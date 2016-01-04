@@ -17,5 +17,5 @@ dependencies:
 
 test:
     override:
-        - (./gradlew testDevDebug):
+        - (./gradlew test --continue):
             timeout: 360
