@@ -1,4 +1,7 @@
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 
 import com.example.ivan.champy_v2.BuildConfig;
@@ -37,7 +40,12 @@ public class FacebookLoginTest {
 
         ShadowActivity shadowActivity = Shadows.shadowOf(activity);
         Intent actualIntent = shadowActivity.getNextStartedActivity();
-        //assertTrue("Activity can't start",actualIntent.filterEquals(expectedIntent));
+
+        ConnectivityManager cm =
+                (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+      //  if (netInfo == null && netInfo.isConnectedOrConnecting()) assertTrue("Activity can't start",actualIntent.filterEquals(expectedIntent));
+       //         else assertFalse("No Internet Connection",actualIntent.filterEquals(expectedIntent));
     }
 
 }
