@@ -7,7 +7,6 @@ import android.os.Build;
 import com.example.ivan.champy_v2.BuildConfig;
 import com.example.ivan.champy_v2.LoginActivity;
 import com.example.ivan.champy_v2.MainActivity;
-import com.example.ivan.champy_v2.R;
 
 import org.junit.Before;
 import org.junit.Test;

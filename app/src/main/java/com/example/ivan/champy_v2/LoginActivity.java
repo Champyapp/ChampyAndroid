@@ -7,10 +7,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -29,6 +28,7 @@ import com.facebook.login.LoginResult;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 public class LoginActivity extends AppCompatActivity {
@@ -47,10 +47,15 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
 
 
+        try {
+            Init();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         mCallbackManager = CallbackManager.Factory.create();
         mTokenTracker  = new AccessTokenTracker() {
@@ -74,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
         mTokenTracker.startTracking();
         mProfileTracker.startTracking();
 
-        Button button = (Button)findViewById(R.id.LoginButton);
+        ImageButton button = (ImageButton)findViewById(R.id.login_button);
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -87,6 +92,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Lost internet connection!", Toast.LENGTH_LONG).show();
                     return;
                 }
+
                 LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile, email, user_friends"));
                 LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
                     @Override
@@ -113,6 +119,7 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d(TAG, "start intent");
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
+
                     }
 
                     @Override
@@ -147,6 +154,11 @@ public class LoginActivity extends AppCompatActivity {
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
 
+    }
+
+    public void Init() throws IOException {
+        InitializeLogin initializeLogin = new InitializeLogin(this, getApplicationContext(), new ImageModule(getApplicationContext()));
+        initializeLogin.Init();
     }
 
 
