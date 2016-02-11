@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.ivan.champy_v2.Friends"
+    tools:showIn="@layout/app_bar_friends"
+    android:id="@+id/friends_view">
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/friends_background"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/sliding_tabs"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        app:tabMode="fixed"
+        android:gravity="center"
+        app:tabMaxWidth="0dp"
+        app:tabGravity="fill"
+        app:tabTextColor="#FFE0E0E0"
+        app:tabSelectedTextColor="#FFFFFFFF"
+        app:tabIndicatorColor="#339997"
+        android:fillViewport="false" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00000000"
+        android:layout_below="@+id/sliding_tabs"
+        android:layout_marginTop="8dp"
+        android:visibility="invisible">
+
+    </android.support.v4.view.ViewPager>
+
+</RelativeLayout>

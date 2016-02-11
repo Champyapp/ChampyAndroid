@@ -25,7 +25,7 @@ public class SessionManager {
     // All Shared Preferences Keys
     private static final String IS_USER_LOGIN = "IsUserLoggedIn";
 
-    // User name (make variable public to access from outside)
+    // Friend_json name (make variable public to access from outside)
     public static final String KEY_NAME = "name";
 
     // Email address (make variable public to access from outside)

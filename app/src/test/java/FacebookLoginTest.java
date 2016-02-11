@@ -33,7 +33,6 @@ public class FacebookLoginTest {
     @Test
     public void testLoginButton()
     {
-        //activity.findViewById(R.id.LoginButton).performClick();
 
         Intent expectedIntent = new Intent(activity, MainActivity.class);
 

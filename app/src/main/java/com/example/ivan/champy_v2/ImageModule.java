@@ -23,6 +23,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 /**
  * Created by ivan on 11.01.16.
@@ -39,10 +40,18 @@ public class ImageModule {
     public void MakeBlurTransformDrawable(Activity activity, ImageView imageView, Uri uri){
         Glide.with(activity).load(uri).centerCrop().bitmapTransform(new BlurTransformation(context)).into(imageView);
     }
-
+    public void MakeCircleImage(Activity activity, String url, ImageView imageView){
+        Glide.with(activity).load(url).centerCrop().bitmapTransform(new CropCircleTransformation(context)).into(imageView);
+    }
     public void resize(Activity activity, ImageView imageView, Uri uri, int width, int height){
         Glide.with(activity).load(uri).override(width, height).into(imageView);
     }
+
+    public void MakeBlurTransfromFile(Activity activity, File file, ImageView imageView){
+        Glide.with(activity).load(file).centerCrop().bitmapTransform(new BlurTransformation(context)).into(imageView);
+    }
+
+
     public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
         int width = bm.getWidth();
         int height = bm.getHeight();
@@ -99,4 +108,6 @@ public class ImageModule {
 
         return output;
     }
+
+
  }
