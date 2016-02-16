@@ -1,6 +1,6 @@
 package com.example.ivan.champy_v2;
 
-import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -8,7 +8,6 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -26,8 +25,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.facebook.login.LoginManager;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -72,14 +73,15 @@ public class Friends extends AppCompatActivity
         final ViewPager viewPager = (ViewPager)findViewById(R.id.viewpager);
         adapterViewPager = new SampleFragmentPagerAdapter(getSupportFragmentManager(), Friends.this);
         viewPager.setAdapter(adapterViewPager);
-        final ProgressDialog pd = ProgressDialog.show(Friends.this, "", "Please Wait...",
+        viewPager.setVisibility(View.VISIBLE);
+        /*final ProgressDialog pd = ProgressDialog.show(Friends.this, "", "Please Wait...",
                 true, false);
         pd.show();
-        new CountDownTimer(2000, 1000) {
+        new CountDownTimer(8000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 //this will be done every 1000 milliseconds ( 1 seconds )
-                int progress = (int)(2000 - millisUntilFinished) / 1000;
+                int progress = (int)(8000 - millisUntilFinished) / 1000;
                 pd.setProgress(progress);
             }
 
@@ -90,7 +92,7 @@ public class Friends extends AppCompatActivity
                 viewPager.setVisibility(View.VISIBLE);
             }
 
-        }.start();
+        }.start();*/
 
 
 
@@ -162,6 +164,23 @@ public class Friends extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+
+        if (id == R.id.nav_logout) {
+            OfflineMode offlineMode = new OfflineMode();
+            if (offlineMode.isInternetAvailable(this)) {
+                LoginManager.getInstance().logOut();
+                SessionManager sessionManager = new SessionManager(getApplicationContext());
+                sessionManager.logoutUser();
+                Intent intent = new Intent(Friends.this, LoginActivity.class);
+                startActivity(intent);
+                Toast.makeText(this, "Bye Bye!!!", Toast.LENGTH_SHORT).show();
+            }
+            else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
+        }
+        if (id == R.id.challenges) {
+            Intent intent = new Intent(Friends.this, MainActivity.class);
+            startActivity(intent);
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

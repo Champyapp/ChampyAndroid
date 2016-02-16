@@ -6,12 +6,14 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -58,6 +60,8 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
         }
+
+
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
         try {
@@ -87,6 +91,10 @@ public class LoginActivity extends AppCompatActivity {
         };
         mTokenTracker.startTracking();
         mProfileTracker.startTracking();
+
+        TextView textView = (TextView)findViewById(R.id.login_text);
+        Typeface typeface = Typeface.createFromAsset(LoginActivity.this.getAssets(), "fonts/bebasneue.ttf");
+        textView.setTypeface(typeface);
 
         ImageButton button = (ImageButton)findViewById(R.id.login_button);
         View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -180,6 +188,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
+
+    }
+
+    @Override
+    public void onBackPressed() {
 
     }
 

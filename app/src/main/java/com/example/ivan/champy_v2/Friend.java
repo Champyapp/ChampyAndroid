@@ -9,11 +9,13 @@ import java.util.List;
 public class Friend {
     private String mName;
     private String mPicture;
+    private int mID;
    // private List<Friend> friends;
 
-    public Friend(String name, String picture) {
+    public Friend(String name, String picture, int ID) {
         mName = name;
         mPicture = picture;
+        mID = ID;
     }
 
     public String getName() {
@@ -24,6 +26,9 @@ public class Friend {
         return mPicture;
     }
 
+    public int getID(){ return  mID; }
+
+    public void setID(int id) { mID = id; }
 
     private static int lastFriendId = 0;
 
@@ -42,7 +47,7 @@ public class Friend {
 
         for (int i=0; i<20; i++)
         {
-            friends.add(new Friend("My friend number "+i, "http://loremflickr.com/320/240?random="+(i+1)));
+            friends.add(new Friend("My friend number "+i, "http://loremflickr.com/320/240?random="+(i+1), 0));
         }
         return friends;
 
