@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -18,6 +19,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
+
+
     <android.support.design.widget.TabLayout
         android:id="@+id/sliding_tabs"
         android:layout_width="fill_parent"
@@ -31,6 +34,7 @@
         app:tabIndicatorColor="#339997"
         android:fillViewport="false" />
 
+
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
@@ -38,8 +42,35 @@
         android:background="#00000000"
         android:layout_below="@+id/sliding_tabs"
         android:layout_marginTop="8dp"
-        android:visibility="invisible">
+
+        android:visibility="visible"
+        android:clickable="false">
+
+
 
     </android.support.v4.view.ViewPager>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:id="@+id/blured"
+        android:visibility="invisible">
+
+    </ImageView>
+
+    <com.melnykov.fab.FloatingActionButton
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/imageButton"
+        android:src="@drawable/plus"
+        fab:fab_colorNormal="#FFF5C390"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
 
 </RelativeLayout>

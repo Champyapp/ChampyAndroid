@@ -42,6 +42,7 @@ public class SessionManager {
         editor = pref.edit();
     }
 
+
     //Create login session
     public void createUserLoginSession(String name, String email, String facebook_id, String path_to_pic){
         // Storing login value as TRUE
@@ -60,6 +61,10 @@ public class SessionManager {
         Log.i("YO", "LOGINED");
 
         // commit changes
+        editor.commit();
+    }
+    public void change_name(String name){
+        editor.putString(KEY_NAME, name);
         editor.commit();
     }
 
@@ -94,7 +99,7 @@ public class SessionManager {
     /**
      * Get stored session data
      * */
-    public HashMap<String, String> getUserDetails(){
+    public HashMap<String, String> getUserDetails() {
 
         //Use hashmap to store user credentials
         HashMap<String, String> user = new HashMap<String, String>();
@@ -123,7 +128,7 @@ public class SessionManager {
         editor.clear();
         editor.commit();
         // After logout redirect user to Login Activity
-       /* Intent i = new Intent(_context, MainActivity.class);
+       /* Intent i = new Intent(_context, TestActivity.class);
 
         // Closing all the Activities
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -134,6 +139,9 @@ public class SessionManager {
         // Staring Login Activity
         _context.startActivity(i);*/
     }
+
+
+
 
 
     // Check for login

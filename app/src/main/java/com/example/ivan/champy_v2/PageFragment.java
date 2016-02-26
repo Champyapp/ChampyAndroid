@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.melnykov.fab.FloatingActionButton;
+
 import java.util.List;
 
 /**
@@ -30,70 +32,29 @@ public class PageFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPage = getArguments().getInt(ARG_PAGE);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_first, container, false);
-
-
-
-        /*TextView textView = (TextView) view;
-        textView.setText("Fragment #" + mPage);*/
-
-
         final List<Friend> friends = Friend.createFriendsList();
 
         RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-        rvContacts.setLayoutManager(new LinearLayoutManager(getActivity()));
-        ContactsAdapter adapter = new ContactsAdapter(friends, getContext(), new CustomItemClickListener() {
+        final ContactsAdapter adapter = new ContactsAdapter(friends, getContext(), new CustomItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Friend friend = friends.get(position);
                 int id = friend.getID();
                 Log.i("Click_on", " " + view.toString() + " " + id);
-              /*  String name = friend.getName();
-                    ImageView img = (ImageView) view.findViewById(R.id.imageView5);
-                    ImageView imageView = (ImageView) view.findViewById(R.id.friend_pic);
-                    if (imageView.getVisibility() == imageView.VISIBLE) {
-                        imageView.setVisibility(View.INVISIBLE);
-                        img.setImageDrawable(imageView.getDrawable());
-                    } else {
-
-                        img.setImageDrawable(null);
-                        imageView.setVisibility(View.VISIBLE);
-                    }*/
             }
         });
-
-
+        FloatingActionButton floatingActionButton = (FloatingActionButton)getActivity().findViewById(R.id.imageButton);
+        floatingActionButton.attachToRecyclerView(rvContacts);
+        rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         rvContacts.setAdapter(adapter);
-       /* rvContacts.addOnItemTouchListener(
-                new RecyclerItemClickListener(getContext(), new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        Friend friend = friends.get(position);
-                        String name = friend.getName();
-                        int id = friend.getID();
-                        if (position != id) return;
-                        ImageView img = (ImageView)view.findViewById(R.id.imageView5);
-                        ImageView imageView = (ImageView) view.findViewById(R.id.friend_pic);
-                        if (imageView.getVisibility() == imageView.VISIBLE) {
-                            imageView.setVisibility(View.INVISIBLE);
-                            img.setImageDrawable(imageView.getDrawable());
-                        } else {
-
-                            img.setImageDrawable(null);
-                            imageView.setVisibility(View.VISIBLE);
-                        }
-
-                    }
-                })
-        );*/
         return view;
+
     }
 
 

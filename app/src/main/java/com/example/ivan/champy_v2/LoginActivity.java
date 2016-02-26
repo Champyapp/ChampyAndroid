@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.debug.hv.ViewServer;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -136,11 +137,11 @@ public class LoginActivity extends AppCompatActivity {
                                         e.printStackTrace();
                                     }
                                     Log.d(TAG, path_to_pic);
-                            //        new DownloadImageTask().execute(path_to_pic);
+                                    //        new DownloadImageTask().execute(path_to_pic);
                                     sessionManager.createUserLoginSession(name, user_email, fb_id, path_to_pic);
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     intent.putExtra("path_to_pic", path_to_pic);
-                                    intent.putExtra("name",name);
+                                    intent.putExtra("name", name);
                                     startActivity(intent);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -170,11 +171,13 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
         button.setOnClickListener(onClickListener);
+        ViewServer.get(this).addWindow(this);
     }
     @Override
     protected void onResume() {
         super.onResume();
         Profile profile = Profile.getCurrentProfile();
+        ViewServer.get(this).setFocusedWindow(this);
     }
 
     @Override
@@ -253,10 +256,9 @@ public class LoginActivity extends AppCompatActivity {
         return directory.getAbsolutePath();
     }
 
-
-
-
-
-
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ViewServer.get(this).removeWindow(this);
+    }
 }

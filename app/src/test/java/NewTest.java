@@ -31,7 +31,6 @@ public class NewTest {
 
     @Test
     public void validateTextViewContent(){
-        TextView tvHelloWorld = (TextView) activity.findViewById(R.id.tvHelloWorld);
         assertNotNull("TextView could not be found", tvHelloWorld);
         assertTrue("TextView contains incorrect text",
                 "Hello World!".equals(tvHelloWorld.getText().toString()));

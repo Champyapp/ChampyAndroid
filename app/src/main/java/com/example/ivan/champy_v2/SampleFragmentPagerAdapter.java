@@ -25,8 +25,16 @@ public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return PageFragment.newInstance(position + 1);
+
+        switch(position) {
+
+            case 0: return new PageFragment();
+            case 1: return new PageFragment1();
+            default: return new PageFragment1();
+
+        }
     }
+
 
     @Override
     public CharSequence getPageTitle(int position) {
