@@ -44,7 +44,8 @@ public class SessionManager {
 
 
     //Create login session
-    public void createUserLoginSession(String name, String email, String facebook_id, String path_to_pic){
+    public void createUserLoginSession(String name, String email, String facebook_id, String path_to_pic, String token, String id,
+    String pushN, String newChallReq, String acceptedYour, String challengeEnd, String updateDB){
         // Storing login value as TRUE
         editor.putBoolean(IS_USER_LOGIN, true);
 
@@ -58,15 +59,109 @@ public class SessionManager {
 
         editor.putString(KEY_PATH, path_to_pic);
 
+        editor.putString("token", token);
+
+        editor.putString("id", id);
+
+        editor.putString("pushN", pushN);
+
+        editor.putString("newChallReq", newChallReq);
+
+        editor.putString("acceptedYour", acceptedYour);
+
+        editor.putString("challengeEnd", challengeEnd);
+
+        editor.putString("updateDB", updateDB);
+
         Log.i("YO", "LOGINED");
 
         // commit changes
         editor.commit();
     }
+    public void toogle1(String t){
+        editor.putString("pushN", t);
+        editor.commit();
+    }
+
+    public void toogle2(String t){
+        editor.putString("newChallReq", t);
+        editor.commit();
+    }
+
+    public void toogle3(String t){
+        editor.putString("acceptedYour", t);
+        editor.commit();
+    }
+
+    public void toogle4(String t){
+        editor.putString("challengeEnd", t);
+        editor.commit();
+    }
+
     public void change_name(String name){
         editor.putString(KEY_NAME, name);
         editor.commit();
     }
+
+    public void  change_avatar(String url){
+        editor.putString(KEY_PATH, url);
+        editor.commit();
+    }
+    public void setUpdateFalse()
+    {
+        editor.putString("updateDB", "false");
+        editor.commit();
+    }
+    public void setRefreshPending(String refresh)
+    {
+        editor.putString("pendingRefresh", refresh);
+        editor.commit();
+    }
+    public String getRefreshPending()
+    {
+        String s = pref.getString("pendingRefresh", null);
+        return s;
+    }
+
+    public void setRefreshFriends(String refresh)
+    {
+        editor.putString("friendsRefresh", refresh);
+        editor.commit();
+    }
+    public String getRefreshFriends()
+    {
+        String s = pref.getString("friendsRefresh", null);
+        return s;
+    }
+
+
+    public void setSelfSize(int size)
+    {
+        editor.putInt("SelfSize", size);
+        editor.commit();
+    }
+    public int getSelfSize()
+    {
+        int s = pref.getInt("SelfSize", 0);
+        return s;
+    }
+
+    public void setChampyOptions(String challenges, String wins, String total, String level){
+        editor.putString("challenges", challenges);
+        editor.putString("wins", wins);
+        editor.putString("total", total);
+        editor.putString("level", level);
+        editor.commit();
+    }
+    public HashMap<String, String> getChampyOptions(){
+        HashMap<String, String> champy = new HashMap<String, String>();
+        champy.put("challenges", pref.getString("challenges", null));
+        champy.put("wins", pref.getString("wins", null));
+        champy.put("total", pref.getString("total", null));
+        champy.put("level", pref.getString("level", null));
+        return champy;
+    }
+
 
     /**
      * Check login method will check user login status
@@ -78,7 +173,7 @@ public class SessionManager {
         if(!this.isUserLoggedIn()){
 
             // user is not logged in redirect him to Login Activity
-            Intent i = new Intent(_context, MainActivity.class);
+            Intent i = new Intent(_context, LoginActivity.class);
 
             // Closing all the Activities from stack
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -113,6 +208,21 @@ public class SessionManager {
         user.put(KEY_ID, pref.getString(KEY_EMAIL, null));
 
         user.put(KEY_PATH, pref.getString(KEY_PATH, null));
+
+        user.put("token", pref.getString("token", null));
+
+        user.put("id", pref.getString("id", null));
+
+        user.put("pushN", pref.getString("pushN", null));
+
+        user.put("newChallReq", pref.getString("newChallReq", null));
+
+        user.put("acceptedYour", pref.getString("acceptedYour", null));
+
+        user.put("challengeEnd", pref.getString("challengeEnd", null));
+
+        user.put("updateDB", pref.getString("updateDB", null));
+
 
 
         // return user

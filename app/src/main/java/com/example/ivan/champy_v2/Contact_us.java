@@ -26,6 +26,8 @@ import android.widget.Toast;
 
 import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.facebook.login.LoginManager;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -63,7 +65,9 @@ public class Contact_us extends AppCompatActivity
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user = new HashMap<>();
         user = sessionManager.getUserDetails();
-        String url = user.get("path_to_pic");
+        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+        File file = new File(path, "profile.jpg");
+        Uri url = Uri.fromFile(file);
         String name = user.get("name");
 
         ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
@@ -73,6 +77,8 @@ public class Contact_us extends AppCompatActivity
         Glide.with(this)
                 .load(url)
                 .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
                 .into(profile);
 
         try {
@@ -127,8 +133,14 @@ public class Contact_us extends AppCompatActivity
 
         } else if (id == R.id.nav_logout) {
             OfflineMode offlineMode = new OfflineMode();
-            MainActivity mainActivity = new MainActivity();
-            if (offlineMode.isInternetAvailable(this)) mainActivity.Logout();
+            if (offlineMode.isInternetAvailable(this)) {
+                LoginManager.getInstance().logOut();
+                SessionManager sessionManager = new SessionManager(getApplicationContext());
+                sessionManager.logoutUser();
+                Intent intent = new Intent(Contact_us.this, LoginActivity.class);
+                startActivity(intent);
+                Toast.makeText(this, "Bye Bye!!!", Toast.LENGTH_SHORT).show();
+            }
             else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
         } else if (id == R.id.share) {
             String message = "Check out Champy - it helps you improve and compete with your friends!";

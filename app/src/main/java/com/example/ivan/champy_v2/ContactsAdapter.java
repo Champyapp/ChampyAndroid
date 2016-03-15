@@ -1,6 +1,11 @@
 package com.example.ivan.champy_v2;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,13 +16,22 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.ivan.champy_v2.interfaces.Friends;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.GsonConverterFactory;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 /**
  * Created by ivan on 05.02.16.
@@ -25,25 +39,26 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 public class ContactsAdapter extends
         RecyclerView.Adapter<ContactsAdapter.ViewHolder> {
     int selectedPos = 0;
+    final private String API_URL = "http://46.101.213.24:3007";
+    final private String TAG = "myLogs";
     private List<Friend> mContacts;
     private Context _context;
-    CustomItemClickListener listener;
+    Activity activity;
     ArrayList<Integer> selected = new ArrayList<>();
 
     private Other other = new Other(new ArrayList<Friend>());
 
     // Pass in the contact array into the constructor
-    public ContactsAdapter(List<Friend> contacts, Context context, CustomItemClickListener customItemClickListener) {
+    public ContactsAdapter(List<Friend> contacts, Context context, Activity activity) {
         mContacts = contacts;
         _context = context;
-        this.listener = customItemClickListener;
+        this.activity = activity;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-
         // Inflate the custom layout
         View contactView = inflater.inflate(R.layout.item_friends, parent, false);
 
@@ -81,7 +96,7 @@ public class ContactsAdapter extends
     @Override
     public void onBindViewHolder(ContactsAdapter.ViewHolder viewHolder, final int position) {
         // Get the data model based on position
-        Friend contact = mContacts.get(position);
+        final Friend contact = mContacts.get(position);
         Log.i("Selected", ""+selected.contains(position));
         if (selected.contains(position)) {
             Log.i("Selected: ", position + " open");
@@ -90,6 +105,8 @@ public class ContactsAdapter extends
             Glide.with(_context)
                     .load(contact.getPicture())
                     .asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
                     .transform(new CropCircleTransformation(_context))
                     .placeholder(R.mipmap.ic_launcher)
                     .override(80, 80)
@@ -99,17 +116,17 @@ public class ContactsAdapter extends
             Glide.with(_context)
                     .load(R.drawable.start_circle_00026)
                     .placeholder(R.mipmap.ic_launcher)
-                    .into((ImageView)viewHolder.itemView.findViewById(R.id.imageView6));
+                    .into((ImageView) viewHolder.itemView.findViewById(R.id.imageView6));
 
             Glide.with(_context)
                     .load(R.drawable.start_circle_00026)
                     .placeholder(R.mipmap.ic_launcher)
-                    .into((ImageView)viewHolder.itemView.findViewById(R.id.imageView7));
+                    .into((ImageView) viewHolder.itemView.findViewById(R.id.imageView7));
 
             Glide.with(_context)
                     .load(R.drawable.start_circle_00026)
                     .placeholder(R.mipmap.ic_launcher)
-                    .into((ImageView)viewHolder.itemView.findViewById(R.id.imageView8));
+                    .into((ImageView) viewHolder.itemView.findViewById(R.id.imageView8));
 
             TextView textView = (TextView)viewHolder.itemView.findViewById(R.id.textView2);
             textView.setText(contact.getName());
@@ -124,6 +141,20 @@ public class ContactsAdapter extends
 
             textView = (TextView)viewHolder.itemView.findViewById(R.id.textView7);
             textView.setTypeface(typeFace);
+
+            SessionManager sessionManager = new SessionManager(_context);
+            HashMap<String, String> champy = sessionManager.getChampyOptions();
+
+
+            textView = (TextView)viewHolder.itemView.findViewById(R.id.info_chall);
+            textView.setText(champy.get("challenges"));
+            textView = (TextView)viewHolder.itemView.findViewById(R.id.info_wins);
+            textView.setText(champy.get("wins"));
+            textView = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
+            textView.setText(champy.get("total"));
+            textView = (TextView)viewHolder.itemView.findViewById(R.id.info_level);
+            textView.setText("Level "+champy.get("level")+" Champy");
+
             viewHolder.itemView.findViewById(R.id.info).setVisibility(View.VISIBLE);
             viewHolder.itemView.findViewById(R.id.simple).setVisibility(View.GONE);
 
@@ -138,12 +169,102 @@ public class ContactsAdapter extends
         TextView textView = viewHolder.nameTextView;
         textView.setText(contact.getName());
 
+
         viewHolder.block.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mContacts.remove(position);
                 notifyItemRemoved(position);
                 selected.clear();
+            }
+        });
+        viewHolder.add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final SessionManager sessionManager = new SessionManager(_context);
+                HashMap<String, String> user = new HashMap<>();
+                user = sessionManager.getUserDetails();
+                final String token = user.get("token");
+                final String id = user.get("id");
+                String friend = mContacts.get(position).getID();
+                Log.d(TAG, "RefreshPending: "+ sessionManager.getRefreshPending());
+                if (friend == null)  {
+                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which) {
+                                case DialogInterface.BUTTON_POSITIVE:
+
+
+                                    break;
+
+                                case DialogInterface.BUTTON_NEGATIVE:
+
+                                    break;
+                            }
+                        }
+                    };
+                    AlertDialog.Builder builder = new AlertDialog.Builder(_context);
+                    builder.setMessage("This user has not installed Champy. Do you want to send invite?").setPositiveButton("Yes", dialogClickListener)
+                            .setNegativeButton("No", dialogClickListener).show();
+                }
+                else if (friend == id)  Toast.makeText(_context, "This user has not installed Champy", Toast.LENGTH_SHORT).show();
+                else {
+                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which) {
+                                case DialogInterface.BUTTON_POSITIVE:
+
+
+                                    String friend = mContacts.get(position).getID();
+
+                                    Retrofit retrofit = new Retrofit.Builder()
+                                            .baseUrl(API_URL)
+                                            .addConverterFactory(GsonConverterFactory.create())
+                                            .build();
+
+                                    DBHelper dbHelper = new DBHelper(_context);
+                                    final SQLiteDatabase db = dbHelper.getWritableDatabase();
+                                    final ContentValues cv = new ContentValues();
+                                    com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(Friends.class);
+                                    Log.d(TAG, "Status: "+id+" "+friend);
+                                    sessionManager.setRefreshPending("true");
+                                    Log.d(TAG, "RefreshPending: "+sessionManager.getRefreshPending());
+                                    Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.sendFriendRequest(id, friend, token);
+                                    call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
+                                        @Override
+                                        public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
+                                            if (response.isSuccess()){
+                                                Log.d(TAG, "Status: Sended Friend Request");
+                                                cv.put("name", mContacts.get(position).getName());
+                                                cv.put("photo", mContacts.get(position).getPicture());
+                                                cv.put("user_id", mContacts.get(position).getID());
+                                                db.insert("pending", null, cv);
+                                            } else Log.d(TAG, "Status: "+response.toString());
+                                        }
+
+                                        @Override
+                                        public void onFailure(Throwable t) {
+
+                                        }
+                                    });
+                                    mContacts.remove(position);
+                                    notifyItemRemoved(position);
+                                    selected.clear();
+
+                                    break;
+
+                                case DialogInterface.BUTTON_NEGATIVE:
+                                    //No button clicked
+                                    break;
+                            }
+                        }
+                    };
+                    AlertDialog.Builder builder = new AlertDialog.Builder(_context);
+                    builder.setMessage("Do you want add this user to your friends list?").setPositiveButton("Yes", dialogClickListener)
+                            .setNegativeButton("No", dialogClickListener).show();
+                }
             }
         });
 
@@ -153,6 +274,8 @@ public class ContactsAdapter extends
                 .asBitmap()
                 .transform(new CropCircleTransformation(_context))
                 .placeholder(R.mipmap.ic_launcher)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
                 .override(80, 80)
                 .dontAnimate()
                 .into(imageView);
@@ -188,6 +311,18 @@ public class ContactsAdapter extends
                 .override(25,25)
                 .into(imageView);
 
+        SessionManager sessionManager = new SessionManager(_context);
+        HashMap<String, String> champy = sessionManager.getChampyOptions();
+
+        textView = (TextView)viewHolder.itemView.findViewById(R.id.chall);
+        textView.setText(champy.get("challenges"));
+        textView = (TextView)viewHolder.itemView.findViewById(R.id.wins);
+        textView.setText(champy.get("wins"));
+        textView = (TextView)viewHolder.itemView.findViewById(R.id.total);
+        textView.setText(champy.get("total"));
+        textView = (TextView)viewHolder.itemView.findViewById(R.id.level);
+        textView.setText("Level " + champy.get("level") + " Champy");
+
     }
 
     @Override
@@ -209,6 +344,7 @@ public class ContactsAdapter extends
         public ImageView wins;
         public ImageView total;
         public ImageButton block;
+        public ImageButton add;
 
         public ImageView mchallenges;
         public ImageView mwins;
@@ -242,6 +378,7 @@ public class ContactsAdapter extends
             info = (RelativeLayout)itemView.findViewById(R.id.info);
 
             block = (ImageButton)itemView.findViewById(R.id.imageButton2);
+            add = (ImageButton)itemView.findViewById(R.id.imageButton3);
 
 
         }

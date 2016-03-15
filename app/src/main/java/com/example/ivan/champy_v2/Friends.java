@@ -1,12 +1,17 @@
 package com.example.ivan.champy_v2;
 
+import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -17,6 +22,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -29,17 +35,35 @@ import android.widget.Toast;
 
 import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.ivan.champy_v2.model.Friend.Datum;
+import com.example.ivan.champy_v2.model.Friend.Friend;
+import com.example.ivan.champy_v2.model.Friend.Friend_;
+import com.example.ivan.champy_v2.model.Friend.Owner;
+import com.facebook.AccessToken;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
+import com.facebook.share.model.AppInviteContent;
+import com.facebook.share.widget.AppInviteDialog;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.GsonConverterFactory;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 import static java.lang.Math.round;
 
@@ -47,6 +71,7 @@ public class Friends extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     FragmentPagerAdapter adapterViewPager;
     private final String TAG = "myLogs";
+    private com.facebook.CallbackManager CallbackManager;
 
     private FloatingActionMenu actionMenu;
 
@@ -54,9 +79,18 @@ public class Friends extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger logger = AppEventsLogger.newLogger(this);
         setContentView(R.layout.activity_friends);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        final SessionManager sessionManager = new SessionManager(this);
+        HashMap<String, String> user = new HashMap<>();
+        user = sessionManager.getUserDetails();
+        String update = user.get("updateDB");
+       /* if (update.equals("true")) {
+            getFriends();
+            sessionManager.setUpdateFalse();
+        }*/
 
         final com.melnykov.fab.FloatingActionButton actionButton = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.imageButton);
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
@@ -82,7 +116,7 @@ public class Friends extends AppCompatActivity
                 .attachTo(actionButton)
                 .build();
 
-        FloatingActionButton.OnClickListener onClickListener2 = new View.OnClickListener() {
+        final FloatingActionButton.OnClickListener onClickListener2 = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("TAG", "clicked");
@@ -115,14 +149,89 @@ public class Friends extends AppCompatActivity
                 if (!actionMenu.isOpen()) {
                     screen.setVisibility(View.INVISIBLE);
                     viewPager.setVisibility(View.VISIBLE);
+                    actionButton.setImageDrawable(getResources().getDrawable(R.drawable.plus));
                 }
                 else {
                     screen.setVisibility(View.VISIBLE);
                     viewPager.setVisibility(View.INVISIBLE);
+                    actionButton.setImageDrawable(getResources().getDrawable(R.drawable.close));
                 }
             }
         };
-        actionButton.setOnClickListener(onClickListener2);
+
+
+        final FloatingActionButton.OnClickListener onClickListener3 = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String appLinkUrl, previewImageUrl;
+
+                appLinkUrl = "https://fb.me/583663125129793";
+                previewImageUrl = "http://champyapp.com/images/Icon.png";
+
+                Activity activity = Friends.this;
+                if (AccessToken.getCurrentAccessToken() == null) {
+                    // start login...
+                } else {
+                    FacebookSdk.sdkInitialize(Friends.this.getApplicationContext());
+                    CallbackManager = com.facebook.CallbackManager.Factory.create();
+
+                    FacebookCallback<AppInviteDialog.Result> facebookCallback= new FacebookCallback<AppInviteDialog.Result>() {
+                        @Override
+                        public void onSuccess(AppInviteDialog.Result result) {
+                            Log.i(TAG, "MainACtivity, InviteCallback - SUCCESS!" + result.getData());
+                        }
+
+                        @Override
+                        public void onCancel() {
+                            Log.i(TAG, "MainACtivity, InviteCallback - CANCEL!");
+                        }
+
+                        @Override
+                        public void onError(FacebookException e) {
+                            Log.e(TAG, "MainACtivity, InviteCallback - ERROR! " + e.getMessage());
+                        }
+
+                    };
+
+                    AppInviteDialog appInviteDialog = new AppInviteDialog(activity);
+                    if (appInviteDialog.canShow()) {
+                        AppInviteContent.Builder content = new AppInviteContent.Builder();
+                        content.setApplinkUrl(appLinkUrl);
+                        content.setPreviewImageUrl(previewImageUrl);
+                        AppInviteContent appInviteContent = content.build();
+                        appInviteDialog.registerCallback(CallbackManager, facebookCallback);
+                        appInviteDialog.show(activity, appInviteContent);
+                    }
+                }
+            }
+        };
+
+
+        ImageView imageView = (ImageView)findViewById(R.id.blured);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+                ImageView screen = (ImageView) findViewById(R.id.blured);
+                if (actionMenu.isOpen()) {
+                    actionMenu.close(true);
+                    if (!actionMenu.isOpen()) {
+                        screen.setVisibility(View.INVISIBLE);
+                        viewPager.setVisibility(View.VISIBLE);
+                        actionButton.setImageDrawable(getResources().getDrawable(R.drawable.plus));
+                    }
+                } else {
+                    actionMenu.close(false);
+                    if (!actionMenu.isOpen()) {
+                        screen.setVisibility(View.VISIBLE);
+                        viewPager.setVisibility(View.INVISIBLE);
+                        actionButton.setImageDrawable(getResources().getDrawable(R.drawable.plus));
+                    }
+                }
+            }
+
+
+        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -142,7 +251,7 @@ public class Friends extends AppCompatActivity
 
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        adapterViewPager = new SampleFragmentPagerAdapter(getSupportFragmentManager(), Friends.this);
+        adapterViewPager = new SampleFragmentPagerAdapter(getSupportFragmentManager(), getApplicationContext());
         viewPager.setAdapter(adapterViewPager);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -152,14 +261,29 @@ public class Friends extends AppCompatActivity
 
             @Override
             public void onPageSelected(int position) {
-                if (position>0) {
+                SessionManager sessionManager1 = new SessionManager(getApplicationContext());
+                String refresh = sessionManager1.getRefreshFriends();
+                Log.d(TAG, "RefreshFriends: " + refresh);
+                if (refresh.equals("true")) {
+                    UpdateFriendsList();
+                    sessionManager1.setRefreshFriends("false");
+                }
+                refresh = sessionManager1.getRefreshPending();
+                Log.d(TAG, "RefreshPending: "+refresh);
+                if (refresh.equals("true")) {
+                    UpdatePending();
+                    sessionManager1.setRefreshPending("false");
+                }
+                if (position == 1) {
                     com.melnykov.fab.FloatingActionButton floatingActionButton = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.imageButton);
                     floatingActionButton.setVisibility(View.INVISIBLE);
-                }
-                else {
+                } else {
                     com.melnykov.fab.FloatingActionButton floatingActionButton = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.imageButton);
+                    if (position == 0) floatingActionButton.setOnClickListener(onClickListener2);
+                    if (position == 2) floatingActionButton.setOnClickListener(onClickListener3);
                     floatingActionButton.setVisibility(View.VISIBLE);
                 }
+
 
             }
 
@@ -176,24 +300,27 @@ public class Friends extends AppCompatActivity
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        SessionManager sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user = new HashMap<>();
-        user = sessionManager.getUserDetails();
-        String url = user.get("path_to_pic");
+
+
         String name = user.get("name");
 
         ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
         TextView textView = (TextView) headerLayout.findViewById(R.id.textView);
         textView.setText(name);
+        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+        File file = new File(path, "profile.jpg");
+        Uri url = Uri.fromFile(file);
 
         Glide.with(this)
                 .load(url)
                 .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
                 .into(profile);
 
         try {
             Drawable dr = Init("/data/data/com.example.ivan.champy_v2/app_imageDir/");
-            ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
+            imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setImageDrawable(dr);
 
@@ -327,6 +454,230 @@ public class Friends extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         ViewServer.get(this).setFocusedWindow(this);
+        AppEventsLogger.activateApp(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        AppEventsLogger.deactivateApp(this);
+    }
+
+    public void getOther()
+    {
+        final String API_URL = "http://46.101.213.24:3007";
+        SessionManager sessionManager = new SessionManager(getApplicationContext());
+        HashMap<String, String> user = new HashMap<>();
+        user = sessionManager.getUserDetails();
+        String id = user.get("id");
+        String token = user.get("token");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        DBHelper dbHelper = new DBHelper(this);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        int clearCount = db.delete("pending", null, null);
+        final ContentValues cv = new ContentValues();
+
+        com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
+        Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.getUserFriends(id, token);
+        call.enqueue(new Callback<Friend>() {
+            @Override
+            public void onResponse(Response<Friend> response, Retrofit retrofit) {
+                if (response.isSuccess()){
+                    List<Datum> data = response.body().getData();
+                    for (int i=0; i<data.size(); i++){
+                        Datum datum = data.get(i);
+                        Log.d(TAG, "Status: "+response.body().toString());
+                        if (datum.getStatus().toString().equals("false")) {
+                            Owner owner = datum.getOwner();
+                            cv.put("name", owner.getName());
+                            Log.d(TAG, "Status: "+owner.getName());
+                            cv.put("photo", owner.getPhoto().getMedium());
+                            cv.put("user_id", owner.getId());
+                            db.insert("pending", null, cv);
+                        }
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
+    }
+    public void UpdateFriendsList()
+    {
+        final String API_URL = "http://46.101.213.24:3007";
+        SessionManager sessionManager = new SessionManager(getApplicationContext());
+        HashMap<String, String> user = new HashMap<>();
+        user = sessionManager.getUserDetails();
+        final String id = user.get("id");
+        String token = user.get("token");
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        DBHelper dbHelper = new DBHelper(getApplicationContext());
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        int clearCount = db.delete("friends", null, null);
+        final ContentValues cv = new ContentValues();
+
+        com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
+        Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.getUserFriends(id, token);
+        call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
+            @Override
+            public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    List<Datum> data = response.body().getData();
+                    for (int i = 0; i < data.size(); i++) {
+                        Datum datum = data.get(i);
+                        if (datum.getFriend() != null) {
+                            if (datum.getStatus().toString().equals("true")) {
+                                if (datum.getOwner().getId().equals(id)) {
+                                    Friend_ friend = datum.getFriend();
+                                    cv.put("name", friend.getName());
+                                    if (friend.getPhoto() != null)
+                                        cv.put("photo", friend.getPhoto().getMedium());
+                                    else cv.put("photo", "");
+                                    cv.put("user_id", friend.getId());
+                                    db.insert("friends", null, cv);
+                                } else {
+                                    Owner friend = datum.getOwner();
+                                    cv.put("name", friend.getName());
+                                    if (friend.getPhoto() != null)
+                                        cv.put("photo", friend.getPhoto().getMedium());
+                                    else cv.put("photo", "");
+                                    cv.put("user_id", friend.getId());
+                                    db.insert("friends", null, cv);
+                                }
+                            }
+                        }
+                    }
+                    final List<com.example.ivan.champy_v2.Friend> newfriends = new ArrayList<com.example.ivan.champy_v2.Friend>();
+                    Cursor c = db.query("friends", null, null, null, null, null, null);
+                    if (c.moveToFirst()) {
+                        int idColIndex = c.getColumnIndex("id");
+                        int nameColIndex = c.getColumnIndex("name");
+                        int photoColIndex = c.getColumnIndex("photo");
+                        int index = c.getColumnIndex("user_id");
+                        do {
+                            Log.i("newusers", "NewUser: " + c.getString(nameColIndex) + " Photo: " + c.getString(photoColIndex));
+                            newfriends.add(new com.example.ivan.champy_v2.Friend(c.getString(nameColIndex), API_URL+c.getString(photoColIndex), c.getString(index)));
+                        } while (c.moveToNext());
+                    } else
+                        Log.i("stat", "0 rows");
+                    c.close();
+
+                    Log.i("stat", "Friends :" + newfriends.toString());
+
+
+                    RecyclerView rvContacts = (RecyclerView) findViewById(R.id.rvContacts);
+                    final FriendsAdapter adapter = new FriendsAdapter(newfriends, getApplicationContext(), new CustomItemClickListener() {
+                        @Override
+                        public void onItemClick(View view, int position) {
+                            com.example.ivan.champy_v2.Friend friend = newfriends.get(position);
+                        }
+                    });
+                    rvContacts.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
+    }
+
+    public void UpdatePending()
+    {
+        final String API_URL = "http://46.101.213.24:3007";
+        SessionManager sessionManager = new SessionManager(this);
+        HashMap<String, String> user = new HashMap<>();
+        user = sessionManager.getUserDetails();
+        final String id = user.get("id");
+        String token = user.get("token");
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        DBHelper dbHelper = new DBHelper(this);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        int clearCount = db.delete("pending", null, null);
+        final ContentValues cv = new ContentValues();
+
+        com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
+        Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.getUserFriends(id, token);
+        call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
+            @Override
+            public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    List<Datum> data = response.body().getData();
+                    for (int i = 0; i < data.size(); i++) {
+                        Datum datum = data.get(i);
+                        if (datum.getFriend() != null) {
+                            if (datum.getStatus().toString().equals("false")) {
+                                if (datum.getOwner().getId().equals(id)) {
+                                    Friend_ friend = datum.getFriend();
+                                    cv.put("name", friend.getName());
+                                    if (friend.getPhoto() != null)
+                                        cv.put("photo", friend.getPhoto().getMedium());
+                                    else cv.put("photo", "");
+                                    cv.put("user_id", friend.getId());
+                                    cv.put("owner", "false");
+                                    db.insert("pending", null, cv);
+                                } else {
+                                    Owner friend = datum.getOwner();
+                                    cv.put("name", friend.getName());
+                                    if (friend.getPhoto() != null)
+                                        cv.put("photo", friend.getPhoto().getMedium());
+                                    else cv.put("photo", "");
+                                    cv.put("user_id", friend.getId());
+                                    cv.put("owner", "true");
+                                    db.insert("pending", null, cv);
+                                }
+                            }
+                        }
+                    }
+                    final List<Pending_friend> newfriends = new ArrayList<Pending_friend>();
+                    Cursor c = db.query("pending", null, null, null, null, null, null);
+                    if (c.moveToFirst()) {
+                        int idColIndex = c.getColumnIndex("id");
+                        int nameColIndex = c.getColumnIndex("name");
+                        int photoColIndex = c.getColumnIndex("photo");
+                        int index = c.getColumnIndex("user_id");
+                        int owner = c.getColumnIndex("owner");
+                        do {
+                            Log.i("newusers", "NewUser: " + c.getString(nameColIndex) + " Photo: " + c.getString(photoColIndex));
+                            newfriends.add(new Pending_friend(c.getString(nameColIndex), API_URL+c.getString(photoColIndex), c.getString(index), c.getString(owner)));
+                        } while (c.moveToNext());
+                    } else
+                        Log.i("stat", "0 rows");
+                    c.close();
+
+                    Log.i("stat", "Friends :" + newfriends.toString());
+
+
+                    RecyclerView rvContacts = (RecyclerView) findViewById(R.id.rvContacts);
+                    final PendingAdapter adapter = new PendingAdapter(newfriends, getApplicationContext(), new CustomItemClickListener() {
+                        @Override
+                        public void onItemClick(View view, int position) {
+                            Pending_friend friend = newfriends.get(position);
+                        }
+                    });
+                    rvContacts.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
+
     }
 
 

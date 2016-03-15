@@ -28,9 +28,9 @@ public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
 
         switch(position) {
 
-            case 0: return new PageFragment();
-            case 1: return new PageFragment1();
-            default: return new PageFragment1();
+            case 0: return new FriendsFragment();
+            case 1: return new Pending();
+            default: return new PageFragment();
 
         }
     }

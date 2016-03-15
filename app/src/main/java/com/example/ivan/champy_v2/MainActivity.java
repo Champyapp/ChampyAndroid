@@ -12,8 +12,10 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -37,11 +39,15 @@ import android.widget.Toast;
 
 import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
-import com.example.ivan.champy_v2.activity.TestActivity;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.ivan.champy_v2.interfaces.Update_user;
+import com.example.ivan.champy_v2.model.User.User;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.RequestBody;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -50,9 +56,16 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.GsonConverterFactory;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 import static java.lang.Math.max;
 import static java.lang.Math.round;
@@ -73,14 +86,24 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         FacebookSdk.sdkInitialize(getApplicationContext());
+        SessionManager sessionManager1 = new SessionManager(getApplicationContext());
+        if (!sessionManager1.isUserLoggedIn()) {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_gradient));
         setSupportActionBar(toolbar);
 
+
+
         RelativeLayout cards = (RelativeLayout)findViewById(R.id.cards);
-        CustomAdapter adapter = new CustomAdapter(this);
+        CustomAdapter adapter = new CustomAdapter(this, SelfImprovement_model.generate(this));
+        if (adapter.dataCount() > 0){
         pager = new CustomPagerBase(this,  cards, adapter);
-        pager.preparePager(2);
+        pager.preparePager(0);}
 
         final ImageButton actionButton = (ImageButton)findViewById(R.id.imageButton);
 
@@ -149,6 +172,31 @@ public class MainActivity extends AppCompatActivity
         };
         actionButton.setOnClickListener(onClickListener2);
 
+        ImageView imageView = (ImageView)findViewById(R.id.blured);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.cards);
+                ImageView screen = (ImageView) findViewById(R.id.blured);
+                if (actionMenu.isOpen()) {
+                    actionMenu.close(true);
+                    if (!actionMenu.isOpen()) {
+                        screen.setVisibility(View.INVISIBLE);
+                        relativeLayout.setVisibility(View.VISIBLE);
+                        actionButton.setImageDrawable(getResources().getDrawable(R.drawable.plus));
+                    }
+                } else {
+                    actionMenu.close(false);
+                    if (actionMenu.isOpen()) {
+                        screen.setVisibility(View.VISIBLE);
+                        relativeLayout.setVisibility(View.INVISIBLE);
+                        actionButton.setImageDrawable(getResources().getDrawable(R.drawable.plus));
+                    }
+                }
+
+            }
+        });
+
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -180,29 +228,38 @@ public class MainActivity extends AppCompatActivity
             url = intent.getExtras().getString("path_to_pic");
             name = intent.getExtras().getString("name");
         }
-
+        Log.d(TAG, "Image: "+url);
         RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.slider);
         ImageView profile_image = (ImageView)headerLayout.findViewById(R.id.profile_image);
         TextView textView = (TextView)headerLayout.findViewById(R.id.textView);
         textView.setText(name);
-        ImageView imageView = (ImageView)headerLayout.findViewById(R.id.slide_background);
+        imageView = (ImageView)headerLayout.findViewById(R.id.slide_background);
         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "blured2.jpg");
         if (file.exists()) try {
+            Log.d(TAG, "Image: Exist");
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setImageDrawable(Init(path));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         else new DownloadImageTask().execute(url);
+
+        file = new File(path, "profile.jpg");
+        Uri uri = Uri.fromFile(file);
         Glide.with(this)
-                .load(url)
+                .load(uri)
                 .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
                 .into(profile_image);
+
 
         BuildAnim();
 
         ViewServer.get(this).addWindow(this);
+
+
     }
 
     @Override
@@ -256,7 +313,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         }
         if (id == R.id.history){
-            Intent intent = new Intent(MainActivity.this, TestActivity.class);
+            Intent intent = new Intent(MainActivity.this, SelfImprovement.class);
             startActivity(intent);
         }
         if (id == R.id.settings){
@@ -311,6 +368,26 @@ public class MainActivity extends AppCompatActivity
         private String saveToInternalSorage(Bitmap bitmapImage){
             ContextWrapper cw = new ContextWrapper(getApplicationContext());
             // path to /data/data/yourapp/app_data/imageDir
+            String root = Environment.getExternalStorageDirectory().toString();
+            File myDir = new File(root + "/saved_images");
+            myDir.mkdirs();
+            Random generator = new Random();
+            int n = 10000;
+            n = generator.nextInt(n);
+            String fname = "Image-"+ n +".jpg";
+            File file = new File (myDir, fname);
+            if (file.exists ()) file.delete ();
+            try {
+                FileOutputStream out = new FileOutputStream(file);
+                bitmapImage.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                out.flush();
+                out.close();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Upload_photo(Uri.fromFile(file).getPath());
+
             File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
             // Create imageDir
             File mypath=new File(directory,"profile.jpg");
@@ -331,11 +408,17 @@ public class MainActivity extends AppCompatActivity
             return directory.getAbsolutePath();
         }
 
-        public void loadImageFromStorage(String path)
-        {
+        public void loadImageFromStorage(String path) {
 
             try {
                 File f=new File(path, "profile.jpg");
+                Uri uri = Uri.fromFile(f);
+                Glide.with(getApplicationContext())
+                        .load(uri)
+                        .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .into((ImageView)findViewById(R.id.profile_image));
                 File file = new File(path, "blured2.jpg");
                 if (file.exists()) {
                    return;
@@ -384,10 +467,6 @@ public class MainActivity extends AppCompatActivity
                     Drawable ob = new BitmapDrawable(getResources(), blured);
                     screen.setImageDrawable(ob);
                 }
-
-
-
-
             }
             catch (FileNotFoundException e)
             {
@@ -438,9 +517,11 @@ public class MainActivity extends AppCompatActivity
 
     }
     public class CustomAdapter extends CustomPagerAdapter{
+        private ArrayList<SelfImprovement_model> arrayList;
 
-        public CustomAdapter(Context context) {
+        public CustomAdapter(Context context, ArrayList<SelfImprovement_model> marrayList) {
             super(context);
+            this.arrayList = marrayList;
         }
 
         @Override
@@ -452,6 +533,7 @@ public class MainActivity extends AppCompatActivity
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 tempView = inflater.inflate(R.layout.single_card_fragment, null, false);
             }
+            SelfImprovement_model item = arrayList.get(position);
             ImageView cardImage = (ImageView)tempView.findViewById(R.id.cardImage);
             int x = round(getWindowManager().getDefaultDisplay().getWidth() / 100);
             int y = round(getWindowManager().getDefaultDisplay().getHeight() / 100);
@@ -484,9 +566,11 @@ public class MainActivity extends AppCompatActivity
             if (y > 10) y = 10;
 
             TextView textView  = (TextView) tempView.findViewById(R.id.textView12);
+            textView.setText(item.getType());
             textView.setTextSize((float)(y*1.3));
 
             textView = (TextView) tempView.findViewById(R.id.textView13);
+            textView.setText(item.getGoal() + " during " + item.getDays() + " days");
             textView.setTextSize(y);
 
             textView = (TextView) tempView.findViewById(R.id.textView14);
@@ -500,10 +584,12 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public int dataCount() {
-            return 10;
+            return arrayList.size();
         }
 
     }
+
+
     public void BuildAnim()
     {
         int width = getWindowManager().getDefaultDisplay().getWidth();
@@ -516,7 +602,7 @@ public class MainActivity extends AppCompatActivity
         ((AnimationDrawable) mImageViewFilling2.getBackground()).start();
 
         final TextView t1 = (TextView) findViewById(R.id.textView2);
-        final TextView t2 = (TextView) findViewById(R.id.textView3);
+        final TextView t2 = (TextView) findViewById(R.id.info_level);
         final TextView t3 = (TextView) findViewById(R.id.textView4);
         counter = 0;
         final int i1 = 20;
@@ -591,13 +677,24 @@ public class MainActivity extends AppCompatActivity
         mSwitcher3.setText("Total");
         mSwitcher3.startAnimation(in);
 
-        imageView1.setImageResource(R.drawable.challenges);
+        Uri uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/challenges");
+        Glide.with(this)
+                .load(uri)
+                .into(imageView1);
+
         imageView1.startAnimation(in);
 
-        imageView2.setImageResource(R.drawable.wins);
+        uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/wins");
+        Glide.with(this)
+                .load(uri)
+                .into(imageView2);
+
         imageView2.startAnimation(in);
 
-        imageView3.setImageResource(R.drawable.total);
+        uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/total");
+        Glide.with(this)
+                .load(uri)
+                .into(imageView3);
         imageView3.startAnimation(in);
 
     }
@@ -637,7 +734,7 @@ public class MainActivity extends AppCompatActivity
         Float y = x*(float)3.5;
         TextView textView = (TextView)findViewById(R.id.textView2);
         textView.setTextSize(y);
-        textView = (TextView)findViewById(R.id.textView3);
+        textView = (TextView)findViewById(R.id.info_level);
         textView.setTextSize(y);
         textView = (TextView)findViewById(R.id.textView4);
         textView.setTextSize(y);
@@ -650,5 +747,46 @@ public class MainActivity extends AppCompatActivity
         textView = (TextView)findViewById(R.id.textView7);
         textView.setTextSize(y);
 
+    }
+
+    public void Upload_photo(String path)
+    {
+        final String API_URL = "http://46.101.213.24:3007";
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        SessionManager sessionManager = new SessionManager(getApplicationContext());
+        HashMap<String, String> user = new HashMap<>();
+        user = sessionManager.getUserDetails();
+        String token = user.get("token");
+
+        String id = user.get("id");
+
+        Log.d(TAG, "USER: "+token+" "+id);
+
+        File f=new File(path);
+
+        Log.d(TAG, "Status: " + f);
+
+        RequestBody requestBody =
+                RequestBody.create(MediaType.parse("image/jpeg"), f);
+
+        Update_user update_user = retrofit.create(Update_user.class);
+        Call<User> call = update_user.update_photo(id, token, requestBody);
+        Log.d(TAG, "Status: RUN");
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Response<User> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    Log.d(TAG, "Status: photo_uploaded");
+                } else Log.d(TAG, "Status :" + response.code());
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.d(TAG, "Status: "+t);
+            }
+        });
     }
 }

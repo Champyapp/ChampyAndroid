@@ -28,7 +28,8 @@
     android:layout_alignParentTop="true"
     android:layout_centerHorizontal="true"
     android:src="@android:mipmap/sym_def_app_icon"
-    android:layout_marginTop="8dp" />
+    android:layout_marginTop="8dp"
+    android:clickable="true" />
 
 <TextView
     android:layout_width="wrap_content"
@@ -221,7 +222,8 @@
     android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
     android:layout_marginTop="8dp"
     android:layout_marginLeft="16dp"
-    android:textColor="#ffffff" />
+    android:textColor="#ffffff"
+    android:enabled="true" />
 <View
     android:layout_width="match_parent"
     android:layout_height="1dp"
@@ -349,7 +351,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textAppearance="?android:attr/textAppearanceMedium"
-    android:text="Privacy Police"
+    android:text="Privacy Policy"
     android:id="@+id/privacy"
     android:layout_below="@+id/view7"
     android:layout_alignParentLeft="true"
