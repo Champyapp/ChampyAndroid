@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.debug.hv.ViewServer;
+import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
 import com.example.ivan.champy_v2.interfaces.NewUser;
 import com.example.ivan.champy_v2.model.Friend.Datum;
 import com.example.ivan.champy_v2.model.Friend.Friend;
@@ -29,6 +30,7 @@ import com.example.ivan.champy_v2.model.Friend.Owner;
 import com.example.ivan.champy_v2.model.User.Data;
 import com.example.ivan.champy_v2.model.User.LoginData;
 import com.example.ivan.champy_v2.model.User.User;
+import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -65,6 +67,8 @@ import retrofit.Callback;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
+
+import static java.lang.Math.round;
 
 public class LoginActivity extends AppCompatActivity {
     private AccessTokenTracker mTokenTracker;
@@ -466,6 +470,38 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(Throwable t) {
 
+                        }
+                    });
+                    clearCount = db.delete("myChallenges", null, null);
+                    ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
+                    final long unixTime = System.currentTimeMillis() / 1000L;
+                    String update = "1457019726";
+                    Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(id, update, jwtString);
+                    call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
+                        @Override
+                        public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
+                            if (response.isSuccess()) {
+                                List<com.example.ivan.champy_v2.model.active_in_progress.Datum> data = response.body().getData();
+                                for (int i = 0; i < data.size(); i++) {
+                                    com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
+                                    Challenge challenge = datum.getChallenge();
+
+                                    String desctiption = challenge.getDescription();
+                                    int end = datum.getEnd();
+                                    int days = round((end - unixTime) / 86400);
+                                    String duration = "" + days;
+                                    String challenge_id = challenge.get_id();
+                                    cv.put("name", "Self Improvement");
+                                    cv.put("description", desctiption);
+                                    cv.put("duration", duration);
+                                    cv.put("challenge_id", challenge_id);
+                                    db.insert("myChallenges", null, cv);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Throwable t) {
                         }
                     });
                     String api_path = null;

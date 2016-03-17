@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity
 
         SubActionButton button1 = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeupcolor)).build();
         SubActionButton button2 = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.duelcolor)).build();
-        SubActionButton button3 = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementcolor)).build();
+        final SubActionButton button3 = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementcolor)).build();
         int width = getWindowManager().getDefaultDisplay().getWidth();
         int x = round(width/100);
         button1.getLayoutParams().height = x*20;
@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity
                 .setRadius(350)
                 .attachTo(actionButton)
                 .build();
+
 
         FloatingActionButton.OnClickListener onClickListener2 = new View.OnClickListener() {
             @Override
@@ -164,6 +165,13 @@ public class MainActivity extends AppCompatActivity
                     relativeLayout.setVisibility(View.VISIBLE);
                 }
                 else {
+                    button3.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(MainActivity.this, SelfImprovement.class);
+                            startActivity(intent);
+                        }
+                    });
                     screen.setVisibility(View.VISIBLE);
                     relativeLayout.setVisibility(View.INVISIBLE);
 
@@ -179,6 +187,14 @@ public class MainActivity extends AppCompatActivity
                 RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.cards);
                 ImageView screen = (ImageView) findViewById(R.id.blured);
                 if (actionMenu.isOpen()) {
+                    actionMenu.getSubActionItems();
+                    button3.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(MainActivity.this, SelfImprovement.class);
+                            startActivity(intent);
+                        }
+                    });
                     actionMenu.close(true);
                     if (!actionMenu.isOpen()) {
                         screen.setVisibility(View.INVISIBLE);
@@ -574,6 +590,7 @@ public class MainActivity extends AppCompatActivity
             textView.setTextSize(y);
 
             textView = (TextView) tempView.findViewById(R.id.textView14);
+            textView.setText(item.getDays() + " DAYS TO GO");
             textView.setTextSize(y*2);
 
             textView = (TextView) tempView.findViewById(R.id.textView15);
@@ -789,4 +806,5 @@ public class MainActivity extends AppCompatActivity
             }
         });
     }
+
 }
