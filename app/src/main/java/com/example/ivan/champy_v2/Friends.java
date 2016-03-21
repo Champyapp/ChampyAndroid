@@ -319,7 +319,8 @@ public class Friends extends AppCompatActivity
                 .into(profile);
 
         try {
-            Drawable dr = Init("/data/data/com.example.ivan.champy_v2/app_imageDir/");
+            ImageModule imageModule = new ImageModule(this);
+            Drawable dr = imageModule.Init("/data/data/com.example.ivan.champy_v2/app_imageDir/", Friends.this);
             imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setImageDrawable(dr);
@@ -411,7 +412,6 @@ public class Friends extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 
     private Drawable Init(String path) throws FileNotFoundException {
         File file = new File(path, "blured2.jpg");

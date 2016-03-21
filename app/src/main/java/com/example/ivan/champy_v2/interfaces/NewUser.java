@@ -22,4 +22,6 @@ public interface NewUser {
     Call<User> getUserInfo(@Query("token") String token);
 
 
+
+
 }

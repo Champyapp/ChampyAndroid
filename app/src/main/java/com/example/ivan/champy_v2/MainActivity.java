@@ -586,7 +586,7 @@ public class MainActivity extends AppCompatActivity
             textView.setTextSize((float)(y*1.3));
 
             textView = (TextView) tempView.findViewById(R.id.textView13);
-            textView.setText(item.getGoal() + " during " + item.getDays() + " days");
+            textView.setText(item.getGoal());
             textView.setTextSize(y);
 
             textView = (TextView) tempView.findViewById(R.id.textView14);
@@ -622,9 +622,13 @@ public class MainActivity extends AppCompatActivity
         final TextView t2 = (TextView) findViewById(R.id.info_level);
         final TextView t3 = (TextView) findViewById(R.id.textView4);
         counter = 0;
-        final int i1 = 20;
-        final int i2 = 10;
-        final int i3 = 33;
+        SessionManager sessionManager = new SessionManager(this);
+        String challenges = sessionManager.getChampyOptions().get("challenges");
+        String wins = sessionManager.getChampyOptions().get("wins");
+        String tot = sessionManager.getChampyOptions().get("total");
+        final int i1 = Integer.parseInt(challenges);
+        final int i2 = Integer.parseInt(wins);
+        final int i3 = Integer.parseInt(tot);
         total = max(max(i1, i2), i3);
         Log.d(TAG, "TOTAL: " + i2);
 

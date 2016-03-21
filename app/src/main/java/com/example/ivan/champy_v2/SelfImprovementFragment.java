@@ -1,5 +1,6 @@
 package com.example.ivan.champy_v2;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -11,8 +12,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -40,7 +43,7 @@ import static java.lang.Math.round;
 /**
  * Created by ivan on 14.03.16.
  */
-public class SelfImprovementFragment extends Fragment{
+public class SelfImprovementFragment extends Fragment {
     public static final String ARG_PAGE = "ARG_PAGE";
 
     public static SelfImprovementFragment newInstance(int page) {
@@ -64,7 +67,9 @@ public class SelfImprovementFragment extends Fragment{
         final View view = inflater.inflate(R.layout.item_row, container, false);
         final Bundle args = this.getArguments();
         final int[] finalposition = new int[1];
-        final ViewPager viewPager = (ViewPager )getActivity().findViewById(R.id.pager);
+        final ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.pager);
+        setupUI(getActivity().findViewById(R.id.selfimprovement));
+        setupUI(view);
         String name = "";
         String duration = "";
         String description = "";
@@ -84,8 +89,8 @@ public class SelfImprovementFragment extends Fragment{
             int colchallenge_id = c.getColumnIndex("challenge_id");
             do {
                 o++;
-                if (o > position+1) break;
-                if (o == position+1) {
+                if (o > position + 1) break;
+                if (o == position + 1) {
                     name = c.getString(nameColIndex);
                     description = c.getString(coldescription);
                     duration = c.getString(colduration);
@@ -96,31 +101,31 @@ public class SelfImprovementFragment extends Fragment{
         } else
             Log.i("stat", "0 rows");
         c.close();
-        Log.i("stat", "Name: "+description);
+        Log.i("stat", "Name: " + description);
         Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
-        EditText editText = (EditText)view.findViewById(R.id.goal);
+        EditText editText = (EditText) view.findViewById(R.id.goal);
         editText.setText(description);
         editText.setTypeface(typeface);
-        editText = (EditText)view.findViewById(R.id.days);
+        editText = (EditText) view.findViewById(R.id.days);
         editText.setTypeface(typeface);
         int days = 0;
         if (duration != null && duration != "") {
-            days = Integer.parseInt(duration)/86400;
+            days = Integer.parseInt(duration) / 86400;
         }
         editText.setText("" + days);
-        TextView textView = (TextView)view.findViewById(R.id.textView8);
+        TextView textView = (TextView) view.findViewById(R.id.textView8);
         textView.setTypeface(typeface);
 
         Glide.with(getContext())
                 .load(R.drawable.points)
-                .override(120,120)
+                .override(120, 120)
                 .into((ImageView) view.findViewById(R.id.imageView14));
-        editText = (EditText)view.findViewById(R.id.goal);
+        editText = (EditText) view.findViewById(R.id.goal);
         description = editText.getText().toString();
-        editText = (EditText)view.findViewById(R.id.days);
+        editText = (EditText) view.findViewById(R.id.days);
         days = Integer.parseInt(editText.getText().toString());
         Log.i("stat", "Description: " + description);
-        ImageButton imageButton = (ImageButton)getActivity().findViewById(R.id.imageButton5);
+        ImageButton imageButton = (ImageButton) getActivity().findViewById(R.id.imageButton5);
 
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,14 +146,14 @@ public class SelfImprovementFragment extends Fragment{
                 int position = viewPager.getCurrentItem();
                 SessionManager sessionManager = new SessionManager(getContext());
                 int size = sessionManager.getSelfSize();
-                Log.i("stat", "Click: "+position+" "+size);
+                Log.i("stat", "Click: " + position + " " + size);
                 if (position == size) {
-                   description = editText1.getText().toString();
-                   Log.i("stat", "Click: clicked");
-                   Log.i("stat", "Click: "+description);
-                   editText1 = (EditText)view.findViewById(R.id.days);
-                   days = Integer.parseInt(editText1.getText().toString());
-                   Create_new_challenge(description, days);
+                    description = editText1.getText().toString();
+                    Log.i("stat", "Click: clicked");
+                    Log.i("stat", "Click: " + description);
+                    editText1 = (EditText) view.findViewById(R.id.days);
+                    days = Integer.parseInt(editText1.getText().toString());
+                    Create_new_challenge(description, days);
                 } else {
                     Log.i("stat", "Status: " + position);
                     int o = 0;
@@ -177,21 +182,24 @@ public class SelfImprovementFragment extends Fragment{
                         days = Integer.parseInt(duration) / 86400;
                     }
 
-                Log.i("stat", "Click: " + viewPager.getCurrentItem());
-                Toast.makeText(getActivity(), "OK", Toast.LENGTH_SHORT).show();
-                StartSingleInProgress(challenge_id);}
+                    Log.i("stat", "Click: " + viewPager.getCurrentItem());
+                    Toast.makeText(getActivity(), "OK", Toast.LENGTH_SHORT).show();
+                    StartSingleInProgress(challenge_id);
+                }
                 return true;
             }
         });
         return view;
     }
+
     public void Create_new_challenge(String descritpion, int days) {
         String type_id = "567d51c48322f85870fd931a";
         final SessionManager sessionManager = new SessionManager(getContext());
         HashMap<String, String> user = new HashMap<>();
         user = sessionManager.getUserDetails();
         String token = user.get("token");
-        String duration = ""+(days*86400);
+        String duration = "" + (days * 86400);
+        String details = descritpion + " during " + days + " days";
 
         final String API_URL = "http://46.101.213.24:3007";
         final Retrofit retrofit = new Retrofit.Builder()
@@ -202,24 +210,23 @@ public class SelfImprovementFragment extends Fragment{
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
         Call<com.example.ivan.champy_v2.create_challenge.CreateChallenge> call =
                 createChallenge.createChallenge(
-                  "User_Challenge",
+                        "User_Challenge",
                         type_id,
                         descritpion,
-                        descritpion,
+                        details,
                         duration,
                         token
                 );
         call.enqueue(new Callback<com.example.ivan.champy_v2.create_challenge.CreateChallenge>() {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.create_challenge.CreateChallenge> response, Retrofit retrofit) {
-                if (response.isSuccess()){
+                if (response.isSuccess()) {
                     String challenge = response.body().getData().get_id();
-                    Log.i("stat", "Status: "+challenge);
+                    Log.i("stat", "Status: " + challenge);
                     StartSingleInProgress(challenge);
                     Log.i("stat", "Status: Challenge Created");
-                    
-                }
-                else Log.i("stat", "Status: Error Creating");
+
+                } else Log.i("stat", "Status: Error Creating");
             }
 
             @Override
@@ -227,10 +234,10 @@ public class SelfImprovementFragment extends Fragment{
 
             }
         });
-        
+
     }
-    public void StartSingleInProgress(String challenge)
-    {
+
+    public void StartSingleInProgress(String challenge) {
         final SessionManager sessionManager = new SessionManager(getContext());
         HashMap<String, String> user = new HashMap<>();
         user = sessionManager.getUserDetails();
@@ -251,10 +258,10 @@ public class SelfImprovementFragment extends Fragment{
         call.enqueue(new Callback<com.example.ivan.champy_v2.single_inprogress.SingleInProgress>() {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
-                 if (response.isSuccess()){
-                     Log.i("stat", "Status: Starting OK");
-                     generate();
-                 } else Log.i("stat", "Status: Starting WRONG"+response.code());
+                if (response.isSuccess()) {
+                    Log.i("stat", "Status: Starting OK");
+                    generate();
+                } else Log.i("stat", "Status: Starting WRONG" + response.code());
             }
 
             @Override
@@ -263,13 +270,12 @@ public class SelfImprovementFragment extends Fragment{
             }
         });
     }
-    public void generate()
-    {
+
+    public void generate() {
         DBHelper dbHelper = new DBHelper(getContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        //int clearCount = db.delete("myChallenges", null, null);
+        int clearCount = db.delete("myChallenges", null, null);
         final ContentValues cv = new ContentValues();
-
         final String API_URL = "http://46.101.213.24:3007";
         final Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(API_URL)
@@ -295,7 +301,7 @@ public class SelfImprovementFragment extends Fragment{
                         com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
                         Challenge challenge = datum.getChallenge();
 
-                        String desctiption = challenge.getDescription();
+                        String desctiption = challenge.getDetails();
                         int end = datum.getEnd();
                         int days = round((end - unixTime) / 86400);
                         String duration = "" + days;
@@ -315,5 +321,27 @@ public class SelfImprovementFragment extends Fragment{
             public void onFailure(Throwable t) {
             }
         });
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
+    public void setupUI(View view) {
+
+        //Set up touch listener for non-text box views to hide keyboard.
+        if (!(view instanceof EditText)) {
+
+            view.setOnTouchListener(new View.OnTouchListener() {
+
+                public boolean onTouch(View v, MotionEvent event) {
+                    hideSoftKeyboard(getActivity());
+                    return false;
+                }
+
+            });
+        }
+
     }
 }

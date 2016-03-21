@@ -185,6 +185,9 @@ public class Settings extends AppCompatActivity
         textView.setText(name);
         textView.setTypeface(typeface);
 
+        textView = (TextView)findViewById(R.id.textView9);
+        textView.setText("Level "+sessionManager.getChampyOptions().get("level")+ " Champy");
+
         textView = (TextView)findViewById(R.id.textView17);
         textView.setTypeface(typeface);
         textView = (TextView)findViewById(R.id.textView10);
@@ -309,6 +312,7 @@ public class Settings extends AppCompatActivity
                                             DBHelper dbHelper = new DBHelper(getApplicationContext());
                                             final SQLiteDatabase db = dbHelper.getWritableDatabase();
                                             int clearCount = db.delete("pending", null, null);
+                                            db.delete("myChallenges", null, null);
                                             file.delete();
                                         } else Log.i("Status", "Status: " + response.code());
                                     }
