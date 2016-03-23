@@ -2,6 +2,7 @@ package com.example.ivan.champy_v2;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -163,18 +164,29 @@ public class SelfImprovement extends AppCompatActivity
                 if (response.isSuccess()) {
                     Log.i("stat", "Status: OK");
                     List<Datum> data = response.body().getData();
-                    int data_size  = 0;
+                    int data_size = 0;
                     for (int i = 0; i < data.size(); i++) {
                         com.example.ivan.champy_v2.model.Self.Datum datum = data.get(i);
                         Log.i("stat", "Status: " + datum.getType().getName());
                         if (datum.getType().getName().equals("self improvement")) {
-                            cv.put("name", datum.getName());
-                            Log.i("stat", "Status: " + datum.getName());
-                            cv.put("description", datum.getDescription());
-                            cv.put("duration", datum.getDuration());
-                            cv.put("challenge_id", datum.get_id());
-                            db.insert("selfimprovement", null, cv);
-                            data_size++;
+                            if (check(datum.get_id())) {
+                                cv.put("name", datum.getName());
+                                Log.i("stat", "Status: " + datum.getName());
+                                cv.put("description", datum.getDescription());
+                                cv.put("duration", datum.getDuration());
+                                cv.put("challenge_id", datum.get_id());
+                                db.insert("selfimprovement", null, cv);
+                                data_size++;
+                            }
+                            else {
+                                cv.put("name", "active");
+                                Log.i("stat", "Status: " + "active");
+                                cv.put("description", datum.getDescription());
+                                cv.put("duration", datum.getDuration());
+                                cv.put("challenge_id", datum.get_id());
+                                db.insert("selfimprovement", null, cv);
+                                data_size++;
+                            }
                         }
                     }
                     sessionManager.setSelfSize(data_size);
@@ -275,6 +287,34 @@ public class SelfImprovement extends AppCompatActivity
         Intent intent = new Intent(SelfImprovement.this, LoginActivity.class);
         startActivity(intent);
         Toast.makeText(this, "Bye Bye!!!", Toast.LENGTH_SHORT).show();
+    }
+    public boolean check(String id)
+    {
+        DBHelper dbHelper = new DBHelper(this);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        final ContentValues cv = new ContentValues();
+        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
+        int o = 0;
+        boolean ok = true;
+        if (c.moveToFirst()) {
+            int idColIndex = c.getColumnIndex("id");
+            int nameColIndex = c.getColumnIndex("name");
+            int coldescription = c.getColumnIndex("description");
+            int colduration = c.getColumnIndex("duration");
+            int colchallenge_id = c.getColumnIndex("challenge_id");
+            do {
+              String checked = c.getString(colchallenge_id);
+                if (checked.equals(id)) {
+                    Log.i("stat", "Cheked");
+                    ok = false;
+                    break;
+                }
+            } while (c.moveToNext());
+        } else
+            Log.i("stat", "kwo0 rows");
+        c.close();
+        return ok;
     }
 
 }

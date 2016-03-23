@@ -221,6 +221,10 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
+                ImageView screen = (ImageView) findViewById(R.id.blured);
+                RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.cards);
+                relativeLayout.setVisibility(View.VISIBLE);
+                screen.setVisibility(View.INVISIBLE);
                 actionMenu.close(true);
             }
         };
@@ -285,10 +289,11 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         }
         actionMenu.close(true);
-        ImageView screen = (ImageView) findViewById(R.id.blured);
-        screen.setVisibility(View.INVISIBLE);
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.cards);
         relativeLayout.setVisibility(View.VISIBLE);
+        ImageView screen = (ImageView) findViewById(R.id.blured);
+        screen.setVisibility(View.INVISIBLE);
+
     }
 
     @Override

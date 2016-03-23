@@ -10,7 +10,7 @@ import retrofit.http.Query;
  */
 public interface ActiveInProgress {
 
-    @GET("/v1/users/{id}/history/events/{updated}")
+    @GET("/v1/users/{id}/history/in-progress-events/{updated}")
     Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> getActiveInProgress(
             @Path("id") String id,
             @Path("updated") String updated,

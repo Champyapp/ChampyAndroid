@@ -477,7 +477,29 @@ public class LoginActivity extends AppCompatActivity {
                     final long unixTime = System.currentTimeMillis() / 1000L;
                     String update = "1457019726";
                     Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(id, update, jwtString);
-                    call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
+                    try {
+                        List<com.example.ivan.champy_v2.model.active_in_progress.Datum>  list  = call1.execute().body().getData();
+                        for (int i = 0; i < list.size(); i++) {
+                            com.example.ivan.champy_v2.model.active_in_progress.Datum datum = list.get(i);
+                            Challenge challenge = datum.getChallenge();
+                            cv.clear();
+                            String desctiption = challenge.getDescription();
+                            int end = datum.getEnd();
+                            int days = round((end - unixTime) / 86400);
+                            String duration = "" + days;
+                            String challenge_id = challenge.get_id();
+                            cv.put("name", "Self Improvement");
+                            cv.put("description", desctiption);
+                            cv.put("duration", duration);
+                            cv.put("challenge_id", challenge_id);
+                            db.insert("myChallenges", null, cv);
+                            Log.d(TAG, "Challenge: "+desctiption);
+                        }
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                  /*  call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
                         @Override
                         public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
                             if (response.isSuccess()) {
@@ -485,7 +507,7 @@ public class LoginActivity extends AppCompatActivity {
                                 for (int i = 0; i < data.size(); i++) {
                                     com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
                                     Challenge challenge = datum.getChallenge();
-
+                                    cv.clear();
                                     String desctiption = challenge.getDescription();
                                     int end = datum.getEnd();
                                     int days = round((end - unixTime) / 86400);
@@ -496,6 +518,7 @@ public class LoginActivity extends AppCompatActivity {
                                     cv.put("duration", duration);
                                     cv.put("challenge_id", challenge_id);
                                     db.insert("myChallenges", null, cv);
+                                    Log.d(TAG, "Challenge: "+desctiption);
                                 }
                             }
                         }
@@ -503,7 +526,7 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(Throwable t) {
                         }
-                    });
+                    });*/
                     String api_path = null;
                     if (data.getPhoto() != null){
                         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";

@@ -63,13 +63,8 @@ public class SelfImprovementFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.item_row, container, false);
-        final Bundle args = this.getArguments();
-        final int[] finalposition = new int[1];
-        final ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.pager);
-        setupUI(getActivity().findViewById(R.id.selfimprovement));
-        setupUI(view);
         String name = "";
         String duration = "";
         String description = "";
@@ -77,6 +72,7 @@ public class SelfImprovementFragment extends Fragment {
         DBHelper dbHelper = new DBHelper(getActivity());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final ContentValues cv = new ContentValues();
+        final Bundle args = this.getArguments();
         Cursor c = db.query("selfimprovement", null, null, null, null, null, null);
         int position = args.getInt(ARG_PAGE);
         Log.i("stat", "Status: " + position);
@@ -102,60 +98,110 @@ public class SelfImprovementFragment extends Fragment {
             Log.i("stat", "0 rows");
         c.close();
         Log.i("stat", "Name: " + description);
-        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
-        EditText editText = (EditText) view.findViewById(R.id.goal);
-        editText.setText(description);
-        editText.setTypeface(typeface);
-        editText = (EditText) view.findViewById(R.id.days);
-        editText.setTypeface(typeface);
-        int days = 0;
-        if (duration != null && duration != "") {
-            days = Integer.parseInt(duration) / 86400;
-        }
-        editText.setText("" + days);
-        TextView textView = (TextView) view.findViewById(R.id.textView8);
-        textView.setTypeface(typeface);
 
-        Glide.with(getContext())
-                .load(R.drawable.points)
-                .override(120, 120)
-                .into((ImageView) view.findViewById(R.id.imageView14));
-        editText = (EditText) view.findViewById(R.id.goal);
-        description = editText.getText().toString();
-        editText = (EditText) view.findViewById(R.id.days);
-        days = Integer.parseInt(editText.getText().toString());
-        Log.i("stat", "Description: " + description);
-        ImageButton imageButton = (ImageButton) getActivity().findViewById(R.id.imageButton5);
-
-        imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "Tap & Hold", Toast.LENGTH_SHORT).show();
+        if (name.equals("active")) {
+            Log.i("stat", "Status: Active");
+            Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
+            TextView textView = (TextView)view.findViewById(R.id.goal_text);
+            textView.setText(description);
+            textView.setTypeface(typeface);
+            textView.setVisibility(View.VISIBLE);
+            textView = (TextView)view.findViewById(R.id.days_text);
+            int days = 0;
+            if (duration != null && duration != "") {
+                days = Integer.parseInt(duration) / 86400;
             }
-        });
-        imageButton.setOnLongClickListener(new View.OnLongClickListener() {
+            textView.setText("" + days);
+            textView.setTypeface(typeface);
+            textView.setVisibility(View.VISIBLE);
+            EditText editText = (EditText) view.findViewById(R.id.goal);
+            editText.setVisibility(View.INVISIBLE);
+            editText = (EditText)view.findViewById(R.id.days);
+            editText.setVisibility(View.INVISIBLE);
+            Glide.with(getContext())
+                    .load(R.drawable.points)
+                    .override(120, 120)
+                    .into((ImageView) view.findViewById(R.id.imageView14));
+        }
+        else {
+            final int[] finalposition = new int[1];
+            final ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.pager);
+            setupUI(getActivity().findViewById(R.id.selfimprovement));
+            setupUI(view);
+
+
+            Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
+            EditText editText = (EditText) view.findViewById(R.id.goal);
+            editText.setText(description);
+            editText.setTypeface(typeface);
+            editText.setVisibility(View.VISIBLE);
+            editText = (EditText) view.findViewById(R.id.days);
+            editText.setTypeface(typeface);
+            int days = 0;
+            if (duration != null && duration != "") {
+                days = Integer.parseInt(duration) / 86400;
+            }
+            editText.setText("" + days);
+            editText.setVisibility(View.VISIBLE);
+            TextView textView = (TextView) view.findViewById(R.id.textView8);
+            textView.setTypeface(typeface);
+            textView = (TextView)view.findViewById(R.id.goal_text);
+            textView.setVisibility(View.INVISIBLE);
+            textView = (TextView)view.findViewById(R.id.days_text);
+            textView.setVisibility(View.INVISIBLE);
+            Glide.with(getContext())
+                    .load(R.drawable.points)
+                    .override(120, 120)
+                    .into((ImageView) view.findViewById(R.id.imageView14));
+             editText = (EditText) view.findViewById(R.id.goal);
+            description = editText.getText().toString();
+            editText = (EditText) view.findViewById(R.id.days);
+            days = Integer.parseInt(editText.getText().toString());
+            Log.i("stat", "Description: " + description);
+            ImageButton imageButton = (ImageButton) getActivity().findViewById(R.id.imageButton5);
+            imageButton.setVisibility(View.VISIBLE);
+
+            imageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getActivity(), "Tap & Hold", Toast.LENGTH_SHORT).show();
+                }
+            });
+            imageButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                EditText editText1 = (EditText) view.findViewById(R.id.goal);
                 String name = "";
                 String duration = "";
                 String description = "";
                 String challenge_id = "";
                 int days = 0;
+                EditText editText1 = (EditText) view.findViewById(R.id.goal);
+                description = editText1.getText().toString();
+                editText1 = (EditText) view.findViewById(R.id.days);
+                Log.i("stat", "Descrition :"+description+ " " + description.length());
+                days = Integer.parseInt(editText1.getText().toString());
+
                 Cursor c = db.query("selfimprovement", null, null, null, null, null, null);
                 int position = viewPager.getCurrentItem();
                 SessionManager sessionManager = new SessionManager(getContext());
                 int size = sessionManager.getSelfSize();
+
                 Log.i("stat", "Click: " + position + " " + size);
                 if (position == size) {
+                    editText1 = (EditText) view.findViewById(R.id.goal);
                     description = editText1.getText().toString();
                     Log.i("stat", "Click: clicked");
                     Log.i("stat", "Click: " + description);
                     editText1 = (EditText) view.findViewById(R.id.days);
                     days = Integer.parseInt(editText1.getText().toString());
-                    Create_new_challenge(description, days);
-                } else {
-                    Log.i("stat", "Status: " + position);
+                    if (description.length() >= 100)
+                        Toast.makeText(getContext(), "Text is too long", Toast.LENGTH_SHORT).show();
+                    else if (days > 999)
+                        Toast.makeText(getContext(), "Max 999 days", Toast.LENGTH_SHORT).show();
+                    else Create_new_challenge(description, days);
+                } else
+                {
+                    Log.i("stat", "Status: Poehali");
                     int o = 0;
                     if (c.moveToFirst()) {
                         int idColIndex = c.getColumnIndex("id");
@@ -174,32 +220,42 @@ public class SelfImprovementFragment extends Fragment {
                                 break;
                             }
                         } while (c.moveToNext());
-                    } else
-                        Log.i("stat", "0 rows");
+                    } else Log.i("stat", "0 rows");
                     c.close();
-
+                    description = ((EditText) view.findViewById(R.id.goal)).getText().toString();
+                    Log.i("stat", "Description :" + description + " " + description.length());
                     if (duration != null && duration != "") {
                         days = Integer.parseInt(duration) / 86400;
                     }
-
                     Log.i("stat", "Click: " + viewPager.getCurrentItem());
-                    Toast.makeText(getActivity(), "OK", Toast.LENGTH_SHORT).show();
-                    StartSingleInProgress(challenge_id);
+                    if (name.equals("active")) {
+                        Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
+                    } else
+                    if (description.length() > 100) {
+                        Toast.makeText(getContext(), "Text is too long", Toast.LENGTH_SHORT).show();
+                    }
+                    else if (days>999) {
+                        Toast.makeText(getContext(), "Max 999 days", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Toast.makeText(getActivity(), "OK", Toast.LENGTH_SHORT).show();
+                        StartSingleInProgress(challenge_id);
+                    }
                 }
                 return true;
             }
-        });
+        });}
         return view;
     }
 
-    public void Create_new_challenge(String descritpion, int days) {
+    public void Create_new_challenge(String description, int days) {
         String type_id = "567d51c48322f85870fd931a";
         final SessionManager sessionManager = new SessionManager(getContext());
         HashMap<String, String> user = new HashMap<>();
         user = sessionManager.getUserDetails();
         String token = user.get("token");
         String duration = "" + (days * 86400);
-        String details = descritpion + " during " + days + " days";
+        String details = description + " during " + days + " days";
 
         final String API_URL = "http://46.101.213.24:3007";
         final Retrofit retrofit = new Retrofit.Builder()
@@ -212,7 +268,7 @@ public class SelfImprovementFragment extends Fragment {
                 createChallenge.createChallenge(
                         "User_Challenge",
                         type_id,
-                        descritpion,
+                        description,
                         details,
                         duration,
                         token
@@ -300,7 +356,6 @@ public class SelfImprovementFragment extends Fragment {
                     for (int i = 0; i < data.size(); i++) {
                         com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
                         Challenge challenge = datum.getChallenge();
-
                         String desctiption = challenge.getDetails();
                         int end = datum.getEnd();
                         int days = round((end - unixTime) / 86400);
