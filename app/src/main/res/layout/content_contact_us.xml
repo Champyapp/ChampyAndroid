@@ -65,7 +65,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Contact Us"
-        android:id="@+id/wins"
+        android:id="@+id/in_progress"
         android:layout_alignParentTop="true"
         android:layout_alignLeft="@+id/textView9"
         android:layout_alignStart="@+id/textView9"

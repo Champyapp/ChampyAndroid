@@ -104,4 +104,6 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_self_improvement1">SelfImprovement1</string>
+    <string name="title_activity_history">History</string>
+    <string name="title_activity_wake_up">WakeUp</string>
 </resources>

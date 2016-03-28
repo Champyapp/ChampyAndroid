@@ -110,8 +110,8 @@ public class MainActivity extends AppCompatActivity
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
 
 
-        SubActionButton button1 = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeupcolor)).build();
-        SubActionButton button2 = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.duelcolor)).build();
+        final SubActionButton button1 = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeupcolor)).build();
+        final SubActionButton button2 = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.duelcolor)).build();
         final SubActionButton button3 = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementcolor)).build();
         int width = getWindowManager().getDefaultDisplay().getWidth();
         int x = round(width/100);
@@ -172,6 +172,13 @@ public class MainActivity extends AppCompatActivity
                             startActivity(intent);
                         }
                     });
+                    button1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(MainActivity.this, WakeUp.class);
+                            startActivity(intent);
+                        }
+                    });
                     screen.setVisibility(View.VISIBLE);
                     relativeLayout.setVisibility(View.INVISIBLE);
 
@@ -192,6 +199,13 @@ public class MainActivity extends AppCompatActivity
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent(MainActivity.this, SelfImprovement.class);
+                            startActivity(intent);
+                        }
+                    });
+                    button1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(MainActivity.this, WakeUp.class);
                             startActivity(intent);
                         }
                     });
@@ -334,7 +348,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         }
         if (id == R.id.history){
-            Intent intent = new Intent(MainActivity.this, SelfImprovement.class);
+            Intent intent = new Intent(MainActivity.this, History.class);
             startActivity(intent);
         }
         if (id == R.id.settings){

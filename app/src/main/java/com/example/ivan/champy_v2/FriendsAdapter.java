@@ -56,7 +56,7 @@ public class FriendsAdapter extends
         // Inflate the custom layout
         View contactView = inflater.inflate(R.layout.item_friends, parent, false);
 
-        TextView textView = (TextView)contactView.findViewById(R.id.friend_name);
+        TextView textView = (TextView)contactView.findViewById(R.id.name);
         Typeface typeFace = Typeface.createFromAsset(context.getAssets(), "fonts/bebasneue.ttf");
         textView.setTypeface(typeFace);
 
@@ -248,7 +248,7 @@ public class FriendsAdapter extends
 
         textView = (TextView)viewHolder.itemView.findViewById(R.id.chall);
         textView.setText(champy.get("challenges"));
-        textView = (TextView)viewHolder.itemView.findViewById(R.id.wins);
+        textView = (TextView)viewHolder.itemView.findViewById(R.id.in_progress);
         textView.setText(champy.get("wins"));
         textView = (TextView)viewHolder.itemView.findViewById(R.id.total);
         textView.setText(champy.get("total"));
@@ -293,8 +293,8 @@ public class FriendsAdapter extends
             // to access the context from any ViewHolder instance.
             super(itemView);
 
-            nameTextView = (TextView) itemView.findViewById(R.id.friend_name);
-            friendImage = (ImageView) itemView.findViewById(R.id.friend_pic);
+            nameTextView = (TextView) itemView.findViewById(R.id.name);
+            friendImage = (ImageView) itemView.findViewById(R.id.picture);
             challenges = (ImageView) itemView.findViewById(R.id.imageView2);
             wins = (ImageView) itemView.findViewById(R.id.imageView3);
             total = (ImageView) itemView.findViewById(R.id.imageView4);
