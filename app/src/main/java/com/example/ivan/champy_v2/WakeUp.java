@@ -2,7 +2,10 @@ package com.example.ivan.champy_v2;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -83,12 +86,12 @@ public class WakeUp extends AppCompatActivity
         textView.setTypeface(typeface);
 
         Glide.with(this)
-                .load(R.drawable.selfimprovementicon)
+                .load(R.drawable.wakeupwhite)
                 .override(130, 130)
                 .into((ImageView) findViewById(R.id.imageView13));
 
         Glide.with(this)
-                .load(R.drawable.selfimprtext)
+                .load(R.drawable.wakeuptext)
                 .override(200, 170)
                 .into((ImageView) findViewById(R.id.imageView12));
 
@@ -136,21 +139,59 @@ public class WakeUp extends AppCompatActivity
             @Override
             public boolean onLongClick(View v) {
                 alarmTimePicker = (TimePicker)findViewById(R.id.timePicker);
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(Calendar.HOUR_OF_DAY, alarmTimePicker.getCurrentHour());
-                calendar.set(Calendar.MINUTE, alarmTimePicker.getCurrentMinute());
+                int hour = alarmTimePicker.getCurrentHour();
+                int minute = alarmTimePicker.getCurrentMinute();
+                if (minute<10) hour = hour*10;
+                boolean ok = check(hour, minute);
+                if (ok) {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(Calendar.HOUR_OF_DAY, alarmTimePicker.getCurrentHour());
+                    calendar.set(Calendar.MINUTE, alarmTimePicker.getCurrentMinute());
+                    Intent myIntent = new Intent(WakeUp.this, AlarmReceiver.class);
+                    int id = hour+minute;
+                    pendingIntent = PendingIntent.getBroadcast(WakeUp.this, id, myIntent, 0);
+                    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+                    Toast.makeText(WakeUp.this, "Created", Toast.LENGTH_SHORT).show();
+                    ChallengeController challengeController = new ChallengeController(WakeUp.this, WakeUp.this, hour, minute);
+                    challengeController.Create_new_challenge("Wake Up", 21, "567d51c48322f85870fd931c");
+                } else Toast.makeText(WakeUp.this, "Already exist!", Toast.LENGTH_SHORT).show();
 
-                Intent myIntent = new Intent(WakeUp.this, AlarmReceiver.class);
-                pendingIntent = PendingIntent.getBroadcast(WakeUp.this, 0, myIntent, 0);
-                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-                Toast.makeText(WakeUp.this, "Created", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(WakeUp.this, MainActivity.class);
-                startActivity(intent);
                 return true;
             }
         });
 
 
+    }
+
+    public boolean check(int hour, int minute)
+    {
+        boolean ok = true;
+
+        DBHelper dbHelper = new DBHelper(this);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        final ContentValues cv = new ContentValues();
+        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
+        int o = 0;
+        if (c.moveToFirst()) {
+            int nameColIndex = c.getColumnIndex("name");
+            int description = Integer.parseInt(c.getString(c.getColumnIndex("description")));
+            int timeh = description/100;
+            int timem = description-timeh;
+            Log.i("stat", "Statuskwo: o=" + o);
+            do {
+                o++;
+                if (c.getString(nameColIndex).equals("Wake Up")){
+                    if ((hour == timeh) && (minute == timem)){
+                        ok = false;
+                        break;
+                    }
+                }
+            } while (c.moveToNext());
+        } else
+            Log.i("status", "kwo0 rows");
+        c.close();
+        return ok;
     }
 
     private Drawable Init(String path) throws FileNotFoundException {

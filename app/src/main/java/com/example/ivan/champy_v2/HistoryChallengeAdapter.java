@@ -73,14 +73,23 @@ public class HistoryChallengeAdapter extends
     @Override
     public void onBindViewHolder(final HistoryChallengeAdapter.ViewHolder viewholder, int position) {
         HistoryChallenge contact = mContacts.get(position);
-
+        TextView textView = viewholder.nameTextView;
+        String type = contact.getType();
+        if (type.equals("Wake Up")) {
+            textView.setText("Wake Up");
+            Glide.with(_context)
+                    .load(R.drawable.wakeupcolor)
+                    .override(80, 80)
+                    .into(viewholder.image);
+        }
+        else {textView.setText("Self-Improvement Challenge");
         Glide.with(_context)
                 .load(R.drawable.selfimprovementcolor)
                 .override(80, 80)
-                .into(viewholder.image);
+                .into(viewholder.image);}
 
-        TextView textView = viewholder.nameTextView;
-        textView.setText("Self-Improvement Challenge");
+
+
         Typeface typeFace = Typeface.createFromAsset(_context.getAssets(), "fonts/bebasneue.ttf");
         textView.setTypeface(typeFace);
 

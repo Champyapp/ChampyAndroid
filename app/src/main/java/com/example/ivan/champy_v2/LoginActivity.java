@@ -482,18 +482,19 @@ public class LoginActivity extends AppCompatActivity {
                         for (int i = 0; i < list.size(); i++) {
                             com.example.ivan.champy_v2.model.active_in_progress.Datum datum = list.get(i);
                             Challenge challenge = datum.getChallenge();
-                            cv.clear();
-                            String desctiption = challenge.getDescription();
+                            String desctiption = challenge.getDetails();
                             int end = datum.getEnd();
                             int days = round((end - unixTime) / 86400);
                             String duration = "" + days;
                             String challenge_id = challenge.get_id();
-                            cv.put("name", "Self Improvement");
+                            if (challenge.getDescription().equals("Wake Up")) {
+                                cv.put("name", "Wake Up");
+                            }
+                            else cv.put("name", "Self Improvement");
                             cv.put("description", desctiption);
                             cv.put("duration", duration);
                             cv.put("challenge_id", challenge_id);
                             db.insert("myChallenges", null, cv);
-                            Log.d(TAG, "Challenge: "+desctiption);
                         }
 
                     } catch (IOException e) {

@@ -361,7 +361,8 @@ public class SelfImprovementFragment extends Fragment {
                         int days = round((end - unixTime) / 86400);
                         String duration = "" + days;
                         String challenge_id = challenge.get_id();
-                        cv.put("name", "Self Improvement");
+                        if (challenge.getDescription().equals("Wake Up")) cv.put("name", "Wake Up");
+                        else cv.put("name", "Self Improvement");
                         cv.put("description", desctiption);
                         cv.put("duration", duration);
                         cv.put("challenge_id", challenge_id);

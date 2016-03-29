@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -602,10 +603,22 @@ public class MainActivity extends AppCompatActivity
 
             TextView textView  = (TextView) tempView.findViewById(R.id.textView12);
             textView.setText(item.getType());
+            String s = item.getGoal();
+            if (item.getType().equals("Wake Up")) {
+                ImageView imageView = (ImageView)tempView.findViewById(R.id.imageView);
+                imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeupwhite));
+                int t = Integer.parseInt(s);
+                int m = t-((t/100)*100);
+                String minute = ""+m;
+                if (m<10) minute = "0"+m;
+                s = "Wake up at "+t/100+":"+minute;
+            }
             textView.setTextSize((float)(y*1.3));
+            Typeface typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
+            textView.setTypeface(typeface);
 
             textView = (TextView) tempView.findViewById(R.id.textView13);
-            textView.setText(item.getGoal());
+            textView.setText(s);
             textView.setTextSize(y);
 
             textView = (TextView) tempView.findViewById(R.id.textView14);

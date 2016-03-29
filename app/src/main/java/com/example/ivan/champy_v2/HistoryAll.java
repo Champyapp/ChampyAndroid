@@ -32,7 +32,8 @@ public class HistoryAll extends Fragment{
            String descritption = item.getGoal();
            String duration = item.getDays();
 
-           all.add(new HistoryChallenge("self",true,descritption, duration));
+
+           all.add(new HistoryChallenge(item.getType(),true,descritption, duration));
         }
 
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);

@@ -54,7 +54,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 + "name text,"
                 + "description text,"
                 + "duration text,"
-                + "challenge_id"
+                + "challenge_id text"
                 + ");");
     }
 

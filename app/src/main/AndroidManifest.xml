@@ -90,6 +90,10 @@
             android:name=".WakeUp"
             android:label="@string/title_activity_wake_up"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <activity
+            android:name=".AlarmReceiverActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <service
             android:name=".AlarmService"
             android:enabled="true" />
