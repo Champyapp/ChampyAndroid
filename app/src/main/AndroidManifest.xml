@@ -104,6 +104,7 @@
             android:name=".AlarmService"
             android:enabled="true" />
         <receiver android:name=".AlarmReceiver" />
+        <receiver android:name=".AlarmSchedule" />
     </application>
 
 </manifest>

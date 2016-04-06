@@ -2,11 +2,15 @@ package com.example.ivan.champy_v2;
 
 import android.animation.TypeEvaluator;
 import android.animation.ValueAnimator;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -60,6 +64,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -77,6 +82,8 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     final String TAG = "myLogs";
+    AlarmManager alarmManager;
+    private PendingIntent pendingIntent;
     private FloatingActionMenu actionMenu;
 
     private CustomPagerBase pager;
@@ -95,13 +102,24 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         }
 
+
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_gradient));
         setSupportActionBar(toolbar);
 
 
+        alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmSchedule.class);
+        intent.putExtra("alarm", "reset");
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 18);
+        calendar.set(Calendar.MINUTE, 6);
+        calendar.set(Calendar.SECOND, 0);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         RelativeLayout cards = (RelativeLayout)findViewById(R.id.cards);
         CustomAdapter adapter = new CustomAdapter(this, SelfImprovement_model.generate(this));
         if (adapter.dataCount() > 0){
@@ -273,7 +291,7 @@ public class MainActivity extends AppCompatActivity
 
         if (url == null) {
             Log.d(TAG, "intent");
-            Intent intent = getIntent();
+            intent = getIntent();
             url = intent.getExtras().getString("path_to_pic");
             name = intent.getExtras().getString("name");
         }
@@ -593,16 +611,9 @@ public class MainActivity extends AppCompatActivity
 
 
             // cardImage.setImageDrawable(RecyclerView_Activity.this.getResources().getDrawable(R.drawable.card_image));
-            Button button = (Button) tempView.findViewById(R.id.button3);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d("TAG", "YOOO");
-                }
-            });
-            button.getLayoutParams().width = x*10;
-            button.getLayoutParams().height = x*10;
-            button = (Button) tempView.findViewById(R.id.button2);
+
+
+            Button button = (Button) tempView.findViewById(R.id.button2);
             button.getLayoutParams().width = x*10;
             button.getLayoutParams().height = x*10;
             button.setOnClickListener(new View.OnClickListener() {
@@ -671,6 +682,32 @@ public class MainActivity extends AppCompatActivity
 
             textView = (TextView) tempView.findViewById(R.id.textView15);
             textView.setTextSize(y);
+
+            button = (Button) tempView.findViewById(R.id.button3);
+            button.getLayoutParams().width = x*10;
+            button.getLayoutParams().height = x*10;
+            final Button finalButton = button;
+            if (item.getUpdated() != null){
+                if (!item.getType().equals("Wake Up")) {
+                    if (item.getUpdated().equals("false")) {
+                        button.setBackgroundDrawable(MainActivity.this.getResources().getDrawable(R.drawable.accept1));
+                    }
+                }
+            }
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String id = item.getId();
+                    Log.d("myLogs", "Click " + id);
+                    SQLiteDatabase localSQLiteDatabase = new DBHelper(MainActivity.this).getWritableDatabase();
+                    ContentValues localContentValues = new ContentValues();
+                    localContentValues.put("updated", "true");
+                    localSQLiteDatabase.update("myChallenges", localContentValues, "challenge_id = ?", new String[]{id});
+                    int i = localSQLiteDatabase.update("updated", localContentValues, "challenge_id = ?", new String[]{id});
+                    Log.d("myLogs", "Updated: " + i);
+                    finalButton.setBackgroundDrawable(MainActivity.this.getResources().getDrawable(R.drawable.icon_share));
+                }
+            });
 
             return tempView;
         }

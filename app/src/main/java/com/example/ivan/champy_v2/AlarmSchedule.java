@@ -18,6 +18,7 @@ public class AlarmSchedule extends WakefulBroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String newString;
+        Log.d("myLogs", "Updated schedule");
         Bundle extras = intent.getExtras();
         if(extras == null) {
             newString= null;
@@ -25,11 +26,11 @@ public class AlarmSchedule extends WakefulBroadcastReceiver {
             newString= extras.getString("alarm");
         }
         if (newString.equals("reset")){
-            Log.d("myLogs", "Updated schedule");;
+            Log.d("myLogs", "Updated schedule");
             DBHelper dbHelper = new DBHelper(context);
             final SQLiteDatabase db = dbHelper.getWritableDatabase();
             final ContentValues cv = new ContentValues();
-            Cursor c = db.query("myChallenge", null, null, null, null, null, null);
+            Cursor c = db.query("myChallenges", null, null, null, null, null, null);
             int o = 0;
             if (c.moveToFirst()) {
                 int colchallenge_id = c.getColumnIndex("challenge_id");
