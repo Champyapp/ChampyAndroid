@@ -46,7 +46,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 + "name text,"
                 + "description text,"
                 + "duration text,"
-                + "challenge_id text"
+                + "challenge_id text,"
+                + "status text"
                 + ");");
 
         db.execSQL("create table myChallenges("
@@ -54,7 +55,15 @@ public class DBHelper extends SQLiteOpenHelper {
                 + "name text,"
                 + "description text,"
                 + "duration text,"
-                + "challenge_id text"
+                + "challenge_id text,"
+                + "status text,"
+                + "updated text"
+                + ");");
+
+        db.execSQL("create table updated("
+                + "id integer primary key autoincrement,"
+                + "challenge_id text,"
+                + "updated text"
                 + ");");
     }
 

@@ -10,6 +10,8 @@ import android.net.NetworkInfo;
  */
 public class OfflineMode {
 
+
+
     public boolean isInternetAvailable(Activity activity) {
         ConnectivityManager cm =
                 (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);

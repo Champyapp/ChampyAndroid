@@ -19,6 +19,19 @@ public class SelfImprovement_model {
 
     String goal;
     String days;
+    String id;
+
+    public String getUpdated() {
+        return updated;
+    }
+
+    String updated;
+
+    public String getStatus() {
+        return status;
+    }
+
+    String status;
     private Context context;
     public String getGoal() {
         return goal;
@@ -47,11 +60,18 @@ public class SelfImprovement_model {
         this.type = type;
     }
 
-    public SelfImprovement_model( String mgoal, String mdays, String mtype)
+    public String getId() {
+        return id;
+    }
+
+    public SelfImprovement_model( String mgoal, String mdays, String mtype, String mid ,String mstatus, String mupdated)
     {
         this.goal = mgoal;
         this.days = mdays;
         this.type = mtype;
+        this.id = mid;
+        this.status = mstatus;
+        this.updated = mupdated;
     }
 
     public static ArrayList<SelfImprovement_model> generate(Context context)
@@ -82,14 +102,57 @@ public class SelfImprovement_model {
             int coldescription = c.getColumnIndex("description");
             int colduration = c.getColumnIndex("duration");
             int colchallenge_id = c.getColumnIndex("challenge_id");
+            int status = c.getColumnIndex("status");
+            int updated = c.getColumnIndex("updated");
             Log.i("stat", "Statuskwo: o="+o);
             do {
-              arrayList.add (new SelfImprovement_model(c.getString(coldescription), c.getString(colduration), c.getString(nameColIndex)));
+                if (c.getString(status).equals("started")) arrayList.add (new SelfImprovement_model(c.getString(coldescription), c.getString(colduration), c.getString(nameColIndex), c.getString(colchallenge_id), "started", c.getString(updated)));
             } while (c.moveToNext());
         } else
             Log.i("stat", "kwo0 rows");
         c.close();
         return  arrayList;
     }
+
+    public static ArrayList<SelfImprovement_model> generateAll(Context context)
+    {
+        DBHelper dbHelper = new DBHelper(context);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        final ContentValues cv = new ContentValues();
+
+        final String API_URL = "http://46.101.213.24:3007";
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+
+        final SessionManager sessionManager = new SessionManager(context);
+        HashMap<String, String> user = new HashMap<>();
+        user = sessionManager.getUserDetails();
+        String token = user.get("token");
+        String id = user.get("id");
+        ArrayList<SelfImprovement_model> arrayList = new ArrayList<>();
+        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
+        int o = 0;
+        if (c.moveToFirst()) {
+            int idColIndex = c.getColumnIndex("id");
+            int nameColIndex = c.getColumnIndex("name");
+            int coldescription = c.getColumnIndex("description");
+            int colduration = c.getColumnIndex("duration");
+            int colchallenge_id = c.getColumnIndex("challenge_id");
+            int status = c.getColumnIndex("status");
+            int updated = c.getColumnIndex("updated");
+            Log.i("stat", "Statuskwo: o="+o);
+            do {
+              arrayList.add (new SelfImprovement_model(c.getString(coldescription), c.getString(colduration), c.getString(nameColIndex), c.getString(colchallenge_id), c.getString(status), c.getString(updated)));
+            } while (c.moveToNext());
+        } else
+            Log.i("stat", "kwo0 rows");
+        c.close();
+        return  arrayList;
+    }
+
 
 }

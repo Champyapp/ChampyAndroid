@@ -88,8 +88,13 @@ public class HistoryChallengeAdapter extends
                 .override(80, 80)
                 .into(viewholder.image);}
 
-
-
+        if (contact.getStatus().equals("started")) {
+            textView = (TextView)viewholder.itemView.findViewById(R.id.in_progress);
+            textView.setText("In Progress");
+        } else {
+            textView = (TextView)viewholder.itemView.findViewById(R.id.in_progress);
+            textView.setText("Failed");
+        }
         Typeface typeFace = Typeface.createFromAsset(_context.getAssets(), "fonts/bebasneue.ttf");
         textView.setTypeface(typeFace);
 

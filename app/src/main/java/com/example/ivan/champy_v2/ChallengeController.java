@@ -1,6 +1,8 @@
 package com.example.ivan.champy_v2;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +14,9 @@ import com.example.ivan.champy_v2.interfaces.CreateChallenge;
 import com.example.ivan.champy_v2.interfaces.SingleInProgress;
 import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
 import com.example.ivan.champy_v2.model.active_in_progress.Datum;
+import com.example.ivan.champy_v2.single_inprogress.Data;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -149,7 +153,7 @@ public class ChallengeController {
                         int end = datum.getEnd();
                         int days = round((end - unixTime) / 86400);
                         String duration = "" + days;
-                        String challenge_id = challenge.get_id();
+                        String challenge_id = datum.get_id();
                         Log.i("stat", "Wake Up: " + desctiption);
                         if (challenge.getDescription().equals("Wake Up")) {
                             cv.put("name", "Wake Up");
@@ -158,6 +162,7 @@ public class ChallengeController {
                         cv.put("description", desctiption);
                         cv.put("duration", duration);
                         cv.put("challenge_id", challenge_id);
+                        cv.put("status", datum.getStatus());
                         db.insert("myChallenges", null, cv);
                     }
                     Intent intent = new Intent(firstActivity, MainActivity.class);
@@ -169,5 +174,46 @@ public class ChallengeController {
             public void onFailure(Throwable t) {
             }
         });
+    }
+    public void give_up(String id) throws IOException {
+        final SessionManager sessionManager = new SessionManager(context);
+        HashMap<String, String> user = new HashMap<>();
+        user = sessionManager.getUserDetails();
+        String token = user.get("token");
+
+        final String API_URL = "http://46.101.213.24:3007";
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+       SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
+       Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call = activeInProgress.Surrender(id, token);
+       call.enqueue(new Callback<com.example.ivan.champy_v2.single_inprogress.SingleInProgress>() {
+           @Override
+           public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
+               if (response.isSuccess()){
+                   Log.i("stat", "Surrender: Success");
+                   Data data = response.body().getData();
+                   Log.i("stat", "Give up: "+data.getChallenge().getType());
+                   if (data.getChallenge().getType().equals("567d51c48322f85870fd931c")){
+                       String s = data.getChallenge().getDetails();
+                       Log.i("stat", "Give up: "+s);
+                       int i =Integer.parseInt(s);
+                       Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
+                       PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, i, myIntent, 0);
+                       Log.i("stat", "Give up: "+i);
+                       AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                       alarmManager.cancel(pendingIntent);
+                   }
+                   generate();
+               } else Log.i("stat", "Surrender: Fail"+response.code());
+           }
+
+           @Override
+           public void onFailure(Throwable t) {
+
+           }
+       });
     }
 }

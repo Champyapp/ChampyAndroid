@@ -8,6 +8,12 @@ public class HistoryChallenge {
     boolean active;
     String description;
 
+    public String getStatus() {
+        return status;
+    }
+
+    String status;
+
     public String getDuration() {
         return duration;
     }
@@ -41,12 +47,13 @@ public class HistoryChallenge {
     }
 
     String duration;
-    public HistoryChallenge(String mtype, boolean mactive, String mdescription, String mduration)
+    public HistoryChallenge(String mtype, boolean mactive, String mdescription, String mduration, String mstatus)
     {
         this.type = mtype;
         this.active = mactive;
         this.description = mdescription;
         this.duration = mduration;
+        this.status = mstatus;
     }
 
 }

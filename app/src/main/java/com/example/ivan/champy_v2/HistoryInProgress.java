@@ -11,9 +11,9 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 /**
- * Created by ivan on 30.03.16.
+ * Created by ivan on 23.03.16.
  */
-public class HistoryAll extends Fragment {
+public class HistoryInProgress extends Fragment{
 
 
     @Override
@@ -24,16 +24,16 @@ public class HistoryAll extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_second, container, false);
-        ArrayList<SelfImprovement_model> self_improvement = SelfImprovement_model.generateAll(getContext());
+        ArrayList<SelfImprovement_model> self_improvement = SelfImprovement_model.generate(getContext());
         ArrayList<HistoryChallenge> all = new ArrayList<>();
         for (int i=0; i<self_improvement.size(); i++)
         {
-            SelfImprovement_model item = self_improvement.get(i);
-            String descritption = item.getGoal();
-            String duration = item.getDays();
+           SelfImprovement_model item = self_improvement.get(i);
+           String descritption = item.getGoal();
+           String duration = item.getDays();
 
 
-            all.add(new HistoryChallenge(item.getType(),true,descritption, duration, item.getStatus()));
+           all.add(new HistoryChallenge(item.getType(),true,descritption, duration, item.getStatus()));
         }
 
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);

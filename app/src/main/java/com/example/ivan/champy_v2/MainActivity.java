@@ -2,8 +2,10 @@ package com.example.ivan.champy_v2;
 
 import android.animation.TypeEvaluator;
 import android.animation.ValueAnimator;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -103,8 +105,8 @@ public class MainActivity extends AppCompatActivity
         RelativeLayout cards = (RelativeLayout)findViewById(R.id.cards);
         CustomAdapter adapter = new CustomAdapter(this, SelfImprovement_model.generate(this));
         if (adapter.dataCount() > 0){
-        pager = new CustomPagerBase(this,  cards, adapter);
-        pager.preparePager(0);}
+            pager = new CustomPagerBase(this,  cards, adapter);
+            pager.preparePager(0);}
 
         final ImageButton actionButton = (ImageButton)findViewById(R.id.imageButton);
 
@@ -139,23 +141,23 @@ public class MainActivity extends AppCompatActivity
                 ImageView screen = (ImageView) findViewById(R.id.blured);
 
                 if (screen.getDrawable() == null) {
-                RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.content_main);
-                relativeLayout.setDrawingCacheEnabled(true);
-                relativeLayout.buildDrawingCache();
-                Bitmap bm = relativeLayout.getDrawingCache();
+                    RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.content_main);
+                    relativeLayout.setDrawingCacheEnabled(true);
+                    relativeLayout.buildDrawingCache();
+                    Bitmap bm = relativeLayout.getDrawingCache();
 
 
-                Blur blur = new Blur();
-                if (bm == null) Log.d(TAG, "SUKAAAAA");
-                else {
+                    Blur blur = new Blur();
+                    if (bm == null) Log.d(TAG, "SUKAAAAA");
+                    else {
 
-                    Bitmap blured = Blur.blurRenderScript(getApplicationContext(), bm, 25);
+                        Bitmap blured = Blur.blurRenderScript(getApplicationContext(), bm, 25);
 
-                    screen = (ImageView) findViewById(R.id.blured);
+                        screen = (ImageView) findViewById(R.id.blured);
 
-                    Drawable ob = new BitmapDrawable(getResources(), blured);
-                    screen.setImageDrawable(ob);
-                }
+                        Drawable ob = new BitmapDrawable(getResources(), blured);
+                        screen.setImageDrawable(ob);
+                    }
                 }
                 else Log.d(TAG, "Vse zaebok");
                 RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.cards);
@@ -169,15 +171,21 @@ public class MainActivity extends AppCompatActivity
                     button3.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = new Intent(MainActivity.this, SelfImprovement.class);
-                            startActivity(intent);
+                            OfflineMode offlineMode = new OfflineMode();
+                            if (offlineMode.isInternetAvailable(MainActivity.this)) {
+                                Intent intent = new Intent(MainActivity.this, SelfImprovement.class);
+                                startActivity(intent);
+                            }
                         }
                     });
                     button1.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = new Intent(MainActivity.this, WakeUp.class);
-                            startActivity(intent);
+                            OfflineMode offlineMode = new OfflineMode();
+                            if (offlineMode.isInternetAvailable(MainActivity.this)) {
+                                Intent intent = new Intent(MainActivity.this, WakeUp.class);
+                                startActivity(intent);
+                            }
                         }
                     });
                     screen.setVisibility(View.VISIBLE);
@@ -199,15 +207,21 @@ public class MainActivity extends AppCompatActivity
                     button3.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = new Intent(MainActivity.this, SelfImprovement.class);
-                            startActivity(intent);
+                            OfflineMode offlineMode = new OfflineMode();
+                            if (offlineMode.isInternetAvailable(MainActivity.this)) {
+                                Intent intent = new Intent(MainActivity.this, SelfImprovement.class);
+                                startActivity(intent);
+                            }
                         }
                     });
                     button1.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = new Intent(MainActivity.this, WakeUp.class);
-                            startActivity(intent);
+                            OfflineMode offlineMode = new OfflineMode();
+                            if (offlineMode.isInternetAvailable(MainActivity.this)) {
+                                Intent intent = new Intent(MainActivity.this, WakeUp.class);
+                                startActivity(intent);
+                            }
                         }
                     });
                     actionMenu.close(true);
@@ -339,31 +353,33 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_logout) {
         OfflineMode offlineMode = new OfflineMode();
-        if (offlineMode.isInternetAvailable(this)) Logout();
-        else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
-    }
-        if (id == R.id.friends) {
-            Intent intent = new Intent(MainActivity.this, Friends.class);
-            startActivity(intent);
-        }
-        if (id == R.id.history){
-            Intent intent = new Intent(MainActivity.this, History.class);
-            startActivity(intent);
-        }
-        if (id == R.id.settings){
-            Intent intent = new Intent(MainActivity.this, Settings.class);
-            startActivity(intent);
-        }
-        else if (id == R.id.share) {
-            String message = "Check out Champy - it helps you improve and compete with your friends!";
-            Intent share = new Intent(Intent.ACTION_SEND);
-            share.setType("text/plain");
-            share.putExtra(Intent.EXTRA_TEXT, message);
+        if (offlineMode.isInternetAvailable(this)) {
+            if (id == R.id.nav_logout) {
+                offlineMode = new OfflineMode();
+                if (offlineMode.isInternetAvailable(this)) Logout();
+                else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
+            }
+            if (id == R.id.friends) {
+                Intent intent = new Intent(MainActivity.this, Friends.class);
+                startActivity(intent);
+            }
+            if (id == R.id.history) {
+                Intent intent = new Intent(MainActivity.this, History.class);
+                startActivity(intent);
+            }
+            if (id == R.id.settings) {
+                Intent intent = new Intent(MainActivity.this, Settings.class);
+                startActivity(intent);
+            } else if (id == R.id.share) {
+                String message = "Check out Champy - it helps you improve and compete with your friends!";
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("text/plain");
+                share.putExtra(Intent.EXTRA_TEXT, message);
 
-            startActivity(Intent.createChooser(share, "How would you like to share?"));
-        }
+                startActivity(Intent.createChooser(share, "How would you like to share?"));
+            }
+        } else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -457,7 +473,7 @@ public class MainActivity extends AppCompatActivity
                         .into((ImageView)findViewById(R.id.profile_image));
                 File file = new File(path, "blured2.jpg");
                 if (file.exists()) {
-                   return;
+                    return;
                 } else {
                     file.createNewFile();
                     Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
@@ -521,7 +537,6 @@ public class MainActivity extends AppCompatActivity
     }
    /* private void make_screen_blured()
     {
-
     }*/
 
     @Override
@@ -545,7 +560,7 @@ public class MainActivity extends AppCompatActivity
         bitmap = ((BitmapDrawable)dr).getBitmap();
 
 
-       ImageView background = (ImageView)findViewById(R.id.main_background);
+        ImageView background = (ImageView)findViewById(R.id.main_background);
         background.setScaleType(ImageView.ScaleType.CENTER_CROP);
         background.setImageDrawable(dr);
 
@@ -569,7 +584,7 @@ public class MainActivity extends AppCompatActivity
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 tempView = inflater.inflate(R.layout.single_card_fragment, null, false);
             }
-            SelfImprovement_model item = arrayList.get(position);
+            final SelfImprovement_model item = arrayList.get(position);
             ImageView cardImage = (ImageView)tempView.findViewById(R.id.cardImage);
             int x = round(getWindowManager().getDefaultDisplay().getWidth() / 100);
             int y = round(getWindowManager().getDefaultDisplay().getHeight() / 100);
@@ -590,9 +605,38 @@ public class MainActivity extends AppCompatActivity
             button = (Button) tempView.findViewById(R.id.button2);
             button.getLayoutParams().width = x*10;
             button.getLayoutParams().height = x*10;
-            button = (Button) tempView.findViewById(R.id.button4);
-            button.getLayoutParams().width = x*10;
-            button.getLayoutParams().height = x*10;
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which){
+                                case DialogInterface.BUTTON_POSITIVE:
+                                    OfflineMode offlineMode = new OfflineMode();
+                                    if (offlineMode.isInternetAvailable(MainActivity.this)){
+                                        ChallengeController challengeController = new ChallengeController(MainActivity.this, MainActivity.this, 0 , 0);
+                                        try {
+                                            challengeController.give_up(item.getId());
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                    break;
+
+                                case DialogInterface.BUTTON_NEGATIVE:
+                                    //No button clicked
+                                    break;
+                            }
+                        }
+                    };
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    builder.setMessage("Are You Sure? You Want to Give Up").setPositiveButton("Give Up!", dialogClickListener)
+                            .setNegativeButton("Keep Goin'!", dialogClickListener).show();
+
+                }
+            });
             Log.d("TAG", "X: "+x*y);
 
            /* cardImage = (ImageView)tempView.findViewById(R.id.imageView);

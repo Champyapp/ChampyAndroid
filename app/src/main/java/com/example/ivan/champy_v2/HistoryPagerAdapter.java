@@ -29,7 +29,7 @@ public class HistoryPagerAdapter extends FragmentPagerAdapter {
         switch(position) {
 
             case 0: return new HistoryAll();
-            case 1: return new HistoryAll();
+            case 1: return new HistoryInProgress();
             default: return new Fragment();
 
         }

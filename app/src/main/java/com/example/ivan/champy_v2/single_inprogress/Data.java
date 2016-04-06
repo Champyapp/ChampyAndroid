@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class Data {
 
-    private String Id;
+    private String _id;
     private Sender sender;
     private Challenge challenge;
     private Integer begin;
@@ -27,17 +27,16 @@ public class Data {
      * @return
      *     The Id
      */
-    public String getId() {
-        return Id;
+    public String get_id() {
+        return _id;
     }
 
     /**
      * 
-     * @param Id
      *     The _id
      */
-    public void setId(String Id) {
-        this.Id = Id;
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
     /**

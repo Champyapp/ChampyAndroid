@@ -138,47 +138,50 @@ public class Privacy extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.friends) {
-
-        } else if (id == R.id.history) {
-
-        } else if (id == R.id.nav_logout) {
-            OfflineMode offlineMode = new OfflineMode();
-            if (offlineMode.isInternetAvailable(this)) {
-                LoginManager.getInstance().logOut();
-                SessionManager sessionManager = new SessionManager(getApplicationContext());
-                sessionManager.logoutUser();
-                Intent intent = new Intent(Privacy.this, LoginActivity.class);
+        OfflineMode offlineMode = new OfflineMode();
+        if (offlineMode.isInternetAvailable(this)) {
+            if (id == R.id.challenges) {
+                Intent intent = new Intent(Privacy.this, MainActivity.class);
                 startActivity(intent);
-                Toast.makeText(this, "Bye Bye!!!", Toast.LENGTH_SHORT).show();
             }
-            else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
-        } else if (id == R.id.share) {
-            String message = "Check out Champy - it helps you improve and compete with your friends!";
-            Intent share = new Intent(Intent.ACTION_SEND);
-            share.setType("text/plain");
-            share.putExtra(Intent.EXTRA_TEXT, message);
+            if (id == R.id.history){
+                Intent intent = new Intent(Privacy.this, History.class);
+                startActivity(intent);
+            }
+            if (id == R.id.nav_logout) {
 
-            startActivity(Intent.createChooser(share, "How would you like to share?"));
-        } else if (id == R.id.challenges) {
-            Intent intent = new Intent(Privacy.this, MainActivity.class);
-            startActivity(intent);
-        }  else if (id == R.id.settings) {
-           Intent intent = new Intent(Privacy.this, Settings.class);
-          startActivity(intent);
+                if (offlineMode.isInternetAvailable(this)) Logout();
+                else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
+            }
+            if (id == R.id.friends) {
+                Intent intent = new Intent(Privacy.this, Friends.class);
+                startActivity(intent);
+            }
+            if (id == R.id.settings) {
+                Intent intent = new Intent(Privacy.this, Settings.class);
+                startActivity(intent);
+            } else if (id == R.id.share) {
+                String message = "Check out Champy - it helps you improve and compete with your friends!";
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("text/plain");
+                share.putExtra(Intent.EXTRA_TEXT, message);
 
-        }  else if (id == R.id.friends) {
-        Intent intent = new Intent(Privacy.this, Friends.class);
-        startActivity(intent);
-
-    }
-
-
+                startActivity(Intent.createChooser(share, "How would you like to share?"));
+            }
+        }
+        else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
+    public void Logout(){
+        LoginManager.getInstance().logOut();
+        SessionManager sessionManager = new SessionManager(getApplicationContext());
+        sessionManager.logoutUser();
+        Intent intent = new Intent(Privacy.this, LoginActivity.class);
+        startActivity(intent);
+        Toast.makeText(this, "Bye Bye!!!", Toast.LENGTH_SHORT).show();
+    }
     private Drawable Init(String path) throws FileNotFoundException {
         File file = new File(path, "blured2.jpg");
         Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));

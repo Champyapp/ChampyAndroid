@@ -334,8 +334,11 @@ public class LoginActivity extends AppCompatActivity {
                         String challegeEnd = data.getProfileOptions().getChallengeEnd().toString();
                         Log.d(TAG, "Status: " + id);
                         Log.d(TAG, "FB: " + fb_id);
+
+
                         SessionManager sessionManager = new SessionManager(getApplicationContext());
                         sessionManager.setRefreshPending("false");
+                        sessionManager.setRefreshFriends("false");
                         sessionManager.createUserLoginSession(user_name, email, fb_id, path_to_pic, jwtString, id, pushN, newChallReq, acceptedYour, challegeEnd, "true");
                         sessionManager.setChampyOptions(data.getAllChallengesCount().toString(), data.getSuccessChallenges().toString(), data.getScore().toString(), data.getLevel().getNumber().toString());
                         String api_path = null;
@@ -486,7 +489,7 @@ public class LoginActivity extends AppCompatActivity {
                             int end = datum.getEnd();
                             int days = round((end - unixTime) / 86400);
                             String duration = "" + days;
-                            String challenge_id = challenge.get_id();
+                            String challenge_id = datum.get_id();
                             if (challenge.getDescription().equals("Wake Up")) {
                                 cv.put("name", "Wake Up");
                             }
@@ -494,6 +497,7 @@ public class LoginActivity extends AppCompatActivity {
                             cv.put("description", desctiption);
                             cv.put("duration", duration);
                             cv.put("challenge_id", challenge_id);
+                            cv.put("status", datum.getStatus());
                             db.insert("myChallenges", null, cv);
                         }
 

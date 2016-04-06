@@ -248,33 +248,34 @@ public class SelfImprovement extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        OfflineMode offlineMode = new OfflineMode();
+        if (offlineMode.isInternetAvailable(this)) {
+            if (id == R.id.nav_logout) {
 
-        if (id == R.id.nav_logout) {
-            OfflineMode offlineMode = new OfflineMode();
-            if (offlineMode.isInternetAvailable(this)) Logout();
-            else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
-        }
-        if (id == R.id.friends) {
-            Intent intent = new Intent(SelfImprovement.this, Friends.class);
-            startActivity(intent);
-        }
-        if (id == R.id.history){
-            Intent intent = new Intent(SelfImprovement.this, SelfImprovement.class);
-            startActivity(intent);
-        }
-        if (id == R.id.settings){
-            Intent intent = new Intent(SelfImprovement.this, Settings.class);
-            startActivity(intent);
-        }
-        else if (id == R.id.share) {
-            String message = "Check out Champy - it helps you improve and compete with your friends!";
-            Intent share = new Intent(Intent.ACTION_SEND);
-            share.setType("text/plain");
-            share.putExtra(Intent.EXTRA_TEXT, message);
+                if (offlineMode.isInternetAvailable(this)) Logout();
+                else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
+            }
+            if (id == R.id.friends) {
+                Intent intent = new Intent(SelfImprovement.this, Friends.class);
+                startActivity(intent);
+            }
+            if (id == R.id.history) {
+                Intent intent = new Intent(SelfImprovement.this, SelfImprovement.class);
+                startActivity(intent);
+            }
+            if (id == R.id.settings) {
+                Intent intent = new Intent(SelfImprovement.this, Settings.class);
+                startActivity(intent);
+            } else if (id == R.id.share) {
+                String message = "Check out Champy - it helps you improve and compete with your friends!";
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("text/plain");
+                share.putExtra(Intent.EXTRA_TEXT, message);
 
-            startActivity(Intent.createChooser(share, "How would you like to share?"));
+                startActivity(Intent.createChooser(share, "How would you like to share?"));
+            }
         }
-
+        else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

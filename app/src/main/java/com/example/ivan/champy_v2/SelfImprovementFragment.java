@@ -69,6 +69,7 @@ public class SelfImprovementFragment extends Fragment {
         String duration = "";
         String description = "";
         String challenge_id = "";
+        String status = "";
         DBHelper dbHelper = new DBHelper(getActivity());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final ContentValues cv = new ContentValues();
@@ -91,15 +92,14 @@ public class SelfImprovementFragment extends Fragment {
                     description = c.getString(coldescription);
                     duration = c.getString(colduration);
                     challenge_id = c.getString(colchallenge_id);
-                    break;
+
                 }
             } while (c.moveToNext());
         } else
             Log.i("stat", "0 rows");
         c.close();
-        Log.i("stat", "Name: " + description);
-
-        if (name.equals("active")) {
+        Log.i("stat", "Name: " + name);
+        if (isActive(description)) {
             Log.i("stat", "Status: Active");
             Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
             TextView textView = (TextView)view.findViewById(R.id.goal_text);
@@ -179,8 +179,9 @@ public class SelfImprovementFragment extends Fragment {
                 description = editText1.getText().toString();
                 editText1 = (EditText) view.findViewById(R.id.days);
                 Log.i("stat", "Descrition :"+description+ " " + description.length());
-                days = Integer.parseInt(editText1.getText().toString());
-
+                if (editText1.getText().toString().equals("")){
+                    Toast.makeText(getContext(), "Duration is empty!!!", Toast.LENGTH_SHORT).show();
+                } else days = Integer.parseInt(editText1.getText().toString());
                 Cursor c = db.query("selfimprovement", null, null, null, null, null, null);
                 int position = viewPager.getCurrentItem();
                 SessionManager sessionManager = new SessionManager(getContext());
@@ -193,12 +194,18 @@ public class SelfImprovementFragment extends Fragment {
                     Log.i("stat", "Click: clicked");
                     Log.i("stat", "Click: " + description);
                     editText1 = (EditText) view.findViewById(R.id.days);
-                    days = Integer.parseInt(editText1.getText().toString());
-                    if (description.length() >= 100)
-                        Toast.makeText(getContext(), "Text is too long", Toast.LENGTH_SHORT).show();
-                    else if (days > 999)
-                        Toast.makeText(getContext(), "Max 999 days", Toast.LENGTH_SHORT).show();
-                    else Create_new_challenge(description, days);
+                    if (editText1.getText().toString().equals("")){
+                      Toast.makeText(getContext(), "Duration is empty!!!", Toast.LENGTH_SHORT).show();
+                    } else if (description.equals("")){
+                        Toast.makeText(getContext(), "Goal is empty!!!", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        days = Integer.parseInt(editText1.getText().toString());
+                        if (description.length() >= 100) Toast.makeText(getContext(), "Text is too long", Toast.LENGTH_SHORT).show();
+                        else if (days > 999) Toast.makeText(getContext(), "Max 999 days", Toast.LENGTH_SHORT).show();
+                        else if (days == 0) Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
+                        else Create_new_challenge(description, days);
+                    }
                 } else
                 {
                     Log.i("stat", "Status: Poehali");
@@ -209,6 +216,7 @@ public class SelfImprovementFragment extends Fragment {
                         int coldescription = c.getColumnIndex("description");
                         int colduration = c.getColumnIndex("duration");
                         int colchallenge_id = c.getColumnIndex("challenge_id");
+
                         do {
                             o++;
                             if (o > position + 1) break;
@@ -230,13 +238,15 @@ public class SelfImprovementFragment extends Fragment {
                     Log.i("stat", "Click: " + viewPager.getCurrentItem());
                     if (name.equals("active")) {
                         Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
-                    } else
-                    if (description.length() > 100) {
+                    } else if (description == ""){
+                        Toast.makeText(getContext(), "Goal is empty!!!", Toast.LENGTH_SHORT).show();
+                    }
+                    else if (description.length() > 100) {
                         Toast.makeText(getContext(), "Text is too long", Toast.LENGTH_SHORT).show();
                     }
                     else if (days>999) {
                         Toast.makeText(getContext(), "Max 999 days", Toast.LENGTH_SHORT).show();
-                    }
+                    } else if (days == 0)  Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
                     else {
                         Toast.makeText(getActivity(), "OK", Toast.LENGTH_SHORT).show();
                         StartSingleInProgress(challenge_id);
@@ -255,7 +265,7 @@ public class SelfImprovementFragment extends Fragment {
         user = sessionManager.getUserDetails();
         String token = user.get("token");
         String duration = "" + (days * 86400);
-        String details = description + " during " + days + " days";
+        String details = description + " during this period";
 
         final String API_URL = "http://46.101.213.24:3007";
         final Retrofit retrofit = new Retrofit.Builder()
@@ -293,7 +303,7 @@ public class SelfImprovementFragment extends Fragment {
 
     }
 
-    public void StartSingleInProgress(String challenge) {
+    public void StartSingleInProgress(final String challenge) {
         final SessionManager sessionManager = new SessionManager(getContext());
         HashMap<String, String> user = new HashMap<>();
         user = sessionManager.getUserDetails();
@@ -316,6 +326,14 @@ public class SelfImprovementFragment extends Fragment {
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     Log.i("stat", "Status: Starting OK");
+                    ContentValues cv = new ContentValues();
+                    com.example.ivan.champy_v2.single_inprogress.SingleInProgress data = response.body();
+                    cv.put("challenge_id", data.getData().get_id());
+                    Log.d("myLogs", "Added: " + data.getData().get_id());
+                    cv.put("updated", "false");
+                    DBHelper dbHelper = new DBHelper(getActivity());
+                    SQLiteDatabase db = dbHelper.getWritableDatabase();
+                    db.insert("updated", null, cv);
                     generate();
                 } else Log.i("stat", "Status: Starting WRONG" + response.code());
             }
@@ -346,7 +364,7 @@ public class SelfImprovementFragment extends Fragment {
         String id = user.get("id");
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
         final long unixTime = System.currentTimeMillis() / 1000L;
-        String update = "1457019726";
+        final String update = "1457019726";
         Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(id, update, token);
         call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
             @Override
@@ -360,12 +378,15 @@ public class SelfImprovementFragment extends Fragment {
                         int end = datum.getEnd();
                         int days = round((end - unixTime) / 86400);
                         String duration = "" + days;
-                        String challenge_id = challenge.get_id();
+                        String challenge_id = datum.get_id();
                         if (challenge.getDescription().equals("Wake Up")) cv.put("name", "Wake Up");
                         else cv.put("name", "Self Improvement");
                         cv.put("description", desctiption);
                         cv.put("duration", duration);
                         cv.put("challenge_id", challenge_id);
+                        cv.put("status", datum.getStatus());
+                        String updated = find(challenge_id);
+                        cv.put("updated", updated);
                         db.insert("myChallenges", null, cv);
                     }
                     Intent intent = new Intent(getActivity(), MainActivity.class);
@@ -399,5 +420,60 @@ public class SelfImprovementFragment extends Fragment {
             });
         }
 
+    }
+    public String find(String challenge_id)
+    {
+        DBHelper dbHelper = new DBHelper(getActivity());
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor c = db.query("updated", null, null, null, null, null, null);
+        String ok = "false";
+        int o = 0;
+        if (c.moveToFirst()) {
+            int idColIndex = c.getColumnIndex("id");
+            int colchallenge_id = c.getColumnIndex("challenge_id");
+            do {
+                if (c.getString(colchallenge_id).equals(challenge_id)){
+                    ok = c.getString(c.getColumnIndex("updated"));
+                    Log.i("stat", "Find: "+ok);
+                    break;
+                }
+            } while (c.moveToNext());
+        } else
+            Log.i("stat", "0 rows");
+        c.close();
+        return ok;
+    }
+    public boolean isActive(String description)
+    {
+        DBHelper dbHelper = new DBHelper(getActivity());
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        final ContentValues cv = new ContentValues();
+        final Bundle args = this.getArguments();
+        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
+        int position = args.getInt(ARG_PAGE);
+        Log.i("stat", "Status: " + position);
+        description = description + " during this period";
+        boolean ok = false;
+        int o = 0;
+        if (c.moveToFirst()) {
+            int idColIndex = c.getColumnIndex("id");
+            int nameColIndex = c.getColumnIndex("name");
+            int coldescription = c.getColumnIndex("description");
+            int colduration = c.getColumnIndex("duration");
+            int colchallenge_id = c.getColumnIndex("challenge_id");
+            do {
+                if (c.getString(c.getColumnIndex("status")).equals("started")){
+                    Log.i("stat", "Equals: "+c.getString(coldescription)+" "+description);
+                    if (c.getString(coldescription).equals(description)){
+                        Log.i("stat", "Equals: true");
+                        ok = true;
+                    }
+                }
+            } while (c.moveToNext());
+        } else
+            Log.i("stat", "0 rows");
+        c.close();
+
+       return ok;
     }
 }

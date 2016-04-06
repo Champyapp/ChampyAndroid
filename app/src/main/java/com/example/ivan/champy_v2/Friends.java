@@ -379,35 +379,40 @@ public class Friends extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        OfflineMode offlineMode = new OfflineMode();
+        if (offlineMode.isInternetAvailable(this)) {
+            if (id == R.id.nav_logout) {
 
-        if (id == R.id.nav_logout) {
-            OfflineMode offlineMode = new OfflineMode();
-            if (offlineMode.isInternetAvailable(this)) {
-                LoginManager.getInstance().logOut();
-                SessionManager sessionManager = new SessionManager(getApplicationContext());
-                sessionManager.logoutUser();
-                Intent intent = new Intent(Friends.this, LoginActivity.class);
+                if (offlineMode.isInternetAvailable(this)) {
+                    LoginManager.getInstance().logOut();
+                    SessionManager sessionManager = new SessionManager(getApplicationContext());
+                    sessionManager.logoutUser();
+                    Intent intent = new Intent(Friends.this, LoginActivity.class);
+                    startActivity(intent);
+                    Toast.makeText(this, "Bye Bye!!!", Toast.LENGTH_SHORT).show();
+                } else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
+            }
+            if (id == R.id.challenges) {
+                Intent intent = new Intent(Friends.this, MainActivity.class);
                 startActivity(intent);
-                Toast.makeText(this, "Bye Bye!!!", Toast.LENGTH_SHORT).show();
-            } else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
-        }
-        if (id == R.id.challenges) {
-            Intent intent = new Intent(Friends.this, MainActivity.class);
-            startActivity(intent);
-        }
-        if (id == R.id.settings){
-            Intent intent = new Intent(Friends.this, Settings.class);
-            startActivity(intent);
-        }
-        else if (id == R.id.share) {
-            String message = "Check out Champy - it helps you improve and compete with your friends!";
-            Intent share = new Intent(Intent.ACTION_SEND);
-            share.setType("text/plain");
-            share.putExtra(Intent.EXTRA_TEXT, message);
+            }
+            if (id == R.id.history) {
+                Intent intent = new Intent(Friends.this, History.class);
+                startActivity(intent);
+            }
+            if (id == R.id.settings) {
+                Intent intent = new Intent(Friends.this, Settings.class);
+                startActivity(intent);
+            } else if (id == R.id.share) {
+                String message = "Check out Champy - it helps you improve and compete with your friends!";
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("text/plain");
+                share.putExtra(Intent.EXTRA_TEXT, message);
 
-            startActivity(Intent.createChooser(share, "How would you like to share?"));
+                startActivity(Intent.createChooser(share, "How would you like to share?"));
+            }
         }
-
+        else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

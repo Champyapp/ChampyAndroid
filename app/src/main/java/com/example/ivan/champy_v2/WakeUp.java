@@ -34,6 +34,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.facebook.login.LoginManager;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -141,14 +142,18 @@ public class WakeUp extends AppCompatActivity
                 alarmTimePicker = (TimePicker)findViewById(R.id.timePicker);
                 int hour = alarmTimePicker.getCurrentHour();
                 int minute = alarmTimePicker.getCurrentMinute();
-                if (minute<10) hour = hour*10;
-                boolean ok = check(hour, minute);
+                String shour = ""+hour;
+                String sminute = ""+minute;
+                if (hour<10) shour = "0"+shour;
+                if (minute<10) sminute = "0"+sminute;
+                boolean ok = check(shour+sminute);
                 if (ok) {
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(Calendar.HOUR_OF_DAY, alarmTimePicker.getCurrentHour());
                     calendar.set(Calendar.MINUTE, alarmTimePicker.getCurrentMinute());
                     Intent myIntent = new Intent(WakeUp.this, AlarmReceiver.class);
-                    int id = hour+minute;
+                    int id = Integer.parseInt(shour+sminute);
+                    Log.i("stat", "Give up: "+id);
                     pendingIntent = PendingIntent.getBroadcast(WakeUp.this, id, myIntent, 0);
                     alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
                     Toast.makeText(WakeUp.this, "Created", Toast.LENGTH_SHORT).show();
@@ -163,7 +168,8 @@ public class WakeUp extends AppCompatActivity
 
     }
 
-    public boolean check(int hour, int minute)
+
+    public boolean check(String time)
     {
         boolean ok = true;
 
@@ -175,14 +181,13 @@ public class WakeUp extends AppCompatActivity
         int o = 0;
         if (c.moveToFirst()) {
             int nameColIndex = c.getColumnIndex("name");
-            int description = Integer.parseInt(c.getString(c.getColumnIndex("description")));
-            int timeh = description/100;
-            int timem = description-timeh;
             Log.i("stat", "Statuskwo: o=" + o);
             do {
                 o++;
+
                 if (c.getString(nameColIndex).equals("Wake Up")){
-                    if ((hour == timeh) && (minute == timem)){
+
+                    if (c.getString(c.getColumnIndex("description")).equals(time)){
                         ok = false;
                         break;
                     }
@@ -243,23 +248,49 @@ public class WakeUp extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        OfflineMode offlineMode = new OfflineMode();
+        if (offlineMode.isInternetAvailable(this)) {
+            if (id == R.id.challenges) {
+                Intent intent = new Intent(WakeUp.this, MainActivity.class);
+                startActivity(intent);
+            }
+            if (id == R.id.history){
+                Intent intent = new Intent(WakeUp.this, History.class);
+                startActivity(intent);
+            }
+            if (id == R.id.nav_logout) {
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+                if (offlineMode.isInternetAvailable(this)) Logout();
+                else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
+            }
+            if (id == R.id.friends) {
+                Intent intent = new Intent(WakeUp.this, Friends.class);
+                startActivity(intent);
+            }
+            if (id == R.id.settings) {
+                Intent intent = new Intent(WakeUp.this, Settings.class);
+                startActivity(intent);
+            } else if (id == R.id.share) {
+                String message = "Check out Champy - it helps you improve and compete with your friends!";
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("text/plain");
+                share.putExtra(Intent.EXTRA_TEXT, message);
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+                startActivity(Intent.createChooser(share, "How would you like to share?"));
+            }
         }
-
+        else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+    public void Logout(){
+        LoginManager.getInstance().logOut();
+        SessionManager sessionManager = new SessionManager(getApplicationContext());
+        sessionManager.logoutUser();
+        Intent intent = new Intent(WakeUp.this, LoginActivity.class);
+        startActivity(intent);
+        Toast.makeText(this, "Bye Bye!!!", Toast.LENGTH_SHORT).show();
+    }
+
 }
