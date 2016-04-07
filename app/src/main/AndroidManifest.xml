@@ -12,7 +12,6 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
@@ -94,17 +93,23 @@
             android:name=".WakeUp"
             android:label="@string/title_activity_wake_up"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".AlarmReceiverActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <service
             android:name=".AlarmService"
             android:enabled="true" />
+
         <receiver android:name=".AlarmReceiver" />
         <receiver android:name=".AlarmSchedule" />
+
+        <activity
+            android:name=".Duel"
+            android:label="@string/title_activity_duel"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

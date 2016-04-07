@@ -201,6 +201,8 @@ public class FriendsAdapter extends
             }
         });
         ImageView imageView = viewHolder.friendImage;
+        ImageButton imageButton = viewHolder.add;
+        imageButton.setBackgroundDrawable(_context.getResources().getDrawable(R.drawable.duel));
         Glide.with(_context)
                 .load(contact.getPicture())
                 .asBitmap()
