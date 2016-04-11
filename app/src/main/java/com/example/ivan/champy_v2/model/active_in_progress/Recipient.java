@@ -1,12 +1,12 @@
 
-package com.example.ivan.champy_v2.model.Friend;
+package com.example.ivan.champy_v2.model.active_in_progress;
 
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Generated;
 
 @Generated("org.jsonschema2pojo")
-public class Owner {
+public class Recipient {
 
     private String email;
     private String name;
@@ -18,9 +18,9 @@ public class Owner {
     private String _id;
     private Integer created;
     private Integer updated;
-    private Level level;
-    private Photo photo;
-    private ProfileOptions profileOptions;
+    private Photo_ photo;
+    private Level_ level;
+    private ProfileOptions_ profileOptions;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
@@ -154,7 +154,7 @@ public class Owner {
      * @return
      *     The Id
      */
-    public String get_id() {
+    public String getId() {
         return _id;
     }
 
@@ -163,8 +163,8 @@ public class Owner {
      * @param Id
      *     The _id
      */
-    public void set_id(String _id) {
-        this._id = _id;
+    public void setId(String Id) {
+        this._id = Id;
     }
 
     /**
@@ -206,27 +206,9 @@ public class Owner {
     /**
      * 
      * @return
-     *     The level
-     */
-    public Level getLevel() {
-        return level;
-    }
-
-    /**
-     * 
-     * @param level
-     *     The level
-     */
-    public void setLevel(Level level) {
-        this.level = level;
-    }
-
-    /**
-     * 
-     * @return
      *     The photo
      */
-    public Photo getPhoto() {
+    public Photo_ getPhoto() {
         return photo;
     }
 
@@ -235,8 +217,26 @@ public class Owner {
      * @param photo
      *     The photo
      */
-    public void setPhoto(Photo photo) {
+    public void setPhoto(Photo_ photo) {
         this.photo = photo;
+    }
+
+    /**
+     * 
+     * @return
+     *     The level
+     */
+    public Level_ getLevel() {
+        return level;
+    }
+
+    /**
+     * 
+     * @param level
+     *     The level
+     */
+    public void setLevel(Level_ level) {
+        this.level = level;
     }
 
     /**
@@ -244,7 +244,7 @@ public class Owner {
      * @return
      *     The profileOptions
      */
-    public ProfileOptions getProfileOptions() {
+    public ProfileOptions_ getProfileOptions() {
         return profileOptions;
     }
 
@@ -253,7 +253,7 @@ public class Owner {
      * @param profileOptions
      *     The profileOptions
      */
-    public void setProfileOptions(ProfileOptions profileOptions) {
+    public void setProfileOptions(ProfileOptions_ profileOptions) {
         this.profileOptions = profileOptions;
     }
 

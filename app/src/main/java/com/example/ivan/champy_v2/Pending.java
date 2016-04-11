@@ -127,7 +127,7 @@ public class Pending extends Fragment {
                                 Datum datum = data.get(i);
                                 if (datum.getFriend() != null) {
                                     if (datum.getStatus().toString().equals("false")) {
-                                        if (datum.getOwner().getId().equals(id)) {
+                                        if (datum.getOwner().get_id().equals(id)) {
                                             Friend_ friend = datum.getFriend();
                                             cv.put("name", friend.getName());
                                             if (friend.getPhoto() != null)
@@ -142,7 +142,7 @@ public class Pending extends Fragment {
                                             if (friend.getPhoto() != null)
                                                 cv.put("photo", friend.getPhoto().getMedium());
                                             else cv.put("photo", "");
-                                            cv.put("user_id", friend.getId());
+                                            cv.put("user_id", friend.get_id());
                                             cv.put("owner", "true");
                                             db.insert("pending", null, cv);
                                         }

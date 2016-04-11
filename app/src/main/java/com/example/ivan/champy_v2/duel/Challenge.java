@@ -1,20 +1,10 @@
 
-package com.example.ivan.champy_v2.model.active_in_progress;
+package com.example.ivan.champy_v2.duel;
 
 import java.util.HashMap;
 import java.util.Map;
-import javax.annotation.Generated;
 
-@Generated("org.jsonschema2pojo")
 public class Challenge {
-
-    public String get_id() {
-        return _id;
-    }
-
-    public void set_id(String _id) {
-        this._id = _id;
-    }
 
     private String _id;
     private String name;
@@ -29,7 +19,23 @@ public class Challenge {
     private Integer points;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
+    /**
+     * 
+     * @return
+     *     The Id
+     */
+    public String getId() {
+        return _id;
+    }
 
+    /**
+     * 
+     * @param Id
+     *     The _id
+     */
+    public void setId(String Id) {
+        this._id = Id;
+    }
 
     /**
      * 

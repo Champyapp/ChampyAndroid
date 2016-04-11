@@ -1,5 +1,7 @@
 package com.example.ivan.champy_v2.interfaces;
 
+import com.example.ivan.champy_v2.duel.Duel;
+
 import retrofit.Call;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
@@ -28,5 +30,13 @@ public interface SingleInProgress {
     Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> get_challenge(
             @Path("id") String id,
             @Query("token") String token
+    );
+
+    @FormUrlEncoded
+    @POST("/v1/in-progress-challenges/duel")
+    Call<Duel> Start_duel(
+      @Field("recipient") String recipient,
+      @Field("challenge") String challenge,
+      @Query("token") String token
     );
 }

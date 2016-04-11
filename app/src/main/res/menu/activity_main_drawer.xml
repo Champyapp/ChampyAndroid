@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <group>
         <item android:id="@+id/challenges" android:icon="@drawable/challenge"
@@ -14,8 +15,14 @@
 
     </group>
 
+
+    <item android:id="@+id/pending_duels" android:title="Pending Duels" android:icon="@drawable/duelcolor"
+        app:actionLayout="@layout/plus_one"
+        />
     <item android:id="@+id/share" android:icon ="@drawable/share_icon"  android:title="Share" />
     <item android:id="@+id/nav_logout" android:icon="@drawable/logout"
         android:title="Logout" />
+
+
 
 </menu>

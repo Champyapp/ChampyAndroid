@@ -107,4 +107,5 @@
     <string name="title_activity_history">History</string>
     <string name="title_activity_wake_up">WakeUp</string>
     <string name="title_activity_duel">Duel</string>
+    <string name="title_activity_pending__duel">Pending_Duel</string>
 </resources>

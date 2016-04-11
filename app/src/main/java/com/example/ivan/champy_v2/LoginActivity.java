@@ -68,8 +68,6 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-import static java.lang.Math.round;
-
 public class LoginActivity extends AppCompatActivity {
     private AccessTokenTracker mTokenTracker;
     private ProfileTracker mProfileTracker;
@@ -429,8 +427,8 @@ public class LoginActivity extends AppCompatActivity {
                                     Log.d(TAG, "Status: "+response.body().toString());
                                     if (datum.getFriend() != null) {
                                     if (datum.getStatus().toString().equals("false")) {
-                                        Log.d(TAG, "Status: "+datum.getOwner().getId());
-                                        if (datum.getOwner().getId().equals(user_id)) {
+                                        Log.d(TAG, "Status: "+datum.getOwner().get_id());
+                                        if (datum.getOwner().get_id().equals(user_id)) {
                                             Friend_ friend = datum.getFriend();
                                             Log.d(TAG, "Status: "+friend);
                                             if (friend.getName() != null)
@@ -461,7 +459,7 @@ public class LoginActivity extends AppCompatActivity {
                                             if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
                                             else cv.put("photo", "");
                                             Log.d(TAG, "Owner");
-                                            cv.put("user_id", friend.getId());
+                                            cv.put("user_id", friend.get_id());
                                             cv.put("owner", "true");
                                             db.insert("pending", null, cv);
                                         }
@@ -486,9 +484,9 @@ public class LoginActivity extends AppCompatActivity {
                             com.example.ivan.champy_v2.model.active_in_progress.Datum datum = list.get(i);
                             Challenge challenge = datum.getChallenge();
                             String desctiption = challenge.getDetails();
-                            int end = datum.getEnd();
-                            int days = round((end - unixTime) / 86400);
-                            String duration = "" + days;
+                          /*  int end = datum.getEnd();
+                            int days = round((end - unixTime) / 86400);*/
+                            String duration = "" + 21;
                             String challenge_id = datum.get_id();
                             if (challenge.getDescription().equals("Wake Up")) {
                                 cv.put("name", "Wake Up");

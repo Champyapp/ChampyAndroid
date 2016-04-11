@@ -123,6 +123,17 @@ public class SessionManager {
         return s;
     }
 
+    public void set_duel_pending(String count)
+    {
+        editor.putString("duel_pending", count);
+        editor.commit();
+    }
+    public String get_duel_pending()
+    {
+        String s = pref.getString("duel_pending", null);
+        return s;
+    }
+
     public void setRefreshFriends(String refresh)
     {
         editor.putString("friendsRefresh", refresh);

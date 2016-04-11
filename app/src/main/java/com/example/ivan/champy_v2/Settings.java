@@ -312,6 +312,7 @@ public class Settings extends AppCompatActivity
                                             DBHelper dbHelper = new DBHelper(getApplicationContext());
                                             final SQLiteDatabase db = dbHelper.getWritableDatabase();
                                             int clearCount = db.delete("pending", null, null);
+                                            clearCount = db.delete("pending_duel", null, null);
                                             db.delete("myChallenges", null, null);
                                             file.delete();
                                         } else Log.i("Status", "Status: " + response.code());

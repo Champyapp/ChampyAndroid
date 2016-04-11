@@ -1,22 +1,12 @@
 
-package com.example.ivan.champy_v2.model.active_in_progress;
+package com.example.ivan.champy_v2.duel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.Generated;
 
-@Generated("org.jsonschema2pojo")
-public class Datum {
-
-    public String get_id() {
-        return _id;
-    }
-
-    public void set_id(String _id) {
-        this._id = _id;
-    }
+public class Data {
 
     private String _id;
     private Sender sender;
@@ -29,10 +19,25 @@ public class Datum {
     private List<Object> recipientProgress = new ArrayList<Object>();
     private List<Object> senderProgress = new ArrayList<Object>();
     private String status;
-    private Integer begin;
-    private Integer end;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
+    /**
+     * 
+     * @return
+     *     The Id
+     */
+    public String getId() {
+        return _id;
+    }
+
+    /**
+     * 
+     * @param Id
+     *     The _id
+     */
+    public void setId(String Id) {
+        this._id = Id;
+    }
 
     /**
      * 
@@ -212,42 +217,6 @@ public class Datum {
      */
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    /**
-     * 
-     * @return
-     *     The begin
-     */
-    public Integer getBegin() {
-        return begin;
-    }
-
-    /**
-     * 
-     * @param begin
-     *     The begin
-     */
-    public void setBegin(Integer begin) {
-        this.begin = begin;
-    }
-
-    /**
-     * 
-     * @return
-     *     The end
-     */
-    public Integer getEnd() {
-        return end;
-    }
-
-    /**
-     * 
-     * @param end
-     *     The end
-     */
-    public void setEnd(Integer end) {
-        this.end = end;
     }
 
     public Map<String, Object> getAdditionalProperties() {

@@ -124,7 +124,7 @@ public class FriendsFragment extends Fragment {
                                 Datum datum = data.get(i);
                                 if (datum.getFriend() != null) {
                                     if (datum.getStatus().toString().equals("true")) {
-                                        if (datum.getOwner().getId().equals(id)) {
+                                        if (datum.getOwner().get_id().equals(id)) {
                                             Friend_ friend = datum.getFriend();
                                             cv.put("name", friend.getName());
                                             if (friend.getPhoto() != null)
@@ -138,7 +138,7 @@ public class FriendsFragment extends Fragment {
                                             if (friend.getPhoto() != null)
                                                 cv.put("photo", friend.getPhoto().getMedium());
                                             else cv.put("photo", "");
-                                            cv.put("user_id", friend.getId());
+                                            cv.put("user_id", friend.get_id());
                                             db.insert("friends", null, cv);
                                         }
                                     }

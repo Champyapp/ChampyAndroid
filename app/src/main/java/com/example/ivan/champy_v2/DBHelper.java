@@ -50,6 +50,24 @@ public class DBHelper extends SQLiteOpenHelper {
                 + "status text"
                 + ");");
 
+        db.execSQL("create table duel("
+                + "id integer primary key autoincrement,"
+                + "name text,"
+                + "description text,"
+                + "duration text,"
+                + "challenge_id text,"
+                + "status text"
+                + ");");
+
+        db.execSQL("create table pending_duel("
+                + "id integer primary key autoincrement,"
+                + "versus text,"
+                + "description text,"
+                + "duration text,"
+                + "challenge_id text,"
+                + "recipient text"
+                + ");");
+
         db.execSQL("create table myChallenges("
                 + "id integer primary key autoincrement,"
                 + "name text,"

@@ -1,6 +1,7 @@
 package com.example.ivan.champy_v2;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -203,6 +204,16 @@ public class FriendsAdapter extends
         ImageView imageView = viewHolder.friendImage;
         ImageButton imageButton = viewHolder.add;
         imageButton.setBackgroundDrawable(_context.getResources().getDrawable(R.drawable.duel));
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(_context, Duel.class);
+                intent.putExtra("friend", contact.getPicture());
+                intent.putExtra("name", contact.getName());
+                intent.putExtra("id", contact.getID());
+                _context.startActivity(intent);
+            }
+        });
         Glide.with(_context)
                 .load(contact.getPicture())
                 .asBitmap()

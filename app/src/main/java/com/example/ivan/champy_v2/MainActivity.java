@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -47,8 +48,13 @@ import android.widget.Toast;
 import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
 import com.example.ivan.champy_v2.interfaces.Update_user;
 import com.example.ivan.champy_v2.model.User.User;
+import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
+import com.example.ivan.champy_v2.model.active_in_progress.Datum;
+import com.example.ivan.champy_v2.model.active_in_progress.Recipient;
+import com.example.ivan.champy_v2.model.active_in_progress.Sender;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
@@ -66,6 +72,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -101,8 +108,6 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
         }
-
-
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -260,8 +265,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
@@ -281,6 +284,10 @@ public class MainActivity extends AppCompatActivity
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
 
+        int count = check_pending();
+        TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+        view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+        if (count == 0) hideItem();
 
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user = new HashMap<>();
@@ -346,7 +353,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.activity_main_drawer, menu);
+        getMenuInflater().inflate(R.menu.duel, menu);
         return true;
     }
 
@@ -359,7 +366,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+           generate();
         }
 
         return super.onOptionsItemSelected(item);
@@ -402,6 +409,13 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void hideItem()
+    {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Menu nav_Menu = navigationView.getMenu();
+        nav_Menu.findItem(R.id.pending_duels).setVisible(false);
     }
 
     public void Logout(){
@@ -924,4 +938,82 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    public int check_pending() {
+        DBHelper dbHelper = new DBHelper(this);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        final ContentValues cv = new ContentValues();
+        Cursor c = db.query("pending_duel", null, null, null, null, null, null);
+        int o = 0;
+        if (c.moveToFirst()) {
+
+            do {
+                o++;
+            } while (c.moveToNext());
+        } else
+            Log.i("stat", "kwo0 rows");
+        c.close();
+        SessionManager sessionManager = new SessionManager(this);
+        sessionManager.set_duel_pending("" + o);
+        Log.d(TAG, "O: " + o);
+        return o;
+    }
+
+    public void generate() {
+        DBHelper dbHelper = new DBHelper(this);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        final int clearCount = db.delete("pending_duel", null, null);
+        final ContentValues cv = new ContentValues();
+        final String API_URL = "http://46.101.213.24:3007";
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+
+        final SessionManager sessionManager = new SessionManager(this);
+        HashMap<String, String> user = new HashMap<>();
+        user = sessionManager.getUserDetails();
+        String token = user.get("token");
+        final String id = user.get("id");
+        ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
+        final long unixTime = System.currentTimeMillis() / 1000L;
+        final String update = "1457019726";
+        Log.i("stat", "Nam nado: " + id + " " + update + " " + token);
+        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(id, update, token);
+        call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
+            @Override
+            public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    List<Datum> data = response.body().getData();
+                    for (int i = 0; i < data.size(); i++) {
+                        com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
+                        Recipient recipient = datum.getRecipient();
+                        Sender sender = datum.getSender();
+                        Challenge challenge = datum.getChallenge();
+                        cv.clear();
+                        if (challenge.getType().equals("567d51c48322f85870fd931b")) {
+                            if (id.equals(recipient.getId())) {
+                                cv.put("recipient", "true");
+                                cv.put("versus", sender.getName());
+                            }
+                            if (id.equals(sender.get_id())) {
+                                cv.put("recipient", "false");
+                                cv.put("versus", recipient.getName());
+                            }
+                            cv.put("challenge_id", challenge.get_id());
+                            cv.put("description", challenge.getDescription());
+                            cv.put("duration", challenge.getDuration());
+                            db.insert("pending_duel", null, cv);
+                        }
+                    }
+                    Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+            }
+        });
+    }
 }

@@ -249,6 +249,14 @@ public class Friends extends AppCompatActivity
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
 
+        int count = 0;
+        String s = sessionManager.get_duel_pending();
+        if (s != null){
+            count = Integer.parseInt(s);
+        }
+        TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+        if (count == 0) hideItem();
+        else view.setText("+" + (count > 0 ? String.valueOf(count) : null));
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         adapterViewPager = new SampleFragmentPagerAdapter(getSupportFragmentManager(), getApplicationContext());
@@ -332,7 +340,12 @@ public class Friends extends AppCompatActivity
 
         ViewServer.get(this).addWindow(this);
     }
-
+    private void hideItem()
+    {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Menu nav_Menu = navigationView.getMenu();
+        nav_Menu.findItem(R.id.pending_duels).setVisible(false);
+    }
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -501,7 +514,7 @@ public class Friends extends AppCompatActivity
                             cv.put("name", owner.getName());
                             Log.d(TAG, "Status: "+owner.getName());
                             cv.put("photo", owner.getPhoto().getMedium());
-                            cv.put("user_id", owner.getId());
+                            cv.put("user_id", owner.get_id());
                             db.insert("pending", null, cv);
                         }
                     }
@@ -541,7 +554,7 @@ public class Friends extends AppCompatActivity
                         Datum datum = data.get(i);
                         if (datum.getFriend() != null) {
                             if (datum.getStatus().toString().equals("true")) {
-                                if (datum.getOwner().getId().equals(id)) {
+                                if (datum.getOwner().get_id().equals(id)) {
                                     Friend_ friend = datum.getFriend();
                                     cv.put("name", friend.getName());
                                     if (friend.getPhoto() != null)
@@ -555,7 +568,7 @@ public class Friends extends AppCompatActivity
                                     if (friend.getPhoto() != null)
                                         cv.put("photo", friend.getPhoto().getMedium());
                                     else cv.put("photo", "");
-                                    cv.put("user_id", friend.getId());
+                                    cv.put("user_id", friend.get_id());
                                     db.insert("friends", null, cv);
                                 }
                             }
@@ -625,7 +638,7 @@ public class Friends extends AppCompatActivity
                         Datum datum = data.get(i);
                         if (datum.getFriend() != null) {
                             if (datum.getStatus().toString().equals("false")) {
-                                if (datum.getOwner().getId().equals(id)) {
+                                if (datum.getOwner().get_id().equals(id)) {
                                     Friend_ friend = datum.getFriend();
                                     cv.put("name", friend.getName());
                                     if (friend.getPhoto() != null)
@@ -640,7 +653,7 @@ public class Friends extends AppCompatActivity
                                     if (friend.getPhoto() != null)
                                         cv.put("photo", friend.getPhoto().getMedium());
                                     else cv.put("photo", "");
-                                    cv.put("user_id", friend.getId());
+                                    cv.put("user_id", friend.get_id());
                                     cv.put("owner", "true");
                                     db.insert("pending", null, cv);
                                 }
