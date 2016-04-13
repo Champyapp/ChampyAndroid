@@ -80,6 +80,11 @@ public class Friends extends AppCompatActivity
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger logger = AppEventsLogger.newLogger(this);
+        OfflineMode offlineMode = new OfflineMode();
+        if (!offlineMode.isInternetAvailable(this)){
+            Intent intent = new Intent(Friends.this, MainActivity.class);
+            startActivity(intent);
+        }
         setContentView(R.layout.activity_friends);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -94,6 +99,7 @@ public class Friends extends AppCompatActivity
 
         final com.melnykov.fab.FloatingActionButton actionButton = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.imageButton);
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
+
 
 
         SubActionButton button1 = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeupcolor)).build();
@@ -451,6 +457,11 @@ public class Friends extends AppCompatActivity
     @Override
     public void onStart() {
         super.onStart();
+        OfflineMode offlineMode = new OfflineMode();
+        if (!offlineMode.isInternetAvailable(this)){
+            Intent intent = new Intent(Friends.this, MainActivity.class);
+            startActivity(intent);
+        }
 
 
     }
@@ -471,6 +482,12 @@ public class Friends extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        OfflineMode offlineMode = new OfflineMode();
+        if (!offlineMode.isInternetAvailable(this)){
+            Toast.makeText(this, "Lost Internet Connection!!!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(Friends.this, MainActivity.class);
+            startActivity(intent);
+        }
         ViewServer.get(this).setFocusedWindow(this);
         AppEventsLogger.activateApp(this);
     }

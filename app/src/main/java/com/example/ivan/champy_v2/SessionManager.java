@@ -98,6 +98,11 @@ public class SessionManager {
         editor.commit();
     }
 
+    public void change_token(String token){
+        editor.putString("token", token);
+        editor.commit();
+    }
+
     public void change_name(String name){
         editor.putString(KEY_NAME, name);
         editor.commit();

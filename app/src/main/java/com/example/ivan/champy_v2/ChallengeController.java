@@ -149,10 +149,13 @@ public class ChallengeController {
                     for (int i = 0; i < data.size(); i++) {
                         com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
                         Challenge challenge = datum.getChallenge();
+                        String duration = "";
                         String desctiption = challenge.getDetails();
+                        if (datum.getEnd() != null) {
                         int end = datum.getEnd();
                         int days = round((end - unixTime) / 86400);
-                        String duration = "" + days;
+                        duration = "" + days;}
+
                         String challenge_id = datum.get_id();
                         Log.i("stat", "Wake Up: " + desctiption);
                         if (challenge.getDescription().equals("Wake Up")) {

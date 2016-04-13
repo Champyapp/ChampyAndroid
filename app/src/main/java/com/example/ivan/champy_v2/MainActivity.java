@@ -1,5 +1,4 @@
 package com.example.ivan.champy_v2;
-
 import android.animation.TypeEvaluator;
 import android.animation.ValueAnimator;
 import android.app.AlarmManager;
@@ -57,6 +56,8 @@ import com.example.ivan.champy_v2.model.active_in_progress.Recipient;
 import com.example.ivan.champy_v2.model.active_in_progress.Sender;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.iid.InstanceID;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 import com.squareup.okhttp.MediaType;
