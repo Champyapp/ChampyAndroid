@@ -146,6 +146,8 @@ public class WakeUp extends AppCompatActivity
                 String sminute = ""+minute;
                 if (hour<10) shour = "0"+shour;
                 if (minute<10) sminute = "0"+sminute;
+                Log.i("stat", "Give up: "+shour+" "+sminute);
+
                 boolean ok = check(shour+sminute);
                 if (ok) {
                     Calendar calendar = Calendar.getInstance();

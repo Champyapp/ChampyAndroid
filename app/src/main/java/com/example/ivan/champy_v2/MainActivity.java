@@ -403,6 +403,9 @@ public class MainActivity extends AppCompatActivity
                 share.putExtra(Intent.EXTRA_TEXT, message);
 
                 startActivity(Intent.createChooser(share, "How would you like to share?"));
+            } else if (id == R.id.pending_duels){
+                Intent intent = new Intent(MainActivity.this, Pending_Duel.class);
+                startActivity(intent);
             }
         } else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
 

@@ -1,18 +1,38 @@
 package com.example.ivan.champy_v2;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.HashMap;
+
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class Pending_Duel extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -37,15 +57,74 @@ public class Pending_Duel extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
-        TextView textView = (TextView)findViewById(R.id.textView26);
+        TextView textView = (TextView)findViewById(R.id.textView20);
         textView.setTypeface(typeface);
 
 
-        RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.selfimprovement);
+        RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.pending_duel);
         relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementback));
 
+        Glide.with(this)
+                .load(R.drawable.duel_blue)
+                .override(130, 130)
+                .into((ImageView) findViewById(R.id.imageView13));
+
+        SessionManager sessionManager = new SessionManager(getApplicationContext());
+        HashMap<String, String> user = new HashMap<>();
+        user = sessionManager.getUserDetails();
+        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+        File file = new File(path, "profile.jpg");
+        Uri url = Uri.fromFile(file);
+        String name = user.get("name");
+
+        ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        textView = (TextView) headerLayout.findViewById(R.id.textView);
+        textView.setText(name);
+
+        Glide.with(this)
+                .load(url)
+                .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(profile);
+
+        try {
+            Drawable dr = Init("/data/data/com.example.ivan.champy_v2/app_imageDir/");
+            ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setImageDrawable(dr); final String API_URL = "http://46.101.213.24:3007";
+
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        sessionManager = new SessionManager(getApplicationContext());
+        int size = Integer.parseInt(sessionManager.get_duel_pending());
+        PendingDuelsAdapter pagerAdapter = new PendingDuelsAdapter(getSupportFragmentManager());
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.pager_pending_duel);
+        pagerAdapter.setCount(size);
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.setOffscreenPageLimit(1);
+        viewPager.setPageMargin(20);
+        viewPager.setClipToPadding(false);
+        viewPager.setPadding(90, 0, 90, 0);
 
     }
+
+
+    private Drawable Init(String path) throws FileNotFoundException {
+        File file = new File(path, "blured2.jpg");
+        Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
+
+        Log.d("TAG", "x_y" + bitmap.getWidth() + " " + bitmap.getHeight());
+        Drawable dr = new BitmapDrawable(getResources(), bitmap);
+        dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
+
+        return dr;
+
+    }
+
 
     @Override
     public void onBackPressed() {

@@ -406,6 +406,7 @@ public class DuelFragment extends Fragment {
                             db.insert("pending_duel", null, cv);
                         }
                     }
+                    Toast.makeText(getActivity(), "Sended duel Request!!!", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
                 }

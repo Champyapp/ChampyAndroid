@@ -187,6 +187,8 @@ public class ChallengeController {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
+
+
        SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
        Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call = activeInProgress.Surrender(id, token);
        call.enqueue(new Callback<com.example.ivan.champy_v2.single_inprogress.SingleInProgress>() {
