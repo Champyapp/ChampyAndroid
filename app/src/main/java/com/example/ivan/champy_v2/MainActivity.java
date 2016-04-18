@@ -1,4 +1,5 @@
 package com.example.ivan.champy_v2;
+
 import android.animation.TypeEvaluator;
 import android.animation.ValueAnimator;
 import android.app.AlarmManager;
@@ -48,7 +49,9 @@ import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
+import com.example.ivan.champy_v2.interfaces.NewUser;
 import com.example.ivan.champy_v2.interfaces.Update_user;
+import com.example.ivan.champy_v2.model.Token;
 import com.example.ivan.champy_v2.model.User.User;
 import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
 import com.example.ivan.champy_v2.model.active_in_progress.Datum;
@@ -63,6 +66,8 @@ import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.RequestBody;
 
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -70,6 +75,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -109,7 +115,7 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
         }
-
+        get_right_token();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_gradient));
@@ -680,11 +686,7 @@ public class MainActivity extends AppCompatActivity
             if (item.getType().equals("Wake Up")) {
                 ImageView imageView = (ImageView)tempView.findViewById(R.id.imageView);
                 imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeupwhite));
-                int t = Integer.parseInt(s);
-                int m = t-((t/100)*100);
-                String minute = ""+m;
-                if (m<10) minute = "0"+m;
-                s = "Wake up at "+t/100+":"+minute;
+                s = "Wake up at "+s.substring(0, 2)+":"+s.substring(2,4);
             }
             textView.setTextSize((float)(y*1.3));
             Typeface typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
@@ -1019,5 +1021,53 @@ public class MainActivity extends AppCompatActivity
             public void onFailure(Throwable t) {
             }
         });
+    }
+
+    public void get_right_token()
+    {
+        final SessionManager sessionManager = new SessionManager(this);
+        HashMap<String, String> user = new HashMap<>();
+        user = sessionManager.getUserDetails();
+        final String id = user.get("id");
+
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    String token_android;
+                    InstanceID instanceID = InstanceID.getInstance(MainActivity.this);
+
+                    token_android = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
+                            GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+
+                    Log.i(TAG, "GCM Registration Token: " + token_android);
+                    JSONObject manJson = new JSONObject();
+                    manJson.put("token", token_android);
+                    manJson.put("timeZone", "-2");
+
+                    String json = manJson.toString();
+
+
+                    final String API_URL = "http://46.101.213.24:3007";
+
+                    Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl(API_URL)
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+
+                    final String encodedData = URLEncoder.encode(json, "UTF-8");
+                    final NewUser newUser = retrofit.create(NewUser.class);
+                    Call<Token> call = newUser.getUserToken(id, encodedData);
+                    String token = call.execute().body().getData();
+                    sessionManager.change_token(token);
+                    Log.d(TAG, token);
+
+                }catch (Exception e) {
+                    Log.d(TAG, "Failed to complete token refresh", e);
+                }
+            }
+        }).start();
+
+
+
     }
 }

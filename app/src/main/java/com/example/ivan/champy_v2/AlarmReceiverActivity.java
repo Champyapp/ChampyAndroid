@@ -49,7 +49,11 @@ public class AlarmReceiverActivity extends Activity {
         TextView textView = (TextView)findViewById(R.id.textView24);
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
      //   textView.setTypeface(typeface);
-
+        Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+        window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
        ImageButton stopAlarm = (ImageButton) findViewById(R.id.stopAlarm);
         stopAlarm.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View arg0, MotionEvent arg1) {

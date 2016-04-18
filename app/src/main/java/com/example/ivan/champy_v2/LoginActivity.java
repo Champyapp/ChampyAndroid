@@ -27,7 +27,6 @@ import com.example.ivan.champy_v2.model.Friend.Datum;
 import com.example.ivan.champy_v2.model.Friend.Friend;
 import com.example.ivan.champy_v2.model.Friend.Friend_;
 import com.example.ivan.champy_v2.model.Friend.Owner;
-import com.example.ivan.champy_v2.model.Token;
 import com.example.ivan.champy_v2.model.User.Data;
 import com.example.ivan.champy_v2.model.User.LoginData;
 import com.example.ivan.champy_v2.model.User.User;
@@ -44,8 +43,6 @@ import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.iid.InstanceID;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -94,11 +91,7 @@ public class LoginActivity extends AppCompatActivity {
         String token;
 
         FacebookSdk.sdkInitialize(getApplicationContext());
-        setContentView(R.layout.activity_login);new Thread(new Runnable() {
-            public void run() {
-
-            }
-        }).start();
+        setContentView(R.layout.activity_login);
 
 
 
@@ -317,7 +310,7 @@ public class LoginActivity extends AppCompatActivity {
                 "  \"facebookId\": \"" + fb_id + "\"\n" +
                 "}").signWith(SignatureAlgorithm.HS256, "secret").compact();
 
-        final NewUser newUser = retrofit.create(NewUser.class);
+        NewUser newUser = retrofit.create(NewUser.class);
 
         Call<User> call = newUser.register(new LoginData(facebookId, name, email));
 
@@ -330,22 +323,11 @@ public class LoginActivity extends AppCompatActivity {
                     if (response.isSuccess()) {
                  /*   Log.d("TAG", "Status: " + decodedResponse.getDescription());
                     Log.d("TAG", "Status: "+jwtString);*/
-                        String token_android = "";
-                        try {
-                            InstanceID instanceID = InstanceID.getInstance(LoginActivity.this);
-
-                            token_android = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
-                                    GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-
-                            Log.i(TAG, "GCM Registration Token: " + token_android);
-
-                        }catch (Exception e) {
-                            Log.d(TAG, "Failed to complete token refresh", e);
-                        }
+                        String token_android;
 
                         Data data = decodedResponse.getData();
                         String email = data.getEmail();
-                        final String user_name = data.getName();
+                        String user_name = data.getName();
                         String id = data.get_id();
                         String pushN = data.getProfileOptions().getPushNotifications().toString();
                         String newChallReq = data.getProfileOptions().getNewChallengeRequests().toString();
@@ -355,7 +337,7 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d(TAG, "FB: " + fb_id);
 
 
-                        final SessionManager sessionManager = new SessionManager(getApplicationContext());
+                        SessionManager sessionManager = new SessionManager(getApplicationContext());
                         sessionManager.setRefreshPending("false");
                         sessionManager.setRefreshFriends("false");
                         sessionManager.createUserLoginSession(user_name, email, fb_id, path_to_pic, jwtString, id, pushN, newChallReq, acceptedYour, challegeEnd, "true");
@@ -370,28 +352,14 @@ public class LoginActivity extends AppCompatActivity {
                                 Log.d(TAG, "Image: " + api_path);
                             }
                         }
-                        Call<Token> call1 = newUser.getUserToken(id, token_android);
-                        final String finalApi_path = api_path;
-                        call1.enqueue(new Callback<Token>() {
-                            @Override
-                            public void onResponse(Response<Token> response, Retrofit retrofit) {
-                                sessionManager.change_token(response.body().getData());
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                if (finalApi_path == null) intent.putExtra("path_to_pic", path_to_pic);
-                                else {
-                                    intent.putExtra("path_to_pic", finalApi_path);
-                                    sessionManager.change_avatar(finalApi_path);
-                                }
-                                intent.putExtra("name", user_name);
-                                startActivity(intent);
-                            }
-
-                            @Override
-                            public void onFailure(Throwable t) {
-
-                            }
-                        });
-
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        if (api_path == null) intent.putExtra("path_to_pic", path_to_pic);
+                        else {
+                            intent.putExtra("path_to_pic", api_path);
+                            sessionManager.change_avatar(api_path);
+                        }
+                        intent.putExtra("name", user_name);
+                        startActivity(intent);
                     }
                 }
             }

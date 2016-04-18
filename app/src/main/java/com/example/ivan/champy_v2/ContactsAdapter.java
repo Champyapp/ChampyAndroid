@@ -185,6 +185,7 @@ public class ContactsAdapter extends
                 HashMap<String, String> user = new HashMap<>();
                 user = sessionManager.getUserDetails();
                 final String token = user.get("token");
+                Log.i("stat", "token: "+token);
                 final String id = user.get("id");
                 String friend = mContacts.get(position).getID();
                 Log.d(TAG, "RefreshPending: "+ sessionManager.getRefreshPending());

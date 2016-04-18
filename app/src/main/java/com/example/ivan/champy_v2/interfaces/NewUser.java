@@ -6,7 +6,6 @@ import com.example.ivan.champy_v2.model.User.User;
 
 import retrofit.Call;
 import retrofit.http.Body;
-import retrofit.http.Field;
 import retrofit.http.GET;
 import retrofit.http.POST;
 import retrofit.http.Path;
@@ -27,7 +26,7 @@ public interface NewUser {
     @GET("/v1/users/{id}/token")
     Call<Token> getUserToken(
       @Path("id") String id,
-      @Field("AndroidOS") String token
+      @Query(value = "AndroidOS", encoded = true) String token
     );
 
 

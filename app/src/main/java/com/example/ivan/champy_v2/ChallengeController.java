@@ -50,7 +50,11 @@ public class ChallengeController {
         user = sessionManager.getUserDetails();
         String token = user.get("token");
         String duration = "" + (days * 86400);
-        String details = ""+hour+minute;
+        String shour = ""+hour;
+        String sminute = ""+minute;
+        if (hour<10) shour = "0"+shour;
+        if (minute<10) sminute = "0"+sminute;
+        String details = shour+sminute;
 
         final String API_URL = "http://46.101.213.24:3007";
         final Retrofit retrofit = new Retrofit.Builder()
@@ -157,7 +161,7 @@ public class ChallengeController {
                         duration = "" + days;}
 
                         String challenge_id = datum.get_id();
-                        Log.i("stat", "Wake Up: " + desctiption);
+                        Log.i("stat", "Wake Up: " + datum.getStatus());
                         if (challenge.getDescription().equals("Wake Up")) {
                             cv.put("name", "Wake Up");
                         }

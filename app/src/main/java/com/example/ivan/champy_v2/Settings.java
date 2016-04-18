@@ -206,9 +206,14 @@ public class Settings extends AppCompatActivity
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Update_profile(map);
-                Intent intent = new Intent(Settings.this, Photo.class);
-                startActivity(intent);
+                OfflineMode offlineMode = new OfflineMode();
+                if (!offlineMode.isInternetAvailable(Settings.this)) {
+                    Toast.makeText(Settings.this, "Lost Internet Connection! Try Again Later!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Update_profile(map);
+                    Intent intent = new Intent(Settings.this, Photo.class);
+                    startActivity(intent);
+                }
             }
         });
         Glide.with(this)
@@ -249,27 +254,34 @@ public class Settings extends AppCompatActivity
                 imageButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (editText.getText().toString().trim() != "") {
-                            String newName = editText.getText().toString().trim();
-                            SessionManager sessionManager = new SessionManager(getApplicationContext());
-                            sessionManager.change_name(newName);
+                        OfflineMode offlineMode = new OfflineMode();
+                        if (!offlineMode.isInternetAvailable(Settings.this)){
+                            editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_warn, 0);
+                            Toast.makeText(Settings.this, "Lost Internet Connection! Try again later!", Toast.LENGTH_SHORT).show();
+                        } else {
 
-                            Set_new_name(newName);
+                            if (editText.getText().toString().trim() != "") {
+                                String newName = editText.getText().toString().trim();
+                                SessionManager sessionManager = new SessionManager(getApplicationContext());
+                                sessionManager.change_name(newName);
+
+                                Set_new_name(newName);
 
                             /*TextView textView = (TextView)findViewById(R.id.name);
                             textView.setText(editText.getText().toString());*/
+                            }
+                            change_name.setVisibility(View.VISIBLE);
+                            TextView textView1 = (TextView) findViewById(R.id.textView16);
+                            textView1.setVisibility(View.GONE);
+
+                            final EditText editText = (EditText) findViewById(R.id.new_name);
+                            editText.setVisibility(View.GONE);
+
+                            ImageButton imageButton = (ImageButton) findViewById(R.id.imageButton4);
+                            imageButton.setVisibility(View.GONE);
+
+                            findViewById(R.id.view11).setVisibility(View.GONE);
                         }
-                        change_name.setVisibility(View.VISIBLE);
-                        TextView textView1 = (TextView) findViewById(R.id.textView16);
-                        textView1.setVisibility(View.GONE);
-
-                        final EditText editText = (EditText) findViewById(R.id.new_name);
-                        editText.setVisibility(View.GONE);
-
-                        ImageButton imageButton = (ImageButton) findViewById(R.id.imageButton4);
-                        imageButton.setVisibility(View.GONE);
-
-                        findViewById(R.id.view11).setVisibility(View.GONE);
 
                     }
                 });
@@ -279,7 +291,11 @@ public class Settings extends AppCompatActivity
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                OfflineMode offlineMode = new OfflineMode();
+                if (!offlineMode.isInternetAvailable(Settings.this)) {
+                    Toast.makeText(Settings.this, "Lost Internet Connection! Try Again Later!", Toast.LENGTH_SHORT).show();
+                } else {
+                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
@@ -339,6 +355,7 @@ public class Settings extends AppCompatActivity
                 AlertDialog.Builder builder = new AlertDialog.Builder(Settings.this);
                 builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
                         .setNegativeButton("No", dialogClickListener).show();
+                }
 
             }
         });
@@ -373,9 +390,14 @@ public class Settings extends AppCompatActivity
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Update_profile(map);
-                Intent intent = new Intent(Settings.this, Photo.class);
-                startActivity(intent);
+                OfflineMode offlineMode = new OfflineMode();
+                if (!offlineMode.isInternetAvailable(Settings.this)) {
+                    Toast.makeText(Settings.this, "Lost Internet Connection! Try Again Later!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Update_profile(map);
+                    Intent intent = new Intent(Settings.this, Photo.class);
+                    startActivity(intent);
+                }
             }
         });
 

@@ -40,6 +40,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -88,12 +89,12 @@ public class WakeUp extends AppCompatActivity
 
         Glide.with(this)
                 .load(R.drawable.wakeupwhite)
-                .override(130, 130)
+                .override(110, 110)
                 .into((ImageView) findViewById(R.id.imageView13));
 
         Glide.with(this)
                 .load(R.drawable.wakeuptext)
-                .override(200, 170)
+                .override(180, 150)
                 .into((ImageView) findViewById(R.id.imageView12));
 
 
@@ -151,13 +152,20 @@ public class WakeUp extends AppCompatActivity
                 boolean ok = check(shour+sminute);
                 if (ok) {
                     Calendar calendar = Calendar.getInstance();
-                    calendar.set(Calendar.HOUR_OF_DAY, alarmTimePicker.getCurrentHour());
-                    calendar.set(Calendar.MINUTE, alarmTimePicker.getCurrentMinute());
+                    Date date = new Date();
+                    date.setHours(alarmTimePicker.getCurrentHour());
+                    date.setMinutes(alarmTimePicker.getCurrentMinute());
+                    calendar.setTime(date);
+                    long current = Calendar.getInstance().getTimeInMillis();
+
+                    calendar.set(Calendar.SECOND, 0);
+                    long time = calendar.getTimeInMillis();
+                    time = time - (time%60000);
+                    Log.i("stat", "Time: " + time);
                     Intent myIntent = new Intent(WakeUp.this, AlarmReceiver.class);
-                    int id = Integer.parseInt(shour+sminute);
-                    Log.i("stat", "Give up: "+id);
+                    int id = Integer.parseInt(shour + sminute);
                     pendingIntent = PendingIntent.getBroadcast(WakeUp.this, id, myIntent, 0);
-                    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+                    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, 24*60*60*1000, pendingIntent);
                     Toast.makeText(WakeUp.this, "Created", Toast.LENGTH_SHORT).show();
                     ChallengeController challengeController = new ChallengeController(WakeUp.this, WakeUp.this, hour, minute);
                     challengeController.Create_new_challenge("Wake Up", 21, "567d51c48322f85870fd931c");
@@ -183,15 +191,18 @@ public class WakeUp extends AppCompatActivity
         int o = 0;
         if (c.moveToFirst()) {
             int nameColIndex = c.getColumnIndex("name");
+            int status = c.getColumnIndex("status");
             Log.i("stat", "Statuskwo: o=" + o);
             do {
                 o++;
 
                 if (c.getString(nameColIndex).equals("Wake Up")){
-
-                    if (c.getString(c.getColumnIndex("description")).equals(time)){
-                        ok = false;
-                        break;
+                    if (c.getString(status).equals("started")) {
+                        Log.i("stat", "Time : " + c.getString(c.getColumnIndex("description")) + " " + time);
+                        if (c.getString(c.getColumnIndex("description")).equals(time)) {
+                            ok = false;
+                            break;
+                        }
                     }
                 }
             } while (c.moveToNext());

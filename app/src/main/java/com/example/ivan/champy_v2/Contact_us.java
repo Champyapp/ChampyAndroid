@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -73,6 +74,15 @@ public class Contact_us extends AppCompatActivity
         ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
         TextView textView = (TextView) headerLayout.findViewById(R.id.textView);
         textView.setText(name);
+
+        Button button = (Button)findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("myLogs", "started");
+                sendEmail();
+            }
+        });
 
         Glide.with(this)
                 .load(url)
@@ -186,7 +196,7 @@ public class Contact_us extends AppCompatActivity
     protected void sendEmail() {
         EditText subject = (EditText) findViewById(R.id.editText2);
         EditText body = (EditText)findViewById(R.id.editText);
-        String[] recipients = {"lodza7@gmail.com"};
+        String[] recipients = {"skill.bereg@gmail.com"};
         Intent email = new Intent(Intent.ACTION_SEND, Uri.parse("mailto:"));
         email.setType("message/rfc822");
 

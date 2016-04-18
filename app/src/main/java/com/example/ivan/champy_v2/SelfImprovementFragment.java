@@ -375,9 +375,11 @@ public class SelfImprovementFragment extends Fragment {
                         com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
                         Challenge challenge = datum.getChallenge();
                         String desctiption = challenge.getDetails();
-                        int end = datum.getEnd();
-                        int days = round((end - unixTime) / 86400);
-                        String duration = "" + days;
+                        String duration = "";
+                        if (datum.getEnd() != null) {
+                            int end = datum.getEnd();
+                            int days = round((end - unixTime) / 86400);
+                            duration = "" + days;}
                         String challenge_id = datum.get_id();
                         if (challenge.getDescription().equals("Wake Up")) cv.put("name", "Wake Up");
                         else cv.put("name", "Self Improvement");
