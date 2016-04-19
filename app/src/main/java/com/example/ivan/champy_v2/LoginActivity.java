@@ -43,6 +43,8 @@ import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.iid.InstanceID;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -166,11 +168,32 @@ public class LoginActivity extends AppCompatActivity {
                                         e.printStackTrace();
                                     }
                                     Log.d(TAG, path_to_pic);
-                                    getFriends();
 
-                                    Register_User(fb_id, name, user_email);
-                                    getUserData(fb_id, path_to_pic, accessToken);
+                                    new Thread(new Runnable() {
+                                        public void run() {
+                                            try {
+                                                String token_android;
+                                                InstanceID instanceID = InstanceID.getInstance(LoginActivity.this);
+                                                token_android = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
+                                                        GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
 
+                                                Log.d(TAG, "GCM Registration Token: " + token_android);
+                                                JSONObject manJson = new JSONObject();
+                                                manJson.put("token", token_android);
+                                                manJson.put("timeZone", "-2");
+
+                                                String json = manJson.toString();
+                                                getFriends(json);
+
+                                                Register_User(fb_id, name, user_email, json);
+                                                getUserData(fb_id, path_to_pic, json);
+
+
+                                            }catch (Exception e) {
+                                                Log.d(TAG, "Failed to complete token refresh", e);
+                                            }
+                                        }
+                                    }).start();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -298,17 +321,19 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-    private void Register_User(String facebookId, String name, String email)
-    {
+    private void Register_User(String facebookId, String name, String email, String gcm) throws JSONException {
 
         final String API_URL = "http://46.101.213.24:3007";
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload("{\n" +
-                "  \"facebookId\": \"" + fb_id + "\"\n" +
-                "}").signWith(SignatureAlgorithm.HS256, "secret").compact();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("facebookId", fb_id);
+        jsonObject.put("AndroidOS", gcm);
+        jsonObject.put("timeZone", "2");
+        String string = jsonObject.toString();
+        final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
 
         NewUser newUser = retrofit.create(NewUser.class);
 
@@ -370,13 +395,15 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-    private void getUserData(final String fb_id, final String path_to_pic, final AccessToken accessToken)
-    {
+    private void getUserData(final String fb_id, final String path_to_pic, String gcm) throws JSONException {
         final String API_URL = "http://46.101.213.24:3007";
 
-        final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload("{\n" +
-                "  \"facebookId\": \"" + fb_id + "\"\n" +
-                "}").signWith(SignatureAlgorithm.HS256, "secret").compact();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("facebookId", fb_id);
+        jsonObject.put("AndroidOS", gcm);
+        jsonObject.put("timeZone", "2");
+        String string = jsonObject.toString();
+        final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
 
         final Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(API_URL)
@@ -621,7 +648,7 @@ public class LoginActivity extends AppCompatActivity {
         return ok;
     }
 
-    public void getFriends()
+    public void getFriends(final String gcm)
     {
         final String API_URL = "http://46.101.213.24:3007";
 
@@ -646,9 +673,12 @@ public class LoginActivity extends AppCompatActivity {
                             try {
                                 final String fb_id = array.getJSONObject(i).getString("id");
                                 final String user_name = array.getJSONObject(i).getString("name");
-                                final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload("{\n" +
-                                        "  \"facebookId\": \"" + fb_id + "\"\n" +
-                                        "}").signWith(SignatureAlgorithm.HS256, "secret").compact();
+                                JSONObject jsonObject = new JSONObject();
+                                jsonObject.put("facebookId", fb_id);
+                                jsonObject.put("AndroidOS", gcm);
+                                jsonObject.put("timeZone", "2");
+                                String string = jsonObject.toString();
+                                final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
                                 Call<User> call = newUser.getUserInfo(jwtString);
                                 call.enqueue(new Callback<User>() {
                                     @Override
@@ -703,6 +733,9 @@ public class LoginActivity extends AppCompatActivity {
                 });
         request.executeAndWait();
     }
+
+
+
 
 }
 

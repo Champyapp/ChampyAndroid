@@ -157,11 +157,12 @@ public class WakeUp extends AppCompatActivity
                     date.setMinutes(alarmTimePicker.getCurrentMinute());
                     calendar.setTime(date);
                     long current = Calendar.getInstance().getTimeInMillis();
-
                     calendar.set(Calendar.SECOND, 0);
                     long time = calendar.getTimeInMillis();
                     time = time - (time%60000);
-                    Log.i("stat", "Time: " + time);
+                    if (current>time) calendar.add(Calendar.DATE, 1);
+                    time = calendar.getTimeInMillis();
+                    Log.i("stat", "Time: " + (Calendar.getInstance().getTimeInMillis() - calendar.getTimeInMillis()));
                     Intent myIntent = new Intent(WakeUp.this, AlarmReceiver.class);
                     int id = Integer.parseInt(shour + sminute);
                     pendingIntent = PendingIntent.getBroadcast(WakeUp.this, id, myIntent, 0);
