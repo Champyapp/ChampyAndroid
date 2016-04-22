@@ -656,7 +656,8 @@ public class MainActivity extends AppCompatActivity
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }
-                                    }
+
+                                    } else Toast.makeText(MainActivity.this, "Lost Internet Connection!", Toast.LENGTH_SHORT).show();
                                     break;
 
                                 case DialogInterface.BUTTON_NEGATIVE:

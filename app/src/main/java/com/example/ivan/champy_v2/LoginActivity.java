@@ -331,10 +331,10 @@ public class LoginActivity extends AppCompatActivity {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("facebookId", fb_id);
         jsonObject.put("AndroidOS", gcm);
-        jsonObject.put("timeZone", "2");
+        //String string = "{facebookId:'"+fb_id+"', AndroidOS:{token:'"+gcm+"', timeZone:2}";
         String string = jsonObject.toString();
         final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
-
+        Log.d(TAG, "TOKEN: "+string);
         NewUser newUser = retrofit.create(NewUser.class);
 
         Call<User> call = newUser.register(new LoginData(facebookId, name, email));
@@ -401,10 +401,9 @@ public class LoginActivity extends AppCompatActivity {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("facebookId", fb_id);
         jsonObject.put("AndroidOS", gcm);
-        jsonObject.put("timeZone", "2");
         String string = jsonObject.toString();
         final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
-
+        Log.d(TAG, "TOKEN: "+string);
         final Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -508,6 +507,8 @@ public class LoginActivity extends AppCompatActivity {
                     String update = "1457019726";
                     Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(id, update, jwtString);
                     try {
+                        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                        StrictMode.setThreadPolicy(policy);
                         List<com.example.ivan.champy_v2.model.active_in_progress.Datum>  list  = call1.execute().body().getData();
                         for (int i = 0; i < list.size(); i++) {
                             com.example.ivan.champy_v2.model.active_in_progress.Datum datum = list.get(i);
@@ -676,7 +677,6 @@ public class LoginActivity extends AppCompatActivity {
                                 JSONObject jsonObject = new JSONObject();
                                 jsonObject.put("facebookId", fb_id);
                                 jsonObject.put("AndroidOS", gcm);
-                                jsonObject.put("timeZone", "2");
                                 String string = jsonObject.toString();
                                 final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
                                 Call<User> call = newUser.getUserInfo(jwtString);
