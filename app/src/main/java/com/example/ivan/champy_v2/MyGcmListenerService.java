@@ -2,17 +2,31 @@ package com.example.ivan.champy_v2;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
+import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
+import com.example.ivan.champy_v2.model.active_in_progress.Datum;
+import com.example.ivan.champy_v2.model.active_in_progress.Recipient;
+import com.example.ivan.champy_v2.model.active_in_progress.Sender;
 import com.google.android.gms.gcm.GcmListenerService;
 
 import java.util.HashMap;
+import java.util.List;
+
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.GsonConverterFactory;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 public class MyGcmListenerService extends GcmListenerService {
 
@@ -75,9 +89,14 @@ public class MyGcmListenerService extends GcmListenerService {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         if (title.equals("Friend request")) {
-            intent = new Intent(this, MainActivity.class);
+            intent = new Intent(this, Friends.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("friend_request", "true");
+
+        } else {
+            intent = new Intent(this, Pending_Duel.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("refres_duel", "true");
         }
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
@@ -96,5 +115,62 @@ public class MyGcmListenerService extends GcmListenerService {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
+
+    public void generate() {
+        DBHelper dbHelper = new DBHelper(this);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        final int clearCount = db.delete("pending_duel", null, null);
+        final ContentValues cv = new ContentValues();
+        final String API_URL = "http://46.101.213.24:3007";
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+
+        final SessionManager sessionManager = new SessionManager(this);
+        HashMap<String, String> user = new HashMap<>();
+        user = sessionManager.getUserDetails();
+        String token = user.get("token");
+        final String id = user.get("id");
+        ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
+        final long unixTime = System.currentTimeMillis() / 1000L;
+        final String update = "1457019726";
+        Log.i("stat", "Nam nado: " + id + " " + update + " " + token);
+        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(id, update, token);
+        call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
+            @Override
+            public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    List<Datum> data = response.body().getData();
+                    for (int i = 0; i < data.size(); i++) {
+                        com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
+                        Recipient recipient = datum.getRecipient();
+                        Sender sender = datum.getSender();
+                        Challenge challenge = datum.getChallenge();
+                        cv.clear();
+                        if (challenge.getType().equals("567d51c48322f85870fd931b")) {
+                            if (id.equals(recipient.getId())) {
+                                cv.put("recipient", "true");
+                                cv.put("versus", sender.getName());
+                            }
+                            if (id.equals(sender.get_id())) {
+                                cv.put("recipient", "false");
+                                cv.put("versus", recipient.getName());
+                            }
+                            cv.put("challenge_id", challenge.get_id());
+                            cv.put("description", challenge.getDescription());
+                            cv.put("duration", challenge.getDuration());
+                            db.insert("pending_duel", null, cv);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+            }
+        });
     }
 }

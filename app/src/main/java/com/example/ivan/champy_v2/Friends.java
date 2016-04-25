@@ -267,9 +267,12 @@ public class Friends extends AppCompatActivity
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         adapterViewPager = new SampleFragmentPagerAdapter(getSupportFragmentManager(), getApplicationContext());
         viewPager.setAdapter(adapterViewPager);
-       /* Bundle bundle = getIntent().getExtras();
-        s = bundle.getString("friend_request");
-        if (s != null) viewPager.setCurrentItem(1);*/
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            s = bundle.getString("friend_request");
+            UpdatePending();
+            if (s != null) viewPager.setCurrentItem(1);
+        }
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
