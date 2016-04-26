@@ -94,9 +94,8 @@ public class MyGcmListenerService extends GcmListenerService {
             intent.putExtra("friend_request", "true");
 
         } else {
-            intent = new Intent(this, Pending_Duel.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.putExtra("refres_duel", "true");
+            refreshPendinDuels(message);
+            return;
         }
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
@@ -117,7 +116,7 @@ public class MyGcmListenerService extends GcmListenerService {
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
 
-    public void generate() {
+    public void refreshPendinDuels(final String message) {
         DBHelper dbHelper = new DBHelper(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final int clearCount = db.delete("pending_duel", null, null);
@@ -127,8 +126,6 @@ public class MyGcmListenerService extends GcmListenerService {
                 .baseUrl(API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-
-
         final SessionManager sessionManager = new SessionManager(this);
         HashMap<String, String> user = new HashMap<>();
         user = sessionManager.getUserDetails();
@@ -165,6 +162,25 @@ public class MyGcmListenerService extends GcmListenerService {
                             db.insert("pending_duel", null, cv);
                         }
                     }
+                    Intent intent = new Intent(MyGcmListenerService.this, Pending_Duel.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.putExtra("refres_duel", "true");
+                    PendingIntent pendingIntent = PendingIntent.getActivity(MyGcmListenerService.this, 0 /* Request code */, intent,
+                            PendingIntent.FLAG_ONE_SHOT);
+
+                    Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                    NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(MyGcmListenerService.this)
+                            .setSmallIcon(R.drawable.champy_icon)
+                            .setContentTitle("Champy")
+                            .setContentText(message)
+                            .setAutoCancel(true)
+                            .setSound(defaultSoundUri)
+                            .setContentIntent(pendingIntent);
+
+                    NotificationManager notificationManager =
+                            (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+                    notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
                 }
             }
 
