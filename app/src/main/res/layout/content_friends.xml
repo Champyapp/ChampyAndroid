@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.ivan.champy_v2.Friends"
+    tools:showIn="@layout/app_bar_friends"
+    android:id="@+id/friends_view">
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/friends_background"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:clickable="false" />
+
+
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/sliding_tabs"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        app:tabMode="fixed"
+        android:gravity="center"
+        app:tabMaxWidth="0dp"
+        app:tabGravity="fill"
+        app:tabTextColor="#FFE0E0E0"
+        app:tabSelectedTextColor="#FFFFFFFF"
+        app:tabIndicatorColor="#339997"
+        android:fillViewport="false" />
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00000000"
+        android:layout_below="@+id/sliding_tabs"
+        android:layout_marginTop="8dp"
+
+        android:visibility="visible"
+        android:clickable="false">
+
+
+
+    </android.support.v4.view.ViewPager>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:id="@+id/blured"
+        android:visibility="invisible"
+        android:clickable="true">
+
+    </ImageView>
+
+    <com.melnykov.fab.FloatingActionButton
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/imageButton"
+        android:src="@drawable/plus"
+        fab:fab_colorNormal="#FFF5C390"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
+
+</RelativeLayout>

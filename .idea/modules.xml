@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ChampyAndroid-second_sprint.iml" filepath="$PROJECT_DIR$/ChampyAndroid-second_sprint.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libs/JakeWharton-NineOldAndroids-2.4.0-1-gd582f0e/JakeWharton-NineOldAndroids-2.4.0-1-gd582f0e.iml" filepath="$PROJECT_DIR$/libs/JakeWharton-NineOldAndroids-2.4.0-1-gd582f0e/JakeWharton-NineOldAndroids-2.4.0-1-gd582f0e.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libs/libs.iml" filepath="$PROJECT_DIR$/libs/libs.iml" />
+    </modules>
+  </component>
+</project>

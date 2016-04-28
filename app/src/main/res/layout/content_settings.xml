@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/back_settings" />
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView">
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+<ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/img_profile"
+    android:layout_alignParentTop="true"
+    android:layout_centerHorizontal="true"
+    android:src="@android:mipmap/sym_def_app_icon"
+    android:layout_marginTop="8dp"
+    android:clickable="true" />
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textAppearance="?android:attr/textAppearanceLarge"
+    android:text="Large Text"
+    android:id="@+id/name"
+    android:layout_below="@+id/img_profile"
+    android:layout_centerHorizontal="true"
+    android:textColor="#ffffff" />
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    android:text="Level # Champy"
+    android:textColor="#339997"
+    android:id="@+id/textView9"
+    android:layout_below="@+id/name"
+    android:layout_centerHorizontal="true" />
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    android:text="General:"
+    android:id="@+id/textView10"
+    android:layout_below="@+id/textView9"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_marginTop="8dp"
+    android:layout_marginLeft="8dp"
+    android:textColor="#ffffff"
+    android:layout_marginBottom="8dp" />
+<RelativeLayout
+    android:layout_width="wrap_content" android:layout_height="wrap_content"
+    android:layout_below="@+id/textView10"
+    android:visibility="visible"
+    android:id="@+id/change_name"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Enter new name"
+        android:id="@+id/textView16"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="#ffffff"
+        android:visibility="gone"
+        android:layout_marginTop="8dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/new_name"
+        android:layout_below="@+id/textView16"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:visibility="gone"
+        android:textColor="#ffffff" />
+
+    <ImageButton
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/imageButton4"
+        android:layout_below="@+id/new_name"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/accept1"
+        android:visibility="gone" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Name"
+        android:id="@+id/textView11"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textColor="#ffffff"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:clickable="true"
+        android:layout_marginLeft="16dp"
+        android:visibility="visible" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#339997"
+        android:id="@+id/view11"
+        android:visibility="gone"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/textView11"
+        android:layout_alignEnd="@+id/textView11" />
+
+</RelativeLayout>
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:layout_marginTop="8dp"
+    android:background="#339997"
+    android:id="@+id/view"
+    android:visibility="visible"
+    android:layout_below="@+id/change_name"
+    android:layout_alignRight="@+id/change_name"
+    android:layout_alignEnd="@+id/change_name" />
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    android:text="Avatar"
+    android:id="@+id/avatar"
+    android:layout_below="@+id/view"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:clickable="true"
+    android:layout_alignParentRight="true"
+    android:layout_alignParentEnd="true"
+    android:textColor="#ffffff"
+    android:layout_marginTop="8dp"
+    android:layout_marginLeft="16dp" />
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:layout_marginTop="8dp"
+    android:background="#339997"
+    android:id="@+id/view1"
+    android:visibility="visible"
+    android:layout_below="@+id/avatar"
+    android:layout_alignRight="@+id/change_name"
+    android:layout_alignEnd="@+id/change_name" />
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    android:text="Delete Account"
+    android:id="@+id/delete_acc"
+    android:layout_below="@+id/view1"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:clickable="true"
+    android:layout_alignParentRight="true"
+    android:layout_alignParentEnd="true"
+    android:textColor="#ffffff"
+    android:layout_marginTop="8dp"
+    android:layout_marginLeft="16dp" />
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="#339997"
+    android:id="@+id/view2"
+    android:layout_marginTop="8dp"
+    android:visibility="visible"
+    android:layout_below="@+id/delete_acc"
+    android:layout_alignRight="@+id/change_name"
+    android:layout_alignEnd="@+id/change_name" />
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    android:text="Notifications:"
+    android:id="@+id/textView17"
+    android:layout_below="@+id/view2"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_marginTop="16dp"
+    android:layout_marginLeft="8dp"
+    android:textColor="#ffffff" />
+
+<Switch
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Push Notifications"
+    android:id="@+id/switch1"
+    android:layout_below="@+id/textView17"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_alignRight="@+id/delete_acc"
+    android:layout_alignEnd="@+id/delete_acc"
+    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+    android:layout_marginTop="8dp"
+    android:layout_marginLeft="16dp"
+    android:textColor="#ffffff"
+    android:enabled="true" />
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="#339997"
+    android:id="@+id/view3"
+    android:layout_marginTop="8dp"
+    android:visibility="visible"
+    android:layout_below="@+id/switch1"
+    android:layout_alignRight="@+id/change_name"
+    android:layout_alignEnd="@+id/change_name" />
+<Switch
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="New Challenge Requests"
+    android:id="@+id/switch2"
+    android:layout_below="@+id/view3"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_alignRight="@+id/delete_acc"
+    android:layout_alignEnd="@+id/delete_acc"
+    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+    android:layout_marginTop="8dp"
+    android:layout_marginLeft="16dp"
+    android:textColor="#ffffff" />
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="#339997"
+    android:id="@+id/view4"
+    android:layout_marginTop="8dp"
+    android:visibility="visible"
+    android:layout_below="@+id/switch2"
+    android:layout_alignRight="@+id/change_name"
+    android:layout_alignEnd="@+id/change_name" />
+<Switch
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Accepted Your Challenge"
+    android:id="@+id/switch3"
+    android:layout_below="@+id/view4"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_alignRight="@+id/delete_acc"
+    android:layout_alignEnd="@+id/delete_acc"
+    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+    android:layout_marginTop="8dp"
+    android:layout_marginLeft="16dp"
+    android:textColor="#ffffff" />
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="#339997"
+    android:id="@+id/view5"
+    android:layout_marginTop="8dp"
+    android:visibility="visible"
+    android:layout_below="@+id/switch3"
+    android:layout_alignRight="@+id/change_name"
+    android:layout_alignEnd="@+id/change_name" />
+
+        <Switch
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Challenge End"
+    android:id="@+id/switch4"
+    android:layout_below="@+id/view5"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_alignRight="@+id/delete_acc"
+    android:layout_alignEnd="@+id/delete_acc"
+    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+    android:layout_marginTop="8dp"
+    android:layout_marginLeft="16dp"
+    android:textColor="#ffffff" />
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="#339997"
+    android:id="@+id/view6"
+    android:layout_marginTop="8dp"
+    android:visibility="visible"
+    android:layout_below="@+id/switch4"
+    android:layout_alignRight="@+id/change_name"
+    android:layout_alignEnd="@+id/change_name" />
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    android:text="Legal:"
+    android:id="@+id/textView18"
+    android:layout_below="@+id/view6"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_marginTop="16dp"
+    android:layout_marginLeft="8dp"
+    android:textColor="#ffffff" />
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    android:text="About"
+    android:id="@+id/about"
+    android:layout_below="@+id/textView18"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_marginLeft="16dp"
+    android:layout_marginTop="8dp"
+    android:textColor="#ffffff"
+    android:layout_alignRight="@+id/switch4"
+    android:layout_alignEnd="@+id/switch4"
+    android:clickable="true" />
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="#339997"
+    android:id="@+id/view7"
+    android:layout_marginTop="8dp"
+    android:visibility="visible"
+    android:layout_below="@+id/about"
+    android:layout_alignRight="@+id/change_name"
+    android:layout_alignEnd="@+id/change_name" />
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    android:text="Privacy Policy"
+    android:id="@+id/privacy"
+    android:layout_below="@+id/view7"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_marginLeft="16dp"
+    android:layout_marginTop="8dp"
+    android:textColor="#ffffff"
+    android:layout_alignRight="@+id/switch4"
+    android:layout_alignEnd="@+id/switch4"
+    android:clickable="true" />
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="#339997"
+    android:id="@+id/view8"
+    android:layout_marginTop="8dp"
+    android:visibility="visible"
+    android:layout_below="@+id/privacy"
+    android:layout_alignRight="@+id/change_name"
+    android:layout_alignEnd="@+id/change_name" />
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    android:text="Terms"
+    android:id="@+id/terms"
+    android:layout_below="@+id/view8"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_marginLeft="16dp"
+    android:layout_marginTop="8dp"
+    android:textColor="#ffffff"
+    android:layout_alignRight="@+id/switch4"
+    android:layout_alignEnd="@+id/switch4"
+    android:clickable="true" />
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="#339997"
+    android:id="@+id/view9"
+    android:layout_marginTop="8dp"
+    android:visibility="visible"
+    android:layout_below="@+id/terms"
+    android:layout_alignRight="@+id/change_name"
+    android:layout_alignEnd="@+id/change_name" />
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    android:text="Contact Us"
+    android:id="@+id/contact_us"
+    android:layout_below="@+id/view9"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_marginLeft="16dp"
+    android:layout_marginTop="8dp"
+    android:textColor="#ffffff"
+    android:layout_alignRight="@+id/switch4"
+    android:layout_alignEnd="@+id/switch4"
+    android:clickable="true"
+    android:layout_marginBottom="8dp" />
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="#339997"
+    android:id="@+id/view10"
+    android:layout_marginTop="8dp"
+    android:visibility="visible"
+    android:layout_below="@+id/privacy"
+    android:layout_alignRight="@+id/change_name"
+    android:layout_alignEnd="@+id/change_name" />
+
+
+    </RelativeLayout>
+    </ScrollView>
+
+
+</RelativeLayout>
