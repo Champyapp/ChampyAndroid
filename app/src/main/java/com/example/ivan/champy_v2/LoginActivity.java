@@ -13,8 +13,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
@@ -27,6 +29,7 @@ import android.widget.Toast;
 import com.android.debug.hv.ViewServer;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
 import com.example.ivan.champy_v2.interfaces.NewUser;
+import com.example.ivan.champy_v2.interfaces.Update_user;
 import com.example.ivan.champy_v2.model.Friend.Datum;
 import com.example.ivan.champy_v2.model.Friend.Friend;
 import com.example.ivan.champy_v2.model.Friend.Friend_;
@@ -49,6 +52,8 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.RequestBody;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -66,7 +71,9 @@ import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -430,7 +437,7 @@ public class LoginActivity extends AppCompatActivity {
         jsonObject.put("AndroidOS", gcm);
         String string = jsonObject.toString();
         final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
-        Log.d(TAG, "TOKEN: "+string);
+        Log.d(TAG, "TOKEN: "+jwtString);
         final Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -617,6 +624,29 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    private String SaveFromCamera(Bitmap finalBitmap) {
+
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root + "/saved_images");
+        myDir.mkdirs();
+        Random generator = new Random();
+        int n = 10000;
+        n = generator.nextInt(n);
+        String fname = "Image-"+ n +".jpg";
+        File file = new File (myDir, fname);
+        if (file.exists ()) file.delete ();
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return (Uri.fromFile(file).getPath());
+    }
+
 
     public void loadImageFromStorage(String path)
     {
@@ -643,7 +673,6 @@ public class LoginActivity extends AppCompatActivity {
                 fos.flush();
                 fos.close();
                 Log.d(TAG, "Image: Blured");
-
             }
         }
         catch (FileNotFoundException e)
@@ -728,6 +757,10 @@ public class LoginActivity extends AppCompatActivity {
                                             cv.put("name", name);
                                             cv.put("photo", photo);
                                             cv.put("user_id", data.get_id());
+                                            cv.put("challenges", ""+data.getAllChallengesCount());
+                                            cv.put("wins", ""+data.getSuccessChallenges());
+                                            cv.put("total", ""+data.getScore());
+                                            cv.put("level", ""+data.getLevel().getNumber());
                                             if (!getContact(data.get_id()))
                                                 db.insert("mytable", null, cv);
                                             else Log.d(TAG, "DBase: not added");
@@ -742,6 +775,10 @@ public class LoginActivity extends AppCompatActivity {
                                             }
                                             cv.put("name", user_name);
                                             cv.put("photo", photo);
+                                            cv.put("challenges", "0");
+                                            cv.put("wins", "0");
+                                            cv.put("total", "0");
+                                            cv.put("level", "0");
                                             db.insert("mytable", null, cv);
                                         }
                                     }
@@ -759,6 +796,39 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
         request.executeAndWait();
+    }
+
+    public void Upload_photo(String path, String id, String token)
+    {
+        final String API_URL = "http://46.101.213.24:3007";
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        File f=new File(path);
+
+        Log.d(TAG, "Status: " + f);
+
+        RequestBody requestBody =
+                RequestBody.create(MediaType.parse("image/jpeg"), f);
+
+        Update_user update_user = retrofit.create(Update_user.class);
+        Call<User> call = update_user.update_photo(id, token, requestBody);
+        Log.d(TAG, "Status: RUN");
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Response<User> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    Log.d(TAG, "Status: photo_uploaded");
+                } else Log.d(TAG, "Status :" + response.code());
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.d(TAG, "Status: "+t);
+            }
+        });
     }
 
 

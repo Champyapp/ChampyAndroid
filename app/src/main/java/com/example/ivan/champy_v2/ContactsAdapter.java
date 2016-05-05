@@ -147,13 +147,13 @@ public class ContactsAdapter extends
 
 
             textView = (TextView)viewHolder.itemView.findViewById(R.id.info_chall);
-            textView.setText(champy.get("challenges"));
+            textView.setText(contact.getmChallenges());
             textView = (TextView)viewHolder.itemView.findViewById(R.id.info_wins);
-            textView.setText(champy.get("wins"));
+            textView.setText(contact.getmWins());
             textView = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
-            textView.setText(champy.get("total"));
+            textView.setText(contact.getmTotal());
             textView = (TextView)viewHolder.itemView.findViewById(R.id.info_level);
-            textView.setText("Level "+champy.get("level")+" Champy");
+            textView.setText("Level "+contact.getmLevel()+" Champy");
 
             viewHolder.itemView.findViewById(R.id.info).setVisibility(View.VISIBLE);
             viewHolder.itemView.findViewById(R.id.simple).setVisibility(View.GONE);
@@ -316,13 +316,13 @@ public class ContactsAdapter extends
         HashMap<String, String> champy = sessionManager.getChampyOptions();
 
         textView = (TextView)viewHolder.itemView.findViewById(R.id.chall);
-        textView.setText(champy.get("challenges"));
+        textView.setText(contact.getmChallenges());
         textView = (TextView)viewHolder.itemView.findViewById(R.id.in_progress);
-        textView.setText(champy.get("wins"));
+        textView.setText(contact.getmWins());
         textView = (TextView)viewHolder.itemView.findViewById(R.id.total);
-        textView.setText(champy.get("total"));
+        textView.setText(contact.getmTotal());
         textView = (TextView)viewHolder.itemView.findViewById(R.id.level);
-        textView.setText("Level " + champy.get("level") + " Champy");
+        textView.setText("Level " + contact.getmLevel()+ " Champy");
 
     }
 

@@ -49,6 +49,9 @@ public class FriendsAdapter extends
         this.listener = customItemClickListener;
     }
 
+    public void  Add_to_list(Friend friend){
+      mContacts.add(friend);
+    }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();

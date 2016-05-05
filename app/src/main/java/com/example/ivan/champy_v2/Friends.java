@@ -563,7 +563,7 @@ public class Friends extends AppCompatActivity
                 .build();
         DBHelper dbHelper = new DBHelper(getApplicationContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int clearCount = db.delete("friends", null, null);
+        db.delete("friends", null, null);
         final ContentValues cv = new ContentValues();
 
         com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
@@ -598,6 +598,7 @@ public class Friends extends AppCompatActivity
                         }
                     }
                     final List<com.example.ivan.champy_v2.Friend> newfriends = new ArrayList<com.example.ivan.champy_v2.Friend>();
+                    final RecyclerView rvContacts = (RecyclerView) findViewById(R.id.rvContacts);
                     Cursor c = db.query("friends", null, null, null, null, null, null);
                     if (c.moveToFirst()) {
                         int idColIndex = c.getColumnIndex("id");
@@ -606,23 +607,32 @@ public class Friends extends AppCompatActivity
                         int index = c.getColumnIndex("user_id");
                         do {
                             Log.i("newusers", "NewUser: " + c.getString(nameColIndex) + " Photo: " + c.getString(photoColIndex));
-                            newfriends.add(new com.example.ivan.champy_v2.Friend(c.getString(nameColIndex), API_URL+c.getString(photoColIndex), c.getString(index)));
+                            newfriends.add(new com.example.ivan.champy_v2.Friend(c.getString(nameColIndex), API_URL+c.getString(photoColIndex), c.getString(index), "0", "0", "0" ,"0"));
                         } while (c.moveToNext());
                     } else
-                        Log.i("stat", "0 rows");
+                        Log.i("stat", "0 0 0 0");
                     c.close();
 
                     Log.i("stat", "Friends :" + newfriends.toString());
-
-
-                    RecyclerView rvContacts = (RecyclerView) findViewById(R.id.rvContacts);
-                    final FriendsAdapter adapter = new FriendsAdapter(newfriends, getApplicationContext(), new CustomItemClickListener() {
+                    new Thread(new Runnable() {
                         @Override
-                        public void onItemClick(View view, int position) {
-                            com.example.ivan.champy_v2.Friend friend = newfriends.get(position);
+                        public void run() {
+                            final FriendsAdapter adapter = new FriendsAdapter(newfriends, getApplicationContext(), new CustomItemClickListener() {
+                                @Override
+                                public void onItemClick(View view, int position) {
+                                    com.example.ivan.champy_v2.Friend friend = newfriends.get(position);
+                                }
+                            });
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    rvContacts.setAdapter(adapter);
+                                    adapter.notifyDataSetChanged();
+                                }
+                            });
                         }
-                    });
-                    rvContacts.setAdapter(adapter);
+                    }).start();
+                    Log.i(TAG, "Refresh Friends List");
                 }
             }
 
@@ -696,14 +706,14 @@ public class Friends extends AppCompatActivity
                             newfriends.add(new Pending_friend(c.getString(nameColIndex), API_URL+c.getString(photoColIndex), c.getString(index), c.getString(owner)));
                         } while (c.moveToNext());
                     } else
-                        Log.i("stat", "0 rows");
+                        Log.i("stat", "null rows");
                     c.close();
 
                     Log.i("stat", "Friends :" + newfriends.toString());
 
 
                     RecyclerView rvContacts = (RecyclerView) findViewById(R.id.rvContacts);
-                    final PendingAdapter adapter = new PendingAdapter(newfriends, getApplicationContext(), new CustomItemClickListener() {
+                    final PendingAdapter adapter = new PendingAdapter(newfriends, Friends.this, new CustomItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
                             Pending_friend friend = newfriends.get(position);

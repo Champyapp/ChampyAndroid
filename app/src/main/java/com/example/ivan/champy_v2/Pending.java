@@ -86,7 +86,7 @@ public class Pending extends Fragment {
 
 
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-        final PendingAdapter adapter = new PendingAdapter(friends, getContext(), new CustomItemClickListener() {
+        final PendingAdapter adapter = new PendingAdapter(friends, getActivity(), new CustomItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Pending_friend friend = friends.get(position);
@@ -169,7 +169,7 @@ public class Pending extends Fragment {
 
 
                             //  RecclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-                            final PendingAdapter adapter = new PendingAdapter(newfriends, getContext(), new CustomItemClickListener() {
+                            final PendingAdapter adapter = new PendingAdapter(newfriends, getActivity(), new CustomItemClickListener() {
                                 @Override
                                 public void onItemClick(View view, int position) {
                                     Pending_friend friend = newfriends.get(position);
@@ -193,6 +193,8 @@ public class Pending extends Fragment {
         return view;
 
     }
+
+
 
 
 

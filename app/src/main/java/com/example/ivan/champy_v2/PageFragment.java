@@ -120,18 +120,26 @@ public class PageFragment extends Fragment {
             int nameColIndex = c.getColumnIndex("name");
             int photoColIndex = c.getColumnIndex("photo");
             int index = c.getColumnIndex("user_id");
-
+            int challenges = c.getColumnIndex("challenges");
+            int wins = c.getColumnIndex("wins");
+            int total = c.getColumnIndex("total");
+            int level = c.getColumnIndex("level");
             do {
-                if (!getContact(c.getString(index))) friends.add(new Friend(c.getString(nameColIndex), c.getString(photoColIndex), c.getString(index)));
+                if (!getContact(c.getString(index)))
+                    friends.add(new Friend(
+                            c.getString(nameColIndex),
+                            c.getString(photoColIndex),
+                            c.getString(index),
+                            c.getString(challenges),
+                            c.getString(wins),
+                            c.getString(total),
+                            c.getString(level)));
+
             } while (c.moveToNext());
         } else
             Log.i("stat", "0 rows");
         c.close();
 
-        /*for (int i=0; i<20; i++)
-        {
-            friends.add(new Friend("My friend number "+i, "http://loremflickr.com/320/240?random="+(i+1), 0));
-        }*/
         Log.i("stat", "Friends :"+friends);
 
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
@@ -202,11 +210,22 @@ public class PageFragment extends Fragment {
                                                             String name = data.getName();
                                                             cv.put("name", name);
                                                             cv.put("photo", photo);
-
+                                                            cv.put("challenges", ""+data.getAllChallengesCount());
+                                                            cv.put("wins", ""+data.getSuccessChallenges());
+                                                            cv.put("wins", ""+data.getScore());
+                                                            cv.put("level", ""+data.getLevel().getNumber());
                                                             Log.i("Users", "user: " + user_name + " photo: " + photo);
                                                             if (!getContact(data.get_id())){
                                                                 db.insert("mytable", null, cv);
-                                                                newfriends.add(new Friend(name, photo, data.get_id()));
+                                                                newfriends.add(new Friend(
+                                                                        name,
+                                                                        photo,
+                                                                        data.get_id(),
+                                                                        ""+data.getAllChallengesCount(),
+                                                                        ""+data.getSuccessChallenges(),
+                                                                        ""+data.getScore(),
+                                                                        ""+data.getLevel().getNumber()
+                                                                        ));
                                                             }
                                                             else
                                                                 Log.i("stat", "DBase: not added" + user_name);
@@ -222,8 +241,12 @@ public class PageFragment extends Fragment {
                                                             }
                                                             cv.put("name", user_name);
                                                             cv.put("photo", photo);
+                                                            cv.put("challenges", "0");
+                                                            cv.put("wins", "0");
+                                                            cv.put("total", "0");
+                                                            cv.put("level", "0");
                                                             Log.i("Users", "user: " + user_name + " photo: " + photo);
-                                                            newfriends.add(new Friend(user_name, photo, null));
+                                                            newfriends.add(new Friend(user_name, photo, null, "0", "0", "0" ,"0"));
                                                             db.insert("mytable", null, cv);
                                                         }
                                                     }
