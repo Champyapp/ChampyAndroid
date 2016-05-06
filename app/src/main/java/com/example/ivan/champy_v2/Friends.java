@@ -669,7 +669,7 @@ public class Friends extends AppCompatActivity
                     List<Datum> data = response.body().getData();
                     for (int i = 0; i < data.size(); i++) {
                         Datum datum = data.get(i);
-                        if (datum.getFriend() != null) {
+                        if ((datum.getFriend() != null) && (datum.getOwner() != null )) {
                             if (datum.getStatus().toString().equals("false")) {
                                 if (datum.getOwner().get_id().equals(id)) {
                                     Friend_ friend = datum.getFriend();

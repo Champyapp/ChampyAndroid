@@ -1,5 +1,6 @@
 package com.example.ivan.champy_v2;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,7 +23,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -73,6 +76,7 @@ public class Settings extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.bringToFront();
+        setupUI(findViewById(R.id.settings_layout));
 
 
 
@@ -94,7 +98,7 @@ public class Settings extends AppCompatActivity
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user = new HashMap<>();
         user = sessionManager.getUserDetails();
-        String name = user.get("name");
+        final String name = user.get("name");
         String id = user.get("id");
         String token = user.get("token");
         String pushN = user.get("pushN");
@@ -245,6 +249,7 @@ public class Settings extends AppCompatActivity
 
                 final EditText editText = (EditText) findViewById(R.id.new_name);
                 editText.setVisibility(View.VISIBLE);
+                editText.setText(name);
 
                 ImageButton imageButton = (ImageButton) findViewById(R.id.imageButton4);
                 imageButton.setVisibility(View.VISIBLE);
@@ -258,7 +263,10 @@ public class Settings extends AppCompatActivity
                         if (!offlineMode.isInternetAvailable(Settings.this)){
                             editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_warn, 0);
                             Toast.makeText(Settings.this, "Lost Internet Connection! Try again later!", Toast.LENGTH_SHORT).show();
-                        } else {
+                        } if (editText.getText().toString().trim().length()>50){
+                            Toast.makeText(Settings.this, "Name is too long!!!", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
 
                             if (editText.getText().toString().trim() != "") {
                                 String newName = editText.getText().toString().trim();
@@ -291,7 +299,7 @@ public class Settings extends AppCompatActivity
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OfflineMode offlineMode = new OfflineMode();
+                final OfflineMode offlineMode = new OfflineMode();
                 if (!offlineMode.isInternetAvailable(Settings.this)) {
                     Toast.makeText(Settings.this, "Lost Internet Connection! Try Again Later!", Toast.LENGTH_SHORT).show();
                 } else {
@@ -300,50 +308,54 @@ public class Settings extends AppCompatActivity
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
-                                SessionManager sessionManager = new SessionManager(getApplicationContext());
-                                HashMap<String, String> user = new HashMap<>();
-                                user = sessionManager.getUserDetails();
-                                String id = user.get("id");
-                                String token = user.get("token");
+                                if (!offlineMode.isInternetAvailable(Settings.this)) {
+                                    Toast.makeText(Settings.this, "Lost Internet Connection! Try Again Later!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    SessionManager sessionManager = new SessionManager(getApplicationContext());
+                                    HashMap<String, String> user = new HashMap<>();
+                                    user = sessionManager.getUserDetails();
+                                    String id = user.get("id");
+                                    String token = user.get("token");
 
-                                Toast.makeText(getApplicationContext(), "Bye Bye!!!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Bye Bye!!!", Toast.LENGTH_SHORT).show();
 
 
-                                Retrofit retrofit = new Retrofit.Builder()
-                                        .baseUrl(API_URL)
-                                        .addConverterFactory(GsonConverterFactory.create())
-                                        .build();
+                                    Retrofit retrofit = new Retrofit.Builder()
+                                            .baseUrl(API_URL)
+                                            .addConverterFactory(GsonConverterFactory.create())
+                                            .build();
 
-                                Update_user update_user = retrofit.create(Update_user.class);
-                                Call<Delete> call = update_user.delete_user(id, token);
-                                Log.i("Token", "Token: " + token);
+                                    Update_user update_user = retrofit.create(Update_user.class);
+                                    Call<Delete> call = update_user.delete_user(id, token);
+                                    Log.i("Token", "Token: " + token);
 
-                                call.enqueue(new Callback<Delete>() {
-                                    @Override
-                                    public void onResponse(Response<Delete> response, Retrofit retrofit) {
-                                        if (response.isSuccess()) {
-                                            Log.i("Status", "Status: OK");
-                                            String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
-                                            File file = new File(path, "blured2.jpg");
-                                            DBHelper dbHelper = new DBHelper(getApplicationContext());
-                                            final SQLiteDatabase db = dbHelper.getWritableDatabase();
-                                            int clearCount = db.delete("pending", null, null);
-                                            clearCount = db.delete("pending_duel", null, null);
-                                            db.delete("myChallenges", null, null);
-                                            file.delete();
-                                        } else Log.i("Status", "Status: " + response.code());
-                                    }
+                                    call.enqueue(new Callback<Delete>() {
+                                        @Override
+                                        public void onResponse(Response<Delete> response, Retrofit retrofit) {
+                                            if (response.isSuccess()) {
+                                                Log.i("Status", "Status: OK");
+                                                String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+                                                File file = new File(path, "blured2.jpg");
+                                                DBHelper dbHelper = new DBHelper(getApplicationContext());
+                                                final SQLiteDatabase db = dbHelper.getWritableDatabase();
+                                                int clearCount = db.delete("pending", null, null);
+                                                clearCount = db.delete("pending_duel", null, null);
+                                                db.delete("myChallenges", null, null);
+                                                file.delete();
+                                            } else Log.i("Status", "Status: " + response.code());
+                                        }
 
-                                    @Override
-                                    public void onFailure(Throwable t) {
-                                        Log.i("Status", "Status: " + t);
-                                    }
-                                });
-                                sessionManager.logoutUser();
-                                LoginManager.getInstance().logOut();
-                                Intent intent = new Intent(Settings.this, LoginActivity.class);
-                                startActivity(intent);
-                                break;
+                                        @Override
+                                        public void onFailure(Throwable t) {
+                                            Log.i("Status", "Status: " + t);
+                                        }
+                                    });
+                                    sessionManager.logoutUser();
+                                    LoginManager.getInstance().logOut();
+                                    Intent intent = new Intent(Settings.this, LoginActivity.class);
+                                    startActivity(intent);
+                                    break;
+                                }
 
                             case DialogInterface.BUTTON_NEGATIVE:
                                 //No button clicked
@@ -589,5 +601,27 @@ public class Settings extends AppCompatActivity
                 Log.d(TAG, "VSE huynya");
             }
         });
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
+    public void setupUI(View view) {
+
+        //Set up touch listener for non-text box views to hide keyboard.
+        if (!(view instanceof EditText)) {
+
+            view.setOnTouchListener(new View.OnTouchListener() {
+
+                public boolean onTouch(View v, MotionEvent event) {
+                    hideSoftKeyboard(Settings.this);
+                    return false;
+                }
+
+            });
+        }
+
     }
 }

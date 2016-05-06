@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.ivan.champy_v2.interfaces.*;
 import com.example.ivan.champy_v2.interfaces.Friends;
@@ -175,103 +176,106 @@ public class PageFragment extends Fragment {
                         int clearCount = db.delete("mytable", null, null);
                         final ContentValues cv = new ContentValues();
                         final List<Friend> newfriends = new ArrayList<Friend>();
+                        OfflineMode offlineMode = new OfflineMode();
+                        if (offlineMode.isInternetAvailable(getActivity())) {
+                            final GraphRequest request = GraphRequest.newMyFriendsRequest(
+                                    AccessToken.getCurrentAccessToken(),
+                                    new GraphRequest.GraphJSONArrayCallback() {
+                                        @Override
+                                        public void onCompleted(JSONArray array, GraphResponse response) {
+                                            for (int i = 0; i < array.length(); i++) {
+                                                try {
+                                                    final String fb_id = array.getJSONObject(i).getString("id");
+                                                    final String user_name = array.getJSONObject(i).getString("name");
+                                                    final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload("{\n" +
+                                                            "  \"facebookId\": \"" + fb_id + "\"\n" +
+                                                            "}").signWith(SignatureAlgorithm.HS256, "secret").compact();
+                                                    Call<User> call = newUser.getUserInfo(jwtString);
+                                                    call.enqueue(new Callback<User>() {
+                                                        @Override
+                                                        public void onResponse(Response<User> response, Retrofit retrofit) {
+                                                            if (response.isSuccess()) {
+                                                                Data data = response.body().getData();
+                                                                String photo = null;
+                                                                cv.put("user_id", data.get_id());
+                                                                if (data.getPhoto() != null)
+                                                                    photo = API_URL + data.getPhoto().getMedium();
+                                                                else {
+                                                                    try {
+                                                                        URL profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
+                                                                        photo = profile_pic.toString();
+                                                                    } catch (MalformedURLException e) {
+                                                                        e.printStackTrace();
+                                                                    }
+                                                                }
+                                                                String name = data.getName();
+                                                                cv.put("name", name);
+                                                                cv.put("photo", photo);
+                                                                cv.put("challenges", "" + data.getAllChallengesCount());
+                                                                cv.put("wins", "" + data.getSuccessChallenges());
+                                                                cv.put("wins", "" + data.getScore());
+                                                                cv.put("level", "" + data.getLevel().getNumber());
+                                                                Log.i("Users", "user: " + user_name + " photo: " + photo);
+                                                                if (!getContact(data.get_id())) {
+                                                                    db.insert("mytable", null, cv);
+                                                                    newfriends.add(new Friend(
+                                                                            name,
+                                                                            photo,
+                                                                            data.get_id(),
+                                                                            "" + data.getAllChallengesCount(),
+                                                                            "" + data.getSuccessChallenges(),
+                                                                            "" + data.getScore(),
+                                                                            "" + data.getLevel().getNumber()
+                                                                    ));
+                                                                } else
+                                                                    Log.i("stat", "DBase: not added" + user_name);
 
-
-                        final GraphRequest request = GraphRequest.newMyFriendsRequest(
-                                AccessToken.getCurrentAccessToken(),
-                                new GraphRequest.GraphJSONArrayCallback() {
-                                    @Override
-                                    public void onCompleted(JSONArray array, GraphResponse response) {
-                                        for (int i = 0; i < array.length(); i++) {
-                                            try {
-                                                final String fb_id = array.getJSONObject(i).getString("id");
-                                                final String user_name = array.getJSONObject(i).getString("name");
-                                                final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload("{\n" +
-                                                        "  \"facebookId\": \"" + fb_id + "\"\n" +
-                                                        "}").signWith(SignatureAlgorithm.HS256, "secret").compact();
-                                                Call<User> call = newUser.getUserInfo(jwtString);
-                                                call.enqueue(new Callback<User>() {
-                                                    @Override
-                                                    public void onResponse(Response<User> response, Retrofit retrofit) {
-                                                        if (response.isSuccess()) {
-                                                            Data data = response.body().getData();
-                                                            String photo = null;
-                                                            cv.put("user_id", data.get_id());
-                                                            if (data.getPhoto() != null)
-                                                                photo = API_URL + data.getPhoto().getMedium();
-                                                            else {
+                                                            } else {
+                                                                URL profile_pic = null;
+                                                                String photo = null;
                                                                 try {
-                                                                    URL profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
+                                                                    profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
                                                                     photo = profile_pic.toString();
                                                                 } catch (MalformedURLException e) {
                                                                     e.printStackTrace();
                                                                 }
-                                                            }
-                                                            String name = data.getName();
-                                                            cv.put("name", name);
-                                                            cv.put("photo", photo);
-                                                            cv.put("challenges", ""+data.getAllChallengesCount());
-                                                            cv.put("wins", ""+data.getSuccessChallenges());
-                                                            cv.put("wins", ""+data.getScore());
-                                                            cv.put("level", ""+data.getLevel().getNumber());
-                                                            Log.i("Users", "user: " + user_name + " photo: " + photo);
-                                                            if (!getContact(data.get_id())){
+                                                                cv.put("name", user_name);
+                                                                cv.put("photo", photo);
+                                                                cv.put("challenges", "0");
+                                                                cv.put("wins", "0");
+                                                                cv.put("total", "0");
+                                                                cv.put("level", "0");
+                                                                Log.i("Users", "user: " + user_name + " photo: " + photo);
+                                                                newfriends.add(new Friend(user_name, photo, null, "0", "0", "0", "0"));
                                                                 db.insert("mytable", null, cv);
-                                                                newfriends.add(new Friend(
-                                                                        name,
-                                                                        photo,
-                                                                        data.get_id(),
-                                                                        ""+data.getAllChallengesCount(),
-                                                                        ""+data.getSuccessChallenges(),
-                                                                        ""+data.getScore(),
-                                                                        ""+data.getLevel().getNumber()
-                                                                        ));
                                                             }
-                                                            else
-                                                                Log.i("stat", "DBase: not added" + user_name);
-
-                                                        } else {
-                                                            URL profile_pic = null;
-                                                            String photo = null;
-                                                            try {
-                                                                profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
-                                                                photo = profile_pic.toString();
-                                                            } catch (MalformedURLException e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                            cv.put("name", user_name);
-                                                            cv.put("photo", photo);
-                                                            cv.put("challenges", "0");
-                                                            cv.put("wins", "0");
-                                                            cv.put("total", "0");
-                                                            cv.put("level", "0");
-                                                            Log.i("Users", "user: " + user_name + " photo: " + photo);
-                                                            newfriends.add(new Friend(user_name, photo, null, "0", "0", "0" ,"0"));
-                                                            db.insert("mytable", null, cv);
                                                         }
-                                                    }
 
-                                                    @Override
-                                                    public void onFailure(Throwable t) {
+                                                        @Override
+                                                        public void onFailure(Throwable t) {
 
-                                                    }
-                                                });
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
+                                                        }
+                                                    });
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+
                                             }
+                                            RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
+                                            Log.i("stat", "Friends :" + newfriends.toString());
+                                            ContactsAdapter adapter1 = new ContactsAdapter(newfriends, getContext(), getActivity());
+                                            rvContacts.setAdapter(adapter1);
+                                            swipeRefreshLayout.setRefreshing(false);
 
                                         }
-                                        RecyclerView rvContacts = (RecyclerView)view.findViewById(R.id.rvContacts);
-                                        Log.i("stat", "Friends :" + newfriends.toString());
-                                        ContactsAdapter adapter1 = new ContactsAdapter(newfriends, getContext(), getActivity());
-                                        rvContacts.setAdapter(adapter1);
-                                        swipeRefreshLayout.setRefreshing(false);
-
-                                    }
-                                });
+                                    });
 
 
-                        request.executeAsync();
+                            request.executeAsync();
+                        } else {
+                            swipeRefreshLayout.setRefreshing(false);
+                            Toast.makeText(getContext(), "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
 

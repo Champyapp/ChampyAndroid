@@ -487,7 +487,7 @@ public class LoginActivity extends AppCompatActivity {
                                 for (int i=0; i<data.size(); i++){
                                     Datum datum = data.get(i);
                                     Log.d(TAG, "Status: "+response.body().toString());
-                                    if (datum.getFriend() != null) {
+                                    if ((datum.getFriend() != null) && (datum.getOwner() != null)) {
                                     if (datum.getStatus().toString().equals("false")) {
                                         Log.d(TAG, "Status: "+datum.getOwner().get_id());
                                         if (datum.getOwner().get_id().equals(user_id)) {

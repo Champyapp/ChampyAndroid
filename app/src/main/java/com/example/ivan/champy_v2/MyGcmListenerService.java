@@ -44,37 +44,39 @@ public class MyGcmListenerService extends GcmListenerService {
     public void onMessageReceived(String from, Bundle data) {
 
         final SessionManager sessionManager = new SessionManager(this);
-        HashMap<String, String> user = new HashMap<>();
-        user = sessionManager.getUserDetails();
-        String name = user.get("name");
+        if (sessionManager.isUserLoggedIn()) {
+            HashMap<String, String> user = new HashMap<>();
+            user = sessionManager.getUserDetails();
+            String name = user.get("name");
 
-        String message = data.getString("gcm.notification.body");
-        String title = data.getString("gcm.notification.title");
-        if (data != null) Log.d(TAG, "Bundle not null");
-        Log.d(TAG, "From: " + from + " " + name);
-        Log.d(TAG, "Message: " + message);
+            String message = data.getString("gcm.notification.body");
+            String title = data.getString("gcm.notification.title");
+            if (data != null) Log.d(TAG, "Bundle not null");
+            Log.d(TAG, "From: " + from + " " + name);
+            Log.d(TAG, "Message: " + message);
 
-        if (from.startsWith("/topics/")) {
-            // message received from some topic.
-        } else {
-            // normal downstream message.
+            if (from.startsWith("/topics/")) {
+                // message received from some topic.
+            } else {
+                // normal downstream message.
+            }
+
+            // [START_EXCLUDE]
+            /**
+             * Production applications would usually process the message here.
+             * Eg: - Syncing with server.
+             *     - Store message in local database.
+             *     - Update UI.
+             */
+
+            /**
+             * In some cases it may be useful to show a notification indicating to the user
+             * that a message was received.
+             */
+
+            if (!message.toLowerCase().contains(name.toLowerCase()))
+                sendNotification(message, title);
         }
-
-        // [START_EXCLUDE]
-        /**
-         * Production applications would usually process the message here.
-         * Eg: - Syncing with server.
-         *     - Store message in local database.
-         *     - Update UI.
-         */
-
-        /**
-         * In some cases it may be useful to show a notification indicating to the user
-         * that a message was received.
-         */
-
-        if (!message.toLowerCase().contains(name.toLowerCase()))
-        sendNotification(message, title);
         // [END_EXCLUDE]
     }
     // [END receive_message]
