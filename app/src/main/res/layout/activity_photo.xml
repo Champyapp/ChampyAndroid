@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+
+    tools:context="com.example.ivan.champy_v2.Photo"
+    android:background="#e62a5158"
+    android:id="@+id/change_photo">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Take Photo from Gallery"
+        android:id="@+id/gallery"
+        android:layout_below="@+id/camera"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:gravity="center_horizontal"
+        android:textColor="#ffffff"
+        android:clickable="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#339997"
+        android:id="@+id/view"
+        android:visibility="visible"
+        android:layout_below="@+id/gallery"
+        android:layout_alignLeft="@+id/gallery"
+        android:layout_alignStart="@+id/gallery" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#339997"
+        android:id="@+id/view1"
+        android:visibility="visible"
+        android:layout_above="@+id/gallery"
+        android:layout_alignLeft="@+id/gallery"
+        android:layout_alignStart="@+id/gallery" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#339997"
+        android:id="@+id/view2"
+        android:visibility="visible"
+        android:layout_alignBottom="@+id/photo"
+        android:layout_alignLeft="@+id/photo"
+        android:layout_alignStart="@+id/photo" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Take Photo from Camera"
+        android:id="@+id/camera"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/gallery"
+        android:layout_alignStart="@+id/gallery"
+        android:layout_marginBottom="16dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:textColor="#ffffff"
+        android:gravity="center_horizontal"
+        android:clickable="true"
+        android:layout_marginTop="16dp" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/photo"
+        android:layout_above="@+id/camera"
+        android:layout_alignParentTop="true" />
+
+</RelativeLayout>

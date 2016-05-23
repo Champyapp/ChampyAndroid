@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:background="@drawable/card_image"
+        android:id="@+id/cardImage"
+        android:layout_width="200dp"
+        android:layout_height="300dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:id="@+id/button2"
+        android:background="@drawable/icon_give_up"
+        android:layout_alignBottom="@+id/cardImage"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="8dp" />
+
+    <Button
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:background="@drawable/icon_share"
+        android:id="@+id/button3"
+        android:layout_alignRight="@+id/cardImage"
+        android:layout_alignEnd="@+id/cardImage"
+        android:layout_alignTop="@+id/button2"
+        android:layout_marginRight="8dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SELF-IMPROVEMENT CHALLENGE"
+        android:id="@+id/textView12"
+        android:textColor="#ffffff"
+        android:gravity="center_vertical|center_horizontal"
+        android:textStyle="bold"
+        android:textSize="13dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/imageView"
+        android:layout_alignRight="@+id/cardImage"
+        android:layout_alignEnd="@+id/cardImage" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Do 10 push-ups every day during 21 days"
+        android:id="@+id/textView13"
+        android:gravity="center_vertical|center_horizontal"
+        android:textSize="10dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/cardImage"
+        android:layout_alignEnd="@+id/cardImage"
+        android:textStyle="bold"
+        android:textColor="#000000" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="19 DAYS TO GO"
+        android:id="@+id/textView14"
+        android:textSize="24dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:textStyle="bold"
+        android:textColor="#59a7a6"
+        android:layout_above="@+id/textView15"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/cardImage"
+        android:layout_alignEnd="@+id/cardImage" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Level 1 Challenge / Reward + 10 points"
+        android:id="@+id/textView15"
+        android:layout_above="@+id/button3"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_marginBottom="35dp"
+        android:layout_alignRight="@+id/cardImage"
+        android:layout_alignEnd="@+id/cardImage"
+        android:textSize="10dp"
+        android:textColor="#59a7a6"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/icon_self_improv"
+        android:id="@+id/imageView"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" />
+
+</RelativeLayout>
