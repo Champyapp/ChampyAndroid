@@ -275,8 +275,8 @@ public class Settings extends AppCompatActivity
 
                                 Set_new_name(newName);
 
-                            /*TextView textView = (TextView)findViewById(R.id.name);
-                            textView.setText(editText.getText().toString());*/
+                            TextView textView = (TextView)findViewById(R.id.name);
+                            textView.setText(editText.getText().toString());
                             }
                             change_name.setVisibility(View.VISIBLE);
                             TextView textView1 = (TextView) findViewById(R.id.textView16);
@@ -472,6 +472,8 @@ public class Settings extends AppCompatActivity
         else {
             Log.d(TAG, "Status: Back");
             Update_profile(map);
+            Intent intent = new Intent(Settings.this, MainActivity.class);
+            startActivity(intent);
             super.onBackPressed();
         }
     }

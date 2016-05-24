@@ -136,7 +136,7 @@ public class WakeUp extends AppCompatActivity
             e.printStackTrace();
         }
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        ImageButton imageButton = (ImageButton)findViewById(R.id.imageButton5);
+        ImageButton imageButton = (ImageButton)findViewById(R.id.imageButtonAcceptSelfImprovement);
         imageButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {

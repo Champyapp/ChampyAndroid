@@ -37,11 +37,11 @@ public class ChallengeController {
     Activity firstActivity;
     int hour, minute;
 
-    public ChallengeController(Context mcontext,Activity activity, int mhour, int mminute){
-        context = mcontext;
+    public ChallengeController(Context mContext, Activity activity, int mHour, int mMinute) {
+        context = mContext;
         firstActivity = activity;
-        hour = mhour;
-        minute = mminute;
+        hour = mHour;
+        minute = mMinute;
     }
 
     public void Create_new_challenge(String description, int days, String type_id) {
@@ -50,11 +50,11 @@ public class ChallengeController {
         user = sessionManager.getUserDetails();
         String token = user.get("token");
         String duration = "" + (days * 86400);
-        String shour = ""+hour;
-        String sminute = ""+minute;
-        if (hour<10) shour = "0"+shour;
-        if (minute<10) sminute = "0"+sminute;
-        String details = shour+sminute;
+        String sHour = "" + hour;
+        String sMinute = "" + minute;
+        if (hour < 10) sHour = "0" + sHour;
+        if (minute < 10) sMinute = "0" + sMinute;
+        String details = sHour + sMinute;
 
         final String API_URL = "http://46.101.213.24:3007";
         final Retrofit retrofit = new Retrofit.Builder()
@@ -154,10 +154,10 @@ public class ChallengeController {
                         com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
                         Challenge challenge = datum.getChallenge();
                         String duration = "";
-                        String desctiption = challenge.getDetails();
+                        String description = challenge.getDetails();
                         if (datum.getEnd() != null) {
                         int end = datum.getEnd();
-                        int days = round((end - unixTime) / 86400);
+                        int days = round((end - unixTime) / 86400); // секунд в дні
                         duration = "" + days;}
 
                         String challenge_id = datum.get_id();
@@ -166,7 +166,7 @@ public class ChallengeController {
                             cv.put("name", "Wake Up");
                         }
                         else cv.put("name", "Self Improvement");
-                        cv.put("description", desctiption);
+                        cv.put("description", description);
                         cv.put("duration", duration);
                         cv.put("challenge_id", challenge_id);
                         cv.put("status", datum.getStatus());
@@ -194,8 +194,6 @@ public class ChallengeController {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-
-
        SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
        Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call = activeInProgress.Surrender(id, token);
        call.enqueue(new Callback<com.example.ivan.champy_v2.single_inprogress.SingleInProgress>() {
@@ -208,7 +206,7 @@ public class ChallengeController {
                    if (data.getChallenge().getType().equals("567d51c48322f85870fd931c")){
                        String s = data.getChallenge().getDetails();
                        Log.i("stat", "Give up: "+s);
-                       int i =Integer.parseInt(s);
+                       int i = Integer.parseInt(s);
                        Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
                        PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, i, myIntent, 0);
                        Log.i("stat", "Give up: "+i);

@@ -49,9 +49,7 @@ import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
-import com.example.ivan.champy_v2.interfaces.NewUser;
 import com.example.ivan.champy_v2.interfaces.Update_user;
-import com.example.ivan.champy_v2.model.Token;
 import com.example.ivan.champy_v2.model.User.User;
 import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
 import com.example.ivan.champy_v2.model.active_in_progress.Datum;
@@ -59,14 +57,10 @@ import com.example.ivan.champy_v2.model.active_in_progress.Recipient;
 import com.example.ivan.champy_v2.model.active_in_progress.Sender;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.iid.InstanceID;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.RequestBody;
-
-import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -75,7 +69,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -459,7 +452,7 @@ public class MainActivity extends AppCompatActivity
         }
 
 
-        private String saveToInternalSorage(Bitmap bitmapImage){
+        private String saveToInternalStorage(Bitmap bitmapImage){
             ContextWrapper cw = new ContextWrapper(getApplicationContext());
             // path to /data/data/yourapp/app_data/imageDir
             String root = Environment.getExternalStorageDirectory().toString();
@@ -484,14 +477,14 @@ public class MainActivity extends AppCompatActivity
 
             File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
             // Create imageDir
-            File mypath=new File(directory,"profile.jpg");
+            File myPath = new File(directory,"profile.jpg");
 
-            Log.d(TAG, "MY_PATH: "+mypath.toString());
+            Log.d(TAG, "MY_PATH: "+ myPath.toString());
 
             FileOutputStream fos = null;
             try {
 
-                fos = new FileOutputStream(mypath);
+                fos = new FileOutputStream(myPath);
 
                 // Use the compress method on the BitMap object to write image to the OutputStream
                 bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
@@ -573,7 +566,7 @@ public class MainActivity extends AppCompatActivity
 
         protected void onPostExecute(Bitmap result) {
             // Do your staff here to save image
-            saveToInternalSorage(result);
+            saveToInternalStorage(result);
             loadImageFromStorage("/data/data/com.example.ivan.champy_v2/app_imageDir/");
         }
     }

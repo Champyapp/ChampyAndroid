@@ -44,6 +44,7 @@ import static java.lang.Math.round;
  * Created by ivan on 14.03.16.
  */
 public class SelfImprovementFragment extends Fragment {
+
     public static final String ARG_PAGE = "ARG_PAGE";
 
     public static SelfImprovementFragment newInstance(int page) {
@@ -158,7 +159,7 @@ public class SelfImprovementFragment extends Fragment {
             editText = (EditText) view.findViewById(R.id.days);
             days = Integer.parseInt(editText.getText().toString());
             Log.i("stat", "Description: " + description);
-            ImageButton imageButton = (ImageButton) getActivity().findViewById(R.id.imageButton5);
+            ImageButton imageButton = (ImageButton) getActivity().findViewById(R.id.imageButtonAcceptSelfImprovement);
             imageButton.setVisibility(View.VISIBLE);
 
             imageButton.setOnClickListener(new View.OnClickListener() {
@@ -175,13 +176,15 @@ public class SelfImprovementFragment extends Fragment {
                 String description = "";
                 String challenge_id = "";
                 int days = 0;
-                EditText editText1 = (EditText) view.findViewById(R.id.goal);
-                description = editText1.getText().toString();
-                editText1 = (EditText) view.findViewById(R.id.days);
-                Log.i("stat", "Descrition :"+description+ " " + description.length());
-                if (editText1.getText().toString().equals("")){
-                    Toast.makeText(getContext(), "Duration is empty!!!", Toast.LENGTH_SHORT).show();
-                } else days = Integer.parseInt(editText1.getText().toString());
+                EditText editTextGoal = (EditText) view.findViewById(R.id.goal);                         // editText отвечает за цель
+                description = editTextGoal.getText().toString();                                         // description = editTextGoal.getText.toString...
+                editTextGoal = (EditText) view.findViewById(R.id.days);                                  // editTextGold теперь отвечает за дни
+                Log.i("stat", "Description :" + description + " " + description.length());
+                if (editTextGoal.getText().toString().equals("")) {                                      // якщо editTextGold з getText.toString, то він відповідає за ДНІ, якщо без то за НАЗВУ GOAL.
+                    Toast.makeText(getContext(), "Duration is empty!", Toast.LENGTH_SHORT).show();
+                } else {
+                    days = Integer.parseInt(editTextGoal.getText().toString());
+                }
                 Cursor c = db.query("selfimprovement", null, null, null, null, null, null);
                 int position = viewPager.getCurrentItem();
                 SessionManager sessionManager = new SessionManager(getContext());
@@ -189,25 +192,29 @@ public class SelfImprovementFragment extends Fragment {
 
                 Log.i("stat", "Click: " + position + " " + size);
                 if (position == size) {
-                    editText1 = (EditText) view.findViewById(R.id.goal);
-                    description = editText1.getText().toString();
+                    editTextGoal = (EditText) view.findViewById(R.id.goal);                              // тут та же магія
+                    description = editTextGoal.getText().toString();                                     // якщо editTextGold з getText.toString, то він відповідає за ДНІ, якщо без то за НАЗВУ.
                     Log.i("stat", "Click: clicked");
                     Log.i("stat", "Click: " + description);
-                    editText1 = (EditText) view.findViewById(R.id.days);
-                    if (editText1.getText().toString().equals("")){
-                      Toast.makeText(getContext(), "Duration is empty!!!", Toast.LENGTH_SHORT).show();
-                    } else if (description.equals("")){
-                        Toast.makeText(getContext(), "Goal is empty!!!", Toast.LENGTH_SHORT).show();
+                    editTextGoal = (EditText) view.findViewById(R.id.days);
+
+                    if (editTextGoal.getText().toString().equals("")) {                                 // descriptions = days
+                      Toast.makeText(getContext(), "Duration is empty!", Toast.LENGTH_SHORT).show();
+                    }
+                    if (description.equals(" ") || description.startsWith(" ") || description.isEmpty()) {  // descriptions = goal
+                        Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        days = Integer.parseInt(editTextGoal.getText().toString());
+                    }
+
+                    if (days == 0) {
+                        Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        days = Integer.parseInt(editText1.getText().toString());
-                        if (description.length() >= 100) Toast.makeText(getContext(), "Text is too long", Toast.LENGTH_SHORT).show();
-                        else if (days > 999) Toast.makeText(getContext(), "Max 999 days", Toast.LENGTH_SHORT).show();
-                        else if (days == 0) Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
-                        else Create_new_challenge(description, days);
+                        Create_new_challenge(description, days);
                     }
-                } else
-                {
+                }
+                else {
                     Log.i("stat", "Status: Poehali");
                     int o = 0;
                     if (c.moveToFirst()) {
@@ -238,15 +245,12 @@ public class SelfImprovementFragment extends Fragment {
                     Log.i("stat", "Click: " + viewPager.getCurrentItem());
                     if (name.equals("active")) {
                         Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
-                    } else if (description == ""){
-                        Toast.makeText(getContext(), "Goal is empty!!!", Toast.LENGTH_SHORT).show();
+                    } else if (description.equals("") || description.startsWith(" ")) {
+                        Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();
                     }
-                    else if (description.length() > 100) {
-                        Toast.makeText(getContext(), "Text is too long", Toast.LENGTH_SHORT).show();
+                    else if (days == 0) {
+                        Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
                     }
-                    else if (days>999) {
-                        Toast.makeText(getContext(), "Max 999 days", Toast.LENGTH_SHORT).show();
-                    } else if (days == 0)  Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
                     else {
                         Toast.makeText(getActivity(), "OK", Toast.LENGTH_SHORT).show();
                         StartSingleInProgress(challenge_id);
