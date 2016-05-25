@@ -35,13 +35,13 @@ import retrofit.Retrofit;
 /**
  * Created by ivan on 05.02.16.
  */
-public class PendingAdapter extends
-        RecyclerView.Adapter<PendingAdapter.ViewHolder> {
-    int selectedPos = 0;
+public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHolder> {
+
     final private String API_URL = "http://46.101.213.24:3007";
     final private String TAG = "myLogs";
     private List<Pending_friend> mContacts;
     private Context _context;
+    int selectedPos = 0;
     CustomItemClickListener listener;
     ArrayList<Integer> selected = new ArrayList<>();
 

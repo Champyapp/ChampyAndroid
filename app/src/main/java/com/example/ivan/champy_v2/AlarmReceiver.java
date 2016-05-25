@@ -13,8 +13,6 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
     @Override
     public void onReceive(final Context context, Intent intent) {
 
-
-
         Intent i = new Intent();
         i.setClassName("com.example.ivan.champy_v2", "com.example.ivan.champy_v2.AlarmReceiverActivity");
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

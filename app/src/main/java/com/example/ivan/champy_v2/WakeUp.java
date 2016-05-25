@@ -77,7 +77,7 @@ public class WakeUp extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
-   /* TextView textView = (TextView)findViewById(R.id.textView19);*/
+        /* TextView textView = (TextView)findViewById(R.id.textView19);*/
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         //textView.setTypeface(typeface);
         TextView textView = (TextView)findViewById(R.id.textView20);
@@ -141,12 +141,17 @@ public class WakeUp extends AppCompatActivity
             @Override
             public boolean onLongClick(View v) {
                 alarmTimePicker = (TimePicker)findViewById(R.id.timePicker);
+
                 int hour = alarmTimePicker.getCurrentHour();
                 int minute = alarmTimePicker.getCurrentMinute();
-                String shour = ""+hour;
-                String sminute = ""+minute;
-                if (hour<10) shour = "0"+shour;
-                if (minute<10) sminute = "0"+sminute;
+                String shour = "" + hour;
+                String sminute = ""+ minute;
+                if (hour < 10) {
+                    shour = "0" + shour;
+                }
+                if (minute < 10) {
+                    sminute = "0" + sminute;
+                }
                 Log.i("stat", "Give up: "+shour+" "+sminute);
 
                 boolean ok = check(shour+sminute);
@@ -160,7 +165,9 @@ public class WakeUp extends AppCompatActivity
                     calendar.set(Calendar.SECOND, 0);
                     long time = calendar.getTimeInMillis();
                     time = time - (time%60000);
-                    if (current>time) calendar.add(Calendar.DATE, 1);
+                    if (current>time) {
+                        calendar.add(Calendar.DATE, 1);
+                    }
                     time = calendar.getTimeInMillis();
                     Log.i("stat", "Time: " + (Calendar.getInstance().getTimeInMillis() - calendar.getTimeInMillis()));
                     Intent myIntent = new Intent(WakeUp.this, AlarmReceiver.class);
@@ -170,7 +177,9 @@ public class WakeUp extends AppCompatActivity
                     Toast.makeText(WakeUp.this, "Created", Toast.LENGTH_SHORT).show();
                     ChallengeController challengeController = new ChallengeController(WakeUp.this, WakeUp.this, hour, minute);
                     challengeController.Create_new_challenge("Wake Up", 21, "567d51c48322f85870fd931c");
-                } else Toast.makeText(WakeUp.this, "Already exist!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(WakeUp.this, "Already exist!", Toast.LENGTH_SHORT).show();
+                }
 
                 return true;
             }

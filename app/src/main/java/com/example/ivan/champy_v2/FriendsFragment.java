@@ -48,12 +48,9 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i("stat", "Created friends");
         final View view = inflater.inflate(R.layout.fragment_first, container, false);
         final List<com.example.ivan.champy_v2.Friend> friends = new ArrayList<com.example.ivan.champy_v2.Friend>();
@@ -100,6 +97,7 @@ public class FriendsFragment extends Fragment {
         floatingActionButton.attachToRecyclerView(rvContacts);
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         rvContacts.setAdapter(adapter);
+
         final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -128,23 +126,36 @@ public class FriendsFragment extends Fragment {
                         if (response.isSuccess()) {
                             List<Datum> data = response.body().getData();
                             for (int i = 0; i < data.size(); i++) {
+
                                 Datum datum = data.get(i);
+
                                 if (datum.getFriend() != null) {
+
                                     if (datum.getStatus().toString().equals("true")) {
+
                                         if (datum.getOwner().get_id().equals(id)) {
+
                                             Friend_ friend = datum.getFriend();
                                             cv.put("name", friend.getName());
-                                            if (friend.getPhoto() != null)
+
+                                            if (friend.getPhoto() != null) {
                                                 cv.put("photo", friend.getPhoto().getMedium());
-                                            else cv.put("photo", "");
+                                            } else {
+                                                cv.put("photo", "");
+                                            }
+
                                             cv.put("user_id", friend.getId());
                                             db.insert("friends", null, cv);
+
                                         } else {
                                             Owner friend = datum.getOwner();
                                             cv.put("name", friend.getName());
-                                            if (friend.getPhoto() != null)
+
+                                            if (friend.getPhoto() != null) {
                                                 cv.put("photo", friend.getPhoto().getMedium());
-                                            else cv.put("photo", "");
+                                            } else {
+                                                cv.put("photo", "");
+                                            }
                                             cv.put("user_id", friend.get_id());
                                             db.insert("friends", null, cv);
                                         }
@@ -169,7 +180,7 @@ public class FriendsFragment extends Fragment {
                             Log.i("stat", "Friends :" + newfriends.toString());
 
 
-                            //  RecclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
+                            //  RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
                             final FriendsAdapter adapter = new FriendsAdapter(newfriends, getContext(), new CustomItemClickListener() {
                                 @Override
                                 public void onItemClick(View view, int position) {
@@ -186,9 +197,6 @@ public class FriendsFragment extends Fragment {
 
                     }
                 });
-
-
-
             }
         });
         return view;
@@ -221,22 +229,34 @@ public class FriendsFragment extends Fragment {
                     List<Datum> data = response.body().getData();
                     for (int i = 0; i < data.size(); i++) {
                         Datum datum = data.get(i);
+
                         if (datum.getFriend() != null) {
+
                             if (datum.getStatus().toString().equals("true")) {
+
                                 if (datum.getOwner().get_id().equals(id)) {
+
                                     Friend_ friend = datum.getFriend();
                                     cv.put("name", friend.getName());
-                                    if (friend.getPhoto() != null)
+
+                                    if (friend.getPhoto() != null) {
                                         cv.put("photo", friend.getPhoto().getMedium());
-                                    else cv.put("photo", "");
+                                    } else {
+                                        cv.put("photo", "");
+                                    }
+
                                     cv.put("user_id", friend.getId());
                                     db.insert("friends", null, cv);
+
                                 } else {
                                     Owner friend = datum.getOwner();
                                     cv.put("name", friend.getName());
-                                    if (friend.getPhoto() != null)
+
+                                    if (friend.getPhoto() != null) {
                                         cv.put("photo", friend.getPhoto().getMedium());
-                                    else cv.put("photo", "");
+                                    } else {
+                                        cv.put("photo", "");
+                                    }
                                     cv.put("user_id", friend.get_id());
                                     db.insert("friends", null, cv);
                                 }
@@ -252,7 +272,8 @@ public class FriendsFragment extends Fragment {
                         int index = c.getColumnIndex("user_id");
                         do {
                             Log.i("newusers", "NewUser: " + c.getString(nameColIndex) + " Photo: " + c.getString(photoColIndex));
-                            newfriends.add(new com.example.ivan.champy_v2.Friend(c.getString(nameColIndex), API_URL+c.getString(photoColIndex), c.getString(index), "0", "0", "0" ,"0"));
+                            newfriends.add(new com.example.ivan.champy_v2.Friend(c.getString(nameColIndex),
+                                    API_URL+c.getString(photoColIndex), c.getString(index), "0", "0", "0" ,"0"));
                         } while (c.moveToNext());
                     } else
                         Log.i("stat", "0 0 0 0");

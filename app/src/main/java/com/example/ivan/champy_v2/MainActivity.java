@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
         }
-     //   get_right_token();
+        // get_right_token();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_gradient));
@@ -129,8 +129,8 @@ public class MainActivity extends AppCompatActivity
         CustomAdapter adapter = new CustomAdapter(this, SelfImprovement_model.generate(this));
         if (adapter.dataCount() > 0){
             pager = new CustomPagerBase(this,  cards, adapter);
-            pager.preparePager(0);}
-
+            pager.preparePager(0);
+        }
         final ImageButton actionButton = (ImageButton)findViewById(R.id.imageButton);
 
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
@@ -173,24 +173,20 @@ public class MainActivity extends AppCompatActivity
                     Blur blur = new Blur();
                     if (bm == null) Log.d(TAG, "SUKAAAAA");
                     else {
-
                         Bitmap blured = Blur.blurRenderScript(getApplicationContext(), bm, 25);
-
                         screen = (ImageView) findViewById(R.id.blured);
-
                         Drawable ob = new BitmapDrawable(getResources(), blured);
                         screen.setImageDrawable(ob);
                     }
                 }
-                else Log.d(TAG, "Vse zaebok");
+                 else Log.d(TAG, "Vse zaebok");
                 RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.cards);
                 Log.d("TAG", "menu " + actionMenu.isOpen());
                 actionMenu.toggle(true);
                 if (!actionMenu.isOpen()) {
                     screen.setVisibility(View.INVISIBLE);
                     relativeLayout.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     button3.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -198,6 +194,17 @@ public class MainActivity extends AppCompatActivity
                             if (offlineMode.isInternetAvailable(MainActivity.this)) {
                                 Intent intent = new Intent(MainActivity.this, SelfImprovement.class);
                                 startActivity(intent);
+                            }
+                        }
+                    });
+                    button2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            OfflineMode offlineMode = new OfflineMode();
+                            if (offlineMode.isInternetAvailable(MainActivity.this)) {
+                                //Intent intent = new Intent(MainActivity.this, BattleImprovement.class);
+                                Toast.makeText(getApplicationContext(), "Coming soon", Toast.LENGTH_SHORT).show();
+                                //startActivity(intent);
                             }
                         }
                     });
@@ -234,6 +241,17 @@ public class MainActivity extends AppCompatActivity
                             if (offlineMode.isInternetAvailable(MainActivity.this)) {
                                 Intent intent = new Intent(MainActivity.this, SelfImprovement.class);
                                 startActivity(intent);
+                            }
+                        }
+                    });
+                    button2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            OfflineMode offlineMode = new OfflineMode();
+                            if (offlineMode.isInternetAvailable(MainActivity.this)) {
+                                //Intent intent = new Intent(MainActivity.this, BattleImprovement.class);
+                                Toast.makeText(getApplicationContext(), "Coming soon", Toast.LENGTH_SHORT).show();
+                                //startActivity(intent);
                             }
                         }
                     });
@@ -432,9 +450,7 @@ public class MainActivity extends AppCompatActivity
 
 
 
-
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-
 
         protected Bitmap doInBackground(String... urls) {
             String urldisplay = urls[0];
@@ -463,7 +479,9 @@ public class MainActivity extends AppCompatActivity
             n = generator.nextInt(n);
             String fname = "Image-"+ n +".jpg";
             File file = new File (myDir, fname);
-            if (file.exists ()) file.delete ();
+            if (file.exists()) {
+                file.delete();
+            }
             try {
                 FileOutputStream out = new FileOutputStream(file);
                 bitmapImage.compress(Bitmap.CompressFormat.JPEG, 90, out);
@@ -483,9 +501,7 @@ public class MainActivity extends AppCompatActivity
 
             FileOutputStream fos = null;
             try {
-
                 fos = new FileOutputStream(myPath);
-
                 // Use the compress method on the BitMap object to write image to the OutputStream
                 bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
                 fos.close();
@@ -518,7 +534,6 @@ public class MainActivity extends AppCompatActivity
                     Bitmap blured = blur.blurRenderScript(getApplicationContext(), b, 10);
 
                     Bitmap bitmap = blured;
-
 
                     Drawable dr = new BitmapDrawable(getResources(), bitmap);
                     dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);

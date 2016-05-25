@@ -30,13 +30,13 @@ import retrofit.Retrofit;
 /**
  * Created by ivan on 05.02.16.
  */
-public class FriendsAdapter extends
-        RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
-    int selectedPos = 0;
+public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
+
     final private String API_URL = "http://46.101.213.24:3007";
     final private String TAG = "myLogs";
     private List<Friend> mContacts;
     private Context _context;
+    int selectedPos = 0;
     CustomItemClickListener listener;
     ArrayList<Integer> selected = new ArrayList<>();
 
@@ -49,9 +49,10 @@ public class FriendsAdapter extends
         this.listener = customItemClickListener;
     }
 
-    public void  Add_to_list(Friend friend){
+    public void Add_to_list(Friend friend){
       mContacts.add(friend);
     }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();

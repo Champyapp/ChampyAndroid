@@ -54,7 +54,7 @@ public class AlarmReceiverActivity extends Activity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
         window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-       ImageButton stopAlarm = (ImageButton) findViewById(R.id.stopAlarm);
+        ImageButton stopAlarm = (ImageButton) findViewById(R.id.stopAlarm);
         stopAlarm.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View arg0, MotionEvent arg1) {
                 mMediaPlayer.stop();

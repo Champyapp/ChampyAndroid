@@ -67,12 +67,11 @@ import retrofit.Retrofit;
 
 import static java.lang.Math.round;
 
-public class Friends extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class Friends extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
     FragmentPagerAdapter adapterViewPager;
     private final String TAG = "myLogs";
     private com.facebook.CallbackManager CallbackManager;
-
     private FloatingActionMenu actionMenu;
 
     @Override
@@ -100,11 +99,10 @@ public class Friends extends AppCompatActivity
         final com.melnykov.fab.FloatingActionButton actionButton = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.imageButton);
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
 
-
-
         SubActionButton button1 = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeupcolor)).build();
         SubActionButton button2 = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.duelcolor)).build();
         SubActionButton button3 = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementcolor)).build();
+
         int width = getWindowManager().getDefaultDisplay().getWidth();
         int x = round(width/100);
         button1.getLayoutParams().height = x*20;
@@ -135,19 +133,18 @@ public class Friends extends AppCompatActivity
 
 
                     Blur blur = new Blur();
-                    if (bm == null) Log.d(TAG, "SUKAAAAA");
-                    else {
-
+                    if (bm == null) {
+                        Log.d(TAG, "SUKAAAAA");
+                    } else {
                         Bitmap blured = Blur.blurRenderScript(getApplicationContext(), bm, 25);
-
                         screen = (ImageView) findViewById(R.id.blured);
-
                         Drawable ob = new BitmapDrawable(getResources(), blured);
                         screen.setImageDrawable(ob);
                     }
                 }
-                else Log.d(TAG, "Vse zaebok");
-
+                else {
+                    Log.d(TAG, "Vse zaebok");
+                }
                 //      screen.bringToFront();
                 Log.d("TAG", "menu " + actionMenu.isOpen());
                 actionMenu.toggle(true);
@@ -199,6 +196,7 @@ public class Friends extends AppCompatActivity
 
                     };
 
+                    // sharing method ???
                     AppInviteDialog appInviteDialog = new AppInviteDialog(activity);
                     if (appInviteDialog.canShow()) {
                         AppInviteContent.Builder content = new AppInviteContent.Builder();
@@ -207,6 +205,7 @@ public class Friends extends AppCompatActivity
                         AppInviteContent appInviteContent = content.build();
                         appInviteDialog.registerCallback(CallbackManager, facebookCallback);
                         appInviteDialog.show(activity, appInviteContent);
+                        //Toast.makeText(getApplicationContext(), "TIPA OTPRAVLENNO", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -256,13 +255,19 @@ public class Friends extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         int count = 0;
+
         String s = sessionManager.get_duel_pending();
         if (s != null){
             count = Integer.parseInt(s);
         }
+
         TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-        if (count == 0) hideItem();
-        else view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+        if (count == 0) {
+            hideItem();
+        }
+        else {
+            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+        }
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         adapterViewPager = new SampleFragmentPagerAdapter(getSupportFragmentManager(), getApplicationContext());
@@ -271,7 +276,9 @@ public class Friends extends AppCompatActivity
         if (bundle != null) {
             s = bundle.getString("friend_request");
             UpdatePending();
-            if (s != null) viewPager.setCurrentItem(1);
+            if (s != null) {
+                viewPager.setCurrentItem(1);
+            }
         }
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -309,18 +316,12 @@ public class Friends extends AppCompatActivity
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
 
 
-
-
-
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
-
-
 
         String name = user.get("name");
 
@@ -344,20 +345,18 @@ public class Friends extends AppCompatActivity
             imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setImageDrawable(dr);
-
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
         ViewServer.get(this).addWindow(this);
     }
-    private void hideItem()
-    {
+    private void hideItem() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         Menu nav_Menu = navigationView.getMenu();
         nav_Menu.findItem(R.id.pending_duels).setVisible(false);
     }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -371,7 +370,6 @@ public class Friends extends AppCompatActivity
             viewPager.setVisibility(View.VISIBLE);
         }
         else {
-
             super.onBackPressed();
         }
     }

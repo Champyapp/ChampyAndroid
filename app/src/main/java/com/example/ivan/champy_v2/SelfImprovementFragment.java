@@ -198,21 +198,21 @@ public class SelfImprovementFragment extends Fragment {
                     Log.i("stat", "Click: " + description);
                     editTextGoal = (EditText) view.findViewById(R.id.days);
 
-                    if (editTextGoal.getText().toString().equals("")) {                                 // descriptions = days
+                    if (editTextGoal.getText().toString().equals("")) {                                            // descriptions = days
                       Toast.makeText(getContext(), "Duration is empty!", Toast.LENGTH_SHORT).show();
-                    }
-                    if (description.equals(" ") || description.startsWith(" ") || description.isEmpty()) {  // descriptions = goal
+                    } else if (description.equals(" ") || description.startsWith(" ") || description.isEmpty()) {  // descriptions = goal
                         Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        days = Integer.parseInt(editTextGoal.getText().toString());
-                    }
-
-                    if (days == 0) {
+                    } else if (days == 0) {
                         Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
                     }
+                    //if (description.equals(" \\d+")) {
+                    //}
                     else {
+                        //its ok
+                        days = Integer.parseInt(editTextGoal.getText().toString());
                         Create_new_challenge(description, days);
                     }
+
                 }
                 else {
                     Log.i("stat", "Status: Poehali");

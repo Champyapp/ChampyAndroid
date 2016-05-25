@@ -19,16 +19,15 @@ import static java.lang.Math.round;
 
 public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
 
-    private static final long TRANSITION_DURATION_MS = 300;
-    private static final String TAG = "AwesomeLayoutManager";
-
     public enum Orientation {VERTICAL, HORIZONTAL}
 
-    private static final float SCALE_THRESHOLD_PERCENT = 0.66f;
+    private static final long TRANSITION_DURATION_MS = 300;
     private static final float ITEM_HEIGHT_PERCENT = 0.7f;
+    private static final float SCALE_THRESHOLD_PERCENT = 0.66f;
+    private static final String TAG = "AwesomeLayoutManager";
+    private int mAnchorPos;
     private SparseArray<View> viewCache = new SparseArray<>();
     private Orientation orientation = Orientation.VERTICAL;
-    private int mAnchorPos;
 
     public AwesomeLayoutManager(Context context) {
 
@@ -46,7 +45,7 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
     public void setOrientation(Orientation orientation) {
         View anchorView = getAnchorView();
         mAnchorPos = anchorView != null ? getPosition(anchorView) : 0;
-        if (orientation != null){
+        if (orientation != null) {
             this.orientation = orientation;
         }
         requestLayout();
@@ -60,7 +59,7 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
     }
 
     public void openItem(int pos) {
-        if (orientation == Orientation.VERTICAL){
+        if (orientation == Orientation.VERTICAL) {
             View viewToOpen = null;
             int childCount = getChildCount();
             for (int i = 0; i < childCount; i++) {
@@ -80,6 +79,7 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
         final ArrayList<ViewAnimationInfo> animationInfos = new ArrayList<>();
         int childCount = getChildCount();
         int animatedPos = getPosition(viewToAnimate);
+
         for (int i = 0; i < childCount; i++) {
             View view = getChildAt(i);
             int pos = getPosition(view);
@@ -128,6 +128,7 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
 
         View anchorView = getAnchorView();
         viewCache.clear();
+
         for (int i = 0, cnt = getChildCount(); i < cnt; i++) {
             View view = getChildAt(i);
             int pos = getPosition(view);
@@ -139,7 +140,6 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
         }
 
         switch (orientation) {
-
             case VERTICAL:
                 fillUp(anchorView, recycler);
                 fillDown(anchorView, recycler);
@@ -160,6 +160,7 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
     private void fillUp(@Nullable View anchorView, RecyclerView.Recycler recycler) {
         int anchorPos;
         int anchorTop = 0;
+
         if (anchorView != null){
             anchorPos = getPosition(anchorView);
             anchorTop = getDecoratedTop(anchorView);
@@ -173,8 +174,10 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
         int viewHeight = (int) (getHeight() * ITEM_HEIGHT_PERCENT);
         final int widthSpec = View.MeasureSpec.makeMeasureSpec(getWidth(), View.MeasureSpec.EXACTLY);
         final int heightSpec = View.MeasureSpec.makeMeasureSpec(getHeight(), View.MeasureSpec.EXACTLY);
+
         while (fillUp && pos >= 0){
             View view = viewCache.get(pos);
+
             if (view == null){
                 view = recycler.getViewForPosition(pos);
                 addView(view, 0);
@@ -194,6 +197,7 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
     private void fillDown(@Nullable View anchorView, RecyclerView.Recycler recycler) {
         int anchorPos;
         int anchorTop = 0;
+
         if (anchorView != null){
             anchorPos = getPosition(anchorView);
             anchorTop = getDecoratedTop(anchorView);
@@ -212,6 +216,7 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
 
         while (fillDown && pos < itemCount){
             View view = viewCache.get(pos);
+
             if (view == null){
                 view = recycler.getViewForPosition(pos);
                 addView(view);
@@ -231,6 +236,7 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
     private void fillLeft(@Nullable View anchorView, RecyclerView.Recycler recycler) {
         int anchorPos;
         int anchorLeft = 0;
+
         if (anchorView != null){
             anchorPos = getPosition(anchorView);
             anchorLeft = getDecoratedLeft(anchorView);
@@ -245,9 +251,11 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
         int height = getHeight();
         final int widthSpec = View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY);
         final int heightSpec = View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.AT_MOST);
+
         while (fillLeft && pos >= 0){
             View view = viewCache.get(pos);
-            if (view == null){
+
+            if (view == null) {
                 view = recycler.getViewForPosition(pos);
                 addView(view, 0);
                 measureChildWithDecorationsAndMargin(view, widthSpec, heightSpec);
@@ -327,6 +335,7 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
         Rect mainRect = new Rect(0, 0, getWidth(), getHeight());
         int maxSquare = 0;
         View anchorView = null;
+
         for (int i = 0; i < childCount; i++) {
             View view = getChildAt(i);
             int top = getDecoratedTop(view);
@@ -335,6 +344,7 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
             int right = getDecoratedRight(view);
             Rect viewRect = new Rect(left, top, right, bottom);
             boolean intersect = viewRect.intersect(mainRect);
+
             if (intersect){
                 int square = viewRect.width() * viewRect.height();
                 if (square > maxSquare){
@@ -373,6 +383,7 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
         }
         final int firstChildPos = getPosition(getChildAt(0));
         final int direction = targetPosition < firstChildPos ? -1 : 1;
+
         if (orientation == Orientation.HORIZONTAL) {
             return new PointF(direction, 0);
         } else {
@@ -461,16 +472,16 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
         }
 
         int delta = 0;
-        if (dx < 0){
+        if (dx < 0) {
             View firstView = getChildAt(0);
             int firstViewAdapterPos = getPosition(firstView);
-            if (firstViewAdapterPos > 0){
+            if (firstViewAdapterPos > 0) {
                 delta = dx;
             } else {
                 int viewLeft = getDecoratedLeft(firstView);
                 delta = Math.max(viewLeft, dx);
             }
-        } else if (dx > 0){
+        } else if (dx > 0) {
             View lastView = getChildAt(childCount - 1);
             int lastViewAdapterPos = getPosition(lastView);
             if (lastViewAdapterPos < itemCount - 1){

@@ -21,11 +21,11 @@ public class AlarmSchedule extends WakefulBroadcastReceiver {
         Log.d("myLogs", "Updated schedule");
         Bundle extras = intent.getExtras();
         if(extras == null) {
-            newString= null;
+            newString = null;
         } else {
-            newString= extras.getString("alarm");
+            newString = extras.getString("alarm");
         }
-        if (newString.equals("reset")){
+        if (newString.equals("reset")) {
             Log.d("myLogs", "Updated schedule");
             DBHelper dbHelper = new DBHelper(context);
             final SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -40,11 +40,10 @@ public class AlarmSchedule extends WakefulBroadcastReceiver {
                     db.update("myChallenges", cv, "challenge_id = ?", new String[]{id});
                     db.update("updated", cv, "challenge_id = ?", new String[] {id});
                 } while (c.moveToNext());
-            } else
+            } else {
                 Log.i("stat", "0 rows");
+            }
             c.close();
-
         }
-
     }
 }

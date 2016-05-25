@@ -263,21 +263,23 @@ public class Settings extends AppCompatActivity
                         if (!offlineMode.isInternetAvailable(Settings.this)){
                             editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_warn, 0);
                             Toast.makeText(Settings.this, "Lost Internet Connection! Try again later!", Toast.LENGTH_SHORT).show();
-                        } if (editText.getText().toString().trim().length()>50){
+                        } if (editText.getText().toString().trim().length() > 50){
                             Toast.makeText(Settings.this, "Name is too long!!!", Toast.LENGTH_SHORT).show();
+                        } else if (editText.getText().toString().isEmpty() || editText.getText().toString().startsWith(" ")
+                                || editText.getText().toString().equals("")) {
+                            Toast.makeText(getApplicationContext(), "Name field is empty!", Toast.LENGTH_SHORT).show();
                         }
                         else {
 
-                            if (editText.getText().toString().trim() != "") {
-                                String newName = editText.getText().toString().trim();
-                                SessionManager sessionManager = new SessionManager(getApplicationContext());
-                                sessionManager.change_name(newName);
+                            String newName = editText.getText().toString().trim();
+                            SessionManager sessionManager = new SessionManager(getApplicationContext());
+                            sessionManager.change_name(newName);
 
-                                Set_new_name(newName);
+                            Set_new_name(newName);
 
                             TextView textView = (TextView)findViewById(R.id.name);
                             textView.setText(editText.getText().toString());
-                            }
+
                             change_name.setVisibility(View.VISIBLE);
                             TextView textView1 = (TextView) findViewById(R.id.textView16);
                             textView1.setVisibility(View.GONE);
