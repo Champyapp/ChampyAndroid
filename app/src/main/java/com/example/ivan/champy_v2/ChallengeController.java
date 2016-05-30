@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
 import com.example.ivan.champy_v2.interfaces.CreateChallenge;
@@ -49,6 +50,7 @@ public class ChallengeController {
         HashMap<String, String> user = new HashMap<>();
         user = sessionManager.getUserDetails();
         String token = user.get("token");
+
         String duration = "" + (days * 86400);
         String sHour = "" + hour;
         String sMinute = "" + minute;
@@ -124,6 +126,7 @@ public class ChallengeController {
             }
         });
     }
+
     public void generate() {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -135,15 +138,19 @@ public class ChallengeController {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-
         final SessionManager sessionManager = new SessionManager(context);
+
         HashMap<String, String> user = new HashMap<>();
         user = sessionManager.getUserDetails();
         String token = user.get("token");
         String id = user.get("id");
+
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
+
         final long unixTime = System.currentTimeMillis() / 1000L;
+
         String update = "1457019726";
+
         Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(id, update, token);
         call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
             @Override
@@ -151,21 +158,28 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     List<Datum> data = response.body().getData();
                     for (int i = 0; i < data.size(); i++) {
+
                         com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
+
                         Challenge challenge = datum.getChallenge();
                         String duration = "";
                         String description = challenge.getDetails();
+
                         if (datum.getEnd() != null) {
-                        int end = datum.getEnd();
-                        int days = round((end - unixTime) / 86400); // секунд в дні
-                        duration = "" + days;}
+                            int end = datum.getEnd();
+                            int days = round((end - unixTime) / 86400); // секунд в дні
+                            duration = "" + days;
+                        }
 
                         String challenge_id = datum.get_id();
                         Log.i("stat", "Wake Up: " + datum.getStatus());
+
                         if (challenge.getDescription().equals("Wake Up")) {
                             cv.put("name", "Wake Up");
                         }
-                        else cv.put("name", "Self Improvement");
+                        else {
+                            cv.put("name", "Self Improvement");
+                        }
                         cv.put("description", description);
                         cv.put("duration", duration);
                         cv.put("challenge_id", challenge_id);
@@ -195,7 +209,8 @@ public class ChallengeController {
                 .build();
 
        SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
-       Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call = activeInProgress.Surrender(id, token);
+
+        Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call = activeInProgress.Surrender(id, token);
        call.enqueue(new Callback<com.example.ivan.champy_v2.single_inprogress.SingleInProgress>() {
            @Override
            public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
@@ -203,24 +218,31 @@ public class ChallengeController {
                    Log.i("stat", "Surrender: Success");
                    Data data = response.body().getData();
                    Log.i("stat", "Give up: "+data.getChallenge().getType());
-                   if (data.getChallenge().getType().equals("567d51c48322f85870fd931c")){
+                   if (data.getChallenge().getType().equals("567d51c48322f85870fd931c")) {
                        String s = data.getChallenge().getDetails();
                        Log.i("stat", "Give up: "+s);
+
                        int i = Integer.parseInt(s);
+
                        Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
+
                        PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, i, myIntent, 0);
+
                        Log.i("stat", "Give up: "+i);
+
                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                        alarmManager.cancel(pendingIntent);
                    }
+
                    generate();
+
                } else Log.i("stat", "Surrender: Fail"+response.code());
            }
 
            @Override
            public void onFailure(Throwable t) {
-
            }
+
        });
     }
 }

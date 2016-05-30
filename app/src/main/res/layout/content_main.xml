@@ -4,10 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:windowEnableSplitTouch="false"
+    android:splitMotionEvents="false"
+    android:touchscreenBlocksFocus="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.ivan.champy_v2.MainActivity"
     tools:showIn="@layout/app_bar_main"
-    android:id="@+id/content_main">
+    android:id="@+id/content_main"  >
 
 
     <ImageView
@@ -25,8 +28,7 @@
         android:layout_alignTop="@+id/imageview_score_animation1"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginLeft="@dimen/activity_vertical_margin"
-        />
+        android:layout_marginLeft="@dimen/activity_vertical_margin" />
 
     <ImageView
         android:id="@+id/imageview_score_animation1"
@@ -35,8 +37,7 @@
         android:background="@drawable/score_animation"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        />
+        android:layout_marginTop="@dimen/activity_vertical_margin" />
 
     <ImageView
         android:id="@+id/imageview_score_animation2"
@@ -46,8 +47,7 @@
         android:layout_alignTop="@+id/imageview_score_animation1"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginRight="@dimen/activity_vertical_margin"
-        />
+        android:layout_marginRight="@dimen/activity_vertical_margin" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -66,8 +66,7 @@
         android:layout_alignEnd="@+id/imageview_score_animation"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginLeft="@dimen/activity_vertical_margin"
-        android:layout_alignBottom="@+id/imageView2"
-        />
+        android:layout_alignBottom="@+id/imageView2" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -83,8 +82,7 @@
         android:layout_alignBottom="@+id/imageView3"
         android:layout_alignRight="@+id/imageview_score_animation1"
         android:layout_alignEnd="@+id/imageview_score_animation1"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        />
+        android:layout_marginTop="@dimen/activity_vertical_margin" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -100,8 +98,7 @@
         android:layout_alignBottom="@+id/imageView4"
         android:layout_alignRight="@+id/imageview_score_animation2"
         android:layout_alignEnd="@+id/imageview_score_animation2"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        />
+        android:layout_marginTop="@dimen/activity_vertical_margin" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -146,8 +143,7 @@
         android:layout_alignStart="@+id/imageview_score_animation2"
         android:gravity="center_vertical|center_horizontal"
         android:paddingBottom="30dp"
-        android:textColor="#ffffff"
-        />
+        android:textColor="#ffffff" />
 
     <ImageView
         android:layout_width="25dp"
@@ -187,7 +183,10 @@
         android:layout_above="@+id/imageButton"
         android:layout_centerHorizontal="true"
         android:id="@+id/cards"
-        android:layout_below="@+id/textView5"></RelativeLayout>
+        android:layout_below="@+id/textView5"
+        android:focusable="false">
+
+    </RelativeLayout>
 
     <ImageView
         android:layout_width="fill_parent"

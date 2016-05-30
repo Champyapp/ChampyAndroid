@@ -43,20 +43,22 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 /**
- * Created by ivan on 05.02.16.
+ * Created by ivan on 05.02.16. // Класс отвечает за OTHER в разделе Friends
  */
-public class PageFragment extends Fragment {
+public class OtherFragment extends Fragment {
+
     public static final String ARG_PAGE = "ARG_PAGE";
 
     private int mPage;
 
-    public static PageFragment newInstance(int page) {
+    public static OtherFragment newInstance(int page) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
-        PageFragment fragment = new PageFragment();
+        OtherFragment fragment = new OtherFragment();
         fragment.setArguments(args);
         return fragment;
     }
+
     public Boolean getContact(String id) {
         DBHelper dbHelper = new DBHelper(getContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -75,8 +77,9 @@ public class PageFragment extends Fragment {
                     break;
                 }
             } while (c.moveToNext());
-        } else
+        } else {
             Log.i("stat", "0 rows");
+        }
         c = db.query("friends", null, null, null, null, null, null);
         if (c.moveToFirst()) {
             int idColIndex = c.getColumnIndex("id");
@@ -156,7 +159,6 @@ public class PageFragment extends Fragment {
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(true);
-
                 swipeRefreshLayout.post(new Runnable() {
                     @Override
                     public void run() {
@@ -169,17 +171,25 @@ public class PageFragment extends Fragment {
                                 .build();
                         final NewUser newUser = retrofit.create(NewUser.class);
                         final com.example.ivan.champy_v2.interfaces.Friends friend = retrofit.create(Friends.class);
+
                         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
                         StrictMode.setThreadPolicy(policy);
+
                         DBHelper dbHelper = new DBHelper(getActivity());
+
                         final SQLiteDatabase db = dbHelper.getWritableDatabase();
+
                         int clearCount = db.delete("mytable", null, null);
+
                         final ContentValues cv = new ContentValues();
-                        final List<Friend> newfriends = new ArrayList<Friend>();
+                        final List<Friend> newFriends = new ArrayList<Friend>();
+
+                        // Проверка на оффлайн вкладке OTHERS
                         OfflineMode offlineMode = new OfflineMode();
                         if (offlineMode.isInternetAvailable(getActivity())) {
                             final GraphRequest request = GraphRequest.newMyFriendsRequest(
                                     AccessToken.getCurrentAccessToken(),
+
                                     new GraphRequest.GraphJSONArrayCallback() {
                                         @Override
                                         public void onCompleted(JSONArray array, GraphResponse response) {
@@ -190,6 +200,7 @@ public class PageFragment extends Fragment {
                                                     final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload("{\n" +
                                                             "  \"facebookId\": \"" + fb_id + "\"\n" +
                                                             "}").signWith(SignatureAlgorithm.HS256, "secret").compact();
+
                                                     Call<User> call = newUser.getUserInfo(jwtString);
                                                     call.enqueue(new Callback<User>() {
                                                         @Override
@@ -198,6 +209,7 @@ public class PageFragment extends Fragment {
                                                                 Data data = response.body().getData();
                                                                 String photo = null;
                                                                 cv.put("user_id", data.get_id());
+
                                                                 if (data.getPhoto() != null)
                                                                     photo = API_URL + data.getPhoto().getMedium();
                                                                 else {
@@ -208,6 +220,7 @@ public class PageFragment extends Fragment {
                                                                         e.printStackTrace();
                                                                     }
                                                                 }
+
                                                                 String name = data.getName();
                                                                 cv.put("name", name);
                                                                 cv.put("photo", photo);
@@ -216,9 +229,10 @@ public class PageFragment extends Fragment {
                                                                 cv.put("wins", "" + data.getScore());
                                                                 cv.put("level", "" + data.getLevel().getNumber());
                                                                 Log.i("Users", "user: " + user_name + " photo: " + photo);
+
                                                                 if (!getContact(data.get_id())) {
                                                                     db.insert("mytable", null, cv);
-                                                                    newfriends.add(new Friend(
+                                                                    newFriends.add(new Friend(
                                                                             name,
                                                                             photo,
                                                                             data.get_id(),
@@ -246,14 +260,13 @@ public class PageFragment extends Fragment {
                                                                 cv.put("total", "0");
                                                                 cv.put("level", "0");
                                                                 Log.i("Users", "user: " + user_name + " photo: " + photo);
-                                                                newfriends.add(new Friend(user_name, photo, null, "0", "0", "0", "0"));
+                                                                newFriends.add(new Friend(user_name, photo, null, "0", "0", "0", "0"));
                                                                 db.insert("mytable", null, cv);
                                                             }
                                                         }
 
                                                         @Override
                                                         public void onFailure(Throwable t) {
-
                                                         }
                                                     });
                                                 } catch (JSONException e) {
@@ -262,8 +275,8 @@ public class PageFragment extends Fragment {
 
                                             }
                                             RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-                                            Log.i("stat", "Friends :" + newfriends.toString());
-                                            ContactsAdapter adapter1 = new ContactsAdapter(newfriends, getContext(), getActivity());
+                                            Log.i("stat", "Friends :" + newFriends.toString());
+                                            ContactsAdapter adapter1 = new ContactsAdapter(newFriends, getContext(), getActivity());
                                             rvContacts.setAdapter(adapter1);
                                             swipeRefreshLayout.setRefreshing(false);
 

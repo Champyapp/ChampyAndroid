@@ -7,7 +7,7 @@ public class Pending_friend {
     private String mName;
     private String mPicture;
     private String mID;
-    private String mowner;
+    private String mOwner;
 
 
 
@@ -15,7 +15,7 @@ public class Pending_friend {
         mName = name;
         mPicture = picture;
         mID = ID;
-        mowner = owner;
+        mOwner = owner;
     }
 
     public String getName() {
@@ -31,11 +31,11 @@ public class Pending_friend {
     public void setID(String id) { mID = id; }
 
     public String getOwner() {
-        return mowner;
+        return mOwner;
     }
 
     public void setOwner(String mowner) {
-        this.mowner = mowner;
+        this.mOwner = mowner;
     }
 
     private static int lastFriendId = 0;

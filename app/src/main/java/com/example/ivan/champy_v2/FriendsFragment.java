@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.ivan.champy_v2.model.Friend.Datum;
 import com.example.ivan.champy_v2.model.Friend.Friend_;
@@ -49,6 +50,7 @@ public class FriendsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i("stat", "Created friends");
@@ -119,92 +121,101 @@ public class FriendsFragment extends Fragment {
                 final ContentValues cv = new ContentValues();
 
                 com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
-                Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.getUserFriends(id, token);
-                call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
-                    @Override
-                    public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
-                        if (response.isSuccess()) {
-                            List<Datum> data = response.body().getData();
-                            for (int i = 0; i < data.size(); i++) {
 
-                                Datum datum = data.get(i);
+                // Проверка на оффлайн вкладке Friends
+                OfflineMode offlineMode = new OfflineMode();
+                if (offlineMode.isInternetAvailable(getActivity())) {
 
-                                if (datum.getFriend() != null) {
+                    Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.getUserFriends(id, token);
+                    call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
+                        @Override
+                        public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
+                            if (response.isSuccess()) {
+                                List<Datum> data = response.body().getData();
+                                for (int i = 0; i < data.size(); i++) {
 
-                                    if (datum.getStatus().toString().equals("true")) {
+                                    Datum datum = data.get(i);
 
-                                        if (datum.getOwner().get_id().equals(id)) {
+                                    if (datum.getFriend() != null) {
 
-                                            Friend_ friend = datum.getFriend();
-                                            cv.put("name", friend.getName());
+                                        if (datum.getStatus().toString().equals("true")) {
 
-                                            if (friend.getPhoto() != null) {
-                                                cv.put("photo", friend.getPhoto().getMedium());
+                                            if (datum.getOwner().get_id().equals(id)) {
+
+                                                Friend_ friend = datum.getFriend();
+                                                cv.put("name", friend.getName());
+
+                                                if (friend.getPhoto() != null) {
+                                                    cv.put("photo", friend.getPhoto().getMedium());
+                                                } else {
+                                                    cv.put("photo", "");
+                                                }
+
+                                                cv.put("user_id", friend.getId());
+                                                db.insert("friends", null, cv);
+
                                             } else {
-                                                cv.put("photo", "");
+                                                Owner friend = datum.getOwner();
+                                                cv.put("name", friend.getName());
+
+                                                if (friend.getPhoto() != null) {
+                                                    cv.put("photo", friend.getPhoto().getMedium());
+                                                } else {
+                                                    cv.put("photo", "");
+                                                }
+                                                cv.put("user_id", friend.get_id());
+                                                db.insert("friends", null, cv);
                                             }
-
-                                            cv.put("user_id", friend.getId());
-                                            db.insert("friends", null, cv);
-
-                                        } else {
-                                            Owner friend = datum.getOwner();
-                                            cv.put("name", friend.getName());
-
-                                            if (friend.getPhoto() != null) {
-                                                cv.put("photo", friend.getPhoto().getMedium());
-                                            } else {
-                                                cv.put("photo", "");
-                                            }
-                                            cv.put("user_id", friend.get_id());
-                                            db.insert("friends", null, cv);
                                         }
                                     }
                                 }
+                                final List<Friend> newfriends = new ArrayList<Friend>();
+                                Cursor c = db.query("friends", null, null, null, null, null, null);
+                                if (c.moveToFirst()) {
+                                    int idColIndex = c.getColumnIndex("id");
+                                    int nameColIndex = c.getColumnIndex("name");
+                                    int photoColIndex = c.getColumnIndex("photo");
+                                    int index = c.getColumnIndex("user_id");
+                                    do {
+                                        Log.i("newusers", "NewUser: " + c.getString(nameColIndex) + " Photo: " + c.getString(photoColIndex));
+                                        newfriends.add(new Friend(c.getString(nameColIndex), API_URL + c.getString(photoColIndex), c.getString(index), "0", "0", "0", "0"));
+                                    } while (c.moveToNext());
+                                } else
+                                    Log.i("stat", "0 rows");
+                                c.close();
+
+                                Log.i("stat", "Friends :" + newfriends.toString());
+
+
+                                //  RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
+                                final FriendsAdapter adapter = new FriendsAdapter(newfriends, getContext(), new CustomItemClickListener() {
+                                    @Override
+                                    public void onItemClick(View view, int position) {
+                                        Friend friend = newfriends.get(position);
+                                    }
+                                });
+                                rvContacts.setAdapter(adapter);
+                                swipeRefreshLayout.setRefreshing(false);
                             }
-                            final List<Friend> newfriends = new ArrayList<Friend>();
-                            Cursor c = db.query("friends", null, null, null, null, null, null);
-                            if (c.moveToFirst()) {
-                                int idColIndex = c.getColumnIndex("id");
-                                int nameColIndex = c.getColumnIndex("name");
-                                int photoColIndex = c.getColumnIndex("photo");
-                                int index = c.getColumnIndex("user_id");
-                                do {
-                                    Log.i("newusers", "NewUser: " + c.getString(nameColIndex) + " Photo: " + c.getString(photoColIndex));
-                                    newfriends.add(new Friend(c.getString(nameColIndex), API_URL+c.getString(photoColIndex), c.getString(index), "0", "0", "0" ,"0"));
-                                } while (c.moveToNext());
-                            } else
-                                Log.i("stat", "0 rows");
-                            c.close();
-
-                            Log.i("stat", "Friends :" + newfriends.toString());
-
-
-                            //  RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-                            final FriendsAdapter adapter = new FriendsAdapter(newfriends, getContext(), new CustomItemClickListener() {
-                                @Override
-                                public void onItemClick(View view, int position) {
-                                    Friend friend = newfriends.get(position);
-                                }
-                            });
-                            rvContacts.setAdapter(adapter);
-                            swipeRefreshLayout.setRefreshing(false);
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Throwable t) {
+                        @Override
+                        public void onFailure(Throwable t) {
 
-                    }
-                });
+                        }
+                    });
+
+                } else {
+                    swipeRefreshLayout.setRefreshing(false);
+                    Toast.makeText(getContext(), "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         return view;
 
     }
 
-    public void UpdateFriendsList()
-    {
+    public void UpdateFriendsList() {
         final String API_URL = "http://46.101.213.24:3007";
         SessionManager sessionManager = new SessionManager(getActivity());
         HashMap<String, String> user = new HashMap<>();

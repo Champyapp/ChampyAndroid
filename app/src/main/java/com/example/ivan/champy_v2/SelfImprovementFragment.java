@@ -162,12 +162,14 @@ public class SelfImprovementFragment extends Fragment {
             ImageButton imageButton = (ImageButton) getActivity().findViewById(R.id.imageButtonAcceptSelfImprovement);
             imageButton.setVisibility(View.VISIBLE);
 
+
             imageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(getActivity(), "Tap & Hold", Toast.LENGTH_SHORT).show();
                 }
             });
+
             imageButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -180,7 +182,7 @@ public class SelfImprovementFragment extends Fragment {
                 description = editTextGoal.getText().toString();                                         // description = editTextGoal.getText.toString...
                 editTextGoal = (EditText) view.findViewById(R.id.days);                                  // editTextGold теперь отвечает за дни
                 Log.i("stat", "Description :" + description + " " + description.length());
-                if (editTextGoal.getText().toString().equals("")) {                                      // якщо editTextGold з getText.toString, то він відповідає за ДНІ, якщо без то за НАЗВУ GOAL.
+                if (editTextGoal.getText().toString().equals("")) {                                      // якщо editTextGoal з getText.toString, то він відповідає за ДНІ, якщо без то за НАЗВУ.
                     Toast.makeText(getContext(), "Duration is empty!", Toast.LENGTH_SHORT).show();
                 } else {
                     days = Integer.parseInt(editTextGoal.getText().toString());
@@ -211,6 +213,7 @@ public class SelfImprovementFragment extends Fragment {
                         //its ok
                         days = Integer.parseInt(editTextGoal.getText().toString());
                         Create_new_challenge(description, days);
+                        Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
                     }
 
                 }
@@ -252,13 +255,15 @@ public class SelfImprovementFragment extends Fragment {
                         Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        Toast.makeText(getActivity(), "OK", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
                         StartSingleInProgress(challenge_id);
                     }
                 }
                 return true;
             }
-        });}
+            });
+
+        }
         return view;
     }
 

@@ -66,7 +66,6 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         Typeface typeFace = Typeface.createFromAsset(context.getAssets(), "fonts/bebasneue.ttf");
         textView.setTypeface(typeFace);
 
-
         // Return a new holder instance
         final ViewHolder viewHolder = new ViewHolder(contactView);
         viewHolder.simple.setVisibility(View.VISIBLE);
@@ -82,9 +81,11 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                 } else {
                     int oldSelected = selected.get(0);
                     selected.clear();
-                    if (viewHolder.getAdapterPosition() == oldSelected) selected.add(-1);
+                    if (viewHolder.getAdapterPosition() == oldSelected) {
+                        selected.add(-1);
+                    }
                     notifyItemChanged(oldSelected);
-                    // notifyItemChanged(viewHolder.getAdapterPosition());
+                    notifyItemChanged(viewHolder.getAdapterPosition());
 
                 }
             }
@@ -92,6 +93,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
 
         return viewHolder;
     }
+
     @Override
     public void onBindViewHolder(final PendingAdapter.ViewHolder viewHolder, final int position) {
         // Get the data model based on position
@@ -182,17 +184,24 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
             @Override
             public void onClick(View v) {
                 final SessionManager sessionManager = new SessionManager(_context);
+
                 HashMap<String, String> user = new HashMap<>();
                 user = sessionManager.getUserDetails();
+
                 final String token = user.get("token");
                 final String id = user.get("id");
+
                 String friend = mContacts.get(position).getID();
+
                 Retrofit retrofit = new Retrofit.Builder()
                         .baseUrl(API_URL)
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
+
                 com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
+
                 Log.d(TAG, "Status: " + id + " " + friend);
+
                 Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.removeFriend(id, friend, token);
                 call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
                     @Override
@@ -244,6 +253,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                                     final ContentValues cv = new ContentValues();
                                     com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(Friends.class);
                                     Log.d(TAG, "Status: "+id+" "+friend+" "+token);
+
                                     Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.acceptFriendRequest(id, friend, token);
                                     call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
                                         @Override
@@ -268,7 +278,8 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                                     break;
 
                                 case DialogInterface.BUTTON_NEGATIVE:
-                                  /*   friend = mContacts.get(position).getID();
+                                    //////////////////////////////////////////////////////////////
+                                    friend = mContacts.get(position).getID();
                                     retrofit = new Retrofit.Builder()
                                             .baseUrl(API_URL)
                                             .addConverterFactory(GsonConverterFactory.create())
@@ -286,12 +297,12 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
 
                                         @Override
                                         public void onFailure(Throwable t) {
-
                                         }
                                     });
                                     mContacts.remove(position);
                                     notifyItemRemoved(position);
-                                    selected.clear();*/
+                                    selected.clear();
+                                    //////////////////////////////////////////////////////////////
                                     break;
 
                             }
@@ -331,17 +342,17 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                 .override(40, 40)
                 .into(imageView);
 
-        imageView = viewHolder.mchallenges;
+        imageView = viewHolder.mChallenges;
         Glide.with(_context)
                 .load(R.drawable.challenges)
                 .override(25, 25)
                 .into(imageView);
-        imageView = viewHolder.mwins;
+        imageView = viewHolder.mWins;
         Glide.with(_context)
                 .load(R.drawable.wins)
                 .override(25, 25)
                 .into(imageView);
-        imageView = viewHolder.mtotal;
+        imageView = viewHolder.mTotal;
         Glide.with(_context)
                 .load(R.drawable.total)
                 .override(25,25)
@@ -376,9 +387,9 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         public ImageButton block;
         public ImageButton add;
 
-        public ImageView mchallenges;
-        public ImageView mwins;
-        public ImageView mtotal;
+        public ImageView mChallenges;
+        public ImageView mWins;
+        public ImageView mTotal;
 
         public RelativeLayout simple;
         public RelativeLayout info;
@@ -400,9 +411,9 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
             total = (ImageView) itemView.findViewById(R.id.imageView4);
             dop = (ImageView) itemView.findViewById(R.id.imageView5);
 
-            mchallenges = (ImageView) itemView.findViewById(R.id.imageView9);
-            mwins = (ImageView) itemView.findViewById(R.id.imageView10);
-            mtotal = (ImageView) itemView.findViewById(R.id.imageView11);
+            mChallenges = (ImageView) itemView.findViewById(R.id.imageView9);
+            mWins = (ImageView) itemView.findViewById(R.id.imageView10);
+            mTotal = (ImageView) itemView.findViewById(R.id.imageView11);
 
             simple = (RelativeLayout)itemView.findViewById(R.id.simple);
             info = (RelativeLayout)itemView.findViewById(R.id.info);

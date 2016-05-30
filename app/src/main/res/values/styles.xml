@@ -9,6 +9,8 @@
         <item name="colorControlNormal">#c5c5c5</item>
         <item name="colorControlActivated">#339997</item>
         <item name="colorControlHighlight">#339997</item>
+        <item name="android:windowEnableSplitTouch">false</item>
+        <item name="android:splitMotionEvents">false</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -26,6 +28,7 @@
         <item name="android:windowBackground">@null</item>
         <item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>
         <item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
+        <item name="android:windowEnableSplitTouch">false</item>
     </style>
 
     <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">

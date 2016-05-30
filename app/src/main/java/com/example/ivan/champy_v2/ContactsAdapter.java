@@ -169,7 +169,6 @@ public class ContactsAdapter extends
         TextView textView = viewHolder.nameTextView;
         textView.setText(contact.getName());
 
-
         viewHolder.block.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -205,12 +204,15 @@ public class ContactsAdapter extends
                             }
                         }
                     };
-                    AlertDialog.Builder builder = new AlertDialog.Builder(_context);
-                    builder.setMessage("This user has not installed Champy. Do you want to send invite?").setPositiveButton("Yes", dialogClickListener)
-                            .setNegativeButton("No", dialogClickListener).show();
+                     AlertDialog.Builder builder = new AlertDialog.Builder(_context);
+                     builder.setMessage("This user has not installed Champy. Do you want to send invite?")
+                            .setPositiveButton("Yes", dialogClickListener)
+                            .setNegativeButton("No", dialogClickListener)
+                            .show();
                 }
-                else if (friend == id)  Toast.makeText(_context, "This user has not installed Champy", Toast.LENGTH_SHORT).show();
-                else {
+                else if (friend == id) {
+                    Toast.makeText(_context, "This user has not installed Champy", Toast.LENGTH_SHORT).show();
+                } else {
                     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -226,20 +228,26 @@ public class ContactsAdapter extends
                                             .build();
 
                                     DBHelper dbHelper = new DBHelper(_context);
+
                                     final SQLiteDatabase db = dbHelper.getWritableDatabase();
                                     final ContentValues cv = new ContentValues();
+
                                     com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(Friends.class);
+
                                     Log.d(TAG, "Status: "+id+" "+friend);
+
                                     sessionManager.setRefreshPending("true");
+
                                     Log.d(TAG, "RefreshPending: "+sessionManager.getRefreshPending());
+
                                     Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.sendFriendRequest(id, friend, token);
                                     call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
                                         @Override
                                         public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
                                             if (response.isSuccess()){
                                                 Log.d(TAG, "Status: Sended Friend Request");
-                                                cv.put("name", mContacts.get(position).getName());
-                                                cv.put("photo", mContacts.get(position).getPicture());
+                                                cv.put("name",    mContacts.get(position).getName());
+                                                cv.put("photo",   mContacts.get(position).getPicture());
                                                 cv.put("user_id", mContacts.get(position).getID());
                                                 db.insert("pending", null, cv);
                                             } else Log.d(TAG, "Status: "+response.toString());
@@ -262,9 +270,11 @@ public class ContactsAdapter extends
                             }
                         }
                     };
-                    AlertDialog.Builder builder = new AlertDialog.Builder(_context);
-                    builder.setMessage("Do you want add this user to your friends list?").setPositiveButton("Yes", dialogClickListener)
-                            .setNegativeButton("No", dialogClickListener).show();
+                     AlertDialog.Builder builder = new AlertDialog.Builder(_context);
+                     builder.setMessage("Do you want add this user to your friends list?")
+                            .setPositiveButton("Yes", dialogClickListener)
+                            .setNegativeButton("No", dialogClickListener)
+                            .show();
                 }
             }
         });

@@ -37,21 +37,21 @@ import java.util.HashMap;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
-public class Contact_us extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class Contact_us extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             sendEmail();
         }
     };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_us);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

@@ -84,16 +84,13 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 public class LoginActivity extends AppCompatActivity {
+
+    private static final String TAG = "myLogs";
+    private boolean ok;
     private AccessTokenTracker mTokenTracker;
     private ProfileTracker mProfileTracker;
     private CallbackManager mCallbackManager;
-    private boolean ok;
-
-
     private String user_email, path_to_pic, name, fb_id;
-
-
-    private static final String TAG = "myLogs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,16 +101,13 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
-
         String token;
-
         FacebookSdk.sdkInitialize(getApplicationContext());
 
         try {
             PackageInfo info = getPackageManager().getPackageInfo(
                     "com.facebook.samples.hellofacebook",
                     PackageManager.GET_SIGNATURES);
-
 
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
@@ -179,7 +173,7 @@ public class LoginActivity extends AppCompatActivity {
                 LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
-                         final AccessToken accessToken = loginResult.getAccessToken();
+                        final AccessToken accessToken = loginResult.getAccessToken();
                         Profile profile = Profile.getCurrentProfile();
                         final String[] URL = {""};
                         GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
@@ -283,12 +277,11 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+
     public void Init() throws IOException {
         InitializeLogin initializeLogin = new InitializeLogin(this, getApplicationContext(), new ImageModule(getApplicationContext()));
         initializeLogin.Init();
     }
-
-
 
 
 
@@ -352,7 +345,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onDestroy();
         ViewServer.get(this).removeWindow(this);
     }
-
 
 
     private void Register_User(String facebookId, String name, String email, String gcm) throws JSONException {
@@ -429,6 +421,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+
     private void getUserData(final String fb_id, final String path_to_pic, String gcm) throws JSONException {
         final String API_URL = "http://46.101.213.24:3007";
 
@@ -624,6 +618,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+
     private String SaveFromCamera(Bitmap finalBitmap) {
 
         String root = Environment.getExternalStorageDirectory().toString();
@@ -648,8 +643,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    public void loadImageFromStorage(String path)
-    {
+    public void loadImageFromStorage(String path) {
 
         try {
             File f=new File(path, "profile.jpg");
@@ -684,6 +678,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+
     public Boolean getContact(String id) {
         DBHelper dbHelper = new DBHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -705,8 +700,8 @@ public class LoginActivity extends AppCompatActivity {
         return ok;
     }
 
-    public void getFriends(final String gcm)
-    {
+
+    public void getFriends(final String gcm) {
         final String API_URL = "http://46.101.213.24:3007";
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -798,8 +793,8 @@ public class LoginActivity extends AppCompatActivity {
         request.executeAndWait();
     }
 
-    public void Upload_photo(String path, String id, String token)
-    {
+
+    public void Upload_photo(String path, String id, String token) {
         final String API_URL = "http://46.101.213.24:3007";
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(API_URL)

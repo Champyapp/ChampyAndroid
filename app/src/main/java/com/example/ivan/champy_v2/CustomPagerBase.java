@@ -2,11 +2,13 @@ package com.example.ivan.champy_v2;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.Animator.AnimatorListener;
@@ -18,6 +20,7 @@ import com.nineoldandroids.view.ViewHelper;
  * Created by ivan on 09.12.15.
  */
 public class CustomPagerBase {
+
     private static final int NEXT_PAGE = 1;
     private static final int PREVIOUS_PAGE = 2;
     private Activity context;
@@ -31,10 +34,10 @@ public class CustomPagerBase {
     private boolean isTouchEnabled = true;
     private CustomPagerAdapter pagerAdapter;
 
-    private static CustomPagerBase me;
-    public static CustomPagerBase getInstance()
-    {
-        return me;
+    private static CustomPagerBase customPagerBase;
+
+    public static CustomPagerBase getInstance() {
+        return customPagerBase;
     }
 
     public CustomPagerBase(Activity context, RelativeLayout rootView, CustomPagerAdapter pagerAdapter) {
@@ -44,10 +47,9 @@ public class CustomPagerBase {
         viewList          = new View[pagerAdapter.dataCount()];
 
         if (inflater == null){
-            inflater = (LayoutInflater) context.getSystemService
-                    (Context.LAYOUT_INFLATER_SERVICE);
+            inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
-        me = this;
+        customPagerBase = this;
     }
 
     public void preparePager(int position) {
@@ -107,7 +109,7 @@ public class CustomPagerBase {
 
     public void setIsTouchEnabled(boolean isEnabled)
     {
-        isTouchEnabled=isEnabled;
+        isTouchEnabled = isEnabled;
     }
 
     private View.OnTouchListener touchListener(final View itemView) {
@@ -117,41 +119,64 @@ public class CustomPagerBase {
 
             public boolean onTouch(View v, MotionEvent event) {
                 Log.d("TAG", "Touch :" + isTouchEnabled);
+
                 if(isTouchEnabled){
                     int width = Math.round(HelperClass.getWindowWidth(context) / 100);
                     Log.d("TAG", "Width: ="+width);
+
                     final int X = (int) event.getRawX();
+
                     float viewXPosition = ViewHelper.getX(itemView);
+
                     switch (event.getAction() & MotionEvent.ACTION_MASK) {
                         case MotionEvent.ACTION_DOWN:
                             lastX = X;
                             firstTouchX = X;
                             break;
                         case MotionEvent.ACTION_MOVE:
-                            if (X > width*25 && X < width*80) ViewHelper.setX(itemView, viewXPosition + (X - lastX));
+                            /*if (X > width*25 && X < width*80) {
+                                ViewHelper.setX(itemView, viewXPosition + (X - lastX));
+                            }*/
+                            if (X > width*50 & X < width*50) {
+                                ViewHelper.setX(itemView, viewXPosition + (X - lastX));
+                            }
+
                             lastX = X;
                             //   Log.d("TAG", "Move "+ViewHelper.getAlpha(nextItem));
                             Log.d("TAG", "Move " + ViewHelper.getScaleX(itemView));
                             ViewHelper.setScaleY(itemView, getScaleValue(viewXPosition));
                             ViewHelper.setScaleX(itemView, getScaleValue(viewXPosition));
-                            if (firstTouchX - lastX > 10 && nextItem != null)  {
-                                if (ViewHelper.getAlpha(nextItem) < 0.93f) ViewHelper.setAlpha(itemView, ViewHelper.getScaleX(itemView));
-                                else ViewHelper.setAlpha(itemView, 1f);
-                                ViewHelper.setAlpha(nextItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
+
+                            /*if (firstTouchX - lastX > 10 && nextItem != null)  {
+                                if (ViewHelper.getAlpha(nextItem) < 0.93f) {
+                                    ViewHelper.setAlpha(itemView, ViewHelper.getScaleX(itemView));
+                                }
+                                else {
+                                    ViewHelper.setAlpha(itemView, 1f);
+                                }
+                                ViewHelper.setAlpha (nextItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
                                 ViewHelper.setScaleX(nextItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
-                                ViewHelper.setScaleY(nextItem, 0.8f+(1f-ViewHelper.getScaleY(itemView)));
-                                if (ViewHelper.getAlpha(nextItem) > 0.9f) nextItem.bringToFront();
+                                ViewHelper.setScaleY(nextItem, 0.8f + (1f - ViewHelper.getScaleY(itemView)));
+                                if (ViewHelper.getAlpha(nextItem) > 0.9f) {
+                                    nextItem.bringToFront();
+                                }
                                 else if (currentItem != null) {
                                     currentItem.bringToFront();
                                     Log.d("TAG", "Bring to Front");
                                 }
                             } else if (lastX - firstTouchX > 10 && previousItem != null) {
-                                if (ViewHelper.getAlpha(previousItem) < 0.93f) ViewHelper.setAlpha(itemView, ViewHelper.getScaleX(itemView));
-                                else ViewHelper.setAlpha(itemView, 1f);
-                                ViewHelper.setAlpha(previousItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
+                                if (ViewHelper.getAlpha(previousItem) < 0.93f) {
+                                    ViewHelper.setAlpha(itemView, ViewHelper.getScaleX(itemView));
+                                }
+                                else {
+                                    ViewHelper.setAlpha(itemView, 1f);
+                                }
+                                ViewHelper.setAlpha (previousItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
                                 ViewHelper.setScaleX(previousItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
-                                ViewHelper.setScaleY(previousItem, 0.8f+(1f-ViewHelper.getScaleY(itemView)));
-                                if (ViewHelper.getAlpha(previousItem) > 0.9f) previousItem.bringToFront();
+                                ViewHelper.setScaleY(previousItem, 0.8f + (1f - ViewHelper.getScaleY(itemView)));
+                                if (ViewHelper.getAlpha(previousItem) > 0.9f) {
+                                    previousItem.bringToFront();
+                                }
                                 else if (currentItem != null) {
                                     currentItem.bringToFront();
                                     Log.d("TAG", "Bring to Front");
@@ -159,12 +184,13 @@ public class CustomPagerBase {
                             } else if  (currentItem != null) {
                                 Log.d("TAG", "Bring to Front");
                                 currentItem.bringToFront();
-                            }
+                            }*/
                             break;
                         case MotionEvent.ACTION_UP:
                             isTouchEnabled = false;
                             if (Math.abs(lastX - firstTouchX) < 5) {
                                 // Click state
+                                // поворот карточок справа вліво
                             } else if (lastX - firstTouchX > 100) {
                                 if (previousItem != null)
                                     changePageTo(PREVIOUS_PAGE);
@@ -179,6 +205,7 @@ public class CustomPagerBase {
                                     set.setDuration(90);
                                     set.start();
                                 }
+                                // поворот карточок зліва на право
                             } else if (firstTouchX - lastX > 100) {
                                 if (nextItem != null) {
                                     Log.d("TAG", "Ready to next:"+(firstTouchX - lastX));
@@ -195,6 +222,7 @@ public class CustomPagerBase {
                                     set.start();
                                 }
                             } else {
+                                // збільшує розмір бокових карточок, якщо вибрана одна із центральних
                                 if (nextItem != null && previousItem != null) {
                                     AnimatorSet set = new AnimatorSet();
                                     set.playTogether(
@@ -215,6 +243,7 @@ public class CustomPagerBase {
                                     Log.d("TAG", "Bring to Front");
                                     set.start();
                                 }
+                                // збільшує праву, якщо вибрана сама ліва
                                 else if (nextItem == null && previousItem != null){
                                     AnimatorSet set = new AnimatorSet();
                                     set.playTogether(
@@ -232,6 +261,7 @@ public class CustomPagerBase {
                                     Log.d("TAG", "Bring to Front");
                                     set.start();
                                 }
+                                // збільшує ліву, якшо вибрана сама права
                                 else if (previousItem == null && nextItem != null) {
                                     AnimatorSet set = new AnimatorSet();
                                     set.playTogether(
@@ -413,12 +443,14 @@ public class CustomPagerBase {
         }
     }
 
+
     private float getScaleValue(float currentPoint) {
         float value = (float) (((HelperClass.getCurrentCardPositionX(context) - currentPoint) * 0.5) / HelperClass.getCurrentCardPositionX(context));
         if (1 - value * value < 0.8f)
             return 0.8f;
         return 1 - value * value;
     }
+
 
     public void performNextPage() {
         if (nextItem != null)

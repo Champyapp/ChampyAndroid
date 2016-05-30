@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentPagerAdapter;
  * Created by ivan on 05.02.16.
  */
 public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
+
     final int PAGE_COUNT = 3;
     private String tabTitles[] = new String[] { "Friends", "Pending", "Other" };
     private Context context;
@@ -30,7 +31,7 @@ public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
 
             case 0: return new FriendsFragment();
             case 1: return new Pending();
-            default: return new PageFragment();
+            default: return new OtherFragment();
 
         }
     }

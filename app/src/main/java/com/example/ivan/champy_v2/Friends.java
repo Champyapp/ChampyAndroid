@@ -74,6 +74,10 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
     private com.facebook.CallbackManager CallbackManager;
     private FloatingActionMenu actionMenu;
 
+    /**
+     * коли заходиш в friends, то friends по дефолтку (тіпа 1);
+     * onClickListener2 = Pending || onClickListener3 = Others; vrodi...
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +91,7 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
         setContentView(R.layout.activity_friends);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         final SessionManager sessionManager = new SessionManager(this);
         HashMap<String, String> user = new HashMap<>();
         user = sessionManager.getUserDetails();
@@ -130,7 +135,6 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
                     relativeLayout.setDrawingCacheEnabled(true);
                     relativeLayout.buildDrawingCache();
                     Bitmap bm = relativeLayout.getDrawingCache();
-
 
                     Blur blur = new Blur();
                     if (bm == null) {
@@ -286,7 +290,7 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
 
             }
 
-            @Override
+            @Override // отвечает за кнопку fab в разделе Friends
             public void onPageSelected(int position) {
                 SessionManager sessionManager1 = new SessionManager(getApplicationContext());
                 String refresh = sessionManager1.getRefreshFriends();
@@ -466,15 +470,11 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
             Intent intent = new Intent(Friends.this, MainActivity.class);
             startActivity(intent);
         }
-
-
     }
 
     @Override
     public void onStop() {
         super.onStop();
-
-
     }
 
     @Override
@@ -547,6 +547,7 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
             }
         });
     }
+
     public void UpdateFriendsList()
     {
         final String API_URL = "http://46.101.213.24:3007";
@@ -574,21 +575,28 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
                     for (int i = 0; i < data.size(); i++) {
                         Datum datum = data.get(i);
                         if (datum.getFriend() != null) {
+
                             if (datum.getStatus().toString().equals("true")) {
+
                                 if (datum.getOwner().get_id().equals(id)) {
                                     Friend_ friend = datum.getFriend();
                                     cv.put("name", friend.getName());
-                                    if (friend.getPhoto() != null)
+
+                                    if (friend.getPhoto() != null) {
                                         cv.put("photo", friend.getPhoto().getMedium());
-                                    else cv.put("photo", "");
+                                    } else {
+                                        cv.put("photo", "");
+                                    }
                                     cv.put("user_id", friend.getId());
                                     db.insert("friends", null, cv);
                                 } else {
                                     Owner friend = datum.getOwner();
                                     cv.put("name", friend.getName());
-                                    if (friend.getPhoto() != null)
+                                    if (friend.getPhoto() != null) {
                                         cv.put("photo", friend.getPhoto().getMedium());
-                                    else cv.put("photo", "");
+                                    } else {
+                                        cv.put("photo", "");
+                                    }
                                     cv.put("user_id", friend.get_id());
                                     db.insert("friends", null, cv);
                                 }

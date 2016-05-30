@@ -40,8 +40,7 @@ import java.util.HashMap;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
-public class History extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class History extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private FloatingActionMenu actionMenu;
     private final String TAG = "myLogs";

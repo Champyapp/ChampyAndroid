@@ -14,6 +14,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
@@ -69,6 +70,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -85,8 +87,7 @@ import retrofit.Retrofit;
 import static java.lang.Math.max;
 import static java.lang.Math.round;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     final String TAG = "myLogs";
     AlarmManager alarmManager;
@@ -114,7 +115,6 @@ public class MainActivity extends AppCompatActivity
         toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_gradient));
         setSupportActionBar(toolbar);
 
-
         alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(this, AlarmSchedule.class);
         intent.putExtra("alarm", "reset");
@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity
         calendar.set(Calendar.HOUR_OF_DAY, 18);
         calendar.set(Calendar.MINUTE, 6);
         calendar.set(Calendar.SECOND, 0);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
         RelativeLayout cards = (RelativeLayout)findViewById(R.id.cards);
         CustomAdapter adapter = new CustomAdapter(this, SelfImprovement_model.generate(this));
         if (adapter.dataCount() > 0){
@@ -136,22 +136,24 @@ public class MainActivity extends AppCompatActivity
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
 
 
-        final SubActionButton button1 = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeupcolor)).build();
-        final SubActionButton button2 = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.duelcolor)).build();
-        final SubActionButton button3 = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementcolor)).build();
+        final SubActionButton buttonWakeUpChallenge = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeupcolor)).build();
+        final SubActionButton buttonDuelChallenge = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.duelcolor)).build();
+        final SubActionButton buttonSelfImprovement = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementcolor)).build();
+
         int width = getWindowManager().getDefaultDisplay().getWidth();
         int x = round(width/100);
-        button1.getLayoutParams().height = x*20;
-        button1.getLayoutParams().width = x*20;
-        button2.getLayoutParams().height = x*20;
-        button2.getLayoutParams().width = x*20;
-        button3.getLayoutParams().height = x*20;
-        button3.getLayoutParams().width = x*20;
+
+        buttonWakeUpChallenge.getLayoutParams().height = x*20;
+        buttonWakeUpChallenge.getLayoutParams().width = x*20;
+        buttonDuelChallenge.getLayoutParams().height = x*20;
+        buttonDuelChallenge.getLayoutParams().width = x*20;
+        buttonSelfImprovement.getLayoutParams().height = x*20;
+        buttonSelfImprovement.getLayoutParams().width = x*20;
 
         actionMenu = new FloatingActionMenu.Builder(this)
-                .addSubActionView(button1)
-                .addSubActionView(button2)
-                .addSubActionView(button3)
+                .addSubActionView(buttonWakeUpChallenge)
+                .addSubActionView(buttonDuelChallenge)
+                .addSubActionView(buttonSelfImprovement)
                 .setRadius(350)
                 .attachTo(actionButton)
                 .build();
@@ -163,6 +165,9 @@ public class MainActivity extends AppCompatActivity
                 Log.d("TAG", "clicked");
                 ImageView screen = (ImageView) findViewById(R.id.blured);
 
+                // BINGO ~~~~~~~~~~~~ google how to take screen in code.
+                // idea: switch for position of pages
+                //
                 if (screen.getDrawable() == null) {
                     RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.content_main);
                     relativeLayout.setDrawingCacheEnabled(true);
@@ -179,7 +184,9 @@ public class MainActivity extends AppCompatActivity
                         screen.setImageDrawable(ob);
                     }
                 }
-                 else Log.d(TAG, "Vse zaebok");
+                 else {
+                    Log.d(TAG, "Vse zaebok");
+                }
                 RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.cards);
                 Log.d("TAG", "menu " + actionMenu.isOpen());
                 actionMenu.toggle(true);
@@ -187,7 +194,7 @@ public class MainActivity extends AppCompatActivity
                     screen.setVisibility(View.INVISIBLE);
                     relativeLayout.setVisibility(View.VISIBLE);
                 } else {
-                    button3.setOnClickListener(new View.OnClickListener() {
+                    buttonSelfImprovement.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             OfflineMode offlineMode = new OfflineMode();
@@ -197,7 +204,7 @@ public class MainActivity extends AppCompatActivity
                             }
                         }
                     });
-                    button2.setOnClickListener(new View.OnClickListener() {
+                    buttonDuelChallenge.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             OfflineMode offlineMode = new OfflineMode();
@@ -208,7 +215,7 @@ public class MainActivity extends AppCompatActivity
                             }
                         }
                     });
-                    button1.setOnClickListener(new View.OnClickListener() {
+                    buttonWakeUpChallenge.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             OfflineMode offlineMode = new OfflineMode();
@@ -224,6 +231,7 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         };
+
         actionButton.setOnClickListener(onClickListener2);
 
         ImageView imageView = (ImageView)findViewById(R.id.blured);
@@ -234,7 +242,7 @@ public class MainActivity extends AppCompatActivity
                 ImageView screen = (ImageView) findViewById(R.id.blured);
                 if (actionMenu.isOpen()) {
                     actionMenu.getSubActionItems();
-                    button3.setOnClickListener(new View.OnClickListener() {
+                    buttonSelfImprovement.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             OfflineMode offlineMode = new OfflineMode();
@@ -244,7 +252,7 @@ public class MainActivity extends AppCompatActivity
                             }
                         }
                     });
-                    button2.setOnClickListener(new View.OnClickListener() {
+                    buttonDuelChallenge.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             OfflineMode offlineMode = new OfflineMode();
@@ -255,7 +263,7 @@ public class MainActivity extends AppCompatActivity
                             }
                         }
                     });
-                    button1.setOnClickListener(new View.OnClickListener() {
+                    buttonWakeUpChallenge.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             OfflineMode offlineMode = new OfflineMode();
@@ -335,7 +343,9 @@ public class MainActivity extends AppCompatActivity
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        else new DownloadImageTask().execute(url);
+        else {
+            new DownloadImageTask().execute(url);
+        }
 
         file = new File(path, "profile.jpg");
         Uri uri = Uri.fromFile(file);
@@ -353,6 +363,7 @@ public class MainActivity extends AppCompatActivity
 
 
     }
+
 
     @Override
     public void onBackPressed() {
@@ -432,12 +443,13 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void hideItem()
-    {
+
+    private void hideItem() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         Menu nav_Menu = navigationView.getMenu();
         nav_Menu.findItem(R.id.pending_duels).setVisible(false);
     }
+
 
     public void Logout(){
         LoginManager.getInstance().logOut();
@@ -447,7 +459,6 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
         Toast.makeText(this, "Bye Bye!!!", Toast.LENGTH_SHORT).show();
     }
-
 
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
@@ -585,9 +596,7 @@ public class MainActivity extends AppCompatActivity
             loadImageFromStorage("/data/data/com.example.ivan.champy_v2/app_imageDir/");
         }
     }
-   /* private void make_screen_blured()
-    {
-    }*/
+
 
     @Override
     protected void onDestroy() {
@@ -600,6 +609,7 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         ViewServer.get(this).setFocusedWindow(this);
     }
+
 
     public Drawable Init(String path) throws FileNotFoundException {
         File file = new File(path, "blured2.jpg");
@@ -617,7 +627,10 @@ public class MainActivity extends AppCompatActivity
         return dr;
 
     }
-    public class CustomAdapter extends CustomPagerAdapter{
+
+
+    public class CustomAdapter extends CustomPagerAdapter {
+
         private ArrayList<SelfImprovement_model> arrayList;
 
         public CustomAdapter(Context context, ArrayList<SelfImprovement_model> marrayList) {
@@ -749,8 +762,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    public void BuildAnim()
-    {
+    public void BuildAnim() {
         int width = getWindowManager().getDefaultDisplay().getWidth();
         make_responsive_score(width);
         ImageView mImageViewFilling = (ImageView) findViewById(R.id.imageview_score_animation);
@@ -862,8 +874,8 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void make_responsive_score(int width)
-    {
+
+    public void make_responsive_score(int width) {
         int x = round(width/100);
 
         ImageView imageView = (ImageView)findViewById(R.id.imageview_score_animation);
@@ -912,8 +924,8 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void Upload_photo(String path)
-    {
+
+    public void Upload_photo(String path) {
         final String API_URL = "http://46.101.213.24:3007";
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(API_URL)
@@ -953,6 +965,7 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+
     public int check_pending() {
         DBHelper dbHelper = new DBHelper(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -972,6 +985,7 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "O: " + o);
         return o;
     }
+
 
     public void generate() {
         DBHelper dbHelper = new DBHelper(this);

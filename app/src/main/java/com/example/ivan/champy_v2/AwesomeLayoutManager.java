@@ -85,14 +85,18 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
             int pos = getPosition(view);
             int posDelta = pos - animatedPos;
             final ViewAnimationInfo viewAnimationInfo = new ViewAnimationInfo();
+
             viewAnimationInfo.startTop = getDecoratedTop(view);
             viewAnimationInfo.startBottom = getDecoratedBottom(view);
             viewAnimationInfo.finishTop = getHeight() * posDelta;
             viewAnimationInfo.finishBottom = round((getHeight() * posDelta + getHeight()));
             viewAnimationInfo.view = view;
+
             animationInfos.add(viewAnimationInfo);
         }
+
         ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
+
         animator.setDuration(TRANSITION_DURATION_MS);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -106,7 +110,9 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
                 updateViewScale();
             }
         });
+
         animator.addListener(new Animator.AnimatorListener() {
+
             @Override
             public void onAnimationStart(Animator animation) {}
 
@@ -121,6 +127,7 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
             @Override
             public void onAnimationRepeat(Animator animation) {}
         });
+
         animator.start();
     }
 
@@ -310,8 +317,9 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
         }
     }
 
+    // якщо щось піде не так - закомітити це. 30.05.16
     private void updateViewScale() {
-       /* int childCount = getChildCount();
+        int childCount = getChildCount();
         int height = getHeight();
         int thresholdPx = (int) (height * SCALE_THRESHOLD_PERCENT);
         for (int i = 0; i < childCount; i++) {
@@ -327,7 +335,7 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
             view.setPivotY(view.getHeight() / -2);
             view.setScaleX(scale);
             view.setScaleY(scale);
-        }*/
+        }
     }
 
     private View getAnchorView() {
