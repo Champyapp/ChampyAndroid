@@ -71,7 +71,6 @@ import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -251,6 +250,8 @@ public class LoginActivity extends AppCompatActivity {
         button.setOnClickListener(onClickListener);
         ViewServer.get(this).addWindow(this);
     }
+
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -279,7 +280,8 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void Init() throws IOException {
-        InitializeLogin initializeLogin = new InitializeLogin(this, getApplicationContext(), new ImageModule(getApplicationContext()));
+        InitializeLogin initializeLogin = new InitializeLogin(this,
+                 getApplicationContext(), new ImageModule(getApplicationContext()));
         initializeLogin.Init();
     }
 
@@ -309,12 +311,12 @@ public class LoginActivity extends AppCompatActivity {
 
         protected void onPostExecute(Bitmap result) {
             // Do your staff here to save image
-            String string = saveToInternalSorage(result);
+            String string = saveToInternalStorage(result);
             loadImageFromStorage(string);
         }
     }
 
-    private String saveToInternalSorage(Bitmap bitmapImage){
+    private String saveToInternalStorage(Bitmap bitmapImage){
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
         // path to /data/data/yourapp/app_data/imageDir
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
@@ -322,7 +324,7 @@ public class LoginActivity extends AppCompatActivity {
             directory.mkdirs();
         }
         // Create imageDir
-        File mypath=new File(directory,"profile.jpg");
+        File mypath = new File(directory,"profile.jpg");
 
         Log.d(TAG, "MY_PATH: "+mypath.toString());
 
@@ -387,7 +389,7 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d(TAG, "Status: " + id);
                         Log.d(TAG, "FB: " + fb_id);
 
-
+                            // "http://graph.facebook.com/" + fb_id + "/picture?type=large&redirect=true&width=500&height=500"
                         SessionManager sessionManager = new SessionManager(getApplicationContext());
                         sessionManager.setRefreshPending("false");
                         sessionManager.setRefreshFriends("false");
@@ -571,7 +573,7 @@ public class LoginActivity extends AppCompatActivity {
                                     cv.clear();
                                     String desctiption = challenge.getDescription();
                                     int end = datum.getEnd();
-                                    int days = round((end - unixTime) / 86400);
+                        -->         int days = round((end - unixTime) / 86400);
                                     String duration = "" + days;
                                     String challenge_id = challenge.get_id();
                                     cv.put("name", "Self Improvement");

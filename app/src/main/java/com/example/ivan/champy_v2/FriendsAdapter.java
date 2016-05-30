@@ -91,6 +91,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
         return viewHolder;
     }
+
     @Override
     public void onBindViewHolder(final FriendsAdapter.ViewHolder viewHolder, final int position) {
         // Get the data model based on position

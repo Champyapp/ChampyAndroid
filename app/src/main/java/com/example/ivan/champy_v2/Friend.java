@@ -65,8 +65,6 @@ public class Friend {
 
     public String  getID(){ return  mID; }
 
-
-
     public void setID(String id) { mID = id; }
 
     private static int lastFriendId = 0;

@@ -39,6 +39,7 @@ public class MyGcmListenerService extends GcmListenerService {
      * @param data Data bundle containing message data as key/value pairs.
      *             For Set of keys use data.keySet().
      */
+
     // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
@@ -96,7 +97,7 @@ public class MyGcmListenerService extends GcmListenerService {
             intent.putExtra("friend_request", "true");
 
         } else {
-            refreshPendinDuels(message);
+            refreshPendingDuels(message);
             return;
         }
 
@@ -118,7 +119,7 @@ public class MyGcmListenerService extends GcmListenerService {
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
 
-    public void refreshPendinDuels(final String message) {
+    public void refreshPendingDuels(final String message) {
         DBHelper dbHelper = new DBHelper(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final int clearCount = db.delete("pending_duel", null, null);

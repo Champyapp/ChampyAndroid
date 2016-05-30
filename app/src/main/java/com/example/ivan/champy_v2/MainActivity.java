@@ -209,9 +209,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         public void onClick(View v) {
                             OfflineMode offlineMode = new OfflineMode();
                             if (offlineMode.isInternetAvailable(MainActivity.this)) {
-                                //Intent intent = new Intent(MainActivity.this, BattleImprovement.class);
-                                Toast.makeText(getApplicationContext(), "Coming soon", Toast.LENGTH_SHORT).show();
-                                //startActivity(intent);
+                                Intent intent = new Intent(MainActivity.this, Friends.class);
+                                //Toast.makeText(getApplicationContext(), "Coming soon", Toast.LENGTH_SHORT).show();
+                                startActivity(intent);
                             }
                         }
                     });

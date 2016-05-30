@@ -74,10 +74,7 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
     private com.facebook.CallbackManager CallbackManager;
     private FloatingActionMenu actionMenu;
 
-    /**
-     * коли заходиш в friends, то friends по дефолтку (тіпа 1);
-     * onClickListener2 = Pending || onClickListener3 = Others; vrodi...
-     */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +99,7 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
         }*/
 
         final com.melnykov.fab.FloatingActionButton actionButton = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.imageButton);
+        actionButton.setVisibility(View.INVISIBLE);
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
 
         SubActionButton button1 = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeupcolor)).build();
@@ -167,7 +165,7 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
         };
 
 
-        final FloatingActionButton.OnClickListener onClickListener3 = new View.OnClickListener() {
+        final FloatingActionButton.OnClickListener onClickInviteFriends = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String appLinkUrl, previewImageUrl;
@@ -305,14 +303,22 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
                     UpdatePending();
                     sessionManager1.setRefreshPending("false");
                 }
-                if (position == 1) {
+                /*if (position == 1) {
                     com.melnykov.fab.FloatingActionButton floatingActionButton = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.imageButton);
                     floatingActionButton.setVisibility(View.INVISIBLE);
-                } else {
+                } else *//*(position == 0)*//*{
                     com.melnykov.fab.FloatingActionButton floatingActionButton = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.imageButton);
                     if (position == 0) floatingActionButton.setOnClickListener(onClickListener2);
-                    if (position == 2) floatingActionButton.setOnClickListener(onClickListener3);
+                    if (position == 2) floatingActionButton.setOnClickListener(onClickInviteFriends);
                     floatingActionButton.setVisibility(View.VISIBLE);
+                }*/
+                if (position == 2) {
+                    com.melnykov.fab.FloatingActionButton floatingActionButton = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.imageButton);
+                    floatingActionButton.setVisibility(View.VISIBLE);
+                    floatingActionButton.setOnClickListener(onClickInviteFriends);
+                } else {
+                    com.melnykov.fab.FloatingActionButton floatingActionButton = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.imageButton);
+                    floatingActionButton.setVisibility(View.INVISIBLE);
                 }
 
 
@@ -355,6 +361,7 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
 
         ViewServer.get(this).addWindow(this);
     }
+
     private void hideItem() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         Menu nav_Menu = navigationView.getMenu();
@@ -435,8 +442,10 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 share.putExtra(Intent.EXTRA_TEXT, message);
-
                 startActivity(Intent.createChooser(share, "How would you like to share?"));
+            } else if (id == R.id.pending_duels) {
+                Intent intent = new Intent(Friends.this, Pending_Duel.class);
+                startActivity(intent);
             }
         }
         else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
@@ -502,8 +511,8 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
         AppEventsLogger.deactivateApp(this);
     }
 
-    public void getOther()
-    {
+
+    public void getOther() {
         final String API_URL = "http://46.101.213.24:3007";
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user = new HashMap<>();
@@ -543,13 +552,12 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
             }
             @Override
             public void onFailure(Throwable t) {
-
             }
         });
     }
 
-    public void UpdateFriendsList()
-    {
+
+    public void UpdateFriendsList() {
         final String API_URL = "http://46.101.213.24:3007";
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user = new HashMap<>();
@@ -649,8 +657,8 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
         });
     }
 
-    public void UpdatePending()
-    {
+
+    public void UpdatePending() {
         final String API_URL = "http://46.101.213.24:3007";
         SessionManager sessionManager = new SessionManager(this);
         HashMap<String, String> user = new HashMap<>();

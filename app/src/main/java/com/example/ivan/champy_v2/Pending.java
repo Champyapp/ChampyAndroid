@@ -34,6 +34,7 @@ import retrofit.Retrofit;
  * Created by ivan on 05.02.16.
  */
 public class Pending extends Fragment {
+
     public static final String ARG_PAGE = "ARG_PAGE";
     final String API_URL = "http://46.101.213.24:3007";
 

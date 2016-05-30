@@ -73,6 +73,22 @@ public class History extends AppCompatActivity implements NavigationView.OnNavig
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
 
+        int count = 0;
+
+        String s = sessionManager.get_duel_pending();
+        if (s != null){
+            count = Integer.parseInt(s);
+        }
+
+        TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+        if (count == 0) {
+            hideItem();
+        }
+        else {
+            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+        }
+
+
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager_history);
         adapterViewPager = new HistoryPagerAdapter(getSupportFragmentManager(), getApplicationContext());
         viewPager.setAdapter(adapterViewPager);
@@ -80,7 +96,6 @@ public class History extends AppCompatActivity implements NavigationView.OnNavig
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs_history);
         tabLayout.setupWithViewPager(viewPager);
-
 
 
         String name = user.get("name");
@@ -110,6 +125,12 @@ public class History extends AppCompatActivity implements NavigationView.OnNavig
         }
 
         ViewServer.get(this).addWindow(this);
+    }
+
+    private void hideItem() {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Menu nav_Menu = navigationView.getMenu();
+        nav_Menu.findItem(R.id.pending_duels).setVisible(false);
     }
 
     @Override
@@ -172,6 +193,9 @@ public class History extends AppCompatActivity implements NavigationView.OnNavig
                 share.putExtra(Intent.EXTRA_TEXT, message);
 
                 startActivity(Intent.createChooser(share, "How would you like to share?"));
+            } else if (id == R.id.pending_duels) {
+                Intent intent = new Intent(History.this, Pending_Duel.class);
+                startActivity(intent);
             }
         }
         else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
@@ -179,6 +203,7 @@ public class History extends AppCompatActivity implements NavigationView.OnNavig
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
     public void Logout(){
         LoginManager.getInstance().logOut();
         SessionManager sessionManager = new SessionManager(getApplicationContext());
@@ -187,6 +212,7 @@ public class History extends AppCompatActivity implements NavigationView.OnNavig
         startActivity(intent);
         Toast.makeText(this, "Bye Bye!!!", Toast.LENGTH_SHORT).show();
     }
+
     public Drawable Init(String path) throws FileNotFoundException {
         File file = new File(path, "blured2.jpg");
         Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
@@ -202,4 +228,5 @@ public class History extends AppCompatActivity implements NavigationView.OnNavig
         return dr;
 
     }
+
 }

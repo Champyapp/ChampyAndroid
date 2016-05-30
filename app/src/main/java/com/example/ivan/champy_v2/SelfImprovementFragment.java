@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.test.suitebuilder.annotation.SmallTest;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -28,6 +29,8 @@ import com.example.ivan.champy_v2.interfaces.CreateChallenge;
 import com.example.ivan.champy_v2.interfaces.SingleInProgress;
 import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
 import com.example.ivan.champy_v2.model.active_in_progress.Datum;
+
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.List;
@@ -115,6 +118,7 @@ public class SelfImprovementFragment extends Fragment {
             textView.setText("" + days);
             textView.setTypeface(typeface);
             textView.setVisibility(View.VISIBLE);
+
             EditText editText = (EditText) view.findViewById(R.id.goal);
             editText.setVisibility(View.INVISIBLE);
             editText = (EditText)view.findViewById(R.id.days);
@@ -195,20 +199,20 @@ public class SelfImprovementFragment extends Fragment {
                 Log.i("stat", "Click: " + position + " " + size);
                 if (position == size) {
                     editTextGoal = (EditText) view.findViewById(R.id.goal);                              // тут та же магія
-                    description = editTextGoal.getText().toString();                                     // якщо editTextGold з getText.toString, то він відповідає за ДНІ, якщо без то за НАЗВУ.
+                    description = editTextGoal.getText().toString();                                     // якщо editTextGoal з getText.toString, то він відповідає за ДНІ, якщо без то за НАЗВУ.
                     Log.i("stat", "Click: clicked");
                     Log.i("stat", "Click: " + description);
                     editTextGoal = (EditText) view.findViewById(R.id.days);
 
                     if (editTextGoal.getText().toString().equals("")) {                                            // descriptions = days
                       Toast.makeText(getContext(), "Duration is empty!", Toast.LENGTH_SHORT).show();
+                    } else if (name.equals("active")) {
+                        Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
                     } else if (description.equals(" ") || description.startsWith(" ") || description.isEmpty()) {  // descriptions = goal
                         Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();
                     } else if (days == 0) {
                         Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
                     }
-                    //if (description.equals(" \\d+")) {
-                    //}
                     else {
                         //its ok
                         days = Integer.parseInt(editTextGoal.getText().toString());
@@ -246,15 +250,14 @@ public class SelfImprovementFragment extends Fragment {
                         days = Integer.parseInt(duration) / 86400;
                     }
                     Log.i("stat", "Click: " + viewPager.getCurrentItem());
-                    if (name.equals("active")) {
-                        Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
-                    } else if (description.equals("") || description.startsWith(" ")) {
+
+                    if (description.equals("") || description.startsWith(" ")) {
                         Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();
-                    }
-                    else if (days == 0) {
+                    } else if (name.equals("active")) {
+                        Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
+                    } else if (days == 0) {
                         Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
+                    } else {
                         Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
                         StartSingleInProgress(challenge_id);
                     }
@@ -311,6 +314,7 @@ public class SelfImprovementFragment extends Fragment {
         });
 
     }
+
 
     public void StartSingleInProgress(final String challenge) {
         final SessionManager sessionManager = new SessionManager(getContext());
@@ -432,8 +436,8 @@ public class SelfImprovementFragment extends Fragment {
         }
 
     }
-    public String find(String challenge_id)
-    {
+
+    public String find(String challenge_id) {
         DBHelper dbHelper = new DBHelper(getActivity());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("updated", null, null, null, null, null, null);
@@ -454,8 +458,8 @@ public class SelfImprovementFragment extends Fragment {
         c.close();
         return ok;
     }
-    public boolean isActive(String description)
-    {
+
+    public boolean isActive(String description) {
         DBHelper dbHelper = new DBHelper(getActivity());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final ContentValues cv = new ContentValues();

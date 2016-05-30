@@ -26,6 +26,8 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
+            android:capitalize="characters"
+            android:textAllCaps="false"
             android:gravity="center_vertical|center_horizontal"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:typeface="normal"

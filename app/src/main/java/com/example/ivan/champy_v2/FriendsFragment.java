@@ -33,10 +33,11 @@ import retrofit.Retrofit;
  * Created by ivan on 17.02.16.
  */
 public class FriendsFragment extends Fragment {
-    public static final String ARG_PAGE = "ARG_PAGE";
-    final String API_URL = "http://46.101.213.24:3007";
 
+    public static final String ARG_PAGE = "ARG_PAGE";
     private int mPage;
+
+    final String API_URL = "http://46.101.213.24:3007";
 
     public static FriendsFragment newInstance(int page) {
         Bundle args = new Bundle();
