@@ -47,6 +47,7 @@ public class FriendsFragment extends Fragment {
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -292,7 +293,6 @@ public class FriendsFragment extends Fragment {
                     c.close();
 
                     Log.i("stat", "Friends :" + newfriends.toString());
-
 
                     RecyclerView rvContacts = (RecyclerView) getActivity().findViewById(R.id.rvContacts);
                     final FriendsAdapter adapter = new FriendsAdapter(newfriends, getActivity(), new CustomItemClickListener() {

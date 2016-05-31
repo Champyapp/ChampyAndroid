@@ -234,7 +234,9 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                 Log.d(TAG, "User: "+friend);
                 if (friend == null)  {
                     Toast.makeText(_context, "This user has not installed Champy", Toast.LENGTH_SHORT).show();
-                } else if (friend == id)  Toast.makeText(_context, "This user has not installed Champy", Toast.LENGTH_SHORT).show();
+                } else if (friend == id)  {
+                    Toast.makeText(_context, "This user has not installed Champy", Toast.LENGTH_SHORT).show();
+                }
                 else {
                     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                         @Override

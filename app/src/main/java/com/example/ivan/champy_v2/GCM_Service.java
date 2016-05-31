@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 
+import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 
@@ -16,6 +17,8 @@ public class GCM_Service extends IntentService {
 
 
     private static final String TAG = "RegIntentService";
+    private static final String[] TOPICS = {"global"};
+
     public GCM_Service() {
         super(TAG);
     }
@@ -33,4 +36,14 @@ public class GCM_Service extends IntentService {
         // [END get_token]
         Log.d(TAG, "GCM Registration Token: " + token);
     }
+
+
+    private void subscribeTopics(String token) throws IOException {
+        GcmPubSub pubSub = GcmPubSub.getInstance(this);
+        for (String topic : TOPICS) {
+            pubSub.subscribe(token, "/topics/" + topic, null);
+        }
+    }
+
+
 }

@@ -34,6 +34,10 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
+import com.example.ivan.champy_v2.interfaces.SingleInProgress;
+import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
+import com.example.ivan.champy_v2.model.active_in_progress.Datum;
 import com.facebook.login.LoginManager;
 
 import java.io.File;
@@ -42,11 +46,18 @@ import java.io.FileNotFoundException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.GsonConverterFactory;
+import retrofit.Response;
+import retrofit.Retrofit;
 
-public class WakeUp extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+import static java.lang.Math.round;
+
+public class WakeUp extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     AlarmManager alarmManager;
     private PendingIntent pendingIntent;
@@ -82,7 +93,7 @@ public class WakeUp extends AppCompatActivity
         //textView.setTypeface(typeface);
         TextView textView = (TextView)findViewById(R.id.textView20);
         textView.setTypeface(typeface);
-        textView  = (TextView)findViewById(R.id.goal_text);
+        textView = (TextView)findViewById(R.id.goal_text);
         textView.setTypeface(typeface);
         textView = (TextView)findViewById(R.id.textView23);
         textView.setTypeface(typeface);
@@ -129,9 +140,8 @@ public class WakeUp extends AppCompatActivity
             Drawable dr = Init("/data/data/com.example.ivan.champy_v2/app_imageDir/");
             ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setImageDrawable(dr); final String API_URL = "http://46.101.213.24:3007";
-
-
+            imageView.setImageDrawable(dr);
+            final String API_URL = "http://46.101.213.24:3007";
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -194,11 +204,12 @@ public class WakeUp extends AppCompatActivity
 
                         pendingIntent = PendingIntent.getBroadcast(WakeUp.this, id, myIntent, 0);
 
-                        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, 24 * 60 * 60 * 1000, pendingIntent); // 24*60*60*1000 = 1 day;
+                        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, 24*60*60*1000, pendingIntent); // 24*60*60*1000 = 1 day;
 
                         Toast.makeText(WakeUp.this, "Challenge created", Toast.LENGTH_SHORT).show();
                         ChallengeController challengeController = new ChallengeController(WakeUp.this, WakeUp.this, hour, minute);
                         challengeController.Create_new_challenge("Wake Up", 21, "567d51c48322f85870fd931c");
+
                     } else {
                         Toast.makeText(WakeUp.this, "Already exist!", Toast.LENGTH_SHORT).show();
                     }
@@ -212,6 +223,8 @@ public class WakeUp extends AppCompatActivity
 
 
     }
+
+
 
 
     public boolean check(String time) {
@@ -246,6 +259,7 @@ public class WakeUp extends AppCompatActivity
         return ok;
     }
 
+
     private Drawable Init(String path) throws FileNotFoundException {
         File file = new File(path, "blured2.jpg");
         Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
@@ -257,6 +271,7 @@ public class WakeUp extends AppCompatActivity
         return dr;
 
     }
+
 
     @Override
     public void onBackPressed() {
@@ -331,6 +346,7 @@ public class WakeUp extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 
     public void Logout(){
         LoginManager.getInstance().logOut();

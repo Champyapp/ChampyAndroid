@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.test.suitebuilder.annotation.SmallTest;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -120,6 +121,8 @@ public class SelfImprovementFragment extends Fragment {
             textView.setVisibility(View.VISIBLE);
 
             EditText editText = (EditText) view.findViewById(R.id.goal);
+            //editText.setInputType(InputType.TYPE_CLASS_TEXT);
+
             editText.setVisibility(View.INVISIBLE);
             editText = (EditText)view.findViewById(R.id.days);
             editText.setVisibility(View.INVISIBLE);
@@ -175,95 +178,106 @@ public class SelfImprovementFragment extends Fragment {
             });
 
             imageButton.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                String name = "";
-                String duration = "";
-                String description = "";
-                String challenge_id = "";
-                int days = 0;
-                EditText editTextGoal = (EditText) view.findViewById(R.id.goal);                         // editText отвечает за цель
-                description = editTextGoal.getText().toString();                                         // description = editTextGoal.getText.toString...
-                editTextGoal = (EditText) view.findViewById(R.id.days);                                  // editTextGold теперь отвечает за дни
-                Log.i("stat", "Description :" + description + " " + description.length());
-                if (editTextGoal.getText().toString().equals("")) {                                      // якщо editTextGoal з getText.toString, то він відповідає за ДНІ, якщо без то за НАЗВУ.
-                    Toast.makeText(getContext(), "Duration is empty!", Toast.LENGTH_SHORT).show();
-                } else {
-                    days = Integer.parseInt(editTextGoal.getText().toString());
-                }
-                Cursor c = db.query("selfimprovement", null, null, null, null, null, null);
-                int position = viewPager.getCurrentItem();
-                SessionManager sessionManager = new SessionManager(getContext());
-                int size = sessionManager.getSelfSize();
-
-                Log.i("stat", "Click: " + position + " " + size);
-                if (position == size) {
-                    editTextGoal = (EditText) view.findViewById(R.id.goal);                              // тут та же магія
-                    description = editTextGoal.getText().toString();                                     // якщо editTextGoal з getText.toString, то він відповідає за ДНІ, якщо без то за НАЗВУ.
-                    Log.i("stat", "Click: clicked");
-                    Log.i("stat", "Click: " + description);
-                    editTextGoal = (EditText) view.findViewById(R.id.days);
-
-                    if (editTextGoal.getText().toString().equals("")) {                                            // descriptions = days
-                      Toast.makeText(getContext(), "Duration is empty!", Toast.LENGTH_SHORT).show();
-                    } else if (name.equals("active")) {
-                        Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
-                    } else if (description.equals(" ") || description.startsWith(" ") || description.isEmpty()) {  // descriptions = goal
-                        Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();
-                    } else if (days == 0) {
-                        Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        //its ok
-                        days = Integer.parseInt(editTextGoal.getText().toString());
-                        Create_new_challenge(description, days);
-                        Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
-                    }
-
-                }
-                else {
-                    Log.i("stat", "Status: Poehali");
-                    int o = 0;
-                    if (c.moveToFirst()) {
-                        int idColIndex = c.getColumnIndex("id");
-                        int nameColIndex = c.getColumnIndex("name");
-                        int coldescription = c.getColumnIndex("description");
-                        int colduration = c.getColumnIndex("duration");
-                        int colchallenge_id = c.getColumnIndex("challenge_id");
-
-                        do {
-                            o++;
-                            if (o > position + 1) break;
-                            if (o == position + 1) {
-                                name = c.getString(nameColIndex);
-                                description = c.getString(coldescription);
-                                duration = c.getString(colduration);
-                                challenge_id = c.getString(colchallenge_id);
-                                break;
-                            }
-                        } while (c.moveToNext());
-                    } else Log.i("stat", "0 rows");
-                    c.close();
-                    description = ((EditText) view.findViewById(R.id.goal)).getText().toString();
+                @Override
+                public boolean onLongClick(View v) {
+                    String name = "";
+                    String duration = "";
+                    String description = "";
+                    String challenge_id = "";
+                    int days = 0;
+                    EditText editTextGoal = (EditText) view.findViewById(R.id.goal);                         // editText отвечает за цель
+                    description = editTextGoal.getText().toString();                                         // description = editTextGoal.getText.toString...
+                    editTextGoal = (EditText) view.findViewById(R.id.days);                                  // editTextGold теперь отвечает за дни
                     Log.i("stat", "Description :" + description + " " + description.length());
-                    if (duration != null && duration != "") {
-                        days = Integer.parseInt(duration) / 86400;
-                    }
-                    Log.i("stat", "Click: " + viewPager.getCurrentItem());
-
-                    if (description.equals("") || description.startsWith(" ")) {
-                        Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();
-                    } else if (name.equals("active")) {
-                        Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
-                    } else if (days == 0) {
-                        Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
+                    if (editTextGoal.getText().toString().equals("")) {                                      // якщо editTextGoal з getText.toString, то він відповідає за ДНІ, якщо без то за НАЗВУ.
+                        Toast.makeText(getContext(), "Duration is empty!", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
-                        StartSingleInProgress(challenge_id);
+                        days = Integer.parseInt(editTextGoal.getText().toString());
                     }
+                    Cursor c = db.query("selfimprovement", null, null, null, null, null, null);
+                    int position = viewPager.getCurrentItem();
+
+
+
+                        SessionManager sessionManager = new SessionManager(getContext());
+                        int size = sessionManager.getSelfSize();
+
+                        Log.i("stat", "Click: " + position + " " + size);
+                        if (position == size) {
+                            editTextGoal = (EditText) view.findViewById(R.id.goal);                              // тут та же магія
+                            description = editTextGoal.getText().toString();                                     // якщо editTextGoal з getText.toString, то він відповідає за ДНІ, якщо без то за НАЗВУ.
+                            Log.i("stat", "Click: clicked");
+                            Log.i("stat", "Click: " + description);
+                            editTextGoal = (EditText) view.findViewById(R.id.days);
+
+                            if (editTextGoal.getText().toString().equals("")) {                                            // descriptions = days
+                                Toast.makeText(getContext(), "Duration is empty!", Toast.LENGTH_SHORT).show();
+                            } else if (name.equals("active")) {
+                                Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
+                            } else if (description.equals(" ") || description.startsWith(" ") || description.isEmpty()) {  // descriptions = goal
+                                Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();
+                            } else if (days == 0) {
+                                Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
+                            } else {
+                                //its ok
+                                OfflineMode offlineMode = new OfflineMode();
+                                if (offlineMode.isInternetAvailable(getActivity())) {
+                                    days = Integer.parseInt(editTextGoal.getText().toString());
+                                    Create_new_challenge(description, days);
+                                    Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getContext(), "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                        } else {
+                            Log.i("stat", "Status: Poehali");
+                            int o = 0;
+                            if (c.moveToFirst()) {
+                                int idColIndex = c.getColumnIndex("id");
+                                int nameColIndex = c.getColumnIndex("name");
+                                int coldescription = c.getColumnIndex("description");
+                                int colduration = c.getColumnIndex("duration");
+                                int colchallenge_id = c.getColumnIndex("challenge_id");
+
+                                do {
+                                    o++;
+                                    if (o > position + 1) break;
+                                    if (o == position + 1) {
+                                        name = c.getString(nameColIndex);
+                                        description = c.getString(coldescription);
+                                        duration = c.getString(colduration);
+                                        challenge_id = c.getString(colchallenge_id);
+                                        break;
+                                    }
+                                } while (c.moveToNext());
+                            } else Log.i("stat", "0 rows");
+                            c.close();
+                            description = ((EditText) view.findViewById(R.id.goal)).getText().toString();
+                            Log.i("stat", "Description :" + description + " " + description.length());
+                            if (duration != null && duration != "") {
+                                days = Integer.parseInt(duration) / 86400;
+                            }
+                            Log.i("stat", "Click: " + viewPager.getCurrentItem());
+
+                            if (description.equals("") || description.startsWith(" ")) {
+                                Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();
+                            } else if (name.equals("active")) {
+                                Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
+                            } else if (days == 0) {
+                                Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
+                            } else {
+                                OfflineMode offlineMode = new OfflineMode();
+                                if (offlineMode.isInternetAvailable(getActivity())) {
+                                    Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
+                                    StartSingleInProgress(challenge_id);
+                                } else {
+                                    Toast.makeText(getContext(), "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+                        return true;
                 }
-                return true;
-            }
             });
 
         }

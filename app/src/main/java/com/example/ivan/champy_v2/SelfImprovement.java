@@ -156,6 +156,8 @@ public class SelfImprovement extends AppCompatActivity
         user = sessionManager.getUserDetails();
         String token = user.get("token");
         com.example.ivan.champy_v2.interfaces.SelfImprovement selfImprovement = retrofit.create(com.example.ivan.champy_v2.interfaces.SelfImprovement.class);
+
+
         Call<com.example.ivan.champy_v2.model.Self.SelfImprovement> call = selfImprovement.getChallenges(token);
         Log.i("stat", "Status: RUN");
         call.enqueue(new Callback<com.example.ivan.champy_v2.model.Self.SelfImprovement>() {

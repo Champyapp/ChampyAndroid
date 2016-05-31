@@ -39,8 +39,7 @@ import java.util.HashMap;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 
-public class Terms extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class Terms extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

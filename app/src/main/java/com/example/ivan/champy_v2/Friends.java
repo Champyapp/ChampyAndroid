@@ -24,10 +24,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -54,6 +56,7 @@ import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -74,7 +77,6 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
     private com.facebook.CallbackManager CallbackManager;
     private FloatingActionMenu actionMenu;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +95,8 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
         HashMap<String, String> user = new HashMap<>();
         user = sessionManager.getUserDetails();
         String update = user.get("updateDB");
-       /* if (update.equals("true")) {
+
+        /* if (update.equals("true")) {
             getFriends();
             sessionManager.setUpdateFalse();
         }*/
@@ -123,7 +126,7 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
                 .attachTo(actionButton)
                 .build();
 
-        final FloatingActionButton.OnClickListener onClickListener2 = new View.OnClickListener() {
+        /*final FloatingActionButton.OnClickListener onClickListener2 = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("TAG", "clicked");
@@ -162,7 +165,7 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
                     actionButton.setImageDrawable(getResources().getDrawable(R.drawable.close));
                 }
             }
-        };
+        };*/
 
 
         final FloatingActionButton.OnClickListener onClickInviteFriends = new View.OnClickListener() {
@@ -282,10 +285,11 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
                 viewPager.setCurrentItem(1);
             }
         }
+
+
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
 
             @Override // отвечает за кнопку fab в разделе Friends
@@ -361,6 +365,7 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
 
         ViewServer.get(this).addWindow(this);
     }
+
 
     private void hideItem() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);

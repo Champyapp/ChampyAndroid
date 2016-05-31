@@ -189,6 +189,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.cards);
                 Log.d("TAG", "menu " + actionMenu.isOpen());
+
+
                 actionMenu.toggle(true);
                 if (!actionMenu.isOpen()) {
                     screen.setVisibility(View.INVISIBLE);
@@ -201,6 +203,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             if (offlineMode.isInternetAvailable(MainActivity.this)) {
                                 Intent intent = new Intent(MainActivity.this, SelfImprovement.class);
                                 startActivity(intent);
+                            } else {
+                                Toast.makeText(getApplication(), "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -212,6 +216,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 Intent intent = new Intent(MainActivity.this, Friends.class);
                                 //Toast.makeText(getApplicationContext(), "Coming soon", Toast.LENGTH_SHORT).show();
                                 startActivity(intent);
+                            } else {
+                                Toast.makeText(getApplication(), "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -222,6 +228,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             if (offlineMode.isInternetAvailable(MainActivity.this)) {
                                 Intent intent = new Intent(MainActivity.this, WakeUp.class);
                                 startActivity(intent);
+                            } else {
+                                Toast.makeText(getApplication(), "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
