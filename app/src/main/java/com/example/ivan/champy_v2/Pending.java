@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.example.ivan.champy_v2.model.Friend.Datum;
 import com.example.ivan.champy_v2.model.Friend.Friend_;
 import com.example.ivan.champy_v2.model.Friend.Owner;
+import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.melnykov.fab.FloatingActionButton;
 
@@ -73,7 +74,12 @@ public class Pending extends Fragment {
 
             do {
                 Log.i("stat", "Status: "+c.getString(photoColIndex));
-                friends.add(new Pending_friend(c.getString(nameColIndex), API_URL+c.getString(photoColIndex), c.getString(index), c.getString(owner)));
+                friends.add(new Pending_friend(
+                        c.getString(nameColIndex),
+                        API_URL+c.getString(photoColIndex),
+                        c.getString(index),
+                        c.getString(owner)));
+
             } while (c.moveToNext());
         } else
             Log.i("stat", "0 rows");
@@ -87,7 +93,7 @@ public class Pending extends Fragment {
 
 
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-        final PendingAdapter adapter = new PendingAdapter(friends, getActivity(), new CustomItemClickListener() {
+        final PendingAdapter adapter = new PendingAdapter(friends, getContext(), getActivity(), new CustomItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Pending_friend friend = friends.get(position);
@@ -196,7 +202,7 @@ public class Pending extends Fragment {
 
 
                                 //  RecclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-                                final PendingAdapter adapter = new PendingAdapter(newfriends, getActivity(), new CustomItemClickListener() {
+                                final PendingAdapter adapter = new PendingAdapter(newfriends, getContext(), getActivity(), new CustomItemClickListener() {
                                     @Override
                                     public void onItemClick(View view, int position) {
                                         Pending_friend friend = newfriends.get(position);

@@ -1,5 +1,6 @@
 package com.example.ivan.champy_v2;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -12,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -36,6 +38,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     final private String TAG = "myLogs";
     private List<Friend> mContacts;
     private Context _context;
+    private Activity activity;
     int selectedPos = 0;
     CustomItemClickListener listener;
     ArrayList<Integer> selected = new ArrayList<>();
@@ -43,10 +46,11 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     private Other other = new Other(new ArrayList<Friend>());
 
     // Pass in the contact array into the constructor
-    public FriendsAdapter(List<Friend> contacts, Context context, CustomItemClickListener customItemClickListener) {
+    public FriendsAdapter(List<Friend> contacts, Context context, Activity activity, CustomItemClickListener customItemClickListener) {
         mContacts = contacts;
         _context = context;
         this.listener = customItemClickListener;
+        this.activity = activity;
     }
 
     public void Add_to_list(Friend friend){
@@ -83,8 +87,8 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                     selected.clear();
                     if (viewHolder.getAdapterPosition() == oldSelected) selected.add(-1);
                     notifyItemChanged(oldSelected);
-                    // notifyItemChanged(viewHolder.getAdapterPosition());
-
+                    notifyItemChanged(viewHolder.getAdapterPosition());
+                    selected.clear();
                 }
             }
         });
@@ -156,14 +160,14 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             textView = (TextView)viewHolder.itemView.findViewById(R.id.info_level);
             textView.setText("Level "+champy.get("level")+" Champy");
 
-            viewHolder.itemView.findViewById(R.id.info).setVisibility(View.VISIBLE);
-            viewHolder.itemView.findViewById(R.id.simple).setVisibility(View.GONE);
+            viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.VISIBLE);
+            viewHolder.itemView.findViewById(R.id.row_friends_list).setVisibility(View.GONE);
 
         }
         else {
             Log.i("Selected: ", position + " close");
-            viewHolder.itemView.findViewById(R.id.info).setVisibility(View.GONE);
-            viewHolder.itemView.findViewById(R.id.simple).setVisibility(View.VISIBLE);
+            viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.GONE);
+            viewHolder.itemView.findViewById(R.id.row_friends_list).setVisibility(View.VISIBLE);
 
         }
 
@@ -174,49 +178,63 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         viewHolder.block.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final SessionManager sessionManager = new SessionManager(_context);
-                HashMap<String, String> user = new HashMap<>();
-                user = sessionManager.getUserDetails();
-                final String token = user.get("token");
-                final String id = user.get("id");
-                String friend = mContacts.get(position).getID();
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(API_URL)
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-                com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
-                Log.d(TAG, "Status: " + id + " " + friend);
-                Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.removeFriend(id, friend, token);
-                call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
-                    @Override
-                    public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
-                        if (response.isSuccess()){
-                            Log.d(TAG, "Status: Removed ");
-                        } else Log.d(TAG, "Status: "+response.toString());
-                    }
+                OfflineMode offlineMode = new OfflineMode();
+                if (!offlineMode.isInternetAvailable(activity)) {
+                    Toast.makeText(activity, "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
 
-                    @Override
-                    public void onFailure(Throwable t) {
+                } else {
+                    final SessionManager sessionManager = new SessionManager(_context);
+                    HashMap<String, String> user = new HashMap<>();
+                    user = sessionManager.getUserDetails();
+                    final String token = user.get("token");
+                    final String id = user.get("id");
 
-                    }
-                });
-                sessionManager.setRefreshFriends("true");
-                mContacts.remove(position);
-                notifyItemRemoved(position);
-                selected.clear();
+                    String friend = mContacts.get(position).getID();
+
+                    Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl(API_URL)
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+                    com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
+                    Log.d(TAG, "Status: " + id + " " + friend);
+                    Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.removeFriend(id, friend, token);
+                    call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
+                        @Override
+                        public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
+                            if (response.isSuccess()) {
+                                Log.d(TAG, "Status: Removed ");
+                            } else Log.d(TAG, "Status: " + response.toString());
+                        }
+
+                        @Override
+                        public void onFailure(Throwable t) {
+
+                        }
+                    });
+                    sessionManager.setRefreshFriends("true");
+                    mContacts.remove(position);
+                    notifyItemRemoved(position);
+                    selected.clear();
+                }
             }
         });
         ImageView imageView = viewHolder.friendImage;
         ImageButton imageButton = viewHolder.add;
         imageButton.setBackgroundDrawable(_context.getResources().getDrawable(R.drawable.duel));
+
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(_context, Duel.class);
-                intent.putExtra("friend", contact.getPicture());
-                intent.putExtra("name", contact.getName());
-                intent.putExtra("id", contact.getID());
-                _context.startActivity(intent);
+                OfflineMode offlineMode = new OfflineMode();
+                if (!offlineMode.isInternetAvailable(activity)) {
+                    Toast.makeText(activity, "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent intent = new Intent(_context, Duel.class);
+                    intent.putExtra("friend", contact.getPicture());
+                    intent.putExtra("name", contact.getName());
+                    intent.putExtra("id", contact.getID());
+                    _context.startActivity(intent);
+                }
             }
         });
         Glide.with(_context)
@@ -322,8 +340,8 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             mwins = (ImageView) itemView.findViewById(R.id.imageView10);
             mtotal = (ImageView) itemView.findViewById(R.id.imageView11);
 
-            simple = (RelativeLayout)itemView.findViewById(R.id.simple);
-            info = (RelativeLayout)itemView.findViewById(R.id.info);
+            simple = (RelativeLayout)itemView.findViewById(R.id.row_friends_list);
+            info = (RelativeLayout)itemView.findViewById(R.id.row_friends_list_open);
 
             block = (ImageButton)itemView.findViewById(R.id.imageButton2);
             add = (ImageButton)itemView.findViewById(R.id.imageButton3);

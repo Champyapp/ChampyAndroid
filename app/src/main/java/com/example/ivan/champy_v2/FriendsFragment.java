@@ -84,7 +84,7 @@ public class FriendsFragment extends Fragment {
 
 
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-        final FriendsAdapter adapter = new FriendsAdapter(friends, getContext(), new CustomItemClickListener() {
+        final FriendsAdapter adapter = new FriendsAdapter(friends, getContext(), getActivity(), new CustomItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Friend friend = friends.get(position);
@@ -139,11 +139,8 @@ public class FriendsFragment extends Fragment {
                                     Datum datum = data.get(i);
 
                                     if (datum.getFriend() != null) {
-
                                         if (datum.getStatus().toString().equals("true")) {
-
                                             if (datum.getOwner().get_id().equals(id)) {
-
                                                 Friend_ friend = datum.getFriend();
                                                 cv.put("name", friend.getName());
 
@@ -190,7 +187,7 @@ public class FriendsFragment extends Fragment {
 
 
                                 //  RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-                                final FriendsAdapter adapter = new FriendsAdapter(newfriends, getContext(), new CustomItemClickListener() {
+                                final FriendsAdapter adapter = new FriendsAdapter(newfriends, getContext(), getActivity(), new CustomItemClickListener() {
                                     @Override
                                     public void onItemClick(View view, int position) {
                                         Friend friend = newfriends.get(position);
@@ -295,7 +292,7 @@ public class FriendsFragment extends Fragment {
                     Log.i("stat", "Friends :" + newfriends.toString());
 
                     RecyclerView rvContacts = (RecyclerView) getActivity().findViewById(R.id.rvContacts);
-                    final FriendsAdapter adapter = new FriendsAdapter(newfriends, getActivity(), new CustomItemClickListener() {
+                    final FriendsAdapter adapter = new FriendsAdapter(newfriends, getContext(), getActivity(), new CustomItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
                             com.example.ivan.champy_v2.Friend friend = newfriends.get(position);

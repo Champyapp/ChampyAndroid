@@ -1,5 +1,6 @@
 package com.example.ivan.champy_v2;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -41,6 +42,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
     final private String TAG = "myLogs";
     private List<Pending_friend> mContacts;
     private Context _context;
+    private Activity activity;
     int selectedPos = 0;
     CustomItemClickListener listener;
     ArrayList<Integer> selected = new ArrayList<>();
@@ -48,10 +50,11 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
     private Other other = new Other(new ArrayList<Friend>());
 
     // Pass in the contact array into the constructor
-    public PendingAdapter(List<Pending_friend> contacts, Context context, CustomItemClickListener customItemClickListener) {
+    public PendingAdapter(List<Pending_friend> contacts, Context context, Activity activity, CustomItemClickListener customItemClickListener) {
         mContacts = contacts;
         _context = context;
         this.listener = customItemClickListener;
+        this.activity = activity;
     }
 
     @Override
@@ -71,6 +74,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         viewHolder.simple.setVisibility(View.VISIBLE);
         viewHolder.info.setVisibility(View.GONE);
 
+        // отвечает за клик по другу в списке
         contactView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,7 +90,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                     }
                     notifyItemChanged(oldSelected);
                     notifyItemChanged(viewHolder.getAdapterPosition());
-
+                    selected.clear();
                 }
             }
         });
@@ -157,7 +161,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
             textView = (TextView)viewHolder.itemView.findViewById(R.id.info_level);
             textView.setText("Level "+champy.get("level")+" Champy");
 
-            viewHolder.itemView.findViewById(R.id.info).setVisibility(View.VISIBLE);
+            viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.VISIBLE);
             if (contact.getOwner().equals("true")) {
                 Log.d(TAG, "Owner: true");
                 viewHolder.add.setVisibility(View.GONE);
@@ -167,13 +171,13 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                 viewHolder.add.setVisibility(View.VISIBLE);
                 viewHolder.block.setVisibility(View.VISIBLE);
             }
-            viewHolder.itemView.findViewById(R.id.simple).setVisibility(View.GONE);
+            viewHolder.itemView.findViewById(R.id.row_friends_list).setVisibility(View.GONE);
 
         }
         else {
             Log.i("Selected: ", position + " close");
-            viewHolder.itemView.findViewById(R.id.info).setVisibility(View.GONE);
-            viewHolder.itemView.findViewById(R.id.simple).setVisibility(View.VISIBLE);
+            viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.GONE);
+            viewHolder.itemView.findViewById(R.id.row_friends_list).setVisibility(View.VISIBLE);
 
         }
         // Set item views based on the data model
@@ -184,135 +188,147 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
             @Override
             public void onClick(View v) {
                 final SessionManager sessionManager = new SessionManager(_context);
+                OfflineMode offlineMode = new OfflineMode();
+                if (offlineMode.isInternetAvailable(activity)) {
 
-                HashMap<String, String> user = new HashMap<>();
-                user = sessionManager.getUserDetails();
+                    HashMap<String, String> user = new HashMap<>();
+                    user = sessionManager.getUserDetails();
 
-                final String token = user.get("token");
-                final String id = user.get("id");
+                    final String token = user.get("token");
+                    final String id = user.get("id");
 
-                String friend = mContacts.get(position).getID();
+                    String friend = mContacts.get(position).getID();
 
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(API_URL)
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
+                    Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl(API_URL)
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
 
-                com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
+                    com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
 
-                Log.d(TAG, "Status: " + id + " " + friend);
+                    Log.d(TAG, "Status: " + id + " " + friend);
 
-                Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.removeFriend(id, friend, token);
-                call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
-                    @Override
-                    public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
-                        if (response.isSuccess()){
-                            Log.d(TAG, "Status: Removed ");
-                        } else Log.d(TAG, "Status: "+response.toString());
-                    }
+                    Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.removeFriend(id, friend, token);
+                    call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
+                        @Override
+                        public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
+                            if (response.isSuccess()) {
+                                Log.d(TAG, "Status: Removed ");
+                            } else Log.d(TAG, "Status: " + response.toString());
+                        }
 
-                    @Override
-                    public void onFailure(Throwable t) {
+                        @Override
+                        public void onFailure(Throwable t) {
 
-                    }
-                });
-                sessionManager.setRefreshPending("true");
-                mContacts.remove(position);
-                notifyItemRemoved(position);
-                selected.clear();
+                        }
+                    });
+                    sessionManager.setRefreshPending("true");
+                    mContacts.remove(position);
+                    notifyItemRemoved(position);
+                    selected.clear();
+                } else {
+                    Toast.makeText(activity, "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
+
+
         viewHolder.add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final SessionManager sessionManager = new SessionManager(_context);
-                HashMap<String, String> user = new HashMap<>();
-                user = sessionManager.getUserDetails();
-                final String token = user.get("token");
-                final String id = user.get("id");
-                String friend = mContacts.get(position).getID();
-                Log.d(TAG, "User: "+friend);
-                if (friend == null)  {
-                    Toast.makeText(_context, "This user has not installed Champy", Toast.LENGTH_SHORT).show();
-                } else if (friend == id)  {
-                    Toast.makeText(_context, "This user has not installed Champy", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            switch (which) {
-                                case DialogInterface.BUTTON_POSITIVE:
-                                    String friend = mContacts.get(position).getID();
-                                    Retrofit retrofit = new Retrofit.Builder()
-                                            .baseUrl(API_URL)
-                                            .addConverterFactory(GsonConverterFactory.create())
-                                            .build();
-                                    sessionManager.setRefreshFriends("true");
-                                    sessionManager.setRefreshPending("true");
-                                    DBHelper dbHelper = new DBHelper(_context);
-                                    final SQLiteDatabase db = dbHelper.getWritableDatabase();
-                                    final ContentValues cv = new ContentValues();
-                                    com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(Friends.class);
-                                    Log.d(TAG, "Status: "+id+" "+friend+" "+token);
+                OfflineMode offlineMode = new OfflineMode();
+                if (offlineMode.isInternetAvailable(activity)) {
 
-                                    Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.acceptFriendRequest(id, friend, token);
-                                    call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
-                                        @Override
-                                        public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
-                                            if (response.isSuccess()){
-                                                Log.d(TAG, "Status: Accepted");
-                                                cv.put("name", mContacts.get(position).getName());
-                                                cv.put("photo", mContacts.get(position).getPicture());
-                                                cv.put("user_id", mContacts.get(position).getID());
-                                                db.insert("friends", null, cv);
-                                            } else Log.d(TAG, "Status: "+response.code());
-                                        }
+                    final SessionManager sessionManager = new SessionManager(_context);
+                    HashMap<String, String> user = new HashMap<>();
+                    user = sessionManager.getUserDetails();
+                    final String token = user.get("token");
+                    final String id = user.get("id");
+                    String friend = mContacts.get(position).getID();
+                    Log.d(TAG, "User: " + friend);
+                    if (friend == null) {
+                        Toast.makeText(_context, "This user has not installed Champy", Toast.LENGTH_SHORT).show();
+                    } else if (friend == id) {
+                        Toast.makeText(_context, "This user has not installed Champy", Toast.LENGTH_SHORT).show();
+                    } else {
+                        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which) {
+                                    case DialogInterface.BUTTON_POSITIVE:
+                                        String friend = mContacts.get(position).getID();
+                                        Retrofit retrofit = new Retrofit.Builder()
+                                                .baseUrl(API_URL)
+                                                .addConverterFactory(GsonConverterFactory.create())
+                                                .build();
+                                        sessionManager.setRefreshFriends("true");
+                                        sessionManager.setRefreshPending("true");
+                                        DBHelper dbHelper = new DBHelper(_context);
+                                        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+                                        final ContentValues cv = new ContentValues();
+                                        com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(Friends.class);
+                                        Log.d(TAG, "Status: " + id + " " + friend + " " + token);
 
-                                        @Override
-                                        public void onFailure(Throwable t) {
+                                        Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.acceptFriendRequest(id, friend, token);
+                                        call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
+                                            @Override
+                                            public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
+                                                if (response.isSuccess()) {
+                                                    Log.d(TAG, "Status: Accepted");
+                                                    cv.put("name", mContacts.get(position).getName());
+                                                    cv.put("photo", mContacts.get(position).getPicture());
+                                                    cv.put("user_id", mContacts.get(position).getID());
+                                                    db.insert("friends", null, cv);
+                                                } else Log.d(TAG, "Status: " + response.code());
+                                            }
 
-                                        }
-                                    });
-                                    mContacts.remove(position);
-                                    notifyItemRemoved(position);
-                                    selected.clear();
-                                    break;
+                                            @Override
+                                            public void onFailure(Throwable t) {
 
-                                case DialogInterface.BUTTON_NEGATIVE:
-                                    //////////////////////////////////////////////////////////////
-                                    friend = mContacts.get(position).getID();
-                                    retrofit = new Retrofit.Builder()
-                                            .baseUrl(API_URL)
-                                            .addConverterFactory(GsonConverterFactory.create())
-                                            .build();
-                                    friends = retrofit.create(Friends.class);
-                                    Log.d(TAG, "Status: "+id+" "+friend);
-                                    call = friends.acceptFriendRequest(id, friend, token);
-                                    call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
-                                        @Override
-                                        public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
-                                            if (response.isSuccess()){
-                                                Log.d(TAG, "Status: Removed ");
-                                            } else Log.d(TAG, "Status: "+response.toString());
-                                        }
+                                            }
+                                        });
+                                        mContacts.remove(position);
+                                        notifyItemRemoved(position);
+                                        selected.clear();
+                                        break;
 
-                                        @Override
-                                        public void onFailure(Throwable t) {
-                                        }
-                                    });
-                                    mContacts.remove(position);
-                                    notifyItemRemoved(position);
-                                    selected.clear();
-                                    //////////////////////////////////////////////////////////////
-                                    break;
+                                    case DialogInterface.BUTTON_NEGATIVE:
+                                        //////////////////////////////////////////////////////////////
+                                        friend = mContacts.get(position).getID();
+                                        retrofit = new Retrofit.Builder()
+                                                .baseUrl(API_URL)
+                                                .addConverterFactory(GsonConverterFactory.create())
+                                                .build();
+                                        friends = retrofit.create(Friends.class);
+                                        Log.d(TAG, "Status: " + id + " " + friend);
+                                        call = friends.acceptFriendRequest(id, friend, token);
+                                        call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
+                                            @Override
+                                            public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
+                                                if (response.isSuccess()) {
+                                                    Log.d(TAG, "Status: Removed ");
+                                                } else Log.d(TAG, "Status: " + response.toString());
+                                            }
 
+                                            @Override
+                                            public void onFailure(Throwable t) {
+                                            }
+                                        });
+                                        mContacts.remove(position);
+                                        notifyItemRemoved(position);
+                                        selected.clear();
+                                        //////////////////////////////////////////////////////////////
+                                        break;
+
+                                }
                             }
-                        }
-                    };
-                    AlertDialog.Builder builder = new AlertDialog.Builder(_context);
-                    builder.setMessage("Do you want add this user to your friends list?").setPositiveButton("Yes", dialogClickListener)
-                            .setNegativeButton("No", dialogClickListener).show();
+                        };
+                        AlertDialog.Builder builder = new AlertDialog.Builder(_context);
+                        builder.setMessage("Do you want add this user to your friends list?").setPositiveButton("Yes", dialogClickListener)
+                                .setNegativeButton("No", dialogClickListener).show();
+                    }
+                } else {
+                    Toast.makeText(activity, "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -372,10 +388,14 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         textView.setText("Level " + champy.get("level") + " Champy");
 
     }
+
+
     @Override
     public int getItemCount() {
         return mContacts.size();
     }
+
+
     // Provide a direct reference to each of the views within a data item
     // Used to cache the views within the item layout for fast access
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -417,8 +437,8 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
             mWins = (ImageView) itemView.findViewById(R.id.imageView10);
             mTotal = (ImageView) itemView.findViewById(R.id.imageView11);
 
-            simple = (RelativeLayout)itemView.findViewById(R.id.simple);
-            info = (RelativeLayout)itemView.findViewById(R.id.info);
+            simple = (RelativeLayout)itemView.findViewById(R.id.row_friends_list);
+            info = (RelativeLayout)itemView.findViewById(R.id.row_friends_list_open);
 
             block = (ImageButton)itemView.findViewById(R.id.imageButton2);
             add = (ImageButton)itemView.findViewById(R.id.imageButton3);

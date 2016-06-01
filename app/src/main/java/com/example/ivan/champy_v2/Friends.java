@@ -636,7 +636,7 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            final FriendsAdapter adapter = new FriendsAdapter(newfriends, getApplicationContext(), new CustomItemClickListener() {
+                            final FriendsAdapter adapter = new FriendsAdapter(newfriends, getApplicationContext(), Friends.this, new CustomItemClickListener() {
                                 @Override
                                 public void onItemClick(View view, int position) {
                                     com.example.ivan.champy_v2.Friend friend = newfriends.get(position);
@@ -732,7 +732,7 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
 
 
                     RecyclerView rvContacts = (RecyclerView) findViewById(R.id.rvContacts);
-                    final PendingAdapter adapter = new PendingAdapter(newfriends, Friends.this, new CustomItemClickListener() {
+                    final PendingAdapter adapter = new PendingAdapter(newfriends, Friends.this, Friends.this, new CustomItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
                             Pending_friend friend = newfriends.get(position);

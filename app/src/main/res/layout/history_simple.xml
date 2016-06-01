@@ -6,7 +6,7 @@
     android:layout_alignParentStart="false"
     android:id="@+id/history_simple"
     android:visibility="visible"
-    android:layout_above="@+id/info"
+    android:layout_above="@+id/row_friends_list_open"
     android:layout_alignParentRight="true"
     android:layout_alignParentEnd="true">
 

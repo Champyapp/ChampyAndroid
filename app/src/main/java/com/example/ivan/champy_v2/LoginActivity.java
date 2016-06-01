@@ -228,7 +228,8 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         });
                         Bundle parameters = new Bundle();
-                        parameters.putString("fields", "id, first_name, last_name, email,gender, birthday, location"); // Parámetros que pedimos a facebook
+                        // Parámetros que pedimos a facebook
+                        parameters.putString("fields", "id, first_name, last_name, email,gender, birthday, location");
                         request.setParameters(parameters);
                         request.executeAsync();
 
@@ -308,12 +309,12 @@ public class LoginActivity extends AppCompatActivity {
             return mIcon11;
         }
 
-
         protected void onPostExecute(Bitmap result) {
             // Do your staff here to save image
             String string = saveToInternalStorage(result);
             loadImageFromStorage(string);
         }
+
     }
 
     private String saveToInternalStorage(Bitmap bitmapImage){
@@ -359,10 +360,10 @@ public class LoginActivity extends AppCompatActivity {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("facebookId", fb_id);
         jsonObject.put("AndroidOS", gcm);
-        //String string = "{facebookId:'"+fb_id+"', AndroidOS:{token:'"+gcm+"', timeZone:2}";
+        String string2 = "{facebookId:'"+fb_id+"', AndroidOS:{token:'"+gcm+"', timeZone:2}";
         String string = jsonObject.toString();
         final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
-        Log.d(TAG, "TOKEN: "+string);
+        Log.d(TAG, "TOKEN: "+string + "\n fb_id" + string2);
         NewUser newUser = retrofit.create(NewUser.class);
 
         Call<User> call = newUser.register(new LoginData(facebookId, name, email));
@@ -473,6 +474,7 @@ public class LoginActivity extends AppCompatActivity {
                     final String  user_id = id;
 
                     com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
+
                     Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.getUserFriends(id, jwtString);
                     call.enqueue(new Callback<Friend>() {
                         @Override
@@ -531,6 +533,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         }
                     });
+
                     clearCount = db.delete("myChallenges", null, null);
                     ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
                     final long unixTime = System.currentTimeMillis() / 1000L;

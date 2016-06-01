@@ -36,7 +36,6 @@ public class Blur {
         blur.setInput(blurInput);
         blur.setRadius(radius); // radius must be 0 < r <= 25
         blur.forEach(blurOutput);
-
         blurOutput.copyTo(bitmap);
         renderScript.destroy();
 
@@ -47,7 +46,6 @@ public class Blur {
     private static Bitmap RGB565toARGB888(Bitmap img) throws Exception {
         int numPixels = img.getWidth() * img.getHeight();
         int[] pixels = new int[numPixels];
-
         //Get JPEG pixels.  Each int is the color values for one pixel.
         img.getPixels(pixels, 0, img.getWidth(), 0, 0, img.getWidth(), img.getHeight());
 
