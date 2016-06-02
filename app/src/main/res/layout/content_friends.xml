@@ -54,7 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:id="@+id/blured"
+        android:id="@+id/blurScreen"
         android:visibility="invisible"
         android:clickable="true">
 
@@ -63,7 +63,7 @@
     <com.melnykov.fab.FloatingActionButton
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:id="@+id/imageButton"
+        android:id="@+id/fabPlus"
         android:src="@drawable/plus"
         fab:fab_colorNormal="#FFF5C390"
         android:layout_alignParentBottom="true"

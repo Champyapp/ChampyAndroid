@@ -21,17 +21,17 @@
         android:layout_alignParentBottom="true" />
 
     <ImageView
-        android:id="@+id/imageview_score_animation"
+        android:id="@+id/imageView_challenges_animation"
         android:layout_width="110dp"
         android:layout_height="110dp"
         android:background="@drawable/score_animation"
-        android:layout_alignTop="@+id/imageview_score_animation1"
+        android:layout_alignTop="@+id/imageView_wins_animation"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginLeft="@dimen/activity_vertical_margin" />
 
     <ImageView
-        android:id="@+id/imageview_score_animation1"
+        android:id="@+id/imageView_wins_animation"
         android:layout_width="110dp"
         android:layout_height="110dp"
         android:background="@drawable/score_animation"
@@ -40,11 +40,11 @@
         android:layout_marginTop="@dimen/activity_vertical_margin" />
 
     <ImageView
-        android:id="@+id/imageview_score_animation2"
+        android:id="@+id/imageView_total_animation"
         android:layout_width="110dp"
         android:layout_height="110dp"
         android:background="@drawable/score_animation"
-        android:layout_alignTop="@+id/imageview_score_animation1"
+        android:layout_alignTop="@+id/imageView_wins_animation"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginRight="@dimen/activity_vertical_margin" />
@@ -53,63 +53,63 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/textView2"
+        android:id="@+id/textViewScoreChallenges"
         android:textIsSelectable="true"
         android:textSize="40dp"
-        android:layout_centerInParent="@+id/imageview_score_animation"
+        android:layout_centerInParent="@+id/imageView_challenges_animation"
         android:gravity="center_vertical|center_horizontal"
         android:textColor="#ffffff"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/imageview_score_animation"
-        android:layout_alignEnd="@+id/imageview_score_animation"
+        android:layout_alignRight="@+id/imageView_challenges_animation"
+        android:layout_alignEnd="@+id/imageView_challenges_animation"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginLeft="@dimen/activity_vertical_margin"
-        android:layout_alignBottom="@+id/imageView2" />
+        android:layout_alignBottom="@+id/imageView_challenges_logo" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/info_level"
-        android:layout_alignLeft="@+id/imageview_score_animation1"
-        android:layout_alignStart="@+id/imageview_score_animation1"
+        android:id="@+id/textViewScoreWins"
+        android:layout_alignLeft="@+id/imageView_wins_animation"
+        android:layout_alignStart="@+id/imageView_wins_animation"
         android:layout_alignParentTop="true"
         android:gravity="center_vertical|center_horizontal"
         android:textSize="40dp"
         android:textColor="#ffffff"
-        android:layout_alignBottom="@+id/imageView3"
-        android:layout_alignRight="@+id/imageview_score_animation1"
-        android:layout_alignEnd="@+id/imageview_score_animation1"
+        android:layout_alignBottom="@+id/imageView_wins_logo"
+        android:layout_alignRight="@+id/imageView_wins_animation"
+        android:layout_alignEnd="@+id/imageView_wins_animation"
         android:layout_marginTop="@dimen/activity_vertical_margin" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/textView4"
+        android:id="@+id/textViewScoreTotal"
         android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/imageview_score_animation2"
-        android:layout_alignStart="@+id/imageview_score_animation2"
+        android:layout_alignLeft="@+id/imageView_total_animation"
+        android:layout_alignStart="@+id/imageView_total_animation"
         android:textSize="40dp"
         android:gravity="center_vertical|center_horizontal"
         android:textColor="#ffffff"
-        android:layout_alignBottom="@+id/imageView4"
-        android:layout_alignRight="@+id/imageview_score_animation2"
-        android:layout_alignEnd="@+id/imageview_score_animation2"
+        android:layout_alignBottom="@+id/imageView_total_logo"
+        android:layout_alignRight="@+id/imageView_total_animation"
+        android:layout_alignEnd="@+id/imageView_total_animation"
         android:layout_marginTop="@dimen/activity_vertical_margin" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/textView5"
-        android:layout_below="@+id/imageview_score_animation"
+        android:id="@+id/textViewChallenges"
+        android:layout_below="@+id/imageView_challenges_animation"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/imageview_score_animation"
-        android:layout_alignEnd="@+id/imageview_score_animation"
+        android:layout_alignRight="@+id/imageView_challenges_animation"
+        android:layout_alignEnd="@+id/imageView_challenges_animation"
         android:gravity="center_vertical|center_horizontal"
         android:textColor="#ffffff"
         android:layout_marginLeft="@dimen/activity_vertical_margin"
@@ -119,13 +119,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/textView6"
-        android:layout_below="@+id/imageview_score_animation1"
-        android:layout_alignLeft="@+id/imageview_score_animation1"
-        android:layout_alignStart="@+id/imageview_score_animation1"
-        android:layout_toStartOf="@+id/imageview_score_animation2"
-        android:layout_alignRight="@+id/imageview_score_animation1"
-        android:layout_alignEnd="@+id/imageview_score_animation1"
+        android:id="@+id/textViewWins"
+        android:layout_below="@+id/imageView_wins_animation"
+        android:layout_alignLeft="@+id/imageView_wins_animation"
+        android:layout_alignStart="@+id/imageView_wins_animation"
+        android:layout_toStartOf="@+id/imageView_total_animation"
+        android:layout_alignRight="@+id/imageView_wins_animation"
+        android:layout_alignEnd="@+id/imageView_wins_animation"
         android:gravity="center_vertical|center_horizontal"
         android:paddingBottom="30dp"
         android:textColor="#ffffff" />
@@ -134,13 +134,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/textView7"
-        android:layout_below="@+id/imageview_score_animation2"
-        android:layout_alignRight="@+id/imageview_score_animation2"
-        android:layout_alignEnd="@+id/imageview_score_animation2"
-        android:layout_alignBottom="@+id/textView6"
-        android:layout_alignLeft="@+id/imageview_score_animation2"
-        android:layout_alignStart="@+id/imageview_score_animation2"
+        android:id="@+id/textViewTotal"
+        android:layout_below="@+id/imageView_total_animation"
+        android:layout_alignRight="@+id/imageView_total_animation"
+        android:layout_alignEnd="@+id/imageView_total_animation"
+        android:layout_alignBottom="@+id/textViewWins"
+        android:layout_alignLeft="@+id/imageView_total_animation"
+        android:layout_alignStart="@+id/imageView_total_animation"
         android:gravity="center_vertical|center_horizontal"
         android:paddingBottom="30dp"
         android:textColor="#ffffff" />
@@ -148,11 +148,11 @@
     <ImageView
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:id="@+id/imageView2"
-        android:layout_alignBottom="@+id/imageview_score_animation"
+        android:id="@+id/imageView_challenges_logo"
+        android:layout_alignBottom="@+id/imageView_challenges_animation"
         android:layout_marginBottom="10dp"
-        android:layout_alignRight="@+id/imageview_score_animation"
-        android:layout_alignEnd="@+id/imageview_score_animation"
+        android:layout_alignRight="@+id/imageView_challenges_animation"
+        android:layout_alignEnd="@+id/imageView_challenges_animation"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginLeft="@dimen/activity_vertical_margin"/>
@@ -160,30 +160,30 @@
     <ImageView
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:id="@+id/imageView3"
-        android:layout_alignLeft="@+id/imageview_score_animation1"
-        android:layout_alignStart="@+id/imageview_score_animation1"
-        android:layout_alignTop="@+id/imageView2"
-        android:layout_alignRight="@+id/imageview_score_animation1"
-        android:layout_alignEnd="@+id/imageview_score_animation1" />
+        android:id="@+id/imageView_wins_logo"
+        android:layout_alignLeft="@+id/imageView_wins_animation"
+        android:layout_alignStart="@+id/imageView_wins_animation"
+        android:layout_alignTop="@+id/imageView_challenges_logo"
+        android:layout_alignRight="@+id/imageView_wins_animation"
+        android:layout_alignEnd="@+id/imageView_wins_animation" />
 
     <ImageView
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:id="@+id/imageView4"
-        android:layout_alignRight="@+id/imageview_score_animation2"
-        android:layout_alignEnd="@+id/imageview_score_animation2"
-        android:layout_alignTop="@+id/imageView3"
-        android:layout_alignLeft="@+id/imageview_score_animation2"
-        android:layout_alignStart="@+id/imageview_score_animation2" />
+        android:id="@+id/imageView_total_logo"
+        android:layout_alignRight="@+id/imageView_total_animation"
+        android:layout_alignEnd="@+id/imageView_total_animation"
+        android:layout_alignTop="@+id/imageView_wins_logo"
+        android:layout_alignLeft="@+id/imageView_total_animation"
+        android:layout_alignStart="@+id/imageView_total_animation" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/imageButton"
+        android:layout_above="@+id/fabPlus"
         android:layout_centerHorizontal="true"
         android:id="@+id/cards"
-        android:layout_below="@+id/textView5"
+        android:layout_below="@+id/textViewChallenges"
         android:focusable="false">
 
     </RelativeLayout>
@@ -191,7 +191,7 @@
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/blured"
+        android:id="@+id/blurScreen"
         android:layout_centerHorizontal="true"
         android:visibility="invisible"
         android:clickable="true" />
@@ -199,7 +199,7 @@
     <ImageButton
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:id="@+id/imageButton"
+        android:id="@+id/fabPlus"
         android:background="@drawable/centerwithplus"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"

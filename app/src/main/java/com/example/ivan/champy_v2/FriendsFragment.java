@@ -97,7 +97,7 @@ public class FriendsFragment extends Fragment {
 
             sessionManager.setRefreshFriends("false");
         }
-        FloatingActionButton floatingActionButton = (FloatingActionButton)getActivity().findViewById(R.id.imageButton);
+        FloatingActionButton floatingActionButton = (FloatingActionButton)getActivity().findViewById(R.id.fabPlus);
         floatingActionButton.attachToRecyclerView(rvContacts);
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         rvContacts.setAdapter(adapter);

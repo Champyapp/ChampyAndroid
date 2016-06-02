@@ -131,18 +131,18 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                     .placeholder(R.mipmap.ic_launcher)
                     .into((ImageView)viewHolder.itemView.findViewById(R.id.imageView8));
 
-            TextView textView = (TextView)viewHolder.itemView.findViewById(R.id.textView2);
+            TextView textView = (TextView)viewHolder.itemView.findViewById(R.id.textViewScoreChallenges);
             textView.setText(contact.getName());
             Typeface typeFace = Typeface.createFromAsset(_context.getAssets(), "fonts/bebasneue.ttf");
             textView.setTypeface(typeFace);
 
-            textView = (TextView)viewHolder.itemView.findViewById(R.id.textView5);
+            textView = (TextView)viewHolder.itemView.findViewById(R.id.textViewChallenges);
             textView.setTypeface(typeFace);
 
-            textView = (TextView)viewHolder.itemView.findViewById(R.id.textView6);
+            textView = (TextView)viewHolder.itemView.findViewById(R.id.textViewWins);
             textView.setTypeface(typeFace);
 
-            textView = (TextView)viewHolder.itemView.findViewById(R.id.textView7);
+            textView = (TextView)viewHolder.itemView.findViewById(R.id.textViewTotal);
             textView.setTypeface(typeFace);
 
             SessionManager sessionManager = new SessionManager(_context);
@@ -157,7 +157,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             textView.setText(champy.get("wins"));
             textView = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
             textView.setText(champy.get("total"));
-            textView = (TextView)viewHolder.itemView.findViewById(R.id.info_level);
+            textView = (TextView)viewHolder.itemView.findViewById(R.id.textViewScoreWins);
             textView.setText("Level "+champy.get("level")+" Champy");
 
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.VISIBLE);
@@ -331,9 +331,9 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
             nameTextView = (TextView) itemView.findViewById(R.id.name);
             friendImage = (ImageView) itemView.findViewById(R.id.picture);
-            challenges = (ImageView) itemView.findViewById(R.id.imageView2);
-            wins = (ImageView) itemView.findViewById(R.id.imageView3);
-            total = (ImageView) itemView.findViewById(R.id.imageView4);
+            challenges = (ImageView) itemView.findViewById(R.id.imageView_challenges_logo);
+            wins = (ImageView) itemView.findViewById(R.id.imageView_wins_logo);
+            total = (ImageView) itemView.findViewById(R.id.imageView_total_logo);
             dop = (ImageView) itemView.findViewById(R.id.imageView5);
 
             mchallenges = (ImageView) itemView.findViewById(R.id.imageView9);

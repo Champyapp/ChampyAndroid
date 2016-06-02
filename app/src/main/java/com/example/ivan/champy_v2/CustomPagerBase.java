@@ -147,7 +147,8 @@ public class CustomPagerBase {
                             ViewHelper.setScaleY(itemView, getScaleValue(viewXPosition));
                             ViewHelper.setScaleX(itemView, getScaleValue(viewXPosition));
 
-                            /*if (firstTouchX - lastX > 10 && nextItem != null)  {
+                            // отвечает за прозначность карточок
+                            if (firstTouchX - lastX > 10 && nextItem != null)  {
                                 if (ViewHelper.getAlpha(nextItem) < 0.93f) {
                                     ViewHelper.setAlpha(itemView, ViewHelper.getScaleX(itemView));
                                 }
@@ -184,7 +185,7 @@ public class CustomPagerBase {
                             } else if  (currentItem != null) {
                                 Log.d("TAG", "Bring to Front");
                                 currentItem.bringToFront();
-                            }*/
+                            }
                             break;
                         case MotionEvent.ACTION_UP:
                             isTouchEnabled = false;

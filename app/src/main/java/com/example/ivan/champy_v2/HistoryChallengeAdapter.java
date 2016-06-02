@@ -142,8 +142,8 @@ public class HistoryChallengeAdapter extends
 
             nameTextView = (TextView) itemView.findViewById(R.id.name);
             image = (ImageView) itemView.findViewById(R.id.picture);
-            wins = (ImageView) itemView.findViewById(R.id.imageView3);
-            total = (ImageView) itemView.findViewById(R.id.imageView4);
+            wins = (ImageView) itemView.findViewById(R.id.imageView_wins_logo);
+            total = (ImageView) itemView.findViewById(R.id.imageView_total_logo);
 
 
 

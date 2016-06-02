@@ -531,6 +531,11 @@ public class Settings extends AppCompatActivity
                 Intent intent = new Intent(Settings.this, History.class);
                 startActivity(intent);
             }
+            if (id == R.id.pending_duels) {
+                Update_profile(map);
+                Intent intent = new Intent(Settings.this, Pending_Duel.class);
+                startActivity(intent);
+            }
             if (id == R.id.friends) {
                 Update_profile(map);
                 Intent intent = new Intent(Settings.this, Friends.class);

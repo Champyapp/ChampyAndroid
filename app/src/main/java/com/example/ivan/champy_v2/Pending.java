@@ -17,8 +17,6 @@ import android.widget.Toast;
 import com.example.ivan.champy_v2.model.Friend.Datum;
 import com.example.ivan.champy_v2.model.Friend.Friend_;
 import com.example.ivan.champy_v2.model.Friend.Owner;
-import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -99,7 +97,7 @@ public class Pending extends Fragment {
                 Pending_friend friend = friends.get(position);
             }
         });
-        FloatingActionButton floatingActionButton = (FloatingActionButton)getActivity().findViewById(R.id.imageButton);
+        FloatingActionButton floatingActionButton = (FloatingActionButton)getActivity().findViewById(R.id.fabPlus);
         floatingActionButton.attachToRecyclerView(rvContacts);
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         rvContacts.setAdapter(adapter);

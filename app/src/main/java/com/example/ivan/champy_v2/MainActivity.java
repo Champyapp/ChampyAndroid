@@ -14,7 +14,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
@@ -70,7 +69,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -121,8 +119,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 18);
-        calendar.set(Calendar.MINUTE, 6);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);  // 18 ?
+        calendar.set(Calendar.MINUTE, 0);        //  6 ?
         calendar.set(Calendar.SECOND, 0);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
         RelativeLayout cards = (RelativeLayout)findViewById(R.id.cards);
@@ -131,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             pager = new CustomPagerBase(this,  cards, adapter);
             pager.preparePager(0);
         }
-        final ImageButton actionButton = (ImageButton)findViewById(R.id.imageButton);
+        final ImageButton actionButton = (ImageButton)findViewById(R.id.fabPlus);
 
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
 
@@ -163,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
                 Log.d("TAG", "clicked");
-                ImageView screen = (ImageView) findViewById(R.id.blured);
+                ImageView screen = (ImageView) findViewById(R.id.blurScreen);
 
                 // BINGO ~~~~~~~~~~~~ google how to take screen in code.
                 // idea: switch for position of pages
@@ -179,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     if (bm == null) Log.d(TAG, "SUKAAAAA");
                     else {
                         Bitmap blured = Blur.blurRenderScript(getApplicationContext(), bm, 25);
-                        screen = (ImageView) findViewById(R.id.blured);
+                        screen = (ImageView) findViewById(R.id.blurScreen);
                         Drawable ob = new BitmapDrawable(getResources(), blured);
                         screen.setImageDrawable(ob);
                     }
@@ -242,12 +240,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         actionButton.setOnClickListener(onClickListener2);
 
-        ImageView imageView = (ImageView)findViewById(R.id.blured);
+        ImageView imageView = (ImageView)findViewById(R.id.blurScreen);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.cards);
-                ImageView screen = (ImageView) findViewById(R.id.blured);
+                ImageView screen = (ImageView) findViewById(R.id.blurScreen);
                 if (actionMenu.isOpen()) {
                     actionMenu.getSubActionItems();
                     buttonSelfImprovement.setOnClickListener(new View.OnClickListener() {
@@ -265,9 +263,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         public void onClick(View v) {
                             OfflineMode offlineMode = new OfflineMode();
                             if (offlineMode.isInternetAvailable(MainActivity.this)) {
-                                //Intent intent = new Intent(MainActivity.this, BattleImprovement.class);
-                                Toast.makeText(getApplicationContext(), "Coming soon", Toast.LENGTH_SHORT).show();
-                                //startActivity(intent);
+                                Intent intent = new Intent(MainActivity.this, Friends.class);
+                                //Toast.makeText(getApplicationContext(), "Coming soon", Toast.LENGTH_SHORT).show();
+                                startActivity(intent);
                             }
                         }
                     });
@@ -305,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
-                ImageView screen = (ImageView) findViewById(R.id.blured);
+                ImageView screen = (ImageView) findViewById(R.id.blurScreen);
                 RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.cards);
                 relativeLayout.setVisibility(View.VISIBLE);
                 screen.setVisibility(View.INVISIBLE);
@@ -382,7 +380,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         actionMenu.close(true);
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.cards);
         relativeLayout.setVisibility(View.VISIBLE);
-        ImageView screen = (ImageView) findViewById(R.id.blured);
+        ImageView screen = (ImageView) findViewById(R.id.blurScreen);
         screen.setVisibility(View.INVISIBLE);
 
     }
@@ -583,7 +581,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     blured = blur.blurRenderScript(getApplicationContext(), bm, 25);
 
-                    ImageView screen = (ImageView) findViewById(R.id.blured);
+                    ImageView screen = (ImageView) findViewById(R.id.blurScreen);
 
                     Drawable ob = new BitmapDrawable(getResources(), blured);
                     screen.setImageDrawable(ob);
@@ -773,16 +771,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void BuildAnim() {
         int width = getWindowManager().getDefaultDisplay().getWidth();
         make_responsive_score(width);
-        ImageView mImageViewFilling = (ImageView) findViewById(R.id.imageview_score_animation);
+        ImageView mImageViewFilling = (ImageView) findViewById(R.id.imageView_challenges_animation);
         ((AnimationDrawable) mImageViewFilling.getBackground()).start();
-        ImageView mImageViewFilling1 = (ImageView) findViewById(R.id.imageview_score_animation1);
+        ImageView mImageViewFilling1 = (ImageView) findViewById(R.id.imageView_wins_animation);
         ((AnimationDrawable) mImageViewFilling1.getBackground()).start();
-        ImageView mImageViewFilling2 = (ImageView) findViewById(R.id.imageview_score_animation2);
+        ImageView mImageViewFilling2 = (ImageView) findViewById(R.id.imageView_total_animation);
         ((AnimationDrawable) mImageViewFilling2.getBackground()).start();
 
-        final TextView t1 = (TextView) findViewById(R.id.textView2);
-        final TextView t2 = (TextView) findViewById(R.id.info_level);
-        final TextView t3 = (TextView) findViewById(R.id.textView4);
+        final TextView t1 = (TextView) findViewById(R.id.textViewScoreChallenges);
+        final TextView t2 = (TextView) findViewById(R.id.textViewScoreWins);
+        final TextView t3 = (TextView) findViewById(R.id.textViewScoreTotal);
         counter = 0;
         SessionManager sessionManager = new SessionManager(this);
         String challenges = sessionManager.getChampyOptions().get("challenges");
@@ -842,12 +840,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-        final TextView mSwitcher1 = (TextView) findViewById(R.id.textView5);
-        final TextView mSwitcher2 = (TextView) findViewById(R.id.textView6);
-        final TextView mSwitcher3 = (TextView) findViewById(R.id.textView7);
-        final ImageView imageView1 = (ImageView) findViewById(R.id.imageView2);
-        final ImageView imageView2 = (ImageView) findViewById(R.id.imageView3);
-        final ImageView imageView3 = (ImageView) findViewById(R.id.imageView4);
+        final TextView mSwitcher1 = (TextView) findViewById(R.id.textViewChallenges);
+        final TextView mSwitcher2 = (TextView) findViewById(R.id.textViewWins);
+        final TextView mSwitcher3 = (TextView) findViewById(R.id.textViewTotal);
+        final ImageView imageView1 = (ImageView) findViewById(R.id.imageView_challenges_logo);
+        final ImageView imageView2 = (ImageView) findViewById(R.id.imageView_wins_logo);
+        final ImageView imageView3 = (ImageView) findViewById(R.id.imageView_total_logo);
         final Animation in = new AlphaAnimation(0.0f, 1.0f);
         in.setDuration(3000);
 
@@ -886,27 +884,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void make_responsive_score(int width) {
         int x = round(width/100);
 
-        ImageView imageView = (ImageView)findViewById(R.id.imageview_score_animation);
+        ImageView imageView = (ImageView)findViewById(R.id.imageView_challenges_animation);
         imageView.getLayoutParams().width = x*25;
         imageView.getLayoutParams().height = x*25;
-        imageView = (ImageView)findViewById(R.id.imageview_score_animation1);
+        imageView = (ImageView)findViewById(R.id.imageView_wins_animation);
         imageView.getLayoutParams().width = x*25;
         imageView.getLayoutParams().height = x*25;
-        imageView = (ImageView)findViewById(R.id.imageview_score_animation2);
+        imageView = (ImageView)findViewById(R.id.imageView_total_animation);
         imageView.getLayoutParams().width = x*25;
         imageView.getLayoutParams().height = x*25;
 
-        imageView = (ImageView)findViewById(R.id.imageView3);
+        imageView = (ImageView)findViewById(R.id.imageView_wins_logo);
         imageView.getLayoutParams().width = x*5;
         imageView.getLayoutParams().height = x*5;
-        imageView = (ImageView)findViewById(R.id.imageView4);
+        imageView = (ImageView)findViewById(R.id.imageView_total_logo);
         imageView.getLayoutParams().width = x*5;
         imageView.getLayoutParams().height = x*5;
-        imageView = (ImageView)findViewById(R.id.imageView2);
+        imageView = (ImageView)findViewById(R.id.imageView_challenges_logo);
         imageView.getLayoutParams().width = x*5;
         imageView.getLayoutParams().height = x*5;
 
-        ImageButton imageButton = (ImageButton)findViewById(R.id.imageButton);
+        ImageButton imageButton = (ImageButton)findViewById(R.id.fabPlus);
         imageButton.getLayoutParams().width = x*20;
         imageButton.getLayoutParams().height = x*20;
 
@@ -915,19 +913,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         imageView.getLayoutParams().height = x*25;*/
 
         Float y = x*(float)3.5;
-        TextView textView = (TextView)findViewById(R.id.textView2);
+        TextView textView = (TextView)findViewById(R.id.textViewScoreChallenges);
         textView.setTextSize(y);
-        textView = (TextView)findViewById(R.id.info_level);
+        textView = (TextView)findViewById(R.id.textViewScoreWins);
         textView.setTextSize(y);
-        textView = (TextView)findViewById(R.id.textView4);
+        textView = (TextView)findViewById(R.id.textViewScoreTotal);
         textView.setTextSize(y);
 
         y = x*(float)1.5;
-        textView = (TextView)findViewById(R.id.textView5);
+        textView = (TextView)findViewById(R.id.textViewChallenges);
         textView.setTextSize(y);
-        textView = (TextView)findViewById(R.id.textView6);
+        textView = (TextView)findViewById(R.id.textViewWins);
         textView.setTextSize(y);
-        textView = (TextView)findViewById(R.id.textView7);
+        textView = (TextView)findViewById(R.id.textViewTotal);
         textView.setTextSize(y);
 
     }

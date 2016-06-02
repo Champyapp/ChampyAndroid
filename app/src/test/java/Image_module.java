@@ -23,6 +23,7 @@ import static junit.framework.Assert.assertNotNull;
 /**
  * Created by ivan on 04.01.16.
  */
+
 @Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.LOLLIPOP)
 @RunWith(RobolectricGradleTestRunner.class)
 public class Image_module {

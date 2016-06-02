@@ -24,14 +24,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,7 +53,6 @@ import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -101,7 +97,7 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
             sessionManager.setUpdateFalse();
         }*/
 
-        final com.melnykov.fab.FloatingActionButton actionButton = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.imageButton);
+        final com.melnykov.fab.FloatingActionButton actionButton = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.fabPlus);
         actionButton.setVisibility(View.INVISIBLE);
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
 
@@ -217,12 +213,12 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
         };
 
 
-        ImageView imageView = (ImageView)findViewById(R.id.blured);
+        ImageView imageView = (ImageView)findViewById(R.id.blurScreen);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-                ImageView screen = (ImageView) findViewById(R.id.blured);
+                ImageView screen = (ImageView) findViewById(R.id.blurScreen);
                 if (actionMenu.isOpen()) {
                     actionMenu.close(true);
                     if (!actionMenu.isOpen()) {
@@ -317,11 +313,11 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
                     floatingActionButton.setVisibility(View.VISIBLE);
                 }*/
                 if (position == 2) {
-                    com.melnykov.fab.FloatingActionButton floatingActionButton = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.imageButton);
+                    com.melnykov.fab.FloatingActionButton floatingActionButton = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.fabPlus);
                     floatingActionButton.setVisibility(View.VISIBLE);
                     floatingActionButton.setOnClickListener(onClickInviteFriends);
                 } else {
-                    com.melnykov.fab.FloatingActionButton floatingActionButton = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.imageButton);
+                    com.melnykov.fab.FloatingActionButton floatingActionButton = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.fabPlus);
                     floatingActionButton.setVisibility(View.INVISIBLE);
                 }
 
@@ -380,7 +376,7 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
             drawer.closeDrawer(GravityCompat.START);
         }else if (actionMenu.isOpen()) {
             actionMenu.close(true);
-            ImageView screen = (ImageView) findViewById(R.id.blured);
+            ImageView screen = (ImageView) findViewById(R.id.blurScreen);
             screen.setVisibility(View.INVISIBLE);
             ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
             viewPager.setVisibility(View.VISIBLE);
