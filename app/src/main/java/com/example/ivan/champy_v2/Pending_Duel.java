@@ -37,8 +37,7 @@ import java.util.HashMap;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
-public class Pending_Duel extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class Pending_Duel extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,9 +134,12 @@ public class Pending_Duel extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            Intent intent = new Intent(Pending_Duel.this, MainActivity.class);
+            startActivity(intent);
             super.onBackPressed();
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -145,6 +147,7 @@ public class Pending_Duel extends AppCompatActivity
         getMenuInflater().inflate(R.menu.pending_duel, menu);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -187,6 +190,7 @@ public class Pending_Duel extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 
     public void Logout(){
         LoginManager.getInstance().logOut();
@@ -246,4 +250,5 @@ public class Pending_Duel extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

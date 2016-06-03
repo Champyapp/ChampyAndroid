@@ -139,6 +139,8 @@ public class History extends AppCompatActivity implements NavigationView.OnNavig
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            Intent intent = new Intent(History.this, MainActivity.class);
+            startActivity(intent);
             super.onBackPressed();
         }
     }

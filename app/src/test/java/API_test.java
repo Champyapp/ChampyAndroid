@@ -19,14 +19,13 @@ import static junit.framework.Assert.assertEquals;
  * Created by ivan on 21.03.16.
  */
 public class API_test {
+
     final String API_URL = "http://46.101.21.24:3007";
     final String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYWNlYm9va0lkIjoidmFzeWEifQ.soq0_3F72wJnehA5E0PZbZ2_M71U5HsPx_U59wf-i7Q";
     final String id = "56d85b4eb1908db90f787e8e";
 
-
     @Test
-    public void Test_Get_user()
-    {
+    public void Test_Get_user() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -48,8 +47,7 @@ public class API_test {
     }
 
     @Test
-    public void Test_get_Friends()
-    {
+    public void Test_get_Friends() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -71,8 +69,7 @@ public class API_test {
     }
 
     @Test
-    public void Test_get_Challanges()
-    {
+    public void Test_get_Challanges() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -92,9 +89,9 @@ public class API_test {
             }
         });
     }
+
     @Test
-    public void Test_get_In_Progress()
-    {
+    public void Test_get_In_Progress() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(API_URL)
                 .addConverterFactory(GsonConverterFactory.create())

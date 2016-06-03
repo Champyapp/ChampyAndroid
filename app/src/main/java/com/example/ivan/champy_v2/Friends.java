@@ -382,6 +382,8 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
             viewPager.setVisibility(View.VISIBLE);
         }
         else {
+            Intent intent = new Intent(Friends.this, MainActivity.class);
+            startActivity(intent);
             super.onBackPressed();
         }
     }
@@ -407,6 +409,7 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
 
         return super.onOptionsItemSelected(item);
     }
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -454,6 +457,7 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 
     private Drawable Init(String path) throws FileNotFoundException {
         File file = new File(path, "blured2.jpg");
