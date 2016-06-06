@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-     android:layout_width="wrap_content"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:visibility="visible"
     android:id="@+id/row_friends_list_open"
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="false"
     android:layout_alignParentBottom="true">
+
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:id="@+id/imageView5"
+        android:id="@+id/imageViewUserAvatar"
         android:visibility="visible"
         android:src="@mipmap/ic_launcher"
         android:layout_centerHorizontal="true"
@@ -23,7 +24,7 @@
         android:text="Large Text"
         android:id="@+id/textViewScoreChallenges"
         android:textColor="#ffffff"
-        android:layout_below="@+id/imageView5"
+        android:layout_below="@+id/imageViewUserAvatar"
         android:layout_centerHorizontal="true"
         android:textSize="20dp" />
 
@@ -151,7 +152,7 @@
     <ImageButton
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:id="@+id/imageButton2"
+        android:id="@+id/imageButtonBlockUser"
         android:background="@drawable/block"
         android:layout_alignBottom="@+id/textViewScoreChallenges"
         android:layout_alignLeft="@+id/imageView6"
@@ -160,7 +161,7 @@
     <ImageButton
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:id="@+id/imageButton3"
+        android:id="@+id/imageButtonAddUser"
         android:background="@drawable/centerwithplus"
         android:layout_above="@+id/textViewScoreWins"
         android:layout_alignRight="@+id/imageView11"
@@ -176,7 +177,7 @@
         android:layout_alignStart="@+id/imageView6"
         android:layout_alignRight="@+id/imageView6"
         android:layout_alignEnd="@+id/imageView6"
-        android:gravity="center_vertical|center_horizontal"
+        android:gravity="center"
         android:textColor="#ffffff"
         android:layout_below="@+id/textViewScoreWins"
         android:layout_above="@+id/textViewChallenges"
@@ -189,14 +190,10 @@
         android:text="Small Text"
         android:id="@+id/info_wins"
         android:textColor="#ffffff"
-        android:gravity="center_vertical|center_horizontal"
-        android:layout_alignLeft="@+id/imageView7"
-        android:layout_alignStart="@+id/imageView7"
-        android:layout_alignRight="@+id/imageView7"
-        android:layout_alignEnd="@+id/imageView7"
-        android:layout_above="@+id/textViewChallenges"
-        android:layout_alignTop="@+id/imageView6"
-        android:layout_marginTop="24dp" />
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_alignTop="@+id/info_chall"
+        android:layout_above="@+id/textViewWins" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -208,7 +205,7 @@
         android:layout_alignStart="@+id/imageView8"
         android:layout_alignRight="@+id/imageView8"
         android:layout_alignEnd="@+id/imageView8"
-        android:gravity="center_vertical|center_horizontal"
+        android:gravity="center"
         android:textColor="#ffffff"
         android:layout_below="@+id/textViewScoreWins"
         android:layout_above="@+id/textViewWins"

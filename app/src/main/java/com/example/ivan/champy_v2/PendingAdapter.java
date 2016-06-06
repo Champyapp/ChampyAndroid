@@ -106,7 +106,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         if (selected.contains(position)) {
             Log.i("Selected: ", position + " open");
 
-            ImageView img = (ImageView)viewHolder.itemView.findViewById(R.id.imageView5);
+            ImageView img = (ImageView)viewHolder.itemView.findViewById(R.id.imageViewUserAvatar);
             Glide.with(_context)
                     .load(contact.getPicture())
                     .asBitmap()
@@ -246,11 +246,10 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                     final String id = user.get("id");
                     String friend = mContacts.get(position).getID();
                     Log.d(TAG, "User: " + friend);
-                    if (friend == null) {
-                        Toast.makeText(_context, "This user has not installed Champy", Toast.LENGTH_SHORT).show();
-                    } else if (friend == id) {
+                    if (friend == null || friend == id) {
                         Toast.makeText(_context, "This user has not installed Champy", Toast.LENGTH_SHORT).show();
                     } else {
+                        // подтверждение или отмена заявки в друзья
                         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -294,29 +293,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
 
                                     case DialogInterface.BUTTON_NEGATIVE:
                                         //////////////////////////////////////////////////////////////
-                                        friend = mContacts.get(position).getID();
-                                        retrofit = new Retrofit.Builder()
-                                                .baseUrl(API_URL)
-                                                .addConverterFactory(GsonConverterFactory.create())
-                                                .build();
-                                        friends = retrofit.create(Friends.class);
-                                        Log.d(TAG, "Status: " + id + " " + friend);
-                                        call = friends.acceptFriendRequest(id, friend, token);
-                                        call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
-                                            @Override
-                                            public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
-                                                if (response.isSuccess()) {
-                                                    Log.d(TAG, "Status: Removed ");
-                                                } else Log.d(TAG, "Status: " + response.toString());
-                                            }
-
-                                            @Override
-                                            public void onFailure(Throwable t) {
-                                            }
-                                        });
-                                        mContacts.remove(position);
-                                        notifyItemRemoved(position);
-                                        selected.clear();
+                                        dialog.cancel();
                                         //////////////////////////////////////////////////////////////
                                         break;
 
@@ -431,7 +408,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
             challenges = (ImageView) itemView.findViewById(R.id.imageView_challenges_logo);
             wins = (ImageView) itemView.findViewById(R.id.imageView_wins_logo);
             total = (ImageView) itemView.findViewById(R.id.imageView_total_logo);
-            dop = (ImageView) itemView.findViewById(R.id.imageView5);
+            dop = (ImageView) itemView.findViewById(R.id.imageViewUserAvatar);
 
             mChallenges = (ImageView) itemView.findViewById(R.id.imageView9);
             mWins = (ImageView) itemView.findViewById(R.id.imageView10);
@@ -440,8 +417,8 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
             simple = (RelativeLayout)itemView.findViewById(R.id.row_friends_list);
             info = (RelativeLayout)itemView.findViewById(R.id.row_friends_list_open);
 
-            block = (ImageButton)itemView.findViewById(R.id.imageButton2);
-            add = (ImageButton)itemView.findViewById(R.id.imageButton3);
+            block = (ImageButton)itemView.findViewById(R.id.imageButtonBlockUser);
+            add = (ImageButton)itemView.findViewById(R.id.imageButtonAddUser);
 
 
         }

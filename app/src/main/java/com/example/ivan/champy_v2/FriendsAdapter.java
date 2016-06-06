@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -104,7 +105,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         if (selected.contains(position)) {
             Log.i("Selected: ", position + " open");
 
-            ImageView img = (ImageView)viewHolder.itemView.findViewById(R.id.imageView5);
+            ImageView img = (ImageView)viewHolder.itemView.findViewById(R.id.imageViewUserAvatar);
             Glide.with(_context)
                     .load(contact.getPicture())
                     .asBitmap()
@@ -150,9 +151,10 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
 
 
-
+            // Каунтеры challenge / wins / total для списка друзей в развернутом виде
             textView = (TextView)viewHolder.itemView.findViewById(R.id.info_chall);
             textView.setText(champy.get("challenges"));
+            //textView.setGravity(View.TEXT_ALIGNMENT_CENTER);
             textView = (TextView)viewHolder.itemView.findViewById(R.id.info_wins);
             textView.setText(champy.get("wins"));
             textView = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
@@ -183,6 +185,8 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                     Toast.makeText(activity, "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
 
                 } else {
+
+                    // можно добавить диалог типа "ты уверен что хочешь удалить юзера?"
                     final SessionManager sessionManager = new SessionManager(_context);
                     HashMap<String, String> user = new HashMap<>();
                     user = sessionManager.getUserDetails();
@@ -237,6 +241,8 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                 }
             }
         });
+
+        // отвечает за значки в свернутом виде
         Glide.with(_context)
                 .load(contact.getPicture())
                 .asBitmap()
@@ -263,20 +269,21 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                 .override(40, 40)
                 .into(imageView);
 
+        // отвечает за значки в развернутом виде  //imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView = viewHolder.mchallenges;
         Glide.with(_context)
                 .load(R.drawable.challenges)
-                .override(25, 25)
+                .override(40, 40)
                 .into(imageView);
         imageView = viewHolder.mwins;
         Glide.with(_context)
                 .load(R.drawable.wins)
-                .override(25, 25)
+                .override(40, 40)
                 .into(imageView);
         imageView = viewHolder.mtotal;
         Glide.with(_context)
                 .load(R.drawable.total)
-                .override(25,25)
+                .override(40, 40)
                 .into(imageView);
 
         SessionManager sessionManager = new SessionManager(_context);
@@ -334,7 +341,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             challenges = (ImageView) itemView.findViewById(R.id.imageView_challenges_logo);
             wins = (ImageView) itemView.findViewById(R.id.imageView_wins_logo);
             total = (ImageView) itemView.findViewById(R.id.imageView_total_logo);
-            dop = (ImageView) itemView.findViewById(R.id.imageView5);
+            dop = (ImageView) itemView.findViewById(R.id.imageViewUserAvatar);
 
             mchallenges = (ImageView) itemView.findViewById(R.id.imageView9);
             mwins = (ImageView) itemView.findViewById(R.id.imageView10);
@@ -343,8 +350,8 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             simple = (RelativeLayout)itemView.findViewById(R.id.row_friends_list);
             info = (RelativeLayout)itemView.findViewById(R.id.row_friends_list_open);
 
-            block = (ImageButton)itemView.findViewById(R.id.imageButton2);
-            add = (ImageButton)itemView.findViewById(R.id.imageButton3);
+            block = (ImageButton)itemView.findViewById(R.id.imageButtonBlockUser);
+            add = (ImageButton)itemView.findViewById(R.id.imageButtonAddUser);
 
 
         }

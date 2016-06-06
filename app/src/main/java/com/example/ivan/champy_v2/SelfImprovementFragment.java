@@ -212,11 +212,11 @@ public class SelfImprovementFragment extends Fragment {
 
                         if (editTextGoal.getText().toString().equals("")) {                                            // descriptions = days
                             Toast.makeText(getContext(), "Duration is empty!", Toast.LENGTH_SHORT).show();
-                        } else if (description.equals(" ") || description.startsWith(" ") || description.isEmpty()) {  // descriptions = goal
-                            Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();
                         } else if (days == 0) {
                             Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
-                        } else if (name.equals("active")) {
+                        } else if (description.equals(" ") || description.startsWith(" ") || description.isEmpty()) {  // descriptions = goal
+                            Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();
+                        } else if (name.equals("active")) { // а так сработает?
                                 Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
                         } else {
                             //its ok
@@ -264,7 +264,7 @@ public class SelfImprovementFragment extends Fragment {
                             Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();
                         } else if (days == 0) {
                             Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
-                        } else if (name.equals("active")) {
+                        } else if (name.equals("created")) {
                             Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
                         } else {
                             OfflineMode offlineMode = new OfflineMode();
@@ -407,8 +407,12 @@ public class SelfImprovementFragment extends Fragment {
                             int days = round((end - unixTime) / 86400);
                             duration = "" + days;}
                         String challenge_id = datum.get_id();
-                        if (challenge.getDescription().equals("Wake Up")) cv.put("name", "Wake Up");
-                        else cv.put("name", "Self Improvement");
+                        if (challenge.getDescription().equals("Wake Up")) {
+                            cv.put("name", "Wake Up");
+                        }
+                        else {
+                            cv.put("name", "Self Improvement");
+                        }
                         cv.put("description", desctiption);
                         cv.put("duration", duration);
                         cv.put("challenge_id", challenge_id);

@@ -83,10 +83,6 @@ public class Pending extends Fragment {
             Log.i("stat", "0 rows");
         c.close();
 
-        /*for (int i=0; i<20; i++)
-        {
-            friends.add(new Friend("My friend number "+i, "http://loremflickr.com/320/240?random="+(i+1), 0));
-        }*/
         Log.i("stat", "Friends :"+friends);
 
 

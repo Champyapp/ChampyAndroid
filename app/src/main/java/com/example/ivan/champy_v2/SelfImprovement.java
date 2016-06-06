@@ -71,7 +71,7 @@ public class SelfImprovement extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
-   /* TextView textView = (TextView)findViewById(R.id.textView19);*/
+        /*TextView textView = (TextView)findViewById(R.id.textView19);*/
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         //textView.setTypeface(typeface);
         TextView textView = (TextView)findViewById(R.id.textView20);
@@ -213,12 +213,15 @@ public class SelfImprovement extends AppCompatActivity
         });
 
     }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            Intent intent = new Intent(SelfImprovement.this, MainActivity.class);
+            startActivity(intent);
             super.onBackPressed();
         }
     }
@@ -283,6 +286,7 @@ public class SelfImprovement extends AppCompatActivity
         return true;
     }
 
+
     public void Logout(){
         LoginManager.getInstance().logOut();
         SessionManager sessionManager = new SessionManager(getApplicationContext());
@@ -291,8 +295,9 @@ public class SelfImprovement extends AppCompatActivity
         startActivity(intent);
         Toast.makeText(this, "Bye Bye!!!", Toast.LENGTH_SHORT).show();
     }
-    public boolean check(String id)
-    {
+
+
+    public boolean check(String id) {
         DBHelper dbHelper = new DBHelper(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
 

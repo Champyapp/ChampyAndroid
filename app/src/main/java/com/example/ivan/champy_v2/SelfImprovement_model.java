@@ -20,19 +20,20 @@ public class SelfImprovement_model {
     String goal;
     String days;
     String id;
+    String updated;
+    String status;
+    String type;
 
     public String getUpdated() {
         return updated;
     }
 
-    String updated;
-
     public String getStatus() {
         return status;
     }
 
-    String status;
     private Context context;
+
     public String getGoal() {
         return goal;
     }
@@ -49,9 +50,6 @@ public class SelfImprovement_model {
         this.days = days;
     }
 
-
-    String type;
-
     public String getType() {
         return type;
     }
@@ -64,8 +62,7 @@ public class SelfImprovement_model {
         return id;
     }
 
-    public SelfImprovement_model( String mgoal, String mdays, String mtype, String mid ,String mstatus, String mupdated)
-    {
+    public SelfImprovement_model( String mgoal, String mdays, String mtype, String mid ,String mstatus, String mupdated) {
         this.goal = mgoal;
         this.days = mdays;
         this.type = mtype;
@@ -74,8 +71,7 @@ public class SelfImprovement_model {
         this.updated = mupdated;
     }
 
-    public static ArrayList<SelfImprovement_model> generate(Context context)
-    {
+    public static ArrayList<SelfImprovement_model> generate(Context context) {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -114,8 +110,7 @@ public class SelfImprovement_model {
         return  arrayList;
     }
 
-    public static ArrayList<SelfImprovement_model> generateAll(Context context)
-    {
+    public static ArrayList<SelfImprovement_model> generateAll(Context context) {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
 

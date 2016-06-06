@@ -101,7 +101,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         if (selected.contains(position)) {
             Log.i("Selected: ", position + " open");
 
-            ImageView img = (ImageView)viewHolder.itemView.findViewById(R.id.imageView5);
+            ImageView img = (ImageView)viewHolder.itemView.findViewById(R.id.imageViewUserAvatar);
             Glide.with(_context)
                     .load(contact.getPicture())
                     .asBitmap()
@@ -383,7 +383,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
             challenges = (ImageView) itemView.findViewById(R.id.imageView_challenges_logo);
             wins = (ImageView) itemView.findViewById(R.id.imageView_wins_logo);
             total = (ImageView) itemView.findViewById(R.id.imageView_total_logo);
-            dop = (ImageView) itemView.findViewById(R.id.imageView5);
+            dop = (ImageView) itemView.findViewById(R.id.imageViewUserAvatar);
 
             mchallenges = (ImageView) itemView.findViewById(R.id.imageView9);
             mwins = (ImageView) itemView.findViewById(R.id.imageView10);
@@ -392,8 +392,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
             simple = (RelativeLayout)itemView.findViewById(R.id.row_friends_list);
             info = (RelativeLayout)itemView.findViewById(R.id.row_friends_list_open);
 
-            block = (ImageButton)itemView.findViewById(R.id.imageButton2);
-            add = (ImageButton)itemView.findViewById(R.id.imageButton3);
+            block = (ImageButton)itemView.findViewById(R.id.imageButtonBlockUser);
+            add = (ImageButton)itemView.findViewById(R.id.imageButtonAddUser);
 
 
         }

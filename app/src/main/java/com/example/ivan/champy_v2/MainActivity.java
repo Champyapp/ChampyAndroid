@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private CustomPagerBase pager;
 
     private int counter = 0;
-    private int total = 30; // the total number
+    private int total = 30; // the total number // 30?
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,10 +119,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 0);  // 18 ?
-        calendar.set(Calendar.MINUTE, 0);        //  6 ?
+        calendar.set(Calendar.HOUR_OF_DAY, 18);  // 18 ?
+        calendar.set(Calendar.MINUTE, 6);        //  6 ?
         calendar.set(Calendar.SECOND, 0);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+
         RelativeLayout cards = (RelativeLayout)findViewById(R.id.cards);
         CustomAdapter adapter = new CustomAdapter(this, SelfImprovement_model.generate(this));
         if (adapter.dataCount() > 0){
@@ -156,8 +157,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .attachTo(actionButton)
                 .build();
 
-
-        FloatingActionButton.OnClickListener onClickListener2 = new View.OnClickListener() {
+        // клик фаба
+        FloatingActionButton.OnClickListener onClickFab = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("TAG", "clicked");
@@ -238,7 +239,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         };
 
-        actionButton.setOnClickListener(onClickListener2);
+        // клик по меню фаба
+        actionButton.setOnClickListener(onClickFab);
 
         ImageView imageView = (ImageView)findViewById(R.id.blurScreen);
         imageView.setOnClickListener(new View.OnClickListener() {
@@ -614,6 +616,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onResume() {
         super.onResume();
         ViewServer.get(this).setFocusedWindow(this);
+        BuildAnim();
     }
 
 
@@ -781,64 +784,70 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final TextView t1 = (TextView) findViewById(R.id.textViewScoreChallenges);
         final TextView t2 = (TextView) findViewById(R.id.textViewScoreWins);
         final TextView t3 = (TextView) findViewById(R.id.textViewScoreTotal);
+
         counter = 0;
+
         SessionManager sessionManager = new SessionManager(this);
         String challenges = sessionManager.getChampyOptions().get("challenges");
         String wins = sessionManager.getChampyOptions().get("wins");
         String tot = sessionManager.getChampyOptions().get("total");
-        final int i1 = Integer.parseInt(challenges);
-        final int i2 = Integer.parseInt(wins);
-        final int i3 = Integer.parseInt(tot);
-        total = max(max(i1, i2), i3);
-        Log.d(TAG, "TOTAL: " + i2);
 
-        ValueAnimator animator = new ValueAnimator();
-        animator.setObjectValues(0, i1);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        final int challengesInteger = Integer.parseInt(challenges);
+        final int winsInteger = Integer.parseInt(wins);
+        final int totalInteger = Integer.parseInt(tot);
+
+        total = max(max(challengesInteger, winsInteger), totalInteger);
+
+        Log.d(TAG, "TOTAL: " + winsInteger);
+
+        //----------------------- animator for Challenges -----------------------//
+        ValueAnimator animatorChallenges = new ValueAnimator();
+        animatorChallenges.setObjectValues(0, challengesInteger);
+        animatorChallenges.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             public void onAnimationUpdate(ValueAnimator animation) {
                 t1.setText(String.valueOf(animation.getAnimatedValue()));
             }
         });
-        animator.setEvaluator(new TypeEvaluator<Integer>() {
+        animatorChallenges.setEvaluator(new TypeEvaluator<Integer>() {
             public Integer evaluate(float fraction, Integer startValue, Integer endValue) {
                 return Math.round(startValue + (endValue - startValue) * fraction);
             }
         });
-        animator.setDuration(1000);
+        animatorChallenges.setDuration(1000);
 
-        ValueAnimator animator1 = new ValueAnimator();
-        animator1.setObjectValues(0, i2);
-        animator1.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        //-------------------------- animator for Wins --------------------------//
+        ValueAnimator animatorWins = new ValueAnimator();
+        animatorWins.setObjectValues(0, winsInteger);
+        animatorWins.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             public void onAnimationUpdate(ValueAnimator animation) {
                 t2.setText(String.valueOf(animation.getAnimatedValue()));
             }
         });
-        animator1.setEvaluator(new TypeEvaluator<Integer>() {
+        animatorWins.setEvaluator(new TypeEvaluator<Integer>() {
             public Integer evaluate(float fraction, Integer startValue, Integer endValue) {
                 return Math.round(startValue + (endValue - startValue) * fraction);
             }
         });
-        animator1.setDuration(1000);
+        animatorWins.setDuration(1000);
 
-        ValueAnimator animator2 = new ValueAnimator();
-        animator2.setObjectValues(0, i3);
-        animator2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        //------------------------- animator for Total -------------------------//
+        ValueAnimator animatorTotal = new ValueAnimator();
+        animatorTotal.setObjectValues(0, totalInteger);
+        animatorTotal.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             public void onAnimationUpdate(ValueAnimator animation) {
                 t3.setText(String.valueOf(animation.getAnimatedValue()));
             }
         });
-        animator2.setEvaluator(new TypeEvaluator<Integer>() {
+        animatorTotal.setEvaluator(new TypeEvaluator<Integer>() {
             public Integer evaluate(float fraction, Integer startValue, Integer endValue) {
                 return Math.round(startValue + (endValue - startValue) * fraction);
             }
         });
-        animator2.setDuration(1000);
+        animatorTotal.setDuration(1000);
 
-        animator.start();
-        animator1.start();
-        animator2.start();
-
-
+        animatorChallenges.start();
+        animatorWins.start();
+        animatorTotal.start();
 
         final TextView mSwitcher1 = (TextView) findViewById(R.id.textViewChallenges);
         final TextView mSwitcher2 = (TextView) findViewById(R.id.textViewWins);
@@ -884,26 +893,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void make_responsive_score(int width) {
         int x = round(width/100);
 
-        ImageView imageView = (ImageView)findViewById(R.id.imageView_challenges_animation);
-        imageView.getLayoutParams().width = x*25;
-        imageView.getLayoutParams().height = x*25;
-        imageView = (ImageView)findViewById(R.id.imageView_wins_animation);
-        imageView.getLayoutParams().width = x*25;
-        imageView.getLayoutParams().height = x*25;
-        imageView = (ImageView)findViewById(R.id.imageView_total_animation);
-        imageView.getLayoutParams().width = x*25;
-        imageView.getLayoutParams().height = x*25;
+        //-------------------------- Animation ---------------------------//
+        ImageView imageViewChallengesAnim = (ImageView)findViewById(R.id.imageView_challenges_animation);
+        imageViewChallengesAnim.getLayoutParams().width = x*25;
+        imageViewChallengesAnim.getLayoutParams().height = x*25;
 
-        imageView = (ImageView)findViewById(R.id.imageView_wins_logo);
-        imageView.getLayoutParams().width = x*5;
-        imageView.getLayoutParams().height = x*5;
-        imageView = (ImageView)findViewById(R.id.imageView_total_logo);
-        imageView.getLayoutParams().width = x*5;
-        imageView.getLayoutParams().height = x*5;
-        imageView = (ImageView)findViewById(R.id.imageView_challenges_logo);
-        imageView.getLayoutParams().width = x*5;
-        imageView.getLayoutParams().height = x*5;
+        ImageView imageViewWinsAnim = (ImageView)findViewById(R.id.imageView_wins_animation);
+        imageViewWinsAnim.getLayoutParams().width = x*25;
+        imageViewWinsAnim.getLayoutParams().height = x*25;
 
+        ImageView imageViewTotalAnim = (ImageView)findViewById(R.id.imageView_total_animation);
+        imageViewTotalAnim.getLayoutParams().width = x*25;
+        imageViewTotalAnim.getLayoutParams().height = x*25;
+
+        //---------------------------- Logo -----------------------------//
+        ImageView imageViewChallengesLogo = (ImageView)findViewById(R.id.imageView_challenges_logo);
+        imageViewChallengesLogo.getLayoutParams().width = x*5;
+        imageViewChallengesLogo.getLayoutParams().height = x*5;
+
+        ImageView imageViewWins = (ImageView)findViewById(R.id.imageView_wins_logo);
+        imageViewWins.getLayoutParams().width = x*5;
+        imageViewWins.getLayoutParams().height = x*5;
+
+        ImageView imageViewTotalLogo = (ImageView)findViewById(R.id.imageView_total_logo);
+        imageViewTotalLogo.getLayoutParams().width = x*5;
+        imageViewTotalLogo.getLayoutParams().height = x*5;
+
+        //---------------------------- Fab -----------------------------//
         ImageButton imageButton = (ImageButton)findViewById(R.id.fabPlus);
         imageButton.getLayoutParams().width = x*20;
         imageButton.getLayoutParams().height = x*20;
@@ -912,21 +928,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         imageView.getLayoutParams().width = x*25;
         imageView.getLayoutParams().height = x*25;*/
 
+        //--------------------------- Score ----------------------------//
         Float y = x*(float)3.5;
-        TextView textView = (TextView)findViewById(R.id.textViewScoreChallenges);
-        textView.setTextSize(y);
-        textView = (TextView)findViewById(R.id.textViewScoreWins);
-        textView.setTextSize(y);
-        textView = (TextView)findViewById(R.id.textViewScoreTotal);
-        textView.setTextSize(y);
+        TextView textViewScoreChallenges = (TextView)findViewById(R.id.textViewScoreChallenges);
+        textViewScoreChallenges.setTextSize(y);
 
+        TextView textViewScoreWins = (TextView)findViewById(R.id.textViewScoreWins);
+        textViewScoreWins.setTextSize(y);
+
+        TextView textViewScoreTotal = (TextView)findViewById(R.id.textViewScoreTotal);
+        textViewScoreTotal.setTextSize(y);
+
+        //------------------------- TextViews -------------------------//
         y = x*(float)1.5;
-        textView = (TextView)findViewById(R.id.textViewChallenges);
-        textView.setTextSize(y);
-        textView = (TextView)findViewById(R.id.textViewWins);
-        textView.setTextSize(y);
-        textView = (TextView)findViewById(R.id.textViewTotal);
-        textView.setTextSize(y);
+        TextView textViewChallenges = (TextView)findViewById(R.id.textViewChallenges);
+        textViewChallenges.setTextSize(y);
+
+        TextView textViewWins = (TextView)findViewById(R.id.textViewWins);
+        textViewWins.setTextSize(y);
+
+        TextView textViewTotal = (TextView)findViewById(R.id.textViewTotal);
+        textViewTotal.setTextSize(y);
 
     }
 

@@ -410,7 +410,6 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
         return super.onOptionsItemSelected(item);
     }
 
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {

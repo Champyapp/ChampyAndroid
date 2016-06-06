@@ -170,6 +170,7 @@ public class SessionManager {
         editor.putString("level", level);
         editor.commit();
     }
+
     public HashMap<String, String> getChampyOptions(){
         HashMap<String, String> champy = new HashMap<String, String>();
         champy.put("challenges", pref.getString("challenges", null));

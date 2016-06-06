@@ -279,6 +279,8 @@ public class WakeUp extends AppCompatActivity implements NavigationView.OnNaviga
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            Intent intent = new Intent(WakeUp.this, MainActivity.class);
+            startActivity(intent);
             super.onBackPressed();
         }
     }
