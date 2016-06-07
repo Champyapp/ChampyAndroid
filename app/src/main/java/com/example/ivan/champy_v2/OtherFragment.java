@@ -147,7 +147,7 @@ public class OtherFragment extends Fragment {
         Log.i("stat", "Friends :"+friends);
 
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-        final ContactsAdapter adapter = new ContactsAdapter(friends, getContext(), getActivity());
+        final OtherAdapter adapter = new OtherAdapter(friends, getContext(), getActivity());
         FloatingActionButton floatingActionButton = (FloatingActionButton)getActivity().findViewById(R.id.fabPlus);
         floatingActionButton.attachToRecyclerView(rvContacts);
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -276,7 +276,7 @@ public class OtherFragment extends Fragment {
                                             }
                                             RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
                                             Log.i("stat", "Friends :" + newFriends.toString());
-                                            ContactsAdapter adapter1 = new ContactsAdapter(newFriends, getContext(), getActivity());
+                                            OtherAdapter adapter1 = new OtherAdapter(newFriends, getContext(), getActivity());
                                             rvContacts.setAdapter(adapter1);
                                             swipeRefreshLayout.setRefreshing(false);
 

@@ -242,7 +242,6 @@ public class WakeUp extends AppCompatActivity implements NavigationView.OnNaviga
             Log.i("stat", "Statuskwo: o=" + o);
             do {
                 o++;
-
                 if (c.getString(nameColIndex).equals("Wake Up")){
                     if (c.getString(status).equals("started")) {
                         Log.i("stat", "Time : " + c.getString(c.getColumnIndex("description")) + " " + time);
@@ -272,7 +271,6 @@ public class WakeUp extends AppCompatActivity implements NavigationView.OnNaviga
 
     }
 
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -288,7 +286,7 @@ public class WakeUp extends AppCompatActivity implements NavigationView.OnNaviga
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-      //  getMenuInflater().inflate(R.menu.wake_up, menu);
+        //  getMenuInflater().inflate(R.menu.wake_up, menu);
         return true;
     }
 

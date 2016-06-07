@@ -2,8 +2,10 @@ package com.example.ivan.champy_v2;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +19,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,7 +56,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     }
 
     public void Add_to_list(Friend friend){
-      mContacts.add(friend);
+        mContacts.add(friend);
     }
 
     @Override
@@ -120,23 +121,24 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             Glide.with(_context)
                     .load(R.drawable.start_circle_00026)
                     .placeholder(R.mipmap.ic_launcher)
-                    .into((ImageView)viewHolder.itemView.findViewById(R.id.imageView6));
+                    .into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleChall));
 
             Glide.with(_context)
                     .load(R.drawable.start_circle_00026)
                     .placeholder(R.mipmap.ic_launcher)
-                    .into((ImageView)viewHolder.itemView.findViewById(R.id.imageView7));
+                    .into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleWins));
 
             Glide.with(_context)
                     .load(R.drawable.start_circle_00026)
                     .placeholder(R.mipmap.ic_launcher)
-                    .into((ImageView)viewHolder.itemView.findViewById(R.id.imageView8));
+                    .into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleTotal));
 
             TextView textView = (TextView)viewHolder.itemView.findViewById(R.id.textViewScoreChallenges);
             textView.setText(contact.getName());
             Typeface typeFace = Typeface.createFromAsset(_context.getAssets(), "fonts/bebasneue.ttf");
             textView.setTypeface(typeFace);
 
+            //--------------------------------- Simple text ----------------------------------//
             textView = (TextView)viewHolder.itemView.findViewById(R.id.textViewChallenges);
             textView.setTypeface(typeFace);
 
@@ -146,15 +148,16 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             textView = (TextView)viewHolder.itemView.findViewById(R.id.textViewTotal);
             textView.setTypeface(typeFace);
 
+            //----------------------------------- Session ------------------------------------//
             SessionManager sessionManager = new SessionManager(_context);
             HashMap<String, String> champy = sessionManager.getChampyOptions();
 
 
-
-            // Каунтеры challenge / wins / total для списка друзей в развернутом виде
+            //--------------------------------- Counters view --------------------------------//
             textView = (TextView)viewHolder.itemView.findViewById(R.id.info_chall);
-            textView.setText(champy.get("challenges"));
-            //textView.setGravity(View.TEXT_ALIGNMENT_CENTER);
+            //textView.setText(champy.get("challenges"));
+            textView.setText(contact.getmChallenges());
+
             textView = (TextView)viewHolder.itemView.findViewById(R.id.info_wins);
             textView.setText(champy.get("wins"));
             textView = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
@@ -177,6 +180,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         TextView textView = viewHolder.nameTextView;
         textView.setText(contact.getName());
 
+        // button block user in All pages
         viewHolder.block.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -185,40 +189,56 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                     Toast.makeText(activity, "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
 
                 } else {
-
                     // можно добавить диалог типа "ты уверен что хочешь удалить юзера?"
-                    final SessionManager sessionManager = new SessionManager(_context);
-                    HashMap<String, String> user = new HashMap<>();
-                    user = sessionManager.getUserDetails();
-                    final String token = user.get("token");
-                    final String id = user.get("id");
-
-                    String friend = mContacts.get(position).getID();
-
-                    Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(API_URL)
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
-                    com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
-                    Log.d(TAG, "Status: " + id + " " + friend);
-                    Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.removeFriend(id, friend, token);
-                    call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
+                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                         @Override
-                        public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
-                            if (response.isSuccess()) {
-                                Log.d(TAG, "Status: Removed ");
-                            } else Log.d(TAG, "Status: " + response.toString());
-                        }
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which) {
+                                case DialogInterface.BUTTON_POSITIVE:
+                                    final SessionManager sessionManager = new SessionManager(_context);
+                                    HashMap<String, String> user = new HashMap<>();
+                                    user = sessionManager.getUserDetails();
+                                    final String token = user.get("token");
+                                    final String id = user.get("id");
 
-                        @Override
-                        public void onFailure(Throwable t) {
+                                    String friend = mContacts.get(position).getID();
 
+                                    Retrofit retrofit = new Retrofit.Builder()
+                                            .baseUrl(API_URL)
+                                            .addConverterFactory(GsonConverterFactory.create())
+                                            .build();
+                                    com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
+                                    Log.d(TAG, "Status: " + id + " " + friend);
+                                    Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.removeFriend(id, friend, token);
+                                    call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
+                                        @Override
+                                        public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
+                                            if (response.isSuccess()) {
+                                                Log.d(TAG, "Status: Removed ");
+                                            } else Log.d(TAG, "Status: " + response.toString());
+                                        }
+
+                                        @Override
+                                        public void onFailure(Throwable t) {
+
+                                        }
+                                    });
+                                    sessionManager.setRefreshFriends("true");
+                                    mContacts.remove(position);
+                                    notifyItemRemoved(position);
+                                    selected.clear();
+                                    break;
+                                case DialogInterface.BUTTON_NEGATIVE:
+                                    //No button clicked
+                                    break;
+                            }
                         }
-                    });
-                    sessionManager.setRefreshFriends("true");
-                    mContacts.remove(position);
-                    notifyItemRemoved(position);
-                    selected.clear();
+                    };
+                    AlertDialog.Builder builder = new AlertDialog.Builder(_context);
+                    builder.setMessage("Do you want to delete this user from your friends list?")
+                            .setPositiveButton("Yes", dialogClickListener)
+                            .setNegativeButton("No",  dialogClickListener)
+                            .show();
                 }
             }
         });
@@ -269,7 +289,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                 .override(40, 40)
                 .into(imageView);
 
-        // отвечает за значки в развернутом виде  //imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        // отвечает за значки в развернутом виде
         imageView = viewHolder.mchallenges;
         Glide.with(_context)
                 .load(R.drawable.challenges)
@@ -290,11 +310,17 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         HashMap<String, String> champy = sessionManager.getChampyOptions();
 
         textView = (TextView)viewHolder.itemView.findViewById(R.id.chall);
-        textView.setText(champy.get("challenges"));
+        textView.setText(contact.getmChallenges());
+        //textView.setText(champy.get("challenges"));
+
         textView = (TextView)viewHolder.itemView.findViewById(R.id.in_progress);
         textView.setText(champy.get("wins"));
+        //textView.setText(contact.getmWins());
+
         textView = (TextView)viewHolder.itemView.findViewById(R.id.total);
         textView.setText(champy.get("total"));
+        //textView.setText(contact.getmTotal());
+
         textView = (TextView)viewHolder.itemView.findViewById(R.id.level);
         textView.setText("Level " + champy.get("level") + " Champy");
 

@@ -410,6 +410,7 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
         return super.onOptionsItemSelected(item);
     }
 
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -661,7 +662,6 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
         });
     }
 
-
     public void UpdatePending() {
         final String API_URL = "http://46.101.213.24:3007";
         SessionManager sessionManager = new SessionManager(this);
@@ -719,9 +719,13 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
                         int photoColIndex = c.getColumnIndex("photo");
                         int index = c.getColumnIndex("user_id");
                         int owner = c.getColumnIndex("owner");
+                        int challenges = c.getColumnIndex("challenges");
                         do {
                             Log.i("newusers", "NewUser: " + c.getString(nameColIndex) + " Photo: " + c.getString(photoColIndex));
-                            newfriends.add(new Pending_friend(c.getString(nameColIndex), API_URL+c.getString(photoColIndex), c.getString(index), c.getString(owner)));
+                            newfriends.add(new Pending_friend(c.getString(nameColIndex),
+                                    API_URL+c.getString(photoColIndex),
+                                    c.getString(index),
+                                    c.getString(owner)));
                         } while (c.moveToNext());
                     } else
                         Log.i("stat", "null rows");

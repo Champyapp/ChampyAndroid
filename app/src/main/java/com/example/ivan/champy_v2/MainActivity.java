@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private CustomPagerBase pager;
 
     private int counter = 0;
-    private int total = 30; // the total number // 30?
+    private int total = 30; // the total number
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,11 +119,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 18);  // 18 ?
-        calendar.set(Calendar.MINUTE, 6);        //  6 ?
+        calendar.set(Calendar.HOUR_OF_DAY, 0);  // 18 ?
+        calendar.set(Calendar.MINUTE, 0);        //  6 ?
         calendar.set(Calendar.SECOND, 0);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-
         RelativeLayout cards = (RelativeLayout)findViewById(R.id.cards);
         CustomAdapter adapter = new CustomAdapter(this, SelfImprovement_model.generate(this));
         if (adapter.dataCount() > 0){
@@ -183,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         screen.setImageDrawable(ob);
                     }
                 }
-                 else {
+                else {
                     Log.d(TAG, "Vse zaebok");
                 }
                 RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.cards);
@@ -241,7 +240,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // клик по меню фаба
         actionButton.setOnClickListener(onClickFab);
-
         ImageView imageView = (ImageView)findViewById(R.id.blurScreen);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -403,7 +401,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-           generate();
+            generate();
         }
 
         return super.onOptionsItemSelected(item);
@@ -781,23 +779,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ImageView mImageViewFilling2 = (ImageView) findViewById(R.id.imageView_total_animation);
         ((AnimationDrawable) mImageViewFilling2.getBackground()).start();
 
-        final TextView t1 = (TextView) findViewById(R.id.textViewScoreChallenges);
-        final TextView t2 = (TextView) findViewById(R.id.textViewScoreWins);
-        final TextView t3 = (TextView) findViewById(R.id.textViewScoreTotal);
+        final TextView textViewScoreChall = (TextView) findViewById(R.id.textViewScoreChallenges);
+        final TextView textViewScoreWins = (TextView) findViewById(R.id.textViewScoreWins);
+        final TextView textViewScoreTotal = (TextView) findViewById(R.id.textViewScoreTotal);
 
         counter = 0;
 
         SessionManager sessionManager = new SessionManager(this);
+        // берем данные про себя
         String challenges = sessionManager.getChampyOptions().get("challenges");
         String wins = sessionManager.getChampyOptions().get("wins");
         String tot = sessionManager.getChampyOptions().get("total");
 
+        // переобразуем данные
         final int challengesInteger = Integer.parseInt(challenges);
         final int winsInteger = Integer.parseInt(wins);
         final int totalInteger = Integer.parseInt(tot);
 
         total = max(max(challengesInteger, winsInteger), totalInteger);
-
         Log.d(TAG, "TOTAL: " + winsInteger);
 
         //----------------------- animator for Challenges -----------------------//
@@ -805,7 +804,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         animatorChallenges.setObjectValues(0, challengesInteger);
         animatorChallenges.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             public void onAnimationUpdate(ValueAnimator animation) {
-                t1.setText(String.valueOf(animation.getAnimatedValue()));
+                textViewScoreChall.setText(String.valueOf(animation.getAnimatedValue()));
             }
         });
         animatorChallenges.setEvaluator(new TypeEvaluator<Integer>() {
@@ -815,12 +814,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
         animatorChallenges.setDuration(1000);
 
-        //-------------------------- animator for Wins --------------------------//
+        //------------------------- animator for Total -------------------------//
         ValueAnimator animatorWins = new ValueAnimator();
         animatorWins.setObjectValues(0, winsInteger);
         animatorWins.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             public void onAnimationUpdate(ValueAnimator animation) {
-                t2.setText(String.valueOf(animation.getAnimatedValue()));
+                textViewScoreWins.setText(String.valueOf(animation.getAnimatedValue()));
             }
         });
         animatorWins.setEvaluator(new TypeEvaluator<Integer>() {
@@ -835,7 +834,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         animatorTotal.setObjectValues(0, totalInteger);
         animatorTotal.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             public void onAnimationUpdate(ValueAnimator animation) {
-                t3.setText(String.valueOf(animation.getAnimatedValue()));
+                textViewScoreTotal.setText(String.valueOf(animation.getAnimatedValue()));
             }
         });
         animatorTotal.setEvaluator(new TypeEvaluator<Integer>() {
@@ -848,6 +847,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         animatorChallenges.start();
         animatorWins.start();
         animatorTotal.start();
+
+
 
         final TextView mSwitcher1 = (TextView) findViewById(R.id.textViewChallenges);
         final TextView mSwitcher2 = (TextView) findViewById(R.id.textViewWins);
@@ -894,35 +895,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int x = round(width/100);
 
         //-------------------------- Animation ---------------------------//
-        ImageView imageViewChallengesAnim = (ImageView)findViewById(R.id.imageView_challenges_animation);
-        imageViewChallengesAnim.getLayoutParams().width = x*25;
-        imageViewChallengesAnim.getLayoutParams().height = x*25;
+        ImageView imageView = (ImageView)findViewById(R.id.imageView_challenges_animation);
+        imageView.getLayoutParams().width = x*25;
+        imageView.getLayoutParams().height = x*25;
 
-        ImageView imageViewWinsAnim = (ImageView)findViewById(R.id.imageView_wins_animation);
-        imageViewWinsAnim.getLayoutParams().width = x*25;
-        imageViewWinsAnim.getLayoutParams().height = x*25;
+        imageView = (ImageView)findViewById(R.id.imageView_wins_animation);
+        imageView.getLayoutParams().width = x*25;
+        imageView.getLayoutParams().height = x*25;
 
-        ImageView imageViewTotalAnim = (ImageView)findViewById(R.id.imageView_total_animation);
-        imageViewTotalAnim.getLayoutParams().width = x*25;
-        imageViewTotalAnim.getLayoutParams().height = x*25;
+        imageView = (ImageView)findViewById(R.id.imageView_total_animation);
+        imageView.getLayoutParams().width = x*25;
+        imageView.getLayoutParams().height = x*25;
 
         //---------------------------- Logo -----------------------------//
-        ImageView imageViewChallengesLogo = (ImageView)findViewById(R.id.imageView_challenges_logo);
-        imageViewChallengesLogo.getLayoutParams().width = x*5;
-        imageViewChallengesLogo.getLayoutParams().height = x*5;
+        imageView = (ImageView)findViewById(R.id.imageView_wins_logo);
+        imageView.getLayoutParams().width = x*5;
+        imageView.getLayoutParams().height = x*5;
 
-        ImageView imageViewWins = (ImageView)findViewById(R.id.imageView_wins_logo);
-        imageViewWins.getLayoutParams().width = x*5;
-        imageViewWins.getLayoutParams().height = x*5;
+        imageView = (ImageView)findViewById(R.id.imageView_total_logo);
+        imageView.getLayoutParams().width = x*5;
+        imageView.getLayoutParams().height = x*5;
 
-        ImageView imageViewTotalLogo = (ImageView)findViewById(R.id.imageView_total_logo);
-        imageViewTotalLogo.getLayoutParams().width = x*5;
-        imageViewTotalLogo.getLayoutParams().height = x*5;
+        imageView = (ImageView)findViewById(R.id.imageView_challenges_logo);
+        imageView.getLayoutParams().width = x*5;
+        imageView.getLayoutParams().height = x*5;
 
         //---------------------------- Fab -----------------------------//
-        ImageButton imageButton = (ImageButton)findViewById(R.id.fabPlus);
-        imageButton.getLayoutParams().width = x*20;
-        imageButton.getLayoutParams().height = x*20;
+        ImageButton fab = (ImageButton)findViewById(R.id.fabPlus);
+        fab.getLayoutParams().width = x*20;
+        fab.getLayoutParams().height = x*20;
 
         /*imageView = (ImageView)findViewById(R.id.profile_image);
         imageView.getLayoutParams().width = x*25;
@@ -930,6 +931,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //--------------------------- Score ----------------------------//
         Float y = x*(float)3.5;
+
         TextView textViewScoreChallenges = (TextView)findViewById(R.id.textViewScoreChallenges);
         textViewScoreChallenges.setTextSize(y);
 

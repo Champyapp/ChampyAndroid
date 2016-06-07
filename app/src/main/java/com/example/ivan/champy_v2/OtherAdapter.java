@@ -36,7 +36,7 @@ import retrofit.Retrofit;
 /**
  * Отвечает за каждый раздел в friends (friends, pending, others)
  */
-public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHolder> {
+public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> {
 
     final private String API_URL = "http://46.101.213.24:3007";
     final private String TAG = "myLogs";
@@ -49,7 +49,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     private Other other = new Other(new ArrayList<Friend>());
 
     // Pass in the contact array into the constructor
-    public ContactsAdapter(List<Friend> contacts, Context context, Activity activity) {
+    public OtherAdapter(List<Friend> contacts, Context context, Activity activity) {
         mContacts = contacts;
         _context = context;
         this.activity = activity;
@@ -94,10 +94,10 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(ContactsAdapter.ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(OtherAdapter.ViewHolder viewHolder, final int position) {
         // Get the data model based on position
         final Friend contact = mContacts.get(position);
-        Log.i("Selected", ""+selected.contains(position));
+        Log.i("Selected", "" + selected.contains(position));
         if (selected.contains(position)) {
             Log.i("Selected: ", position + " open");
 
@@ -116,44 +116,50 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
             Glide.with(_context)
                     .load(R.drawable.start_circle_00026)
                     .placeholder(R.mipmap.ic_launcher)
-                    .into((ImageView) viewHolder.itemView.findViewById(R.id.imageView6));
+                    .into((ImageView) viewHolder.itemView.findViewById(R.id.imageViewBgForCircleChall));
 
             Glide.with(_context)
                     .load(R.drawable.start_circle_00026)
                     .placeholder(R.mipmap.ic_launcher)
-                    .into((ImageView) viewHolder.itemView.findViewById(R.id.imageView7));
+                    .into((ImageView) viewHolder.itemView.findViewById(R.id.imageViewBgForCircleWins));
 
             Glide.with(_context)
                     .load(R.drawable.start_circle_00026)
                     .placeholder(R.mipmap.ic_launcher)
-                    .into((ImageView) viewHolder.itemView.findViewById(R.id.imageView8));
+                    .into((ImageView) viewHolder.itemView.findViewById(R.id.imageViewBgForCircleTotal));
 
-            TextView textView = (TextView)viewHolder.itemView.findViewById(R.id.textViewScoreChallenges);
-            textView.setText(contact.getName());
+
+            TextView textViewScoreChallenges = (TextView)viewHolder.itemView.findViewById(R.id.textViewScoreChallenges);
+            textViewScoreChallenges.setText(contact.getName());
             Typeface typeFace = Typeface.createFromAsset(_context.getAssets(), "fonts/bebasneue.ttf");
-            textView.setTypeface(typeFace);
+            textViewScoreChallenges.setTypeface(typeFace);
 
-            textView = (TextView)viewHolder.itemView.findViewById(R.id.textViewChallenges);
-            textView.setTypeface(typeFace);
+            //--------------------------------- Simple text ----------------------------------//
+            TextView textViewChallenges = (TextView)viewHolder.itemView.findViewById(R.id.textViewChallenges);
+            textViewChallenges.setTypeface(typeFace);
 
-            textView = (TextView)viewHolder.itemView.findViewById(R.id.textViewWins);
-            textView.setTypeface(typeFace);
+            TextView textViewWins = (TextView)viewHolder.itemView.findViewById(R.id.textViewWins);
+            textViewWins.setTypeface(typeFace);
 
-            textView = (TextView)viewHolder.itemView.findViewById(R.id.textViewTotal);
-            textView.setTypeface(typeFace);
+            TextView textViewTotal = (TextView)viewHolder.itemView.findViewById(R.id.textViewTotal);
+            textViewTotal.setTypeface(typeFace);
 
+            //----------------------------------- Session ------------------------------------//
             SessionManager sessionManager = new SessionManager(_context);
             HashMap<String, String> champy = sessionManager.getChampyOptions();
 
+            //--------------------------------- Counters view --------------------------------//
+            TextView textViewChallengesInfo = (TextView)viewHolder.itemView.findViewById(R.id.info_chall);
+            textViewChallengesInfo.setText(contact.getmChallenges());
 
-            textView = (TextView)viewHolder.itemView.findViewById(R.id.info_chall);
-            textView.setText(contact.getmChallenges());
-            textView = (TextView)viewHolder.itemView.findViewById(R.id.info_wins);
-            textView.setText(contact.getmWins());
-            textView = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
-            textView.setText(contact.getmTotal());
-            textView = (TextView)viewHolder.itemView.findViewById(R.id.textViewScoreWins);
-            textView.setText("Level "+contact.getmLevel()+" Champy");
+            TextView textViewWinsInfo = (TextView)viewHolder.itemView.findViewById(R.id.info_wins);
+            textViewWinsInfo.setText(contact.getmWins());
+
+            TextView textViewTotalInfo = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
+            textViewTotalInfo.setText(contact.getmTotal());
+
+            TextView textViewScoreWins = (TextView)viewHolder.itemView.findViewById(R.id.textViewScoreWins);
+            textViewScoreWins.setText("Level "+contact.getmLevel()+" Champy");
 
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.VISIBLE);
             viewHolder.itemView.findViewById(R.id.row_friends_list).setVisibility(View.GONE);
@@ -313,17 +319,17 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         imageView = viewHolder.mchallenges;
         Glide.with(_context)
                 .load(R.drawable.challenges)
-                .override(25, 25)
+                .override(40, 40)
                 .into(imageView);
         imageView = viewHolder.mwins;
         Glide.with(_context)
                 .load(R.drawable.wins)
-                .override(25, 25)
+                .override(40, 40)
                 .into(imageView);
         imageView = viewHolder.mtotal;
         Glide.with(_context)
                 .load(R.drawable.total)
-                .override(25,25)
+                .override(40, 40)
                 .into(imageView);
 
         SessionManager sessionManager = new SessionManager(_context);

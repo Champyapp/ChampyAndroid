@@ -121,17 +121,17 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
             Glide.with(_context)
                     .load(R.drawable.start_circle_00026)
                     .placeholder(R.mipmap.ic_launcher)
-                    .into((ImageView)viewHolder.itemView.findViewById(R.id.imageView6));
+                    .into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleChall));
 
             Glide.with(_context)
                     .load(R.drawable.start_circle_00026)
                     .placeholder(R.mipmap.ic_launcher)
-                    .into((ImageView)viewHolder.itemView.findViewById(R.id.imageView7));
+                    .into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleWins));
 
             Glide.with(_context)
                     .load(R.drawable.start_circle_00026)
                     .placeholder(R.mipmap.ic_launcher)
-                    .into((ImageView)viewHolder.itemView.findViewById(R.id.imageView8));
+                    .into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleTotal));
 
             TextView textView = (TextView)viewHolder.itemView.findViewById(R.id.textViewScoreChallenges);
             textView.setText(contact.getName());
@@ -154,10 +154,15 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
 
             textView = (TextView)viewHolder.itemView.findViewById(R.id.info_chall);
             textView.setText(champy.get("challenges"));
+            //textView.setText(contact.getmChallenges());
+            //textViewChallengesInfo.setText(contact.getmChallenges());
+
             textView = (TextView)viewHolder.itemView.findViewById(R.id.info_wins);
             textView.setText(champy.get("wins"));
+
             textView = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
             textView.setText(champy.get("total"));
+
             textView = (TextView)viewHolder.itemView.findViewById(R.id.textViewScoreWins);
             textView.setText("Level "+champy.get("level")+" Champy");
 
@@ -246,10 +251,9 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                     final String id = user.get("id");
                     String friend = mContacts.get(position).getID();
                     Log.d(TAG, "User: " + friend);
-                    if (friend == null || friend == id) {
+                    if (friend == null && friend == id) {
                         Toast.makeText(_context, "This user has not installed Champy", Toast.LENGTH_SHORT).show();
                     } else {
-                        // подтверждение или отмена заявки в друзья
                         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -292,9 +296,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                                         break;
 
                                     case DialogInterface.BUTTON_NEGATIVE:
-                                        //////////////////////////////////////////////////////////////
                                         dialog.cancel();
-                                        //////////////////////////////////////////////////////////////
                                         break;
 
                                 }
@@ -340,17 +342,17 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         imageView = viewHolder.mChallenges;
         Glide.with(_context)
                 .load(R.drawable.challenges)
-                .override(25, 25)
+                .override(40, 40)
                 .into(imageView);
         imageView = viewHolder.mWins;
         Glide.with(_context)
                 .load(R.drawable.wins)
-                .override(25, 25)
+                .override(40, 40)
                 .into(imageView);
         imageView = viewHolder.mTotal;
         Glide.with(_context)
                 .load(R.drawable.total)
-                .override(25,25)
+                .override(40, 40)
                 .into(imageView);
         SessionManager sessionManager = new SessionManager(_context);
         HashMap<String, String> champy = sessionManager.getChampyOptions();

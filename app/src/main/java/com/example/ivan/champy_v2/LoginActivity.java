@@ -180,10 +180,12 @@ public class LoginActivity extends AppCompatActivity {
                             public void onCompleted(JSONObject object, GraphResponse response) {
                                 Log.i("LoginActivity", response.toString());
                                 try {
+                                    //if (object != null) {
                                     user_email = object.getString("email");
                                     fb_id = object.getString("id");
                                     name = object.getString("first_name") + " " + object.getString("last_name");
-
+                                    //    return;
+                                    //}
                                     Log.d(TAG, user_email);
                                     Log.d(TAG, name);
                                     try {
@@ -282,7 +284,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void Init() throws IOException {
         InitializeLogin initializeLogin = new InitializeLogin(this,
-                 getApplicationContext(), new ImageModule(getApplicationContext()));
+                getApplicationContext(), new ImageModule(getApplicationContext()));
         initializeLogin.Init();
     }
 
@@ -390,7 +392,7 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d(TAG, "Status: " + id);
                         Log.d(TAG, "FB: " + fb_id);
 
-                            // "http://graph.facebook.com/" + fb_id + "/picture?type=large&redirect=true&width=500&height=500"
+                        // "http://graph.facebook.com/" + fb_id + "/picture?type=large&redirect=true&width=500&height=500"
                         SessionManager sessionManager = new SessionManager(getApplicationContext());
                         sessionManager.setRefreshPending("false");
                         sessionManager.setRefreshFriends("false");
@@ -486,45 +488,45 @@ public class LoginActivity extends AppCompatActivity {
                                     Datum datum = data.get(i);
                                     Log.d(TAG, "Status: "+response.body().toString());
                                     if ((datum.getFriend() != null) && (datum.getOwner() != null)) {
-                                    if (datum.getStatus().toString().equals("false")) {
-                                        Log.d(TAG, "Status: "+datum.getOwner().get_id());
-                                        if (datum.getOwner().get_id().equals(user_id)) {
-                                            Friend_ friend = datum.getFriend();
-                                            Log.d(TAG, "Status: "+friend);
-                                            if (friend.getName() != null)
-                                            cv.put("name", friend.getName());
-                                            Log.d(TAG, "Status: "+friend.getPhoto());
-                                            if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
-                                            else cv.put("photo", "");
-                                            Log.d(TAG, "Friend");
-                                            cv.put("user_id", friend.getId());
-                                            cv.put("owner", "false");
-                                            db.insert("pending", null, cv);}
-                                        else if (datum.getStatus().toString().equals("true")){
-                                            Friend_ friend = datum.getFriend();
-                                            Log.d(TAG, "Status: "+friend);
-                                            if (friend.getName() != null)
+                                        if (datum.getStatus().toString().equals("false")) {
+                                            Log.d(TAG, "Status: "+datum.getOwner().get_id());
+                                            if (datum.getOwner().get_id().equals(user_id)) {
+                                                Friend_ friend = datum.getFriend();
+                                                Log.d(TAG, "Status: "+friend);
+                                                if (friend.getName() != null)
+                                                    cv.put("name", friend.getName());
+                                                Log.d(TAG, "Status: "+friend.getPhoto());
+                                                if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
+                                                else cv.put("photo", "");
+                                                Log.d(TAG, "Friend");
+                                                cv.put("user_id", friend.getId());
+                                                cv.put("owner", "false");
+                                                db.insert("pending", null, cv);}
+                                            else if (datum.getStatus().toString().equals("true")){
+                                                Friend_ friend = datum.getFriend();
+                                                Log.d(TAG, "Status: "+friend);
+                                                if (friend.getName() != null)
+                                                    cv.put("name", friend.getName());
+                                                Log.d(TAG, "Status: "+friend.getPhoto());
+                                                if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
+                                                else cv.put("photo", "");
+                                                Log.d(TAG, "Friend");
+                                                cv.put("user_id", friend.getId());
+                                                cv.put("owner", "false");
+                                                db.insert("friends", null, cv);
+                                            }
+                                            else {
+                                                Owner friend = datum.getOwner();
                                                 cv.put("name", friend.getName());
-                                            Log.d(TAG, "Status: "+friend.getPhoto());
-                                            if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
-                                            else cv.put("photo", "");
-                                            Log.d(TAG, "Friend");
-                                            cv.put("user_id", friend.getId());
-                                            cv.put("owner", "false");
-                                            db.insert("friends", null, cv);
-                                        }
-                                        else {
-                                            Owner friend = datum.getOwner();
-                                            cv.put("name", friend.getName());
-                                            if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
-                                            else cv.put("photo", "");
-                                            Log.d(TAG, "Owner");
-                                            cv.put("user_id", friend.get_id());
-                                            cv.put("owner", "true");
-                                            db.insert("pending", null, cv);
+                                                if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
+                                                else cv.put("photo", "");
+                                                Log.d(TAG, "Owner");
+                                                cv.put("user_id", friend.get_id());
+                                                cv.put("owner", "true");
+                                                db.insert("pending", null, cv);
+                                            }
                                         }
                                     }
-                                }
                                 }
                             }
                         }

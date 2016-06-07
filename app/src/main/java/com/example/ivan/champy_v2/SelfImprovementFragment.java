@@ -161,7 +161,7 @@ public class SelfImprovementFragment extends Fragment {
                     .load(R.drawable.points)
                     .override(120, 120)
                     .into((ImageView) view.findViewById(R.id.imageView14));
-             editText = (EditText) view.findViewById(R.id.goal);
+            editText = (EditText) view.findViewById(R.id.goal);
             description = editText.getText().toString();
             editText = (EditText) view.findViewById(R.id.days);
             days = Integer.parseInt(editText.getText().toString());
@@ -217,7 +217,7 @@ public class SelfImprovementFragment extends Fragment {
                         } else if (description.equals(" ") || description.startsWith(" ") || description.isEmpty()) {  // descriptions = goal
                             Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();
                         } else if (name.equals("active")) { // а так сработает?
-                                Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
                         } else {
                             //its ok
                             OfflineMode offlineMode = new OfflineMode();
@@ -264,7 +264,7 @@ public class SelfImprovementFragment extends Fragment {
                             Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();
                         } else if (days == 0) {
                             Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
-                        } else if (name.equals("created")) {
+                        } else if (name.equals("active")) {
                             Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
                         } else {
                             OfflineMode offlineMode = new OfflineMode();
@@ -494,7 +494,7 @@ public class SelfImprovementFragment extends Fragment {
             int colduration = c.getColumnIndex("duration");
             int colchallenge_id = c.getColumnIndex("challenge_id");
             do {
-                if (c.getString(c.getColumnIndex("status")).equals("started")){
+                if (c.getString(c.getColumnIndex("status")).equals("created")){
                     Log.i("stat", "Equals: "+c.getString(coldescription)+" "+description);
                     if (c.getString(coldescription).equals(description)){
                         Log.i("stat", "Equals: true");
@@ -506,7 +506,7 @@ public class SelfImprovementFragment extends Fragment {
             Log.i("stat", "0 rows");
         c.close();
 
-       return ok;
+        return ok;
     }
 
 }

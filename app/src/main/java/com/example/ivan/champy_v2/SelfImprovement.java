@@ -71,7 +71,7 @@ public class SelfImprovement extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
-        /*TextView textView = (TextView)findViewById(R.id.textView19);*/
+        //TextView textView = (TextView)findViewById(R.id.textView19);
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         //textView.setTypeface(typeface);
         TextView textView = (TextView)findViewById(R.id.textView20);
@@ -213,7 +213,6 @@ public class SelfImprovement extends AppCompatActivity
         });
 
     }
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -286,7 +285,6 @@ public class SelfImprovement extends AppCompatActivity
         return true;
     }
 
-
     public void Logout(){
         LoginManager.getInstance().logOut();
         SessionManager sessionManager = new SessionManager(getApplicationContext());
@@ -296,15 +294,17 @@ public class SelfImprovement extends AppCompatActivity
         Toast.makeText(this, "Bye Bye!!!", Toast.LENGTH_SHORT).show();
     }
 
-
     public boolean check(String id) {
+        boolean ok = true;
+
         DBHelper dbHelper = new DBHelper(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         final ContentValues cv = new ContentValues();
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
+
         int o = 0;
-        boolean ok = true;
+
         if (c.moveToFirst()) {
             int idColIndex = c.getColumnIndex("id");
             int nameColIndex = c.getColumnIndex("name");
@@ -312,9 +312,9 @@ public class SelfImprovement extends AppCompatActivity
             int colduration = c.getColumnIndex("duration");
             int colchallenge_id = c.getColumnIndex("challenge_id");
             do {
-              String checked = c.getString(colchallenge_id);
+                String checked = c.getString(colchallenge_id);
                 if (checked.equals(id)) {
-                    Log.i("stat", "Cheked");
+                    Log.i("stat", "Checked");
                     ok = false;
                     break;
                 }

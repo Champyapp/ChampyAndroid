@@ -20,6 +20,7 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true" />
 
+    <!-- Bar with counters -->
     <ImageView
         android:id="@+id/imageView_challenges_animation"
         android:layout_width="110dp"
@@ -49,6 +50,9 @@
         android:layout_alignParentEnd="true"
         android:layout_marginRight="@dimen/activity_vertical_margin" />
 
+    <!-- End Bar with counters -->
+
+    <!-- Counters -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -100,6 +104,10 @@
         android:layout_alignEnd="@+id/imageView_total_animation"
         android:layout_marginTop="@dimen/activity_vertical_margin" />
 
+    <!-- End Counters -->
+
+    <!-- Simple TextView -->
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -145,6 +153,9 @@
         android:paddingBottom="30dp"
         android:textColor="#ffffff" />
 
+    <!-- End Simple TextView -->
+
+    <!-- Icons in bar -->
     <ImageView
         android:layout_width="25dp"
         android:layout_height="25dp"
@@ -177,6 +188,8 @@
         android:layout_alignLeft="@+id/imageView_total_animation"
         android:layout_alignStart="@+id/imageView_total_animation" />
 
+    <!-- End Icons in bar -->
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -185,7 +198,6 @@
         android:id="@+id/cards"
         android:layout_below="@+id/textViewChallenges"
         android:focusable="false">
-
     </RelativeLayout>
 
     <ImageView
