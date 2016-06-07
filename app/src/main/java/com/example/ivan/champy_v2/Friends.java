@@ -163,7 +163,7 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
             }
         };*/
 
-
+        // invite friends button
         final FloatingActionButton.OnClickListener onClickInviteFriends = new View.OnClickListener() {
             @Override
             public void onClick(View v) {

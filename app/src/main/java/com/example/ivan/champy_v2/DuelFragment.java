@@ -183,13 +183,13 @@ public class DuelFragment extends Fragment {
                     String description = "";
                     String challenge_id = "";
                     int days = 0;
-                    EditText editText1 = (EditText) view.findViewById(R.id.goal);
-                    description = editText1.getText().toString();
-                    editText1 = (EditText) view.findViewById(R.id.days);
+                    EditText editTextGoal = (EditText) view.findViewById(R.id.goal);
+                    description = editTextGoal.getText().toString();
+                    editTextGoal = (EditText) view.findViewById(R.id.days);
                     Log.i("stat", "Descrition :"+description+ " " + description.length());
-                    if (editText1.getText().toString().equals("")){
+                    if (editTextGoal.getText().toString().equals("")){
                         Toast.makeText(getContext(), "Duration is empty!!!", Toast.LENGTH_SHORT).show();
-                    } else days = Integer.parseInt(editText1.getText().toString());
+                    } else days = Integer.parseInt(editTextGoal.getText().toString());
                     Cursor c = db.query("duel", null, null, null, null, null, null);
                     int position = viewPager.getCurrentItem();
                     SessionManager sessionManager = new SessionManager(getContext());
@@ -197,25 +197,29 @@ public class DuelFragment extends Fragment {
 
                     Log.i("stat", "Click: " + position + " " + size);
                     if (position == size) {
-                        editText1 = (EditText) view.findViewById(R.id.goal);
-                        description = editText1.getText().toString();
+                        editTextGoal = (EditText) view.findViewById(R.id.goal);
+                        description = editTextGoal.getText().toString();
                         Log.i("stat", "Click: clicked");
                         Log.i("stat", "Click: " + description);
-                        editText1 = (EditText) view.findViewById(R.id.days);
-                        if (editText1.getText().toString().equals("")){
-                            Toast.makeText(getContext(), "Duration is empty!!!", Toast.LENGTH_SHORT).show();
-                        } else if (description.equals("")){
+                        editTextGoal = (EditText) view.findViewById(R.id.days);
+                        if (editTextGoal.getText().toString().equals("") || days == 0) {
+                            Toast.makeText(getContext(), "Min 1 day!", Toast.LENGTH_SHORT).show();
+                        } else if (description.equals(" ") || description.startsWith(" ") || description.isEmpty()) {
                             Toast.makeText(getContext(), "Goal is empty!!!", Toast.LENGTH_SHORT).show();
+                        } else if (name.equals("active")) {
+                            Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
                         }
                         else {
-                            days = Integer.parseInt(editText1.getText().toString());
-                            if (description.length() >= 100) Toast.makeText(getContext(), "Text is too long", Toast.LENGTH_SHORT).show();
-                            else if (days > 999) Toast.makeText(getContext(), "Max 999 days", Toast.LENGTH_SHORT).show();
-                            else if (days == 0) Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
-                            else Create_new_challenge(description, days, finalFriend_id);
+                            OfflineMode offlineMode = new OfflineMode();
+                            if (offlineMode.isInternetAvailable(getActivity())) {
+                                days = Integer.parseInt(editTextGoal.getText().toString());
+                                Create_new_challenge(description, days, finalFriend_id);
+                                Toast.makeText(getContext(), "Challenge created", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getContext(), "No Internet Connection!", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    } else
-                    {
+                    } else {
                         Log.i("stat", "Status: Poehali");
                         int o = 0;
                         if (c.moveToFirst()) {
@@ -244,24 +248,24 @@ public class DuelFragment extends Fragment {
                             days = Integer.parseInt(duration) / 86400;
                         }
                         Log.i("stat", "Click: " + viewPager.getCurrentItem());
+
                         if (name.equals("active")) {
                             Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
-                        } else if (description == ""){
-                            Toast.makeText(getContext(), "Goal is empty!!!", Toast.LENGTH_SHORT).show();
-                        }
-                        else if (description.length() > 100) {
-                            Toast.makeText(getContext(), "Text is too long", Toast.LENGTH_SHORT).show();
-                        }
-                        else if (days>999) {
-                            Toast.makeText(getContext(), "Max 999 days", Toast.LENGTH_SHORT).show();
-                        } else if (days == 0)  Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
-                        else {
-                            Toast.makeText(getActivity(), "Duel Request Sended!", Toast.LENGTH_SHORT).show();
-                            StartSingleInProgress(challenge_id, finalFriend_id);
-                            HashMap<String, String> user = new HashMap<>();
-                            user = sessionManager.getUserDetails();
-                            String token = user.get("token");
-                            Log.i("stat", "Nam nado: " + challenge_id + " " + finalFriend_id + " "+ token);
+                        } else if (description.equals("") || description.startsWith(" ")) {
+                            Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();
+                        } else if (days == 0) {
+                            Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
+                        } else {
+                            OfflineMode offlineMode = new OfflineMode();
+                            if (offlineMode.isInternetAvailable(getActivity())) {
+                                StartSingleInProgress(challenge_id, finalFriend_id);
+                                HashMap<String, String> user = new HashMap<>();
+                                user = sessionManager.getUserDetails();
+                                String token = user.get("token");
+                                Log.i("stat", "Nam nado: " + challenge_id + " " + finalFriend_id + " " + token);
+                            } else {
+                                Toast.makeText(getContext(), "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                     return true;

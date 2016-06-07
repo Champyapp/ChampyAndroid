@@ -102,7 +102,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
     public void onBindViewHolder(final PendingAdapter.ViewHolder viewHolder, final int position) {
         // Get the data model based on position
         final Pending_friend contact = mContacts.get(position);
-        Log.i("Selected", ""+selected.contains(position));
+        Log.i("Selected", " " + selected.contains(position));
         if (selected.contains(position)) {
             Log.i("Selected: ", position + " open");
 

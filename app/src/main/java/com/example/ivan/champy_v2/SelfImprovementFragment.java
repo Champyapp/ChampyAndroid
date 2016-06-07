@@ -226,7 +226,7 @@ public class SelfImprovementFragment extends Fragment {
                                 Create_new_challenge(description, days);
                                 Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(getContext(), "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "No Internet Connection!", Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -260,13 +260,13 @@ public class SelfImprovementFragment extends Fragment {
                         }
                         Log.i("stat", "Click: " + viewPager.getCurrentItem());
 
-                        if (description.equals("") || description.startsWith(" ")) {
+                        if (name.equals("active")) {
+                            Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
+                        } else if (description.equals("") || description.startsWith(" ")) {
                             Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();
                         } else if (days == 0) {
                             Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
-                        } else if (name.equals("active")) {
-                            Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
-                        } else {
+                        }  else {
                             OfflineMode offlineMode = new OfflineMode();
                             if (offlineMode.isInternetAvailable(getActivity())) {
                                 Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
