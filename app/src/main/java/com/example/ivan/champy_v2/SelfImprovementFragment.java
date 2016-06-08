@@ -10,8 +10,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.test.suitebuilder.annotation.SmallTest;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -30,8 +28,6 @@ import com.example.ivan.champy_v2.interfaces.CreateChallenge;
 import com.example.ivan.champy_v2.interfaces.SingleInProgress;
 import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
 import com.example.ivan.champy_v2.model.active_in_progress.Datum;
-
-import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.List;
@@ -97,7 +93,6 @@ public class SelfImprovementFragment extends Fragment {
                     description = c.getString(coldescription);
                     duration = c.getString(colduration);
                     challenge_id = c.getString(colchallenge_id);
-
                 }
             } while (c.moveToNext());
         } else
@@ -107,29 +102,27 @@ public class SelfImprovementFragment extends Fragment {
         if (isActive(description)) {
             Log.i("stat", "Status: Active");
             Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
-            TextView textView = (TextView)view.findViewById(R.id.goal_text);
-            textView.setText(description);
-            textView.setTypeface(typeface);
-            textView.setVisibility(View.VISIBLE);
-            textView = (TextView)view.findViewById(R.id.days_text);
+            TextView tvGoal = (TextView)view.findViewById(R.id.goal_text);
+            tvGoal.setText(description);
+            tvGoal.setTypeface(typeface);
+            tvGoal.setVisibility(View.VISIBLE);
+            TextView tvDays = (TextView)view.findViewById(R.id.days_text);
             int days = 0;
             if (duration != null && duration != "") {
                 days = Integer.parseInt(duration) / 86400;
             }
-            textView.setText("" + days);
-            textView.setTypeface(typeface);
-            textView.setVisibility(View.VISIBLE);
+            tvDays.setText("" + days);
+            tvDays.setTypeface(typeface);
+            tvDays.setVisibility(View.VISIBLE);
 
-            EditText editText = (EditText) view.findViewById(R.id.goal);
-            //editText.setInputType(InputType.TYPE_CLASS_TEXT);
-
-            editText.setVisibility(View.INVISIBLE);
-            editText = (EditText)view.findViewById(R.id.days);
-            editText.setVisibility(View.INVISIBLE);
+            EditText etGoal = (EditText) view.findViewById(R.id.goal);
+            etGoal.setVisibility(View.INVISIBLE);
+            EditText etDays = (EditText)view.findViewById(R.id.days);
+            etDays.setVisibility(View.INVISIBLE);
             Glide.with(getContext())
                     .load(R.drawable.points)
                     .override(120, 120)
-                    .into((ImageView) view.findViewById(R.id.imageView14));
+                    .into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
         }
         else {
             final int[] finalposition = new int[1];
@@ -137,47 +130,53 @@ public class SelfImprovementFragment extends Fragment {
             setupUI(getActivity().findViewById(R.id.selfimprovement));
             setupUI(view);
 
-
             Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
-            EditText editText = (EditText) view.findViewById(R.id.goal);
-            editText.setText(description);
-            editText.setTypeface(typeface);
-            editText.setVisibility(View.VISIBLE);
-            editText = (EditText) view.findViewById(R.id.days);
-            editText.setTypeface(typeface);
+
+            EditText etGoal = (EditText) view.findViewById(R.id.goal);
+            etGoal.setText(description);
+            etGoal.setTypeface(typeface);
+            etGoal.setVisibility(View.VISIBLE);
+
+            EditText etDays = (EditText) view.findViewById(R.id.days);
+            etDays.setTypeface(typeface);
             int days = 0;
             if (duration != null && duration != "") {
                 days = Integer.parseInt(duration) / 86400;
             }
-            editText.setText("" + days);
-            editText.setVisibility(View.VISIBLE);
-            TextView textView = (TextView) view.findViewById(R.id.textView8);
-            textView.setTypeface(typeface);
-            textView = (TextView)view.findViewById(R.id.goal_text);
-            textView.setVisibility(View.INVISIBLE);
-            textView = (TextView)view.findViewById(R.id.days_text);
-            textView.setVisibility(View.INVISIBLE);
+            etDays.setText("" + days);
+            etDays.setVisibility(View.VISIBLE);
+
+            TextView tvDays = (TextView) view.findViewById(R.id.tvDays);
+            tvDays.setTypeface(typeface);
+
+            TextView tvGoal = (TextView)view.findViewById(R.id.goal_text);
+            tvGoal.setVisibility(View.INVISIBLE);
+
+            TextView tvDaysSimpleText = (TextView)view.findViewById(R.id.days_text);
+            tvDaysSimpleText.setVisibility(View.INVISIBLE);
             Glide.with(getContext())
                     .load(R.drawable.points)
                     .override(120, 120)
-                    .into((ImageView) view.findViewById(R.id.imageView14));
-            editText = (EditText) view.findViewById(R.id.goal);
-            description = editText.getText().toString();
-            editText = (EditText) view.findViewById(R.id.days);
-            days = Integer.parseInt(editText.getText().toString());
+                    .into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
+
+            EditText etGoalAgain = (EditText) view.findViewById(R.id.goal);
+            description = etGoalAgain.getText().toString();
+            etGoalAgain = (EditText) view.findViewById(R.id.days);
+            days = Integer.parseInt(etGoalAgain.getText().toString());
             Log.i("stat", "Description: " + description);
-            ImageButton imageButton = (ImageButton) getActivity().findViewById(R.id.imageButtonAcceptSelfImprovement);
-            imageButton.setVisibility(View.VISIBLE);
+
+            ImageButton imageButtonAccept = (ImageButton) getActivity().findViewById(R.id.imageButtonAcceptSelfImprovement);
+            imageButtonAccept.setVisibility(View.VISIBLE);
 
 
-            imageButton.setOnClickListener(new View.OnClickListener() {
+            imageButtonAccept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(getActivity(), "Tap & Hold", Toast.LENGTH_SHORT).show();
                 }
             });
 
-            imageButton.setOnLongClickListener(new View.OnLongClickListener() {
+            imageButtonAccept.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     String name = "";
@@ -210,9 +209,7 @@ public class SelfImprovementFragment extends Fragment {
                         Log.i("stat", "Click: " + description);
                         editTextGoal = (EditText) view.findViewById(R.id.days);
 
-                        if (editTextGoal.getText().toString().equals("")) {                                            // descriptions = days
-                            Toast.makeText(getContext(), "Duration is empty!", Toast.LENGTH_SHORT).show();
-                        } else if (days == 0) {
+                        if (editTextGoal.getText().toString().equals("") || days == 0) {                     // descriptions = days
                             Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
                         } else if (description.equals(" ") || description.startsWith(" ") || description.isEmpty()) {  // descriptions = goal
                             Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();

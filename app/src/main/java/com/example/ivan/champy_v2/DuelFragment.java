@@ -128,7 +128,7 @@ public class DuelFragment extends Fragment {
             Glide.with(getContext())
                     .load(R.drawable.points)
                     .override(120, 120)
-                    .into((ImageView) view.findViewById(R.id.imageView14));
+                    .into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
         }
         else {
             final int[] finalposition = new int[1];
@@ -150,7 +150,7 @@ public class DuelFragment extends Fragment {
             }
             editText.setText("" + days);
             editText.setVisibility(View.VISIBLE);
-            TextView textView = (TextView) view.findViewById(R.id.textView8);
+            TextView textView = (TextView) view.findViewById(R.id.tvDays);
             textView.setTypeface(typeface);
             textView = (TextView)view.findViewById(R.id.goal_text);
             textView.setVisibility(View.INVISIBLE);
@@ -159,7 +159,7 @@ public class DuelFragment extends Fragment {
             Glide.with(getContext())
                     .load(R.drawable.points)
                     .override(120, 120)
-                    .into((ImageView) view.findViewById(R.id.imageView14));
+                    .into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
             editText = (EditText) view.findViewById(R.id.goal);
             description = editText.getText().toString();
             editText = (EditText) view.findViewById(R.id.days);

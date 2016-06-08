@@ -129,37 +129,40 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
                     .into((ImageView) viewHolder.itemView.findViewById(R.id.imageViewBgForCircleTotal));
 
 
+            //-------------------------------- Take username ---------------------------------//
             TextView textViewScoreChallenges = (TextView)viewHolder.itemView.findViewById(R.id.textViewScoreChallenges);
             textViewScoreChallenges.setText(contact.getName());
+
+            //----------------------------------- Typeface -----------------------------------//
             Typeface typeFace = Typeface.createFromAsset(_context.getAssets(), "fonts/bebasneue.ttf");
             textViewScoreChallenges.setTypeface(typeFace);
 
             //--------------------------------- Simple text ----------------------------------//
-            TextView textViewChallenges = (TextView)viewHolder.itemView.findViewById(R.id.textViewChallenges);
-            textViewChallenges.setTypeface(typeFace);
+            TextView tvChallenges = (TextView)viewHolder.itemView.findViewById(R.id.textViewChallenges);
+            tvChallenges.setTypeface(typeFace);
 
-            TextView textViewWins = (TextView)viewHolder.itemView.findViewById(R.id.textViewWins);
-            textViewWins.setTypeface(typeFace);
+            TextView tvWins = (TextView)viewHolder.itemView.findViewById(R.id.textViewWins);
+            tvWins.setTypeface(typeFace);
 
-            TextView textViewTotal = (TextView)viewHolder.itemView.findViewById(R.id.textViewTotal);
-            textViewTotal.setTypeface(typeFace);
+            TextView tvTotal = (TextView)viewHolder.itemView.findViewById(R.id.textViewTotal);
+            tvTotal.setTypeface(typeFace);
 
             //----------------------------------- Session ------------------------------------//
             SessionManager sessionManager = new SessionManager(_context);
             HashMap<String, String> champy = sessionManager.getChampyOptions();
 
             //--------------------------------- Counters view --------------------------------//
-            TextView textViewChallengesInfo = (TextView)viewHolder.itemView.findViewById(R.id.info_chall);
-            textViewChallengesInfo.setText(contact.getmChallenges());
+            TextView tvChallengesInfo = (TextView)viewHolder.itemView.findViewById(R.id.info_chall);
+            tvChallengesInfo.setText(contact.getmChallenges());
 
-            TextView textViewWinsInfo = (TextView)viewHolder.itemView.findViewById(R.id.info_wins);
-            textViewWinsInfo.setText(contact.getmWins());
+            TextView tvWinsInfo = (TextView)viewHolder.itemView.findViewById(R.id.info_wins);
+            tvWinsInfo.setText(contact.getmWins());
 
-            TextView textViewTotalInfo = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
-            textViewTotalInfo.setText(contact.getmTotal());
+            TextView tvTotalInfo = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
+            tvTotalInfo.setText(contact.getmTotal());
 
-            TextView textViewScoreWins = (TextView)viewHolder.itemView.findViewById(R.id.textViewScoreWins);
-            textViewScoreWins.setText("Level "+contact.getmLevel()+" Champy");
+            TextView tvUserLevel = (TextView)viewHolder.itemView.findViewById(R.id.textViewUserLevel);
+            tvUserLevel.setText("Level "+contact.getmLevel()+" Champy");
 
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.VISIBLE);
             viewHolder.itemView.findViewById(R.id.row_friends_list).setVisibility(View.GONE);
@@ -172,8 +175,8 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
 
         }
         // Set item views based on the data model
-        TextView textView = viewHolder.nameTextView;
-        textView.setText(contact.getName());
+        TextView tvUserName = viewHolder.nameTextView;
+        tvUserName.setText(contact.getName());
 
         // button block user in All pages
         viewHolder.block.setOnClickListener(new View.OnClickListener() {
@@ -225,7 +228,7 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
                     } else if (friend == id) {
                         Toast.makeText(_context, "This user has not installed Champy", Toast.LENGTH_SHORT).show();
                     } else {
-                        // create dialog "Do you want add this user to your friends list?"
+                        // dialog "Do you want add this user to your friends list?"
                         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -300,32 +303,40 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
                 .override(80, 80)
                 .dontAnimate()
                 .into(imageView);
+        // ----------------- Close friend row ----------------- //
+        // CHALLENGES
         imageView = viewHolder.challenges;
         Glide.with(_context)
                 .load(R.drawable.challenges)
                 .override(40, 40)
                 .into(imageView);
+        // WINS
         imageView = viewHolder.wins;
         Glide.with(_context)
                 .load(R.drawable.wins)
                 .override(40, 40)
                 .into(imageView);
+        // TOTAL
         imageView = viewHolder.total;
         Glide.with(_context)
                 .load(R.drawable.total)
                 .override(40, 40)
                 .into(imageView);
 
+        // ----------------- Open friend row ------------------ //
+        // CHALLENGES
         imageView = viewHolder.mchallenges;
         Glide.with(_context)
                 .load(R.drawable.challenges)
                 .override(40, 40)
                 .into(imageView);
+        // WINS
         imageView = viewHolder.mwins;
         Glide.with(_context)
                 .load(R.drawable.wins)
                 .override(40, 40)
                 .into(imageView);
+        // TOTAL
         imageView = viewHolder.mtotal;
         Glide.with(_context)
                 .load(R.drawable.total)
@@ -335,14 +346,14 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
         SessionManager sessionManager = new SessionManager(_context);
         HashMap<String, String> champy = sessionManager.getChampyOptions();
 
-        textView = (TextView)viewHolder.itemView.findViewById(R.id.chall);
-        textView.setText(contact.getmChallenges());
-        textView = (TextView)viewHolder.itemView.findViewById(R.id.in_progress);
-        textView.setText(contact.getmWins());
-        textView = (TextView)viewHolder.itemView.findViewById(R.id.total);
-        textView.setText(contact.getmTotal());
-        textView = (TextView)viewHolder.itemView.findViewById(R.id.level);
-        textView.setText("Level " + contact.getmLevel()+ " Champy");
+        tvUserName = (TextView)viewHolder.itemView.findViewById(R.id.chall);
+        tvUserName.setText(contact.getmChallenges());
+        tvUserName = (TextView)viewHolder.itemView.findViewById(R.id.in_progress);
+        tvUserName.setText(contact.getmWins());
+        tvUserName = (TextView)viewHolder.itemView.findViewById(R.id.total);
+        tvUserName.setText(contact.getmTotal());
+        tvUserName = (TextView)viewHolder.itemView.findViewById(R.id.level);
+        tvUserName.setText("Level " + contact.getmLevel()+ " Champy");
 
     }
 

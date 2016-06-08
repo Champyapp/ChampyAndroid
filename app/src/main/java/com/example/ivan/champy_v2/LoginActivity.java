@@ -377,7 +377,7 @@ public class LoginActivity extends AppCompatActivity {
                 User decodedResponse = response.body();
                 if (response.isSuccess()) {
                     if (response.isSuccess()) {
-                 /*   Log.d("TAG", "Status: " + decodedResponse.getDescription());
+                    /* Log.d("TAG", "Status: " + decodedResponse.getDescription());
                     Log.d("TAG", "Status: "+jwtString);*/
                         String token_android;
 
@@ -458,6 +458,7 @@ public class LoginActivity extends AppCompatActivity {
                     String email = data.getEmail();
                     final String user_name = data.getName();
                     final String id = data.get_id();
+
                     String pushN = data.getProfileOptions().getPushNotifications().toString();
                     String newChallReq = data.getProfileOptions().getNewChallengeRequests().toString();
                     String acceptedYour = data.getProfileOptions().getAcceptedYourChallenge().toString();
@@ -469,6 +470,7 @@ public class LoginActivity extends AppCompatActivity {
                     sessionManager.setRefreshFriends("false");
                     sessionManager.createUserLoginSession(user_name, email, fb_id, path_to_pic, jwtString, id, pushN, newChallReq, acceptedYour, challegeEnd, "true");
                     sessionManager.setChampyOptions(data.getAllChallengesCount().toString(), data.getSuccessChallenges().toString(), data.getScore().toString(), data.getLevel().getNumber().toString());
+
                     DBHelper dbHelper = new DBHelper(LoginActivity.this);
                     final SQLiteDatabase db = dbHelper.getWritableDatabase();
                     int clearCount = db.delete("pending", null, null);
@@ -484,32 +486,51 @@ public class LoginActivity extends AppCompatActivity {
                             if (response.isSuccess()){
                                 List<Datum> data = response.body().getData();
                                 Log.d(TAG, "Status: "+data.size());
-                                for (int i=0; i<data.size(); i++){
+
+                                for (int i=0; i<data.size(); i++) {
                                     Datum datum = data.get(i);
                                     Log.d(TAG, "Status: "+response.body().toString());
+
                                     if ((datum.getFriend() != null) && (datum.getOwner() != null)) {
+
                                         if (datum.getStatus().toString().equals("false")) {
                                             Log.d(TAG, "Status: "+datum.getOwner().get_id());
+
                                             if (datum.getOwner().get_id().equals(user_id)) {
                                                 Friend_ friend = datum.getFriend();
                                                 Log.d(TAG, "Status: "+friend);
-                                                if (friend.getName() != null)
+
+                                                if (friend.getName() != null) {
                                                     cv.put("name", friend.getName());
+                                                }
+
                                                 Log.d(TAG, "Status: "+friend.getPhoto());
-                                                if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
-                                                else cv.put("photo", "");
+                                                if (friend.getPhoto() != null) {
+                                                    cv.put("photo", friend.getPhoto().getMedium());
+                                                }
+                                                else {
+                                                    cv.put("photo", "");
+                                                }
+
                                                 Log.d(TAG, "Friend");
                                                 cv.put("user_id", friend.getId());
                                                 cv.put("owner", "false");
                                                 db.insert("pending", null, cv);}
-                                            else if (datum.getStatus().toString().equals("true")){
+
+                                            else if (datum.getStatus().toString().equals("true")) {
                                                 Friend_ friend = datum.getFriend();
                                                 Log.d(TAG, "Status: "+friend);
-                                                if (friend.getName() != null)
+
+                                                if (friend.getName() != null) {
                                                     cv.put("name", friend.getName());
+                                                }
                                                 Log.d(TAG, "Status: "+friend.getPhoto());
-                                                if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
-                                                else cv.put("photo", "");
+                                                if (friend.getPhoto() != null) {
+                                                    cv.put("photo", friend.getPhoto().getMedium());
+                                                }
+                                                else {
+                                                    cv.put("photo", "");
+                                                }
                                                 Log.d(TAG, "Friend");
                                                 cv.put("user_id", friend.getId());
                                                 cv.put("owner", "false");
@@ -518,8 +539,12 @@ public class LoginActivity extends AppCompatActivity {
                                             else {
                                                 Owner friend = datum.getOwner();
                                                 cv.put("name", friend.getName());
-                                                if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
-                                                else cv.put("photo", "");
+                                                if (friend.getPhoto() != null) {
+                                                    cv.put("photo", friend.getPhoto().getMedium());
+                                                }
+                                                else {
+                                                    cv.put("photo", "");
+                                                }
                                                 Log.d(TAG, "Owner");
                                                 cv.put("user_id", friend.get_id());
                                                 cv.put("owner", "true");

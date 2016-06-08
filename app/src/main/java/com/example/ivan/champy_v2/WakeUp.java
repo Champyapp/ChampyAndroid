@@ -34,10 +34,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
-import com.example.ivan.champy_v2.interfaces.SingleInProgress;
-import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
-import com.example.ivan.champy_v2.model.active_in_progress.Datum;
 import com.facebook.login.LoginManager;
 
 import java.io.File;
@@ -46,14 +42,8 @@ import java.io.FileNotFoundException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.GsonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
 
 import static java.lang.Math.round;
 
@@ -85,16 +75,20 @@ public class WakeUp extends AppCompatActivity implements NavigationView.OnNaviga
         drawer.setDrawerListener(toggle);
         toggle.setDrawerIndicatorEnabled(true);
         toggle.syncState();
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
         /* TextView textView = (TextView)findViewById(R.id.textView19);*/
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         //textView.setTypeface(typeface);
+
         TextView textView = (TextView)findViewById(R.id.textView20);
         textView.setTypeface(typeface);
+
         textView = (TextView)findViewById(R.id.goal_text);
         textView.setTypeface(typeface);
+
         textView = (TextView)findViewById(R.id.textView23);
         textView.setTypeface(typeface);
 
@@ -127,7 +121,7 @@ public class WakeUp extends AppCompatActivity implements NavigationView.OnNaviga
         Glide.with(this)
                 .load(R.drawable.points)
                 .override(100, 100)
-                .into((ImageView)findViewById(R.id.imageView14));
+                .into((ImageView)findViewById(R.id.imageViewAcceptButton));
 
         Glide.with(this)
                 .load(url)
@@ -354,7 +348,7 @@ public class WakeUp extends AppCompatActivity implements NavigationView.OnNaviga
         sessionManager.logoutUser();
         Intent intent = new Intent(WakeUp.this, LoginActivity.class);
         startActivity(intent);
-        Toast.makeText(this, "Bye Bye!!!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Bye Bye!", Toast.LENGTH_SHORT).show();
     }
 
 }

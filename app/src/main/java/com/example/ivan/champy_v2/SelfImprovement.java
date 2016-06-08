@@ -48,8 +48,7 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-public class SelfImprovement extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class SelfImprovement extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,16 +57,19 @@ public class SelfImprovement extends AppCompatActivity
         setContentView(R.layout.activity_self_improvement);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer,
+                toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
             }
         };
+
         drawer.setDrawerListener(toggle);
         toggle.setDrawerIndicatorEnabled(true);
         toggle.syncState();
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
@@ -115,8 +117,6 @@ public class SelfImprovement extends AppCompatActivity
             ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setImageDrawable(dr); final String API_URL = "http://46.101.213.24:3007";
-
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -125,6 +125,7 @@ public class SelfImprovement extends AppCompatActivity
 
     }
 
+    // задний фон
     private Drawable Init(String path) throws FileNotFoundException {
         File file = new File(path, "blured2.jpg");
         Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
@@ -137,8 +138,8 @@ public class SelfImprovement extends AppCompatActivity
 
     }
 
-    public void getChallenges()
-    {
+    // отображаем наши челенджи
+    public void getChallenges() {
         DBHelper dbHelper = new DBHelper(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("selfimprovement", null, null);
@@ -213,6 +214,7 @@ public class SelfImprovement extends AppCompatActivity
         });
 
     }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -285,6 +287,7 @@ public class SelfImprovement extends AppCompatActivity
         return true;
     }
 
+
     public void Logout(){
         LoginManager.getInstance().logOut();
         SessionManager sessionManager = new SessionManager(getApplicationContext());
@@ -293,6 +296,7 @@ public class SelfImprovement extends AppCompatActivity
         startActivity(intent);
         Toast.makeText(this, "Bye Bye!!!", Toast.LENGTH_SHORT).show();
     }
+
 
     public boolean check(String id) {
         boolean ok = true;

@@ -3,6 +3,7 @@ package com.example.ivan.champy_v2;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -57,7 +58,7 @@ public class Pending extends Fragment {
                              Bundle savedInstanceState) {
         Log.i("stat", "Created Pending");
         final View view = inflater.inflate(R.layout.fragment_first, container, false);
-        final List<Pending_friend> friends = new ArrayList<Pending_friend>();
+        final List<Pending_friend> friends = new ArrayList<>();
 
         DBHelper dbHelper = new DBHelper(getContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -83,7 +84,7 @@ public class Pending extends Fragment {
             Log.i("stat", "0 rows");
         c.close();
 
-        Log.i("stat", "Friends :"+friends);
+        Log.i("stat", "Friends :" + friends);
 
 
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
@@ -100,7 +101,6 @@ public class Pending extends Fragment {
 
 
         final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
-
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -123,16 +123,13 @@ public class Pending extends Fragment {
                 DBHelper dbHelper = new DBHelper(getContext());
 
                 final SQLiteDatabase db = dbHelper.getWritableDatabase();
-
                 int clearCount = db.delete("pending", null, null);
-
                 final ContentValues cv = new ContentValues();
                 Log.d("Pending", "ID :" + id + " Token: " + token);
                 com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
 
                 OfflineMode offlineMode = new OfflineMode();
                 if (offlineMode.isInternetAvailable(getActivity())) {
-
                     Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.getUserFriends(id, token);
                     call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
                         @Override
@@ -195,7 +192,7 @@ public class Pending extends Fragment {
                                 Log.i("stat", "Friends :" + newfriends.toString());
 
 
-                                //  RecclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
+                                RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
                                 final PendingAdapter adapter = new PendingAdapter(newfriends, getContext(), getActivity(), new CustomItemClickListener() {
                                     @Override
                                     public void onItemClick(View view, int position) {
@@ -212,14 +209,13 @@ public class Pending extends Fragment {
 
                         }
                     });
-
                 } else {
                     swipeRefreshLayout.setRefreshing(false);
                     Toast.makeText(getContext(), "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
+
         return view;
 
     }
@@ -228,6 +224,6 @@ public class Pending extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
     }
+
 }

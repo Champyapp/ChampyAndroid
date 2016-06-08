@@ -1,9 +1,5 @@
 package com.example.ivan.champy_v2;
 
-/**
- * Created by ivan on 25.03.16.
- */
-
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;

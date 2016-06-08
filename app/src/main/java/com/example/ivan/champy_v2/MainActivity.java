@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     AlarmManager alarmManager;
     private PendingIntent pendingIntent;
     private FloatingActionMenu actionMenu;
-
+    private Context _context;
     private CustomPagerBase pager;
 
     private int counter = 0;
@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 // BINGO ~~~~~~~~~~~~ google how to take screen in code.
                 // idea: switch for position of pages
-                //
+                // F*cking blur method
                 if (screen.getDrawable() == null) {
                     RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.content_main);
                     relativeLayout.setDrawingCacheEnabled(true);
@@ -212,7 +212,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             OfflineMode offlineMode = new OfflineMode();
                             if (offlineMode.isInternetAvailable(MainActivity.this)) {
                                 Intent intent = new Intent(MainActivity.this, Friends.class);
-                                //Toast.makeText(getApplicationContext(), "Coming soon", Toast.LENGTH_SHORT).show();
                                 startActivity(intent);
                             } else {
                                 Toast.makeText(getApplication(), "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
@@ -417,8 +416,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (offlineMode.isInternetAvailable(this)) {
             if (id == R.id.nav_logout) {
                 offlineMode = new OfflineMode();
-                if (offlineMode.isInternetAvailable(this)) Logout();
-                else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
+                if (offlineMode.isInternetAvailable(this)) {
+                    /*DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which) {
+                                case DialogInterface.BUTTON_POSITIVE:
+                                    LoginManager.getInstance().logOut();
+                                    SessionManager sessionManager = new SessionManager(getApplicationContext());
+                                    sessionManager.logoutUser();
+                                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                                    startActivity(intent);
+                                    Toast.makeText(MainActivity.this, "Bye Bye!", Toast.LENGTH_SHORT).show();
+                                    break;
+                                case DialogInterface.BUTTON_NEGATIVE:
+                                    break;
+                            }
+                        }
+                    };
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+                    builder.setMessage("Are you sure?")
+                            .setPositiveButton("Yes", dialogClickListener)
+                            .setNegativeButton("No",  dialogClickListener)
+                            .show();*/
+                    Logout();
+                } else {
+                    Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
+                }
             }
             if (id == R.id.friends) {
                 Intent intent = new Intent(MainActivity.this, Friends.class);
@@ -463,7 +487,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sessionManager.logoutUser();
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
-        Toast.makeText(this, "Bye Bye!!!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Bye Bye!", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -780,7 +804,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ((AnimationDrawable) mImageViewFilling2.getBackground()).start();
 
         final TextView textViewScoreChall = (TextView) findViewById(R.id.textViewScoreChallenges);
-        final TextView textViewScoreWins = (TextView) findViewById(R.id.textViewScoreWins);
+        final TextView textViewScoreWins = (TextView) findViewById(R.id.textViewUserLevel);
         final TextView textViewScoreTotal = (TextView) findViewById(R.id.textViewScoreTotal);
 
         counter = 0;
@@ -935,7 +959,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView textViewScoreChallenges = (TextView)findViewById(R.id.textViewScoreChallenges);
         textViewScoreChallenges.setTextSize(y);
 
-        TextView textViewScoreWins = (TextView)findViewById(R.id.textViewScoreWins);
+        TextView textViewScoreWins = (TextView)findViewById(R.id.textViewUserLevel);
         textViewScoreWins.setTextSize(y);
 
         TextView textViewScoreTotal = (TextView)findViewById(R.id.textViewScoreTotal);

@@ -16,8 +16,7 @@ public class RecyclerView_adapter extends
     private ArrayList<SelfImprovement_model> arrayList;
     private Context context;
 
-    public RecyclerView_adapter(Context context,
-                                ArrayList<SelfImprovement_model> arrayList) {
+    public RecyclerView_adapter(Context context, ArrayList<SelfImprovement_model> arrayList) {
         this.context = context;
         this.arrayList = arrayList;
 

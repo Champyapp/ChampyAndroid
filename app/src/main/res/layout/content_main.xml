@@ -76,7 +76,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/textViewScoreWins"
+        android:id="@+id/textViewUserLevel"
         android:layout_alignLeft="@+id/imageView_wins_animation"
         android:layout_alignStart="@+id/imageView_wins_animation"
         android:layout_alignParentTop="true"

@@ -63,8 +63,7 @@ public class SelfImprovement_model {
     }
 
 
-    public SelfImprovement_model( String mgoal, String mdays, String mtype, String mid ,String mstatus, String mupdated)
-    {
+    public SelfImprovement_model( String mgoal, String mdays, String mtype, String mid ,String mstatus, String mupdated) {
         this.goal = mgoal;
         this.days = mdays;
         this.type = mtype;
@@ -73,8 +72,7 @@ public class SelfImprovement_model {
         this.updated = mupdated;
     }
 
-    public static ArrayList<SelfImprovement_model> generate(Context context)
-    {
+    public static ArrayList<SelfImprovement_model> generate(Context context) {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -105,7 +103,13 @@ public class SelfImprovement_model {
             int updated = c.getColumnIndex("updated");
             Log.i("stat", "Statuskwo: o="+o);
             do {
-                if (c.getString(status).equals("started")) arrayList.add (new SelfImprovement_model(c.getString(coldescription), c.getString(colduration), c.getString(nameColIndex), c.getString(colchallenge_id), "started", c.getString(updated)));
+                if (c.getString(status).equals("started")) arrayList.add (new SelfImprovement_model(
+                        c.getString(coldescription),
+                        c.getString(colduration),
+                        c.getString(nameColIndex),
+                        c.getString(colchallenge_id),
+                        "started",
+                        c.getString(updated)));
             } while (c.moveToNext());
         } else
             Log.i("stat", "kwo0 rows");
@@ -113,8 +117,7 @@ public class SelfImprovement_model {
         return  arrayList;
     }
 
-    public static ArrayList<SelfImprovement_model> generateAll(Context context)
-    {
+    public static ArrayList<SelfImprovement_model> generateAll(Context context) {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -145,7 +148,13 @@ public class SelfImprovement_model {
             int updated = c.getColumnIndex("updated");
             Log.i("stat", "Statuskwo: o="+o);
             do {
-                arrayList.add (new SelfImprovement_model(c.getString(coldescription), c.getString(colduration), c.getString(nameColIndex), c.getString(colchallenge_id), c.getString(status), c.getString(updated)));
+                arrayList.add (new SelfImprovement_model(
+                        c.getString(coldescription),
+                        c.getString(colduration),
+                        c.getString(nameColIndex),
+                        c.getString(colchallenge_id),
+                        c.getString(status),
+                        c.getString(updated)));
             } while (c.moveToNext());
         } else
             Log.i("stat", "kwo0 rows");

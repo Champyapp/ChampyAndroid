@@ -87,7 +87,7 @@ public class PendingDuelFragment extends Fragment {
         Glide.with(getContext())
                 .load(R.drawable.points)
                 .override(120, 120)
-                .into((ImageView) view.findViewById(R.id.imageView14));
+                .into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
         Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
         textView.setTypeface(typeface);
 

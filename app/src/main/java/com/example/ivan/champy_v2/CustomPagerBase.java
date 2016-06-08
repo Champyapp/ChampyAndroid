@@ -134,12 +134,12 @@ public class CustomPagerBase {
                             firstTouchX = X;
                             break;
                         case MotionEvent.ACTION_MOVE:
-                            /*if (X > width*25 && X < width*80) {
-                                ViewHelper.setX(itemView, viewXPosition + (X - lastX));
-                            }*/
-                            if (X > width*50 & X < width*50) {
+                            if (X > width*25 && X < width*80) {
                                 ViewHelper.setX(itemView, viewXPosition + (X - lastX));
                             }
+                            /*if (X > width*50 & X < width*50) {
+                                ViewHelper.setX(itemView, viewXPosition + (X - lastX));
+                            }*/
 
                             lastX = X;
                             //   Log.d("TAG", "Move "+ViewHelper.getAlpha(nextItem));

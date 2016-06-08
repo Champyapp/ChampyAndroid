@@ -163,7 +163,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
             textView = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
             textView.setText(champy.get("total"));
 
-            textView = (TextView)viewHolder.itemView.findViewById(R.id.textViewScoreWins);
+            textView = (TextView)viewHolder.itemView.findViewById(R.id.textViewUserLevel);
             textView.setText("Level "+champy.get("level")+" Champy");
 
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.VISIBLE);

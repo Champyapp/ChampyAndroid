@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Level # Champy"
-        android:id="@+id/textViewScoreWins"
+        android:id="@+id/textViewUserLevel"
         android:layout_below="@+id/textViewScoreChallenges"
         android:layout_centerHorizontal="true"
         android:textColor="#ffffff"
@@ -44,7 +44,7 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:id="@+id/imageViewBgForCircleChall"
-        android:layout_below="@+id/textViewScoreWins"
+        android:layout_below="@+id/textViewUserLevel"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginLeft="16dp" />
@@ -53,14 +53,14 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:id="@+id/imageViewBgForCircleWins"
-        android:layout_below="@+id/textViewScoreWins"
+        android:layout_below="@+id/textViewUserLevel"
         android:layout_centerHorizontal="true" />
 
     <ImageView
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:id="@+id/imageViewBgForCircleTotal"
-        android:layout_below="@+id/textViewScoreWins"
+        android:layout_below="@+id/textViewUserLevel"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginRight="16dp" />
@@ -169,7 +169,7 @@
         android:layout_height="40dp"
         android:id="@+id/imageButtonAddUser"
         android:background="@drawable/centerwithplus"
-        android:layout_above="@+id/textViewScoreWins"
+        android:layout_above="@+id/textViewUserLevel"
         android:layout_alignRight="@+id/imageView11"
         android:layout_alignEnd="@+id/imageView11" />
 
