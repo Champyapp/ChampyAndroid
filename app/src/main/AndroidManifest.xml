@@ -119,10 +119,12 @@
         <activity
             android:name=".Duel"
             android:label="@string/title_activity_duel"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Pending_Duel"
             android:label="@string/title_activity_pending__duel"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <service

@@ -79,6 +79,7 @@ public class SelfImprovementFragment extends Fragment {
         int position = args.getInt(ARG_PAGE);
         Log.i("stat", "Status: " + position);
         int o = 0;
+        // достаем карточки с базы данных
         if (c.moveToFirst()) {
             int idColIndex = c.getColumnIndex("id");
             int nameColIndex = c.getColumnIndex("name");
@@ -99,6 +100,8 @@ public class SelfImprovementFragment extends Fragment {
             Log.i("stat", "0 rows");
         c.close();
         Log.i("stat", "Name: " + name);
+
+        // перевіряється чи вона активна
         if (isActive(description)) {
             Log.i("stat", "Status: Active");
             Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
@@ -124,6 +127,7 @@ public class SelfImprovementFragment extends Fragment {
                     .override(120, 120)
                     .into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
         }
+        // якщо не isActive
         else {
             final int[] finalposition = new int[1];
             final ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.pager);
@@ -188,9 +192,7 @@ public class SelfImprovementFragment extends Fragment {
                     description = editTextGoal.getText().toString();                                         // description = editTextGoal.getText.toString...
                     editTextGoal = (EditText) view.findViewById(R.id.days);                                  // editTextGold теперь отвечает за дни
                     Log.i("stat", "Description :" + description + " " + description.length());
-                    if (editTextGoal.getText().toString().equals("")) {                                      // якщо editTextGoal з getText.toString, то він відповідає за ДНІ, якщо без то за НАЗВУ.
-                        Toast.makeText(getContext(), "Duration is empty!", Toast.LENGTH_SHORT).show();
-                    } else {
+                    if (!editTextGoal.getText().toString().equals("")) {                                      // якщо editTextGoal з getText.toString, то він відповідає за ДНІ, якщо без то за НАЗВУ.
                         days = Integer.parseInt(editTextGoal.getText().toString());
                     }
                     Cursor c = db.query("selfimprovement", null, null, null, null, null, null);
@@ -202,21 +204,21 @@ public class SelfImprovementFragment extends Fragment {
                     int size = sessionManager.getSelfSize();
 
                     Log.i("stat", "Click: " + position + " " + size);
+                    // якшо (position = size) - значить я стою на пустому (останьому)
                     if (position == size) {
                         editTextGoal = (EditText) view.findViewById(R.id.goal);                              // тут та же магія
                         description = editTextGoal.getText().toString();                                     // якщо editTextGoal з getText.toString, то він відповідає за ДНІ, якщо без то за НАЗВУ.
                         Log.i("stat", "Click: clicked");
                         Log.i("stat", "Click: " + description);
                         editTextGoal = (EditText) view.findViewById(R.id.days);
-
-                        if (editTextGoal.getText().toString().equals("") || days == 0) {                     // descriptions = days
-                            Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
-                        } else if (description.equals(" ") || description.startsWith(" ") || description.isEmpty()) {  // descriptions = goal
+                        // тут всьо чотко, я виправив
+                        if (description.equals("") && (days == 0 || editTextGoal.getText().toString().equals(""))) { // descriptions = days
+                            Toast.makeText(getContext(), "Card is empty", Toast.LENGTH_SHORT).show();
+                        } else if (description.isEmpty() || description.equals(" ") || description.startsWith(" ")) { // descriptions = goal
                             Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();
-                        } else if (name.equals("active")) { // а так сработает?
-                            Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
+                        } else if (editTextGoal.getText().toString().equals("") || days == 0) {
+                            Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
                         } else {
-                            //its ok
                             OfflineMode offlineMode = new OfflineMode();
                             if (offlineMode.isInternetAvailable(getActivity())) {
                                 days = Integer.parseInt(editTextGoal.getText().toString());
@@ -227,16 +229,17 @@ public class SelfImprovementFragment extends Fragment {
                             }
                         }
 
-                    } else { //по-идем отвечает за создание нового челенджа, т.к. position != size
+                    } else { // тут вже создані карточки
                         Log.i("stat", "Status: Poehali");
                         int o = 0;
+                        // опять карточки з бд
                         if (c.moveToFirst()) {
                             int idColIndex = c.getColumnIndex("id");
                             int nameColIndex = c.getColumnIndex("name");
                             int coldescription = c.getColumnIndex("description");
                             int colduration = c.getColumnIndex("duration");
                             int colchallenge_id = c.getColumnIndex("challenge_id");
-
+                            // ручками перевіряєм
                             do {
                                 o++;
                                 if (o > position + 1) break;
@@ -256,20 +259,21 @@ public class SelfImprovementFragment extends Fragment {
                             days = Integer.parseInt(duration) / 86400;
                         }
                         Log.i("stat", "Click: " + viewPager.getCurrentItem());
-
-                        if (name.equals("active")) {
-                            Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
-                        } else if (description.equals("") || description.startsWith(" ")) {
+                        // тут всьо чотко, я виправив
+                        if (description.equals("") && (days == 0 || editTextGoal.getText().toString().equals(""))) { // descriptions = days
+                            Toast.makeText(getContext(), "Card is empty", Toast.LENGTH_SHORT).show();
+                        } else if (description.isEmpty() || description.equals(" ") || description.startsWith(" ")) { // descriptions = goal
                             Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();
-                        } else if (days == 0) {
+                        } else if (editTextGoal.getText().toString().equals("") || days == 0) {
                             Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
-                        }  else {
+                        } else {
                             OfflineMode offlineMode = new OfflineMode();
                             if (offlineMode.isInternetAvailable(getActivity())) {
+                                days = Integer.parseInt(editTextGoal.getText().toString());
+                                Create_new_challenge(description, days);
                                 Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
-                                StartSingleInProgress(challenge_id);
                             } else {
-                                Toast.makeText(getContext(), "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "No Internet Connection!", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
