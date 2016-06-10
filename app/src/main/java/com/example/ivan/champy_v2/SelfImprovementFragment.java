@@ -197,8 +197,7 @@ public class SelfImprovementFragment extends Fragment {
                     }
                     Cursor c = db.query("selfimprovement", null, null, null, null, null, null);
                     int position = viewPager.getCurrentItem();
-
-
+                    
 
                     SessionManager sessionManager = new SessionManager(getContext());
                     int size = sessionManager.getSelfSize();

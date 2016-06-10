@@ -2,8 +2,10 @@ package com.example.ivan.champy_v2;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -56,12 +58,12 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-public class Settings extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class Settings extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     final private String API_URL = "http://46.101.213.24:3007";
     final private String TAG = "myLogs";
     HashMap<String, String> map = new HashMap<String, String>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +96,11 @@ public class Settings extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
+
+        int count = check_pending();
+        TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+        view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+        if (count == 0) hideItem();
 
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user = new HashMap<>();
@@ -418,8 +425,8 @@ public class Settings extends AppCompatActivity
         ViewServer.get(this).addWindow(this);
     }
 
-    private void Set_new_name(String newName)
-    {
+
+    private void Set_new_name(String newName) {
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user = new HashMap<>();
         user = sessionManager.getUserDetails();
@@ -556,6 +563,8 @@ public class Settings extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
     private Drawable Init(String path) throws FileNotFoundException {
         File file = new File(path, "blured2.jpg");
         Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
@@ -572,6 +581,8 @@ public class Settings extends AppCompatActivity
         return dr;
 
     }
+
+
     public void Update_profile(HashMap<String, String> map){
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user = new HashMap<>();
@@ -612,10 +623,40 @@ public class Settings extends AppCompatActivity
         });
     }
 
+
+    public int check_pending() {
+        DBHelper dbHelper = new DBHelper(this);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        final ContentValues cv = new ContentValues();
+        Cursor c = db.query("pending_duel", null, null, null, null, null, null);
+        int o = 0;
+        if (c.moveToFirst()) {
+
+            do {
+                o++;
+            } while (c.moveToNext());
+        } else
+            Log.i("stat", "kwo0 rows");
+        c.close();
+        SessionManager sessionManager = new SessionManager(this);
+        sessionManager.set_duel_pending("" + o);
+        Log.d(TAG, "O: " + o);
+        return o;
+    }
+
+
+    private void hideItem() {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Menu nav_Menu = navigationView.getMenu();
+        nav_Menu.findItem(R.id.pending_duels).setVisible(false);
+    }
+
+
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
+
 
     public void setupUI(View view) {
 

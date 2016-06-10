@@ -417,28 +417,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (id == R.id.nav_logout) {
                 offlineMode = new OfflineMode();
                 if (offlineMode.isInternetAvailable(this)) {
-                    /*DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            switch (which) {
-                                case DialogInterface.BUTTON_POSITIVE:
-                                    LoginManager.getInstance().logOut();
-                                    SessionManager sessionManager = new SessionManager(getApplicationContext());
-                                    sessionManager.logoutUser();
-                                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                                    startActivity(intent);
-                                    Toast.makeText(MainActivity.this, "Bye Bye!", Toast.LENGTH_SHORT).show();
-                                    break;
-                                case DialogInterface.BUTTON_NEGATIVE:
-                                    break;
-                            }
-                        }
-                    };
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-                    builder.setMessage("Are you sure?")
-                            .setPositiveButton("Yes", dialogClickListener)
-                            .setNegativeButton("No",  dialogClickListener)
-                            .show();*/
                     Logout();
                 } else {
                     Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
@@ -481,6 +459,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    public int check_pending() {
+        DBHelper dbHelper = new DBHelper(this);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        final ContentValues cv = new ContentValues();
+        Cursor c = db.query("pending_duel", null, null, null, null, null, null);
+        int o = 0;
+        if (c.moveToFirst()) {
+
+            do {
+                o++;
+            } while (c.moveToNext());
+        } else
+            Log.i("stat", "kwo0 rows");
+        c.close();
+        SessionManager sessionManager = new SessionManager(this);
+        sessionManager.set_duel_pending("" + o);
+        Log.d(TAG, "O: " + o);
+        return o;
+    }
+
+
     public void Logout(){
         LoginManager.getInstance().logOut();
         SessionManager sessionManager = new SessionManager(getApplicationContext());
@@ -490,8 +489,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toast.makeText(this, "Bye Bye!", Toast.LENGTH_SHORT).show();
     }
 
-
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+
 
         protected Bitmap doInBackground(String... urls) {
             String urldisplay = urls[0];
@@ -507,7 +506,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             return mIcon11;
         }
-
 
         private String saveToInternalStorage(Bitmap bitmapImage){
             ContextWrapper cw = new ContextWrapper(getApplicationContext());
@@ -619,20 +617,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
         }
-
         protected void onPostExecute(Bitmap result) {
             // Do your staff here to save image
             saveToInternalStorage(result);
             loadImageFromStorage("/data/data/com.example.ivan.champy_v2/app_imageDir/");
         }
-    }
 
+
+    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         ViewServer.get(this).removeWindow(this);
     }
+
 
     @Override
     protected void onResume() {
@@ -658,7 +657,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return dr;
 
     }
-
 
     public class CustomAdapter extends CustomPagerAdapter {
 
@@ -789,6 +787,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public int dataCount() {
             return arrayList.size();
         }
+
 
     }
 
@@ -1017,27 +1016,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Log.d(TAG, "Status: "+t);
             }
         });
-    }
-
-
-    public int check_pending() {
-        DBHelper dbHelper = new DBHelper(this);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final ContentValues cv = new ContentValues();
-        Cursor c = db.query("pending_duel", null, null, null, null, null, null);
-        int o = 0;
-        if (c.moveToFirst()) {
-
-            do {
-                o++;
-            } while (c.moveToNext());
-        } else
-            Log.i("stat", "kwo0 rows");
-        c.close();
-        SessionManager sessionManager = new SessionManager(this);
-        sessionManager.set_duel_pending("" + o);
-        Log.d(TAG, "O: " + o);
-        return o;
     }
 
 
