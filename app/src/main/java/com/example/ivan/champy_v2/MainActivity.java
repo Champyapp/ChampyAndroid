@@ -416,33 +416,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (offlineMode.isInternetAvailable(this)) {
             if (id == R.id.nav_logout) {
                 offlineMode = new OfflineMode();
-                if (offlineMode.isInternetAvailable(this)) {
-                    /*DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            switch (which) {
-                                case DialogInterface.BUTTON_POSITIVE:
-                                    LoginManager.getInstance().logOut();
-                                    SessionManager sessionManager = new SessionManager(getApplicationContext());
-                                    sessionManager.logoutUser();
-                                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                                    startActivity(intent);
-                                    Toast.makeText(MainActivity.this, "Bye Bye!", Toast.LENGTH_SHORT).show();
-                                    break;
-                                case DialogInterface.BUTTON_NEGATIVE:
-                                    break;
-                            }
-                        }
-                    };
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-                    builder.setMessage("Are you sure?")
-                            .setPositiveButton("Yes", dialogClickListener)
-                            .setNegativeButton("No",  dialogClickListener)
-                            .show();*/
-                    Logout();
-                } else {
-                    Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
-                }
+                if (offlineMode.isInternetAvailable(this)) { Logout(); }
+                else { Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();}
             }
             if (id == R.id.friends) {
                 Intent intent = new Intent(MainActivity.this, Friends.class);

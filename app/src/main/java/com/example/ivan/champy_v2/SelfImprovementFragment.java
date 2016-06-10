@@ -40,9 +40,6 @@ import retrofit.Retrofit;
 
 import static java.lang.Math.round;
 
-/**
- * Created by ivan on 14.03.16.
- */
 public class SelfImprovementFragment extends Fragment {
 
     public static final String ARG_PAGE = "ARG_PAGE";
