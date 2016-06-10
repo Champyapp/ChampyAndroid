@@ -55,7 +55,6 @@ public class WakeUp extends AppCompatActivity implements NavigationView.OnNaviga
     private TextView alarmTextView;
     public static WakeUp inst;
 
-
     public static WakeUp instance() {
         return inst;
     }
@@ -80,12 +79,10 @@ public class WakeUp extends AppCompatActivity implements NavigationView.OnNaviga
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
-        int count = check_pending();
-        TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-        view.setText("+" + (count > 0 ? String.valueOf(count) : null));
-        if (count == 0) hideItem();
-
+        /* TextView textView = (TextView)findViewById(R.id.textView19);*/
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
+        //textView.setTypeface(typeface);
+
         TextView textView = (TextView)findViewById(R.id.textView20);
         textView.setTypeface(typeface);
 
@@ -222,6 +219,8 @@ public class WakeUp extends AppCompatActivity implements NavigationView.OnNaviga
     }
 
 
+
+
     public boolean check(String time) {
         boolean ok = true;
 
@@ -266,7 +265,6 @@ public class WakeUp extends AppCompatActivity implements NavigationView.OnNaviga
 
     }
 
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -279,14 +277,12 @@ public class WakeUp extends AppCompatActivity implements NavigationView.OnNaviga
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         //  getMenuInflater().inflate(R.menu.wake_up, menu);
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -327,10 +323,6 @@ public class WakeUp extends AppCompatActivity implements NavigationView.OnNaviga
                 Intent intent = new Intent(WakeUp.this, Friends.class);
                 startActivity(intent);
             }
-            if (id == R.id.pending_duel) {
-                Intent intent = new Intent(WakeUp.this, Pending_Duel.class);
-                startActivity(intent);
-            }
             if (id == R.id.settings) {
                 Intent intent = new Intent(WakeUp.this, Settings.class);
                 startActivity(intent);
@@ -347,34 +339,6 @@ public class WakeUp extends AppCompatActivity implements NavigationView.OnNaviga
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-
-    public int check_pending() {
-        DBHelper dbHelper = new DBHelper(this);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final ContentValues cv = new ContentValues();
-        Cursor c = db.query("pending_duel", null, null, null, null, null, null);
-        int o = 0;
-        if (c.moveToFirst()) {
-            do {
-                o++;
-            } while (c.moveToNext());
-        } else {
-            Log.i("stat", "kwo0 rows");
-        }
-        c.close();
-        SessionManager sessionManager = new SessionManager(this);
-        sessionManager.set_duel_pending("" + o);
-        Log.d("TAG", "O: " + o);
-        return o;
-    }
-
-
-    private void hideItem() {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        Menu nav_Menu = navigationView.getMenu();
-        nav_Menu.findItem(R.id.pending_duels).setVisible(false);
     }
 
 
