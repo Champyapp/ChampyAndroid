@@ -63,13 +63,13 @@ public class SelfImprovement_model {
     }
 
 
-    public SelfImprovement_model( String mgoal, String mdays, String mtype, String mid ,String mstatus, String mupdated) {
-        this.goal = mgoal;
-        this.days = mdays;
-        this.type = mtype;
+    public SelfImprovement_model( String mGoal, String mDays, String mType, String mid ,String mStatus, String mUpdated) {
+        this.goal = mGoal;
+        this.days = mDays;
+        this.type = mType;
         this.id = mid;
-        this.status = mstatus;
-        this.updated = mupdated;
+        this.status = mStatus;
+        this.updated = mUpdated;
     }
 
     public static ArrayList<SelfImprovement_model> generate(Context context) {

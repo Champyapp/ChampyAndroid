@@ -20,9 +20,9 @@ public class RecyclerViewHolder extends RecyclerView.ViewHolder  {
         // Find all views ids
 
         this.goal = (EditText) view
-                .findViewById(R.id.goal);
+                .findViewById(R.id.et_goal);
 
-        this.days = (EditText) view.findViewById(R.id.days);
+        this.days = (EditText) view.findViewById(R.id.et_days);
 
 
 

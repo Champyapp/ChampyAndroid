@@ -80,7 +80,7 @@ public class Pending_Duel extends AppCompatActivity implements NavigationView.On
         String name = user.get("name");
 
         ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        textView = (TextView) headerLayout.findViewById(R.id.textView);
+        textView = (TextView) headerLayout.findViewById(R.id.tvUserName);
         textView.setText(name);
 
         Glide.with(this)

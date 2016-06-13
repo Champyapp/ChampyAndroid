@@ -121,9 +121,9 @@ public class DuelFragment extends Fragment {
             textView.setText("" + days);
             textView.setTypeface(typeface);
             textView.setVisibility(View.VISIBLE);
-            EditText editText = (EditText) view.findViewById(R.id.goal);
+            EditText editText = (EditText) view.findViewById(R.id.et_goal);
             editText.setVisibility(View.INVISIBLE);
-            editText = (EditText)view.findViewById(R.id.days);
+            editText = (EditText)view.findViewById(R.id.et_days);
             editText.setVisibility(View.INVISIBLE);
             Glide.with(getContext())
                     .load(R.drawable.points)
@@ -138,11 +138,11 @@ public class DuelFragment extends Fragment {
 
 
             Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
-            EditText editText = (EditText) view.findViewById(R.id.goal);
+            EditText editText = (EditText) view.findViewById(R.id.et_goal);
             editText.setText(description);
             editText.setTypeface(typeface);
             editText.setVisibility(View.VISIBLE);
-            editText = (EditText) view.findViewById(R.id.days);
+            editText = (EditText) view.findViewById(R.id.et_days);
             editText.setTypeface(typeface);
             int days = 0;
             if (duration != null && duration != "") {
@@ -160,9 +160,9 @@ public class DuelFragment extends Fragment {
                     .load(R.drawable.points)
                     .override(120, 120)
                     .into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
-            editText = (EditText) view.findViewById(R.id.goal);
+            editText = (EditText) view.findViewById(R.id.et_goal);
             description = editText.getText().toString();
-            editText = (EditText) view.findViewById(R.id.days);
+            editText = (EditText) view.findViewById(R.id.et_days);
             days = Integer.parseInt(editText.getText().toString());
             Log.i("stat", "Description: " + description);
             ImageButton imageButton = (ImageButton) getActivity().findViewById(R.id.ok);
@@ -183,9 +183,9 @@ public class DuelFragment extends Fragment {
                     String description = "";
                     String challenge_id = "";
                     int days = 0;
-                    EditText editTextGoal = (EditText) view.findViewById(R.id.goal);
+                    EditText editTextGoal = (EditText) view.findViewById(R.id.et_goal);
                     description = editTextGoal.getText().toString();
-                    editTextGoal = (EditText) view.findViewById(R.id.days);
+                    editTextGoal = (EditText) view.findViewById(R.id.et_days);
                     Log.i("stat", "Descrition :"+description+ " " + description.length());
                     if (editTextGoal.getText().toString().equals("")){
                         Toast.makeText(getContext(), "Duration is empty!!!", Toast.LENGTH_SHORT).show();
@@ -197,11 +197,11 @@ public class DuelFragment extends Fragment {
 
                     Log.i("stat", "Click: " + position + " " + size);
                     if (position == size) {
-                        editTextGoal = (EditText) view.findViewById(R.id.goal);
+                        editTextGoal = (EditText) view.findViewById(R.id.et_goal);
                         description = editTextGoal.getText().toString();
                         Log.i("stat", "Click: clicked");
                         Log.i("stat", "Click: " + description);
-                        editTextGoal = (EditText) view.findViewById(R.id.days);
+                        editTextGoal = (EditText) view.findViewById(R.id.et_days);
                         if (editTextGoal.getText().toString().equals("") || days == 0) {
                             Toast.makeText(getContext(), "Min 1 day!", Toast.LENGTH_SHORT).show();
                         } else if (description.equals(" ") || description.startsWith(" ") || description.isEmpty()) {
@@ -242,7 +242,7 @@ public class DuelFragment extends Fragment {
                             } while (c.moveToNext());
                         } else Log.i("stat", "0 rows");
                         c.close();
-                        description = ((EditText) view.findViewById(R.id.goal)).getText().toString();
+                        description = ((EditText) view.findViewById(R.id.et_goal)).getText().toString();
                         Log.i("stat", "Description :" + description + " " + description.length());
                         if (duration != null && duration != "") {
                             days = Integer.parseInt(duration) / 86400;

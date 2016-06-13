@@ -115,9 +115,9 @@ public class SelfImprovementFragment extends Fragment {
             tvDays.setTypeface(typeface);
             tvDays.setVisibility(View.VISIBLE);
 
-            EditText etGoal = (EditText) view.findViewById(R.id.goal);
+            EditText etGoal = (EditText) view.findViewById(R.id.et_goal);
             etGoal.setVisibility(View.INVISIBLE);
-            EditText etDays = (EditText)view.findViewById(R.id.days);
+            EditText etDays = (EditText)view.findViewById(R.id.et_days);
             etDays.setVisibility(View.INVISIBLE);
             Glide.with(getContext())
                     .load(R.drawable.points)
@@ -133,12 +133,12 @@ public class SelfImprovementFragment extends Fragment {
 
             Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
 
-            EditText etGoal = (EditText) view.findViewById(R.id.goal);
+            EditText etGoal = (EditText) view.findViewById(R.id.et_goal);
             etGoal.setText(description);
             etGoal.setTypeface(typeface);
             etGoal.setVisibility(View.VISIBLE);
 
-            EditText etDays = (EditText) view.findViewById(R.id.days);
+            EditText etDays = (EditText) view.findViewById(R.id.et_days);
             etDays.setTypeface(typeface);
             int days = 0;
             if (duration != null && duration != "") {
@@ -160,9 +160,9 @@ public class SelfImprovementFragment extends Fragment {
                     .override(120, 120)
                     .into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
 
-            EditText etGoalAgain = (EditText) view.findViewById(R.id.goal);
+            EditText etGoalAgain = (EditText) view.findViewById(R.id.et_goal);
             description = etGoalAgain.getText().toString();
-            etGoalAgain = (EditText) view.findViewById(R.id.days);
+            etGoalAgain = (EditText) view.findViewById(R.id.et_days);
             days = Integer.parseInt(etGoalAgain.getText().toString());
             Log.i("stat", "Description: " + description);
 
@@ -185,9 +185,9 @@ public class SelfImprovementFragment extends Fragment {
                     String description = "";
                     String challenge_id = "";
                     int days = 0;
-                    EditText editTextGoal = (EditText) view.findViewById(R.id.goal);                         // editText отвечает за цель
+                    EditText editTextGoal = (EditText) view.findViewById(R.id.et_goal);                         // editText отвечает за цель
                     description = editTextGoal.getText().toString();                                         // description = editTextGoal.getText.toString...
-                    editTextGoal = (EditText) view.findViewById(R.id.days);                                  // editTextGold теперь отвечает за дни
+                    editTextGoal = (EditText) view.findViewById(R.id.et_days);                                  // editTextGold теперь отвечает за дни
                     Log.i("stat", "Description :" + description + " " + description.length());
                     if (!editTextGoal.getText().toString().equals("")) {                                      // якщо editTextGoal з getText.toString, то він відповідає за ДНІ, якщо без то за НАЗВУ.
                         days = Integer.parseInt(editTextGoal.getText().toString());
@@ -203,11 +203,11 @@ public class SelfImprovementFragment extends Fragment {
                     Log.i("stat", "Click: " + position + " " + size);
                     // якшо (position = size) - значить я стою на пустому (останьому)
                     if (position == size) {
-                        editTextGoal = (EditText) view.findViewById(R.id.goal);                              // тут та же магія
+                        editTextGoal = (EditText) view.findViewById(R.id.et_goal);                              // тут та же магія
                         description = editTextGoal.getText().toString();                                     // якщо editTextGoal з getText.toString, то він відповідає за ДНІ, якщо без то за НАЗВУ.
                         Log.i("stat", "Click: clicked");
                         Log.i("stat", "Click: " + description);
-                        editTextGoal = (EditText) view.findViewById(R.id.days);
+                        editTextGoal = (EditText) view.findViewById(R.id.et_days);
                         // тут всьо чотко, я виправив
                         if (description.equals("") && (days == 0 || editTextGoal.getText().toString().equals(""))) { // descriptions = days
                             Toast.makeText(getContext(), "Card is empty", Toast.LENGTH_SHORT).show();
@@ -250,7 +250,7 @@ public class SelfImprovementFragment extends Fragment {
                             } while (c.moveToNext());
                         } else Log.i("stat", "0 rows");
                         c.close();
-                        description = ((EditText) view.findViewById(R.id.goal)).getText().toString();
+                        description = ((EditText) view.findViewById(R.id.et_goal)).getText().toString();
                         Log.i("stat", "Description :" + description + " " + description.length());
                         if (duration != null && duration != "") {
                             days = Integer.parseInt(duration) / 86400;

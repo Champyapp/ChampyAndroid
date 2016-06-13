@@ -336,8 +336,8 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
         String name = user.get("name");
 
         ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        TextView textView = (TextView) headerLayout.findViewById(R.id.textView);
-        textView.setText(name);
+        TextView tvUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        tvUserName.setText(name);
         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);

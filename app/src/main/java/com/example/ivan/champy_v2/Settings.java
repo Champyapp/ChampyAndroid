@@ -187,7 +187,7 @@ public class Settings extends AppCompatActivity implements NavigationView.OnNavi
         Uri url = Uri.fromFile(file);
 
         ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        TextView textView = (TextView) headerLayout.findViewById(R.id.textView);
+        TextView textView = (TextView) headerLayout.findViewById(R.id.tvUserName);
         textView.setText(name);
         Typeface typeface = Typeface.createFromAsset(Settings.this.getAssets(), "fonts/bebasneue.ttf");
 

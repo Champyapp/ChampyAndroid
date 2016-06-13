@@ -336,7 +336,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.d(TAG, "Image: "+url);
         RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.slider);
         ImageView profile_image = (ImageView)headerLayout.findViewById(R.id.profile_image);
-        TextView textView = (TextView)headerLayout.findViewById(R.id.textView);
+        TextView textView = (TextView)headerLayout.findViewById(R.id.tvUserName);
         textView.setText(name);
         imageView = (ImageView)headerLayout.findViewById(R.id.slide_background);
         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
@@ -367,43 +367,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ViewServer.get(this).addWindow(this);
 
 
-    }
-
-
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        }
-        actionMenu.close(true);
-        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.cards);
-        relativeLayout.setVisibility(View.VISIBLE);
-        ImageView screen = (ImageView) findViewById(R.id.blurScreen);
-        screen.setVisibility(View.INVISIBLE);
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.duel, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            generate();
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -448,11 +411,368 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            generate();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.duel, menu);
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        }
+        actionMenu.close(true);
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.cards);
+        relativeLayout.setVisibility(View.VISIBLE);
+        ImageView screen = (ImageView) findViewById(R.id.blurScreen);
+        screen.setVisibility(View.INVISIBLE);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ViewServer.get(this).removeWindow(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ViewServer.get(this).setFocusedWindow(this);
+        BuildAnim();
+    }
+
+
+    public void make_responsive_score(int width) {
+        int x = round(width/100);
+
+        //-------------------------- Animation ---------------------------//
+        ImageView imageView = (ImageView)findViewById(R.id.imageView_challenges_animation);
+        imageView.getLayoutParams().width = x*25;
+        imageView.getLayoutParams().height = x*25;
+
+        imageView = (ImageView)findViewById(R.id.imageView_wins_animation);
+        imageView.getLayoutParams().width = x*25;
+        imageView.getLayoutParams().height = x*25;
+
+        imageView = (ImageView)findViewById(R.id.imageView_total_animation);
+        imageView.getLayoutParams().width = x*25;
+        imageView.getLayoutParams().height = x*25;
+
+        //---------------------------- Logo -----------------------------//
+        imageView = (ImageView)findViewById(R.id.imageView_wins_logo);
+        imageView.getLayoutParams().width = x*5;
+        imageView.getLayoutParams().height = x*5;
+
+        imageView = (ImageView)findViewById(R.id.imageView_total_logo);
+        imageView.getLayoutParams().width = x*5;
+        imageView.getLayoutParams().height = x*5;
+
+        imageView = (ImageView)findViewById(R.id.imageView_challenges_logo);
+        imageView.getLayoutParams().width = x*5;
+        imageView.getLayoutParams().height = x*5;
+
+        //---------------------------- Fab -----------------------------//
+        ImageButton fab = (ImageButton)findViewById(R.id.fabPlus);
+        fab.getLayoutParams().width = x*20;
+        fab.getLayoutParams().height = x*20;
+
+        /*imageView = (ImageView)findViewById(R.id.profile_image);
+        imageView.getLayoutParams().width = x*25;
+        imageView.getLayoutParams().height = x*25;*/
+
+        //--------------------------- Score ----------------------------//
+        Float y = x*(float)3.5;
+
+        TextView textViewScoreChallenges = (TextView)findViewById(R.id.textViewScoreChallenges);
+        textViewScoreChallenges.setTextSize(y);
+
+        TextView textViewScoreWins = (TextView)findViewById(R.id.textViewUserLevel);
+        textViewScoreWins.setTextSize(y);
+
+        TextView textViewScoreTotal = (TextView)findViewById(R.id.textViewScoreTotal);
+        textViewScoreTotal.setTextSize(y);
+
+        //------------------------- TextViews -------------------------//
+        y = x*(float)1.5;
+        TextView textViewChallenges = (TextView)findViewById(R.id.textViewChallenges);
+        textViewChallenges.setTextSize(y);
+
+        TextView textViewWins = (TextView)findViewById(R.id.textViewWins);
+        textViewWins.setTextSize(y);
+
+        TextView textViewTotal = (TextView)findViewById(R.id.textViewTotal);
+        textViewTotal.setTextSize(y);
+
+    }
+
+
+    public void Upload_photo(String path) {
+        final String API_URL = "http://46.101.213.24:3007";
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        SessionManager sessionManager = new SessionManager(getApplicationContext());
+        HashMap<String, String> user = new HashMap<>();
+        user = sessionManager.getUserDetails();
+        String token = user.get("token");
+
+        String id = user.get("id");
+
+        Log.d(TAG, "USER: "+token+" "+id);
+
+        File f=new File(path);
+
+        Log.d(TAG, "Status: " + f);
+
+        RequestBody requestBody =
+                RequestBody.create(MediaType.parse("image/jpeg"), f);
+
+        Update_user update_user = retrofit.create(Update_user.class);
+        Call<User> call = update_user.update_photo(id, token, requestBody);
+        Log.d(TAG, "Status: RUN");
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Response<User> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    Log.d(TAG, "Status: photo_uploaded");
+                } else Log.d(TAG, "Status :" + response.code());
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.d(TAG, "Status: "+t);
+            }
+        });
+    }
+
+
+    public int check_pending() {
+        DBHelper dbHelper = new DBHelper(this);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        final ContentValues cv = new ContentValues();
+        Cursor c = db.query("pending_duel", null, null, null, null, null, null);
+        int o = 0;
+        if (c.moveToFirst()) {
+
+            do {
+                o++;
+            } while (c.moveToNext());
+        } else
+            Log.i("stat", "kwo0 rows");
+        c.close();
+        SessionManager sessionManager = new SessionManager(this);
+        sessionManager.set_duel_pending("" + o);
+        Log.d(TAG, "O: " + o);
+        return o;
+    }
+
+
+    public void BuildAnim() {
+        int width = getWindowManager().getDefaultDisplay().getWidth();
+        make_responsive_score(width);
+        ImageView mImageViewFilling = (ImageView) findViewById(R.id.imageView_challenges_animation);
+        ((AnimationDrawable) mImageViewFilling.getBackground()).start();
+        ImageView mImageViewFilling1 = (ImageView) findViewById(R.id.imageView_wins_animation);
+        ((AnimationDrawable) mImageViewFilling1.getBackground()).start();
+        ImageView mImageViewFilling2 = (ImageView) findViewById(R.id.imageView_total_animation);
+        ((AnimationDrawable) mImageViewFilling2.getBackground()).start();
+
+        final TextView textViewScoreChall = (TextView) findViewById(R.id.textViewScoreChallenges);
+        final TextView textViewScoreWins = (TextView) findViewById(R.id.textViewUserLevel);
+        final TextView textViewScoreTotal = (TextView) findViewById(R.id.textViewScoreTotal);
+
+        counter = 0;
+
+        SessionManager sessionManager = new SessionManager(this);
+        // берем данные про себя
+        String challenges = sessionManager.getChampyOptions().get("challenges");
+        String wins = sessionManager.getChampyOptions().get("wins");
+        String tot = sessionManager.getChampyOptions().get("total");
+
+        // переобразуем данные
+        final int challengesInteger = Integer.parseInt(challenges);
+        final int winsInteger = Integer.parseInt(wins);
+        final int totalInteger = Integer.parseInt(tot);
+
+        total = max(max(challengesInteger, winsInteger), totalInteger);
+        Log.d(TAG, "TOTAL: " + winsInteger);
+
+        //----------------------- animator for Challenges -----------------------//
+        ValueAnimator animatorChallenges = new ValueAnimator();
+        animatorChallenges.setObjectValues(0, challengesInteger);
+        animatorChallenges.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            public void onAnimationUpdate(ValueAnimator animation) {
+                textViewScoreChall.setText(String.valueOf(animation.getAnimatedValue()));
+            }
+        });
+        animatorChallenges.setEvaluator(new TypeEvaluator<Integer>() {
+            public Integer evaluate(float fraction, Integer startValue, Integer endValue) {
+                return Math.round(startValue + (endValue - startValue) * fraction);
+            }
+        });
+        animatorChallenges.setDuration(1000);
+
+        //------------------------- animator for Total -------------------------//
+        ValueAnimator animatorWins = new ValueAnimator();
+        animatorWins.setObjectValues(0, winsInteger);
+        animatorWins.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            public void onAnimationUpdate(ValueAnimator animation) {
+                textViewScoreWins.setText(String.valueOf(animation.getAnimatedValue()));
+            }
+        });
+        animatorWins.setEvaluator(new TypeEvaluator<Integer>() {
+            public Integer evaluate(float fraction, Integer startValue, Integer endValue) {
+                return Math.round(startValue + (endValue - startValue) * fraction);
+            }
+        });
+        animatorWins.setDuration(1000);
+
+        //------------------------- animator for Total -------------------------//
+        ValueAnimator animatorTotal = new ValueAnimator();
+        animatorTotal.setObjectValues(0, totalInteger);
+        animatorTotal.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            public void onAnimationUpdate(ValueAnimator animation) {
+                textViewScoreTotal.setText(String.valueOf(animation.getAnimatedValue()));
+            }
+        });
+        animatorTotal.setEvaluator(new TypeEvaluator<Integer>() {
+            public Integer evaluate(float fraction, Integer startValue, Integer endValue) {
+                return Math.round(startValue + (endValue - startValue) * fraction);
+            }
+        });
+        animatorTotal.setDuration(1000);
+
+        animatorChallenges.start();
+        animatorWins.start();
+        animatorTotal.start();
+
+
+
+        final TextView mSwitcher1 = (TextView) findViewById(R.id.textViewChallenges);
+        final TextView mSwitcher2 = (TextView) findViewById(R.id.textViewWins);
+        final TextView mSwitcher3 = (TextView) findViewById(R.id.textViewTotal);
+        final ImageView imageView1 = (ImageView) findViewById(R.id.imageView_challenges_logo);
+        final ImageView imageView2 = (ImageView) findViewById(R.id.imageView_wins_logo);
+        final ImageView imageView3 = (ImageView) findViewById(R.id.imageView_total_logo);
+        final Animation in = new AlphaAnimation(0.0f, 1.0f);
+        in.setDuration(3000);
+
+        mSwitcher1.setText("Challenges");
+        mSwitcher1.startAnimation(in);
+
+        mSwitcher2.setText("Wins");
+        mSwitcher2.startAnimation(in);
+
+        mSwitcher3.setText("Total");
+        mSwitcher3.startAnimation(in);
+
+        Uri uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/challenges");
+        Glide.with(this)
+                .load(uri)
+                .into(imageView1);
+
+        imageView1.startAnimation(in);
+
+        uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/wins");
+        Glide.with(this)
+                .load(uri)
+                .into(imageView2);
+
+        imageView2.startAnimation(in);
+
+        uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/total");
+        Glide.with(this)
+                .load(uri)
+                .into(imageView3);
+        imageView3.startAnimation(in);
+
+    }
+
 
     private void hideItem() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         Menu nav_Menu = navigationView.getMenu();
         nav_Menu.findItem(R.id.pending_duels).setVisible(false);
+    }
+
+
+    public void generate() {
+        DBHelper dbHelper = new DBHelper(this);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        final int clearCount = db.delete("pending_duel", null, null);
+        final ContentValues cv = new ContentValues();
+        final String API_URL = "http://46.101.213.24:3007";
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+
+        final SessionManager sessionManager = new SessionManager(this);
+        HashMap<String, String> user = new HashMap<>();
+        user = sessionManager.getUserDetails();
+        String token = user.get("token");
+        final String id = user.get("id");
+        ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
+        final long unixTime = System.currentTimeMillis() / 1000L;
+        final String update = "1457019726";
+        Log.i("stat", "Nam nado: " + id + " " + update + " " + token);
+        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(id, update, token);
+        call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
+            @Override
+            public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    List<Datum> data = response.body().getData();
+                    for (int i = 0; i < data.size(); i++) {
+                        com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
+                        Recipient recipient = datum.getRecipient();
+                        Sender sender = datum.getSender();
+                        Challenge challenge = datum.getChallenge();
+                        cv.clear();
+                        if (challenge.getType().equals("567d51c48322f85870fd931b")) {
+                            if (id.equals(recipient.getId())) {
+                                cv.put("recipient", "true");
+                                cv.put("versus", sender.getName());
+                            }
+                            if (id.equals(sender.get_id())) {
+                                cv.put("recipient", "false");
+                                cv.put("versus", recipient.getName());
+                            }
+                            cv.put("challenge_id", challenge.get_id());
+                            cv.put("description", challenge.getDescription());
+                            cv.put("duration", challenge.getDuration());
+                            db.insert("pending_duel", null, cv);
+                        }
+                    }
+                    Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+            }
+        });
     }
 
 
@@ -600,20 +920,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             saveToInternalStorage(result);
             loadImageFromStorage("/data/data/com.example.ivan.champy_v2/app_imageDir/");
         }
-    }
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ViewServer.get(this).removeWindow(this);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        ViewServer.get(this).setFocusedWindow(this);
-        BuildAnim();
     }
 
 
@@ -765,314 +1071,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return arrayList.size();
         }
 
-    }
-
-
-    public void BuildAnim() {
-        int width = getWindowManager().getDefaultDisplay().getWidth();
-        make_responsive_score(width);
-        ImageView mImageViewFilling = (ImageView) findViewById(R.id.imageView_challenges_animation);
-        ((AnimationDrawable) mImageViewFilling.getBackground()).start();
-        ImageView mImageViewFilling1 = (ImageView) findViewById(R.id.imageView_wins_animation);
-        ((AnimationDrawable) mImageViewFilling1.getBackground()).start();
-        ImageView mImageViewFilling2 = (ImageView) findViewById(R.id.imageView_total_animation);
-        ((AnimationDrawable) mImageViewFilling2.getBackground()).start();
-
-        final TextView textViewScoreChall = (TextView) findViewById(R.id.textViewScoreChallenges);
-        final TextView textViewScoreWins = (TextView) findViewById(R.id.textViewUserLevel);
-        final TextView textViewScoreTotal = (TextView) findViewById(R.id.textViewScoreTotal);
-
-        counter = 0;
-
-        SessionManager sessionManager = new SessionManager(this);
-        // берем данные про себя
-        String challenges = sessionManager.getChampyOptions().get("challenges");
-        String wins = sessionManager.getChampyOptions().get("wins");
-        String tot = sessionManager.getChampyOptions().get("total");
-
-        // переобразуем данные
-        final int challengesInteger = Integer.parseInt(challenges);
-        final int winsInteger = Integer.parseInt(wins);
-        final int totalInteger = Integer.parseInt(tot);
-
-        total = max(max(challengesInteger, winsInteger), totalInteger);
-        Log.d(TAG, "TOTAL: " + winsInteger);
-
-        //----------------------- animator for Challenges -----------------------//
-        ValueAnimator animatorChallenges = new ValueAnimator();
-        animatorChallenges.setObjectValues(0, challengesInteger);
-        animatorChallenges.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            public void onAnimationUpdate(ValueAnimator animation) {
-                textViewScoreChall.setText(String.valueOf(animation.getAnimatedValue()));
-            }
-        });
-        animatorChallenges.setEvaluator(new TypeEvaluator<Integer>() {
-            public Integer evaluate(float fraction, Integer startValue, Integer endValue) {
-                return Math.round(startValue + (endValue - startValue) * fraction);
-            }
-        });
-        animatorChallenges.setDuration(1000);
-
-        //------------------------- animator for Total -------------------------//
-        ValueAnimator animatorWins = new ValueAnimator();
-        animatorWins.setObjectValues(0, winsInteger);
-        animatorWins.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            public void onAnimationUpdate(ValueAnimator animation) {
-                textViewScoreWins.setText(String.valueOf(animation.getAnimatedValue()));
-            }
-        });
-        animatorWins.setEvaluator(new TypeEvaluator<Integer>() {
-            public Integer evaluate(float fraction, Integer startValue, Integer endValue) {
-                return Math.round(startValue + (endValue - startValue) * fraction);
-            }
-        });
-        animatorWins.setDuration(1000);
-
-        //------------------------- animator for Total -------------------------//
-        ValueAnimator animatorTotal = new ValueAnimator();
-        animatorTotal.setObjectValues(0, totalInteger);
-        animatorTotal.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            public void onAnimationUpdate(ValueAnimator animation) {
-                textViewScoreTotal.setText(String.valueOf(animation.getAnimatedValue()));
-            }
-        });
-        animatorTotal.setEvaluator(new TypeEvaluator<Integer>() {
-            public Integer evaluate(float fraction, Integer startValue, Integer endValue) {
-                return Math.round(startValue + (endValue - startValue) * fraction);
-            }
-        });
-        animatorTotal.setDuration(1000);
-
-        animatorChallenges.start();
-        animatorWins.start();
-        animatorTotal.start();
-
-
-
-        final TextView mSwitcher1 = (TextView) findViewById(R.id.textViewChallenges);
-        final TextView mSwitcher2 = (TextView) findViewById(R.id.textViewWins);
-        final TextView mSwitcher3 = (TextView) findViewById(R.id.textViewTotal);
-        final ImageView imageView1 = (ImageView) findViewById(R.id.imageView_challenges_logo);
-        final ImageView imageView2 = (ImageView) findViewById(R.id.imageView_wins_logo);
-        final ImageView imageView3 = (ImageView) findViewById(R.id.imageView_total_logo);
-        final Animation in = new AlphaAnimation(0.0f, 1.0f);
-        in.setDuration(3000);
-
-        mSwitcher1.setText("Challenges");
-        mSwitcher1.startAnimation(in);
-
-        mSwitcher2.setText("Wins");
-        mSwitcher2.startAnimation(in);
-
-        mSwitcher3.setText("Total");
-        mSwitcher3.startAnimation(in);
-
-        Uri uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/challenges");
-        Glide.with(this)
-                .load(uri)
-                .into(imageView1);
-
-        imageView1.startAnimation(in);
-
-        uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/wins");
-        Glide.with(this)
-                .load(uri)
-                .into(imageView2);
-
-        imageView2.startAnimation(in);
-
-        uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/total");
-        Glide.with(this)
-                .load(uri)
-                .into(imageView3);
-        imageView3.startAnimation(in);
-
-    }
-
-
-    public void make_responsive_score(int width) {
-        int x = round(width/100);
-
-        //-------------------------- Animation ---------------------------//
-        ImageView imageView = (ImageView)findViewById(R.id.imageView_challenges_animation);
-        imageView.getLayoutParams().width = x*25;
-        imageView.getLayoutParams().height = x*25;
-
-        imageView = (ImageView)findViewById(R.id.imageView_wins_animation);
-        imageView.getLayoutParams().width = x*25;
-        imageView.getLayoutParams().height = x*25;
-
-        imageView = (ImageView)findViewById(R.id.imageView_total_animation);
-        imageView.getLayoutParams().width = x*25;
-        imageView.getLayoutParams().height = x*25;
-
-        //---------------------------- Logo -----------------------------//
-        imageView = (ImageView)findViewById(R.id.imageView_wins_logo);
-        imageView.getLayoutParams().width = x*5;
-        imageView.getLayoutParams().height = x*5;
-
-        imageView = (ImageView)findViewById(R.id.imageView_total_logo);
-        imageView.getLayoutParams().width = x*5;
-        imageView.getLayoutParams().height = x*5;
-
-        imageView = (ImageView)findViewById(R.id.imageView_challenges_logo);
-        imageView.getLayoutParams().width = x*5;
-        imageView.getLayoutParams().height = x*5;
-
-        //---------------------------- Fab -----------------------------//
-        ImageButton fab = (ImageButton)findViewById(R.id.fabPlus);
-        fab.getLayoutParams().width = x*20;
-        fab.getLayoutParams().height = x*20;
-
-        /*imageView = (ImageView)findViewById(R.id.profile_image);
-        imageView.getLayoutParams().width = x*25;
-        imageView.getLayoutParams().height = x*25;*/
-
-        //--------------------------- Score ----------------------------//
-        Float y = x*(float)3.5;
-
-        TextView textViewScoreChallenges = (TextView)findViewById(R.id.textViewScoreChallenges);
-        textViewScoreChallenges.setTextSize(y);
-
-        TextView textViewScoreWins = (TextView)findViewById(R.id.textViewUserLevel);
-        textViewScoreWins.setTextSize(y);
-
-        TextView textViewScoreTotal = (TextView)findViewById(R.id.textViewScoreTotal);
-        textViewScoreTotal.setTextSize(y);
-
-        //------------------------- TextViews -------------------------//
-        y = x*(float)1.5;
-        TextView textViewChallenges = (TextView)findViewById(R.id.textViewChallenges);
-        textViewChallenges.setTextSize(y);
-
-        TextView textViewWins = (TextView)findViewById(R.id.textViewWins);
-        textViewWins.setTextSize(y);
-
-        TextView textViewTotal = (TextView)findViewById(R.id.textViewTotal);
-        textViewTotal.setTextSize(y);
-
-    }
-
-
-    public void Upload_photo(String path) {
-        final String API_URL = "http://46.101.213.24:3007";
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        SessionManager sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user = new HashMap<>();
-        user = sessionManager.getUserDetails();
-        String token = user.get("token");
-
-        String id = user.get("id");
-
-        Log.d(TAG, "USER: "+token+" "+id);
-
-        File f=new File(path);
-
-        Log.d(TAG, "Status: " + f);
-
-        RequestBody requestBody =
-                RequestBody.create(MediaType.parse("image/jpeg"), f);
-
-        Update_user update_user = retrofit.create(Update_user.class);
-        Call<User> call = update_user.update_photo(id, token, requestBody);
-        Log.d(TAG, "Status: RUN");
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Response<User> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    Log.d(TAG, "Status: photo_uploaded");
-                } else Log.d(TAG, "Status :" + response.code());
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                Log.d(TAG, "Status: "+t);
-            }
-        });
-    }
-
-
-    public int check_pending() {
-        DBHelper dbHelper = new DBHelper(this);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final ContentValues cv = new ContentValues();
-        Cursor c = db.query("pending_duel", null, null, null, null, null, null);
-        int o = 0;
-        if (c.moveToFirst()) {
-
-            do {
-                o++;
-            } while (c.moveToNext());
-        } else
-            Log.i("stat", "kwo0 rows");
-        c.close();
-        SessionManager sessionManager = new SessionManager(this);
-        sessionManager.set_duel_pending("" + o);
-        Log.d(TAG, "O: " + o);
-        return o;
-    }
-
-
-    public void generate() {
-        DBHelper dbHelper = new DBHelper(this);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final int clearCount = db.delete("pending_duel", null, null);
-        final ContentValues cv = new ContentValues();
-        final String API_URL = "http://46.101.213.24:3007";
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-
-        final SessionManager sessionManager = new SessionManager(this);
-        HashMap<String, String> user = new HashMap<>();
-        user = sessionManager.getUserDetails();
-        String token = user.get("token");
-        final String id = user.get("id");
-        ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
-        final long unixTime = System.currentTimeMillis() / 1000L;
-        final String update = "1457019726";
-        Log.i("stat", "Nam nado: " + id + " " + update + " " + token);
-        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(id, update, token);
-        call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
-            @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    List<Datum> data = response.body().getData();
-                    for (int i = 0; i < data.size(); i++) {
-                        com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
-                        Recipient recipient = datum.getRecipient();
-                        Sender sender = datum.getSender();
-                        Challenge challenge = datum.getChallenge();
-                        cv.clear();
-                        if (challenge.getType().equals("567d51c48322f85870fd931b")) {
-                            if (id.equals(recipient.getId())) {
-                                cv.put("recipient", "true");
-                                cv.put("versus", sender.getName());
-                            }
-                            if (id.equals(sender.get_id())) {
-                                cv.put("recipient", "false");
-                                cv.put("versus", recipient.getName());
-                            }
-                            cv.put("challenge_id", challenge.get_id());
-                            cv.put("description", challenge.getDescription());
-                            cv.put("duration", challenge.getDuration());
-                            db.insert("pending_duel", null, cv);
-                        }
-                    }
-                    Intent intent = new Intent(MainActivity.this, MainActivity.class);
-                    startActivity(intent);
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-            }
-        });
     }
 
 

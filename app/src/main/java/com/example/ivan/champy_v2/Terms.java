@@ -71,7 +71,7 @@ public class Terms extends AppCompatActivity implements NavigationView.OnNavigat
         String name = user.get("name");
 
         ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        textView = (TextView) headerLayout.findViewById(R.id.textView);
+        textView = (TextView) headerLayout.findViewById(R.id.tvUserName);
         textView.setText(name);
 
         Glide.with(this)

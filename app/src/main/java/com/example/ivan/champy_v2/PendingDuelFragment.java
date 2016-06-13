@@ -97,7 +97,7 @@ public class PendingDuelFragment extends Fragment {
         textView = (TextView)view.findViewById(R.id.textView27);
         textView.setText("During " + days + "days");
 
-        textView = (TextView)view.findViewById(R.id.goal);
+        textView = (TextView)view.findViewById(R.id.et_goal);
         textView.setText(description);
         return view;
     }

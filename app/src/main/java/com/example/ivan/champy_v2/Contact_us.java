@@ -72,7 +72,7 @@ public class Contact_us extends AppCompatActivity implements NavigationView.OnNa
         String name = user.get("name");
 
         ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        TextView textView = (TextView) headerLayout.findViewById(R.id.textView);
+        TextView textView = (TextView) headerLayout.findViewById(R.id.tvUserName);
         textView.setText(name);
 
         Button button = (Button)findViewById(R.id.button);

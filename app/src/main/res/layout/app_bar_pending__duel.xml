@@ -23,7 +23,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_pending__duel" />
+    <include layout="@layout/content_pending_duel" />
 
 
 </android.support.design.widget.CoordinatorLayout>
