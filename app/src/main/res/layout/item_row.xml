@@ -1,12 +1,11 @@
-<android.support.v7.widget.CardView
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
     android:id="@+id/card_view_non_edit"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     card_view:cardUseCompatPadding="true"
-    card_view:cardCornerRadius="8dp"
-    >
+    card_view:cardCornerRadius="8dp">
 
     <!--   Recycler View Item Row   -->
     <RelativeLayout
@@ -43,14 +42,13 @@
             android:layout_alignParentStart="true"
             android:inputType="text|textPersonName"
             android:textAllCaps="false"
-            android:capitalize="characters"
             android:hint="Enter your challenge"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:gravity="center_vertical|center_horizontal"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:typeface="normal"
-            android:textColor="#339997" />
+            android:textColor="#339997"
+            android:capitalize="characters" />
 
         <EditText
             android:layout_width="50dp"
@@ -59,30 +57,31 @@
             android:ems="10"
             android:id="@+id/et_days"
             android:maxLength="3"
+            android:hint="21"
             android:gravity="center_vertical|center_horizontal"
-            android:layout_below="@+id/tvEverydayForTheNext"
-            android:layout_alignLeft="@+id/tvEverydayForTheNext"
-            android:layout_alignStart="@+id/tvEverydayForTheNext"
-            android:layout_toLeftOf="@+id/tvDays"
-            android:layout_toStartOf="@+id/tvDays"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="30dp"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:textColor="#339997" />
+            android:textColor="#339997"
+            android:layout_below="@+id/tvEverydayForTheNext"
+            android:layout_alignLeft="@+id/imageViewAcceptButton"
+            android:layout_alignStart="@+id/imageViewAcceptButton"
+            android:layout_alignRight="@+id/imageViewAcceptButton"
+            android:layout_alignEnd="@+id/imageViewAcceptButton" />
+
         <TextView
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:id="@+id/days_text"
-            android:gravity="center_horizontal"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textColor="#339997"
-            android:text="21"
             android:paddingLeft="0dp"
             android:layout_alignBottom="@+id/et_days"
-            android:layout_toLeftOf="@+id/tvRewardPlus10Points"
+            android:layout_alignTop="@+id/et_days"
+            android:editable="false"
+            android:gravity="center"
+            android:layout_alignRight="@+id/imageViewAcceptButton"
+            android:layout_alignEnd="@+id/imageViewAcceptButton"
             android:layout_alignLeft="@+id/et_days"
-            android:layout_alignStart="@+id/et_days"
-            android:layout_alignTop="@+id/tvDays" />
+            android:layout_alignStart="@+id/et_days" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -93,7 +92,9 @@
             android:textColor="#339997"
             android:layout_alignBottom="@+id/et_days"
             android:layout_alignRight="@+id/tvEverydayForTheNext"
-            android:layout_alignEnd="@+id/tvEverydayForTheNext" />
+            android:layout_alignEnd="@+id/tvEverydayForTheNext"
+            android:layout_alignTop="@+id/et_days"
+            android:gravity="center" />
 
         <TextView
             android:layout_width="wrap_content"

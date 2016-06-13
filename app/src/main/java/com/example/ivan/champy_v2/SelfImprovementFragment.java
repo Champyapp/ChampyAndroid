@@ -77,7 +77,7 @@ public class SelfImprovementFragment extends Fragment {
         Log.i("stat", "Status: " + position);
         int o = 0;
         // достаем карточки с базы данных
-        if (c.moveToFirst()) {
+        if (c.moveToLast()) {
             int idColIndex = c.getColumnIndex("id");
             int nameColIndex = c.getColumnIndex("name");
             int coldescription = c.getColumnIndex("description");
@@ -92,195 +92,176 @@ public class SelfImprovementFragment extends Fragment {
                     duration = c.getString(colduration);
                     challenge_id = c.getString(colchallenge_id);
                 }
-            } while (c.moveToNext());
-        } else
+            } while (c.moveToPrevious());
+        } /*else {
             Log.i("stat", "0 rows");
+        }*/
         c.close();
         Log.i("stat", "Name: " + name);
+        final SessionManager sessionManager = new SessionManager(getContext());
+        final int[] finalposition = new int[1];
+        final ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.pager);
+        setupUI(getActivity().findViewById(R.id.selfimprovement));
+        setupUI(view);
+        int size = sessionManager.getSelfSize();
 
-        // перевіряється чи вона активна
-        if (isActive(description)) {
-            Log.i("stat", "Status: Active");
-            Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
-            TextView tvGoal = (TextView)view.findViewById(R.id.goal_text);
-            tvGoal.setText(description);
-            tvGoal.setTypeface(typeface);
-            tvGoal.setVisibility(View.VISIBLE);
-            TextView tvDays = (TextView)view.findViewById(R.id.days_text);
+        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
+        TextView tvGoal = (TextView) view.findViewById(R.id.goal_text);
+        TextView tvDays = (TextView) view.findViewById(R.id.days_text);
+        final EditText etGoal = (EditText) view.findViewById(R.id.et_goal);
+        final EditText etDays = (EditText) view.findViewById(R.id.et_days);
+
+        Glide.with(getContext())
+                .load(R.drawable.points)
+                .override(120, 120)
+                .into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
+
+        if (position != size) {
             int days = 0;
             if (duration != null && duration != "") {
                 days = Integer.parseInt(duration) / 86400;
             }
+            tvGoal.setText(description);
+            tvGoal.setTypeface(typeface);
+            tvGoal.setVisibility(View.VISIBLE);
+
             tvDays.setText("" + days);
             tvDays.setTypeface(typeface);
             tvDays.setVisibility(View.VISIBLE);
 
-            EditText etGoal = (EditText) view.findViewById(R.id.et_goal);
             etGoal.setVisibility(View.INVISIBLE);
-            EditText etDays = (EditText)view.findViewById(R.id.et_days);
             etDays.setVisibility(View.INVISIBLE);
-            Glide.with(getContext())
-                    .load(R.drawable.points)
-                    .override(120, 120)
-                    .into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
-        }
-        // якщо не isActive
-        else {
-            final int[] finalposition = new int[1];
-            final ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.pager);
-            setupUI(getActivity().findViewById(R.id.selfimprovement));
-            setupUI(view);
+        } else {
+            tvGoal.setText(description);
+            tvGoal.setVisibility(View.VISIBLE);
+            tvGoal.setTypeface(typeface);
 
-            Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
-
-            EditText etGoal = (EditText) view.findViewById(R.id.et_goal);
-            etGoal.setText(description);
-            etGoal.setTypeface(typeface);
-            etGoal.setVisibility(View.VISIBLE);
-
-            EditText etDays = (EditText) view.findViewById(R.id.et_days);
-            etDays.setTypeface(typeface);
-            int days = 0;
-            if (duration != null && duration != "") {
-                days = Integer.parseInt(duration) / 86400;
-            }
-            etDays.setText("" + days);
-            etDays.setVisibility(View.VISIBLE);
-
-            TextView tvDays = (TextView) view.findViewById(R.id.tvDays);
+            tvDays.setVisibility(View.VISIBLE);
             tvDays.setTypeface(typeface);
 
-            TextView tvGoal = (TextView)view.findViewById(R.id.goal_text);
-            tvGoal.setVisibility(View.INVISIBLE);
-
-            TextView tvDaysSimpleText = (TextView)view.findViewById(R.id.days_text);
-            tvDaysSimpleText.setVisibility(View.INVISIBLE);
+            etGoal.setVisibility(View.VISIBLE);
+            etDays.setVisibility(View.VISIBLE);
             Glide.with(getContext())
                     .load(R.drawable.points)
                     .override(120, 120)
                     .into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
-
-            EditText etGoalAgain = (EditText) view.findViewById(R.id.et_goal);
-            description = etGoalAgain.getText().toString();
-            etGoalAgain = (EditText) view.findViewById(R.id.et_days);
-            days = Integer.parseInt(etGoalAgain.getText().toString());
-            Log.i("stat", "Description: " + description);
-
-            ImageButton imageButtonAccept = (ImageButton) getActivity().findViewById(R.id.imageButtonAcceptSelfImprovement);
-            imageButtonAccept.setVisibility(View.VISIBLE);
-
-
-            imageButtonAccept.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(getActivity(), "Tap & Hold", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            imageButtonAccept.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    String name = "";
-                    String duration = "";
-                    String description = "";
-                    String challenge_id = "";
-                    int days = 0;
-                    EditText editTextGoal = (EditText) view.findViewById(R.id.et_goal);                         // editText отвечает за цель
-                    description = editTextGoal.getText().toString();                                         // description = editTextGoal.getText.toString...
-                    editTextGoal = (EditText) view.findViewById(R.id.et_days);                                  // editTextGold теперь отвечает за дни
-                    Log.i("stat", "Description :" + description + " " + description.length());
-                    if (!editTextGoal.getText().toString().equals("")) {                                      // якщо editTextGoal з getText.toString, то він відповідає за ДНІ, якщо без то за НАЗВУ.
-                        days = Integer.parseInt(editTextGoal.getText().toString());
-                    }
-                    Cursor c = db.query("selfimprovement", null, null, null, null, null, null);
-                    int position = viewPager.getCurrentItem();
-
-
-
-                    SessionManager sessionManager = new SessionManager(getContext());
-                    int size = sessionManager.getSelfSize();
-
-                    Log.i("stat", "Click: " + position + " " + size);
-                    // якшо (position = size) - значить я стою на пустому (останьому)
-                    if (position == size) {
-                        editTextGoal = (EditText) view.findViewById(R.id.et_goal);                              // тут та же магія
-                        description = editTextGoal.getText().toString();                                     // якщо editTextGoal з getText.toString, то він відповідає за ДНІ, якщо без то за НАЗВУ.
-                        Log.i("stat", "Click: clicked");
-                        Log.i("stat", "Click: " + description);
-                        editTextGoal = (EditText) view.findViewById(R.id.et_days);
-                        // тут всьо чотко, я виправив
-                        if (description.equals("") && (days == 0 || editTextGoal.getText().toString().equals(""))) { // descriptions = days
-                            Toast.makeText(getContext(), "Card is empty", Toast.LENGTH_SHORT).show();
-                        } else if (description.isEmpty() || description.equals(" ") || description.startsWith(" ")) { // descriptions = goal
-                            Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();
-                        } else if (editTextGoal.getText().toString().equals("") || days == 0) {
-                            Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
-                        } else {
-                            OfflineMode offlineMode = new OfflineMode();
-                            if (offlineMode.isInternetAvailable(getActivity())) {
-                                days = Integer.parseInt(editTextGoal.getText().toString());
-                                Create_new_challenge(description, days);
-                                Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(getContext(), "No Internet Connection!", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                    } else { // тут вже создані карточки
-                        Log.i("stat", "Status: Poehali");
-                        int o = 0;
-                        // опять карточки з бд
-                        if (c.moveToFirst()) {
-                            int idColIndex = c.getColumnIndex("id");
-                            int nameColIndex = c.getColumnIndex("name");
-                            int coldescription = c.getColumnIndex("description");
-                            int colduration = c.getColumnIndex("duration");
-                            int colchallenge_id = c.getColumnIndex("challenge_id");
-                            // ручками перевіряєм
-                            do {
-                                o++;
-                                if (o > position + 1) break;
-                                if (o == position + 1) {
-                                    name = c.getString(nameColIndex);
-                                    description = c.getString(coldescription);
-                                    duration = c.getString(colduration);
-                                    challenge_id = c.getString(colchallenge_id);
-                                    break;
-                                }
-                            } while (c.moveToNext());
-                        } else Log.i("stat", "0 rows");
-                        c.close();
-                        description = ((EditText) view.findViewById(R.id.et_goal)).getText().toString();
-                        Log.i("stat", "Description :" + description + " " + description.length());
-                        if (duration != null && duration != "") {
-                            days = Integer.parseInt(duration) / 86400;
-                        }
-                        Log.i("stat", "Click: " + viewPager.getCurrentItem());
-                        // тут всьо чотко, я виправив
-                        if (description.equals("") && (days == 0 || editTextGoal.getText().toString().equals(""))) { // descriptions = days
-                            Toast.makeText(getContext(), "Card is empty", Toast.LENGTH_SHORT).show();
-                        } else if (description.isEmpty() || description.equals(" ") || description.startsWith(" ")) { // descriptions = goal
-                            Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();
-                        } else if (editTextGoal.getText().toString().equals("") || days == 0) {
-                            Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
-                        } else {
-                            OfflineMode offlineMode = new OfflineMode();
-                            if (offlineMode.isInternetAvailable(getActivity())) {
-                                days = Integer.parseInt(editTextGoal.getText().toString());
-                                Create_new_challenge(description, days);
-                                Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(getContext(), "No Internet Connection!", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
-                    return true;
-                }
-            });
-
         }
+
+        ImageButton imageButtonAccept = (ImageButton) getActivity().findViewById(R.id.imageButtonAcceptSelfImprovement);
+        imageButtonAccept.setVisibility(View.VISIBLE);
+
+        imageButtonAccept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "Tap & Hold", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        imageButtonAccept.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String name = "";
+                String duration = "";
+                String description = "";
+                String challenge_id = "";
+                int days = 0;
+                EditText editTextDays = (EditText) view.findViewById(R.id.et_days);
+                duration = editTextDays.getText().toString();
+
+                EditText editTextGoal = (EditText) view.findViewById(R.id.et_goal);
+                description = editTextGoal.getText().toString();
+
+                //Log.i("stat", "Description :" + description + " " + description.length());
+                if (!editTextDays.getText().toString().equals("")) {
+                    days = Integer.parseInt(editTextDays.getText().toString());
+                }
+                Cursor c = db.query("selfimprovement", null, null, null, null, null, null);
+                int position = viewPager.getCurrentItem();
+
+
+                int size = sessionManager.getSelfSize();
+
+                //Log.i("stat", "Click: " + position + " " + size);
+                // якшо (position = size) - значить я стою на пустому (останьому)
+                if (position == size) {
+                    //editTextGoal = (EditText) view.findViewById(R.id.et_goal);
+                    //description = etGoal.getText().toString();
+                    //Log.i("stat", "Click: clicked");
+                    //Log.i("stat", "Click: " + description);
+                    //editTextGoal = (EditText) view.findViewById(R.id.et_days);
+                    // тут всьо чотко, я виправив
+                    if (description.equals("") && (days == 0 || duration.equals(""))) {
+                        Toast.makeText(getContext(), "Card is empty!", Toast.LENGTH_SHORT).show();
+                    } else if (description.isEmpty() || description.startsWith(" ")) {
+                        Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();
+                    } else if (duration.equals("") || days == 0) {
+                        Toast.makeText(getContext(), "Min 1 day!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        OfflineMode offlineMode = new OfflineMode();
+                        if (offlineMode.isInternetAvailable(getActivity())) {
+                            days = Integer.parseInt(duration);
+                            Create_new_challenge(description, days);
+                            Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getContext(), "No Internet Connection!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                } else { // тут вже создані карточки
+                    Log.i("stat", "Status: Poehali");
+                    int o = 0;
+                    // опять карточки з бд
+                    /*if (c.moveToFirst()) {
+                        int idColIndex = c.getColumnIndex("id");
+                        int nameColIndex = c.getColumnIndex("name");
+                        int coldescription = c.getColumnIndex("description");
+                        int colduration = c.getColumnIndex("duration");
+                        int colchallenge_id = c.getColumnIndex("challenge_id");
+                        // ручками перевіряєм
+                        do {
+                            o++;
+                            if (o > position + 1) break;
+                            if (o == position + 1) {
+                                name = c.getString(nameColIndex);
+                                description = c.getString(coldescription);
+                                duration = c.getString(colduration);
+                                challenge_id = c.getString(colchallenge_id);
+                                break;
+                            }
+                        } while (c.moveToNext());
+                    } else Log.i("stat", "0 rows");
+                    c.close();*/
+                    /*description = ((EditText) view.findViewById(R.id.et_goal)).getText().toString();
+                    Log.i("stat", "Description :" + description + " " + description.length());
+                    if (duration != null && duration != "") {
+                        days = Integer.parseInt(duration) / 86400;
+                    }
+                    Log.i("stat", "Click: " + viewPager.getCurrentItem());
+                    // тут всьо чотко, я виправив
+                    if (description.equals("") && (days == 0 || etGoal.getText().toString().equals(""))) { // descriptions = days
+                        Toast.makeText(getContext(), "Card is empty", Toast.LENGTH_SHORT).show();
+                    } else if (description.isEmpty() || description.equals(" ") || description.startsWith(" ")) { // descriptions = goal
+                        Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();
+                    } else if (etGoal.getText().toString().equals("") || days == 0) {
+                        Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
+                    } else {
+                        OfflineMode offlineMode = new OfflineMode();
+                        if (offlineMode.isInternetAvailable(getActivity())) {
+                            days = Integer.parseInt(etGoal.getText().toString());
+                            Create_new_challenge(description, days);
+                            Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getContext(), "No Internet Connection!", Toast.LENGTH_SHORT).show();
+                        }
+                    }*/
+                }
+                return true;
+            }
+        });
         return view;
     }
+
+
 
     public void Create_new_challenge(String description, int days) {
         String type_id = "567d51c48322f85870fd931a";
