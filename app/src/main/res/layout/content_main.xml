@@ -205,7 +205,7 @@
         android:layout_height="fill_parent"
         android:id="@+id/blurScreen"
         android:layout_centerHorizontal="true"
-        android:visibility="invisible"
+        android:visibility="visible"
         android:clickable="true" />
 
     <ImageButton

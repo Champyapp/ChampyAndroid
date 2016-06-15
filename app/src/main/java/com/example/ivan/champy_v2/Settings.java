@@ -511,53 +511,54 @@ public class Settings extends AppCompatActivity implements NavigationView.OnNavi
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
         OfflineMode offlineMode = new OfflineMode();
         if (offlineMode.isInternetAvailable(this)) {
-            if (id == R.id.nav_logout) {
-
-                if (offlineMode.isInternetAvailable(this)) {
+            switch (item.getItemId()) {
+                case R.id.challenges:
                     Update_profile(map);
-                    LoginManager.getInstance().logOut();
-                    SessionManager sessionManager = new SessionManager(getApplicationContext());
-                    sessionManager.logoutUser();
-                    Intent intent = new Intent(Settings.this, LoginActivity.class);
-                    startActivity(intent);
-                    Toast.makeText(this, "Bye Bye!!!", Toast.LENGTH_SHORT).show();
-                } else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
+                    Intent goToChallenges = new Intent(Settings.this, MainActivity.class);
+                    startActivity(goToChallenges);
+                    break;
+                case R.id.friends:
+                    Update_profile(map);
+                    Intent goToFriends = new Intent(Settings.this, Friends.class);
+                    startActivity(goToFriends);
+                    break;
+                case R.id.history:
+                    Update_profile(map);
+                    Intent goToHistory = new Intent(Settings.this, History.class);
+                    startActivity(goToHistory);
+                    break;
+                case R.id.pending_duels:
+                    Update_profile(map);
+                    Intent goToPendingDuel = new Intent(Settings.this, Pending_Duel.class);
+                    startActivity(goToPendingDuel);
+                case R.id.share:
+                    Update_profile(map);
+                    String message = "Check out Champy - it helps you improve and compete with your friends!";
+                    Intent share = new Intent(Intent.ACTION_SEND);
+                    share.setType("text/plain");
+                    share.putExtra(Intent.EXTRA_TEXT, message);
+                    startActivity(Intent.createChooser(share, "How would you like to share?"));
+                    break;
+                case R.id.nav_logout:
+                    if (offlineMode.isInternetAvailable(this)) {
+                        Update_profile(map);
+                        LoginManager.getInstance().logOut();
+                        SessionManager sessionManager = new SessionManager(getApplicationContext());
+                        sessionManager.logoutUser();
+                        Intent intent = new Intent(Settings.this, LoginActivity.class);
+                        startActivity(intent);
+                        Toast.makeText(this, "Bye Bye!!!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
+                    }
+                    break;
             }
-            if (id == R.id.challenges) {
-                Update_profile(map);
-                Intent intent = new Intent(Settings.this, MainActivity.class);
-                startActivity(intent);
-            }
-            if (id == R.id.history) {
-                Update_profile(map);
-                Intent intent = new Intent(Settings.this, History.class);
-                startActivity(intent);
-            }
-            if (id == R.id.pending_duels) {
-                Update_profile(map);
-                Intent intent = new Intent(Settings.this, Pending_Duel.class);
-                startActivity(intent);
-            }
-            if (id == R.id.friends) {
-                Update_profile(map);
-                Intent intent = new Intent(Settings.this, Friends.class);
-                startActivity(intent);
-            } else if (id == R.id.share) {
-                Update_profile(map);
-                String message = "Check out Champy - it helps you improve and compete with your friends!";
-                Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType("text/plain");
-                share.putExtra(Intent.EXTRA_TEXT, message);
-
-                startActivity(Intent.createChooser(share, "How would you like to share?"));
-            }
-
         }
-        else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
+        else {
+            Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

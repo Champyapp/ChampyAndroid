@@ -414,50 +414,48 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
         OfflineMode offlineMode = new OfflineMode();
         if (offlineMode.isInternetAvailable(this)) {
-            if (id == R.id.nav_logout) {
-
-                if (offlineMode.isInternetAvailable(this)) {
-                    LoginManager.getInstance().logOut();
-                    SessionManager sessionManager = new SessionManager(getApplicationContext());
-                    sessionManager.logoutUser();
-                    Intent intent = new Intent(Friends.this, LoginActivity.class);
-                    startActivity(intent);
-                    Toast.makeText(this, "Bye Bye!!!", Toast.LENGTH_SHORT).show();
-                } else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
+            switch (item.getItemId()) {
+                case R.id.challenges:
+                    Intent goToChallenges = new Intent(Friends.this, MainActivity.class);
+                    startActivity(goToChallenges);
+                    break;
+                case R.id.history:
+                    Intent goToHistory = new Intent(Friends.this, History.class);
+                    startActivity(goToHistory);
+                    break;
+                case R.id.pending_duels:
+                    Intent goToPendingDuel = new Intent(Friends.this, Pending_Duel.class);
+                    startActivity(goToPendingDuel);
+                    break;
+                case R.id.settings:
+                    Intent goToSettings = new Intent(Friends.this, Settings.class);
+                    startActivity(goToSettings);
+                    break;
+                case R.id.share:
+                    String message = "Check out Champy - it helps you improve and compete with your friends!";
+                    Intent share = new Intent(Intent.ACTION_SEND);
+                    share.setType("text/plain");
+                    share.putExtra(Intent.EXTRA_TEXT, message);
+                    startActivity(Intent.createChooser(share, "How would you like to share?"));
+                    break;
+                case R.id.nav_logout:
+                    offlineMode = new OfflineMode();
+                    if (offlineMode.isInternetAvailable(this)) {
+                        Logout();
+                    } else {
+                        Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
+                    }
+                    break;
             }
-            if (id == R.id.challenges) {
-                Intent intent = new Intent(Friends.this, MainActivity.class);
-                startActivity(intent);
-            }
-            if (id == R.id.history) {
-                Intent intent = new Intent(Friends.this, History.class);
-                startActivity(intent);
-            }
-            if (id == R.id.settings) {
-                Intent intent = new Intent(Friends.this, Settings.class);
-                startActivity(intent);
-            } else if (id == R.id.share) {
-                String message = "Check out Champy - it helps you improve and compete with your friends!";
-                Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType("text/plain");
-                share.putExtra(Intent.EXTRA_TEXT, message);
-                startActivity(Intent.createChooser(share, "How would you like to share?"));
-            } else if (id == R.id.pending_duels) {
-                Intent intent = new Intent(Friends.this, Pending_Duel.class);
-                startActivity(intent);
-            }
+        } else {
+            Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
         }
-        else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 
     private Drawable Init(String path) throws FileNotFoundException {
         File file = new File(path, "blured2.jpg");
@@ -562,6 +560,16 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
     }
 
 
+    public void Logout(){
+        LoginManager.getInstance().logOut();
+        SessionManager sessionManager = new SessionManager(getApplicationContext());
+        sessionManager.logoutUser();
+        Intent intent = new Intent(Friends.this, LoginActivity.class);
+        startActivity(intent);
+        Toast.makeText(this, "Bye Bye!", Toast.LENGTH_SHORT).show();
+    }
+
+
     public void UpdateFriendsList() {
         final String API_URL = "http://46.101.213.24:3007";
         SessionManager sessionManager = new SessionManager(getApplicationContext());
@@ -661,6 +669,7 @@ public class Friends extends AppCompatActivity implements NavigationView.OnNavig
             }
         });
     }
+
 
     public void UpdatePending() {
         final String API_URL = "http://46.101.213.24:3007";

@@ -16,7 +16,7 @@ import android.view.View;
 public class Blur {
 
     @SuppressLint("NewApi")
-    public static Bitmap blurRenderScript(Context context,Bitmap smallBitmap, int radius) {
+    public static Bitmap blurRenderScript(Context context, Bitmap smallBitmap, int radius) {
         try {
             smallBitmap = RGB565toARGB888(smallBitmap);
         } catch (Exception e) {
@@ -28,7 +28,7 @@ public class Blur {
 
         RenderScript renderScript = RenderScript.create(context);
 
-        Allocation blurInput = Allocation.createFromBitmap(renderScript, smallBitmap);
+        Allocation blurInput  = Allocation.createFromBitmap(renderScript, smallBitmap);
         Allocation blurOutput = Allocation.createFromBitmap(renderScript, bitmap);
 
         ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(renderScript,
@@ -56,10 +56,12 @@ public class Blur {
         result.setPixels(pixels, 0, result.getWidth(), 0, 0, result.getWidth(), result.getHeight());
         return result;
     }
+
     private static Bitmap getScreenshot(View v) {
         Bitmap b = Bitmap.createBitmap(v.getWidth(), v.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(b);
         v.draw(c);
         return b;
     }
+
 }

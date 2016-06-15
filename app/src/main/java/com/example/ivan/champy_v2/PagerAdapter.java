@@ -6,9 +6,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
-/**
- * Created by ivan on 14.03.16.
- */
 public class PagerAdapter extends FragmentStatePagerAdapter {
     SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
     int size = 0;

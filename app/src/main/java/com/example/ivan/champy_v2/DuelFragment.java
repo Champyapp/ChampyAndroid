@@ -174,6 +174,7 @@ public class DuelFragment extends Fragment {
                     Toast.makeText(getActivity(), "Tap & Hold", Toast.LENGTH_SHORT).show();
                 }
             });
+
             final String finalFriend_id = friend_id;
             imageButton.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
@@ -192,7 +193,7 @@ public class DuelFragment extends Fragment {
                     } else days = Integer.parseInt(editTextGoal.getText().toString());
                     Cursor c = db.query("duel", null, null, null, null, null, null);
                     int position = viewPager.getCurrentItem();
-                    SessionManager sessionManager = new SessionManager(getContext());
+                    final SessionManager sessionManager = new SessionManager(getContext());
                     int size = sessionManager.getSelfSize();
 
                     Log.i("stat", "Click: " + position + " " + size);

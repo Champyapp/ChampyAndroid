@@ -11,12 +11,10 @@ import java.util.HashMap;
  * Created by ivan on 15.01.16.
  */
 public class SessionManager {
+
     SharedPreferences pref;
-
     SharedPreferences.Editor editor;
-
     Context _context;
-
     int PRIVATE_MODE = 0;
 
     // Sharedpref file name
@@ -109,56 +107,49 @@ public class SessionManager {
         editor.commit();
     }
 
-    public void  change_avatar(String url){
+    public void change_avatar(String url){
         editor.putString(KEY_PATH, url);
         editor.commit();
     }
-    public void setUpdateFalse()
-    {
+    public void setUpdateFalse() {
         editor.putString("updateDB", "false");
         editor.commit();
     }
-    public void setRefreshPending(String refresh)
-    {
+    public void setRefreshPending(String refresh) {
         editor.putString("pendingRefresh", refresh);
         editor.commit();
     }
-    public String getRefreshPending()
-    {
+    public String getRefreshPending() {
         String s = pref.getString("pendingRefresh", null);
         return s;
     }
 
-    public void set_duel_pending(String count)
-    {
+    public void set_duel_pending(String count) {
         editor.putString("duel_pending", count);
         editor.commit();
     }
-    public String get_duel_pending()
-    {
+
+    public String get_duel_pending() {
         String s = pref.getString("duel_pending", null);
         return s;
     }
 
-    public void setRefreshFriends(String refresh)
-    {
+    public void setRefreshFriends(String refresh) {
         editor.putString("friendsRefresh", refresh);
         editor.commit();
     }
-    public String getRefreshFriends()
-    {
+
+    public String getRefreshFriends() {
         String s = pref.getString("friendsRefresh", null);
         return s;
     }
 
-
-    public void setSelfSize(int size)
-    {
+    public void setSelfSize(int size) {
         editor.putInt("SelfSize", size);
         editor.commit();
     }
-    public int getSelfSize()
-    {
+
+    public int getSelfSize() {
         int s = pref.getInt("SelfSize", 0);
         return s;
     }
