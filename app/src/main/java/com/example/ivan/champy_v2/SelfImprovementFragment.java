@@ -92,78 +92,80 @@ public class SelfImprovementFragment extends Fragment {
 
                 }
             } while (c.moveToNext());
-        } //else
-            //Log.i("stat", "0 rows");
-        c.close();
-        //Log.i("stat", "Name: " + name);
-        if (isActive(description)) {
-            //Log.i("stat", "Status: Active");
-            Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
-
-            TextView tvGoal = (TextView)view.findViewById(R.id.goal_text);
-            tvGoal.setText(description);
-            tvGoal.setTypeface(typeface);
-            tvGoal.setVisibility(View.VISIBLE);
-
-            TextView tvDays = (TextView)view.findViewById(R.id.days_text);
-            int days = 21;
-            if (duration != null && duration != "") {
-                days = Integer.parseInt(duration) / 86400;
-            }
-            tvDays.setText("" + days);
-            tvDays.setTypeface(typeface);
-            tvDays.setVisibility(View.VISIBLE);
-
-            EditText etGoal = (EditText) view.findViewById(R.id.et_goal);
-            etGoal.setVisibility(View.INVISIBLE);
-
-            EditText etDays = (EditText)view.findViewById(R.id.et_days);
-            etDays.setVisibility(View.INVISIBLE);
-
-            Glide.with(getContext()).load(R.drawable.points).override(120, 120)
-                    .into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
         }
-        else {
+        c.close();
+        final SessionManager sessionManager = new SessionManager(getContext());
+        int size = sessionManager.getSelfSize();
+        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
+        TextView tvGoal = (TextView)view.findViewById(R.id.goal_text);
+        TextView tvDays = (TextView)view.findViewById(R.id.days_text);
+        EditText etGoal = (EditText)view.findViewById(R.id.et_goal);
+        EditText etDays = (EditText)view.findViewById(R.id.et_days);
+
+        int days = 21;
+        if (duration != null && duration != "") {
+            days = Integer.parseInt(duration) / 86400;
+        }
+
+        tvGoal.setText(description);
+        tvGoal.setTypeface(typeface);
+        tvGoal.setVisibility(View.VISIBLE);
+
+        tvDays.setText("" + days);
+        tvDays.setTypeface(typeface);
+        tvDays.setVisibility(View.VISIBLE);
+
+        etGoal.setVisibility(View.INVISIBLE);
+        etDays.setVisibility(View.INVISIBLE);
+
+        Glide.with(getContext()).load(R.drawable.points).override(120, 120)
+                .into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
+
+        if (!isActive(description)){
             final int[] finalposition = new int[1];
             final ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.pager);
             setupUI(getActivity().findViewById(R.id.selfimprovement));
             setupUI(view);
+            if (position == size || name.equals("User_Challenge")) {
+                etGoal.setText(description);
+                etGoal.setTypeface(typeface);
+                etGoal.setVisibility(View.VISIBLE);
 
-            Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
-
-            EditText etGoal = (EditText) view.findViewById(R.id.et_goal);
-            etGoal.setText(description);
-            etGoal.setTypeface(typeface);
-            etGoal.setVisibility(View.VISIBLE);
-
-            EditText etDays = (EditText) view.findViewById(R.id.et_days);
-            etDays.setTypeface(typeface);
-            int days = 21;
-            if (duration != null && duration != "") {
-                days = Integer.parseInt(duration) / 86400;
+                etDays.setTypeface(typeface);
+                if (duration != null && duration != "") {
+                    days = Integer.parseInt(duration) / 86400;
+                }
+                etDays.setText("" + days);
+                etDays.setHint("21");
+                etDays.setVisibility(View.VISIBLE);
+                TextView daysText = (TextView) view.findViewById(R.id.tvDays);
+                daysText.setTypeface(typeface);
+                tvGoal.setVisibility(View.INVISIBLE);
+                tvDays.setVisibility(View.INVISIBLE);
             }
-            etDays.setText("" + days);
-            etDays.setHint("21");
-            etDays.setVisibility(View.VISIBLE);
+            /*
+                //тут треба реалізувати, щоб воно обновляло дані, якщо юзей пройшов челендж і
+                //хоче ще раз його пройти, лише, наприклад, добавив +20 дній (зараз воно не обновяє)
+            if (name.equals("User_Challenge")) {
 
-            TextView daysText = (TextView) view.findViewById(R.id.tvDays);
-            daysText.setTypeface(typeface);
+                days = 0;
+                etGoal.setText("");
+                etGoal.setTypeface(typeface);
+                etGoal.setVisibility(View.VISIBLE);
 
-            TextView tvGoal = (TextView)view.findViewById(R.id.goal_text);
-            tvGoal.setVisibility(View.INVISIBLE);
+                etDays.setTypeface(typeface);
+                if (duration != null && duration != "") {
+                    days = Integer.parseInt(duration) / 86400;
+                }
+                etDays.setText("" + days);
+                etDays.setHint("21");
+                etDays.setVisibility(View.VISIBLE);
+                TextView daysText = (TextView) view.findViewById(R.id.tvDays);
+                daysText.setTypeface(typeface);
+                tvGoal.setVisibility(View.INVISIBLE);
+                tvDays.setVisibility(View.INVISIBLE);
+            }*/
 
-            final TextView tvDays = (TextView)view.findViewById(R.id.days_text);
-            tvDays.setVisibility(View.INVISIBLE);
-
-            Glide.with(getContext()).load(R.drawable.points).override(120, 120)
-                    .into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
-
-            //-------------------------------------------------------------//
-            //etDays = (EditText) view.findViewById(R.id.et_goal);
-            //description = etDays.getText().toString();
-            //etDays = (EditText) view.findViewById(R.id.et_days);
-            //days = Integer.parseInt(etDays.getText().toString());
-            //Log.i("stat", "Description: " + description);
             ImageButton imageButton = (ImageButton) getActivity().findViewById(R.id.imageButtonAcceptSelfImprovement);
             imageButton.setVisibility(View.VISIBLE);
 
@@ -181,14 +183,12 @@ public class SelfImprovementFragment extends Fragment {
                     String duration = "";
                     String description = "";
                     String challenge_id = "";
-                    int days = 0;
+                    int days = 21;
 
                     EditText etGoal = (EditText) view.findViewById(R.id.et_goal);
                     description = etGoal.getText().toString();
                     EditText etDays = (EditText) view.findViewById(R.id.et_days);
                     duration = etDays.getText().toString();
-
-                    //Log.i("stat", "Descrition :"+description+ " " + description.length());
 
                     if (!etDays.getText().toString().equals("")){
                         days = Integer.parseInt(etDays.getText().toString());
@@ -196,13 +196,9 @@ public class SelfImprovementFragment extends Fragment {
 
                     Cursor c = db.query("selfimprovement", null, null, null, null, null, null);
                     int position = viewPager.getCurrentItem();
-                    final SessionManager sessionManager = new SessionManager(getContext());
                     int size = sessionManager.getSelfSize();
                     OfflineMode offlineMode = new OfflineMode();
-                    //Log.i("stat", "Click: " + position + " " + size);
                     if (position == size) {
-                        //Log.i("stat", "Click: clicked");
-                        //Log.i("stat", "Click: " + description);
                         if ((!isActive(description)) && offlineMode.isInternetAvailable(getActivity()) && (!description.equals("")) &&
                                 (!description.startsWith(" ")) && (days != 0) && (!duration.equals("")) && (!isActive(description))) {
                             days = Integer.parseInt(duration);
@@ -233,7 +229,6 @@ public class SelfImprovementFragment extends Fragment {
                         }
                     }
                     else {
-                        //Log.i("stat", "Status: Poehali");
                         int o = 0;
                         if (c.moveToFirst()) {
                             int idColIndex = c.getColumnIndex("id");
@@ -252,15 +247,9 @@ public class SelfImprovementFragment extends Fragment {
                                     break;
                                 }
                             } while (c.moveToNext());
-                        } //else Log.i("stat", "0 rows");
+                        }
                         c.close();
-                        //description = ((EditText) view.findViewById(R.id.et_goal)).getText().toString();
-                        //Log.i("stat", "Description :" + description + " " + description.length());
-                        //if (duration != null && duration != "") {
-                        //    days = Integer.parseInt(duration) / 86400;
-                        //}
-                        //Log.i("stat", "Click: " + viewPager.getCurrentItem());
-                        //etGoal.setVisibility(View.INVISIBLE);
+
                         if ((!isActive(description)) && offlineMode.isInternetAvailable(getActivity())
                                 && (!description.equals("active")) && (!description.equals("")) && (!description.startsWith(" "))
                                 && (days != 0) && (!duration.equals(""))) {
@@ -289,26 +278,11 @@ public class SelfImprovementFragment extends Fragment {
                                 return true;
                             }
                         }
-
-                        /*if (name.equals("active")) {
-                            Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
-                        } else if (description == ""){
-                            Toast.makeText(getContext(), "Goal is empty!!!", Toast.LENGTH_SHORT).show();
-                        }
-                        else if (description.length() > 100) {
-                            Toast.makeText(getContext(), "Text is too long", Toast.LENGTH_SHORT).show();
-                        }
-                        else if (days>999) {
-                            Toast.makeText(getContext(), "Max 999 days", Toast.LENGTH_SHORT).show();
-                        } else if (days == 0)  Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
-                        else {
-                            Toast.makeText(getActivity(), "OK", Toast.LENGTH_SHORT).show();
-                            StartSingleInProgress(challenge_id);
-                        }*/
                     }
                     return true;
                 }
-            });}
+            });
+        }
         return view;
     }
 

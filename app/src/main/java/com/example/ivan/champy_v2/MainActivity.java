@@ -161,39 +161,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
                 Log.d("TAG", "clicked");
-                ImageView screen = (ImageView) findViewById(R.id.blurScreen);
+                ImageView blurScreen = (ImageView) findViewById(R.id.blurScreen);
+                RelativeLayout contentMain = (RelativeLayout) findViewById(R.id.content_main);
 
-                // BINGO ~~~~~~~~~~~~ google how to take screen in code.
-                // idea: switch for position of pages
+                blurScreen.destroyDrawingCache();
+
                 // F*cking blur method
-                if (screen.getDrawable() == null) {
-                    RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.content_main);
-                    relativeLayout.setDrawingCacheEnabled(true);
-                    relativeLayout.buildDrawingCache();
-                    Bitmap bm = relativeLayout.getDrawingCache();
+                if (blurScreen.getDrawable() == null) {
 
+                    contentMain.setDrawingCacheEnabled(true);
+                    contentMain.buildDrawingCache();
+                    Bitmap bm = contentMain.getDrawingCache();
 
                     Blur blur = new Blur();
-                    if (bm == null) Log.d(TAG, "SUKAAAAA");
-                    else {
+                    if (bm != null) {
                         Bitmap blured = Blur.blurRenderScript(getApplicationContext(), bm, 25);
-                        screen = (ImageView) findViewById(R.id.blurScreen);
+                        blurScreen = (ImageView) findViewById(R.id.blurScreen);
                         Drawable ob = new BitmapDrawable(getResources(), blured);
-                        screen.setImageDrawable(ob);
+                        blurScreen.setImageDrawable(ob);
                     }
                 }
-                else {
-                    Log.d(TAG, "Vse zaebok");
-                }
-                RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.cards);
-                Log.d("TAG", "menu " + actionMenu.isOpen());
 
+                RelativeLayout cardsLayout = (RelativeLayout)findViewById(R.id.cards);
+                //Log.d("TAG", "menu " + actionMenu.isOpen());
 
                 actionMenu.toggle(true);
-                if (!actionMenu.isOpen()) {
-                    screen.setVisibility(View.INVISIBLE);
-                    relativeLayout.setVisibility(View.VISIBLE);
-                } else {
+                if (!actionMenu.isOpen()) { // закрыто
+                    blurScreen.setVisibility(View.INVISIBLE);
+                    cardsLayout.setVisibility(View.VISIBLE);
+                } else { // открыто
                     buttonSelfImprovement.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -230,8 +226,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             }
                         }
                     });
-                    screen.setVisibility(View.VISIBLE);
-                    relativeLayout.setVisibility(View.INVISIBLE);
+                    blurScreen.setVisibility(View.VISIBLE);
+                    cardsLayout.setVisibility(View.INVISIBLE);
 
                 }
             }
