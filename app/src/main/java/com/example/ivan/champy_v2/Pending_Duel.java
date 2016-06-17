@@ -206,19 +206,19 @@ public class Pending_Duel extends AppCompatActivity implements NavigationView.On
         if (offlineMode.isInternetAvailable(this)) {
             switch (item.getItemId()) {
                 case R.id.challenges:
-                    Intent goToChallenges = new Intent(Pending_Duel.this, MainActivity.class);
+                    Intent goToChallenges = new Intent(this, MainActivity.class);
                     startActivity(goToChallenges);
                     break;
                 case R.id.friends:
-                    Intent goToFriends = new Intent(Pending_Duel.this, Friends.class);
+                    Intent goToFriends = new Intent(this, Friends.class);
                     startActivity(goToFriends);
                     break;
                 case R.id.history:
-                    Intent goToHistory = new Intent(Pending_Duel.this, History.class);
+                    Intent goToHistory = new Intent(this, History.class);
                     startActivity(goToHistory);
                     break;
                 case R.id.settings:
-                    Intent goToSettings = new Intent(Pending_Duel.this, Settings.class);
+                    Intent goToSettings = new Intent(this, Settings.class);
                     startActivity(goToSettings);
                     break;
                 case R.id.share:

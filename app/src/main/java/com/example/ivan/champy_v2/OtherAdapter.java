@@ -108,24 +108,24 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .transform(new CropCircleTransformation(_context))
-                    .placeholder(R.mipmap.ic_launcher)
+                    .placeholder(R.drawable.champy_icon2)
                     .override(80, 80)
                     .dontAnimate()
                     .into(img);
 
             Glide.with(_context)
                     .load(R.drawable.start_circle_00026)
-                    .placeholder(R.mipmap.ic_launcher)
+                    .placeholder(R.drawable.champy_icon2)
                     .into((ImageView) viewHolder.itemView.findViewById(R.id.imageViewBgForCircleChall));
 
             Glide.with(_context)
                     .load(R.drawable.start_circle_00026)
-                    .placeholder(R.mipmap.ic_launcher)
+                    .placeholder(R.drawable.champy_icon2)
                     .into((ImageView) viewHolder.itemView.findViewById(R.id.imageViewBgForCircleWins));
 
             Glide.with(_context)
                     .load(R.drawable.start_circle_00026)
-                    .placeholder(R.mipmap.ic_launcher)
+                    .placeholder(R.drawable.champy_icon2)
                     .into((ImageView) viewHolder.itemView.findViewById(R.id.imageViewBgForCircleTotal));
 
 
@@ -297,7 +297,7 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
                 .load(contact.getPicture())
                 .asBitmap()
                 .transform(new CropCircleTransformation(_context))
-                .placeholder(R.mipmap.ic_launcher)
+                .placeholder(R.drawable.champy_icon2)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .override(80, 80)

@@ -41,10 +41,8 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-/**
- * Created by ivan on 14.03.16.
- */
 public class DuelFragment extends Fragment {
+
     public static final String ARG_PAGE = "ARG_PAGE";
 
     public static DuelFragment newInstance(int page) {
@@ -275,6 +273,7 @@ public class DuelFragment extends Fragment {
         return view;
     }
 
+
     public void Create_new_challenge(String description, int days, final String friend_id) {
         String type_id = "567d51c48322f85870fd931b";
         final SessionManager sessionManager = new SessionManager(getContext());
@@ -320,6 +319,7 @@ public class DuelFragment extends Fragment {
 
     }
 
+
     public void StartSingleInProgress(final String challenge, String recipient) {
         final SessionManager sessionManager = new SessionManager(getContext());
         HashMap<String, String> user = new HashMap<>();
@@ -362,6 +362,7 @@ public class DuelFragment extends Fragment {
             }
         });
     }
+
 
     public void generate() {
         DBHelper dbHelper = new DBHelper(getContext());
@@ -423,10 +424,12 @@ public class DuelFragment extends Fragment {
         });
     }
 
+
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
+
 
     public void setupUI(View view) {
 
@@ -444,6 +447,8 @@ public class DuelFragment extends Fragment {
         }
 
     }
+
+
     public String find(String challenge_id)
     {
         DBHelper dbHelper = new DBHelper(getActivity());
@@ -466,6 +471,7 @@ public class DuelFragment extends Fragment {
         c.close();
         return ok;
     }
+
     public boolean isActive(String description)
     {
         DBHelper dbHelper = new DBHelper(getActivity());

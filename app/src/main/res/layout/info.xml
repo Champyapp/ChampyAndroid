@@ -15,7 +15,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/picture"
-        android:src="@mipmap/ic_launcher"
+        android:src="@drawable/champy_icon2"
         android:layout_alignParentBottom="false"
         android:layout_alignParentLeft="false"
         android:layout_alignParentStart="true"

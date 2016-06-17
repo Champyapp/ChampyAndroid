@@ -50,8 +50,8 @@ import retrofit.Retrofit;
 
 import static java.lang.Math.round;
 
-public class Duel extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class Duel extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +137,7 @@ public class Duel extends AppCompatActivity
 
     }
 
+
     private Drawable Init(String path) throws FileNotFoundException {
         File file = new File(path, "blured2.jpg");
         Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
@@ -184,18 +185,55 @@ public class Duel extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-
-
+        OfflineMode offlineMode = new OfflineMode();
+        if (offlineMode.isInternetAvailable(this)) {
+            switch (item.getItemId()) {
+                case R.id.challenges:
+                    Intent goToChallenges = new Intent(this, MainActivity.class);
+                    startActivity(goToChallenges);
+                    break;
+                case R.id.friends:
+                    Intent goToFriends = new Intent(this, Friends.class);
+                    startActivity(goToFriends);
+                    break;
+                case R.id.history:
+                    Intent goToHistory = new Intent(this, History.class);
+                    startActivity(goToHistory);
+                    break;
+                case R.id.settings:
+                    Intent goToSettings = new Intent(this, Settings.class);
+                    startActivity(goToSettings);
+                    break;
+                case R.id.pending_duels:
+                    Intent goToPendingDuel = new Intent(this, Pending_Duel.class);
+                    startActivity(goToPendingDuel);
+                    break;
+                case R.id.share:
+                    String message = "Check out Champy - it helps you improve and compete with your friends!";
+                    Intent share = new Intent(Intent.ACTION_SEND);
+                    share.setType("text/plain");
+                    share.putExtra(Intent.EXTRA_TEXT, message);
+                    startActivity(Intent.createChooser(share, "How would you like to share?"));
+                    break;
+                case R.id.nav_logout:
+                    offlineMode = new OfflineMode();
+                    if (offlineMode.isInternetAvailable(this)) {
+                        Logout();
+                    } else {
+                        Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
+                    }
+                    break;
+            }
+        } else {
+            Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    public void getChallenges()
-    {
+
+    public void getChallenges() {
         DBHelper dbHelper = new DBHelper(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("duel", null, null);
@@ -267,6 +305,8 @@ public class Duel extends AppCompatActivity
             }
         });
     }
+
+
     public void Logout(){
         LoginManager.getInstance().logOut();
         SessionManager sessionManager = new SessionManager(getApplicationContext());
@@ -275,8 +315,9 @@ public class Duel extends AppCompatActivity
         startActivity(intent);
         Toast.makeText(this, "Bye Bye!!!", Toast.LENGTH_SHORT).show();
     }
-    public boolean check(String id)
-    {
+
+
+    public boolean check(String id) {
         DBHelper dbHelper = new DBHelper(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -303,4 +344,5 @@ public class Duel extends AppCompatActivity
         c.close();
         return ok;
     }
+
 }
