@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
+import com.example.ivan.champy_v2.data.DBHelper;
+
 /**
  * Created by ivan on 04.04.16.
  */

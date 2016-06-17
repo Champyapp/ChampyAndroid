@@ -5,7 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 
 import com.example.ivan.champy_v2.BuildConfig;
-import com.example.ivan.champy_v2.Friends;
+import com.example.ivan.champy_v2.activity.FriendsActivity;
 import com.example.ivan.champy_v2.ImageModule;
 
 import org.junit.Before;
@@ -29,7 +29,7 @@ import static junit.framework.Assert.assertNotNull;
 public class Image_module {
     private ImageModule imagemodule;
     private Context context;
-    private Friends activity;
+    private FriendsActivity activity;
 
     @Before
     public void set_up() throws Exception

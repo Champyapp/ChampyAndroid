@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
 
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.ivan.champy_v2.Duel"
+    tools:context=".activity.DuelActivity"
     tools:showIn="@layout/app_bar_duel"
     android:id="@+id/duel_back">
 

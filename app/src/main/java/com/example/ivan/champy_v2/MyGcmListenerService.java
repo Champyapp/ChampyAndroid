@@ -12,6 +12,10 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.example.ivan.champy_v2.activity.FriendsActivity;
+import com.example.ivan.champy_v2.activity.MainActivity;
+import com.example.ivan.champy_v2.activity.PendingDuelActivity;
+import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
 import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
 import com.example.ivan.champy_v2.model.active_in_progress.Datum;
@@ -92,7 +96,7 @@ public class MyGcmListenerService extends GcmListenerService {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         if (title.equals("Friend request")) {
-            intent = new Intent(this, Friends.class);
+            intent = new Intent(this, FriendsActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("friend_request", "true");
 
@@ -165,7 +169,7 @@ public class MyGcmListenerService extends GcmListenerService {
                             db.insert("pending_duel", null, cv);
                         }
                     }
-                    Intent intent = new Intent(MyGcmListenerService.this, Pending_Duel.class);
+                    Intent intent = new Intent(MyGcmListenerService.this, PendingDuelActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.putExtra("refres_duel", "true");
                     PendingIntent pendingIntent = PendingIntent.getActivity(MyGcmListenerService.this, 0 /* Request code */, intent,

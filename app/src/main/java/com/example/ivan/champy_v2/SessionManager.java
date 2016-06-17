@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.example.ivan.champy_v2.activity.LoginActivity;
+
 import java.util.HashMap;
 
 /**

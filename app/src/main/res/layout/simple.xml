@@ -125,18 +125,18 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView9"
+        android:id="@+id/imageViewBgChallenges"
         android:src="@mipmap/ic_launcher"
         android:layout_alignLeft="@+id/imageViewBgForCircleChall"
         android:layout_alignStart="@+id/imageViewBgForCircleChall"
         android:layout_alignRight="@+id/imageViewBgForCircleChall"
         android:layout_alignEnd="@+id/imageViewBgForCircleChall"
-        android:layout_alignBottom="@+id/imageView10" />
+        android:layout_alignBottom="@+id/imageViewBgWins" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView10"
+        android:id="@+id/imageViewBgWins"
         android:src="@mipmap/ic_launcher"
         android:layout_above="@+id/textViewChallenges"
         android:layout_centerHorizontal="true"
@@ -145,9 +145,9 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView11"
+        android:id="@+id/imageViewBgTotal"
         android:src="@mipmap/ic_launcher"
-        android:layout_alignTop="@+id/imageView10"
+        android:layout_alignTop="@+id/imageViewBgWins"
         android:layout_alignLeft="@+id/imageViewBgForCircleTotal"
         android:layout_alignStart="@+id/imageViewBgForCircleTotal"
         android:layout_alignRight="@+id/imageViewBgForCircleTotal"
@@ -170,8 +170,8 @@
         android:id="@+id/imageButtonAddUser"
         android:background="@drawable/centerwithplus"
         android:layout_above="@+id/textViewUserLevel"
-        android:layout_alignRight="@+id/imageView11"
-        android:layout_alignEnd="@+id/imageView11" />
+        android:layout_alignRight="@+id/imageViewBgTotal"
+        android:layout_alignEnd="@+id/imageViewBgTotal" />
 
     <!-- Текст на кругах! -->
     <TextView

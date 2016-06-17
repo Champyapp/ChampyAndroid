@@ -19,15 +19,16 @@ import static java.lang.Math.round;
 
 public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
 
-    public enum Orientation {VERTICAL, HORIZONTAL}
-
-    private static final long TRANSITION_DURATION_MS = 300;
     private static final float ITEM_HEIGHT_PERCENT = 0.7f;
     private static final float SCALE_THRESHOLD_PERCENT = 0.66f;
+    private static final long TRANSITION_DURATION_MS = 300;
     private static final String TAG = "AwesomeLayoutManager";
     private int mAnchorPos;
     private SparseArray<View> viewCache = new SparseArray<>();
     private Orientation orientation = Orientation.VERTICAL;
+
+    public enum Orientation {VERTICAL, HORIZONTAL}
+
 
     public AwesomeLayoutManager(Context context) {
 
@@ -38,9 +39,11 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
         return new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 
+
     public Orientation getOrientation() {
         return orientation;
     }
+
 
     public void setOrientation(Orientation orientation) {
         View anchorView = getAnchorView();
@@ -58,6 +61,7 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
         mAnchorPos = 0;
     }
 
+
     public void openItem(int pos) {
         if (orientation == Orientation.VERTICAL) {
             View viewToOpen = null;
@@ -74,6 +78,7 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
             }
         }
     }
+
 
     private void openView(final View viewToAnimate) {
         final ArrayList<ViewAnimationInfo> animationInfos = new ArrayList<>();
@@ -131,6 +136,7 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
         animator.start();
     }
 
+
     private void fill(RecyclerView.Recycler recycler) {
 
         View anchorView = getAnchorView();
@@ -163,6 +169,7 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
         
         updateViewScale();
     }
+
 
     private void fillUp(@Nullable View anchorView, RecyclerView.Recycler recycler) {
         int anchorPos;
@@ -200,6 +207,7 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
             pos--;
         }
     }
+
 
     private void fillDown(@Nullable View anchorView, RecyclerView.Recycler recycler) {
         int anchorPos;
@@ -240,6 +248,7 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
         }
     }
 
+
     private void fillLeft(@Nullable View anchorView, RecyclerView.Recycler recycler) {
         int anchorPos;
         int anchorLeft = 0;
@@ -279,6 +288,7 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
         }
     }
 
+
     private void fillRight(View anchorView, RecyclerView.Recycler recycler) {
         int anchorPos;
         int anchorLeft = 0;
@@ -317,7 +327,7 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
         }
     }
 
-    // якщо щось піде не так - закомітити це. 30.05.16
+
     private void updateViewScale() {
         int childCount = getChildCount();
         int height = getHeight();
@@ -337,6 +347,7 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
             view.setScaleY(scale);
         }
     }
+
 
     private View getAnchorView() {
         int childCount = getChildCount();
@@ -385,6 +396,7 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
         startSmoothScroll(scroller);
     }
 
+
     private PointF computeScrollVectorForPosition(int targetPosition) {
         if (getChildCount() == 0) {
             return null;
@@ -425,6 +437,7 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
         return delta;
     }
 
+
     private int scrollVerticallyInternal(int dy) {
         int childCount = getChildCount();
         int itemCount = getItemCount();
@@ -464,6 +477,7 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
         return delta;
     }
 
+
     private int scrollHorizontallyInternal(int dx) {
         int childCount = getChildCount();
         int itemCount = getItemCount();
@@ -502,6 +516,7 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
         return delta;
     }
 
+
     private void measureChildWithDecorationsAndMargin(View child, int widthSpec, int heightSpec) {
         Rect decorRect = new Rect();
         calculateItemDecorationsForChild(child, decorRect);
@@ -512,6 +527,7 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
                 lp.bottomMargin + decorRect.bottom);
         child.measure(widthSpec, heightSpec);
     }
+
 
     private int updateSpecWithExtra(int spec, int startInset, int endInset) {
         if (startInset == 0 && endInset == 0) {
@@ -525,6 +541,7 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
         return spec;
     }
 
+
     private static class ViewAnimationInfo {
         int startTop;
         int startBottom;
@@ -532,4 +549,5 @@ public class AwesomeLayoutManager extends RecyclerView.LayoutManager {
         int finishBottom;
         View view;
     }
+
 }

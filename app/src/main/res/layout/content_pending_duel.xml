@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.ivan.champy_v2.Pending_Duel"
+    tools:context=".activity.PendingDuelActivity"
     tools:showIn="@layout/app_bar_pending__duel"
     android:id="@+id/pending_duel">
 

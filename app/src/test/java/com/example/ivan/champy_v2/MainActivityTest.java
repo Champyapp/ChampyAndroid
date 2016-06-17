@@ -3,6 +3,8 @@ package com.example.ivan.champy_v2;
 import android.os.Build;
 import android.widget.TextView;
 
+import com.example.ivan.champy_v2.activity.MainActivity;
+
 import junit.framework.JUnit4TestAdapter;
 
 import static org.junit.Assert.assertNotNull;

@@ -7,7 +7,7 @@
     android:windowEnableSplitTouch="false"
     android:splitMotionEvents="false"
     android:fitsSystemWindows="true"
-    tools:context="com.example.ivan.champy_v2.MainActivity">
+    tools:context=".activity.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

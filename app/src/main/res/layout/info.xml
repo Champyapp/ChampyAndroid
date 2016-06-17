@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="false"
-    android:id="@+id/row_friends_list"
+    android:id="@+id/row_friends_list_close"
     android:visibility="visible"
     android:layout_above="@+id/row_friends_list_open"
     android:layout_alignParentRight="true"
@@ -60,6 +60,7 @@
         android:text="#"
         android:id="@+id/chall"
         android:textColor="#ffffff"
+        android:visibility="visible"
         android:layout_above="@+id/view"
         android:layout_toLeftOf="@+id/imageView_wins_logo"
         android:layout_toStartOf="@+id/imageView_wins_logo"
@@ -73,6 +74,19 @@
         android:layout_above="@+id/view"
         android:layout_toLeftOf="@+id/in_progress"
         android:layout_toStartOf="@+id/in_progress"
+        android:layout_marginRight="8dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="#"
+        android:id="@+id/in_progress"
+        android:textColor="#ffffff"
+        android:visibility="visible"
+        android:layout_alignBottom="@+id/imageView_total_logo"
+        android:layout_toLeftOf="@+id/imageView_total_logo"
+        android:layout_toStartOf="@+id/imageView_total_logo"
         android:layout_marginRight="8dp" />
 
     <ImageView
@@ -92,21 +106,10 @@
         android:text="#"
         android:id="@+id/total"
         android:textColor="#ffffff"
+        android:visibility="visible"
         android:layout_alignBottom="@+id/imageView_total_logo"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginRight="8dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="#"
-        android:id="@+id/in_progress"
-        android:textColor="#ffffff"
-        android:layout_alignBottom="@+id/imageView_total_logo"
-        android:layout_toLeftOf="@+id/imageView_total_logo"
-        android:layout_toStartOf="@+id/imageView_total_logo"
         android:layout_marginRight="8dp" />
 
     <View

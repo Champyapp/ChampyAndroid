@@ -4,14 +4,15 @@ package com.example.ivan.champy_v2;
  * Created by ivan on 05.02.16.
  */
 public class Friend {
-    private String mName;
-    private String mPicture;
-    private String mID;
+
     private String mChallenges;
-    private String mWins;
-    private String mTotal;
+    private String mPicture;
     private String mLevel;
-   // private List<Friend> friends;
+    private String mTotal;
+    private String mName;
+    private String mWins;
+    private String mID;
+    // private List<Friend> friends;
 
     public String getmChallenges() {
         return mChallenges;

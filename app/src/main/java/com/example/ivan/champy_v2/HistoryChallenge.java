@@ -4,15 +4,17 @@ package com.example.ivan.champy_v2;
  * Created by ivan on 23.03.16.
  */
 public class HistoryChallenge {
-    String type;
+
     boolean active;
+
+    String type;
     String description;
+    String duration;
+    String status;
 
     public String getStatus() {
         return status;
     }
-
-    String status;
 
     public String getDuration() {
         return duration;
@@ -46,9 +48,8 @@ public class HistoryChallenge {
         this.description = description;
     }
 
-    String duration;
-    public HistoryChallenge(String mtype, boolean mactive, String mdescription, String mduration, String mstatus)
-    {
+    public HistoryChallenge(String mtype, boolean mactive, String mdescription,
+                            String mduration, String mstatus) {
         this.type = mtype;
         this.active = mactive;
         this.description = mdescription;

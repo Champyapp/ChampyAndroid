@@ -15,10 +15,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.R.*;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.ivan.champy_v2.activity.MainActivity;
 import com.example.ivan.champy_v2.interfaces.Update_user;
 import com.example.ivan.champy_v2.model.User.User;
 import com.soundcloud.android.crop.Crop;
@@ -98,67 +98,70 @@ public class Photo extends AppCompatActivity {
         });
     }
 
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK){
-        if (requestCode == CAMERA_REQUEST ) {
-            Bundle extras = data.getExtras();
-            // get the cropped bitmap
-            Bitmap thePic = extras.getParcelable("data");
-            savePhoto(thePic);
-            Upload_photo(SaveFromCamera(thePic));
-            Intent intent = new Intent(Photo.this, MainActivity.class);
-            startActivity(intent);
-            Toast.makeText(getApplicationContext(), "Changed", Toast.LENGTH_SHORT).show();
-        } else if (requestCode == CROP_PIC){
-            Bundle extras = data.getExtras();
-            // get the cropped bitmap
-            Bitmap thePic = extras.getParcelable("data");
-            savePhoto(thePic);
-            Intent intent = new Intent(Photo.this, MainActivity.class);
-            startActivity(intent);
-            Toast.makeText(getApplicationContext(), "Changed", Toast.LENGTH_SHORT).show();
-        }
-            if (requestCode == Crop.REQUEST_PICK && resultCode == RESULT_OK) {
-                Uri uri = data.getData();
-
-                beginCrop(data.getData());
-            } else if (requestCode == Crop.REQUEST_CROP) {
-                try {
-                    handleCrop(resultCode, data);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            if (requestCode == CAMERA_REQUEST ) {
+                Bundle extras = data.getExtras();
+                // get the cropped bitmap
+                Bitmap thePic = extras.getParcelable("data");
+                savePhoto(thePic);
+                Upload_photo(SaveFromCamera(thePic));
+                Intent intent = new Intent(Photo.this, MainActivity.class);
+                startActivity(intent);
+                Toast.makeText(getApplicationContext(), "Changed", Toast.LENGTH_SHORT).show();
+            } else if (requestCode == CROP_PIC){
+                Bundle extras = data.getExtras();
+                // get the cropped bitmap
+                Bitmap thePic = extras.getParcelable("data");
+                savePhoto(thePic);
+                Intent intent = new Intent(Photo.this, MainActivity.class);
+                startActivity(intent);
+                Toast.makeText(getApplicationContext(), "Changed", Toast.LENGTH_SHORT).show();
             }
-        if (requestCode == SELECT_FILE ){
-            Uri selectedImageUri = data.getData();
-            performCrop(selectedImageUri);
-           /* String[] projection = { MediaStore.MediaColumns.DATA };
-            CursorLoader cursorLoader = new CursorLoader(this,selectedImageUri, projection, null, null,
-                    null);
-            Cursor cursor =cursorLoader.loadInBackground();
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-            cursor.moveToFirst();
-            String selectedImagePath = cursor.getString(column_index);
-            Bitmap bm;
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(selectedImagePath, options);
-            final int REQUIRED_SIZE = 200;
-            int scale = 1;
-            while (options.outWidth / scale / 2 >= REQUIRED_SIZE
-                    && options.outHeight / scale / 2 >= REQUIRED_SIZE)
-                scale *= 2;
-            options.inSampleSize = scale;
-            options.inJustDecodeBounds = false;
-            bm = BitmapFactory.decodeFile(selectedImagePath, options);
-            savePhoto(bm);
-            Intent intent = new Intent(Photo.this, MainActivity.class);
-            startActivity(intent);
-            Toast.makeText(getApplicationContext(), "Changed", Toast.LENGTH_SHORT).show();*/
+                if (requestCode == Crop.REQUEST_PICK && resultCode == RESULT_OK) {
+                    Uri uri = data.getData();
 
-        }
+                    beginCrop(data.getData());
+                } else if (requestCode == Crop.REQUEST_CROP) {
+                    try {
+                        handleCrop(resultCode, data);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            if (requestCode == SELECT_FILE ){
+                Uri selectedImageUri = data.getData();
+                performCrop(selectedImageUri);
+               /* String[] projection = { MediaStore.MediaColumns.DATA };
+                CursorLoader cursorLoader = new CursorLoader(this,selectedImageUri, projection, null, null,
+                        null);
+                Cursor cursor =cursorLoader.loadInBackground();
+                int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+                cursor.moveToFirst();
+                String selectedImagePath = cursor.getString(column_index);
+                Bitmap bm;
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+                BitmapFactory.decodeFile(selectedImagePath, options);
+                final int REQUIRED_SIZE = 200;
+                int scale = 1;
+                while (options.outWidth / scale / 2 >= REQUIRED_SIZE
+                        && options.outHeight / scale / 2 >= REQUIRED_SIZE)
+                    scale *= 2;
+                options.inSampleSize = scale;
+                options.inJustDecodeBounds = false;
+                bm = BitmapFactory.decodeFile(selectedImagePath, options);
+                savePhoto(bm);
+                Intent intent = new Intent(Photo.this, MainActivity.class);
+                startActivity(intent);
+                Toast.makeText(getApplicationContext(), "Changed", Toast.LENGTH_SHORT).show();*/
+
+            }
         }
     }
+
+
     public String getPath(Uri uri) throws URISyntaxException {
         if ("content".equalsIgnoreCase(uri.getScheme())) {
             String[] projection = { "_data" };
@@ -181,10 +184,12 @@ public class Photo extends AppCompatActivity {
         return null;
     }
 
+
     private void beginCrop(Uri source) {
         Uri destination = Uri.fromFile(new File(getCacheDir(), "cropped"));
         Crop.of(source, destination).asSquare().withMaxSize(300, 300).start(this);
     }
+
 
     private void handleCrop(int resultCode, Intent result) throws IOException {
         if (resultCode == RESULT_OK) {
@@ -207,6 +212,8 @@ public class Photo extends AppCompatActivity {
             Toast.makeText(this, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
+
+
     private String SaveFromCamera(Bitmap finalBitmap) {
 
         String root = Environment.getExternalStorageDirectory().toString();
@@ -230,8 +237,8 @@ public class Photo extends AppCompatActivity {
         return (Uri.fromFile(file).getPath());
     }
 
-    public void savePhoto (Bitmap photo)
-    {
+
+    public void savePhoto (Bitmap photo) {
         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         File file1 = new File(path, "blured2.jpg");
@@ -278,6 +285,7 @@ public class Photo extends AppCompatActivity {
         }
     }
 
+
     private void performCrop(Uri picUri) {
         // take care of exceptions
         try {
@@ -308,8 +316,8 @@ public class Photo extends AppCompatActivity {
         }
     }
 
-    public void Upload_photo(String path)
-    {
+
+    public void Upload_photo(String path) {
         final String API_URL = "http://46.101.213.24:3007";
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(API_URL)

@@ -11,6 +11,8 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.example.ivan.champy_v2.activity.WakeUpActivity;
+
 public class AlarmService extends IntentService {
 
     private NotificationManager alarmNotificationManager;
@@ -28,7 +30,7 @@ public class AlarmService extends IntentService {
         Log.d("AlarmService", "Preparing to send notification...: " + msg);
         alarmNotificationManager = (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, WakeUp.class), 0);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, WakeUpActivity.class), 0);
 
         NotificationCompat.Builder alarmNotificationBuilder = new NotificationCompat.Builder(this)
                 .setContentTitle("Alarm")

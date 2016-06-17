@@ -2,14 +2,13 @@ package com.example.ivan.champy_v2;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
+import com.example.ivan.champy_v2.adapter.CustomPagerAdapter;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.Animator.AnimatorListener;
 import com.nineoldandroids.animation.AnimatorSet;
@@ -137,6 +136,7 @@ public class CustomPagerBase {
                             if (X > width*25 && X < width*80) {
                                 ViewHelper.setX(itemView, viewXPosition + (X - lastX));
                             }
+                            // Прокрутка карточкоч
                             /*if (X > width*50 & X < width*50) {
                                 ViewHelper.setX(itemView, viewXPosition + (X - lastX));
                             }*/

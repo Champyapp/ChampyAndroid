@@ -6,7 +6,7 @@
     <statePointEntry>
       <state      
         class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
-        className = "com.example.ivan.champy_v2.Friends"/>
+        className = "com.example.ivan.champy_v2.activity.FriendsActivity"/>
       <point      
         x = "1892"      
         y = "168"/>
@@ -14,7 +14,7 @@
     <statePointEntry>
       <state      
         class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
-        className = "com.example.ivan.champy_v2.MainActivity"/>
+        className = "com.example.ivan.champy_v2.activity.MainActivity"/>
       <point      
         x = "-32"      
         y = "156"/>
@@ -22,7 +22,7 @@
     <statePointEntry>
       <state      
         class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
-        className = "com.example.ivan.champy_v2.LoginActivity"/>
+        className = "com.example.ivan.champy_v2.activity.LoginActivity"/>
       <point      
         x = "908"      
         y = "140"/>

@@ -10,22 +10,17 @@ import android.widget.TextView;
  * Created by SONU on 25/09/15.
  */
 public class RecyclerViewHolder extends RecyclerView.ViewHolder  {
+
     public EditText goal;
     public EditText days;
     public TextView reward;
 
-
     public RecyclerViewHolder(View view) {
         super(view);
+
         // Find all views ids
-
-        this.goal = (EditText) view
-                .findViewById(R.id.et_goal);
-
+        this.goal = (EditText) view.findViewById(R.id.et_goal);
         this.days = (EditText) view.findViewById(R.id.et_days);
-
-
-
     }
 
 
