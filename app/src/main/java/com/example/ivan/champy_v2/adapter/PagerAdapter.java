@@ -23,6 +23,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
         return size+1;
     }
 
+
     public void setCount(int count){
         size = count;
     }
@@ -45,7 +46,9 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
         super.destroyItem(container, position, object);
     }
 
+
     public Fragment getRegisteredFragment(int position) {
         return registeredFragments.get(position);
     }
+
 }

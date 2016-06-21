@@ -49,8 +49,8 @@
         android:id="@+id/imageView_wins_logo"
         android:src="@mipmap/ic_launcher"
         android:layout_above="@+id/view"
-        android:layout_toLeftOf="@+id/in_progress"
-        android:layout_toStartOf="@+id/in_progress"
+        android:layout_toLeftOf="@+id/counterWins"
+        android:layout_toStartOf="@+id/counterWins"
         android:layout_marginRight="8dp" />
 
     <ImageView
@@ -59,8 +59,8 @@
         android:id="@+id/imageView_total_logo"
         android:src="@mipmap/ic_launcher"
         android:layout_above="@+id/view"
-        android:layout_toLeftOf="@+id/total"
-        android:layout_toStartOf="@+id/total"
+        android:layout_toLeftOf="@+id/counterTotal"
+        android:layout_toStartOf="@+id/counterTotal"
         android:layout_marginRight="8dp" />
 
     <TextView
@@ -68,7 +68,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="10"
-        android:id="@+id/total"
+        android:id="@+id/counterTotal"
         android:textColor="#ffffff"
         android:layout_alignBottom="@+id/imageView_total_logo"
         android:layout_alignParentRight="true"
@@ -80,7 +80,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:text="In Progress"
-        android:id="@+id/in_progress"
+        android:id="@+id/counterWins"
         android:textColor="#ffffff"
         android:layout_alignBottom="@+id/imageView_total_logo"
         android:layout_toLeftOf="@+id/imageView_total_logo"

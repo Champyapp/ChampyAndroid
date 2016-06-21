@@ -23,28 +23,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     public RecyclerViewAdapter(Context context, ArrayList<SelfImprovement_model> arrayList) {
         this.context = context;
         this.arrayList = arrayList;
-
     }
 
     @Override
     public int getItemCount() {
         return (null != arrayList ? arrayList.size() : 0);
-
     }
 
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
         final SelfImprovement_model model = arrayList.get(position);
-
         RecyclerViewHolder mainHolder = (RecyclerViewHolder) holder;// holder
-
-
-
     }
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-
         // This method will inflate the custom layout and return as viewholder
         LayoutInflater mInflater = LayoutInflater.from(viewGroup.getContext());
 

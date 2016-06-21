@@ -509,7 +509,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //--------------------------- Score ----------------------------//
         Float y = x*(float)3.5;
 
-        TextView textViewScoreChallenges = (TextView)findViewById(R.id.textViewScoreChallenges);
+        TextView textViewScoreChallenges = (TextView)findViewById(R.id.textViewUserName);
         textViewScoreChallenges.setTextSize(y);
 
         TextView textViewScoreWins = (TextView)findViewById(R.id.textViewUserLevel);
@@ -604,7 +604,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ImageView mImageViewFilling2 = (ImageView) findViewById(R.id.imageView_total_animation);
         ((AnimationDrawable) mImageViewFilling2.getBackground()).start();
 
-        final TextView textViewScoreChall = (TextView) findViewById(R.id.textViewScoreChallenges);
+        final TextView textViewScoreChall = (TextView) findViewById(R.id.textViewUserName);
         final TextView textViewScoreWins = (TextView) findViewById(R.id.textViewUserLevel);
         final TextView textViewScoreTotal = (TextView) findViewById(R.id.textViewScoreTotal);
 
@@ -962,7 +962,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             View tempView = convertView;
             if(tempView == null){
                 LayoutInflater inflater = (LayoutInflater) getApplicationContext()
-
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 tempView = inflater.inflate(R.layout.single_card_fragment, null, false);
             }
@@ -1008,16 +1007,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     };
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    builder.setMessage("Are You Sure? You Want to Give Up").setPositiveButton("Give Up!", dialogClickListener)
-                            .setNegativeButton("Keep Goin'!", dialogClickListener).show();
+                    builder.setMessage("Are you sure you want to give up?")
+                            .setPositiveButton("Yes!", dialogClickListener)
+                            .setNegativeButton("No!", dialogClickListener).show();
 
                 }
             });
             Log.d("TAG", "X: "+x*y);
-
-           /* cardImage = (ImageView)tempView.findViewById(R.id.imageView);
-            cardImage.getLayoutParams().width = x*15;
-            cardImage.getLayoutParams().height = x *15;*/
 
             if (y > 10) y = 10;
 

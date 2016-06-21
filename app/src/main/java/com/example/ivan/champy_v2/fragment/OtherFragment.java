@@ -49,12 +49,11 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 /**
- * Created by ivan on 05.02.16. // Класс отвечает за OTHER в разделе FriendsActivity
+ * Класс отвечает за OTHER в разделе FriendsActivity
  */
 public class OtherFragment extends Fragment {
 
     public static final String ARG_PAGE = "ARG_PAGE";
-
     private int mPage;
 
     @Override
@@ -101,7 +100,7 @@ public class OtherFragment extends Fragment {
             Log.i("stat", "0 rows");
         c.close();
 
-        Log.i("stat", "FriendsActivity :"+friends);
+        Log.i("stat", "Friends: " + friends);
 
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
         final OtherAdapter adapter = new OtherAdapter(friends, getContext(), getActivity());
@@ -128,16 +127,11 @@ public class OtherFragment extends Fragment {
                                 .build();
                         final NewUser newUser = retrofit.create(NewUser.class);
                         final com.example.ivan.champy_v2.interfaces.Friends friend = retrofit.create(Friends.class);
-
                         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
                         StrictMode.setThreadPolicy(policy);
-
                         DBHelper dbHelper = new DBHelper(getActivity());
-
                         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-
                         int clearCount = db.delete("mytable", null, null);
-
                         final ContentValues cv = new ContentValues();
                         final List<Friend> newFriends = new ArrayList<Friend>();
 
@@ -152,6 +146,7 @@ public class OtherFragment extends Fragment {
                                         public void onCompleted(JSONArray array, GraphResponse response) {
                                             for (int i = 0; i < array.length(); i++) {
                                                 try {
+                                                    // jwt - Json Web Token...
                                                     final String fb_id = array.getJSONObject(i).getString("id");
                                                     final String user_name = array.getJSONObject(i).getString("name");
                                                     final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload("{\n" +
@@ -187,6 +182,7 @@ public class OtherFragment extends Fragment {
                                                                 cv.put("level", "" + data.getLevel().getNumber());
                                                                 Log.i("Users", "user: " + user_name + " photo: " + photo);
 
+                                                                // отображаем друзей в списке
                                                                 if (!getContact(data.get_id())) {
                                                                     db.insert("mytable", null, cv);
                                                                     newFriends.add(new Friend(
@@ -198,10 +194,10 @@ public class OtherFragment extends Fragment {
                                                                             "" + data.getScore(),
                                                                             "" + data.getLevel().getNumber()
                                                                     ));
-                                                                } else
-                                                                    Log.i("stat", "DBase: not added" + user_name);
+                                                                } else Log.i("stat", "DBase: not added" + user_name);
 
                                                             } else {
+                                                                // отображение всего у человека, который не установил champy
                                                                 URL profile_pic = null;
                                                                 String photo = null;
                                                                 try {
@@ -232,7 +228,7 @@ public class OtherFragment extends Fragment {
 
                                             }
                                             RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-                                            Log.i("stat", "FriendsActivity :" + newFriends.toString());
+                                            Log.i("stat", "Friends :" + newFriends.toString());
                                             OtherAdapter adapter1 = new OtherAdapter(newFriends, getContext(), getActivity());
                                             rvContacts.setAdapter(adapter1);
                                             swipeRefreshLayout.setRefreshing(false);

@@ -5,13 +5,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.example.ivan.champy_v2.activity.PendingActivity;
+import com.example.ivan.champy_v2.fragment.PendingFragment;
 import com.example.ivan.champy_v2.fragment.FriendsFragment;
 import com.example.ivan.champy_v2.fragment.OtherFragment;
 
-/**
- * Created by ivan on 05.02.16.
- */
 public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
 
     final int PAGE_COUNT = 3;
@@ -28,13 +25,14 @@ public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
         return PAGE_COUNT;
     }
 
-    @Override
+    @Override // если что-то пойдет не так, то удалить return null и сменить case 2 на return.
     public Fragment getItem(int position) {
         switch(position) {
             case 0: return new FriendsFragment();
-            case 1: return new PendingActivity();
-            default: return new OtherFragment();
+            case 1: return new PendingFragment();
+            case 2: return new OtherFragment();
         }
+        return null;
     }
 
     @Override

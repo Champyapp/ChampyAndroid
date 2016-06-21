@@ -36,9 +36,6 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-/**
- * Created by ivan on 17.02.16.
- */
 public class FriendsFragment extends Fragment {
 
     final String API_URL = "http://46.101.213.24:3007";

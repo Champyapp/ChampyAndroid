@@ -57,7 +57,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/textViewScoreChallenges"
+        android:id="@+id/textViewUserName"
         android:textIsSelectable="true"
         android:textSize="40dp"
         android:layout_centerInParent="@+id/imageView_challenges_animation"

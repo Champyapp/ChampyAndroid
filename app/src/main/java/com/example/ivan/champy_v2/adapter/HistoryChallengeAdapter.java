@@ -47,8 +47,8 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
 
         // Return a new holder instance
         final ViewHolder viewHolder = new ViewHolder(contactView);
-        //viewHolder.simple.setVisibility(View.VISIBLE);
-       /* viewHolder.info.setVisibility(View.GONE);
+        //viewHolder.item_friends_open.setVisibility(View.VISIBLE);
+       /* viewHolder.item_friends_close.setVisibility(View.GONE);
 
         contactView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,10 +90,10 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
                 .into(viewholder.image);}
 
         if (contact.getStatus().equals("started")) {
-            textView = (TextView)viewholder.itemView.findViewById(R.id.in_progress);
+            textView = (TextView)viewholder.itemView.findViewById(R.id.counterWins);
             textView.setText("In Progress");
         } else {
-            textView = (TextView)viewholder.itemView.findViewById(R.id.in_progress);
+            textView = (TextView)viewholder.itemView.findViewById(R.id.counterWins);
             textView.setText("Failed");
         }
         Typeface typeFace = Typeface.createFromAsset(_context.getAssets(), "fonts/bebasneue.ttf");

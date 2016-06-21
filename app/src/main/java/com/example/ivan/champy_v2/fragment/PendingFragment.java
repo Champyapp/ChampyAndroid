@@ -1,4 +1,4 @@
-package com.example.ivan.champy_v2.activity;
+package com.example.ivan.champy_v2.fragment;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -36,20 +36,17 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-/**
- * Created by ivan on 05.02.16.
- */
-public class PendingActivity extends Fragment {
+public class PendingFragment extends Fragment {
 
     public static final String ARG_PAGE = "ARG_PAGE";
     final String API_URL = "http://46.101.213.24:3007";
 
     private int mPage;
 
-    public static PendingActivity newInstance(int page) {
+    public static PendingFragment newInstance(int page) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
-        PendingActivity fragment = new PendingActivity();
+        PendingFragment fragment = new PendingFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -62,7 +59,7 @@ public class PendingActivity extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.i("stat", "Created PendingActivity");
+        Log.i("stat", "Created Pending");
         final View view = inflater.inflate(R.layout.fragment_first, container, false);
         final List<Pending_friend> friends = new ArrayList<>();
 
@@ -90,7 +87,7 @@ public class PendingActivity extends Fragment {
             Log.i("stat", "0 rows");
         c.close();
 
-        Log.i("stat", "FriendsActivity :" + friends);
+        Log.i("stat", "Friends :" + friends);
 
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
         final PendingAdapter adapter = new PendingAdapter(friends, getContext(), getActivity(), new CustomItemClickListener() {
@@ -130,7 +127,7 @@ public class PendingActivity extends Fragment {
                 final SQLiteDatabase db = dbHelper.getWritableDatabase();
                 int clearCount = db.delete("pending", null, null);
                 final ContentValues cv = new ContentValues();
-                Log.d("PendingActivity", "ID :" + id + " Token: " + token);
+                Log.d("PendingFragment", "ID :" + id + " Token: " + token);
                 com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
 
                 OfflineMode offlineMode = new OfflineMode();

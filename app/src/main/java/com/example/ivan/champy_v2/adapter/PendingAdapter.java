@@ -141,7 +141,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                     .placeholder(R.drawable.champy_icon2)
                     .into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleTotal));
 
-            TextView textView = (TextView)viewHolder.itemView.findViewById(R.id.textViewScoreChallenges);
+            TextView textView = (TextView)viewHolder.itemView.findViewById(R.id.textViewUserName);
             textView.setText(contact.getName());
             Typeface typeFace = Typeface.createFromAsset(_context.getAssets(), "fonts/bebasneue.ttf");
             textView.setTypeface(typeFace);
@@ -365,11 +365,11 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         SessionManager sessionManager = new SessionManager(_context);
         HashMap<String, String> champy = sessionManager.getChampyOptions();
 
-        textView = (TextView)viewHolder.itemView.findViewById(R.id.chall);
+        textView = (TextView)viewHolder.itemView.findViewById(R.id.counterInProgress);
         textView.setText(champy.get("challenges"));
-        textView = (TextView)viewHolder.itemView.findViewById(R.id.in_progress);
+        textView = (TextView)viewHolder.itemView.findViewById(R.id.counterWins);
         textView.setText(champy.get("wins"));
-        textView = (TextView)viewHolder.itemView.findViewById(R.id.total);
+        textView = (TextView)viewHolder.itemView.findViewById(R.id.counterTotal);
         textView.setText(champy.get("total"));
         textView = (TextView)viewHolder.itemView.findViewById(R.id.level);
         textView.setText("Level " + champy.get("level") + " Champy");

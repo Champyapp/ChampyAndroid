@@ -87,7 +87,7 @@ public class MyGcmListenerService extends GcmListenerService {
     // [END receive_message]
 
     /**
-     * Create and show a simple notification containing the received GCM message.
+     * Create and show a item_friends_open notification containing the received GCM message.
      *
      * @param message GCM message received.
      */

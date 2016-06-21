@@ -21,19 +21,14 @@ public class SessionManager {
 
     // Sharedpref file name
     private static final String PREFER_NAME = "Champy_pref";
-
     // All Shared Preferences Keys
     private static final String IS_USER_LOGIN = "IsUserLoggedIn";
-
     // Friend_json name (make variable public to access from outside)
-    public static final String KEY_NAME = "name";
-
+    public static final String KEY_NAME  = "name";
     // Email address (make variable public to access from outside)
     public static final String KEY_EMAIL = "email";
-
-    public static final String KEY_ID = "facebook_id";
-
-    public static final String KEY_PATH = "path_to_pic";
+    public static final String KEY_ID    = "facebook_id";
+    public static final String KEY_PATH  = "path_to_pic";
 
     // Constructor
     public SessionManager(Context context){

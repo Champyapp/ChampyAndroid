@@ -4,9 +4,9 @@
     android:layout_width="wrap_content">
 
 
-   <include layout="@layout/info" />
+   <include layout="@layout/item_friends_close" />
 
-   <include layout="@layout/simple" />
+   <include layout="@layout/item_friends_open" />
 
 
 
