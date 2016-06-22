@@ -257,6 +257,10 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                             StartSingleInProgress(challenge_id);
                             return true;
                         } else {
+                            if (isActive(description) || description.equals("active")) {
+                                Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
+                                return true;
+                            }
                             if ((description.equals("") || description.startsWith(" ")) && (days == 0 || duration.equals(""))) {
                                 Toast.makeText(getContext(), "Card is empty!", Toast.LENGTH_SHORT).show();
                                 return true;
@@ -271,10 +275,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                             }
                             if (!offlineMode.isInternetAvailable(getActivity())) {
                                 Toast.makeText(getContext(), "No Internet Connection!", Toast.LENGTH_SHORT).show();
-                                return true;
-                            }
-                            if (isActive(description)) {
-                                Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
                                 return true;
                             }
                         }

@@ -115,8 +115,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
 
         FacebookSdk.sdkInitialize(getApplicationContext());
-        SessionManager sessionManager1 = new SessionManager(getApplicationContext());
-        if (!sessionManager1.isUserLoggedIn()) {
+        SessionManager sessionManager = new SessionManager(getApplicationContext());
+        if (!sessionManager.isUserLoggedIn()) {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
         }
@@ -132,8 +132,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 0);  // 18 ?
-        calendar.set(Calendar.MINUTE, 0);        //  6 ?
+        calendar.set(Calendar.HOUR_OF_DAY, 18);  // 18 ?
+        calendar.set(Calendar.MINUTE, 6);        //  6 ?
         calendar.set(Calendar.SECOND, 0);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
         RelativeLayout cards = (RelativeLayout)findViewById(R.id.cards);
@@ -145,8 +145,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final ImageButton actionButton = (ImageButton)findViewById(R.id.fabPlus);
 
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
-
-
         final SubActionButton buttonWakeUpChallenge = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeupcolor)).build();
         final SubActionButton buttonDuelChallenge = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.duelcolor)).build();
         final SubActionButton buttonSelfImprovement = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementcolor)).build();
@@ -155,19 +153,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int x = round(width/100);
 
         buttonWakeUpChallenge.getLayoutParams().height = x*20;
-        buttonWakeUpChallenge.getLayoutParams().width = x*20;
-        buttonDuelChallenge.getLayoutParams().height = x*20;
-        buttonDuelChallenge.getLayoutParams().width = x*20;
+        buttonWakeUpChallenge.getLayoutParams().width  = x*20;
+        buttonDuelChallenge  .getLayoutParams().height = x*20;
+        buttonDuelChallenge  .getLayoutParams().width  = x*20;
         buttonSelfImprovement.getLayoutParams().height = x*20;
-        buttonSelfImprovement.getLayoutParams().width = x*20;
+        buttonSelfImprovement.getLayoutParams().width  = x*20;
 
-        actionMenu = new FloatingActionMenu.Builder(this)
-                .addSubActionView(buttonWakeUpChallenge)
-                .addSubActionView(buttonDuelChallenge)
-                .addSubActionView(buttonSelfImprovement)
-                .setRadius(350)
-                .attachTo(actionButton)
-                .build();
+        actionMenu = new FloatingActionMenu.Builder(this).addSubActionView(buttonWakeUpChallenge)
+                .addSubActionView(buttonDuelChallenge).addSubActionView(buttonSelfImprovement)
+                .setRadius(350).attachTo(actionButton).build();
 
         // клик фаба
         FloatingActionButton.OnClickListener onClickFab = new View.OnClickListener() {
@@ -323,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         view.setText("+" + (count > 0 ? String.valueOf(count) : null));
         if (count == 0) hideItem();
 
-        SessionManager sessionManager = new SessionManager(getApplicationContext());
+        //SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user = new HashMap<>();
         user = sessionManager.getUserDetails();
         String url = user.get("path_to_pic");
@@ -337,11 +331,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             name = intent.getExtras().getString("name");
         }
         Log.d(TAG, "Image: "+url);
+
         RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.slider);
-        ImageView profile_image = (ImageView)headerLayout.findViewById(R.id.profile_image);
-        TextView textView = (TextView)headerLayout.findViewById(R.id.tvUserName);
-        textView.setText(name);
-        blurScreenClick = (ImageView)headerLayout.findViewById(R.id.slide_background);
+        ImageView profile_image       = (ImageView)headerLayout.findViewById(R.id.profile_image);
+        TextView tvUserName           = (TextView)headerLayout.findViewById(R.id.tvUserName);
+        blurScreenClick               = (ImageView)headerLayout.findViewById(R.id.slide_background);
+        tvUserName.setText(name);
+
         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "blured2.jpg");
         if (file.exists()) try {
@@ -357,18 +353,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         file = new File(path, "profile.jpg");
         Uri uri = Uri.fromFile(file);
-        Glide.with(this)
-                .load(uri)
-                .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(profile_image);
-
-
+        Glide.with(this).load(uri).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile_image);
         BuildAnim();
-
         ViewServer.get(this).addWindow(this);
-
 
     }
 
@@ -420,16 +408,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (item.getItemId() == R.id.action_settings) {
             generate();
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -509,13 +490,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //--------------------------- Score ----------------------------//
         Float y = x*(float)3.5;
 
-        TextView textViewScoreChallenges = (TextView)findViewById(R.id.textViewUserName);
+        TextView textViewScoreChallenges = (TextView)findViewById(R.id.textViewChallengesCounter);
         textViewScoreChallenges.setTextSize(y);
 
-        TextView textViewScoreWins = (TextView)findViewById(R.id.textViewUserLevel);
+        TextView textViewScoreWins = (TextView)findViewById(R.id.textViewWinsCounter);
         textViewScoreWins.setTextSize(y);
 
-        TextView textViewScoreTotal = (TextView)findViewById(R.id.textViewScoreTotal);
+        TextView textViewScoreTotal = (TextView)findViewById(R.id.textViewTotalCounter);
         textViewScoreTotal.setTextSize(y);
 
         //------------------------- TextViews -------------------------//
@@ -604,24 +585,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ImageView mImageViewFilling2 = (ImageView) findViewById(R.id.imageView_total_animation);
         ((AnimationDrawable) mImageViewFilling2.getBackground()).start();
 
-        final TextView textViewScoreChall = (TextView) findViewById(R.id.textViewUserName);
-        final TextView textViewScoreWins = (TextView) findViewById(R.id.textViewUserLevel);
-        final TextView textViewScoreTotal = (TextView) findViewById(R.id.textViewScoreTotal);
+        final TextView tvChallengesCounter = (TextView) findViewById(R.id.textViewChallengesCounter);
+        final TextView tvWinsCounter       = (TextView) findViewById(R.id.textViewWinsCounter);
+        final TextView tvTotalCounter      = (TextView) findViewById(R.id.textViewTotalCounter);
 
         counter = 0;
 
         SessionManager sessionManager = new SessionManager(this);
-        // Ð±ÐµÑÐµÐ¼ Ð´Ð°Ð½Ð½ÑÐµ Ð¿ÑÐ¾ ÑÐµÐ±Ñ
+
         String challenges = sessionManager.getChampyOptions().get("challenges");
         String wins       = sessionManager.getChampyOptions().get("wins");
-        String tot        = sessionManager.getChampyOptions().get("total");
+        String total      = sessionManager.getChampyOptions().get("total");
 
-        // Ð¿ÐµÑÐµÐ¾Ð±ÑÐ°Ð·ÑÐµÐ¼ Ð´Ð°Ð½Ð½ÑÐµ
         final int challengesInteger = Integer.parseInt(challenges);
-        final int winsInteger = Integer.parseInt(wins);
-        final int totalInteger = Integer.parseInt(tot);
+        final int winsInteger       = Integer.parseInt(wins);
+        final int totalInteger      = Integer.parseInt(total);
 
-        total = max(max(challengesInteger, winsInteger), totalInteger);
+        this.total = max(max(challengesInteger, winsInteger), totalInteger);
         Log.d(TAG, "TOTAL: " + winsInteger);
 
         //----------------------- animator for Challenges -----------------------//
@@ -629,7 +609,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         animatorChallenges.setObjectValues(0, challengesInteger);
         animatorChallenges.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             public void onAnimationUpdate(ValueAnimator animation) {
-                textViewScoreChall.setText(String.valueOf(animation.getAnimatedValue()));
+                tvChallengesCounter.setText(String.valueOf(animation.getAnimatedValue()));
             }
         });
         animatorChallenges.setEvaluator(new TypeEvaluator<Integer>() {
@@ -644,7 +624,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         animatorWins.setObjectValues(0, winsInteger);
         animatorWins.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             public void onAnimationUpdate(ValueAnimator animation) {
-                textViewScoreWins.setText(String.valueOf(animation.getAnimatedValue()));
+                tvWinsCounter.setText(String.valueOf(animation.getAnimatedValue()));
             }
         });
         animatorWins.setEvaluator(new TypeEvaluator<Integer>() {
@@ -659,7 +639,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         animatorTotal.setObjectValues(0, totalInteger);
         animatorTotal.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             public void onAnimationUpdate(ValueAnimator animation) {
-                textViewScoreTotal.setText(String.valueOf(animation.getAnimatedValue()));
+                tvTotalCounter.setText(String.valueOf(animation.getAnimatedValue()));
             }
         });
         animatorTotal.setEvaluator(new TypeEvaluator<Integer>() {
@@ -673,45 +653,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         animatorWins.start();
         animatorTotal.start();
 
+        final TextView textViewChallenges       = (TextView)  findViewById(R.id.textViewChallenges);
+        final TextView textViewWins             = (TextView)  findViewById(R.id.textViewWins);
+        final TextView textViewTotal            = (TextView)  findViewById(R.id.textViewTotal);
+        final ImageView imageViewChallengesLogo = (ImageView) findViewById(R.id.imageView_challenges_logo);
+        final ImageView imageViewWinsLogo       = (ImageView) findViewById(R.id.imageView_wins_logo);
+        final ImageView imageViewTotalLogo      = (ImageView) findViewById(R.id.imageView_total_logo);
+        final Animation alphaAnimation          = new AlphaAnimation(0.0f, 1.0f);
+        alphaAnimation.setDuration(3000);
 
-
-        final TextView mSwitcher1 = (TextView) findViewById(R.id.textViewChallenges);
-        final TextView mSwitcher2 = (TextView) findViewById(R.id.textViewWins);
-        final TextView mSwitcher3 = (TextView) findViewById(R.id.textViewTotal);
-        final ImageView imageView1 = (ImageView) findViewById(R.id.imageView_challenges_logo);
-        final ImageView imageView2 = (ImageView) findViewById(R.id.imageView_wins_logo);
-        final ImageView imageView3 = (ImageView) findViewById(R.id.imageView_total_logo);
-        final Animation in = new AlphaAnimation(0.0f, 1.0f);
-        in.setDuration(3000);
-
-        mSwitcher1.setText("Challenges");
-        mSwitcher1.startAnimation(in);
-
-        mSwitcher2.setText("Wins");
-        mSwitcher2.startAnimation(in);
-
-        mSwitcher3.setText("Total");
-        mSwitcher3.startAnimation(in);
+        textViewChallenges.setText("Challenges");
+        textViewChallenges.startAnimation(alphaAnimation);
+        textViewWins.setText("Wins");
+        textViewWins.startAnimation(alphaAnimation);
+        textViewTotal.setText("Total");
+        textViewTotal.startAnimation(alphaAnimation);
 
         Uri uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/challenges");
-        Glide.with(this)
-                .load(uri)
-                .into(imageView1);
-
-        imageView1.startAnimation(in);
+        Glide.with(this).load(uri).into(imageViewChallengesLogo);
+        imageViewChallengesLogo.startAnimation(alphaAnimation);
 
         uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/wins");
-        Glide.with(this)
-                .load(uri)
-                .into(imageView2);
-
-        imageView2.startAnimation(in);
+        Glide.with(this).load(uri).into(imageViewWinsLogo);
+        imageViewWinsLogo.startAnimation(alphaAnimation);
 
         uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/total");
-        Glide.with(this)
-                .load(uri)
-                .into(imageView3);
-        imageView3.startAnimation(in);
+        Glide.with(this).load(uri).into(imageViewTotalLogo);
+        imageViewTotalLogo.startAnimation(alphaAnimation);
 
     }
 

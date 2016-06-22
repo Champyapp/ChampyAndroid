@@ -139,7 +139,7 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
                     .into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleTotal));
 
             // отвечает за имя юзера в развернутом виде
-            TextView tvUserName = (TextView)viewHolder.itemView.findViewById(R.id.textViewUserName);
+            TextView tvUserName = (TextView)viewHolder.itemView.findViewById(R.id.textViewChallengesCounter);
             tvUserName.setText(contact.getName());
             Typeface typeFace = Typeface.createFromAsset(_context.getAssets(), "fonts/bebasneue.ttf");
             tvUserName.setTypeface(typeFace);
@@ -164,7 +164,7 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
             counterTotalOpen.setText(contact.getmTotal());
 
             // отвечает за лвл юзера в свернутом виде
-            TextView tvUserLevelOpen = (TextView)viewHolder.itemView.findViewById(R.id.textViewUserLevel);
+            TextView tvUserLevelOpen = (TextView)viewHolder.itemView.findViewById(R.id.textViewWinsCounter);
             tvUserLevelOpen.setText("Level "+champy.get("level")+" Champy");
 
             // делаем view open видимой, view close невидимой

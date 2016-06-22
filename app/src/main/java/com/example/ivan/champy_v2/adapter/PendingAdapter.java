@@ -141,7 +141,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                     .placeholder(R.drawable.champy_icon2)
                     .into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleTotal));
 
-            TextView textView = (TextView)viewHolder.itemView.findViewById(R.id.textViewUserName);
+            TextView textView = (TextView)viewHolder.itemView.findViewById(R.id.textViewChallengesCounter);
             textView.setText(contact.getName());
             Typeface typeFace = Typeface.createFromAsset(_context.getAssets(), "fonts/bebasneue.ttf");
             textView.setTypeface(typeFace);
@@ -171,7 +171,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
             textView = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
             textView.setText(champy.get("total"));
 
-            textView = (TextView)viewHolder.itemView.findViewById(R.id.textViewUserLevel);
+            textView = (TextView)viewHolder.itemView.findViewById(R.id.textViewWinsCounter);
             textView.setText("Level "+champy.get("level")+" Champy");
 
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.VISIBLE);
