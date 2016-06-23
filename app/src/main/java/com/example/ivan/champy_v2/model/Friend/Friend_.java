@@ -1,4 +1,3 @@
-
 package com.example.ivan.champy_v2.model.Friend;
 
 import java.util.HashMap;
@@ -12,7 +11,7 @@ public class Friend_ {
     private String name;
     private Integer successChallenges;
     private Integer failedChallenges;
-    private Integer allChallengesCount;
+    private Integer allChallengesCount; // allChallengesCount =
     private Integer inProgressChallengesCount;
     private Integer score;
     private String _id;
@@ -101,7 +100,7 @@ public class Friend_ {
      *     The allChallengesCount
      */
     public Integer getAllChallengesCount() {
-        return allChallengesCount;
+        return this.inProgressChallengesCount + allChallengesCount;
     }
 
     /**

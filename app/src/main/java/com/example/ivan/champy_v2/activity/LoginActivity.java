@@ -34,6 +34,8 @@ import com.example.ivan.champy_v2.InitializeLogin;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.helper.CHExtensions;
+import com.example.ivan.champy_v2.helper.CHRequest;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
 import com.example.ivan.champy_v2.interfaces.NewUser;
 import com.example.ivan.champy_v2.interfaces.Update_user;
@@ -166,11 +168,13 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v)
             {
                 Activity activity = LoginActivity.this;
+                //CHRequest chRequest = new CHRequest();
+                //chRequest.initShit();
+                //CHExtensions chExtensions = new CHExtensions();
+                //chExtensions.isConnectedToRemoteAPI(activity);
+
                 OfflineMode offlineMode = new OfflineMode();
-                if (!offlineMode.isInternetAvailable(LoginActivity.this)) {
-                    Toast.makeText(LoginActivity.this, "Lost internet connection!", Toast.LENGTH_LONG).show();
-                    return;
-                }
+                offlineMode.isConnectedToRemoteAPI(activity);
 
                 LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile, email, user_friends"));
                 LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
