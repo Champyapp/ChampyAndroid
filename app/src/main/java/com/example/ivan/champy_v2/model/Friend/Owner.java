@@ -101,7 +101,7 @@ public class Owner {
      *     The allChallengesCount
      */
     public Integer getAllChallengesCount() {
-        return allChallengesCount;
+        return this.inProgressChallengesCount + allChallengesCount;
     }
 
     /**

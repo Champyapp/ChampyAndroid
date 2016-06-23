@@ -405,16 +405,9 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (item.getItemId() == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -610,7 +603,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                                 if (datum.getOwner().get_id().equals(id)) {
                                     Friend_ friend = datum.getFriend();
                                     cv.put("name", friend.getName());
-
                                     if (friend.getPhoto() != null) {
                                         cv.put("photo", friend.getPhoto().getMedium());
                                     } else {
@@ -642,10 +634,13 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                         int index = c.getColumnIndex("user_id");
                         do {
                             Log.i("newusers", "NewUser: " + c.getString(nameColIndex) + " Photo: " + c.getString(photoColIndex));
-                            newfriends.add(new com.example.ivan.champy_v2.Friend(c.getString(nameColIndex), API_URL+c.getString(photoColIndex), c.getString(index), "0", "0", "0" ,"0"));
+                            newfriends.add(new com.example.ivan.champy_v2.Friend(
+                                    c.getString(nameColIndex),
+                                    API_URL + c.getString(photoColIndex),
+                                    c.getString(index),
+                                    "0", "0", "0" ,"0"));
                         } while (c.moveToNext());
-                    } else
-                        Log.i("stat", "0 0 0 0");
+                    } //else Log.i("stat", "0 0 0 0");
                     c.close();
 
                     Log.i("stat", "FriendsActivity :" + newfriends.toString());
@@ -656,6 +651,9 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                                 @Override
                                 public void onItemClick(View view, int position) {
                                     com.example.ivan.champy_v2.Friend friend = newfriends.get(position);
+                                    friend.getmChallenges();
+                                    friend.getmTotal();
+                                    friend.getmWins();
                                 }
                             });
                             runOnUiThread(new Runnable() {

@@ -96,8 +96,7 @@ public class OtherFragment extends Fragment {
                             c.getString(level)));
 
             } while (c.moveToNext());
-        } else
-            Log.i("stat", "0 rows");
+        } //else Log.i("stat", "0 rows");
         c.close();
 
         Log.i("stat", "Friends: " + friends);
@@ -177,9 +176,9 @@ public class OtherFragment extends Fragment {
                                                                 cv.put("name", name);
                                                                 cv.put("photo", photo);
                                                                 cv.put("challenges", "" + data.getAllChallengesCount());
-                                                                cv.put("wins", "" + data.getSuccessChallenges());
-                                                                cv.put("wins", "" + data.getScore());
-                                                                cv.put("level", "" + data.getLevel().getNumber());
+                                                                cv.put("wins", ""       + data.getSuccessChallenges());
+                                                                cv.put("wins", ""       + data.getScore());
+                                                                cv.put("level", ""      + data.getLevel().getNumber());
                                                                 Log.i("Users", "user: " + user_name + " photo: " + photo);
 
                                                                 // отображаем друзей в списке

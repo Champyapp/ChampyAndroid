@@ -71,17 +71,16 @@ public class FriendsFragment extends Fragment {
             int photoColIndex = c.getColumnIndex("photo");
             int index = c.getColumnIndex("user_id");
             do {
-                Log.i("stat", "Status: "+c.getString(photoColIndex));
-                friends.add(new com.example.ivan.champy_v2.Friend(c.getString(nameColIndex), API_URL+c.getString(photoColIndex), c.getString(index), "0", "0", "0" ,"0"));
+                Log.i("stat", "Status: " + c.getString(photoColIndex));
+                friends.add(new com.example.ivan.champy_v2.Friend(
+                        c.getString(nameColIndex),
+                        API_URL + c.getString(photoColIndex),
+                        c.getString(index),
+                        "0", "0", "0" ,"0"));
             } while (c.moveToNext());
-        } else
-            Log.i("stat", "friends_null");
+        } //else Log.i("stat", "friends_null");
         c.close();
 
-        /*for (int i=0; i<20; i++)
-        {
-            friends.add(new Friend("My friend number "+i, "http://loremflickr.com/320/240?random="+(i+1), 0));
-        }*/
         Log.i("stat", "FriendsActivity :"+friends);
 
 
@@ -94,9 +93,9 @@ public class FriendsFragment extends Fragment {
         });
         SessionManager sessionManager = new SessionManager(getActivity());
         String refresh = sessionManager.getRefreshFriends();
+        String inProgressCount = sessionManager.getChampyOptions().get("challenges");
         if (refresh.equals("true")) {
             UpdateFriendsList();
-
             sessionManager.setRefreshFriends("false");
         }
         FloatingActionButton floatingActionButton = (FloatingActionButton)getActivity().findViewById(R.id.fabPlus);
@@ -137,9 +136,7 @@ public class FriendsFragment extends Fragment {
                             if (response.isSuccess()) {
                                 List<Datum> data = response.body().getData();
                                 for (int i = 0; i < data.size(); i++) {
-
                                     Datum datum = data.get(i);
-
                                     if (datum.getFriend() != null) {
                                         if (datum.getStatus().toString().equals("true")) {
                                             if (datum.getOwner().get_id().equals(id)) {
@@ -179,10 +176,12 @@ public class FriendsFragment extends Fragment {
                                     int index = c.getColumnIndex("user_id");
                                     do {
                                         Log.i("newusers", "NewUser: " + c.getString(nameColIndex) + " Photo: " + c.getString(photoColIndex));
-                                        newfriends.add(new Friend(c.getString(nameColIndex), API_URL + c.getString(photoColIndex), c.getString(index), "0", "0", "0", "0"));
+                                        newfriends.add(new Friend(c.getString(nameColIndex),
+                                                API_URL + c.getString(photoColIndex),
+                                                c.getString(index),
+                                                "0", "0", "0", "0"));
                                     } while (c.moveToNext());
-                                } else
-                                    Log.i("stat", "0 rows");
+                                } //else Log.i("stat", "0 rows");
                                 c.close();
 
                                 Log.i("stat", "FriendsActivity :" + newfriends.toString());
@@ -244,27 +243,29 @@ public class FriendsFragment extends Fragment {
                         Datum datum = data.get(i);
 
                         if (datum.getFriend() != null) {
-
                             if (datum.getStatus().toString().equals("true")) {
-
                                 if (datum.getOwner().get_id().equals(id)) {
 
                                     Friend_ friend = datum.getFriend();
-                                    cv.put("name", friend.getName());
 
+                                    cv.put("name", friend.getName());
+                                    /*cv.put("challenges", friend.getInProgressChallengesCount());
+                                    cv.put("wins", friend.getSuccessChallenges());
+                                    cv.put("total", friend.getAllChallengesCount());*/
                                     if (friend.getPhoto() != null) {
                                         cv.put("photo", friend.getPhoto().getMedium());
                                     } else {
                                         cv.put("photo", "");
                                     }
-
                                     cv.put("user_id", friend.getId());
                                     db.insert("friends", null, cv);
 
                                 } else {
                                     Owner friend = datum.getOwner();
                                     cv.put("name", friend.getName());
-
+                                    /*cv.put("challenges", friend.getInProgressChallengesCount());
+                                    cv.put("wins", friend.getSuccessChallenges());
+                                    cv.put("total", friend.getAllChallengesCount());*/
                                     if (friend.getPhoto() != null) {
                                         cv.put("photo", friend.getPhoto().getMedium());
                                     } else {
@@ -285,11 +286,13 @@ public class FriendsFragment extends Fragment {
                         int index = c.getColumnIndex("user_id");
                         do {
                             Log.i("newusers", "NewUser: " + c.getString(nameColIndex) + " Photo: " + c.getString(photoColIndex));
-                            newfriends.add(new com.example.ivan.champy_v2.Friend(c.getString(nameColIndex),
-                                    API_URL+c.getString(photoColIndex), c.getString(index), "0", "0", "0" ,"0"));
+                            newfriends.add(new com.example.ivan.champy_v2.Friend(
+                                    c.getString(nameColIndex),
+                                    API_URL + c.getString(photoColIndex),
+                                    c.getString(index),
+                                    "0", "0", "0" ,"0"));
                         } while (c.moveToNext());
-                    } else
-                        Log.i("stat", "0 0 0 0");
+                    } //else Log.i("stat", "0 0 0 0");
                     c.close();
 
                     Log.i("stat", "FriendsActivity :" + newfriends.toString());

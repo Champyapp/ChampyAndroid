@@ -555,7 +555,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 Log.d(TAG, "Owner");
                                                 cv.put("user_id", friend.get_id());
                                                 cv.put("owner", "true");
-                                                db.insert("pending", null, cv);
+//                                                db.insert("pending", null, cv);
                                             }
                                         }
                                     }

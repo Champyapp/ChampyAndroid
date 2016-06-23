@@ -158,6 +158,9 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             TextView tvTotal = (TextView)viewHolder.itemView.findViewById(R.id.textViewTotal);
             tvTotal.setTypeface(typeFace);
 
+            //SessionManager sessionManager = new SessionManager(_context);
+            //HashMap<String, String> champy = sessionManager.getChampyOptions();
+
             // отвечает за счетчики в развернутом виде
             TextView counterInProgressOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
             counterInProgressOpen.setText(contact.getmChallenges());
@@ -168,7 +171,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
             // отвечает за лвл юзера в свернутом виде
             TextView tvUserLevelOpen = (TextView)viewHolder.itemView.findViewById(R.id.textViewWinsCounter);
-            tvUserLevelOpen.setText("Level "+contact.getmLevel() + " Champy");
+            tvUserLevelOpen.setText("Level "+ contact.getmLevel() + " Champy");
 
             // делаем view open видимой, view close невидимой
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.VISIBLE);
@@ -179,8 +182,8 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             Log.i("Selected: ", position + " close");
             // отвечает за значки в свернутом виде
             ImageView imageViewFriendPicture = viewHolder.friendImage;
-            Glide.with(_context).load(contact.getPicture()).asBitmap().transform(new CropCircleTransformation(_context))
-                    .placeholder(R.drawable.champy_icon2).diskCacheStrategy(DiskCacheStrategy.NONE)
+            Glide.with(_context).load(contact.getPicture()).asBitmap().transform(new CropCircleTransformation(_context)).
+                    placeholder(R.drawable.champy_icon2).diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true).override(80, 80).dontAnimate().into(imageViewFriendPicture);
             ImageView imageViewChallenges = viewHolder.challenges;
             Glide.with(_context).load(R.drawable.challenges).override(40, 40).into(imageViewChallenges);
@@ -190,11 +193,11 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             Glide.with(_context).load(R.drawable.total).override(40, 40).into(imageViewTotal);
 
             // отвечает за счетчики в свернутом виде
-            TextView counterInProgressClose = (TextView)viewHolder.itemView.findViewById(R.id.counterTotal);
+            TextView counterInProgressClose = (TextView)viewHolder.itemView.findViewById(R.id.counterInProgress);
             counterInProgressClose.setText(contact.getmChallenges());
             TextView counterWinsClose = (TextView)viewHolder.itemView.findViewById(R.id.counterWins);
             counterWinsClose.setText(contact.getmWins());
-            TextView counterTotalClose = (TextView)viewHolder.itemView.findViewById(R.id.counterInProgress);
+            TextView counterTotalClose = (TextView)viewHolder.itemView.findViewById(R.id.counterTotal);
             counterTotalClose.setText(contact.getmTotal());
 
             // отвечает за лвл юзера в свернутом виде
@@ -240,12 +243,13 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                                         public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
                                             if (response.isSuccess()) {
                                                 Log.d(TAG, "Status: Removed ");
-                                            } else Log.d(TAG, "Status: " + response.toString());
+                                            } else {
+                                                Log.d(TAG, "Status: " + response.toString());
+                                            }
                                         }
 
                                         @Override
                                         public void onFailure(Throwable t) {
-
                                         }
                                     });
                                     sessionManager.setRefreshFriends("true");
