@@ -59,8 +59,8 @@
         android:id="@+id/imageView_total_logo"
         android:src="@mipmap/ic_launcher"
         android:layout_above="@+id/view"
-        android:layout_toLeftOf="@+id/counterTotal"
-        android:layout_toStartOf="@+id/counterTotal"
+        android:layout_toLeftOf="@+id/counterInProgress"
+        android:layout_toStartOf="@+id/counterInProgress"
         android:layout_marginRight="8dp" />
 
     <TextView
@@ -68,7 +68,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="10"
-        android:id="@+id/counterTotal"
+        android:id="@+id/counterInProgress"
         android:textColor="#ffffff"
         android:layout_alignBottom="@+id/imageView_total_logo"
         android:layout_alignParentRight="true"

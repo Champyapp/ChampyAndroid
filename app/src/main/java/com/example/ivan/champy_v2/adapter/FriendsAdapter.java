@@ -159,11 +159,11 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             tvTotal.setTypeface(typeFace);
 
             // отвечает за счетчики в развернутом виде
-            TextView counterInProgressOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_chall);
+            TextView counterInProgressOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
             counterInProgressOpen.setText(contact.getmChallenges());
             TextView counterWinsOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_wins);
             counterWinsOpen.setText(contact.getmWins());
-            TextView counterTotalOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
+            TextView counterTotalOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_inProgress);
             counterTotalOpen.setText(contact.getmTotal());
 
             // отвечает за лвл юзера в свернутом виде
@@ -190,11 +190,11 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             Glide.with(_context).load(R.drawable.total).override(40, 40).into(imageViewTotal);
 
             // отвечает за счетчики в свернутом виде
-            TextView counterInProgressClose = (TextView)viewHolder.itemView.findViewById(R.id.counterInProgress);
+            TextView counterInProgressClose = (TextView)viewHolder.itemView.findViewById(R.id.counterTotal);
             counterInProgressClose.setText(contact.getmChallenges());
             TextView counterWinsClose = (TextView)viewHolder.itemView.findViewById(R.id.counterWins);
             counterWinsClose.setText(contact.getmWins());
-            TextView counterTotalClose = (TextView)viewHolder.itemView.findViewById(R.id.counterTotal);
+            TextView counterTotalClose = (TextView)viewHolder.itemView.findViewById(R.id.counterInProgress);
             counterTotalClose.setText(contact.getmTotal());
 
             // отвечает за лвл юзера в свернутом виде

@@ -233,6 +233,7 @@ public class Data {
      * @param status
      *     The status
      */
+
     public void setStatus(String status) {
         this.status = status;
     }

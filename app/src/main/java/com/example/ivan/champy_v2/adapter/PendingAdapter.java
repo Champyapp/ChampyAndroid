@@ -160,7 +160,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
 
 
 
-            textView = (TextView)viewHolder.itemView.findViewById(R.id.info_chall);
+            textView = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
             textView.setText(champy.get("challenges"));
             //textView.setText(contact.getmChallenges());
             //textViewChallengesInfo.setText(contact.getmChallenges());
@@ -168,7 +168,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
             textView = (TextView)viewHolder.itemView.findViewById(R.id.info_wins);
             textView.setText(champy.get("wins"));
 
-            textView = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
+            textView = (TextView)viewHolder.itemView.findViewById(R.id.info_inProgress);
             textView.setText(champy.get("total"));
 
             textView = (TextView)viewHolder.itemView.findViewById(R.id.textViewWinsCounter);
@@ -365,11 +365,11 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         SessionManager sessionManager = new SessionManager(_context);
         HashMap<String, String> champy = sessionManager.getChampyOptions();
 
-        textView = (TextView)viewHolder.itemView.findViewById(R.id.counterInProgress);
+        textView = (TextView)viewHolder.itemView.findViewById(R.id.counterTotal);
         textView.setText(champy.get("challenges"));
         textView = (TextView)viewHolder.itemView.findViewById(R.id.counterWins);
         textView.setText(champy.get("wins"));
-        textView = (TextView)viewHolder.itemView.findViewById(R.id.counterTotal);
+        textView = (TextView)viewHolder.itemView.findViewById(R.id.counterInProgress);
         textView.setText(champy.get("total"));
         textView = (TextView)viewHolder.itemView.findViewById(R.id.level);
         textView.setText("Level " + champy.get("level") + " Champy");

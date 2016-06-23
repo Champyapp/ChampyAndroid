@@ -120,11 +120,8 @@ public class LoginActivity extends AppCompatActivity {
                 md.update(signature.toByteArray());
                 Log.d("KeyHash: ", Base64.encodeToString(md.digest(), Base64.DEFAULT));
             }
-        } catch (PackageManager.NameNotFoundException e) {
+        } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
             Log.d("KeyHash : ", "not working" );
-        } catch (NoSuchAlgorithmException e) {
-            Log.d("KeyHash : ", "not working" );
-
         }
         setContentView(R.layout.activity_login);
 
@@ -261,7 +258,6 @@ public class LoginActivity extends AppCompatActivity {
         ViewServer.get(this).addWindow(this);
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -296,9 +292,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
-
-
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
 
@@ -325,6 +318,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
     }
+
 
     private String saveToInternalStorage(Bitmap bitmapImage){
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
@@ -388,7 +382,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d("TAG", "Status: "+jwtString);*/
                         String token_android;
 
-                        Data data = decodedResponse.getData();
+                        Data data = decodedResponse.getData(); // data == user
                         String email = data.getEmail();
                         String user_name = data.getName();
                         String id = data.get_id();
@@ -404,7 +398,10 @@ public class LoginActivity extends AppCompatActivity {
                         sessionManager.setRefreshPending("false");
                         sessionManager.setRefreshFriends("false");
                         sessionManager.createUserLoginSession(user_name, email, fb_id, path_to_pic, jwtString, id, pushN, newChallReq, acceptedYour, challegeEnd, "true");
-                        sessionManager.setChampyOptions(data.getAllChallengesCount().toString(), data.getSuccessChallenges().toString(), data.getScore().toString(), data.getLevel().getNumber().toString());
+                        sessionManager.setChampyOptions(data.getAllChallengesCount().toString(),
+                                data.getSuccessChallenges().toString(),
+                                data.getInProgressChallengesCount().toString(),
+                                data.getLevel().getNumber().toString());
                         String api_path = null;
                         if (data.getPhoto() != null) {
                             String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
@@ -476,7 +473,10 @@ public class LoginActivity extends AppCompatActivity {
                     sessionManager.setRefreshPending("false");
                     sessionManager.setRefreshFriends("false");
                     sessionManager.createUserLoginSession(user_name, email, fb_id, path_to_pic, jwtString, id, pushN, newChallReq, acceptedYour, challegeEnd, "true");
-                    sessionManager.setChampyOptions(data.getAllChallengesCount().toString(), data.getSuccessChallenges().toString(), data.getScore().toString(), data.getLevel().getNumber().toString());
+                    sessionManager.setChampyOptions(data.getAllChallengesCount().toString(),
+                            data.getSuccessChallenges().toString(),
+                            data.getScore().toString(),
+                            data.getLevel().getNumber().toString());
 
                     DBHelper dbHelper = new DBHelper(LoginActivity.this);
                     final SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -864,9 +864,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
 
 }
 

@@ -363,6 +363,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                     Log.i("stat", "Status: Starting OK");
                     ContentValues cv = new ContentValues();
                     com.example.ivan.champy_v2.single_inprogress.SingleInProgress data = response.body();
+                    Log.i("hyghynuhnuhnuhnuh", "onResponse: " + data.getData().toString()); //get smth else
                     cv.put("challenge_id", data.getData().get_id());
                     Log.d("myLogs", "Added: " + data.getData().get_id());
                     cv.put("updated", "false");

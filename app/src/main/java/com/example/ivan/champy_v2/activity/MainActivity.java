@@ -115,8 +115,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
 
         FacebookSdk.sdkInitialize(getApplicationContext());
-        SessionManager sessionManager = new SessionManager(getApplicationContext());
-        if (!sessionManager.isUserLoggedIn()) {
+        SessionManager sessionManager2 = new SessionManager(getApplicationContext());
+        if (!sessionManager2.isUserLoggedIn()) {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
         }
@@ -132,8 +132,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 18);  // 18 ?
-        calendar.set(Calendar.MINUTE, 6);        //  6 ?
+        calendar.set(Calendar.HOUR_OF_DAY, 0);  // 18 ?
+        calendar.set(Calendar.MINUTE, 0);        //  6 ?
         calendar.set(Calendar.SECOND, 0);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
         RelativeLayout cards = (RelativeLayout)findViewById(R.id.cards);
@@ -173,17 +173,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 mLastClickTime = SystemClock.elapsedRealtime();
                 ImageView blurScreen;
                 RelativeLayout contentMain = (RelativeLayout) findViewById(R.id.content_main);
-
                 contentMain.destroyDrawingCache();
-
                 contentMain.buildDrawingCache();
                 Bitmap bm = contentMain.getDrawingCache();
-
                 Bitmap blured = Blur.blurRenderScript(getApplicationContext(), bm, 25);
                 blurScreen = (ImageView) findViewById(R.id.blurScreen);
                 Drawable ob = new BitmapDrawable(getResources(), blured);
                 blurScreen.setImageDrawable(ob);
-
                 RelativeLayout cardsLayout = (RelativeLayout)findViewById(R.id.cards);
 
                 actionMenu.toggle(true);
@@ -317,7 +313,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         view.setText("+" + (count > 0 ? String.valueOf(count) : null));
         if (count == 0) hideItem();
 
-        //SessionManager sessionManager = new SessionManager(getApplicationContext());
+        SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user = new HashMap<>();
         user = sessionManager.getUserDetails();
         String url = user.get("path_to_pic");
@@ -598,15 +594,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String total      = sessionManager.getChampyOptions().get("total");
 
         final int challengesInteger = Integer.parseInt(challenges);
-        final int winsInteger       = Integer.parseInt(wins);
         final int totalInteger      = Integer.parseInt(total);
+        final int winsInteger       = Integer.parseInt(wins);
 
-        this.total = max(max(challengesInteger, winsInteger), totalInteger);
-        Log.d(TAG, "TOTAL: " + winsInteger);
+        this.total = max(max(totalInteger, winsInteger), challengesInteger);
+        //Log.d(TAG, "TOTAL: " + winsInteger);
 
         //----------------------- animator for Challenges -----------------------//
         ValueAnimator animatorChallenges = new ValueAnimator();
-        animatorChallenges.setObjectValues(0, challengesInteger);
+        animatorChallenges.setObjectValues(0, totalInteger);
         animatorChallenges.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             public void onAnimationUpdate(ValueAnimator animation) {
                 tvChallengesCounter.setText(String.valueOf(animation.getAnimatedValue()));
@@ -619,7 +615,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
         animatorChallenges.setDuration(1000);
 
-        //------------------------- animator for Total -------------------------//
+        // animator for Total
         ValueAnimator animatorWins = new ValueAnimator();
         animatorWins.setObjectValues(0, winsInteger);
         animatorWins.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -634,9 +630,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
         animatorWins.setDuration(1000);
 
-        //------------------------- animator for Total -------------------------//
+        // animator for Total
         ValueAnimator animatorTotal = new ValueAnimator();
-        animatorTotal.setObjectValues(0, totalInteger);
+        animatorTotal.setObjectValues(0, challengesInteger);
         animatorTotal.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             public void onAnimationUpdate(ValueAnimator animation) {
                 tvTotalCounter.setText(String.valueOf(animation.getAnimatedValue()));
@@ -662,7 +658,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final Animation alphaAnimation          = new AlphaAnimation(0.0f, 1.0f);
         alphaAnimation.setDuration(3000);
 
-        textViewChallenges.setText("Challenges");
+        textViewChallenges.setText("In Progress"); // TODO: 22.06.2016 Change to Challenges
         textViewChallenges.startAnimation(alphaAnimation);
         textViewWins.setText("Wins");
         textViewWins.startAnimation(alphaAnimation);

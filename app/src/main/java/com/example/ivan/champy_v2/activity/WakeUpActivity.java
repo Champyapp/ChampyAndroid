@@ -127,17 +127,10 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         textView = (TextView) headerLayout.findViewById(R.id.tvUserName);
         textView.setText(name);
 
-        Glide.with(this)
-                .load(R.drawable.points)
-                .override(100, 100)
-                .into((ImageView)findViewById(R.id.imageViewAcceptButton));
+        Glide.with(this).load(R.drawable.points).override(100, 100).into((ImageView)findViewById(R.id.imageViewAcceptButton));
 
-        Glide.with(this)
-                .load(url)
-                .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(profile);
+        Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile);
 
         try {
             Drawable dr = Init("/data/data/com.example.ivan.champy_v2/app_imageDir/");

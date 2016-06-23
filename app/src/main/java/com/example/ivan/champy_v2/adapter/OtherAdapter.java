@@ -156,7 +156,7 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
             //HashMap<String, String> champy = sessionManager.getChampyOptions();
 
             // отвечает за счетчики в развернутом виде
-            TextView counterInProgressOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_chall);
+            TextView counterInProgressOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_inProgress);
             counterInProgressOpen.setText(contact.getmChallenges());
             TextView counterWinsOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_wins);
             counterWinsOpen.setText(contact.getmWins());

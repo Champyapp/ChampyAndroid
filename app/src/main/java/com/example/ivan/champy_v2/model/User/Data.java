@@ -101,7 +101,7 @@ public class Data {
      *     The allChallengesCount
      */
     public Integer getAllChallengesCount() {
-        return allChallengesCount;
+        return this.inProgressChallengesCount + allChallengesCount;
     }
 
     /**
@@ -137,7 +137,7 @@ public class Data {
      *     The score
      */
     public Integer getScore() {
-        return score;
+        return inProgressChallengesCount;
     }
 
     /**
