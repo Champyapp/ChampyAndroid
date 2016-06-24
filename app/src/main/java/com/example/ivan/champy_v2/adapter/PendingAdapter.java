@@ -102,7 +102,6 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                 }
             }
         });
-
         return viewHolder;
     }
 
@@ -117,7 +116,6 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
 
         if (selected.contains(position)) {
             Log.i("Selected: ", position + " open");
-
             // отвечает за значки в развернутом виде
             ImageView imageViewUserAvatar = (ImageView)viewHolder.itemView.findViewById(R.id.imageViewUserAvatar);
             Glide.with(_context).load(contact.getPicture()).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -208,16 +206,14 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
             public void onClick(View v) {
                 final SessionManager sessionManager = new SessionManager(_context);
                 OfflineMode offlineMode = new OfflineMode();
-                if (offlineMode.isInternetAvailable(activity)) {
+                if (offlineMode.isConnectedToRemoteAPI(activity)) {
 
-                    HashMap<String, String> user = new HashMap<>();
+                    HashMap<String, String> user;
                     user = sessionManager.getUserDetails();
-
                     final String token = user.get("token");
                     final String id = user.get("id");
 
                     String friend = mContacts.get(position).getID();
-
                     Retrofit retrofit = new Retrofit.Builder()
                             .baseUrl(API_URL)
                             .addConverterFactory(GsonConverterFactory.create())
@@ -245,8 +241,6 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                     mContacts.remove(position);
                     notifyItemRemoved(position);
                     selected.clear();
-                } else {
-                    Toast.makeText(activity, "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -256,16 +250,15 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
             @Override
             public void onClick(View v) {
                 OfflineMode offlineMode = new OfflineMode();
-                if (offlineMode.isInternetAvailable(activity)) {
-
+                if (offlineMode.isConnectedToRemoteAPI(activity)) {
                     final SessionManager sessionManager = new SessionManager(_context);
-                    HashMap<String, String> user = new HashMap<>();
+                    HashMap<String, String> user;
                     user = sessionManager.getUserDetails();
                     final String token = user.get("token");
                     final String id = user.get("id");
                     String friend = mContacts.get(position).getID();
                     Log.d(TAG, "User: " + friend);
-                    if (friend == null && friend == id) {
+                    if (friend == null && friend.equals(id)) {
                         Toast.makeText(_context, "This user has not installed Champy", Toast.LENGTH_SHORT).show();
                     } else {
                         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -296,19 +289,17 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                                                     cv.put("photo", mContacts.get(position).getPicture());
                                                     cv.put("user_id", mContacts.get(position).getID());
                                                     db.insert("friends", null, cv);
-                                                } else Log.d(TAG, "Status: " + response.code());
+                                                } //else Log.d(TAG, "Status: " + response.code());
                                             }
 
                                             @Override
                                             public void onFailure(Throwable t) {
-
                                             }
                                         });
                                         mContacts.remove(position);
                                         notifyItemRemoved(position);
                                         selected.clear();
                                         break;
-
                                     case DialogInterface.BUTTON_NEGATIVE:
                                         dialog.cancel();
                                         break;
@@ -320,8 +311,6 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                         builder.setMessage("Do you want add this user to your friends list?").setPositiveButton("Yes", dialogClickListener)
                                 .setNegativeButton("No", dialogClickListener).show();
                     }
-                } else {
-                    Toast.makeText(activity, "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -336,11 +325,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
     }
 
 
-    // Provide a direct reference to each of the views within a data item
-    // Used to cache the views within the item layout for fast access
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        // Your holder should contain a member variable
-        // for any view that will be set as you render a row
         public TextView nameTextView;
         public ImageView friendImage;
         public ImageView challenges;
@@ -359,11 +344,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         public ImageView dop;
 
 
-        // We also create a constructor that accepts the entire item row
-        // and does the view lookups to find each subview
         public ViewHolder(View itemView) {
-            // Stores the itemView in a public final member variable that can be used
-            // to access the context from any ViewHolder instance.
             super(itemView);
 
             nameTextView = (TextView) itemView.findViewById(R.id.name);
@@ -382,7 +363,6 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
 
             block = (ImageButton)itemView.findViewById(R.id.imageButtonBlockUser);
             add = (ImageButton)itemView.findViewById(R.id.imageButtonAddUser);
-
 
         }
 

@@ -261,14 +261,12 @@ public class DuelFragment extends Fragment {
                             Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
                         } else {
                             OfflineMode offlineMode = new OfflineMode();
-                            if (offlineMode.isInternetAvailable(getActivity())) {
+                            if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
                                 StartSingleInProgress(challenge_id, finalFriend_id);
                                 HashMap<String, String> user = new HashMap<>();
                                 user = sessionManager.getUserDetails();
                                 String token = user.get("token");
                                 Log.i("stat", "Nam nado: " + challenge_id + " " + finalFriend_id + " " + token);
-                            } else {
-                                Toast.makeText(getContext(), "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }

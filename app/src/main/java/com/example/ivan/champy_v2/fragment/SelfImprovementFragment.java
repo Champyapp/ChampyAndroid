@@ -199,7 +199,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                     int size = sessionManager.getSelfSize();
                     OfflineMode offlineMode = new OfflineMode();
                     if (position == size) {
-                        if ((!isActive(description)) && offlineMode.isInternetAvailable(getActivity()) && (!description.equals("")) &&
+                        if ((!isActive(description)) && offlineMode.isConnectedToRemoteAPI(getActivity()) && (!description.equals("")) &&
                                 (!description.startsWith(" ")) && (days != 0) && (!duration.equals("")) && (!isActive(description))) {
                             days = Integer.parseInt(duration);
                             Create_new_challenge(description, days);
@@ -220,10 +220,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                             }
                             if (duration.equals("") || days == 0) {
                                 Toast.makeText(getContext(), "Min 1 day!", Toast.LENGTH_SHORT).show();
-                                return true;
-                            }
-                            if (!offlineMode.isInternetAvailable(getActivity())) {
-                                Toast.makeText(getContext(), "No Internet Connection!", Toast.LENGTH_SHORT).show();
                                 return true;
                             }
                         }

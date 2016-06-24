@@ -207,12 +207,10 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
             @Override
             public void onClick(View v) {
                 OfflineMode offlineMode = new OfflineMode();
-                if (offlineMode.isInternetAvailable(activity)) {
+                if (offlineMode.isConnectedToRemoteAPI(activity)) {
                     mContacts.remove(position);
                     notifyItemRemoved(position);
                     selected.clear();
-                } else {
-                    Toast.makeText(activity, "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -222,9 +220,9 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
             @Override
             public void onClick(View v) {
                 OfflineMode offlineMode = new OfflineMode();
-                if (offlineMode.isInternetAvailable(activity)) {
+                if (offlineMode.isConnectedToRemoteAPI(activity)) {
                     final SessionManager sessionManager = new SessionManager(_context);
-                    HashMap<String, String> user = new HashMap<>();
+                    HashMap<String, String> user;
                     user = sessionManager.getUserDetails();
                     final String token = user.get("token");
                     Log.i("stat", "token: " + token);
@@ -248,7 +246,7 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
                                 .setPositiveButton("Yes", dialogClickListener)
                                 .setNegativeButton("No", dialogClickListener)
                                 .show();
-                    } else if (friend == id) {
+                    } else if (friend.equals(id)) {
                         Toast.makeText(_context, "This user has not installed Champy", Toast.LENGTH_SHORT).show();
                     } else {
                         // dialog "Do you want add this user to your friends list?"
@@ -288,7 +286,6 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
 
                                             @Override
                                             public void onFailure(Throwable t) {
-
                                             }
                                         });
                                         mContacts.remove(position);
@@ -307,8 +304,6 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
                                 .setNegativeButton("No", dialogClickListener)
                                 .show();
                     }
-                } else {
-                    Toast.makeText(activity, "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
                 }
             }
         });

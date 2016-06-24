@@ -78,16 +78,11 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         String type = contact.getType();
         if (type.equals("Wake Up")) {
             textView.setText("Wake Up");
-            Glide.with(_context)
-                    .load(R.drawable.wakeupcolor)
-                    .override(80, 80)
-                    .into(viewholder.image);
+            Glide.with(_context).load(R.drawable.wakeupcolor).override(80, 80).into(viewholder.image);
+        } else {
+            textView.setText("Self-Improvement Challenge");
+            Glide.with(_context).load(R.drawable.selfimprovementcolor).override(80, 80).into(viewholder.image);
         }
-        else {textView.setText("Self-Improvement Challenge");
-        Glide.with(_context)
-                .load(R.drawable.selfimprovementcolor)
-                .override(80, 80)
-                .into(viewholder.image);}
 
         if (contact.getStatus().equals("started")) {
             textView = (TextView)viewholder.itemView.findViewById(R.id.counterWins);
@@ -99,14 +94,8 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         Typeface typeFace = Typeface.createFromAsset(_context.getAssets(), "fonts/bebasneue.ttf");
         textView.setTypeface(typeFace);
 
-        Glide.with(_context)
-                .load(R.drawable.challenges)
-                .override(40, 40)
-                .into(viewholder.wins);
-        Glide.with(_context)
-                .load(R.drawable.challenge)
-                .override(40, 40)
-                .into(viewholder.total);
+        Glide.with(_context).load(R.drawable.challenges).override(40, 40).into(viewholder.wins);
+        Glide.with(_context).load(R.drawable.challenge) .override(40, 40).into(viewholder.total);
     }
     @Override
     public int getItemCount() {
@@ -114,8 +103,6 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        // Your holder should contain a member variable
-        // for any view that will be set as you render a row
         public TextView nameTextView;
         public ImageView image;
         public ImageView challenges;
@@ -123,31 +110,20 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         public ImageView total;
         public ImageButton block;
         public ImageButton add;
-
         public ImageView mchallenges;
         public ImageView mwins;
         public ImageView mtotal;
-
         public RelativeLayout simple;
         public RelativeLayout info;
-
         public ImageView dop;
 
-
-        // We also create a constructor that accepts the entire item row
-        // and does the view lookups to find each subview
         public ViewHolder(View itemView) {
-            // Stores the itemView in a public final member variable that can be used
-            // to access the context from any ViewHolder instance.
             super(itemView);
 
             nameTextView = (TextView) itemView.findViewById(R.id.name);
             image = (ImageView) itemView.findViewById(R.id.picture);
             wins = (ImageView) itemView.findViewById(R.id.imageView_wins_logo);
             total = (ImageView) itemView.findViewById(R.id.imageView_total_logo);
-
-
-
 
         }
     }

@@ -214,9 +214,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             @Override
             public void onClick(View v) {
                 OfflineMode offlineMode = new OfflineMode();
-                if (!offlineMode.isInternetAvailable(activity)) {
-                    Toast.makeText(activity, "No Internet Connection!", Toast.LENGTH_SHORT).show();
-                } else {
+                if (offlineMode.isConnectedToRemoteAPI(activity)) {
                     // можно добавить диалог типа "ты уверен что хочешь удалить юзера?"
                     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                         @Override
@@ -224,7 +222,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                             switch (which) {
                                 case DialogInterface.BUTTON_POSITIVE:
                                     final SessionManager sessionManager = new SessionManager(_context);
-                                    HashMap<String, String> user = new HashMap<>();
+                                    HashMap<String, String> user;
                                     user = sessionManager.getUserDetails();
                                     final String token = user.get("token");
                                     final String id = user.get("id");
@@ -279,9 +277,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             @Override
             public void onClick(View v) {
                 OfflineMode offlineMode = new OfflineMode();
-                if (!offlineMode.isInternetAvailable(activity)) {
-                    Toast.makeText(activity, "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
-                } else {
+                if (offlineMode.isConnectedToRemoteAPI(activity)) {
                     Intent intent = new Intent(_context, DuelActivity.class);
                     intent.putExtra("friend", contact.getPicture());
                     intent.putExtra("name", contact.getName());

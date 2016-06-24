@@ -100,7 +100,7 @@ import static java.lang.Math.round;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private long mLastClickTime = 0;
-
+    private RoleControllerActivity roleControllerActivity;
     final String TAG = "myLogs";
     AlarmManager alarmManager;
     private PendingIntent pendingIntent;
@@ -117,11 +117,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
 
         FacebookSdk.sdkInitialize(getApplicationContext());
-        SessionManager sessionManager2 = new SessionManager(getApplicationContext());
-        if (!sessionManager2.isUserLoggedIn()) {
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(intent);
-        }
+
         // get_right_token();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -148,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
         final SubActionButton buttonWakeUpChallenge = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeupcolor)).build();
-        final SubActionButton buttonDuelChallenge = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.duelcolor)).build();
+        final SubActionButton buttonDuelChallenge   = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.duelcolor)).build();
         final SubActionButton buttonSelfImprovement = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementcolor)).build();
 
         int width = getWindowManager().getDefaultDisplay().getWidth();
@@ -733,13 +729,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    public void Logout(){
+    public void Logout() {
         LoginManager.getInstance().logOut();
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         sessionManager.logoutUser();
-        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
-        Toast.makeText(this, "Bye Bye!", Toast.LENGTH_SHORT).show();
     }
 
 

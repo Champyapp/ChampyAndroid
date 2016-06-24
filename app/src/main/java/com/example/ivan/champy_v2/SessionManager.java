@@ -38,10 +38,9 @@ public class SessionManager {
         editor.apply();
     }
 
-
     //Create login session
     public void createUserLoginSession(String name, String email, String facebook_id, String path_to_pic, String token, String id,
-    String pushN, String newChallReq, String acceptedYour, String challengeEnd, String updateDB){
+                                       String pushN, String newChallReq, String acceptedYour, String challengeEnd, String updateDB) {
         // Storing login value as TRUE
         editor.putBoolean(IS_USER_LOGIN, true);
 
@@ -74,6 +73,7 @@ public class SessionManager {
         // commit changes
         editor.commit();
     }
+
     public void toogle1(String t){
         editor.putString("pushN", t);
         editor.commit();
@@ -94,11 +94,6 @@ public class SessionManager {
         editor.commit();
     }
 
-    public void change_token(String token){
-        editor.putString("token", token);
-        editor.commit();
-    }
-
     public void change_name(String name){
         editor.putString(KEY_NAME, name);
         editor.commit();
@@ -108,14 +103,12 @@ public class SessionManager {
         editor.putString(KEY_PATH, url);
         editor.commit();
     }
-    public void setUpdateFalse() {
-        editor.putString("updateDB", "false");
-        editor.commit();
-    }
+
     public void setRefreshPending(String refresh) {
         editor.putString("pendingRefresh", refresh);
         editor.commit();
     }
+
     public String getRefreshPending() {
         String s = pref.getString("pendingRefresh", null);
         return s;
@@ -168,38 +161,6 @@ public class SessionManager {
         return champy;
     }
 
-
-    /**
-     * Check login method will check user login status
-     * If false it will redirect user to login page
-     * Else do anything
-     * */
-    public boolean checkLogin(){
-        // Check login status
-        if(!this.isUserLoggedIn()){
-
-            // user is not logged in redirect him to Login Activity
-            Intent i = new Intent(_context, LoginActivity.class);
-
-            // Closing all the Activities from stack
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-            // Add new Flag to start new Activity
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            // Staring Login Activity
-            _context.startActivity(i);
-
-            return true;
-        }
-        return false;
-    }
-
-
-
-    /**
-     * Get stored session data
-     * */
     public HashMap<String, String> getUserDetails() {
 
         //Use hashmap to store user credentials
@@ -230,9 +191,6 @@ public class SessionManager {
         return user;
     }
 
-    /**
-     * Clear session details
-     * */
     public void logoutUser(){
 
         // Clearing all user data from Shared Preferences
@@ -251,10 +209,39 @@ public class SessionManager {
         _context.startActivity(i);*/
     }
 
-
-    // Check for login
     public boolean isUserLoggedIn(){
         return pref.getBoolean(IS_USER_LOGIN, false);
+    }
+
+    public void change_token(String token){
+        editor.putString("token", token);
+        editor.commit();
+    }
+
+    public boolean checkLogin(){
+        // Check login status
+        if(!this.isUserLoggedIn()){
+
+            // user is not logged in redirect him to Login Activity
+            Intent i = new Intent(_context, LoginActivity.class);
+
+            // Closing all the Activities from stack
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+            // Add new Flag to start new Activity
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            // Staring Login Activity
+            _context.startActivity(i);
+
+            return true;
+        }
+        return false;
+    }
+
+    public void setUpdateFalse() {
+        editor.putString("updateDB", "false");
+        editor.commit();
     }
 
 
