@@ -35,16 +35,16 @@ import android.widget.Toast;
 import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.ivan.champy_v2.interfaces.CustomItemClickListener;
-import com.example.ivan.champy_v2.data.DBHelper;
-import com.example.ivan.champy_v2.adapter.FriendsAdapter;
 import com.example.ivan.champy_v2.ImageModule;
 import com.example.ivan.champy_v2.OfflineMode;
-import com.example.ivan.champy_v2.adapter.PendingAdapter;
 import com.example.ivan.champy_v2.Pending_friend;
 import com.example.ivan.champy_v2.R;
-import com.example.ivan.champy_v2.adapter.SampleFragmentPagerAdapter;
 import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.adapter.FriendsAdapter;
+import com.example.ivan.champy_v2.adapter.PendingAdapter;
+import com.example.ivan.champy_v2.adapter.SampleFragmentPagerAdapter;
+import com.example.ivan.champy_v2.data.DBHelper;
+import com.example.ivan.champy_v2.interfaces.CustomItemClickListener;
 import com.example.ivan.champy_v2.model.Friend.Datum;
 import com.example.ivan.champy_v2.model.Friend.Friend;
 import com.example.ivan.champy_v2.model.Friend.Friend_;
@@ -57,7 +57,6 @@ import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.share.model.AppInviteContent;
 import com.facebook.share.widget.AppInviteDialog;
-import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import java.io.File;
@@ -81,33 +80,29 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
     FragmentPagerAdapter adapterViewPager;
     private final String TAG = "myLogs";
     private com.facebook.CallbackManager CallbackManager;
-    private FloatingActionMenu actionMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
-        AppEventsLogger logger = AppEventsLogger.newLogger(this);
+        //AppEventsLogger logger = AppEventsLogger.newLogger(this);
+
         OfflineMode offlineMode = new OfflineMode();
-        if (!offlineMode.isInternetAvailable(this)){
-            Intent intent = new Intent(FriendsActivity.this, MainActivity.class);
+        if (!offlineMode.isConnectedToRemoteAPI(this)){
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
+
         setContentView(R.layout.activity_friends);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         final SessionManager sessionManager = new SessionManager(this);
-        HashMap<String, String> user = new HashMap<>();
+        HashMap<String, String> user;
         user = sessionManager.getUserDetails();
-        String update = user.get("updateDB");
+        //String update = user.get("updateDB");
 
-        /* if (update.equals("true")) {
-            getFriends();
-            sessionManager.setUpdateFalse();
-        }*/
-
-        final com.melnykov.fab.FloatingActionButton actionButton = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.fabPlus);
+       /* final com.melnykov.fab.FloatingActionButton actionButton = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.fabPlus);
         actionButton.setVisibility(View.INVISIBLE);
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
 
@@ -122,56 +117,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         button2.getLayoutParams().height = x*20;
         button2.getLayoutParams().width = x*20;
         button3.getLayoutParams().height = x*20;
-        button3.getLayoutParams().width = x*20;
-
-        actionMenu = new FloatingActionMenu.Builder(this)
-                .addSubActionView(button1)
-                .addSubActionView(button2)
-                .addSubActionView(button3)
-                .setRadius(350)
-                .attachTo(actionButton)
-                .build();
-
-        /*final FloatingActionButton.OnClickListener onClickListener2 = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("TAG", "clicked");
-                ImageView screen = (ImageView) findViewById(R.id.blured);
-                if (screen.getDrawable() == null) {
-                    RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.friends_view);
-                    relativeLayout.setDrawingCacheEnabled(true);
-                    relativeLayout.buildDrawingCache();
-                    Bitmap bm = relativeLayout.getDrawingCache();
-
-                    Blur blur = new Blur();
-                    if (bm == null) {
-                        Log.d(TAG, "SUKAAAAA");
-                    } else {
-                        Bitmap blured = Blur.blurRenderScript(getApplicationContext(), bm, 25);
-                        screen = (ImageView) findViewById(R.id.blured);
-                        Drawable ob = new BitmapDrawable(getResources(), blured);
-                        screen.setImageDrawable(ob);
-                    }
-                }
-                else {
-                    Log.d(TAG, "Vse zaebok");
-                }
-                //      screen.bringToFront();
-                Log.d("TAG", "menu " + actionMenu.isOpen());
-                actionMenu.toggle(true);
-                ViewPager viewPager = (ViewPager)findViewById(R.id.viewpager);
-                if (!actionMenu.isOpen()) {
-                    screen.setVisibility(View.INVISIBLE);
-                    viewPager.setVisibility(View.VISIBLE);
-                    actionButton.setImageDrawable(getResources().getDrawable(R.drawable.plus));
-                }
-                else {
-                    screen.setVisibility(View.VISIBLE);
-                    viewPager.setVisibility(View.INVISIBLE);
-                    actionButton.setImageDrawable(getResources().getDrawable(R.drawable.close));
-                }
-            }
-        };*/
+        button3.getLayoutParams().width = x*20;*/
 
         // invite friends button
         final FloatingActionButton.OnClickListener onClickInviteFriends = new View.OnClickListener() {
@@ -183,12 +129,9 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                 previewImageUrl = "http://champyapp.com/images/Icon.png";
 
                 Activity activity = FriendsActivity.this;
-                if (AccessToken.getCurrentAccessToken() == null) {
-                    // start login...
-                } else {
+                if (AccessToken.getCurrentAccessToken() != null) {
                     FacebookSdk.sdkInitialize(FriendsActivity.this.getApplicationContext());
                     CallbackManager = com.facebook.CallbackManager.Factory.create();
-
                     FacebookCallback<AppInviteDialog.Result> facebookCallback= new FacebookCallback<AppInviteDialog.Result>() {
                         @Override
                         public void onSuccess(AppInviteDialog.Result result) {
@@ -206,54 +149,28 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                         }
 
                     };
-
                     AppInviteDialog appInviteDialog = new AppInviteDialog(activity);
-                    if (appInviteDialog.canShow()) {
+                    if (AppInviteDialog.canShow()) {
                         AppInviteContent.Builder content = new AppInviteContent.Builder();
                         content.setApplinkUrl(appLinkUrl);
                         content.setPreviewImageUrl(previewImageUrl);
                         AppInviteContent appInviteContent = content.build();
                         appInviteDialog.registerCallback(CallbackManager, facebookCallback);
-                        appInviteDialog.show(activity, appInviteContent);
+                        AppInviteDialog.show(activity, appInviteContent);
                     }
                 }
             }
         };
 
 
-        ImageView imageView = (ImageView)findViewById(R.id.blurScreen);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-                ImageView screen = (ImageView) findViewById(R.id.blurScreen);
-                if (actionMenu.isOpen()) {
-                    actionMenu.close(true);
-                    if (!actionMenu.isOpen()) {
-                        screen.setVisibility(View.INVISIBLE);
-                        viewPager.setVisibility(View.VISIBLE);
-                        actionButton.setImageDrawable(getResources().getDrawable(R.drawable.plus));
-                    }
-                } else {
-                    actionMenu.close(false);
-                    if (!actionMenu.isOpen()) {
-                        screen.setVisibility(View.VISIBLE);
-                        viewPager.setVisibility(View.INVISIBLE);
-                        actionButton.setImageDrawable(getResources().getDrawable(R.drawable.plus));
-                    }
-                }
-            }
-
-
-        });
-
+        ImageView imageView;
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
-                actionMenu.close(true);
+                //actionMenu.close(true);
             }
         };
         drawer.setDrawerListener(toggle);
@@ -311,15 +228,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                     UpdatePending();
                     sessionManager1.setRefreshPending("false");
                 }
-                /*if (position == 1) {
-                    com.melnykov.fab.FloatingActionButton floatingActionButton = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.imageButton);
-                    floatingActionButton.setVisibility(View.INVISIBLE);
-                } else *//*(position == 0)*//*{
-                    com.melnykov.fab.FloatingActionButton floatingActionButton = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.imageButton);
-                    if (position == 0) floatingActionButton.setOnClickListener(onClickListener2);
-                    if (position == 2) floatingActionButton.setOnClickListener(onClickInviteFriends);
-                    floatingActionButton.setVisibility(View.VISIBLE);
-                }*/
                 if (position == 2) {
                     com.melnykov.fab.FloatingActionButton floatingActionButton = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.fabPlus);
                     floatingActionButton.setVisibility(View.VISIBLE);
@@ -328,8 +236,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                     com.melnykov.fab.FloatingActionButton floatingActionButton = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.fabPlus);
                     floatingActionButton.setVisibility(View.INVISIBLE);
                 }
-
-
             }
 
             @Override
@@ -350,12 +256,8 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
 
-        Glide.with(this)
-                .load(url)
-                .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(profile);
+        Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile);
 
         try {
             ImageModule imageModule = new ImageModule(this);
@@ -382,14 +284,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        }else if (actionMenu.isOpen()) {
-            actionMenu.close(true);
-            ImageView screen = (ImageView) findViewById(R.id.blurScreen);
-            screen.setVisibility(View.INVISIBLE);
-            ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-            viewPager.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             Intent intent = new Intent(FriendsActivity.this, MainActivity.class);
             startActivity(intent);
             super.onBackPressed();
@@ -398,24 +293,15 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.activity_main_drawer, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         OfflineMode offlineMode = new OfflineMode();
-        if (offlineMode.isInternetAvailable(this)) {
+        if (offlineMode.isConnectedToRemoteAPI(this)) {
             switch (item.getItemId()) {
                 case R.id.challenges:
                     Intent goToChallenges = new Intent(FriendsActivity.this, MainActivity.class);
@@ -442,44 +328,22 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                     break;
                 case R.id.nav_logout:
                     offlineMode = new OfflineMode();
-                    if (offlineMode.isInternetAvailable(this)) {
+                    if (offlineMode.isConnectedToRemoteAPI(this)) {
                         Logout();
-                    } else {
-                        Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
                     }
                     break;
             }
-        } else {
-            Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-
-    private Drawable Init(String path) throws FileNotFoundException {
-        File file = new File(path, "blured2.jpg");
-        Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
-
-        Log.d("TAG", "x_y" + bitmap.getWidth() + " " + bitmap.getHeight());
-        Drawable dr = new BitmapDrawable(getResources(), bitmap);
-        dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
-
-
-        ImageView imageView = (ImageView) findViewById(R.id.friends_background);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imageView.setImageDrawable(dr);
-
-        return dr;
-
-    }
-
     @Override
     public void onStart() {
         super.onStart();
         OfflineMode offlineMode = new OfflineMode();
-        if (!offlineMode.isInternetAvailable(this)){
+        if (!offlineMode.isConnectedToRemoteAPI(this)){
             Intent intent = new Intent(FriendsActivity.this, MainActivity.class);
             startActivity(intent);
         }
@@ -499,12 +363,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
     @Override
     protected void onResume() {
         super.onResume();
-        OfflineMode offlineMode = new OfflineMode();
-        if (!offlineMode.isInternetAvailable(this)){
-            Toast.makeText(this, "Lost Internet Connection!!!", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(FriendsActivity.this, MainActivity.class);
-            startActivity(intent);
-        }
         ViewServer.get(this).setFocusedWindow(this);
         AppEventsLogger.activateApp(this);
     }
@@ -516,7 +374,22 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
     }
 
 
-    public void getOther() {
+    /*private Drawable Init(String path) throws FileNotFoundException {
+        File file = new File(path, "blured2.jpg");
+        Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
+
+        Log.d("TAG", "x_y" + bitmap.getWidth() + " " + bitmap.getHeight());
+        Drawable dr = new BitmapDrawable(getResources(), bitmap);
+        dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
+
+        ImageView imageView = (ImageView) findViewById(R.id.friends_background);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setImageDrawable(dr);
+        return dr;
+    }*/
+
+
+    /*public void getOther() {
         final String API_URL = "http://46.101.213.24:3007";
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user = new HashMap<>();
@@ -558,7 +431,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
             public void onFailure(Throwable t) {
             }
         });
-    }
+    }*/
 
 
     public void Logout(){
@@ -574,7 +447,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
     public void UpdateFriendsList() {
         final String API_URL = "http://46.101.213.24:3007";
         SessionManager sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user = new HashMap<>();
+        HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         final String id = user.get("id");
         String token = user.get("token");
@@ -624,11 +497,11 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                             }
                         }
                     }
-                    final List<com.example.ivan.champy_v2.Friend> newfriends = new ArrayList<com.example.ivan.champy_v2.Friend>();
+                    final List<com.example.ivan.champy_v2.Friend> newfriends = new ArrayList<>();
                     final RecyclerView rvContacts = (RecyclerView) findViewById(R.id.rvContacts);
                     Cursor c = db.query("friends", null, null, null, null, null, null);
                     if (c.moveToFirst()) {
-                        int idColIndex = c.getColumnIndex("id");
+                        //int idColIndex = c.getColumnIndex("id");
                         int nameColIndex = c.getColumnIndex("name");
                         int photoColIndex = c.getColumnIndex("photo");
                         int index = c.getColumnIndex("user_id");
@@ -671,7 +544,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 
             @Override
             public void onFailure(Throwable t) {
-
             }
         });
     }
@@ -680,7 +552,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
     public void UpdatePending() {
         final String API_URL = "http://46.101.213.24:3007";
         SessionManager sessionManager = new SessionManager(this);
-        HashMap<String, String> user = new HashMap<>();
+        HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         final String id = user.get("id");
         String token = user.get("token");
@@ -690,7 +562,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                 .build();
         DBHelper dbHelper = new DBHelper(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int clearCount = db.delete("pending", null, null);
+        //int clearCount = db.delete("pending", null, null);
         final ContentValues cv = new ContentValues();
 
         com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
@@ -726,15 +598,15 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                             }
                         }
                     }
-                    final List<Pending_friend> newfriends = new ArrayList<Pending_friend>();
+                    final List<Pending_friend> newfriends = new ArrayList<>();
                     Cursor c = db.query("pending", null, null, null, null, null, null);
                     if (c.moveToFirst()) {
-                        int idColIndex = c.getColumnIndex("id");
+                        //int idColIndex = c.getColumnIndex("id");
                         int nameColIndex = c.getColumnIndex("name");
                         int photoColIndex = c.getColumnIndex("photo");
                         int index = c.getColumnIndex("user_id");
                         int owner = c.getColumnIndex("owner");
-                        int challenges = c.getColumnIndex("challenges");
+                        //int challenges = c.getColumnIndex("challenges");
                         do {
                             Log.i("newusers", "NewUser: " + c.getString(nameColIndex) + " Photo: " + c.getString(photoColIndex));
                             newfriends.add(new Pending_friend(c.getString(nameColIndex),
@@ -748,21 +620,19 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 
                     Log.i("stat", "FriendsActivity :" + newfriends.toString());
 
-
-                    RecyclerView rvContacts = (RecyclerView) findViewById(R.id.rvContacts);
+                    /*RecyclerView rvContacts = (RecyclerView) findViewById(R.id.rvContacts);
                     final PendingAdapter adapter = new PendingAdapter(newfriends, FriendsActivity.this, FriendsActivity.this, new CustomItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
                             Pending_friend friend = newfriends.get(position);
                         }
                     });
-                    rvContacts.setAdapter(adapter);
+                    rvContacts.setAdapter(adapter);*/
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-
             }
         });
 

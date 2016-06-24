@@ -71,6 +71,13 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         setContentView(R.layout.activity_wake_up);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        OfflineMode offlineMode = new OfflineMode();
+        if (!offlineMode.isConnectedToRemoteAPI(this)){
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
             @Override
@@ -116,7 +123,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementback));
 
         SessionManager sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user = new HashMap<>();
+        HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
@@ -159,21 +166,21 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
                 int hour = alarmTimePicker.getCurrentHour();
                 int minute = alarmTimePicker.getCurrentMinute();
 
-                String shour = "" + hour;
-                String sminute = "" + minute;
+                String sHour = "" + hour;
+                String sMinute = "" + minute;
 
                 // щоб не було такого часу 12.1 mp, робиться 12: '0' + time
                 if (hour < 10) {
-                    shour = "0" + shour;
+                    sHour = "0" + sHour;
                 }
                 if (minute < 10) {
-                    sminute = "0" + sminute;
+                    sMinute = "0" + sMinute;
                 }
-                Log.i("stat", "Give up: "+shour+" "+sminute);
+                Log.i("stat", "Give up: " + sHour + " " + sMinute);
 
-                boolean ok = check(shour+sminute);
+                boolean ok = check(sHour + sMinute);
                 OfflineMode offlineMode = new OfflineMode();
-                if (offlineMode.isInternetAvailable(WakeUpActivity.this)) {
+                if (offlineMode.isConnectedToRemoteAPI(WakeUpActivity.this)) {
                     if (ok) {
                         Calendar calendar = Calendar.getInstance();
                         Date date = new Date();
@@ -196,11 +203,11 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
 
                         Intent myIntent = new Intent(WakeUpActivity.this, AlarmReceiver.class);
 
-                        int id = Integer.parseInt(shour + sminute);
+                        int id = Integer.parseInt(sHour + sMinute);
 
                         pendingIntent = PendingIntent.getBroadcast(WakeUpActivity.this, id, myIntent, 0);
 
-                        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, 24*60*60*1000, pendingIntent); // 24*60*60*1000 = 1 day;
+                        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, 24 * 60 * 60 * 1000, pendingIntent); // 24*60*60*1000 = 1 day;
 
                         Toast.makeText(WakeUpActivity.this, "Challenge created", Toast.LENGTH_SHORT).show();
                         ChallengeController challengeController = new ChallengeController(WakeUpActivity.this, WakeUpActivity.this, hour, minute);
@@ -209,9 +216,6 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
                     } else {
                         Toast.makeText(WakeUpActivity.this, "Already exist!", Toast.LENGTH_SHORT).show();
                     }
-
-                } else {
-                    Toast.makeText(getApplicationContext(), "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
                 }
                 return true;
             }

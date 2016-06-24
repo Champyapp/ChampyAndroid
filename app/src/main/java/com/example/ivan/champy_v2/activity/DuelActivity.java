@@ -167,23 +167,15 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.duel, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (item.getItemId() == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -191,7 +183,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         OfflineMode offlineMode = new OfflineMode();
-        if (offlineMode.isInternetAvailable(this)) {
+        if (offlineMode.isConnectedToRemoteAPI(this)) {
             switch (item.getItemId()) {
                 case R.id.challenges:
                     Intent goToChallenges = new Intent(this, MainActivity.class);
@@ -222,15 +214,11 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
                     break;
                 case R.id.nav_logout:
                     offlineMode = new OfflineMode();
-                    if (offlineMode.isInternetAvailable(this)) {
+                    if (offlineMode.isConnectedToRemoteAPI(this)) {
                         Logout();
-                    } else {
-                        Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
                     }
                     break;
             }
-        } else {
-            Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -249,7 +237,6 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
                 .baseUrl(API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-
 
         final SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user = new HashMap<>();

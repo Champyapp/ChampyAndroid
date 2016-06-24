@@ -2,6 +2,7 @@ package com.example.ivan.champy_v2.activity;
 
 import android.animation.TypeEvaluator;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -105,10 +106,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private PendingIntent pendingIntent;
     private FloatingActionMenu actionMenu;
     private Context _context;
+    private Activity activity;
     private CustomPagerBase pager;
-
     private int counter = 0;
     private int total = 30; // the total number
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,51 +182,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 blurScreen = (ImageView) findViewById(R.id.blurScreen);
                 Drawable ob = new BitmapDrawable(getResources(), blured);
                 blurScreen.setImageDrawable(ob);
-                RelativeLayout cardsLayout = (RelativeLayout)findViewById(R.id.cards);
+                RelativeLayout cardsLayout = (RelativeLayout) findViewById(R.id.cards);
 
-                actionMenu.toggle(true);
-                if (!actionMenu.isOpen()) {
-                    blurScreen.setVisibility(View.INVISIBLE);
-                    cardsLayout.setVisibility(View.VISIBLE);
-                } else {
-                    buttonSelfImprovement.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            OfflineMode offlineMode = new OfflineMode();
-                            if (offlineMode.isInternetAvailable(MainActivity.this)) {
+                OfflineMode offlineMode = new OfflineMode();
+                if (offlineMode.isConnectedToRemoteAPI(MainActivity.this)) {
+                    actionMenu.toggle(true);
+                    if (!actionMenu.isOpen()) {
+                        blurScreen.setVisibility(View.INVISIBLE);
+                        cardsLayout.setVisibility(View.VISIBLE);
+                    } else {
+                        /*buttonSelfImprovement.setOnClickListener(this);
+                        buttonDuelChallenge.setOnClickListener(this);
+                        buttonWakeUpChallenge.setOnClickListener(this);*/
+                        buttonSelfImprovement.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
                                 Intent intent = new Intent(MainActivity.this, SelfImprovementActivity.class);
                                 startActivity(intent);
-                            } else {
-                                Toast.makeText(getApplication(), "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
                             }
-                        }
-                    });
-                    buttonDuelChallenge.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            OfflineMode offlineMode = new OfflineMode();
-                            if (offlineMode.isInternetAvailable(MainActivity.this)) {
+                        });
+                        buttonDuelChallenge.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
                                 Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
                                 startActivity(intent);
-                            } else {
-                                Toast.makeText(getApplication(), "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
                             }
-                        }
-                    });
-                    buttonWakeUpChallenge.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            OfflineMode offlineMode = new OfflineMode();
-                            if (offlineMode.isInternetAvailable(MainActivity.this)) {
+                        });
+                        buttonWakeUpChallenge.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
                                 Intent intent = new Intent(MainActivity.this, WakeUpActivity.class);
                                 startActivity(intent);
-                            } else {
-                                Toast.makeText(getApplication(), "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
                             }
-                        }
-                    });
-                    blurScreen.setVisibility(View.VISIBLE);
-                    cardsLayout.setVisibility(View.INVISIBLE);
+                        });
+                        blurScreen.setVisibility(View.VISIBLE);
+                        cardsLayout.setVisibility(View.INVISIBLE);
+                    }
                 }
             }
         };
@@ -360,7 +353,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         OfflineMode offlineMode = new OfflineMode();
-        if (offlineMode.isInternetAvailable(this)) {
+        if (offlineMode.isConnectedToRemoteAPI(this)) {
             switch (item.getItemId()) {
                 case R.id.friends:
                     Intent goToFriends = new Intent(MainActivity.this, FriendsActivity.class);
@@ -387,15 +380,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     break;
                 case R.id.nav_logout:
                     offlineMode = new OfflineMode();
-                    if (offlineMode.isInternetAvailable(this)) {
+                    if (offlineMode.isConnectedToRemoteAPI(this)) {
                         Logout();
-                    } else {
-                        Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
                     }
                     break;
             }
-        } else {
-            Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -404,15 +393,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_settings) {
-            generate();
-        }
+        if (item.getItemId() == R.id.action_settings) { generate(); }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.duel, menu);
         return true;
     }

@@ -17,7 +17,6 @@ public class CHRequest {
         Log.i("CHRequest", "CHRequest: YPA");
     }
 
-
     public void myLog() {
         Log.i("MyLog", "BOASASDASDASDASDASDASDASDASDASDASDASDASDASD");
     }

@@ -42,13 +42,6 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class ContactUsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    View.OnClickListener onClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            sendEmail();
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +60,7 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         navigationView.setNavigationItemSelectedListener(this);
 
         SessionManager sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user = new HashMap<>();
+        HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
@@ -120,15 +113,12 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.activity_main_drawer, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -137,10 +127,9 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view single_card_fragment clicks here.
         int id = item.getItemId();
         OfflineMode offlineMode = new OfflineMode();
-        if (offlineMode.isInternetAvailable(this)) {
+        if (offlineMode.isConnectedToRemoteAPI(this)) {
             if (id == R.id.challenges) {
                 Intent intent = new Intent(ContactUsActivity.this, MainActivity.class);
                 startActivity(intent);
@@ -150,9 +139,9 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
                 startActivity(intent);
             }
             if (id == R.id.nav_logout) {
-
-                if (offlineMode.isInternetAvailable(this)) Logout();
-                else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
+                if (offlineMode.isConnectedToRemoteAPI(this)) {
+                    Logout();
+                }
             }
             if (id == R.id.friends) {
                 Intent intent = new Intent(ContactUsActivity.this, FriendsActivity.class);
@@ -166,15 +155,15 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 share.putExtra(Intent.EXTRA_TEXT, message);
-
                 startActivity(Intent.createChooser(share, "How would you like to share?"));
             }
         }
-        else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
     public void Logout(){
         LoginManager.getInstance().logOut();
         SessionManager sessionManager = new SessionManager(getApplicationContext());
@@ -184,6 +173,7 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         Toast.makeText(this, "Bye Bye!!!", Toast.LENGTH_SHORT).show();
     }
 
+
     private Drawable Init(String path) throws FileNotFoundException {
         File file = new File(path, "blured2.jpg");
         Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
@@ -192,10 +182,11 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         Drawable dr = new BitmapDrawable(getResources(), bitmap);
         dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
 
-
         return dr;
 
     }
+
+
     protected void sendEmail() {
         EditText subject = (EditText) findViewById(R.id.editText2);
         EditText body = (EditText)findViewById(R.id.editText);
@@ -210,7 +201,6 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         try {
             // the user can choose the email client
             startActivity(Intent.createChooser(email, "Choose an email client from..."));
-
         } catch (android.content.ActivityNotFoundException ex) {
             Toast.makeText(ContactUsActivity.this, "No email client installed.",
                     Toast.LENGTH_LONG).show();

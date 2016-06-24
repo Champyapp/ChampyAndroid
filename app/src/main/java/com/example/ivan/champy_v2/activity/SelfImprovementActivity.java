@@ -63,6 +63,11 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
+        OfflineMode offlineMode = new OfflineMode();
+        if (!offlineMode.isConnectedToRemoteAPI(this)){
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer,
                 toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override

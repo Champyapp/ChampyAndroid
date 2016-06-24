@@ -165,8 +165,7 @@ public class LoginActivity extends AppCompatActivity {
         ImageButton button = (ImageButton)findViewById(R.id.login_button);
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 Activity activity = LoginActivity.this;
                 //CHRequest chRequest = new CHRequest();
                 //chRequest.initShit();
