@@ -136,7 +136,7 @@ public class OtherFragment extends Fragment {
 
                         // Проверка на оффлайн вкладке OTHERS
                         OfflineMode offlineMode = new OfflineMode();
-                        if (offlineMode.isInternetAvailable(getActivity())) {
+                        if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
                             final GraphRequest request = GraphRequest.newMyFriendsRequest(
                                     AccessToken.getCurrentAccessToken(),
 
@@ -237,9 +237,6 @@ public class OtherFragment extends Fragment {
 
 
                             request.executeAsync();
-                        } else {
-                            swipeRefreshLayout.setRefreshing(false);
-                            Toast.makeText(getContext(), "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

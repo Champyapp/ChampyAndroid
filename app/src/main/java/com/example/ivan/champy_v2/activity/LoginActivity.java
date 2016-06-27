@@ -187,12 +187,12 @@ public class LoginActivity extends AppCompatActivity {
                             public void onCompleted(JSONObject object, GraphResponse response) {
                                 Log.i("LoginActivity", response.toString());
                                 try {
-                                    //if (object != null) {
+                                    if (object != null) {
                                     user_email = object.getString("email");
                                     fb_id = object.getString("id");
                                     name = object.getString("first_name") + " " + object.getString("last_name");
-                                    //    return;
-                                    //}
+                                        return;
+                                    }
                                     Log.d(TAG, user_email);
                                     Log.d(TAG, name);
                                     try {

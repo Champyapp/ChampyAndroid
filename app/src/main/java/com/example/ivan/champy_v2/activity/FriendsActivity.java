@@ -102,23 +102,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         user = sessionManager.getUserDetails();
         //String update = user.get("updateDB");
 
-       /* final com.melnykov.fab.FloatingActionButton actionButton = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.fabPlus);
-        actionButton.setVisibility(View.INVISIBLE);
-        SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
-
-        SubActionButton button1 = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeupcolor)).build();
-        SubActionButton button2 = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.duelcolor)).build();
-        SubActionButton button3 = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementcolor)).build();
-
-        int width = getWindowManager().getDefaultDisplay().getWidth();
-        int x = round(width/100);
-        button1.getLayoutParams().height = x*20;
-        button1.getLayoutParams().width = x*20;
-        button2.getLayoutParams().height = x*20;
-        button2.getLayoutParams().width = x*20;
-        button3.getLayoutParams().height = x*20;
-        button3.getLayoutParams().width = x*20;*/
-
         // invite friends button
         final FloatingActionButton.OnClickListener onClickInviteFriends = new View.OnClickListener() {
             @Override
@@ -183,7 +166,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         int count = 0;
 
         String s = sessionManager.get_duel_pending();
-        if (s != null){
+        if (s != null) {
             count = Integer.parseInt(s);
         }
 
@@ -213,7 +196,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
 
-            @Override // отвечает за кнопку fab в разделе FriendsActivity
+            @Override
             public void onPageSelected(int position) {
                 SessionManager sessionManager1 = new SessionManager(getApplicationContext());
                 String refresh = sessionManager1.getRefreshFriends();
@@ -228,12 +211,11 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                     UpdatePending();
                     sessionManager1.setRefreshPending("false");
                 }
+                com.melnykov.fab.FloatingActionButton floatingActionButton = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.fabPlus);
                 if (position == 2) {
-                    com.melnykov.fab.FloatingActionButton floatingActionButton = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.fabPlus);
                     floatingActionButton.setVisibility(View.VISIBLE);
                     floatingActionButton.setOnClickListener(onClickInviteFriends);
                 } else {
-                    com.melnykov.fab.FloatingActionButton floatingActionButton = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.fabPlus);
                     floatingActionButton.setVisibility(View.INVISIBLE);
                 }
             }
@@ -374,73 +356,12 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
     }
 
 
-    /*private Drawable Init(String path) throws FileNotFoundException {
-        File file = new File(path, "blured2.jpg");
-        Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
-
-        Log.d("TAG", "x_y" + bitmap.getWidth() + " " + bitmap.getHeight());
-        Drawable dr = new BitmapDrawable(getResources(), bitmap);
-        dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
-
-        ImageView imageView = (ImageView) findViewById(R.id.friends_background);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imageView.setImageDrawable(dr);
-        return dr;
-    }*/
-
-
-    /*public void getOther() {
-        final String API_URL = "http://46.101.213.24:3007";
-        SessionManager sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user = new HashMap<>();
-        user = sessionManager.getUserDetails();
-        String id = user.get("id");
-        String token = user.get("token");
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        DBHelper dbHelper = new DBHelper(this);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int clearCount = db.delete("pending", null, null);
-        final ContentValues cv = new ContentValues();
-
-        com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
-        Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.getUserFriends(id, token);
-        call.enqueue(new Callback<Friend>() {
-            @Override
-            public void onResponse(Response<Friend> response, Retrofit retrofit) {
-                if (response.isSuccess()){
-                    List<Datum> data = response.body().getData();
-                    for (int i=0; i<data.size(); i++){
-                        Datum datum = data.get(i);
-                        Log.d(TAG, "Status: "+response.body().toString());
-                        if (datum.getStatus().toString().equals("false")) {
-                            Owner owner = datum.getOwner();
-                            cv.put("name", owner.getName());
-                            Log.d(TAG, "Status: "+owner.getName());
-                            cv.put("photo", owner.getPhoto().getMedium());
-                            cv.put("user_id", owner.get_id());
-                            db.insert("pending", null, cv);
-                        }
-                    }
-                }
-            }
-            @Override
-            public void onFailure(Throwable t) {
-            }
-        });
-    }*/
-
-
     public void Logout(){
         LoginManager.getInstance().logOut();
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         sessionManager.logoutUser();
         Intent intent = new Intent(FriendsActivity.this, LoginActivity.class);
         startActivity(intent);
-        Toast.makeText(this, "Bye Bye!", Toast.LENGTH_SHORT).show();
     }
 
 

@@ -64,6 +64,7 @@
         android:layout_height="60dp"
         android:id="@+id/fabPlus"
         android:src="@drawable/plus"
+        android:visibility="invisible"
         fab:fab_colorNormal="#FFF5C390"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"

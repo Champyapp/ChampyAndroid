@@ -187,9 +187,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         blurScreen.setVisibility(View.INVISIBLE);
                         cardsLayout.setVisibility(View.VISIBLE);
                     } else {
-                        /*buttonSelfImprovement.setOnClickListener(this);
-                        buttonDuelChallenge.setOnClickListener(this);
-                        buttonWakeUpChallenge.setOnClickListener(this);*/
                         buttonSelfImprovement.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -279,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -291,13 +288,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 actionMenu.close(true);
             }
         };
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        drawer.setDrawerListener(drawerToggle);
+        drawerToggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
 
-        int count = check_pending();
+        int count = checkPending();
         TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
         view.setText("+" + (count > 0 ? String.valueOf(count) : null));
         if (count == 0) hideItem();
@@ -340,7 +337,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Uri uri = Uri.fromFile(file);
         Glide.with(this).load(uri).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile_image);
-        BuildAnim();
+        buildAnim();
         ViewServer.get(this).addWindow(this);
 
     }
@@ -377,7 +374,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 case R.id.nav_logout:
                     offlineMode = new OfflineMode();
                     if (offlineMode.isConnectedToRemoteAPI(this)) {
-                        Logout();
+                        logout();
                     }
                     break;
             }
@@ -423,11 +420,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onResume() {
         super.onResume();
         ViewServer.get(this).setFocusedWindow(this);
-        BuildAnim();
+        buildAnim();
     }
 
 
-    public void make_responsive_score(int width) {
+    public void makeResponsiveScore(int width) {
         int x = round(width/100);
 
         //-------------------------- Animation ---------------------------//
@@ -491,7 +488,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    public void Upload_photo(String path) {
+    public void uploadPhoto(String path) {
         final String API_URL = "http://46.101.213.24:3007";
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(API_URL)
@@ -532,19 +529,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    public int check_pending() {
+    public int checkPending() {
         DBHelper dbHelper = new DBHelper(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final ContentValues cv = new ContentValues();
         Cursor c = db.query("pending_duel", null, null, null, null, null, null);
         int o = 0;
         if (c.moveToFirst()) {
-
             do {
                 o++;
             } while (c.moveToNext());
-        } else
-            Log.i("stat", "kwo0 rows");
+        }
         c.close();
         SessionManager sessionManager = new SessionManager(this);
         sessionManager.set_duel_pending("" + o);
@@ -553,9 +548,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    public void BuildAnim() {
+    public void buildAnim() {
         int width = getWindowManager().getDefaultDisplay().getWidth();
-        make_responsive_score(width);
+        makeResponsiveScore(width);
         ImageView mImageViewFilling = (ImageView) findViewById(R.id.imageView_challenges_animation);
         ((AnimationDrawable) mImageViewFilling.getBackground()).start();
         ImageView mImageViewFilling1 = (ImageView) findViewById(R.id.imageView_wins_animation);
@@ -682,11 +677,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         final SessionManager sessionManager = new SessionManager(this);
+
         HashMap<String, String> user = new HashMap<>();
         user = sessionManager.getUserDetails();
         String token = user.get("token");
+
         final String id = user.get("id");
+
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
+
         final long unixTime = System.currentTimeMillis() / 1000L;
         final String update = "1457019726";
         Log.i("stat", "Nam nado: " + id + " " + update + " " + token);
@@ -729,7 +728,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    public void Logout() {
+    public void logout() {
         LoginManager.getInstance().logOut();
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         sessionManager.logoutUser();
@@ -755,7 +754,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return mIcon11;
         }
 
-
         private String saveToInternalStorage(Bitmap bitmapImage){
             ContextWrapper cw = new ContextWrapper(getApplicationContext());
             // path to /data/data/yourapp/app_data/imageDir
@@ -779,7 +777,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            Upload_photo(Uri.fromFile(file).getPath());
+            uploadPhoto(Uri.fromFile(file).getPath());
 
             File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
             // Create imageDir
@@ -882,7 +880,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Drawable dr = new BitmapDrawable(getResources(), bitmap);
         dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
         bitmap = ((BitmapDrawable)dr).getBitmap();
-
 
         ImageView background = (ImageView)findViewById(R.id.main_background);
         background.setScaleType(ImageView.ScaleType.CENTER_CROP);
