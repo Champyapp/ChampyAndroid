@@ -99,17 +99,17 @@ import static java.lang.Math.round;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private long mLastClickTime = 0;
-    private RoleControllerActivity roleControllerActivity;
     final String TAG = "myLogs";
-    AlarmManager alarmManager;
+    private long mLastClickTime = 0;
+    private int counter = 0;
+    private int total = 30;
+    private RoleControllerActivity roleControllerActivity;
     private PendingIntent pendingIntent;
     private FloatingActionMenu actionMenu;
     private Context _context;
     private Activity activity;
     private CustomPagerBase pager;
-    private int counter = 0;
-    private int total = 30; // the total number
+    AlarmManager alarmManager;
 
 
     @Override
@@ -352,19 +352,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (offlineMode.isConnectedToRemoteAPI(this)) {
             switch (item.getItemId()) {
                 case R.id.friends:
-                    Intent goToFriends = new Intent(MainActivity.this, FriendsActivity.class);
+                    Intent goToFriends = new Intent(this, FriendsActivity.class);
                     startActivity(goToFriends);
                     break;
                 case R.id.pending_duels:
-                    Intent goToPendingDuel = new Intent(MainActivity.this, PendingDuelActivity.class);
+                    Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
                     startActivity(goToPendingDuel);
                     break;
                 case R.id.history:
-                    Intent goToHistory = new Intent(MainActivity.this, HistoryActivity.class);
+                    Intent goToHistory = new Intent(this, HistoryActivity.class);
                     startActivity(goToHistory);
                     break;
                 case R.id.settings:
-                    Intent goToSettings = new Intent(MainActivity.this, SettingsActivity.class);
+                    Intent goToSettings = new Intent(this, SettingsActivity.class);
                     startActivity(goToSettings);
                     break;
                 case R.id.share:

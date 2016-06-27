@@ -59,7 +59,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        //Log.i("stat", "Status: Created");
         super.onCreate(savedInstanceState);
     }
 
@@ -148,28 +147,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                 tvGoal.setVisibility(View.INVISIBLE);
                 tvDays.setVisibility(View.INVISIBLE);
             }
-            /*
-                //тут треба реалізувати, щоб воно обновляло дані, якщо юзей пройшов челендж і
-                //хоче ще раз його пройти, лише, наприклад, добавив +20 дній (зараз воно не обновяє)
-            if (name.equals("User_Challenge")) {
-
-                days = 0;
-                etGoal.setText("");
-                etGoal.setTypeface(typeface);
-                etGoal.setVisibility(View.VISIBLE);
-
-                etDays.setTypeface(typeface);
-                if (duration != null && duration != "") {
-                    days = Integer.parseInt(duration) / 86400;
-                }
-                etDays.setText("" + days);
-                etDays.setHint("21");
-                etDays.setVisibility(View.VISIBLE);
-                TextView daysText = (TextView) view.findViewById(R.id.tvDays);
-                daysText.setTypeface(typeface);
-                tvGoal.setVisibility(View.INVISIBLE);
-                tvDays.setVisibility(View.INVISIBLE);
-            }*/
 
             ImageButton imageButton = (ImageButton) getActivity().findViewById(R.id.imageButtonAcceptSelfImprovement);
             imageButton.setVisibility(View.VISIBLE);
@@ -246,17 +223,13 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                         }
                         c.close();
 
-                        if ((!isActive(description)) && offlineMode.isInternetAvailable(getActivity())
+                        if ((!isActive(description)) && offlineMode.isConnectedToRemoteAPI(getActivity())
                                 && (!description.equals("active")) && (!description.equals("")) && (!description.startsWith(" "))
                                 && (days != 0) && (!duration.equals(""))) {
                             Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
                             StartSingleInProgress(challenge_id);
                             return true;
                         } else {
-                            if (isActive(description) || description.equals("active")) {
-                                Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
-                                return true;
-                            }
                             if ((description.equals("") || description.startsWith(" ")) && (days == 0 || duration.equals(""))) {
                                 Toast.makeText(getContext(), "Card is empty!", Toast.LENGTH_SHORT).show();
                                 return true;
@@ -269,8 +242,8 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                                 Toast.makeText(getContext(), "Min 1 day!", Toast.LENGTH_SHORT).show();
                                 return true;
                             }
-                            if (!offlineMode.isInternetAvailable(getActivity())) {
-                                Toast.makeText(getContext(), "No Internet Connection!", Toast.LENGTH_SHORT).show();
+                            if (isActive(description)) {
+                                Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
                                 return true;
                             }
                         }
@@ -359,7 +332,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                     Log.i("stat", "Status: Starting OK");
                     ContentValues cv = new ContentValues();
                     com.example.ivan.champy_v2.single_inprogress.SingleInProgress data = response.body();
-                    Log.i("hyghynuhnuhnuhnuh", "onResponse: " + data.getData().toString()); //get smth else
                     cv.put("challenge_id", data.getData().get_id());
                     Log.d("myLogs", "Added: " + data.getData().get_id());
                     cv.put("updated", "false");
@@ -388,7 +360,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                 .baseUrl(API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-
 
         final SessionManager sessionManager = new SessionManager(getContext());
         HashMap<String, String> user = new HashMap<>();
