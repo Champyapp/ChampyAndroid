@@ -167,11 +167,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Activity activity = LoginActivity.this;
-                //CHRequest chRequest = new CHRequest();
-                //chRequest.initShit();
-                //CHExtensions chExtensions = new CHExtensions();
-                //chExtensions.isConnectedToRemoteAPI(activity);
-
                 OfflineMode offlineMode = new OfflineMode();
                 offlineMode.isConnectedToRemoteAPI(activity);
 
@@ -187,12 +182,12 @@ public class LoginActivity extends AppCompatActivity {
                             public void onCompleted(JSONObject object, GraphResponse response) {
                                 Log.i("LoginActivity", response.toString());
                                 try {
-                                    if (object != null) {
+                                    //if (object != null) {
                                     user_email = object.getString("email");
                                     fb_id = object.getString("id");
                                     name = object.getString("first_name") + " " + object.getString("last_name");
-                                        return;
-                                    }
+                                    //    return;
+                                    //}
                                     Log.d(TAG, user_email);
                                     Log.d(TAG, name);
                                     try {
@@ -200,36 +195,36 @@ public class LoginActivity extends AppCompatActivity {
                                         Log.i("profile_pic", profile_pic + "");
                                         path_to_pic = profile_pic.toString();
 
-                                    } catch (MalformedURLException e) {
-                                        e.printStackTrace();
-                                    }
-                                    Log.d(TAG, path_to_pic);
-
-                                    new Thread(new Runnable() {
-                                        public void run() {
-                                            try {
-                                                String token_android;
-                                                InstanceID instanceID = InstanceID.getInstance(LoginActivity.this);
-                                                token_android = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
-                                                        GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-
-                                                Log.d(TAG, "GCM Registration Token: " + token_android);
-                                                JSONObject manJson = new JSONObject();
-                                                manJson.put("token", token_android);
-                                                manJson.put("timeZone", "-2");
-
-                                                String json = manJson.toString();
-                                                getFriends(json);
-
-                                                Register_User(fb_id, name, user_email, json);
-                                                getUserData(fb_id, path_to_pic, json);
-
-
-                                            }catch (Exception e) {
-                                                Log.d(TAG, "Failed to complete token refresh", e);
-                                            }
+                                        } catch (MalformedURLException e) {
+                                            e.printStackTrace();
                                         }
-                                    }).start();
+                                        Log.d(TAG, path_to_pic);
+
+                                        new Thread(new Runnable() {
+                                            public void run() {
+                                                try {
+                                                    String token_android;
+                                                    InstanceID instanceID = InstanceID.getInstance(LoginActivity.this);
+                                                    token_android = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
+                                                            GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+
+                                                    Log.d(TAG, "GCM Registration Token: " + token_android);
+                                                    JSONObject manJson = new JSONObject();
+                                                    manJson.put("token", token_android);
+                                                    manJson.put("timeZone", "-2");
+
+                                                    String json = manJson.toString();
+                                                    getFriends(json);
+
+                                                    Register_User(fb_id, name, user_email, json);
+                                                    getUserData(fb_id, path_to_pic, json);
+
+
+                                                }catch (Exception e) {
+                                                    Log.d(TAG, "Failed to complete token refresh", e);
+                                                }
+                                            }
+                                        }).start();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
