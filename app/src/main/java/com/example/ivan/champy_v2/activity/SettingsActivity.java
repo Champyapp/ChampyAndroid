@@ -517,7 +517,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         OfflineMode offlineMode = new OfflineMode();
-        if (offlineMode.isInternetAvailable(this)) {
+        if (offlineMode.isConnectedToRemoteAPI(this)) {
             switch (item.getItemId()) {
                 case R.id.challenges:
                     Update_profile(map);
@@ -547,22 +547,16 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                     startActivity(Intent.createChooser(share, "How would you like to share?"));
                     break;
                 case R.id.nav_logout:
-                    if (offlineMode.isInternetAvailable(this)) {
+                    if (offlineMode.isConnectedToRemoteAPI(this)) {
                         Update_profile(map);
                         LoginManager.getInstance().logOut();
                         SessionManager sessionManager = new SessionManager(getApplicationContext());
                         sessionManager.logoutUser();
                         Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
                         startActivity(intent);
-                        Toast.makeText(this, "Bye Bye!!!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
                     }
                     break;
             }
-        }
-        else {
-            Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

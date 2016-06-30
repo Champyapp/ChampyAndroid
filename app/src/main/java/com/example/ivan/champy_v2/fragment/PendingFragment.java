@@ -57,8 +57,7 @@ public class PendingFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
         Log.i("stat", "Created Pending");
         final View view = inflater.inflate(R.layout.fragment_first, container, false);
         final List<Pending_friend> friends = new ArrayList<>();
@@ -221,7 +220,6 @@ public class PendingFragment extends Fragment {
         return view;
 
     }
-
 
     @Override
     public void onStart() {

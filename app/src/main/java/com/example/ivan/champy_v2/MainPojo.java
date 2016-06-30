@@ -5,6 +5,9 @@ package com.example.ivan.champy_v2;
  */
 public class MainPojo {
 
+    private String username;
+    private Image_urls image_urls;
+
     public String getUsername() {
         return username;
     }
@@ -12,9 +15,6 @@ public class MainPojo {
     public void setUsername(String username) {
         this.username = username;
     }
-
-    private String username;
-    private Image_urls image_urls;
 
     public Image_urls getImage_urls() {
         return image_urls;

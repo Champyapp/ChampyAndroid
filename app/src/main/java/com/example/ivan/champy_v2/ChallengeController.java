@@ -83,17 +83,14 @@ public class ChallengeController {
                     Log.i("stat", "Status: " + challenge);
                     StartSingleInProgress(challenge);
                     Log.i("stat", "Status: Challenge Created");
-
-                } else Log.i("stat", "Status: Error Creating");
+                }
             }
 
             @Override
-            public void onFailure(Throwable t) {
-
-            }
+            public void onFailure(Throwable t) {}
         });
-
     }
+
     public void StartSingleInProgress(String challenge) {
         final SessionManager sessionManager = new SessionManager(context);
         HashMap<String, String> user = new HashMap<>();
@@ -108,17 +105,14 @@ public class ChallengeController {
 
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
         Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call =
-                singleinprogress.start_single_in_progress(
-                        challenge,
-                        token
-                );
+                singleinprogress.start_single_in_progress(challenge, token);
         call.enqueue(new Callback<com.example.ivan.champy_v2.single_inprogress.SingleInProgress>() {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     Log.i("stat", "Status: Starting OK");
                     generate();
-                } else Log.i("stat", "Status: Starting WRONG" + response.code());
+                }
             }
 
             @Override

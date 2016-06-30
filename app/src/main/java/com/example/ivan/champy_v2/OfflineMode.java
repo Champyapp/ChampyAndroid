@@ -24,10 +24,4 @@ public class OfflineMode {
         return false;
     }
 
-    /*public boolean isInternetAvailable(Activity activity) {
-        ConnectivityManager cm =
-                (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = cm.getActiveNetworkInfo();
-        return activeNetworkInfo.isConnectedOrConnecting();
-    }*/
 }

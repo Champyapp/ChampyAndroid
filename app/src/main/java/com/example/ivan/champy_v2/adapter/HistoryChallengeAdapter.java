@@ -97,10 +97,12 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         Glide.with(_context).load(R.drawable.challenges).override(40, 40).into(viewholder.wins);
         Glide.with(_context).load(R.drawable.challenge) .override(40, 40).into(viewholder.total);
     }
+
     @Override
     public int getItemCount() {
         return mContacts.size();
     }
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView nameTextView;
@@ -127,4 +129,5 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
 
         }
     }
+
 }

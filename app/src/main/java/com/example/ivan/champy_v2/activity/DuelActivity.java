@@ -179,19 +179,18 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
+
     public boolean onNavigationItemSelected(MenuItem item) {
         OfflineMode offlineMode = new OfflineMode();
         if (offlineMode.isConnectedToRemoteAPI(this)) {
             switch (item.getItemId()) {
-                case R.id.challenges:
-                    Intent goToChallenges = new Intent(this, MainActivity.class);
-                    startActivity(goToChallenges);
-                    break;
                 case R.id.friends:
                     Intent goToFriends = new Intent(this, FriendsActivity.class);
                     startActivity(goToFriends);
+                    break;
+                case R.id.pending_duels:
+                    Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
+                    startActivity(goToPendingDuel);
                     break;
                 case R.id.history:
                     Intent goToHistory = new Intent(this, HistoryActivity.class);
@@ -200,10 +199,6 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
                 case R.id.settings:
                     Intent goToSettings = new Intent(this, SettingsActivity.class);
                     startActivity(goToSettings);
-                    break;
-                case R.id.pending_duels:
-                    Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
-                    startActivity(goToPendingDuel);
                     break;
                 case R.id.share:
                     String message = "Check out Champy - it helps you improve and compete with your friends!";
@@ -214,8 +209,9 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
                     break;
                 case R.id.nav_logout:
                     offlineMode = new OfflineMode();
+                    SessionManager sessionManager = new SessionManager(this);
                     if (offlineMode.isConnectedToRemoteAPI(this)) {
-                        Logout();
+                        sessionManager.logout(this);
                     }
                     break;
             }
@@ -296,16 +292,6 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
-    }
-
-
-    public void Logout(){
-        LoginManager.getInstance().logOut();
-        SessionManager sessionManager = new SessionManager(getApplicationContext());
-        sessionManager.logoutUser();
-        Intent intent = new Intent(DuelActivity.this, LoginActivity.class);
-        startActivity(intent);
-        Toast.makeText(this, "Bye Bye!!!", Toast.LENGTH_SHORT).show();
     }
 
 

@@ -39,14 +39,5 @@ public class Pending_friend {
 
     private static int lastFriendId = 0;
 
-    /*public List<Friend> getFriends()
-    {
-        return friends;
-    }
-
-    public void add_user(String name, String picture)
-    {
-        friends.add(new Friend(name, picture));
-    }*/
 
 }

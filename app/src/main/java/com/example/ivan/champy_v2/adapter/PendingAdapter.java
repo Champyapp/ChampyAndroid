@@ -89,7 +89,6 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                 if (selected.isEmpty()) {
                     selected.add(viewHolder.getAdapterPosition());
                     notifyItemChanged(viewHolder.getAdapterPosition());
-
                 } else {
                     int oldSelected = selected.get(0);
                     selected.clear();
@@ -233,9 +232,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                         }
 
                         @Override
-                        public void onFailure(Throwable t) {
-
-                        }
+                        public void onFailure(Throwable t) {}
                     });
                     sessionManager.setRefreshPending("true");
                     mContacts.remove(position);
@@ -293,8 +290,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                                             }
 
                                             @Override
-                                            public void onFailure(Throwable t) {
-                                            }
+                                            public void onFailure(Throwable t) {}
                                         });
                                         mContacts.remove(position);
                                         notifyItemRemoved(position);
@@ -317,7 +313,6 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
 
 
     }
-
 
     @Override
     public int getItemCount() {

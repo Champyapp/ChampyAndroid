@@ -22,6 +22,7 @@ import com.example.ivan.champy_v2.R;
  * Created by ivan on 14.03.16.
  */
 public class PendingDuelFragment extends Fragment {
+
     public static final String ARG_PAGE = "ARG_PAGE";
 
     public static PendingDuelFragment newInstance(int page) {
@@ -76,15 +77,15 @@ public class PendingDuelFragment extends Fragment {
                     recipient = c.getString(colrecipient);
                 }
             } while (c.moveToNext());
-        } else
-            Log.i("stat", "0 rows");
+        }
         c.close();
         TextView textView = (TextView)view.findViewById(R.id.textView26);
-        if (recipient.equals("true")) textView.setText(versus + " vs YOU");
-        else {
+        if (recipient.equals("true")) {
+            textView.setText(versus + " vs YOU");
+        } else {
             textView.setText("YOU vs " + versus);
-            view.findViewById(R.id.imageButton6).setVisibility(View.INVISIBLE);
-            view.findViewById(R.id.imageButton7).setVisibility(View.INVISIBLE);
+            view.findViewById(R.id.imageButtonCancelBattle).setVisibility(View.INVISIBLE);
+            view.findViewById(R.id.imageButtonAcceptBattle).setVisibility(View.INVISIBLE);
         }
         Glide.with(getContext())
                 .load(R.drawable.points)
@@ -96,7 +97,7 @@ public class PendingDuelFragment extends Fragment {
 
       //  int days = Integer.parseInt(duration);
         int days = 21;
-        textView = (TextView)view.findViewById(R.id.textView27);
+        textView = (TextView)view.findViewById(R.id.textViewDuring);
         textView.setText("During " + days + "days");
 
         textView = (TextView)view.findViewById(R.id.et_goal);

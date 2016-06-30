@@ -218,8 +218,7 @@ public class OtherFragment extends Fragment {
                                                         }
 
                                                         @Override
-                                                        public void onFailure(Throwable t) {
-                                                        }
+                                                        public void onFailure(Throwable t) {}
                                                     });
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
@@ -276,8 +275,6 @@ public class OtherFragment extends Fragment {
                     break;
                 }
             } while (c.moveToNext());
-        } else {
-            Log.i("stat", "0 rows");
         }
         c = db.query("friends", null, null, null, null, null, null);
         if (c.moveToFirst()) {

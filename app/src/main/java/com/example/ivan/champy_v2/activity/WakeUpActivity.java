@@ -226,8 +226,8 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
 
 
     public boolean check(String time) {
-        boolean ok = true;
 
+        boolean ok = true;
         DBHelper dbHelper = new DBHelper(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -250,8 +250,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
                     }
                 }
             } while (c.moveToNext());
-        } else
-            Log.i("status", "kwo0 rows");
+        }
         c.close();
         return ok;
     }
@@ -266,7 +265,6 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
 
         return dr;
-
     }
 
     @Override
@@ -283,67 +281,53 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //  getMenuInflater().inflate(R.menu.wake_up, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
+        if (item.getItemId() == R.id.action_settings) { return true; }
         return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
         OfflineMode offlineMode = new OfflineMode();
-        if (offlineMode.isInternetAvailable(this)) {
-            if (id == R.id.challenges) {
-                Intent intent = new Intent(WakeUpActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-            if (id == R.id.history){
-                Intent intent = new Intent(WakeUpActivity.this, HistoryActivity.class);
-                startActivity(intent);
-            }
-            if (id == R.id.friends) {
-                Intent intent = new Intent(WakeUpActivity.this, FriendsActivity.class);
-                startActivity(intent);
-            }
-            if (id == R.id.pending_duel) {
-                Intent intent = new Intent(WakeUpActivity.this, PendingDuelActivity.class);
-                startActivity(intent);
-            }
-            if (id == R.id.settings) {
-                Intent intent = new Intent(WakeUpActivity.this, SettingsActivity.class);
-                startActivity(intent);
-            }
-            if (id == R.id.share) {
-                String message = "Check out Champy - it helps you improve and compete with your friends!";
-                Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType("text/plain");
-                share.putExtra(Intent.EXTRA_TEXT, message);
-
-                startActivity(Intent.createChooser(share, "How would you like to share?"));
-            }
-            if (id == R.id.nav_logout) {
-                if (offlineMode.isInternetAvailable(this)) Logout();
-                else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
+        if (offlineMode.isConnectedToRemoteAPI(this)) {
+            switch (item.getItemId()) {
+                case R.id.friends:
+                    Intent goToFriends = new Intent(this, FriendsActivity.class);
+                    startActivity(goToFriends);
+                    break;
+                case R.id.pending_duels:
+                    Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
+                    startActivity(goToPendingDuel);
+                    break;
+                case R.id.history:
+                    Intent goToHistory = new Intent(this, HistoryActivity.class);
+                    startActivity(goToHistory);
+                    break;
+                case R.id.settings:
+                    Intent goToSettings = new Intent(this, SettingsActivity.class);
+                    startActivity(goToSettings);
+                    break;
+                case R.id.share:
+                    String message = "Check out Champy - it helps you improve and compete with your friends!";
+                    Intent share = new Intent(Intent.ACTION_SEND);
+                    share.setType("text/plain");
+                    share.putExtra(Intent.EXTRA_TEXT, message);
+                    startActivity(Intent.createChooser(share, "How would you like to share?"));
+                    break;
+                case R.id.nav_logout:
+                    offlineMode = new OfflineMode();
+                    SessionManager sessionManager = new SessionManager(this);
+                    if (offlineMode.isConnectedToRemoteAPI(this)) {
+                        sessionManager.logout(this);
+                    }
+                    break;
             }
         }
-        else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -375,16 +359,6 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         Menu nav_Menu = navigationView.getMenu();
         nav_Menu.findItem(R.id.pending_duels).setVisible(false);
-    }
-
-
-    public void Logout(){
-        LoginManager.getInstance().logOut();
-        SessionManager sessionManager = new SessionManager(getApplicationContext());
-        sessionManager.logoutUser();
-        Intent intent = new Intent(WakeUpActivity.this, LoginActivity.class);
-        startActivity(intent);
-        Toast.makeText(this, "Bye Bye!", Toast.LENGTH_SHORT).show();
     }
 
 }

@@ -38,16 +38,11 @@ public class AlarmReceiverActivity extends Activity {
 
         RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.alarm);
         relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementback));
-        Glide.with(this)
-                .load(R.drawable.wakeupwhite)
-                .override(130, 130)
-                .into((ImageView) findViewById(R.id.imageView15));
+        Glide.with(this).load(R.drawable.wakeupwhite).override(130, 130).into((ImageView) findViewById(R.id.imageView15));
 
-        Glide.with(this)
-                .load(R.drawable.wakeuptext)
-                .override(200, 170)
-                .into((ImageView) findViewById(R.id.imageView16));
+        Glide.with(this).load(R.drawable.wakeuptext).override(200, 170).into((ImageView) findViewById(R.id.imageView16));
         TextView textView = (TextView)findViewById(R.id.textView24);
+
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
      //   textView.setTypeface(typeface);
         Window window = this.getWindow();
@@ -72,8 +67,7 @@ public class AlarmReceiverActivity extends Activity {
         mMediaPlayer.setLooping(true);
         try {
             mMediaPlayer.setDataSource(context, alert);
-            final AudioManager audioManager = (AudioManager) context
-                    .getSystemService(Context.AUDIO_SERVICE);
+            final AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
             if (audioManager.getStreamVolume(AudioManager.STREAM_ALARM) != 0) {
                 mMediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
                 mMediaPlayer.prepare();
@@ -87,14 +81,11 @@ public class AlarmReceiverActivity extends Activity {
     //Get an alarm sound. Try for an alarm. If none set, try notification,
     //Otherwise, ringtone.
     private Uri getAlarmUri() {
-        Uri alert = RingtoneManager
-                .getDefaultUri(RingtoneManager.TYPE_ALARM);
+        Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         if (alert == null) {
-            alert = RingtoneManager
-                    .getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             if (alert == null) {
-                alert = RingtoneManager
-                        .getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+                alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
             }
         }
         return alert;

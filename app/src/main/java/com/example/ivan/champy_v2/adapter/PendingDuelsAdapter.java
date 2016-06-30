@@ -24,6 +24,7 @@ public class PendingDuelsAdapter extends FragmentStatePagerAdapter {
         return size;
     }
 
+
     public void setCount(int count){
         size = count;
     }
@@ -46,7 +47,9 @@ public class PendingDuelsAdapter extends FragmentStatePagerAdapter {
         super.destroyItem(container, position, object);
     }
 
+
     public Fragment getRegisteredFragment(int position) {
         return registeredFragments.get(position);
     }
+
 }

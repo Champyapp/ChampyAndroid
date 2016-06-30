@@ -42,8 +42,7 @@ import java.util.HashMap;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
-public class PrivacyActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class PrivacyActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private FloatingActionMenu actionMenu;
 
@@ -137,54 +136,49 @@ public class PrivacyActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
+
     public boolean onNavigationItemSelected(MenuItem item) {
-        int id = item.getItemId();
         OfflineMode offlineMode = new OfflineMode();
-        if (offlineMode.isInternetAvailable(this)) {
-            if (id == R.id.challenges) {
-                Intent intent = new Intent(PrivacyActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-            if (id == R.id.history){
-                Intent intent = new Intent(PrivacyActivity.this, HistoryActivity.class);
-                startActivity(intent);
-            }
-            if (id == R.id.nav_logout) {
-
-                if (offlineMode.isInternetAvailable(this)) Logout();
-                else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
-            }
-            if (id == R.id.friends) {
-                Intent intent = new Intent(PrivacyActivity.this, FriendsActivity.class);
-                startActivity(intent);
-            }
-            if (id == R.id.settings) {
-                Intent intent = new Intent(PrivacyActivity.this, SettingsActivity.class);
-                startActivity(intent);
-            } else if (id == R.id.share) {
-                String message = "Check out Champy - it helps you improve and compete with your friends!";
-                Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType("text/plain");
-                share.putExtra(Intent.EXTRA_TEXT, message);
-
-                startActivity(Intent.createChooser(share, "How would you like to share?"));
+        if (offlineMode.isConnectedToRemoteAPI(this)) {
+            switch (item.getItemId()) {
+                case R.id.friends:
+                    Intent goToFriends = new Intent(this, FriendsActivity.class);
+                    startActivity(goToFriends);
+                    break;
+                case R.id.pending_duels:
+                    Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
+                    startActivity(goToPendingDuel);
+                    break;
+                case R.id.history:
+                    Intent goToHistory = new Intent(this, HistoryActivity.class);
+                    startActivity(goToHistory);
+                    break;
+                case R.id.settings:
+                    Intent goToSettings = new Intent(this, SettingsActivity.class);
+                    startActivity(goToSettings);
+                    break;
+                case R.id.share:
+                    String message = "Check out Champy - it helps you improve and compete with your friends!";
+                    Intent share = new Intent(Intent.ACTION_SEND);
+                    share.setType("text/plain");
+                    share.putExtra(Intent.EXTRA_TEXT, message);
+                    startActivity(Intent.createChooser(share, "How would you like to share?"));
+                    break;
+                case R.id.nav_logout:
+                    offlineMode = new OfflineMode();
+                    SessionManager sessionManager = new SessionManager(this);
+                    if (offlineMode.isConnectedToRemoteAPI(this)) {
+                        sessionManager.logout(this);
+                    }
+                    break;
             }
         }
-        else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-    public void Logout(){
-        LoginManager.getInstance().logOut();
-        SessionManager sessionManager = new SessionManager(getApplicationContext());
-        sessionManager.logoutUser();
-        Intent intent = new Intent(PrivacyActivity.this, LoginActivity.class);
-        startActivity(intent);
-        Toast.makeText(this, "Bye Bye!!!", Toast.LENGTH_SHORT).show();
-    }
+
+
     private Drawable Init(String path) throws FileNotFoundException {
         File file = new File(path, "blured2.jpg");
         Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
@@ -196,6 +190,8 @@ public class PrivacyActivity extends AppCompatActivity
         return dr;
 
     }
+
+
     private class LoadText extends AsyncTask<String, Void, String> {
 
 

@@ -171,26 +171,25 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
+
     public boolean onNavigationItemSelected(MenuItem item) {
         OfflineMode offlineMode = new OfflineMode();
-        if (offlineMode.isInternetAvailable(this)) {
+        if (offlineMode.isConnectedToRemoteAPI(this)) {
             switch (item.getItemId()) {
-                case R.id.challenges:
-                    Intent goToChallenges = new Intent(HistoryActivity.this, MainActivity.class);
-                    startActivity(goToChallenges);
-                    break;
                 case R.id.friends:
-                    Intent goToHistory = new Intent(HistoryActivity.this, FriendsActivity.class);
-                    startActivity(goToHistory);
+                    Intent goToFriends = new Intent(this, FriendsActivity.class);
+                    startActivity(goToFriends);
                     break;
                 case R.id.pending_duels:
-                    Intent goToPendingDuel = new Intent(HistoryActivity.this, PendingDuelActivity.class);
+                    Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
                     startActivity(goToPendingDuel);
                     break;
+                case R.id.history:
+                    Intent goToHistory = new Intent(this, HistoryActivity.class);
+                    startActivity(goToHistory);
+                    break;
                 case R.id.settings:
-                    Intent goToSettings = new Intent(HistoryActivity.this, SettingsActivity.class);
+                    Intent goToSettings = new Intent(this, SettingsActivity.class);
                     startActivity(goToSettings);
                     break;
                 case R.id.share:
@@ -202,28 +201,18 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
                     break;
                 case R.id.nav_logout:
                     offlineMode = new OfflineMode();
-                    if (offlineMode.isInternetAvailable(this)) {
-                        Logout();
-                    } else {
-                        Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
+                    SessionManager sessionManager = new SessionManager(this);
+                    if (offlineMode.isConnectedToRemoteAPI(this)) {
+                        sessionManager.logout(this);
                     }
                     break;
             }
-        } else {
-            Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-    public void Logout(){
-        LoginManager.getInstance().logOut();
-        SessionManager sessionManager = new SessionManager(getApplicationContext());
-        sessionManager.logoutUser();
-        Intent intent = new Intent(HistoryActivity.this, LoginActivity.class);
-        startActivity(intent);
-        Toast.makeText(this, "Bye Bye!!!", Toast.LENGTH_SHORT).show();
-    }
+
 
     public Drawable Init(String path) throws FileNotFoundException {
         File file = new File(path, "blured2.jpg");

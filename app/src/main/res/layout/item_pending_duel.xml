@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="During"
-            android:id="@+id/textView27"
+            android:id="@+id/textViewDuring"
             android:textColor="#339997"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true" />
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/imageViewAcceptButton"
             android:src="@mipmap/ic_launcher"
-            android:layout_below="@+id/textView27"
+            android:layout_below="@+id/textViewDuring"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="48dp" />
 
@@ -87,7 +87,7 @@
         <ImageButton
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:id="@+id/imageButton6"
+            android:id="@+id/imageButtonCancelBattle"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
@@ -97,8 +97,8 @@
         <ImageButton
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:id="@+id/imageButton7"
-            android:layout_alignTop="@+id/imageButton6"
+            android:id="@+id/imageButtonAcceptBattle"
+            android:layout_alignTop="@+id/imageButtonCancelBattle"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"

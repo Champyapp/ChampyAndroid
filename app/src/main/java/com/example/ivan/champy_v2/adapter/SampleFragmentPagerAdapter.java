@@ -25,7 +25,7 @@ public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
         return PAGE_COUNT;
     }
 
-    @Override // если что-то пойдет не так, то удалить return null и сменить case 2 на return.
+    @Override // если что-то пойдет не так, то удалить (return null) и сменить "Case 2" на "return".
     public Fragment getItem(int position) {
         switch(position) {
             case 0: return new FriendsFragment();
@@ -40,4 +40,5 @@ public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
         // Generate title based on item position
         return tabTitles[position];
     }
+
 }

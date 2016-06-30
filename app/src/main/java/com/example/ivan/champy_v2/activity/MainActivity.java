@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        SessionManager sessionManager = new SessionManager(this);
         FacebookSdk.sdkInitialize(getApplicationContext());
 
         // get_right_token();
@@ -299,7 +299,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         view.setText("+" + (count > 0 ? String.valueOf(count) : null));
         if (count == 0) hideItem();
 
-        SessionManager sessionManager = new SessionManager(getApplicationContext());
+        //SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user = new HashMap<>();
         user = sessionManager.getUserDetails();
         String url = user.get("path_to_pic");
@@ -373,8 +373,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     break;
                 case R.id.nav_logout:
                     offlineMode = new OfflineMode();
+                    SessionManager sessionManager = new SessionManager(this);
                     if (offlineMode.isConnectedToRemoteAPI(this)) {
-                        logout();
+                        sessionManager.logout(this);
                     }
                     break;
             }
@@ -728,15 +729,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    public void logout() {
-        LoginManager.getInstance().logOut();
-        SessionManager sessionManager = new SessionManager(getApplicationContext());
-        sessionManager.logoutUser();
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-    }
-
-
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
         protected Bitmap doInBackground(String... urls) {
@@ -914,9 +906,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             cardImage.getLayoutParams().width = x*65;
             cardImage.getLayoutParams().height = y*50;
 
-
             // cardImage.setImageDrawable(RecyclerView_Activity.this.getResources().getDrawable(R.drawable.card_image));
-
 
             Button button = (Button) tempView.findViewById(R.id.button2);
             button.getLayoutParams().width = x*10;

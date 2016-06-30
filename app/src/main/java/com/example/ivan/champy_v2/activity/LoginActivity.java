@@ -430,7 +430,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    private void getUserData(final String fb_id, final String path_to_pic, String gcm) throws JSONException {
+    public void getUserData(final String fb_id, final String path_to_pic, String gcm) throws JSONException {
         final String API_URL = "http://46.101.213.24:3007";
 
         JSONObject jsonObject = new JSONObject();

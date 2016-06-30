@@ -48,8 +48,7 @@ public class HistoryChallenge {
         this.description = description;
     }
 
-    public HistoryChallenge(String mtype, boolean mactive, String mdescription,
-                            String mduration, String mstatus) {
+    public HistoryChallenge(String mtype, boolean mactive, String mdescription, String mduration, String mstatus) {
         this.type = mtype;
         this.active = mactive;
         this.description = mdescription;

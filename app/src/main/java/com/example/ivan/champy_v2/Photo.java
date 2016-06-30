@@ -87,13 +87,9 @@ public class Photo extends AppCompatActivity {
             public void onClick(View v) {
                 Crop.pickImage(Photo.this);
 
-                /*Intent intent = new Intent(
-                        Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                intent.setType("image*//*");
-
-                startActivityForResult(
-                        Intent.createChooser(intent, "Select File"), SELECT_FILE);*/
+                Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setType("image");
+                startActivityForResult(Intent.createChooser(intent, "Select File"), SELECT_FILE);
             }
         });
     }
@@ -118,8 +114,7 @@ public class Photo extends AppCompatActivity {
                 Intent intent = new Intent(Photo.this, MainActivity.class);
                 startActivity(intent);
                 Toast.makeText(getApplicationContext(), "Changed", Toast.LENGTH_SHORT).show();
-            }
-                if (requestCode == Crop.REQUEST_PICK && resultCode == RESULT_OK) {
+            } if (requestCode == Crop.REQUEST_PICK && resultCode == RESULT_OK) {
                     Uri uri = data.getData();
 
                     beginCrop(data.getData());
@@ -133,29 +128,6 @@ public class Photo extends AppCompatActivity {
             if (requestCode == SELECT_FILE ){
                 Uri selectedImageUri = data.getData();
                 performCrop(selectedImageUri);
-               /* String[] projection = { MediaStore.MediaColumns.DATA };
-                CursorLoader cursorLoader = new CursorLoader(this,selectedImageUri, projection, null, null,
-                        null);
-                Cursor cursor =cursorLoader.loadInBackground();
-                int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-                cursor.moveToFirst();
-                String selectedImagePath = cursor.getString(column_index);
-                Bitmap bm;
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inJustDecodeBounds = true;
-                BitmapFactory.decodeFile(selectedImagePath, options);
-                final int REQUIRED_SIZE = 200;
-                int scale = 1;
-                while (options.outWidth / scale / 2 >= REQUIRED_SIZE
-                        && options.outHeight / scale / 2 >= REQUIRED_SIZE)
-                    scale *= 2;
-                options.inSampleSize = scale;
-                options.inJustDecodeBounds = false;
-                bm = BitmapFactory.decodeFile(selectedImagePath, options);
-                savePhoto(bm);
-                Intent intent = new Intent(Photo.this, MainActivity.class);
-                startActivity(intent);
-                Toast.makeText(getApplicationContext(), "Changed", Toast.LENGTH_SHORT).show();*/
 
             }
         }
@@ -166,7 +138,6 @@ public class Photo extends AppCompatActivity {
         if ("content".equalsIgnoreCase(uri.getScheme())) {
             String[] projection = { "_data" };
             Cursor cursor = null;
-
             try {
                 cursor = getContentResolver().query(uri, projection, null, null, null);
                 int column_index = cursor.getColumnIndexOrThrow("_data");
@@ -289,7 +260,6 @@ public class Photo extends AppCompatActivity {
     private void performCrop(Uri picUri) {
         // take care of exceptions
         try {
-
             // call the standard crop action intent (the user device may not
             // support it)
             Intent cropIntent = new Intent("com.android.camera.action.CROP");
@@ -310,8 +280,7 @@ public class Photo extends AppCompatActivity {
         }
         // respond to users whose devices do not support the crop action
         catch (ActivityNotFoundException anfe) {
-            Toast toast = Toast
-                    .makeText(this, "This device doesn't support the crop action!", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(this, "This device doesn't support the crop action!", Toast.LENGTH_SHORT);
             toast.show();
         }
     }
@@ -343,15 +312,11 @@ public class Photo extends AppCompatActivity {
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    Log.d(TAG, "Status: photo_uploaded");
-                } else Log.d(TAG, "Status :" + response.code());
-            }
+                if (response.isSuccess()) { Log.d(TAG, "Status: photo_uploaded");}
+                else Log.d(TAG, "Status :" + response.code()); }
 
             @Override
-            public void onFailure(Throwable t) {
-                Log.d(TAG, "Status: "+t);
-            }
+            public void onFailure(Throwable t) {Log.d(TAG, "Status: "+t); }
         });
     }
 

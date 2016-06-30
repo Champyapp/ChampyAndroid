@@ -1,11 +1,13 @@
 package com.example.ivan.champy_v2;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.example.ivan.champy_v2.activity.LoginActivity;
+import com.facebook.login.LoginManager;
 
 import java.util.HashMap;
 
@@ -211,6 +213,13 @@ public class SessionManager {
 
     public boolean isUserLoggedIn(){
         return pref.getBoolean(IS_USER_LOGIN, false);
+    }
+
+    public void logout(Activity activity) {
+        LoginManager.getInstance().logOut();
+        logoutUser();
+        Intent intent = new Intent(activity, LoginActivity.class);
+        activity.startActivity(intent);
     }
 
     public void change_token(String token){

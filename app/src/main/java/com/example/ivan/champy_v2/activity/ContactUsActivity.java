@@ -124,53 +124,46 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         return true;
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
+
     public boolean onNavigationItemSelected(MenuItem item) {
-        int id = item.getItemId();
         OfflineMode offlineMode = new OfflineMode();
         if (offlineMode.isConnectedToRemoteAPI(this)) {
-            if (id == R.id.challenges) {
-                Intent intent = new Intent(ContactUsActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-            if (id == R.id.history){
-                Intent intent = new Intent(ContactUsActivity.this, HistoryActivity.class);
-                startActivity(intent);
-            }
-            if (id == R.id.nav_logout) {
-                if (offlineMode.isConnectedToRemoteAPI(this)) {
-                    Logout();
-                }
-            }
-            if (id == R.id.friends) {
-                Intent intent = new Intent(ContactUsActivity.this, FriendsActivity.class);
-                startActivity(intent);
-            }
-            if (id == R.id.settings) {
-                Intent intent = new Intent(ContactUsActivity.this, SettingsActivity.class);
-                startActivity(intent);
-            } else if (id == R.id.share) {
-                String message = "Check out Champy - it helps you improve and compete with your friends!";
-                Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType("text/plain");
-                share.putExtra(Intent.EXTRA_TEXT, message);
-                startActivity(Intent.createChooser(share, "How would you like to share?"));
+            switch (item.getItemId()) {
+                case R.id.friends:
+                    Intent goToFriends = new Intent(this, FriendsActivity.class);
+                    startActivity(goToFriends);
+                    break;
+                case R.id.pending_duels:
+                    Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
+                    startActivity(goToPendingDuel);
+                    break;
+                case R.id.history:
+                    Intent goToHistory = new Intent(this, HistoryActivity.class);
+                    startActivity(goToHistory);
+                    break;
+                case R.id.settings:
+                    Intent goToSettings = new Intent(this, SettingsActivity.class);
+                    startActivity(goToSettings);
+                    break;
+                case R.id.share:
+                    String message = "Check out Champy - it helps you improve and compete with your friends!";
+                    Intent share = new Intent(Intent.ACTION_SEND);
+                    share.setType("text/plain");
+                    share.putExtra(Intent.EXTRA_TEXT, message);
+                    startActivity(Intent.createChooser(share, "How would you like to share?"));
+                    break;
+                case R.id.nav_logout:
+                    offlineMode = new OfflineMode();
+                    SessionManager sessionManager = new SessionManager(this);
+                    if (offlineMode.isConnectedToRemoteAPI(this)) {
+                        sessionManager.logout(this);
+                    }
+                    break;
             }
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-
-    public void Logout(){
-        LoginManager.getInstance().logOut();
-        SessionManager sessionManager = new SessionManager(getApplicationContext());
-        sessionManager.logoutUser();
-        Intent intent = new Intent(ContactUsActivity.this, LoginActivity.class);
-        startActivity(intent);
-        Toast.makeText(this, "Bye Bye!!!", Toast.LENGTH_SHORT).show();
     }
 
 

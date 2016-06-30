@@ -110,75 +110,59 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.activity_main_drawer, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar single_card_fragment clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
+        if (item.getItemId() == R.id.action_settings) { return true; }
         return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view single_card_fragment clicks here.
-        int id = item.getItemId();
         OfflineMode offlineMode = new OfflineMode();
-        if (offlineMode.isInternetAvailable(this)) {
-            if (id == R.id.challenges) {
-                Intent intent = new Intent(TermsActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-            if (id == R.id.history){
-                Intent intent = new Intent(TermsActivity.this, HistoryActivity.class);
-                startActivity(intent);
-            }
-            if (id == R.id.nav_logout) {
-
-                if (offlineMode.isInternetAvailable(this)) Logout();
-                else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
-            }
-            if (id == R.id.friends) {
-                Intent intent = new Intent(TermsActivity.this, FriendsActivity.class);
-                startActivity(intent);
-            }
-            if (id == R.id.settings) {
-                Intent intent = new Intent(TermsActivity.this, SettingsActivity.class);
-                startActivity(intent);
-            } else if (id == R.id.share) {
-                String message = "Check out Champy - it helps you improve and compete with your friends!";
-                Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType("text/plain");
-                share.putExtra(Intent.EXTRA_TEXT, message);
-
-                startActivity(Intent.createChooser(share, "How would you like to share?"));
+        if (offlineMode.isConnectedToRemoteAPI(this)) {
+            switch (item.getItemId()) {
+                case R.id.friends:
+                    Intent goToFriends = new Intent(this, FriendsActivity.class);
+                    startActivity(goToFriends);
+                    break;
+                case R.id.pending_duels:
+                    Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
+                    startActivity(goToPendingDuel);
+                    break;
+                case R.id.history:
+                    Intent goToHistory = new Intent(this, HistoryActivity.class);
+                    startActivity(goToHistory);
+                    break;
+                case R.id.settings:
+                    Intent goToSettings = new Intent(this, SettingsActivity.class);
+                    startActivity(goToSettings);
+                    break;
+                case R.id.share:
+                    String message = "Check out Champy - it helps you improve and compete with your friends!";
+                    Intent share = new Intent(Intent.ACTION_SEND);
+                    share.setType("text/plain");
+                    share.putExtra(Intent.EXTRA_TEXT, message);
+                    startActivity(Intent.createChooser(share, "How would you like to share?"));
+                    break;
+                case R.id.nav_logout:
+                    offlineMode = new OfflineMode();
+                    SessionManager sessionManager = new SessionManager(this);
+                    if (offlineMode.isConnectedToRemoteAPI(this)) {
+                        sessionManager.logout(this);
+                    }
+                    break;
             }
         }
-        else Toast.makeText(this, "Lost internet connection!", Toast.LENGTH_LONG).show();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-    public void Logout(){
-        LoginManager.getInstance().logOut();
-        SessionManager sessionManager = new SessionManager(getApplicationContext());
-        sessionManager.logoutUser();
-        Intent intent = new Intent(TermsActivity.this, LoginActivity.class);
-        startActivity(intent);
-        Toast.makeText(this, "Bye Bye!!!", Toast.LENGTH_SHORT).show();
-    }
+
 
     private Drawable Init(String path) throws FileNotFoundException {
         File file = new File(path, "blured2.jpg");
@@ -188,12 +172,12 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
         Drawable dr = new BitmapDrawable(getResources(), bitmap);
         dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
 
-
         return dr;
 
     }
-    private class LoadText extends AsyncTask<String, Void, String> {
 
+
+    private class LoadText extends AsyncTask<String, Void, String> {
 
         protected String doInBackground(String... urls) {
             String text  = "<p lang=\"en-US\">\n" +
@@ -775,17 +759,12 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
             return result;
         }
 
-
         protected void onPostExecute(String result) {
             // Do your staff here to save image
-
             TextView textView = (TextView) findViewById(R.id.textView_terms);
-
             textView.setText(result, TextView.BufferType.SPANNABLE);
-
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
             progressBar.setVisibility(View.INVISIBLE);
-
             textView.setVisibility(View.VISIBLE);
         }
     }

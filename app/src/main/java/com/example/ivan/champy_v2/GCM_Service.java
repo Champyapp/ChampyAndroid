@@ -28,8 +28,7 @@ public class GCM_Service extends IntentService {
         InstanceID instanceID = InstanceID.getInstance(this);
         String token = null;
         try {
-            token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
-                    GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+            token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
         } catch (IOException e) {
             e.printStackTrace();
         }

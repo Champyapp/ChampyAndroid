@@ -53,7 +53,6 @@ public class DuelFragment extends Fragment {
     public static DuelFragment newInstance(int page) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
-
         DuelFragment fragment = new DuelFragment();
         fragment.setArguments(args);
         return fragment;
@@ -105,8 +104,7 @@ public class DuelFragment extends Fragment {
 
                 }
             } while (c.moveToNext());
-        } else
-            Log.i("stat", "0 rows");
+        }
         c.close();
         Log.i("stat", "Name: " + name);
         if (isActive(description)) {
@@ -475,8 +473,7 @@ public class DuelFragment extends Fragment {
         return ok;
     }
 
-    public boolean isActive(String description)
-    {
+    public boolean isActive(String description) {
         DBHelper dbHelper = new DBHelper(getActivity());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final ContentValues cv = new ContentValues();

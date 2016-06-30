@@ -26,6 +26,7 @@ import java.io.FileNotFoundException;
  * Created by ivan on 11.01.16.
  */
 public class ImageModule {
+
     private final Context context;
 
     public ImageModule (Context context){

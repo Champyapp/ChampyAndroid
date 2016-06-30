@@ -12,7 +12,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         Intent i = new Intent();
         i.setClassName("com.example.ivan.champy_v2", "com.example.ivan.champy_v2.activity.AlarmReceiverActivity");
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        //i.setFlags(Integer.parseInt(Intent.EXTRA_ALARM_COUNT));
+        i.setFlags(Integer.parseInt(Intent.EXTRA_ALARM_COUNT));
         context.startActivity(i);
     }
 }
