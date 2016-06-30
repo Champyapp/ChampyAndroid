@@ -176,21 +176,21 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         OfflineMode offlineMode = new OfflineMode();
         if (offlineMode.isConnectedToRemoteAPI(this)) {
             switch (item.getItemId()) {
+                case R.id.challenges:
+                    Intent goToChallenges = new Intent(this, MainActivity.class);
+                    startActivity(goToChallenges);
+                    break;
                 case R.id.friends:
                     Intent goToFriends = new Intent(this, FriendsActivity.class);
                     startActivity(goToFriends);
                     break;
-                case R.id.pending_duels:
-                    Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
-                    startActivity(goToPendingDuel);
-                    break;
-                case R.id.history:
-                    Intent goToHistory = new Intent(this, HistoryActivity.class);
-                    startActivity(goToHistory);
-                    break;
                 case R.id.settings:
                     Intent goToSettings = new Intent(this, SettingsActivity.class);
                     startActivity(goToSettings);
+                    break;
+                case R.id.pending_duels:
+                    Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
+                    startActivity(goToPendingDuel);
                     break;
                 case R.id.share:
                     String message = "Check out Champy - it helps you improve and compete with your friends!";

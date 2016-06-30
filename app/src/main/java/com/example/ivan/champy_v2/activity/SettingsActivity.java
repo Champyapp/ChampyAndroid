@@ -538,6 +538,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                     Update_profile(map);
                     Intent goToPendingDuel = new Intent(SettingsActivity.this, PendingDuelActivity.class);
                     startActivity(goToPendingDuel);
+                    break;
                 case R.id.share:
                     Update_profile(map);
                     String message = "Check out Champy - it helps you improve and compete with your friends!";

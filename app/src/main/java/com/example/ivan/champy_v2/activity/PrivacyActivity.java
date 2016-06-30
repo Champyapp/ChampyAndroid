@@ -44,8 +44,6 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class PrivacyActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private FloatingActionMenu actionMenu;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

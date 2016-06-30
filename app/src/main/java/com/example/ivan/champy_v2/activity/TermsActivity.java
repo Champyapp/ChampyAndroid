@@ -126,6 +126,10 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
         OfflineMode offlineMode = new OfflineMode();
         if (offlineMode.isConnectedToRemoteAPI(this)) {
             switch (item.getItemId()) {
+                case R.id.challenges:
+                    Intent goToChallenges = new Intent(this, MainActivity.class);
+                    startActivity(goToChallenges);
+                    break;
                 case R.id.friends:
                     Intent goToFriends = new Intent(this, FriendsActivity.class);
                     startActivity(goToFriends);

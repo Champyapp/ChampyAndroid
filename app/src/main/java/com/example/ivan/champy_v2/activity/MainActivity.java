@@ -352,10 +352,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Intent goToFriends = new Intent(this, FriendsActivity.class);
                     startActivity(goToFriends);
                     break;
-                case R.id.pending_duels:
-                    Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
-                    startActivity(goToPendingDuel);
-                    break;
                 case R.id.history:
                     Intent goToHistory = new Intent(this, HistoryActivity.class);
                     startActivity(goToHistory);
@@ -363,6 +359,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 case R.id.settings:
                     Intent goToSettings = new Intent(this, SettingsActivity.class);
                     startActivity(goToSettings);
+                    break;
+                case R.id.pending_duels:
+                    Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
+                    startActivity(goToPendingDuel);
                     break;
                 case R.id.share:
                     String message = "Check out Champy - it helps you improve and compete with your friends!";
