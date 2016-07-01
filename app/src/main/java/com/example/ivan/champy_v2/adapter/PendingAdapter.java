@@ -111,7 +111,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         Log.i("Selected", " " + selected.contains(position));
 
         SessionManager sessionManager = new SessionManager(_context);
-        HashMap<String, String> champy = sessionManager.getChampyOptions();
+        HashMap<String, String> champy = sessionManager.getUserDetails();
 
         if (selected.contains(position)) {
             Log.i("Selected: ", position + " open");
@@ -328,16 +328,12 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         public ImageView total;
         public ImageButton block;
         public ImageButton add;
-
         public ImageView mChallenges;
         public ImageView mWins;
         public ImageView mTotal;
-
         public RelativeLayout simple;
         public RelativeLayout info;
-
         public ImageView dop;
-
 
         public ViewHolder(View itemView) {
             super(itemView);

@@ -1,4 +1,5 @@
 package com.example.ivan.champy_v2;
+
 import android.content.Context;
 import android.graphics.Point;
 import android.view.Display;

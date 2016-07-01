@@ -64,17 +64,13 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         TextView textView = (TextView)findViewById(R.id.textView20);
         textView.setTypeface(typeface);
 
-
         RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.pending_duel);
         relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementback));
 
-        Glide.with(this)
-                .load(R.drawable.duel_blue)
-                .override(130, 130)
-                .into((ImageView) findViewById(R.id.imageView13));
+        Glide.with(this).load(R.drawable.duel_blue).override(130, 130).into((ImageView)findViewById(R.id.imageView13));
 
         SessionManager sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user = new HashMap<>();
+        HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
@@ -85,20 +81,14 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         textView = (TextView) headerLayout.findViewById(R.id.tvUserName);
         textView.setText(name);
 
-        Glide.with(this)
-                .load(url)
-                .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(profile);
+        Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile);
 
         try {
             Drawable dr = Init("/data/data/com.example.ivan.champy_v2/app_imageDir/");
             ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setImageDrawable(dr); final String API_URL = "http://46.101.213.24:3007";
-
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -126,7 +116,6 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
 
         return dr;
-
     }
 
 

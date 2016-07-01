@@ -121,16 +121,7 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar single_card_fragment clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
+        if (item.getItemId() == R.id.action_settings) { return true; }
         return super.onOptionsItemSelected(item);
     }
 
@@ -139,6 +130,10 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
         OfflineMode offlineMode = new OfflineMode();
         if (offlineMode.isConnectedToRemoteAPI(this)) {
             switch (item.getItemId()) {
+                case R.id.challenges:
+                    Intent gotoChallenges = new Intent(this, MainActivity.class);
+                    startActivity(gotoChallenges);
+                    break;
                 case R.id.friends:
                     Intent goToFriends = new Intent(this, FriendsActivity.class);
                     startActivity(goToFriends);

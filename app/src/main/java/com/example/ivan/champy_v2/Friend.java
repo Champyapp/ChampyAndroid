@@ -12,7 +12,7 @@ public class Friend {
     private String mName;
     private String mWins;
     private String mID;
-    // private List<Friend> friends;
+    //private List<Friend> friends;
 
     public Friend(String name, String picture, String ID, String challenges, String wins, String total, String level) {
         mName = name;

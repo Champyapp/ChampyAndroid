@@ -87,9 +87,9 @@ public class Photo extends AppCompatActivity {
             public void onClick(View v) {
                 Crop.pickImage(Photo.this);
 
-                Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                /*Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 intent.setType("image");
-                startActivityForResult(Intent.createChooser(intent, "Select File"), SELECT_FILE);
+                startActivityForResult(Intent.createChooser(intent, "Select File"), SELECT_FILE);*/
             }
         });
     }

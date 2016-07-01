@@ -9,17 +9,7 @@ import com.example.ivan.champy_v2.OfflineMode;
 
 public class CHRequest {
 
-    public CHRequest() {
-        Log.i("CHRequest", "CHRequest: YPA");
-    }
 
-    public void initShit() {
-        Log.i("CHRequest", "CHRequest: YPA");
-    }
-
-    public void myLog() {
-        Log.i("MyLog", "BOASASDASDASDASDASDASDASDASDASDASDASDASDASD");
-    }
 
 }
 

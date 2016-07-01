@@ -211,41 +211,28 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         textView.setTypeface(typeface);
 
 
-        Glide.with(this)
-                .load(url)
-                .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(profile);
+        Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile);
         profile = (ImageView) findViewById(R.id.img_profile);
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 OfflineMode offlineMode = new OfflineMode();
-                if (!offlineMode.isInternetAvailable(SettingsActivity.this)) {
-                    Toast.makeText(SettingsActivity.this, "Lost Internet Connection! Try Again Later!", Toast.LENGTH_SHORT).show();
-                } else {
+                if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
                     Update_profile(map);
                     Intent intent = new Intent(SettingsActivity.this, Photo.class);
                     startActivity(intent);
                 }
             }
         });
-        Glide.with(this)
-                .load(url)
-                .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .override(130, 130)
-                .into(profile);
+        Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).override(130, 130).into(profile);
 
         try {
             Drawable dr = Init("/data/data/com.example.ivan.champy_v2/app_imageDir/");
             ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setImageDrawable(dr);
-
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -313,17 +300,13 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
             @Override
             public void onClick(View v) {
                 final OfflineMode offlineMode = new OfflineMode();
-                if (!offlineMode.isInternetAvailable(SettingsActivity.this)) {
-                    Toast.makeText(SettingsActivity.this, "Lost Internet Connection! Try Again Later!", Toast.LENGTH_SHORT).show();
-                } else {
+                if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
                     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
-                                if (!offlineMode.isInternetAvailable(SettingsActivity.this)) {
-                                    Toast.makeText(SettingsActivity.this, "Lost Internet Connection! Try Again Later!", Toast.LENGTH_SHORT).show();
-                                } else {
+                                if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
                                     SessionManager sessionManager = new SessionManager(getApplicationContext());
                                     HashMap<String, String> user = new HashMap<>();
                                     user = sessionManager.getUserDetails();
@@ -331,7 +314,6 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                                     String token = user.get("token");
 
                                     Toast.makeText(getApplicationContext(), "Bye Bye!!!", Toast.LENGTH_SHORT).show();
-
 
                                     Retrofit retrofit = new Retrofit.Builder()
                                             .baseUrl(API_URL)
@@ -416,9 +398,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
             @Override
             public void onClick(View v) {
                 OfflineMode offlineMode = new OfflineMode();
-                if (!offlineMode.isInternetAvailable(SettingsActivity.this)) {
-                    Toast.makeText(SettingsActivity.this, "Lost Internet Connection! Try Again Later!", Toast.LENGTH_SHORT).show();
-                } else {
+                if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
                     Update_profile(map);
                     Intent intent = new Intent(SettingsActivity.this, Photo.class);
                     startActivity(intent);

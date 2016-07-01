@@ -114,6 +114,7 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
         Log.i("Selected", "" + selected.contains(position));
 
         // при нажатии нужно переобъявлять view, поэтому делаем это.
+
         // отвечает за вид в развернутом состоянии
         if (selected.contains(position)) {
             Log.i("Selected: ", position + " open");

@@ -198,18 +198,18 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 
             @Override
             public void onPageSelected(int position) {
-                SessionManager sessionManager1 = new SessionManager(getApplicationContext());
-                String refresh = sessionManager1.getRefreshFriends();
+                SessionManager sessionManager = new SessionManager(getApplicationContext());
+                String refresh = sessionManager.getRefreshFriends();
                 Log.d(TAG, "RefreshFriends: " + refresh);
                 if (refresh.equals("true")) {
                     UpdateFriendsList();
-                    sessionManager1.setRefreshFriends("false");
+                    sessionManager.setRefreshFriends("false");
                 }
-                refresh = sessionManager1.getRefreshPending();
+                refresh = sessionManager.getRefreshPending();
                 Log.d(TAG, "RefreshPending: "+refresh);
                 if (refresh.equals("true")) {
                     UpdatePending();
-                    sessionManager1.setRefreshPending("false");
+                    sessionManager.setRefreshPending("false");
                 }
                 com.melnykov.fab.FloatingActionButton floatingActionButton = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.fabPlus);
                 if (position == 2) {

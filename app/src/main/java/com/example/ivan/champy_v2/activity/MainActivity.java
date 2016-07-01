@@ -862,6 +862,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             saveToInternalStorage(result);
             loadImageFromStorage("/data/data/com.example.ivan.champy_v2/app_imageDir/");
         }
+
     }
 
 

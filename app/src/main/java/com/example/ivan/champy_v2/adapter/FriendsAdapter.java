@@ -70,14 +70,12 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-
         // Inflate the custom layout
         View contactView = inflater.inflate(R.layout.item_friends, parent, false);
 
         TextView tvUserName = (TextView)contactView.findViewById(R.id.name);
         Typeface typeFace = Typeface.createFromAsset(context.getAssets(), "fonts/bebasneue.ttf");
         tvUserName.setTypeface(typeFace);
-
 
         // Return a new holder instance
         final ViewHolder viewHolder = new ViewHolder(contactView);
@@ -90,7 +88,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                 if (selected.isEmpty()) {
                     selected.add(viewHolder.getAdapterPosition());
                     notifyItemChanged(viewHolder.getAdapterPosition());
-
                 } else {
                     int oldSelected = selected.get(0);
                     selected.clear();
@@ -176,7 +173,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             // делаем view open видимой, view close невидимой
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.VISIBLE);
             viewHolder.itemView.findViewById(R.id.row_friends_list_close).setVisibility(View.GONE);
-
         }
         else {
             Log.i("Selected: ", position + " close");
