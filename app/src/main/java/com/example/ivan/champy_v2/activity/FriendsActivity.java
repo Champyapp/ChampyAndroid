@@ -388,21 +388,15 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                                 if (datum.getOwner().get_id().equals(id)) {
                                     Friend_ friend = datum.getFriend();
                                     cv.put("name", friend.getName());
-                                    if (friend.getPhoto() != null) {
-                                        cv.put("photo", friend.getPhoto().getMedium());
-                                    } else {
-                                        cv.put("photo", "");
-                                    }
+                                    if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
+                                    else cv.put("photo", "");
                                     cv.put("user_id", friend.getId());
                                     db.insert("friends", null, cv);
                                 } else {
                                     Owner friend = datum.getOwner();
                                     cv.put("name", friend.getName());
-                                    if (friend.getPhoto() != null) {
-                                        cv.put("photo", friend.getPhoto().getMedium());
-                                    } else {
-                                        cv.put("photo", "");
-                                    }
+                                    if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
+                                    else cv.put("photo", "");
                                     cv.put("user_id", friend.get_id());
                                     db.insert("friends", null, cv);
                                 }

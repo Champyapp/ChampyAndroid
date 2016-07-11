@@ -299,9 +299,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
             }
 
             @Override
-            public void onFailure(Throwable t) {
-
-            }
+            public void onFailure(Throwable t) {}
         });
 
     }
@@ -324,7 +322,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                 singleinprogress.start_single_in_progress(
                         challenge,
                         token
-                );
+                );  
         call.enqueue(new Callback<com.example.ivan.champy_v2.single_inprogress.SingleInProgress>() {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {

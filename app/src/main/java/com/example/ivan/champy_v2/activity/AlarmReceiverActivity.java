@@ -22,29 +22,25 @@ import com.example.ivan.champy_v2.R;
 
 import java.io.IOException;
 
-/**
- * Created by ivan on 28.03.16.
- */
 public class AlarmReceiverActivity extends Activity {
+
     private MediaPlayer mMediaPlayer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.alarm);
 
         RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.alarm);
         relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementback));
         Glide.with(this).load(R.drawable.wakeupwhite).override(130, 130).into((ImageView) findViewById(R.id.imageView15));
-
         Glide.with(this).load(R.drawable.wakeuptext).override(200, 170).into((ImageView) findViewById(R.id.imageView16));
-        TextView textView = (TextView)findViewById(R.id.textView24);
 
+        TextView textView = (TextView)findViewById(R.id.textView24);
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
-     //   textView.setTypeface(typeface);
+        textView.setTypeface(typeface); // закоментити
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
@@ -58,7 +54,6 @@ public class AlarmReceiverActivity extends Activity {
                 return false;
             }
         });
-
         playSound(this, getAlarmUri());
     }
 
@@ -78,8 +73,6 @@ public class AlarmReceiverActivity extends Activity {
         }
     }
 
-    //Get an alarm sound. Try for an alarm. If none set, try notification,
-    //Otherwise, ringtone.
     private Uri getAlarmUri() {
         Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         if (alert == null) {

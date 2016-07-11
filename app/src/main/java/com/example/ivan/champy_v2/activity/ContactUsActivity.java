@@ -80,20 +80,14 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
             }
         });
 
-        Glide.with(this)
-                .load(url)
-                .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(profile);
+        Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile);
 
         try {
             Drawable dr = Init("/data/data/com.example.ivan.champy_v2/app_imageDir/");
             ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setImageDrawable(dr);
-
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

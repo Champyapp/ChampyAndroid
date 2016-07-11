@@ -166,7 +166,7 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
 
             // отвечает за лвл юзера в свернутом виде
             TextView tvUserLevelOpen = (TextView)viewHolder.itemView.findViewById(R.id.textViewWinsCounter);
-            tvUserLevelOpen.setText("Level "+champy.get("level")+" Champy");
+            tvUserLevelOpen.setText("Level " + contact.getmLevel() + "level" + " Champy");
 
             // делаем view open видимой, view close невидимой
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.VISIBLE);

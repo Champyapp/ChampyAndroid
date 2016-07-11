@@ -62,6 +62,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         this.activity = activity;
     }
 
+
     public void Add_to_list(Friend friend){
         mContacts.add(friend);
     }

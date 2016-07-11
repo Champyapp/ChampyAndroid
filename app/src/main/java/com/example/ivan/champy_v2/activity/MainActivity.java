@@ -58,6 +58,7 @@ import com.example.ivan.champy_v2.CustomPagerBase;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
+import com.example.ivan.champy_v2.helper.CHGenerate;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
@@ -242,7 +243,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             OfflineMode offlineMode = new OfflineMode();
                             if (offlineMode.isInternetAvailable(MainActivity.this)) {
                                 Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
-                                //Toast.makeText(getApplicationContext(), "Coming soon", Toast.LENGTH_SHORT).show();
                                 startActivity(intent);
                             }
                         }
@@ -271,7 +271,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         actionButton.setImageDrawable(getResources().getDrawable(R.drawable.plus));
                     }
                 }
-
             }
         });
 
@@ -322,14 +321,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "blured2.jpg");
-        if (file.exists()) try {
-            Log.d(TAG, "Image: Exist");
-            blurScreenClick.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            blurScreenClick.setImageDrawable(Init(path));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        else {
+        if (file.exists())
+            try {
+                Log.d(TAG, "Image: Exist");
+                blurScreenClick.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                blurScreenClick.setImageDrawable(Init(path));
+        }   catch (FileNotFoundException e) {
+                e.printStackTrace();
+        } else {
             new DownloadImageTask().execute(url);
         }
 
@@ -339,7 +338,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile_image);
         buildAnim();
         ViewServer.get(this).addWindow(this);
-
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -387,7 +385,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_settings) { generate(); }
+        if (item.getItemId() == R.id.action_settings) {
+            CHGenerate chGenerate = new CHGenerate();
+            chGenerate.generate(this);
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -665,70 +666,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    public void generate() {
-        DBHelper dbHelper = new DBHelper(this);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final int clearCount = db.delete("pending_duel", null, null);
-        final ContentValues cv = new ContentValues();
-        final String API_URL = "http://46.101.213.24:3007";
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-
-        final SessionManager sessionManager = new SessionManager(this);
-
-        HashMap<String, String> user = new HashMap<>();
-        user = sessionManager.getUserDetails();
-        String token = user.get("token");
-
-        final String id = user.get("id");
-
-        ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
-
-        final long unixTime = System.currentTimeMillis() / 1000L;
-        final String update = "1457019726";
-        Log.i("stat", "Nam nado: " + id + " " + update + " " + token);
-        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(id, update, token);
-        call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
-            @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    List<Datum> data = response.body().getData();
-                    for (int i = 0; i < data.size(); i++) {
-                        com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
-                        Recipient recipient = datum.getRecipient();
-                        Sender sender = datum.getSender();
-                        Challenge challenge = datum.getChallenge();
-                        cv.clear();
-                        if (challenge.getType().equals("567d51c48322f85870fd931b")) {
-                            if (id.equals(recipient.getId())) {
-                                cv.put("recipient", "true");
-                                cv.put("versus", sender.getName());
-                            }
-                            if (id.equals(sender.get_id())) {
-                                cv.put("recipient", "false");
-                                cv.put("versus", recipient.getName());
-                            }
-                            cv.put("challenge_id", challenge.get_id());
-                            cv.put("description", challenge.getDescription());
-                            cv.put("duration", challenge.getDuration());
-                            db.insert("pending_duel", null, cv);
-                        }
-                    }
-                    Intent intent = new Intent(MainActivity.this, MainActivity.class);
-                    startActivity(intent);
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-            }
-        });
-    }
-
-
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
         protected Bitmap doInBackground(String... urls) {
@@ -792,7 +729,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public void loadImageFromStorage(String path) {
 
             try {
-                File f=new File(path, "profile.jpg");
+                File f = new File(path, "profile.jpg");
                 Uri uri = Uri.fromFile(f);
                 Glide.with(getApplicationContext())
                         .load(uri)

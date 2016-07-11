@@ -471,11 +471,12 @@ public class LoginActivity extends AppCompatActivity {
                     sessionManager.setRefreshPending("false");
                     sessionManager.setRefreshFriends("false");
                     sessionManager.createUserLoginSession(user_name, email, fb_id, path_to_pic, jwtString, id, pushN, newChallReq, acceptedYour, challegeEnd, "true");
-                    sessionManager.setChampyOptions(data.getAllChallengesCount().toString(),
+                    sessionManager.setChampyOptions(
+                            data.getAllChallengesCount().toString(),
                             data.getSuccessChallenges().toString(),
                             data.getScore().toString(),
-                            data.getLevel().getNumber().toString());
-
+                            data.getLevel().getNumber().toString()
+                    );
                     DBHelper dbHelper = new DBHelper(LoginActivity.this);
                     final SQLiteDatabase db = dbHelper.getWritableDatabase();
                     int clearCount = db.delete("pending", null, null);
@@ -490,11 +491,11 @@ public class LoginActivity extends AppCompatActivity {
                         public void onResponse(Response<Friend> response, Retrofit retrofit) {
                             if (response.isSuccess()){
                                 List<Datum> data = response.body().getData();
-                                Log.d(TAG, "Status: "+data.size());
+                                Log.d(TAG, "Status: " + data.size());
 
                                 for (int i=0; i<data.size(); i++) {
                                     Datum datum = data.get(i);
-                                    Log.d(TAG, "Status: "+response.body().toString());
+                                    Log.d(TAG, "Status: " + response.body().toString());
 
                                     if ((datum.getFriend() != null) && (datum.getOwner() != null)) {
 
@@ -553,7 +554,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 Log.d(TAG, "Owner");
                                                 cv.put("user_id", friend.get_id());
                                                 cv.put("owner", "true");
-//                                                db.insert("pending", null, cv);
+                                                db.insert("pending", null, cv); //comment this line if something goes wrong
                                             }
                                         }
                                     }
@@ -562,7 +563,6 @@ public class LoginActivity extends AppCompatActivity {
                         }
                         @Override
                         public void onFailure(Throwable t) {
-
                         }
                     });
 
@@ -579,9 +579,9 @@ public class LoginActivity extends AppCompatActivity {
                             com.example.ivan.champy_v2.model.active_in_progress.Datum datum = list.get(i);
                             Challenge challenge = datum.getChallenge();
                             String desctiption = challenge.getDetails();
-                          /*  int end = datum.getEnd();
-                            int days = round((end - unixTime) / 86400);*/
-                            String duration = "" + 21;
+                            //int end = datum.getEnd();
+                            //int days = round((end - unixTime) / 86400);
+                            String duration = "" + 21;  // тут треба присваювати реальну цифру, а не цю хрень!
                             String challenge_id = datum.get_id();
                             if (challenge.getDescription().equals("Wake Up")) {
                                 cv.put("name", "Wake Up");

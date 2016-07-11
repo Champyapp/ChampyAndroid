@@ -164,14 +164,11 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-
         final SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user = new HashMap<>();
         user = sessionManager.getUserDetails();
         String token = user.get("token");
         com.example.ivan.champy_v2.interfaces.SelfImprovement selfImprovement = retrofit.create(com.example.ivan.champy_v2.interfaces.SelfImprovement.class);
-
-
         Call<com.example.ivan.champy_v2.model.Self.SelfImprovement> call = selfImprovement.getChallenges(token);
         Log.i("stat", "Status: RUN");
         call.enqueue(new Callback<com.example.ivan.champy_v2.model.Self.SelfImprovement>() {
@@ -362,8 +359,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
                     break;
                 }
             } while (c.moveToNext());
-        } else
-            Log.i("stat", "kwo0 rows");
+        }
         c.close();
         return ok;
     }

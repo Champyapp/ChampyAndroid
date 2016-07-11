@@ -67,7 +67,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
 
     final private String API_URL = "http://46.101.213.24:3007";
     final private String TAG = "myLogs";
-    HashMap<String, String> map = new HashMap<String, String>();
+    HashMap<String, String> map = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +85,6 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         toolbar.bringToFront();
         setupUI(findViewById(R.id.settings_layout));
 
-
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
@@ -101,13 +99,13 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
-        int count = check_pending();
-        TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-        view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+        int count = checkPending();
+        TextView tvPendingDuels = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+        tvPendingDuels.setText("+" + (count > 0 ? String.valueOf(count) : null));
         if (count == 0) hideItem();
 
         SessionManager sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user = new HashMap<>();
+        HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         final String name = user.get("name");
         String id = user.get("id");
@@ -126,28 +124,27 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         map.put("newChallengeRequests", newChallReq);
         map.put("pushNotifications", pushN);
 
-        Switch switch1 = (Switch) findViewById(R.id.switch1);
+        Switch switchForPushNotif = (Switch) findViewById(R.id.switch1);
         if (pushN.equals("true")) {
-            switch1.setChecked(true);
+            switchForPushNotif.setChecked(true);
+        } else {
+            switchForPushNotif.setChecked(false);
         }
-        else {
-            switch1.setChecked(false);
-        }
-        switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        switchForPushNotif.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) map.put("pushNotifications", "true");
                 else map.put("pushNotifications", "false");
             }
         });
-        Switch switch2 = (Switch) findViewById(R.id.switch2);
+
+        Switch switchorNewChallRequests = (Switch) findViewById(R.id.switch2);
         if (newChallReq.equals("true")) {
-            switch2.setChecked(true);
+            switchorNewChallRequests.setChecked(true);
+        } else {
+            switchorNewChallRequests.setChecked(false);
         }
-        else {
-            switch2.setChecked(false);
-        }
-        switch2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        switchorNewChallRequests.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Log.d(TAG, "Status: " + isChecked);
@@ -156,14 +153,13 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
             }
         });
 
-        Switch switch3 = (Switch) findViewById(R.id.switch3);
+        Switch switchForAcceptedYourChall = (Switch) findViewById(R.id.switch3);
         if (acceptedYour.equals("true")) {
-            switch3.setChecked(true);
+            switchForAcceptedYourChall.setChecked(true);
+        } else {
+            switchForAcceptedYourChall.setChecked(false);
         }
-        else {
-            switch3.setChecked(false);
-        }
-        switch3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        switchForAcceptedYourChall.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) map.put("acceptedYourChallenge", "true");
@@ -171,14 +167,13 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
             }
         });
 
-        Switch switch4 = (Switch) findViewById(R.id.switch4);
+        Switch switchForChallengesEnd = (Switch) findViewById(R.id.switch4);
         if (challengeEnd.equals("true")){
-            switch4.setChecked(true);
+            switchForChallengesEnd.setChecked(true);
+        } else {
+            switchForChallengesEnd.setChecked(false);
         }
-        else {
-            switch4.setChecked(false);
-        }
-        switch4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        switchForChallengesEnd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) map.put("challengeEnd", "true");
@@ -192,24 +187,23 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         Uri url = Uri.fromFile(file);
 
         ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        TextView textView = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        textView.setText(name);
+        TextView tvUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        tvUserName.setText(name);
         Typeface typeface = Typeface.createFromAsset(SettingsActivity.this.getAssets(), "fonts/bebasneue.ttf");
 
-        textView = (TextView)findViewById(R.id.name);
-        textView.setText(name);
-        textView.setTypeface(typeface);
+        TextView tvName = (TextView)findViewById(R.id.name);
+        tvName.setText(name);
+        tvName.setTypeface(typeface);
 
-        textView = (TextView)findViewById(R.id.textView9);
-        textView.setText("Level "+sessionManager.getChampyOptions().get("level")+ " Champy");
+        TextView tvUserLevel = (TextView)findViewById(R.id.textView9);
+        tvUserLevel.setText("Level "+sessionManager.getChampyOptions().get("level")+ " Champy");
 
-        textView = (TextView)findViewById(R.id.textView17);
-        textView.setTypeface(typeface);
-        textView = (TextView)findViewById(R.id.textView10);
-        textView.setTypeface(typeface);
-        textView = (TextView)findViewById(R.id.textView18);
-        textView.setTypeface(typeface);
-
+        TextView tvNotifications = (TextView)findViewById(R.id.tvNotifications);
+        tvNotifications.setTypeface(typeface);
+        TextView tvGeneral = (TextView)findViewById(R.id.tvGeneral);
+        tvGeneral.setTypeface(typeface);
+        TextView tvLegal = (TextView)findViewById(R.id.tvLegal);
+        tvLegal.setTypeface(typeface);
 
         Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile);
@@ -219,7 +213,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
             public void onClick(View v) {
                 OfflineMode offlineMode = new OfflineMode();
                 if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
-                    Update_profile(map);
+                    updateProfile(map);
                     Intent intent = new Intent(SettingsActivity.this, Photo.class);
                     startActivity(intent);
                 }
@@ -237,19 +231,19 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
             e.printStackTrace();
         }
 
-        final TextView change_name = (TextView)findViewById(R.id.textView11);
-        change_name.setOnClickListener(new View.OnClickListener() {
+        final TextView tvChangeName = (TextView)findViewById(R.id.tvName);
+        tvChangeName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                change_name.setVisibility(View.INVISIBLE);
-                TextView textView1 = (TextView) findViewById(R.id.textView16);
+                tvChangeName.setVisibility(View.INVISIBLE);
+                TextView textView1 = (TextView) findViewById(R.id.tvEntedYourName);
                 textView1.setVisibility(View.VISIBLE);
 
                 final EditText editText = (EditText) findViewById(R.id.new_name);
                 editText.setVisibility(View.VISIBLE);
                 editText.setText(name);
 
-                ImageButton imageButton = (ImageButton) findViewById(R.id.imageButton4);
+                ImageButton imageButton = (ImageButton) findViewById(R.id.imageButtonAcceptMaybe);
                 imageButton.setVisibility(View.VISIBLE);
 
                 findViewById(R.id.view11).setVisibility(View.VISIBLE);
@@ -258,35 +252,30 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                     @Override
                     public void onClick(View v) {
                         OfflineMode offlineMode = new OfflineMode();
-                        if (!offlineMode.isInternetAvailable(SettingsActivity.this)){
+                        if (!offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
                             editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_warn, 0);
-                            Toast.makeText(SettingsActivity.this, "Lost Internet Connection! Try again later!", Toast.LENGTH_SHORT).show();
-                        } if (editText.getText().toString().trim().length() > 50){
-                            Toast.makeText(SettingsActivity.this, "Name is too long!!!", Toast.LENGTH_SHORT).show();
-                        } else if (editText.getText().toString().isEmpty() || editText.getText().toString().startsWith(" ")
-                                || editText.getText().toString().equals("")) {
+                        } else if (editText.getText().toString().isEmpty() || editText.getText().toString().startsWith(" ")) {
                             Toast.makeText(getApplicationContext(), "Name field is empty!", Toast.LENGTH_SHORT).show();
                         }
                         else {
-
                             String newName = editText.getText().toString().trim();
                             SessionManager sessionManager = new SessionManager(getApplicationContext());
                             sessionManager.change_name(newName);
 
-                            Set_new_name(newName);
+                            setNewName(newName);
 
-                            TextView textView = (TextView)findViewById(R.id.name);
-                            textView.setText(editText.getText().toString());
+                            TextView tvName = (TextView)findViewById(R.id.name);
+                            tvName.setText(editText.getText().toString());
 
-                            change_name.setVisibility(View.VISIBLE);
-                            TextView textView1 = (TextView) findViewById(R.id.textView16);
-                            textView1.setVisibility(View.GONE);
+                            tvChangeName.setVisibility(View.VISIBLE);
+                            TextView tvEnterYourName = (TextView) findViewById(R.id.tvEntedYourName);
+                            tvEnterYourName.setVisibility(View.GONE);
 
-                            final EditText editText = (EditText) findViewById(R.id.new_name);
-                            editText.setVisibility(View.GONE);
+                            final EditText etNewName = (EditText) findViewById(R.id.new_name);
+                            etNewName.setVisibility(View.GONE);
 
-                            ImageButton imageButton = (ImageButton) findViewById(R.id.imageButton4);
-                            imageButton.setVisibility(View.GONE);
+                            ImageButton imageButtonAccept = (ImageButton) findViewById(R.id.imageButtonAcceptMaybe);
+                            imageButtonAccept.setVisibility(View.GONE);
 
                             findViewById(R.id.view11).setVisibility(View.GONE);
                         }
@@ -378,7 +367,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         privacy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Update_profile(map);
+                updateProfile(map);
                 Intent intent = new Intent(SettingsActivity.this, PrivacyActivity.class);
                 startActivity(intent);
             }
@@ -388,7 +377,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         contact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Update_profile(map);
+                updateProfile(map);
                 Intent intent = new Intent(SettingsActivity.this, ContactUsActivity.class);
                 startActivity(intent);
             }
@@ -399,7 +388,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
             public void onClick(View v) {
                 OfflineMode offlineMode = new OfflineMode();
                 if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
-                    Update_profile(map);
+                    updateProfile(map);
                     Intent intent = new Intent(SettingsActivity.this, Photo.class);
                     startActivity(intent);
                 }
@@ -410,7 +399,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
     }
 
 
-    private void Set_new_name(String newName) {
+    private void setNewName(String newName) {
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user = new HashMap<>();
         user = sessionManager.getUserDetails();
@@ -450,21 +439,21 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
             drawer.closeDrawer(GravityCompat.START);
         }
         else if (findViewById(R.id.view11).getVisibility() == View.VISIBLE) {
-            findViewById(R.id.textView11).setVisibility(View.VISIBLE);
-            TextView textView1 = (TextView)findViewById(R.id.textView16);
+            findViewById(R.id.tvName).setVisibility(View.VISIBLE);
+            TextView textView1 = (TextView)findViewById(R.id.tvEntedYourName);
             textView1.setVisibility(View.GONE);
 
             final EditText editText = (EditText)findViewById(R.id.new_name);
             editText.setVisibility(View.GONE);
 
-            ImageButton imageButton = (ImageButton)findViewById(R.id.imageButton4);
+            ImageButton imageButton = (ImageButton)findViewById(R.id.imageButtonAcceptMaybe);
             imageButton.setVisibility(View.GONE);
 
             findViewById(R.id.view11).setVisibility(View.GONE);
         }
         else {
             Log.d(TAG, "Status: Back");
-            Update_profile(map);
+            updateProfile(map);
             Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
             startActivity(intent);
             super.onBackPressed();
@@ -500,27 +489,27 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         if (offlineMode.isConnectedToRemoteAPI(this)) {
             switch (item.getItemId()) {
                 case R.id.challenges:
-                    Update_profile(map);
+                    updateProfile(map);
                     Intent goToChallenges = new Intent(SettingsActivity.this, MainActivity.class);
                     startActivity(goToChallenges);
                     break;
                 case R.id.friends:
-                    Update_profile(map);
+                    updateProfile(map);
                     Intent goToFriends = new Intent(SettingsActivity.this, FriendsActivity.class);
                     startActivity(goToFriends);
                     break;
                 case R.id.history:
-                    Update_profile(map);
+                    updateProfile(map);
                     Intent goToHistory = new Intent(SettingsActivity.this, HistoryActivity.class);
                     startActivity(goToHistory);
                     break;
                 case R.id.pending_duels:
-                    Update_profile(map);
+                    updateProfile(map);
                     Intent goToPendingDuel = new Intent(SettingsActivity.this, PendingDuelActivity.class);
                     startActivity(goToPendingDuel);
                     break;
                 case R.id.share:
-                    Update_profile(map);
+                    updateProfile(map);
                     String message = "Check out Champy - it helps you improve and compete with your friends!";
                     Intent share = new Intent(Intent.ACTION_SEND);
                     share.setType("text/plain");
@@ -529,7 +518,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                     break;
                 case R.id.nav_logout:
                     if (offlineMode.isConnectedToRemoteAPI(this)) {
-                        Update_profile(map);
+                        updateProfile(map);
                         LoginManager.getInstance().logOut();
                         SessionManager sessionManager = new SessionManager(getApplicationContext());
                         sessionManager.logoutUser();
@@ -545,7 +534,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
     }
 
 
-    public int check_pending() {
+    public int checkPending() {
         DBHelper dbHelper = new DBHelper(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final ContentValues cv = new ContentValues();
@@ -591,7 +580,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
     }
 
 
-    public void Update_profile(HashMap<String, String> map){
+    public void updateProfile(HashMap<String, String> map){
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user = new HashMap<>();
         user = sessionManager.getUserDetails();

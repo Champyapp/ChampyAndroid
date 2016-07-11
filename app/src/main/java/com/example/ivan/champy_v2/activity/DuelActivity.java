@@ -57,7 +57,6 @@ import static java.lang.Math.round;
 
 public class DuelActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,19 +84,14 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         ImageView imageView = (ImageView)findViewById(R.id.user2);
         imageView.getLayoutParams().width = x;
         imageView.getLayoutParams().height = x;
+
         RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.duel_back);
         relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementback));
-        Glide.with(this)
-                .load(newString)
-                .centerCrop()
-                .into((ImageView)findViewById(R.id.user1));
+        Glide.with(this).load(newString).centerCrop().into((ImageView)findViewById(R.id.user1));
         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
-        Glide.with(this)
-                .load(url)
-                .centerCrop()
-                .into((ImageView)findViewById(R.id.user2));
+        Glide.with(this).load(url).centerCrop().into((ImageView)findViewById(R.id.user2));
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -120,20 +114,14 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         textView = (TextView) headerLayout.findViewById(R.id.tvUserName);
         textView.setText(name);
 
-        Glide.with(this)
-                .load(url)
-                .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(profile);
+        Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile);
 
         try {
             Drawable dr = Init("/data/data/com.example.ivan.champy_v2/app_imageDir/");
             imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setImageDrawable(dr); final String API_URL = "http://46.101.213.24:3007";
-
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -289,7 +277,6 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void onFailure(Throwable t) {
-
             }
         });
     }
