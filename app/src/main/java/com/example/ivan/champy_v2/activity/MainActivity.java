@@ -385,10 +385,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_settings) {
-            CHGenerate chGenerate = new CHGenerate();
-            chGenerate.generate(this);
-        }
+        if (item.getItemId() == R.id.action_settings) { generate(); }
         return super.onOptionsItemSelected(item);
     }
 
@@ -423,6 +420,70 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onResume();
         ViewServer.get(this).setFocusedWindow(this);
         buildAnim();
+    }
+
+
+    public void generate() {
+        DBHelper dbHelper = new DBHelper(this);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        final int clearCount = db.delete("pending_duel", null, null);
+        final ContentValues cv = new ContentValues();
+        final String API_URL = "http://46.101.213.24:3007";
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+
+        final SessionManager sessionManager = new SessionManager(this);
+
+        HashMap<String, String> user = new HashMap<>();
+        user = sessionManager.getUserDetails();
+        String token = user.get("token");
+
+        final String id = user.get("id");
+
+        ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
+
+        final long unixTime = System.currentTimeMillis() / 1000L;
+        final String update = "1457019726";
+        Log.i("stat", "Nam nado: " + id + " " + update + " " + token);
+        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(id, update, token);
+        call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
+            @Override
+            public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    List<Datum> data = response.body().getData();
+                    for (int i = 0; i < data.size(); i++) {
+                        com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
+                        Recipient recipient = datum.getRecipient();
+                        Sender sender = datum.getSender();
+                        Challenge challenge = datum.getChallenge();
+                        cv.clear();
+                        if (challenge.getType().equals("567d51c48322f85870fd931b")) {
+                            if (id.equals(recipient.getId())) {
+                                cv.put("recipient", "true");
+                                cv.put("versus", sender.getName());
+                            }
+                            if (id.equals(sender.get_id())) {
+                                cv.put("recipient", "false");
+                                cv.put("versus", recipient.getName());
+                            }
+                            cv.put("challenge_id", challenge.get_id());
+                            cv.put("description", challenge.getDescription());
+                            cv.put("duration", challenge.getDuration());
+                            db.insert("pending_duel", null, cv);
+                        }
+                    }
+                    Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+            }
+        });
     }
 
 

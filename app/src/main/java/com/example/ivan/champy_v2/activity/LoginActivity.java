@@ -34,8 +34,6 @@ import com.example.ivan.champy_v2.InitializeLogin;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
-import com.example.ivan.champy_v2.helper.CHExtensions;
-import com.example.ivan.champy_v2.helper.CHRequest;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
 import com.example.ivan.champy_v2.interfaces.NewUser;
 import com.example.ivan.champy_v2.interfaces.Update_user;

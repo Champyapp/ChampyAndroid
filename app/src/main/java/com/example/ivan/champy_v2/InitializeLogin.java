@@ -30,7 +30,7 @@ public class InitializeLogin {
         this.imageModule = imagemodule;
     }
 
-    public void Init(){
+    public void Init() {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
