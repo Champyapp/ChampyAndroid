@@ -127,7 +127,7 @@ public class FriendsFragment extends Fragment {
 
                 // Проверка на оффлайн вкладке FriendsActivity
                 OfflineMode offlineMode = new OfflineMode();
-                if (offlineMode.isInternetAvailable(getActivity())) {
+                if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
 
                     Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.getUserFriends(id, token);
                     call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
@@ -207,7 +207,6 @@ public class FriendsFragment extends Fragment {
 
                 } else {
                     swipeRefreshLayout.setRefreshing(false);
-                    Toast.makeText(getContext(), "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
                 }
             }
         });

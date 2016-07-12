@@ -46,6 +46,7 @@ public class ChallengeController {
         minute = mMinute;
     }
 
+
     public void Create_new_challenge(String description, int days, String type_id) {
         final SessionManager sessionManager = new SessionManager(context);
         HashMap<String, String> user = new HashMap<>();
@@ -91,6 +92,7 @@ public class ChallengeController {
         });
     }
 
+
     public void StartSingleInProgress(String challenge) {
         final SessionManager sessionManager = new SessionManager(context);
         HashMap<String, String> user = new HashMap<>();
@@ -121,6 +123,7 @@ public class ChallengeController {
             }
         });
     }
+
 
     public void generate() {
         DBHelper dbHelper = new DBHelper(context);
@@ -191,6 +194,8 @@ public class ChallengeController {
             }
         });
     }
+
+
     public void give_up(String id) throws IOException {
         final SessionManager sessionManager = new SessionManager(context);
         HashMap<String, String> user = new HashMap<>();
@@ -240,4 +245,6 @@ public class ChallengeController {
 
        });
     }
+
+
 }

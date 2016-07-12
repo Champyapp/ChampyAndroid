@@ -82,8 +82,7 @@ public class PendingFragment extends Fragment {
                         c.getString(owner)));
 
             } while (c.moveToNext());
-        } else
-            Log.i("stat", "0 rows");
+        }
         c.close();
 
         Log.i("stat", "Friends :" + friends);
@@ -130,42 +129,31 @@ public class PendingFragment extends Fragment {
                 com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
 
                 OfflineMode offlineMode = new OfflineMode();
-                if (offlineMode.isInternetAvailable(getActivity())) {
+                if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
                     Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.getUserFriends(id, token);
                     call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
                         @Override
                         public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
                             if (response.isSuccess()) {
                                 List<Datum> data = response.body().getData();
-
                                 for (int i = 0; i < data.size(); i++) {
                                     Datum datum = data.get(i);
-
                                     if ((datum.getFriend() != null) && (datum.getOwner() != null)) {
-
                                         if (datum.getStatus().toString().equals("false")) {
-
                                             if (datum.getOwner().get_id().equals(id)) {
                                                 Friend_ friend = datum.getFriend();
                                                 cv.put("name", friend.getName());
 
-                                                if (friend.getPhoto() != null) {
-                                                    cv.put("photo", friend.getPhoto().getMedium());
-                                                } else {
-                                                    cv.put("photo", "");
-                                                }
-
+                                                if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
+                                                else cv.put("photo", "");
                                                 cv.put("user_id", friend.getId());
                                                 cv.put("owner", "false");
                                                 db.insert("pending", null, cv);
                                             } else {
                                                 Owner friend = datum.getOwner();
                                                 cv.put("name", friend.getName());
-                                                if (friend.getPhoto() != null) {
-                                                    cv.put("photo", friend.getPhoto().getMedium());
-                                                } else {
-                                                    cv.put("photo", "");
-                                                }
+                                                if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
+                                                else cv.put("photo", "");
 
                                                 cv.put("user_id", friend.get_id());
                                                 cv.put("owner", "true");
@@ -192,7 +180,6 @@ public class PendingFragment extends Fragment {
 
                                 Log.i("stat", "FriendsActivity :" + newfriends.toString());
 
-
                                 RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
                                 final PendingAdapter adapter = new PendingAdapter(newfriends, getContext(), getActivity(), new CustomItemClickListener() {
                                     @Override
@@ -212,7 +199,6 @@ public class PendingFragment extends Fragment {
                     });
                 } else {
                     swipeRefreshLayout.setRefreshing(false);
-                    Toast.makeText(getContext(), "No Internet Connection!!!", Toast.LENGTH_SHORT).show();
                 }
             }
         });

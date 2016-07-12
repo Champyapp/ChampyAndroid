@@ -957,29 +957,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Typeface typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
             textView.setTypeface(typeface);
 
-            textView = (TextView) tempView.findViewById(R.id.textViewChallengeName);
-            textView.setText(s);
-            textView.setTextSize(y);
+            TextView tvChallengeName = (TextView) tempView.findViewById(R.id.textViewChallengeName);
+            tvChallengeName.setText(s);
+            tvChallengeName.setTextSize(y);
 
-            textView = (TextView) tempView.findViewById(R.id.textViewDuration);
-            textView.setText(item.getDays() + " DAYS TO GO");
-            textView.setTextSize(y*2);
+            TextView tvDuration = (TextView) tempView.findViewById(R.id.textViewDuration);
+            tvDuration.setText(item.getDays() + " DAYS TO GO");
+            tvDuration.setTextSize(y*2);
 
-            textView = (TextView) tempView.findViewById(R.id.textViewLevelAndPoints);
-            textView.setTextSize(y);
+            TextView tvLevelAndPoints = (TextView) tempView.findViewById(R.id.textViewLevelAndPoints);
+            tvLevelAndPoints.setTextSize(y);
 
-            button = (Button) tempView.findViewById(R.id.buttonDoneForToday);
-            button.getLayoutParams().width = x*10;
-            button.getLayoutParams().height = x*10;
-            final Button finalButton = button;
+            Button buttonDoneForToday = (Button) tempView.findViewById(R.id.buttonDoneForToday);
+            buttonDoneForToday.getLayoutParams().width = x*10;
+            buttonDoneForToday.getLayoutParams().height = x*10;
+            final Button finalButton = buttonDoneForToday;
             if (item.getUpdated() != null){
                 if (!item.getType().equals("Wake Up")) {
                     if (item.getUpdated().equals("false")) {
-                        button.setBackgroundDrawable(MainActivity.this.getResources().getDrawable(R.drawable.accept1));
+                        buttonDoneForToday.setBackgroundDrawable(MainActivity.this.getResources().getDrawable(R.drawable.accept1));
                     }
                 }
             }
-            button.setOnClickListener(new View.OnClickListener() {
+            buttonDoneForToday.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String id = item.getId();

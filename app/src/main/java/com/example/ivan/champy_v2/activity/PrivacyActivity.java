@@ -81,12 +81,8 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
         textView = (TextView) headerLayout.findViewById(R.id.tvUserName);
         textView.setText(name);
 
-        Glide.with(this)
-                .load(url)
-                .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(profile);
+        Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile);
 
         try {
             Drawable dr = Init("/data/data/com.example.ivan.champy_v2/app_imageDir/");
@@ -114,7 +110,6 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.activity_main_drawer, menu);
         return true;
     }
@@ -186,7 +181,6 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
 
 
     private class LoadText extends AsyncTask<String, Void, String> {
-
 
         protected String doInBackground(String... urls) {
             String text  = "<p>" +
@@ -531,17 +525,13 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
             return result;
         }
 
-
         protected void onPostExecute(String result) {
-
             TextView textView = (TextView) findViewById(R.id.textView1);
-
             textView.setText(result, TextView.BufferType.SPANNABLE);
-
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar2);
             progressBar.setVisibility(View.INVISIBLE);
-
             textView.setVisibility(View.VISIBLE);
         }
     }
+
 }

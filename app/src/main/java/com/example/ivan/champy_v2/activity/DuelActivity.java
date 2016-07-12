@@ -27,7 +27,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -38,7 +37,6 @@ import com.example.ivan.champy_v2.adapter.PagerAdapterDuel;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.model.Self.*;
 import com.example.ivan.champy_v2.model.Self.SelfImprovement;
-import com.facebook.login.LoginManager;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -70,15 +68,15 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
             newString= extras.getString("friend");
             name = extras.getString("name");
             friend_id = extras.getString("id");
-
         }
+
         int x = round(getWindowManager().getDefaultDisplay().getWidth() / 2);
-        TextView textView = (TextView)findViewById(R.id.textView25);
+        TextView textView = (TextView)findViewById(R.id.tvIChallengeMyFriendTo);
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         textView.setTypeface(typeface);
         textView = (TextView)findViewById(R.id.duel);
         textView.setTypeface(typeface);
-        textView = (TextView)findViewById(R.id.duel_chall);
+        textView = (TextView)findViewById(R.id.tvYouVsFriend);
         textView.setText("You vs "+name);
         textView.setTypeface(typeface);
         ImageView imageView = (ImageView)findViewById(R.id.user2);
@@ -172,6 +170,10 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         OfflineMode offlineMode = new OfflineMode();
         if (offlineMode.isConnectedToRemoteAPI(this)) {
             switch (item.getItemId()) {
+                case R.id.challenges:
+                    Intent goToChallenges = new Intent(this, MainActivity.class);
+                    startActivity(goToChallenges);
+                    break;
                 case R.id.friends:
                     Intent goToFriends = new Intent(this, FriendsActivity.class);
                     startActivity(goToFriends);
@@ -283,13 +285,13 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
 
 
     public boolean check(String id) {
+        boolean ok = true;
         DBHelper dbHelper = new DBHelper(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         final ContentValues cv = new ContentValues();
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
         int o = 0;
-        boolean ok = true;
         if (c.moveToFirst()) {
             int idColIndex = c.getColumnIndex("id");
             int nameColIndex = c.getColumnIndex("name");
