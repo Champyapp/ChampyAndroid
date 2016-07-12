@@ -111,7 +111,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         Log.i("Selected", " " + selected.contains(position));
 
         SessionManager sessionManager = new SessionManager(_context);
-        HashMap<String, String> champy = sessionManager.getUserDetails();
+        HashMap<String, String> champy = sessionManager.getChampyOptions();
 
         if (selected.contains(position)) {
             Log.i("Selected: ", position + " open");

@@ -45,7 +45,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
@@ -58,7 +57,6 @@ import com.example.ivan.champy_v2.CustomPagerBase;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
-import com.example.ivan.champy_v2.helper.CHGenerate;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
@@ -69,7 +67,6 @@ import com.example.ivan.champy_v2.model.active_in_progress.Datum;
 import com.example.ivan.champy_v2.model.active_in_progress.Recipient;
 import com.example.ivan.champy_v2.model.active_in_progress.Sender;
 import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 import com.squareup.okhttp.MediaType;
@@ -110,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Context _context;
     private Activity activity;
     private CustomPagerBase pager;
+    private String user_email, path_to_pic, name, fb_id;
     AlarmManager alarmManager;
 
 
@@ -907,7 +905,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             // cardImage.setImageDrawable(RecyclerView_Activity.this.getResources().getDrawable(R.drawable.card_image));
 
-            Button button = (Button) tempView.findViewById(R.id.button2);
+            Button button = (Button) tempView.findViewById(R.id.buttonGiveUp);
             button.getLayoutParams().width = x*10;
             button.getLayoutParams().height = x*10;
             button.setOnClickListener(new View.OnClickListener() {
@@ -919,15 +917,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             switch (which){
                                 case DialogInterface.BUTTON_POSITIVE:
                                     OfflineMode offlineMode = new OfflineMode();
-                                    if (offlineMode.isInternetAvailable(MainActivity.this)){
+                                    if (offlineMode.isConnectedToRemoteAPI(MainActivity.this)){
                                         ChallengeController challengeController = new ChallengeController(MainActivity.this, MainActivity.this, 0 , 0);
                                         try {
                                             challengeController.give_up(item.getId());
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }
-
-                                    } else Toast.makeText(MainActivity.this, "Lost Internet Connection!", Toast.LENGTH_SHORT).show();
+                                    }
                                     break;
 
                                 case DialogInterface.BUTTON_NEGATIVE:
@@ -948,11 +945,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             if (y > 10) y = 10;
 
-            TextView textView  = (TextView) tempView.findViewById(R.id.textView12);
+            TextView textView  = (TextView) tempView.findViewById(R.id.textViewSIC);
             textView.setText(item.getType());
             String s = item.getGoal();
             if (item.getType().equals("Wake Up")) {
-                ImageView imageView = (ImageView)tempView.findViewById(R.id.imageView);
+                ImageView imageView = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
                 imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeupwhite));
                 s = "Wake up at "+s.substring(0, 2)+":"+s.substring(2,4);
             }
@@ -960,18 +957,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Typeface typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
             textView.setTypeface(typeface);
 
-            textView = (TextView) tempView.findViewById(R.id.textView13);
+            textView = (TextView) tempView.findViewById(R.id.textViewChallengeName);
             textView.setText(s);
             textView.setTextSize(y);
 
-            textView = (TextView) tempView.findViewById(R.id.textView14);
+            textView = (TextView) tempView.findViewById(R.id.textViewDuration);
             textView.setText(item.getDays() + " DAYS TO GO");
             textView.setTextSize(y*2);
 
-            textView = (TextView) tempView.findViewById(R.id.textView15);
+            textView = (TextView) tempView.findViewById(R.id.textViewLevelAndPoints);
             textView.setTextSize(y);
 
-            button = (Button) tempView.findViewById(R.id.button3);
+            button = (Button) tempView.findViewById(R.id.buttonDoneForToday);
             button.getLayoutParams().width = x*10;
             button.getLayoutParams().height = x*10;
             final Button finalButton = button;

@@ -1,8 +1,5 @@
 package com.example.ivan.champy_v2;
 
-/**
- * Created by ivan on 23.03.16.
- */
 public class HistoryChallenge {
 
     boolean active;

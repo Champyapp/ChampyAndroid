@@ -29,6 +29,7 @@ import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.activity.MainActivity;
 import com.example.ivan.champy_v2.duel.Duel;
+import com.example.ivan.champy_v2.helper.CHSetupUI;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
 import com.example.ivan.champy_v2.interfaces.CreateChallenge;
 import com.example.ivan.champy_v2.interfaces.SingleInProgress;
@@ -134,9 +135,9 @@ public class DuelFragment extends Fragment {
         else {
             final int[] finalposition = new int[1];
             final ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.pager_duel);
-            setupUI(getActivity().findViewById(R.id.duel_back));
-            setupUI(view);
-
+            CHSetupUI chSetupUI = new CHSetupUI();
+            chSetupUI.setupUI(getActivity().findViewById(R.id.duel_back), getActivity());
+            chSetupUI.setupUI(view, getActivity());
 
             Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
             EditText editText = (EditText) view.findViewById(R.id.et_goal);
@@ -426,7 +427,7 @@ public class DuelFragment extends Fragment {
     }
 
 
-    public static void hideSoftKeyboard(Activity activity) {
+    /*public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
@@ -447,31 +448,8 @@ public class DuelFragment extends Fragment {
             });
         }
 
-    }
+    }*/
 
-
-    public String find(String challenge_id)
-    {
-        DBHelper dbHelper = new DBHelper(getActivity());
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Cursor c = db.query("updated", null, null, null, null, null, null);
-        String ok = "false";
-        int o = 0;
-        if (c.moveToFirst()) {
-            int idColIndex = c.getColumnIndex("id");
-            int colchallenge_id = c.getColumnIndex("challenge_id");
-            do {
-                if (c.getString(colchallenge_id).equals(challenge_id)){
-                    ok = c.getString(c.getColumnIndex("updated"));
-                    Log.i("stat", "Find: "+ok);
-                    break;
-                }
-            } while (c.moveToNext());
-        } else
-            Log.i("stat", "0 rows");
-        c.close();
-        return ok;
-    }
 
     public boolean isActive(String description) {
         DBHelper dbHelper = new DBHelper(getActivity());

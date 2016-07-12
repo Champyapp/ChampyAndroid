@@ -12,6 +12,7 @@ import com.example.ivan.champy_v2.activity.HistoryInProgressActivity;
  * Created by ivan on 23.03.16.
  */
 public class HistoryPagerAdapter extends FragmentPagerAdapter {
+
     final int PAGE_COUNT = 3;
     private String tabTitles[] = new String[] { "All", "In Progress", "Wins" };
     private Context context;
@@ -43,4 +44,6 @@ public class HistoryPagerAdapter extends FragmentPagerAdapter {
         // Generate title based on item position
         return tabTitles[position];
     }
+
+
 }

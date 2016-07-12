@@ -44,6 +44,7 @@ import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.Photo;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.helper.CHSetupUI;
 import com.example.ivan.champy_v2.interfaces.Update_user;
 import com.example.ivan.champy_v2.model.User.Delete;
 import com.example.ivan.champy_v2.model.User.Profile_data;
@@ -83,7 +84,8 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.bringToFront();
-        setupUI(findViewById(R.id.settings_layout));
+        CHSetupUI chSetupUI = new CHSetupUI();
+        chSetupUI.setupUI(findViewById(R.id.settings_layout), this);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -621,7 +623,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
     }
 
 
-    public static void hideSoftKeyboard(Activity activity) {
+    /*public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
@@ -642,7 +644,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
             });
         }
 
-    }
+    }*/
 
 
 }

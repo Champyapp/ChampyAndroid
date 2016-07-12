@@ -1,6 +1,5 @@
 package com.example.ivan.champy_v2.fragment;
 
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,10 +11,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -23,11 +20,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.activity.MainActivity;
+import com.example.ivan.champy_v2.data.DBHelper;
+import com.example.ivan.champy_v2.helper.CHSetupUI;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
 import com.example.ivan.champy_v2.interfaces.CreateChallenge;
 import com.example.ivan.champy_v2.interfaces.SingleInProgress;
@@ -122,14 +120,14 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         etGoal.setVisibility(View.INVISIBLE);
         etDays.setVisibility(View.INVISIBLE);
 
-        Glide.with(getContext()).load(R.drawable.points).override(120, 120)
-                .into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
+        Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
 
         if (!isActive(description)){
             final int[] finalposition = new int[1];
             final ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.pager);
-            setupUI(getActivity().findViewById(R.id.selfimprovement));
-            setupUI(view);
+            CHSetupUI chSetupUI = new CHSetupUI();
+            chSetupUI.setupUI(getActivity().findViewById(R.id.selfimprovement), getActivity());
+            chSetupUI.setupUI(view, getActivity());
             if (position == size || name.equals("User_Challenge")) {
                 etGoal.setText(description);
                 etGoal.setTypeface(typeface);
@@ -405,7 +403,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
     }
 
 
-    public static void hideSoftKeyboard(Activity activity) {
+    /*public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
@@ -426,7 +424,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
             });
         }
 
-    }
+    }*/
 
 
     public String find(String challenge_id) {
