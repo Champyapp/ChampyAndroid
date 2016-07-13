@@ -25,6 +25,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -57,20 +58,29 @@ import com.example.ivan.champy_v2.CustomPagerBase;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
+import com.example.ivan.champy_v2.interfaces.NewUser;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
 import com.example.ivan.champy_v2.interfaces.Update_user;
+import com.example.ivan.champy_v2.model.User.Data;
 import com.example.ivan.champy_v2.model.User.User;
 import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
 import com.example.ivan.champy_v2.model.active_in_progress.Datum;
 import com.example.ivan.champy_v2.model.active_in_progress.Recipient;
 import com.example.ivan.champy_v2.model.active_in_progress.Sender;
+import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.RequestBody;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -79,12 +89,16 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import retrofit.Call;
 import retrofit.Callback;
@@ -101,13 +115,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private long mLastClickTime = 0;
     private int counter = 0;
     private int total = 30;
-    private RoleControllerActivity roleControllerActivity;
     private PendingIntent pendingIntent;
     private FloatingActionMenu actionMenu;
     private Context _context;
     private Activity activity;
     private CustomPagerBase pager;
-    private String user_email, path_to_pic, name, fb_id;
     AlarmManager alarmManager;
 
 
@@ -141,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         final ImageButton actionButton = (ImageButton)findViewById(R.id.fabPlus);
 
-        SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
+        final SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
         final SubActionButton buttonWakeUpChallenge = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeupcolor)).build();
         final SubActionButton buttonDuelChallenge   = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.duelcolor)).build();
         final SubActionButton buttonSelfImprovement = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementcolor)).build();
@@ -225,36 +237,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 ImageView screen = (ImageView) findViewById(R.id.blurScreen);
                 if (actionMenu.isOpen()) {
                     actionMenu.getSubActionItems();
-                    buttonSelfImprovement.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            OfflineMode offlineMode = new OfflineMode();
-                            if (offlineMode.isConnectedToRemoteAPI(MainActivity.this)) {
+                    OfflineMode offlineMode = new OfflineMode();
+                    if (offlineMode.isConnectedToRemoteAPI(MainActivity.this)) {
+                        buttonSelfImprovement.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
                                 Intent intent = new Intent(MainActivity.this, SelfImprovementActivity.class);
                                 startActivity(intent);
                             }
-                        }
-                    });
-                    buttonDuelChallenge.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            OfflineMode offlineMode = new OfflineMode();
-                            if (offlineMode.isConnectedToRemoteAPI(MainActivity.this)) {
+                        });
+                        buttonDuelChallenge.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
                                 Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
                                 startActivity(intent);
                             }
-                        }
-                    });
-                    buttonWakeUpChallenge.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            OfflineMode offlineMode = new OfflineMode();
-                            if (offlineMode.isConnectedToRemoteAPI(MainActivity.this)) {
+                        });
+                        buttonWakeUpChallenge.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
                                 Intent intent = new Intent(MainActivity.this, WakeUpActivity.class);
                                 startActivity(intent);
                             }
-                        }
-                    });
+                        });
+                    }
                     actionMenu.close(true);
                     if (!actionMenu.isOpen()) {
                         screen.setVisibility(View.INVISIBLE);
@@ -431,7 +437,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .baseUrl(API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-
 
         final SessionManager sessionManager = new SessionManager(this);
 

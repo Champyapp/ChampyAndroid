@@ -157,38 +157,26 @@ public class SessionManager {
     public HashMap<String, String> getChampyOptions(){
         HashMap<String, String> champy = new HashMap<String, String>();
         champy.put("challenges", pref.getString("challenges", null));
-        champy.put("wins", pref.getString("wins", null));
-        champy.put("total", pref.getString("total", null));
-        champy.put("level", pref.getString("level", null));
+        champy.put("wins",       pref.getString("wins", null));
+        champy.put("total",      pref.getString("total", null));
+        champy.put("level",      pref.getString("level", null));
         return champy;
     }
 
     public HashMap<String, String> getUserDetails() {
-
         //Use hashmap to store user credentials
         HashMap<String, String> user = new HashMap<String, String>();
-        // user name
-        user.put(KEY_NAME, pref.getString(KEY_NAME, null));
-        // user email id
-        user.put(KEY_EMAIL, pref.getString(KEY_EMAIL, null));
-
-        user.put(KEY_ID, pref.getString(KEY_EMAIL, null));
-
-        user.put(KEY_PATH, pref.getString(KEY_PATH, null));
-
-        user.put("token", pref.getString("token", null));
-
-        user.put("id", pref.getString("id", null));
-
-        user.put("pushN", pref.getString("pushN", null));
-
-        user.put("newChallReq", pref.getString("newChallReq", null));
-
+        user.put(KEY_NAME,       pref.getString(KEY_NAME,       null));
+        user.put(KEY_EMAIL,      pref.getString(KEY_EMAIL,      null));
+        user.put(KEY_ID,         pref.getString(KEY_EMAIL,      null));
+        user.put(KEY_PATH,       pref.getString(KEY_PATH,       null));
+        user.put("token",        pref.getString("token",        null));
+        user.put("id",           pref.getString("id",           null));
+        user.put("pushN",        pref.getString("pushN",        null));
+        user.put("newChallReq",  pref.getString("newChallReq",  null));
         user.put("acceptedYour", pref.getString("acceptedYour", null));
-
         user.put("challengeEnd", pref.getString("challengeEnd", null));
-
-        user.put("updateDB", pref.getString("updateDB", null));
+        user.put("updateDB",     pref.getString("updateDB",     null));
 
         return user;
     }
