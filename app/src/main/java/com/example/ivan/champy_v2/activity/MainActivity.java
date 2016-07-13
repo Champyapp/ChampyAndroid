@@ -229,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         @Override
                         public void onClick(View v) {
                             OfflineMode offlineMode = new OfflineMode();
-                            if (offlineMode.isInternetAvailable(MainActivity.this)) {
+                            if (offlineMode.isConnectedToRemoteAPI(MainActivity.this)) {
                                 Intent intent = new Intent(MainActivity.this, SelfImprovementActivity.class);
                                 startActivity(intent);
                             }
@@ -239,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         @Override
                         public void onClick(View v) {
                             OfflineMode offlineMode = new OfflineMode();
-                            if (offlineMode.isInternetAvailable(MainActivity.this)) {
+                            if (offlineMode.isConnectedToRemoteAPI(MainActivity.this)) {
                                 Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
                                 startActivity(intent);
                             }
@@ -249,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         @Override
                         public void onClick(View v) {
                             OfflineMode offlineMode = new OfflineMode();
-                            if (offlineMode.isInternetAvailable(MainActivity.this)) {
+                            if (offlineMode.isConnectedToRemoteAPI(MainActivity.this)) {
                                 Intent intent = new Intent(MainActivity.this, WakeUpActivity.class);
                                 startActivity(intent);
                             }

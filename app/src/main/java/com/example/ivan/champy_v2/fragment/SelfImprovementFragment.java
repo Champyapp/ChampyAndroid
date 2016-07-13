@@ -43,6 +43,7 @@ import retrofit.Retrofit;
 
 import static java.lang.Math.round;
 
+// TODO: 13.07.2016 показати до і після мене цей клас на review
 public class SelfImprovementFragment extends Fragment implements View.OnClickListener {
 
     public static final String ARG_PAGE = "ARG_PAGE";
@@ -91,7 +92,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                     description = c.getString(coldescription);
                     duration = c.getString(colduration);
                     challenge_id = c.getString(colchallenge_id);
-
                 }
             } while (c.moveToNext());
         }
@@ -120,7 +120,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         etGoal.setVisibility(View.INVISIBLE);
         etDays.setVisibility(View.INVISIBLE);
 
-        Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
+        Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView)view.findViewById(R.id.imageViewAcceptButton));
 
         if (!isActive(description)){
             final int[] finalposition = new int[1];
@@ -148,9 +148,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 
             ImageButton imageButton = (ImageButton) getActivity().findViewById(R.id.imageButtonAcceptSelfImprovement);
             imageButton.setVisibility(View.VISIBLE);
-
             imageButton.setOnClickListener(this);
-
             imageButton.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
@@ -165,7 +163,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                     EditText etDays = (EditText) view.findViewById(R.id.et_days);
                     duration = etDays.getText().toString();
 
-                    if (!etDays.getText().toString().equals("")){
+                    if (!etDays.getText().toString().isEmpty()){
                         days = Integer.parseInt(etDays.getText().toString());
                     }
 
@@ -174,8 +172,8 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                     int size = sessionManager.getSelfSize();
                     OfflineMode offlineMode = new OfflineMode();
                     if (position == size) {
-                        if ((!isActive(description)) && offlineMode.isConnectedToRemoteAPI(getActivity()) && (!description.equals("")) &&
-                                (!description.startsWith(" ")) && (days != 0) && (!duration.equals("")) && (!isActive(description))) {
+                        if ((!isActive(description)) && offlineMode.isConnectedToRemoteAPI(getActivity()) && (!description.isEmpty()) &&
+                                (!description.startsWith(" ")) && (days != 0) && (!duration.isEmpty()) && (!isActive(description))) {
                             days = Integer.parseInt(duration);
                             Create_new_challenge(description, days);
                             Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
@@ -185,15 +183,15 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                                 Toast.makeText(getContext(), "Already exist", Toast.LENGTH_SHORT).show();
                                 return true;
                             }
-                            if ((description.equals("") || description.startsWith(" ")) && (days == 0 || duration.equals(""))) {
-                                Toast.makeText(getContext(), "Card is empty!", Toast.LENGTH_SHORT).show();
-                                return true;
-                            }
+                            //if ((description.isEmpty() || description.startsWith(" ")) && (days == 0 || duration.isEmpty())) {
+                            //    Toast.makeText(getContext(), "Card is empty!", Toast.LENGTH_SHORT).show();
+                            //    return true;
+                            //}
                             if (description.isEmpty() || description.startsWith(" ")) {
                                 Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();
                                 return true;
                             }
-                            if (duration.equals("") || days == 0) {
+                            if (duration.isEmpty() || days == 0) {
                                 Toast.makeText(getContext(), "Min 1 day!", Toast.LENGTH_SHORT).show();
                                 return true;
                             }
@@ -222,26 +220,26 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                         c.close();
 
                         if ((!isActive(description)) && offlineMode.isConnectedToRemoteAPI(getActivity())
-                                && (!description.equals("active")) && (!description.equals("")) && (!description.startsWith(" "))
-                                && (days != 0) && (!duration.equals(""))) {
+                                && (!description.equals("active")) && (!description.isEmpty()) && (!description.startsWith(" "))
+                                && (days != 0) && (!duration.isEmpty())) {
                             Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
                             StartSingleInProgress(challenge_id);
                             return true;
                         } else {
-                            if ((description.equals("") || description.startsWith(" ")) && (days == 0 || duration.equals(""))) {
-                                Toast.makeText(getContext(), "Card is empty!", Toast.LENGTH_SHORT).show();
+                            //if ((description.isEmpty() || description.startsWith(" ")) && (days == 0 || duration.isEmpty())) {
+                            //    Toast.makeText(getContext(), "Card is empty!", Toast.LENGTH_SHORT).show();
+                            //    return true;
+                            //}
+                            if (isActive(description)) {
+                                Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
                                 return true;
                             }
                             if (description.isEmpty() || description.startsWith(" ")) {
                                 Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();
                                 return true;
                             }
-                            if (duration.equals("") || days == 0) {
+                            if (duration.isEmpty() || days == 0) {
                                 Toast.makeText(getContext(), "Min 1 day!", Toast.LENGTH_SHORT).show();
-                                return true;
-                            }
-                            if (isActive(description)) {
-                                Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
                                 return true;
                             }
                         }
@@ -470,7 +468,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
             do {
                 if (c.getString(c.getColumnIndex("status")).equals("started")){
                     Log.i("stat", "Equals: "+c.getString(coldescription)+" "+description);
-                    if (c.getString(coldescription).equals(description)){
+                    if (c.getString(coldescription).equals(description)) {
                         Log.i("stat", "Equals: true");
                         ok = true;
                     }

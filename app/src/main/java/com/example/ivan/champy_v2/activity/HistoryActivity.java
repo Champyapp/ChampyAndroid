@@ -61,7 +61,6 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         HashMap<String, String> user = new HashMap<>();
         user = sessionManager.getUserDetails();
 
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
@@ -80,27 +79,21 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         int count = 0;
 
         String s = sessionManager.get_duel_pending();
-        if (s != null){
-            count = Integer.parseInt(s);
-        }
+        if (s != null) { count = Integer.parseInt(s); }
 
         TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
         if (count == 0) {
             hideItem();
-        }
-        else {
+        } else {
             view.setText("+" + (count > 0 ? String.valueOf(count) : null));
         }
-
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager_history);
         adapterViewPager = new HistoryPagerAdapter(getSupportFragmentManager(), getApplicationContext());
         viewPager.setAdapter(adapterViewPager);
 
-
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs_history);
         tabLayout.setupWithViewPager(viewPager);
-
 
         String name = user.get("name");
 
@@ -110,26 +103,21 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
-        Glide.with(this)
-                .load(url)
-                .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(profile);
+        Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile);
 
         try {
             Drawable dr = Init("/data/data/com.example.ivan.champy_v2/app_imageDir/");
             ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setImageDrawable(dr);
-
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
         ViewServer.get(this).addWindow(this);
     }
+
 
     private void hideItem() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -151,23 +139,13 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.history, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
+        if (item.getItemId() == R.id.action_settings) {return true;}
         return super.onOptionsItemSelected(item);
     }
 

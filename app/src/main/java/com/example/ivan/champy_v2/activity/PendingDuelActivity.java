@@ -61,8 +61,8 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         navigationView.setNavigationItemSelectedListener(this);
 
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
-        TextView textView = (TextView)findViewById(R.id.textView20);
-        textView.setTypeface(typeface);
+        TextView tvPendingDuels = (TextView)findViewById(R.id.textView20);
+        tvPendingDuels.setTypeface(typeface);
 
         RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.pending_duel);
         relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementback));
@@ -78,8 +78,8 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         String name = user.get("name");
 
         ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        textView = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        textView.setText(name);
+        TextView tvUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        tvUserName.setText(name);
 
         Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile);

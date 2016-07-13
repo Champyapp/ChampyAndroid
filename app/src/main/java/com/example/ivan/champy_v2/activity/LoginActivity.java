@@ -109,12 +109,10 @@ public class LoginActivity extends AppCompatActivity {
 
         String token;
         FacebookSdk.sdkInitialize(getApplicationContext());
-
         try {
             PackageInfo info = getPackageManager().getPackageInfo(
                     "com.facebook.samples.hellofacebook",
                     PackageManager.GET_SIGNATURES);
-
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
@@ -124,8 +122,6 @@ public class LoginActivity extends AppCompatActivity {
             Log.d("KeyHash : ", "not working" );
         }
         setContentView(R.layout.activity_login);
-
-
 
         try {
             Init();
@@ -234,8 +230,6 @@ public class LoginActivity extends AppCompatActivity {
                         parameters.putString("fields", "id, first_name, last_name, email,gender, birthday, location");
                         request.setParameters(parameters);
                         request.executeAsync();
-
-
                     }
 
                     @Override
@@ -277,19 +271,17 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
+        moveTaskToBack(false);
     }
 
 
     public void Init() throws IOException {
-        InitializeLogin initializeLogin = new InitializeLogin(this,
-                getApplicationContext(), new ImageModule(getApplicationContext()));
+        InitializeLogin initializeLogin = new InitializeLogin(this, getApplicationContext(), new ImageModule(getApplicationContext()));
         initializeLogin.Init();
     }
 
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-
 
         protected Bitmap doInBackground(String... urls) {
             String urldisplay = urls[0];
@@ -330,9 +322,7 @@ public class LoginActivity extends AppCompatActivity {
 
         FileOutputStream fos = null;
         try {
-
             fos = new FileOutputStream(mypath);
-
             // Use the compress method on the BitMap object to write image to the OutputStream
             bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.close();
@@ -350,7 +340,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void Register_User(String facebookId, String name, String email, String gcm) throws JSONException {
-
         final String API_URL = "http://46.101.213.24:3007";
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(API_URL)
@@ -496,25 +485,17 @@ public class LoginActivity extends AppCompatActivity {
                                     Log.d(TAG, "Status: " + response.body().toString());
 
                                     if ((datum.getFriend() != null) && (datum.getOwner() != null)) {
-
                                         if (datum.getStatus().toString().equals("false")) {
                                             Log.d(TAG, "Status: "+datum.getOwner().get_id());
-
                                             if (datum.getOwner().get_id().equals(user_id)) {
                                                 Friend_ friend = datum.getFriend();
-                                                Log.d(TAG, "Status: "+friend);
-
+                                                //Log.d(TAG, "Status: "+friend);
                                                 if (friend.getName() != null) {
                                                     cv.put("name", friend.getName());
                                                 }
-
-                                                Log.d(TAG, "Status: "+friend.getPhoto());
-                                                if (friend.getPhoto() != null) {
-                                                    cv.put("photo", friend.getPhoto().getMedium());
-                                                }
-                                                else {
-                                                    cv.put("photo", "");
-                                                }
+                                                //Log.d(TAG, "Status: "+friend.getPhoto());
+                                                if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
+                                                else cv.put("photo", "");
 
                                                 Log.d(TAG, "Friend");
                                                 cv.put("user_id", friend.getId());
@@ -529,13 +510,9 @@ public class LoginActivity extends AppCompatActivity {
                                                     cv.put("name", friend.getName());
                                                 }
                                                 Log.d(TAG, "Status: "+friend.getPhoto());
-                                                if (friend.getPhoto() != null) {
-                                                    cv.put("photo", friend.getPhoto().getMedium());
-                                                }
-                                                else {
-                                                    cv.put("photo", "");
-                                                }
-                                                Log.d(TAG, "Friend");
+                                                if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
+                                                else cv.put("photo", "");
+                                                //Log.d(TAG, "Friend");
                                                 cv.put("user_id", friend.getId());
                                                 cv.put("owner", "false");
                                                 db.insert("friends", null, cv);
@@ -654,32 +631,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    private String SaveFromCamera(Bitmap finalBitmap) {
-
-        String root = Environment.getExternalStorageDirectory().toString();
-        File myDir = new File(root + "/saved_images");
-        myDir.mkdirs();
-        Random generator = new Random();
-        int n = 10000;
-        n = generator.nextInt(n);
-        String fname = "Image-"+ n +".jpg";
-        File file = new File (myDir, fname);
-        if (file.exists ()) file.delete ();
-        try {
-            FileOutputStream out = new FileOutputStream(file);
-            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-            out.flush();
-            out.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return (Uri.fromFile(file).getPath());
-    }
-
-
     public void loadImageFromStorage(String path) {
-
         try {
             File f=new File(path, "profile.jpg");
             File file = new File(path, "blured2.jpg");
@@ -704,13 +656,11 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d(TAG, "Image: Blured");
             }
         }
-        catch (FileNotFoundException e)
-        {
+        catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
 
@@ -791,8 +741,7 @@ public class LoginActivity extends AppCompatActivity {
                                             cv.put("wins", ""+data.getSuccessChallenges());
                                             cv.put("total", ""+data.getScore());
                                             cv.put("level", ""+data.getLevel().getNumber());
-                                            if (!getContact(data.get_id()))
-                                                db.insert("mytable", null, cv);
+                                            if (!getContact(data.get_id())) db.insert("mytable", null, cv);
                                             else Log.d(TAG, "DBase: not added");
                                         } else {
                                             URL profile_pic = null;
@@ -814,9 +763,7 @@ public class LoginActivity extends AppCompatActivity {
                                     }
 
                                     @Override
-                                    public void onFailure(Throwable t) {
-
-                                    }
+                                    public void onFailure(Throwable t) {}
                                 });
                             } catch (JSONException e) {
                                 e.printStackTrace();

@@ -239,14 +239,11 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                 tvChangeName.setVisibility(View.INVISIBLE);
                 TextView textView1 = (TextView) findViewById(R.id.tvEntedYourName);
                 textView1.setVisibility(View.VISIBLE);
-
                 final EditText editText = (EditText) findViewById(R.id.new_name);
                 editText.setVisibility(View.VISIBLE);
                 editText.setText(name);
-
                 ImageButton imageButton = (ImageButton) findViewById(R.id.imageButtonAcceptMaybe);
                 imageButton.setVisibility(View.VISIBLE);
-
                 findViewById(R.id.view11).setVisibility(View.VISIBLE);
 
                 imageButton.setOnClickListener(new View.OnClickListener() {
@@ -262,22 +259,16 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                             String newName = editText.getText().toString().trim();
                             SessionManager sessionManager = new SessionManager(getApplicationContext());
                             sessionManager.change_name(newName);
-
                             setNewName(newName);
-
                             TextView tvName = (TextView)findViewById(R.id.name);
                             tvName.setText(editText.getText().toString());
-
                             tvChangeName.setVisibility(View.VISIBLE);
                             TextView tvEnterYourName = (TextView) findViewById(R.id.tvEntedYourName);
                             tvEnterYourName.setVisibility(View.GONE);
-
                             final EditText etNewName = (EditText) findViewById(R.id.new_name);
                             etNewName.setVisibility(View.GONE);
-
                             ImageButton imageButtonAccept = (ImageButton) findViewById(R.id.imageButtonAcceptMaybe);
                             imageButtonAccept.setVisibility(View.GONE);
-
                             findViewById(R.id.view11).setVisibility(View.GONE);
                         }
 
@@ -402,11 +393,10 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
 
     private void setNewName(String newName) {
         SessionManager sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user = new HashMap<>();
+        HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         String id = user.get("id");
         String token = user.get("token");
-
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(API_URL)
@@ -420,11 +410,8 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
-               if (response.isSuccess()){
-                   Log.i("Status", "Status: OK");
-                   recreate();
-               }
-                else Log.i("Status" , "Status: "+response.code());
+               if (response.isSuccess()) recreate();
+               else Log.i("Status" , "Status: "+response.code());
             }
             @Override
             public void onFailure(Throwable t) {
@@ -441,15 +428,12 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         }
         else if (findViewById(R.id.view11).getVisibility() == View.VISIBLE) {
             findViewById(R.id.tvName).setVisibility(View.VISIBLE);
-            TextView textView1 = (TextView)findViewById(R.id.tvEntedYourName);
-            textView1.setVisibility(View.GONE);
-
-            final EditText editText = (EditText)findViewById(R.id.new_name);
-            editText.setVisibility(View.GONE);
-
-            ImageButton imageButton = (ImageButton)findViewById(R.id.imageButtonAcceptMaybe);
-            imageButton.setVisibility(View.GONE);
-
+            TextView tvEnterYourName = (TextView)findViewById(R.id.tvEntedYourName);
+            tvEnterYourName.setVisibility(View.GONE);
+            final EditText etNewName = (EditText)findViewById(R.id.new_name);
+            etNewName.setVisibility(View.GONE);
+            ImageButton imageButtonAccept = (ImageButton)findViewById(R.id.imageButtonAcceptMaybe);
+            imageButtonAccept.setVisibility(View.GONE);
             findViewById(R.id.view11).setVisibility(View.GONE);
         }
         else {
@@ -464,22 +448,12 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main_drawer, menu);
-        // Inflate the menu; this adds items to the action bar if it is present.
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
+        if (item.getItemId() == R.id.action_settings) {return true;}
         return super.onOptionsItemSelected(item);
     }
 
@@ -571,19 +545,17 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         Drawable dr = new BitmapDrawable(getResources(), bitmap);
         dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
 
-
         ImageView imageView = (ImageView) findViewById(R.id.back_settings);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setImageDrawable(dr);
 
         return dr;
-
     }
 
 
     public void updateProfile(HashMap<String, String> map){
         SessionManager sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user = new HashMap<>();
+        HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         String id = user.get("id");
         String token = user.get("token");

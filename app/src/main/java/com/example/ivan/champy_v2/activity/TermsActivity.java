@@ -52,8 +52,8 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
         setSupportActionBar(toolbar);
         new LoadText().execute();
 
-        TextView textView = (TextView)findViewById(R.id.textView_terms);
-        textView.setVisibility(View.INVISIBLE);
+        TextView tvTerms = (TextView)findViewById(R.id.textView_terms);
+        tvTerms.setVisibility(View.INVISIBLE);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -74,23 +74,17 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
         String name = user.get("name");
 
         ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        textView = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        textView.setText(name);
+        TextView tvUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        tvUserName.setText(name);
 
-        Glide.with(this)
-                .load(url)
-                .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(profile);
+        Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile);
 
         try {
             Drawable dr = Init("/data/data/com.example.ivan.champy_v2/app_imageDir/");
             ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setImageDrawable(dr);
-
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

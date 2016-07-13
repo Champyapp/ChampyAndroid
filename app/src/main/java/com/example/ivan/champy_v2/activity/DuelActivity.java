@@ -71,17 +71,17 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         }
 
         int x = round(getWindowManager().getDefaultDisplay().getWidth() / 2);
-        TextView textView = (TextView)findViewById(R.id.tvIChallengeMyFriendTo);
+        TextView tvIChallengeMyFriendTo = (TextView)findViewById(R.id.tvIChallengeMyFriendTo);
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
-        textView.setTypeface(typeface);
-        textView = (TextView)findViewById(R.id.duel);
-        textView.setTypeface(typeface);
-        textView = (TextView)findViewById(R.id.tvYouVsFriend);
-        textView.setText("You vs "+name);
-        textView.setTypeface(typeface);
-        ImageView imageView = (ImageView)findViewById(R.id.user2);
-        imageView.getLayoutParams().width = x;
-        imageView.getLayoutParams().height = x;
+        tvIChallengeMyFriendTo.setTypeface(typeface);
+        TextView textViewDuel = (TextView)findViewById(R.id.duel);
+        textViewDuel.setTypeface(typeface);
+        TextView textViewYouVsFriend = (TextView)findViewById(R.id.tvYouVsFriend);
+        textViewYouVsFriend.setText("You vs "+name);
+        textViewYouVsFriend.setTypeface(typeface);
+        ImageView imageViewUser2 = (ImageView)findViewById(R.id.user2);
+        imageViewUser2.getLayoutParams().width = x;
+        imageViewUser2.getLayoutParams().height = x;
 
         RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.duel_back);
         relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementback));
@@ -92,8 +92,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         Glide.with(this).load(url).centerCrop().into((ImageView)findViewById(R.id.user2));
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -101,7 +100,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
         SessionManager sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user = new HashMap<>();
+        HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         file = new File(path, "profile.jpg");
@@ -109,17 +108,17 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         name = user.get("name");
 
         ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        textView = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        textView.setText(name);
+        textViewYouVsFriend = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        textViewYouVsFriend.setText(name);
 
         Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile);
 
         try {
             Drawable dr = Init("/data/data/com.example.ivan.champy_v2/app_imageDir/");
-            imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setImageDrawable(dr); final String API_URL = "http://46.101.213.24:3007";
+            imageViewUser2 = (ImageView) headerLayout.findViewById(R.id.slide_background);
+            imageViewUser2.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageViewUser2.setImageDrawable(dr); final String API_URL = "http://46.101.213.24:3007";
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -165,7 +164,8 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
-
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         OfflineMode offlineMode = new OfflineMode();
         if (offlineMode.isConnectedToRemoteAPI(this)) {

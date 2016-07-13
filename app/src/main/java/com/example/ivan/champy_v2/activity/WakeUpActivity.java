@@ -98,26 +98,15 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         if (count == 0) hideItem();
 
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
+        TextView tvIChallengeMyselfTo = (TextView)findViewById(R.id.textView20);
+        tvIChallengeMyselfTo.setTypeface(typeface);
+        TextView tvGoal = (TextView)findViewById(R.id.goal_text);
+        tvGoal.setTypeface(typeface);
+        TextView tvDuration = (TextView)findViewById(R.id.textView23);
+        tvDuration.setTypeface(typeface);
 
-        TextView textView = (TextView)findViewById(R.id.textView20);
-        textView.setTypeface(typeface);
-
-        textView = (TextView)findViewById(R.id.goal_text);
-        textView.setTypeface(typeface);
-
-        textView = (TextView)findViewById(R.id.textView23);
-        textView.setTypeface(typeface);
-
-        Glide.with(this)
-                .load(R.drawable.wakeupwhite)
-                .override(110, 110)
-                .into((ImageView) findViewById(R.id.imageView13));
-
-        Glide.with(this)
-                .load(R.drawable.wakeuptext)
-                .override(180, 150)
-                .into((ImageView) findViewById(R.id.imageView12));
-
+        Glide.with(this).load(R.drawable.wakeupwhite).override(110, 110).into((ImageView) findViewById(R.id.imageView13));
+        Glide.with(this).load(R.drawable.wakeuptext).override(180, 150).into((ImageView) findViewById(R.id.imageView12));
 
         RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.wake_up);
         relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementback));
@@ -131,11 +120,10 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         String name = user.get("name");
 
         ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        textView = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        textView.setText(name);
+        tvDuration = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        tvDuration.setText(name);
 
         Glide.with(this).load(R.drawable.points).override(100, 100).into((ImageView)findViewById(R.id.imageViewAcceptButton));
-
         Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile);
 
@@ -169,7 +157,6 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
                 String sHour = "" + hour;
                 String sMinute = "" + minute;
 
-                // щоб не було такого часу 12.1 mp, робиться 12: '0' + time
                 if (hour < 10) {
                     sHour = "0" + sHour;
                 }
@@ -202,11 +189,8 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
                         Log.i("stat", "Time: " + (Calendar.getInstance().getTimeInMillis() - calendar.getTimeInMillis()));
 
                         Intent myIntent = new Intent(WakeUpActivity.this, AlarmReceiver.class);
-
                         int id = Integer.parseInt(sHour + sMinute);
-
                         pendingIntent = PendingIntent.getBroadcast(WakeUpActivity.this, id, myIntent, 0);
-
                         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, 24 * 60 * 60 * 1000, pendingIntent); // 24*60*60*1000 = 1 day;
 
                         Toast.makeText(WakeUpActivity.this, "Challenge created", Toast.LENGTH_SHORT).show();
@@ -226,11 +210,9 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
 
 
     public boolean check(String time) {
-
         boolean ok = true;
         DBHelper dbHelper = new DBHelper(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-
         final ContentValues cv = new ContentValues();
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
         int o = 0;

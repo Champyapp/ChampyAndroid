@@ -1,4 +1,4 @@
-package com.example.ivan.champy_v2.activity;
+package com.example.ivan.champy_v2.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 /**
  * Created by ivan on 30.03.16.
  */
-public class HistoryAllActivity extends Fragment {
+public class HistoryAllFragment extends Fragment {
 
 
     @Override

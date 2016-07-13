@@ -80,7 +80,6 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         toggle.setDrawerIndicatorEnabled(true);
         toggle.syncState();
 
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
@@ -89,25 +88,17 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         view.setText("+" + (count > 0 ? String.valueOf(count) : null));
         if (count == 0) { hideItem(); }
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
-        TextView textView = (TextView)findViewById(R.id.textView20);
-        textView.setTypeface(typeface);
+        TextView tvIChallengeMyFriendTo = (TextView)findViewById(R.id.textView20);
+        tvIChallengeMyFriendTo.setTypeface(typeface);
 
-        Glide.with(this)
-                .load(R.drawable.selfimprovementicon)
-                .override(130, 130)
-                .into((ImageView) findViewById(R.id.imageView13));
-
-        Glide.with(this)
-                .load(R.drawable.selfimprtext)
-                .override(200, 170)
-                .into((ImageView) findViewById(R.id.imageView12));
-
+        Glide.with(this).load(R.drawable.selfimprovementicon).override(130, 130).into((ImageView) findViewById(R.id.imageView13));
+        Glide.with(this).load(R.drawable.selfimprtext).override(200, 170).into((ImageView) findViewById(R.id.imageView12));
 
         RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.selfimprovement);
         relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementback));
 
         SessionManager sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user = new HashMap<>();
+        HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
@@ -115,15 +106,11 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         String name = user.get("name");
 
         ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        textView = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        TextView textView = (TextView) headerLayout.findViewById(R.id.tvUserName);
         textView.setText(name);
 
-        Glide.with(this)
-                .load(url)
-                .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(profile);
+        Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile);
 
         try {
             Drawable dr = Init("/data/data/com.example.ivan.champy_v2/app_imageDir/");
@@ -136,6 +123,77 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
 
         getChallenges();
 
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        OfflineMode offlineMode = new OfflineMode();
+        if (offlineMode.isConnectedToRemoteAPI(this)) {
+            switch (item.getItemId()) {
+                case R.id.challenges:
+                    Intent goToChallenges = new Intent(this, MainActivity.class);
+                    startActivity(goToChallenges);
+                    break;
+                case R.id.friends:
+                    Intent goToFriends = new Intent(this, FriendsActivity.class);
+                    startActivity(goToFriends);
+                    break;
+                case R.id.history:
+                    Intent goToHistory = new Intent(this, HistoryActivity.class);
+                    startActivity(goToHistory);
+                    break;
+                case R.id.pending_duels:
+                    Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
+                    startActivity(goToPendingDuel);
+                    break;
+                case R.id.settings:
+                    Intent goToSettings = new Intent(this, SettingsActivity.class);
+                    startActivity(goToSettings);
+                    break;
+                case R.id.share:
+                    String message = "Check out Champy - it helps you improve and compete with your friends!";
+                    Intent share = new Intent(Intent.ACTION_SEND);
+                    share.setType("text/plain");
+                    share.putExtra(Intent.EXTRA_TEXT, message);
+                    startActivity(Intent.createChooser(share, "How would you like to share?"));
+                    break;
+                case R.id.nav_logout:
+                    offlineMode = new OfflineMode();
+                    SessionManager sessionManager = new SessionManager(this);
+                    if (offlineMode.isConnectedToRemoteAPI(this)) {
+                        sessionManager.logout(this);
+                    }
+                    break;
+            }
+        }
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_main_drawer, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_settings) {return true;}
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            Intent intent = new Intent(SelfImprovementActivity.this, MainActivity.class);
+            startActivity(intent);
+            super.onBackPressed();
+        }
     }
 
     // задний фон
@@ -165,7 +223,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
                 .build();
 
         final SessionManager sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user = new HashMap<>();
+        HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         String token = user.get("token");
         com.example.ivan.champy_v2.interfaces.SelfImprovement selfImprovement = retrofit.create(com.example.ivan.champy_v2.interfaces.SelfImprovement.class);
@@ -225,87 +283,6 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
 
     }
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            Intent intent = new Intent(SelfImprovementActivity.this, MainActivity.class);
-            startActivity(intent);
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.activity_main_drawer, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        OfflineMode offlineMode = new OfflineMode();
-        if (offlineMode.isConnectedToRemoteAPI(this)) {
-            switch (item.getItemId()) {
-                case R.id.challenges:
-                    Intent goToChallenges = new Intent(this, MainActivity.class);
-                    startActivity(goToChallenges);
-                    break;
-                case R.id.friends:
-                    Intent goToFriends = new Intent(this, FriendsActivity.class);
-                    startActivity(goToFriends);
-                    break;
-                case R.id.history:
-                    Intent goToHistory = new Intent(this, HistoryActivity.class);
-                    startActivity(goToHistory);
-                    break;
-                case R.id.pending_duels:
-                    Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
-                    startActivity(goToPendingDuel);
-                    break;
-                case R.id.settings:
-                    Intent goToSettings = new Intent(this, SettingsActivity.class);
-                    startActivity(goToSettings);
-                    break;
-                case R.id.share:
-                    String message = "Check out Champy - it helps you improve and compete with your friends!";
-                    Intent share = new Intent(Intent.ACTION_SEND);
-                    share.setType("text/plain");
-                    share.putExtra(Intent.EXTRA_TEXT, message);
-                    startActivity(Intent.createChooser(share, "How would you like to share?"));
-                    break;
-                case R.id.nav_logout:
-                    offlineMode = new OfflineMode();
-                    SessionManager sessionManager = new SessionManager(this);
-                    if (offlineMode.isConnectedToRemoteAPI(this)) {
-                        sessionManager.logout(this);
-                    }
-                    break;
-            }
-        }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
 
     private void hideItem() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -336,15 +313,11 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
 
     public boolean check(String id) {
         boolean ok = true;
-
         DBHelper dbHelper = new DBHelper(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-
         final ContentValues cv = new ContentValues();
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-
         int o = 0;
-
         if (c.moveToFirst()) {
             int idColIndex = c.getColumnIndex("id");
             int nameColIndex = c.getColumnIndex("name");

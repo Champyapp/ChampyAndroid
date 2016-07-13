@@ -5,8 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.example.ivan.champy_v2.activity.HistoryAllActivity;
-import com.example.ivan.champy_v2.activity.HistoryInProgressActivity;
+import com.example.ivan.champy_v2.fragment.HistoryAllFragment;
+import com.example.ivan.champy_v2.fragment.HistoryInProgressFragment;
 
 /**
  * Created by ivan on 23.03.16.
@@ -32,8 +32,8 @@ public class HistoryPagerAdapter extends FragmentPagerAdapter {
 
         switch(position) {
 
-            case 0: return new HistoryAllActivity();
-            case 1: return new HistoryInProgressActivity();
+            case 0: return new HistoryAllFragment();
+            case 1: return new HistoryInProgressFragment();
             default: return new Fragment();
 
         }

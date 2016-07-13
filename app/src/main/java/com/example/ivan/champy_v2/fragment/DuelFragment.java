@@ -1,6 +1,5 @@
 package com.example.ivan.champy_v2.fragment;
 
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,10 +11,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -23,11 +20,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.activity.MainActivity;
+import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.duel.Duel;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
@@ -47,6 +44,8 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
+// TODO: 12.07.2016 тут логика окна дуелей с другом: friends -> make challenge -> here.
+// TODO: 12.07.2016 переписать это так как SelfImprovementFragment.
 public class DuelFragment extends Fragment {
 
     public static final String ARG_PAGE = "ARG_PAGE";
@@ -127,10 +126,7 @@ public class DuelFragment extends Fragment {
             editText.setVisibility(View.INVISIBLE);
             editText = (EditText)view.findViewById(R.id.et_days);
             editText.setVisibility(View.INVISIBLE);
-            Glide.with(getContext())
-                    .load(R.drawable.points)
-                    .override(120, 120)
-                    .into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
+            Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
         }
         else {
             final int[] finalposition = new int[1];
@@ -158,10 +154,7 @@ public class DuelFragment extends Fragment {
             textView.setVisibility(View.INVISIBLE);
             textView = (TextView)view.findViewById(R.id.days_text);
             textView.setVisibility(View.INVISIBLE);
-            Glide.with(getContext())
-                    .load(R.drawable.points)
-                    .override(120, 120)
-                    .into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
+            Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
             editText = (EditText) view.findViewById(R.id.et_goal);
             description = editText.getText().toString();
             editText = (EditText) view.findViewById(R.id.et_days);
@@ -214,12 +207,10 @@ public class DuelFragment extends Fragment {
                         }
                         else {
                             OfflineMode offlineMode = new OfflineMode();
-                            if (offlineMode.isInternetAvailable(getActivity())) {
+                            if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
                                 days = Integer.parseInt(editTextGoal.getText().toString());
                                 Create_new_challenge(description, days, finalFriend_id);
                                 Toast.makeText(getContext(), "Challenge created", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(getContext(), "No Internet Connection!", Toast.LENGTH_SHORT).show();
                             }
                         }
                     } else {
@@ -427,30 +418,6 @@ public class DuelFragment extends Fragment {
     }
 
 
-    /*public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
-    }
-
-
-    public void setupUI(View view) {
-
-        //Set up touch listener for non-text box views to hide keyboard.
-        if (!(view instanceof EditText)) {
-
-            view.setOnTouchListener(new View.OnTouchListener() {
-
-                public boolean onTouch(View v, MotionEvent event) {
-                    hideSoftKeyboard(getActivity());
-                    return false;
-                }
-
-            });
-        }
-
-    }*/
-
-
     public boolean isActive(String description) {
         DBHelper dbHelper = new DBHelper(getActivity());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -483,4 +450,28 @@ public class DuelFragment extends Fragment {
 
         return ok;
     }
+
+
+    /*public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
+
+    public void setupUI(View view) {
+
+        //Set up touch listener for non-text box views to hide keyboard.
+        if (!(view instanceof EditText)) {
+
+            view.setOnTouchListener(new View.OnTouchListener() {
+
+                public boolean onTouch(View v, MotionEvent event) {
+                    hideSoftKeyboard(getActivity());
+                    return false;
+                }
+
+            });
+        }
+
+    }*/
 }

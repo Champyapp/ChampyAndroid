@@ -79,7 +79,7 @@ public class PendingDuelFragment extends Fragment {
             } while (c.moveToNext());
         }
         c.close();
-        TextView textView = (TextView)view.findViewById(R.id.textView26);
+        TextView textView = (TextView)view.findViewById(R.id.tvYouVsSomebody);
         if (recipient.equals("true")) {
             textView.setText(versus + " vs YOU");
         } else {
@@ -87,10 +87,8 @@ public class PendingDuelFragment extends Fragment {
             view.findViewById(R.id.imageButtonCancelBattle).setVisibility(View.INVISIBLE);
             view.findViewById(R.id.imageButtonAcceptBattle).setVisibility(View.INVISIBLE);
         }
-        Glide.with(getContext())
-                .load(R.drawable.points)
-                .override(120, 120)
-                .into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
+
+        Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
         Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
         textView.setTypeface(typeface);
 
@@ -100,8 +98,8 @@ public class PendingDuelFragment extends Fragment {
         textView = (TextView)view.findViewById(R.id.textViewDuring);
         textView.setText("During " + days + "days");
 
-        textView = (TextView)view.findViewById(R.id.et_goal);
-        textView.setText(description);
+        TextView etGoal = (TextView)view.findViewById(R.id.tv_goal);
+        etGoal.setText(description);
         return view;
     }
 

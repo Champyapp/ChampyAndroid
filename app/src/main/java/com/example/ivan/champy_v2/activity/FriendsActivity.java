@@ -173,8 +173,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
         if (count == 0) {
             hideItem();
-        }
-        else {
+        } else {
             view.setText("+" + (count > 0 ? String.valueOf(count) : null));
         }
 
@@ -189,7 +188,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                 viewPager.setCurrentItem(1);
             }
         }
-
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -279,7 +277,8 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         return true;
     }
 
-
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         OfflineMode offlineMode = new OfflineMode();
         if (offlineMode.isConnectedToRemoteAPI(this)) {
