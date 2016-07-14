@@ -111,7 +111,7 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         File file = new File(path, "blured2.jpg");
         Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
 
-        Log.d("TAG", "x_y" + bitmap.getWidth() + " " + bitmap.getHeight());
+        //Log.d("TAG", "x_y" + bitmap.getWidth() + " " + bitmap.getHeight());
         Drawable dr = new BitmapDrawable(getResources(), bitmap);
         dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
 
