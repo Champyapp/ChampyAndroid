@@ -87,17 +87,18 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         FacebookSdk.sdkInitialize(getApplicationContext());
         //AppEventsLogger logger = AppEventsLogger.newLogger(this);
 
-        OfflineMode offlineMode = new OfflineMode();
+        /*OfflineMode offlineMode = new OfflineMode();
         if (!offlineMode.isConnectedToRemoteAPI(this)){
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
-        }
+        }*/
+        final SessionManager sessionManager = new SessionManager(this);
+        sessionManager.checkLogin();
 
         setContentView(R.layout.activity_friends);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final SessionManager sessionManager = new SessionManager(this);
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         //String update = user.get("updateDB");
@@ -525,14 +526,14 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 
                     Log.i("stat", "FriendsActivity :" + newfriends.toString());
 
-                    /*RecyclerView rvContacts = (RecyclerView) findViewById(R.id.rvContacts);
+                    RecyclerView rvContacts = (RecyclerView) findViewById(R.id.rvContacts);
                     final PendingAdapter adapter = new PendingAdapter(newfriends, FriendsActivity.this, FriendsActivity.this, new CustomItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
                             Pending_friend friend = newfriends.get(position);
                         }
                     });
-                    rvContacts.setAdapter(adapter);*/
+                    rvContacts.setAdapter(adapter);
                 }
             }
 

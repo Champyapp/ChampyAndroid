@@ -155,6 +155,7 @@
 
     <!-- ImageView кругов конец -->
 
+    <!--         Кнопки         -->
     <ImageButton
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -172,6 +173,7 @@
         android:layout_above="@+id/textViewWinsCounter"
         android:layout_alignRight="@+id/imageViewBgTotal"
         android:layout_alignEnd="@+id/imageViewBgTotal" />
+    <!--         Кнопки         -->
 
     <!-- Текст на кругах! -->
     <TextView

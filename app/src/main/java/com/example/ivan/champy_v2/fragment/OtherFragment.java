@@ -233,13 +233,11 @@ public class OtherFragment extends Fragment {
 
                                         }
                                     });
-
-
                             request.executeAsync();
+                            swipeRefreshLayout.setRefreshing(true);
                         }
                     }
                 });
-
             }
         });
         Log.i("stat", "DBase: view returned");
