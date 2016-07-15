@@ -176,9 +176,9 @@ public class OtherFragment extends Fragment {
                                                                 cv.put("name", name);
                                                                 cv.put("photo", photo);
                                                                 cv.put("challenges", "" + data.getAllChallengesCount());
-                                                                cv.put("wins", ""       + data.getSuccessChallenges());
-                                                                cv.put("wins", ""       + data.getScore());
-                                                                cv.put("level", ""      + data.getLevel().getNumber());
+                                                                cv.put("wins", "" + data.getSuccessChallenges());
+                                                                cv.put("wins", "" + data.getScore());
+                                                                cv.put("level", "" + data.getLevel().getNumber());
                                                                 Log.i("Users", "user: " + user_name + " photo: " + photo);
 
                                                                 // отображаем друзей в списке
@@ -193,7 +193,8 @@ public class OtherFragment extends Fragment {
                                                                             "" + data.getScore(),
                                                                             "" + data.getLevel().getNumber()
                                                                     ));
-                                                                } else Log.i("stat", "DBase: not added" + user_name);
+                                                                } else
+                                                                    Log.i("stat", "DBase: not added" + user_name);
 
                                                             } else {
                                                                 // отображение всего у человека, который не установил champy
@@ -214,30 +215,36 @@ public class OtherFragment extends Fragment {
                                                                 Log.i("Users", "user: " + user_name + " photo: " + photo);
                                                                 newFriends.add(new Friend(user_name, photo, null, "0", "0", "0", "0"));
                                                                 db.insert("mytable", null, cv);
+
+                                                                RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
+                                                                Log.i("stat", "Friends :" + newFriends.toString());
+                                                                OtherAdapter adapter1 = new OtherAdapter(newFriends, getContext(), getActivity());
+                                                                rvContacts.setAdapter(adapter1);
+                                                                swipeRefreshLayout.setRefreshing(false);
                                                             }
                                                         }
 
                                                         @Override
-                                                        public void onFailure(Throwable t) {}
+                                                        public void onFailure(Throwable t) {
+
+                                                        }
                                                     });
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
                                                 }
 
                                             }
-                                            RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-                                            Log.i("stat", "Friends :" + newFriends.toString());
-                                            OtherAdapter adapter1 = new OtherAdapter(newFriends, getContext(), getActivity());
-                                            rvContacts.setAdapter(adapter1);
-                                            swipeRefreshLayout.setRefreshing(false);
-
                                         }
                                     });
+
+
                             request.executeAsync();
-                            swipeRefreshLayout.setRefreshing(true);
+                        } else {
+                            swipeRefreshLayout.setRefreshing(false);
                         }
                     }
                 });
+
             }
         });
         Log.i("stat", "DBase: view returned");
