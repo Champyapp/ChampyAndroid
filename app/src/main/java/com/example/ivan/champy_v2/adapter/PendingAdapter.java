@@ -61,8 +61,8 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
     public PendingAdapter(List<Pending_friend> contacts, Context context, Activity activity, CustomItemClickListener customItemClickListener) {
         mContacts = contacts;
         _context = context;
-        this.listener = customItemClickListener;
         this.activity = activity;
+        this.listener = customItemClickListener;
     }
 
     @Override
@@ -132,23 +132,23 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
             Glide.with(_context).load(R.drawable.start_circle_00026).placeholder(R.drawable.champy_icon2).into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleTotal));
 
             // отвечает за имя юзера в развернутом виде
+            Typeface typeFace = Typeface.createFromAsset(_context.getAssets(), "fonts/bebasneue.ttf");
             TextView tvUserName = (TextView)viewHolder.itemView.findViewById(R.id.textViewChallengesCounter);
             tvUserName.setText(contact.getName());
-            Typeface typeFace = Typeface.createFromAsset(_context.getAssets(), "fonts/bebasneue.ttf");
             tvUserName.setTypeface(typeFace);
 
             // создаем вид счетчиком в развернутом виде
             TextView textViewChallenges = (TextView)viewHolder.itemView.findViewById(R.id.textViewChallenges);
-            TextView textViewWins = (TextView)viewHolder.itemView.findViewById(R.id.textViewWins);
-            TextView textViewTotal = (TextView)viewHolder.itemView.findViewById(R.id.textViewTotal);
+            TextView textViewWins       = (TextView)viewHolder.itemView.findViewById(R.id.textViewWins);
+            TextView textViewTotal      = (TextView)viewHolder.itemView.findViewById(R.id.textViewTotal);
             textViewChallenges.setTypeface(typeFace);
             textViewWins.setTypeface(typeFace);
             textViewTotal.setTypeface(typeFace);
 
             // отвечает за счетчики в развернутом виде
             TextView counterInProgressOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_inProgress);
-            TextView counterWinsOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_wins);
-            TextView counterTotalOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
+            TextView counterWinsOpen       = (TextView)viewHolder.itemView.findViewById(R.id.info_wins);
+            TextView counterTotalOpen      = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
             counterInProgressOpen.setText(champy.get("challenges"));
             counterWinsOpen.setText(champy.get("wins"));
             counterTotalOpen.setText(champy.get("total"));
@@ -190,8 +190,8 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
 
             // отвечает за счетчики в свернутом виде
             TextView counterInProgressClose = (TextView)viewHolder.itemView.findViewById(R.id.counterInProgress);
-            TextView counterWinsClose = (TextView)viewHolder.itemView.findViewById(R.id.counterWins);
-            TextView counterTotalClose = (TextView)viewHolder.itemView.findViewById(R.id.counterTotal);
+            TextView counterWinsClose       = (TextView)viewHolder.itemView.findViewById(R.id.counterWins);
+            TextView counterTotalClose      = (TextView)viewHolder.itemView.findViewById(R.id.counterTotal);
 
             counterInProgressClose.setText(champy.get("challenges"));
             counterWinsClose.setText(champy.get("wins"));
@@ -244,7 +244,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                         @Override
                         public void onFailure(Throwable t) {}
                     });
-                    sessionManager.setRefreshPending("true");
+                    sessionManager.setRefreshPending("false");
                     mContacts.remove(position);
                     notifyItemRemoved(position);
                     selected.clear();

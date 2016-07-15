@@ -94,8 +94,8 @@ public class PendingFragment extends Fragment {
                 Pending_friend friend = friends.get(position);
             }
         });
-        FloatingActionButton floatingActionButton = (FloatingActionButton)getActivity().findViewById(R.id.fabPlus);
-        floatingActionButton.attachToRecyclerView(rvContacts);
+        //FloatingActionButton floatingActionButton = (FloatingActionButton)getActivity().findViewById(R.id.fabPlus);
+        //floatingActionButton.attachToRecyclerView(rvContacts);
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         rvContacts.setAdapter(adapter);
 
@@ -111,17 +111,13 @@ public class PendingFragment extends Fragment {
                 SessionManager sessionManager = new SessionManager(getContext());
                 HashMap<String, String> user = new HashMap<>();
                 user = sessionManager.getUserDetails();
-
                 final String id = user.get("id");
                 String token = user.get("token");
-
                 final Retrofit retrofit = new Retrofit.Builder()
                         .baseUrl(API_URL)
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
-
                 DBHelper dbHelper = new DBHelper(getContext());
-
                 final SQLiteDatabase db = dbHelper.getWritableDatabase();
                 int clearCount = db.delete("pending", null, null);
                 final ContentValues cv = new ContentValues();
