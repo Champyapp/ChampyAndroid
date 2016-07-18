@@ -165,5 +165,47 @@ public class SelfImprovement_model {
         return  arrayList;
     }
 
+    public static ArrayList<SelfImprovement_model> generateWins(Context context) {
+        DBHelper dbHelper = new DBHelper(context);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        final ContentValues cv = new ContentValues();
+        final String API_URL = "http://46.101.213.24:3007";
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        final SessionManager sessionManager = new SessionManager(context);
+        HashMap<String, String> user = new HashMap<>();
+        user = sessionManager.getUserDetails();
+        String token = user.get("token");
+        String id = user.get("id");
+        ArrayList<SelfImprovement_model> arrayList = new ArrayList<>();
+        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
+        int o = 0;
+        if (c.moveToFirst()) {
+            int idColIndex = c.getColumnIndex("id");
+            int nameColIndex = c.getColumnIndex("name");
+            int coldescription = c.getColumnIndex("description");
+            int colduration = c.getColumnIndex("duration");
+            int colchallenge_id = c.getColumnIndex("challenge_id");
+            int status = c.getColumnIndex("status");
+            int updated = c.getColumnIndex("updated");
+            Log.i("stat", "Statuskwo: o="+o);
+            do {
+                if (c.getString(status).equals("started")) arrayList.add (new SelfImprovement_model(
+                        c.getString(coldescription),
+                        c.getString(colduration),
+                        c.getString(nameColIndex),
+                        c.getString(colchallenge_id),
+                        "started",
+                        c.getString(updated)));
+            } while (c.moveToNext());
+        } else
+            Log.i("stat", "kwo0 rows");
+        c.close();
+        return  arrayList;
+    }
+
 
 }
