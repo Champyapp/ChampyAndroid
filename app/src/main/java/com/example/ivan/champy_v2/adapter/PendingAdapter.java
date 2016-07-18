@@ -244,6 +244,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                         @Override
                         public void onFailure(Throwable t) {}
                     });
+                    //щоб воно не обновляло (і дублювало) лист друзів після додавання когось, то має юути false
                     sessionManager.setRefreshPending("false");
                     mContacts.remove(position);
                     notifyItemRemoved(position);
@@ -278,8 +279,8 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                                                 .baseUrl(API_URL)
                                                 .addConverterFactory(GsonConverterFactory.create())
                                                 .build();
-                                        sessionManager.setRefreshFriends("true");
-                                        sessionManager.setRefreshPending("true");
+                                        sessionManager.setRefreshFriends("false");
+                                        sessionManager.setRefreshPending("false");
                                         DBHelper dbHelper = new DBHelper(_context);
                                         final SQLiteDatabase db = dbHelper.getWritableDatabase();
                                         final ContentValues cv = new ContentValues();

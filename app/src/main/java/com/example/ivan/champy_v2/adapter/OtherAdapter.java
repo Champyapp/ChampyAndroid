@@ -268,6 +268,7 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
 
                                         com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(Friends.class);
                                         Log.d(TAG, "Status: " + id + " " + friend);
+                                        //щоб воно не обновляло (і дублювало) лист друзів після додавання когось, то має юути false
                                         sessionManager.setRefreshPending("false");
 
                                         Log.d(TAG, "RefreshPending: " + sessionManager.getRefreshPending());

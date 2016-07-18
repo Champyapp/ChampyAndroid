@@ -247,7 +247,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                                         public void onFailure(Throwable t) {
                                         }
                                     });
-                                    sessionManager.setRefreshFriends("true");
+                                    sessionManager.setRefreshFriends("false");
                                     mContacts.remove(position);
                                     notifyItemRemoved(position);
                                     selected.clear();
