@@ -77,10 +77,16 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
     }
 
     @Override
-    public void onBindViewHolder(final HistoryChallengeAdapter.ViewHolder viewholder, int position) {
+    public void onBindViewHolder(final HistoryChallengeAdapter.ViewHolder viewHolder, int position) {
         HistoryChallenge contact = mContacts.get(position);
-        TextView nameTextView = viewholder.nameTextView;
+        TextView nameTextView = viewHolder.nameTextView;
+        TextView level = viewHolder.level;
 
+        SessionManager sessionManager = new SessionManager(_context);
+        HashMap<String, String> champy = sessionManager.getChampyOptions();
+        String userLevel = champy.get("level");
+        level.setText("Level " + userLevel + " Champy");
+        //Log.i(TAG, "FUCKING LEVEL = " + level);
         /*TextView level = viewholder.level;
         level.setText("Level " + contact.getLevel() + " Champy");*/
 
@@ -88,41 +94,40 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         Log.i(TAG, "onBindViewHolder: " + type);
 
         switch (type) {
-            case "Duel":
+            case "Duels":
                 nameTextView.setText("Duel Challenge");
-                Glide.with(_context).load(R.drawable.wakeupcolor).override(80, 80).into(viewholder.image);
+                Glide.with(_context).load(R.drawable.wakeupcolor).override(80, 80).into(viewHolder.image);
                 break;
             case "Self Improvement":
                 nameTextView.setText("Self-Improvement Challenge");
-                Glide.with(_context).load(R.drawable.selfimprovementcolor).override(80, 80).into(viewholder.image);
+                Glide.with(_context).load(R.drawable.selfimprovementcolor).override(80, 80).into(viewHolder.image);
                 break;
             case "Wake Up":
                 nameTextView.setText("Wake Up");
-                Glide.with(_context).load(R.drawable.wakeupcolor).override(80, 80).into(viewholder.image);
+                Glide.with(_context).load(R.drawable.wakeupcolor).override(80, 80).into(viewHolder.image);
                 break;
-
-
         }
 
         switch (contact.getStatus()) {
             case "started":
-                nameTextView = (TextView) viewholder.itemView.findViewById(R.id.counterWins);
+                nameTextView = (TextView) viewHolder.itemView.findViewById(R.id.counterWins);
                 nameTextView.setText("In Progress");
                 break;
             case "finished":
-                nameTextView = (TextView) viewholder.itemView.findViewById(R.id.counterWins);
+                nameTextView = (TextView) viewHolder.itemView.findViewById(R.id.counterWins);
                 nameTextView.setText("Wins");
                 break;
             case "failed":
-            nameTextView = (TextView) viewholder.itemView.findViewById(R.id.counterWins);
+            nameTextView = (TextView) viewHolder.itemView.findViewById(R.id.counterWins);
             nameTextView.setText("Failed");
             break;
         }
+
         Typeface typeFace = Typeface.createFromAsset(_context.getAssets(), "fonts/bebasneue.ttf");
         nameTextView.setTypeface(typeFace);
 
-        Glide.with(_context).load(R.drawable.challenges).override(40, 40).into(viewholder.wins);
-        Glide.with(_context).load(R.drawable.challenge) .override(40, 40).into(viewholder.total);
+        Glide.with(_context).load(R.drawable.challenges).override(40, 40).into(viewHolder.wins);
+        Glide.with(_context).load(R.drawable.challenge) .override(40, 40).into(viewHolder.total);
     }
 
     @Override

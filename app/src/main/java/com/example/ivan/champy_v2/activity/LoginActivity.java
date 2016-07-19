@@ -592,7 +592,7 @@ public class LoginActivity extends AppCompatActivity {
                                     cv.clear();
                                     String desctiption = challenge.getDescription();
                                     int end = datum.getEnd();
-                        -->         int days = round((end - unixTime) / 86400);
+                                    int days = round((end - unixTime) / 86400);
                                     String duration = "" + days;
                                     String challenge_id = challenge.get_id();
                                     cv.put("name", "Self Improvement");

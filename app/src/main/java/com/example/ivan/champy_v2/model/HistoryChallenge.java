@@ -11,14 +11,6 @@ public class HistoryChallenge {
     String duration;
     String status;
 
-    public String getLevel() {
-        return level;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
-    }
-
     public String getStatus() {
         return status;
     }
