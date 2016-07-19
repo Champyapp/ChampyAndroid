@@ -121,23 +121,19 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
 
             // отвечает за значки в развернутом виде
             ImageView imageViewUserAvatar = (ImageView)viewHolder.itemView.findViewById(R.id.imageViewUserAvatar);
-            Glide.with(_context).load(contact.getPicture()).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true).transform(new CropCircleTransformation(_context))
-                    .placeholder(R.drawable.champy_icon2).override(80, 80).dontAnimate().into(imageViewUserAvatar);
             ImageView imageViewChallengesOpen = viewHolder.mchallenges;
-            Glide.with(_context).load(R.drawable.challenges).override(40, 40).into(imageViewChallengesOpen);
-            ImageView imageViewWinsOpen = viewHolder.mwins;
-            Glide.with(_context).load(R.drawable.wins).override(40, 40).into(imageViewWinsOpen);
             ImageView imageViewTotalOpen = viewHolder.mtotal;
+            ImageView imageViewWinsOpen = viewHolder.mwins;
+            Glide.with(_context).load(R.drawable.challenges).override(40, 40).into(imageViewChallengesOpen);
             Glide.with(_context).load(R.drawable.total).override(40, 40).into(imageViewTotalOpen);
+            Glide.with(_context).load(R.drawable.wins).override(40, 40).into(imageViewWinsOpen);
+            Glide.with(_context).load(contact.getPicture()).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true).transform(new CropCircleTransformation(_context)).placeholder(R.drawable.champy_icon2).override(80, 80).dontAnimate().into(imageViewUserAvatar);
 
             // отвечает за круги в развернутом виде
-            Glide.with(_context).load(R.drawable.start_circle_00026).placeholder(R.drawable.champy_icon2)
-                    .into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleChall));
-            Glide.with(_context).load(R.drawable.start_circle_00026).placeholder(R.drawable.champy_icon2)
-                    .into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleWins));
-            Glide.with(_context).load(R.drawable.start_circle_00026).placeholder(R.drawable.champy_icon2)
-                    .into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleTotal));
+            Glide.with(_context).load(R.drawable.start_circle_00026).placeholder(R.drawable.champy_icon2).into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleChall));
+            Glide.with(_context).load(R.drawable.start_circle_00026).placeholder(R.drawable.champy_icon2).into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleWins));
+            Glide.with(_context).load(R.drawable.start_circle_00026).placeholder(R.drawable.champy_icon2).into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleTotal));
 
             // отвечает за имя юзера в развернутом виде
             TextView tvUserName = (TextView)viewHolder.itemView.findViewById(R.id.textViewChallengesCounter);
@@ -146,23 +142,23 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
             tvUserName.setTypeface(typeFace);
 
             // создаем вид счетчиком в развернутом виде
-            TextView textViewChallenges = (TextView)viewHolder.itemView.findViewById(R.id.textViewChallenges);
-            textViewChallenges.setTypeface(typeFace);
-            TextView textViewWins = (TextView)viewHolder.itemView.findViewById(R.id.textViewWins);
-            textViewWins.setTypeface(typeFace);
+            TextView tvChallenges = (TextView)viewHolder.itemView.findViewById(R.id.textViewChallenges);
             TextView tvTotal = (TextView)viewHolder.itemView.findViewById(R.id.textViewTotal);
+            TextView tvWins = (TextView)viewHolder.itemView.findViewById(R.id.textViewWins);
+            tvChallenges.setTypeface(typeFace);
             tvTotal.setTypeface(typeFace);
+            tvWins.setTypeface(typeFace);
 
             //SessionManager sessionManager = new SessionManager(_context);
             //HashMap<String, String> champy = sessionManager.getChampyOptions();
 
             // отвечает за счетчики в развернутом виде
             TextView counterInProgressOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_inProgress);
-            counterInProgressOpen.setText(contact.getmChallenges());
-            TextView counterWinsOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_wins);
-            counterWinsOpen.setText(contact.getmWins());
             TextView counterTotalOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
+            TextView counterWinsOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_wins);
+            counterInProgressOpen.setText(contact.getmChallenges());
             counterTotalOpen.setText(contact.getmTotal());
+            counterWinsOpen.setText(contact.getmWins());
 
             // отвечает за лвл юзера в свернутом виде
             TextView tvUserLevelOpen = (TextView)viewHolder.itemView.findViewById(R.id.textViewWinsCounter);
@@ -176,24 +172,23 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
         else {
             Log.i("Selected: ", position + " close");
             // отвечает за значки в свернутом виде
-            ImageView imageViewFriendPicture = viewHolder.friendImage;
-            Glide.with(_context).load(contact.getPicture()).asBitmap().transform(new CropCircleTransformation(_context)).
-                    placeholder(R.drawable.champy_icon2).diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true).override(80, 80).dontAnimate().into(imageViewFriendPicture);
             ImageView imageViewChallenges = viewHolder.challenges;
-            Glide.with(_context).load(R.drawable.challenges).override(40, 40).into(imageViewChallenges);
             ImageView imageViewWins = viewHolder.wins;
-            Glide.with(_context).load(R.drawable.wins).override(40, 40).into(imageViewWins);
             ImageView imageViewTotal = viewHolder.total;
+            ImageView imageViewFriendPicture = viewHolder.friendImage;
+            Glide.with(_context).load(R.drawable.challenges).override(40, 40).into(imageViewChallenges);
             Glide.with(_context).load(R.drawable.total).override(40, 40).into(imageViewTotal);
+            Glide.with(_context).load(R.drawable.wins).override(40, 40).into(imageViewWins);
+            Glide.with(_context).load(contact.getPicture()).asBitmap().transform(new CropCircleTransformation(_context)).
+                    placeholder(R.drawable.champy_icon2).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).override(80, 80).dontAnimate().into(imageViewFriendPicture);
 
             // отвечает за счетчики в свернутом виде
             TextView counterInProgressClose = (TextView)viewHolder.itemView.findViewById(R.id.counterInProgress);
-            counterInProgressClose.setText(contact.getmChallenges());
-            TextView counterWinsClose = (TextView)viewHolder.itemView.findViewById(R.id.counterWins);
-            counterWinsClose.setText(contact.getmWins());
             TextView counterTotalClose = (TextView)viewHolder.itemView.findViewById(R.id.counterTotal);
+            TextView counterWinsClose = (TextView)viewHolder.itemView.findViewById(R.id.counterWins);
+            counterInProgressClose.setText(contact.getmChallenges());
             counterTotalClose.setText(contact.getmTotal());
+            counterWinsClose.setText(contact.getmWins());
 
             // отвечает за лвл юзера в свернутом виде
             TextView tvUserLevelClose = (TextView)viewHolder.itemView.findViewById(R.id.level);

@@ -70,7 +70,7 @@ public class OtherFragment extends Fragment {
         DBHelper dbHelper = new DBHelper(getContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         SessionManager sessionManager = new SessionManager(getContext());
-        HashMap<String, String> user = new HashMap<>();
+        HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         final String id = user.get("id");
 
@@ -96,7 +96,7 @@ public class OtherFragment extends Fragment {
                             c.getString(level)));
 
             } while (c.moveToNext());
-        } //else Log.i("stat", "0 rows");
+        }
         c.close();
 
         Log.i("stat", "Friends: " + friends);
