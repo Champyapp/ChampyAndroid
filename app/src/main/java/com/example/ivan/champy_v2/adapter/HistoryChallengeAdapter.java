@@ -88,18 +88,20 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         Log.i(TAG, "onBindViewHolder: " + type);
 
         switch (type) {
-            case "Wake Up":
-                nameTextView.setText("Wake Up");
-                Glide.with(_context).load(R.drawable.wakeupcolor).override(80, 80).into(viewholder.image);
-                break;
             case "Duel":
                 nameTextView.setText("Duel Challenge");
                 Glide.with(_context).load(R.drawable.wakeupcolor).override(80, 80).into(viewholder.image);
                 break;
-            case "Self-Improvement Challenge":
+            case "Self Improvement":
                 nameTextView.setText("Self-Improvement Challenge");
                 Glide.with(_context).load(R.drawable.selfimprovementcolor).override(80, 80).into(viewholder.image);
                 break;
+            case "Wake Up":
+                nameTextView.setText("Wake Up");
+                Glide.with(_context).load(R.drawable.wakeupcolor).override(80, 80).into(viewholder.image);
+                break;
+
+
         }
 
         switch (contact.getStatus()) {

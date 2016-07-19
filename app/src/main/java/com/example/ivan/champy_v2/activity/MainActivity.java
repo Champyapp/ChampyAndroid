@@ -449,7 +449,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
 
         final long unixTime = System.currentTimeMillis() / 1000L;
-        final String update = "1457019726";
+        final String update = "0"; //1457019726
         Log.i("stat", "Nam nado: " + id + " " + update + " " + token);
         Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(id, update, token);
         call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
@@ -464,6 +464,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         Challenge challenge = datum.getChallenge();
                         cv.clear();
                         if (challenge.getType().equals("567d51c48322f85870fd931b")) {
+                            Log.i(TAG, "onResponse: TYPE = " + challenge.getType());
                             if (id.equals(recipient.getId())) {
                                 cv.put("recipient", "true");
                                 cv.put("versus", sender.getName());

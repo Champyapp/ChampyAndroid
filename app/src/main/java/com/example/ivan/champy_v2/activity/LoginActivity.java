@@ -89,6 +89,8 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
+import static java.lang.Math.round;
+
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "myLogs";
@@ -555,13 +557,20 @@ public class LoginActivity extends AppCompatActivity {
                             Challenge challenge = datum.getChallenge();
                             String desctiption = challenge.getDetails();
                             //int end = datum.getEnd();
-                            //int days = round((end - unixTime) / 86400);
-                            String duration = "" + 21;  // тут треба присваювати реальну цифру, а не цю хрень!
+                            //int days = (int) ((end - unixTime) / 86400);
+                            //String duration = "" + 21;  // тут треба присваювати реальну цифру, а не цю хрень!
+                            String duration = "";
+                            if (datum.getEnd() != null) {
+                                int end = datum.getEnd();
+                                int days = round((end - unixTime) / 86400);
+                                duration = "" + days;
+                            }
                             String challenge_id = datum.get_id();
                             if (challenge.getDescription().equals("Wake Up")) {
                                 cv.put("name", "Wake Up");
                             }
                             else cv.put("name", "Self Improvement");
+
                             cv.put("description", desctiption);
                             cv.put("duration", duration);
                             cv.put("challenge_id", challenge_id);

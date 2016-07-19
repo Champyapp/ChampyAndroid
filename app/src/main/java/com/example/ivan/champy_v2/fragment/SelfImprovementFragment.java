@@ -362,7 +362,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         String id = user.get("id");
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
         final long unixTime = System.currentTimeMillis() / 1000L;
-        final String update = "1457019726";
+        final String update = "0"; //1457019726
         Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(id, update, token);
         call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
             @Override
@@ -377,7 +377,8 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                         if (datum.getEnd() != null) {
                             int end = datum.getEnd();
                             int days = round((end - unixTime) / 86400);
-                            duration = "" + days;}
+                            duration = "" + days;
+                        }
                         String challenge_id = datum.get_id();
                         if (challenge.getDescription().equals("Wake Up")) cv.put("name", "Wake Up");
                         else cv.put("name", "Self Improvement");
