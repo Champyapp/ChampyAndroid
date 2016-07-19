@@ -1,4 +1,6 @@
-package com.example.ivan.champy_v2;
+package com.example.ivan.champy_v2.model;
+
+import com.example.ivan.champy_v2.Friend;
 
 import java.util.List;
 

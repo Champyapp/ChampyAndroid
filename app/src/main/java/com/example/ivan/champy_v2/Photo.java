@@ -61,20 +61,13 @@ public class Photo extends AppCompatActivity {
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
 
-        Glide.with(this)
-                .load(url)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .centerCrop()
-                .into((ImageView) findViewById(R.id.photo));
-
+        Glide.with(this).load(url).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).centerCrop().into((ImageView) findViewById(R.id.photo));
 
         this.imageView = (ImageView)this.findViewById(R.id.photo);
         TextView camera = (TextView)findViewById(R.id.camera);
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 File f=new File(path, "test.jpg");
                 picUri = Uri.fromFile(f);

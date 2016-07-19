@@ -24,8 +24,8 @@ import com.example.ivan.champy_v2.interfaces.CustomItemClickListener;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.Friend;
 import com.example.ivan.champy_v2.OfflineMode;
-import com.example.ivan.champy_v2.Other;
-import com.example.ivan.champy_v2.Pending_friend;
+import com.example.ivan.champy_v2.model.Other;
+import com.example.ivan.champy_v2.model.Pending_friend;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.interfaces.Friends;
@@ -120,8 +120,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
             ImageView imageViewChallengesOpen = viewHolder.mChallenges;
             ImageView imageViewWinsOpen = viewHolder.mWins;
             ImageView imageViewTotalOpen = viewHolder.mTotal;
-            Glide.with(_context).load(contact.getPicture()).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true).transform(new CropCircleTransformation(_context)).placeholder(R.drawable.champy_icon2).override(80, 80).dontAnimate().into(imageViewUserAvatar);
+            Glide.with(_context).load(contact.getPicture()).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).transform(new CropCircleTransformation(_context)).placeholder(R.drawable.champy_icon2).override(80, 80).dontAnimate().into(imageViewUserAvatar);
             Glide.with(_context).load(R.drawable.challenges).override(40, 40).into(imageViewChallengesOpen);
             Glide.with(_context).load(R.drawable.wins).override(40, 40).into(imageViewWinsOpen);
             Glide.with(_context).load(R.drawable.total).override(40, 40).into(imageViewTotalOpen);
@@ -182,8 +181,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
             ImageView imageViewWins = viewHolder.wins;
             ImageView imageViewTotal = viewHolder.total;
 
-            Glide.with(_context).load(contact.getPicture()).asBitmap().transform(new CropCircleTransformation(_context)).
-                    placeholder(R.drawable.champy_icon2).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).override(80, 80).dontAnimate().into(imageViewFriendPicture);
+            Glide.with(_context).load(contact.getPicture()).asBitmap().transform(new CropCircleTransformation(_context)).placeholder(R.drawable.champy_icon2).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).override(80, 80).dontAnimate().into(imageViewFriendPicture);
             Glide.with(_context).load(R.drawable.challenges).override(40, 40).into(imageViewChallenges);
             Glide.with(_context).load(R.drawable.wins).override(40, 40).into(imageViewWins);
             Glide.with(_context).load(R.drawable.total).override(40, 40).into(imageViewTotal);

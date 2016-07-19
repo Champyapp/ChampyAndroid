@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.example.ivan.champy_v2.fragment.HistoryAllFragment;
+import com.example.ivan.champy_v2.fragment.HistoryFailedFragment;
 import com.example.ivan.champy_v2.fragment.HistoryInProgressFragment;
 import com.example.ivan.champy_v2.fragment.HistoryWinsFragment;
 
@@ -15,7 +15,7 @@ import com.example.ivan.champy_v2.fragment.HistoryWinsFragment;
 public class HistoryPagerAdapter extends FragmentPagerAdapter {
 
     final int PAGE_COUNT = 3;
-    private String tabTitles[] = new String[] { "All", "In Progress", "Wins" };
+    private String tabTitles[] = new String[] { "In Progress", "Wins", "Failed" };
     private Context context;
 
     public HistoryPagerAdapter(FragmentManager fm, Context context) {
@@ -31,9 +31,9 @@ public class HistoryPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch(position) {
-            case 0: return new HistoryAllFragment();
-            case 1: return new HistoryInProgressFragment();
-            case 2: return new HistoryWinsFragment();
+            case 0: return new HistoryInProgressFragment();
+            case 1: return new HistoryWinsFragment();
+            case 2: return new HistoryFailedFragment();
             default: return new Fragment();
         }
     }

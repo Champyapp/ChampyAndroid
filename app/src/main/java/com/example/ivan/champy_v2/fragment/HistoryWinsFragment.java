@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.ivan.champy_v2.HistoryChallenge;
+import com.example.ivan.champy_v2.model.HistoryChallenge;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.adapter.HistoryChallengeAdapter;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
@@ -26,8 +26,8 @@ public class HistoryWinsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_second, container, false);
 
-        ArrayList<SelfImprovement_model> self_improvement = SelfImprovement_model.generate(getContext());
-        ArrayList<HistoryChallenge> all = new ArrayList<>();
+        ArrayList<SelfImprovement_model> self_improvement = SelfImprovement_model.generateWins(getContext());
+        ArrayList<HistoryChallenge> winsArray = new ArrayList<>();
 
         for (int i = 0; i < self_improvement.size(); i++) {
             SelfImprovement_model item = self_improvement.get(i);
@@ -36,11 +36,11 @@ public class HistoryWinsFragment extends Fragment {
             String status = item.getStatus();
             String type = item.getType();
 
-            all.add(new HistoryChallenge(type, true, description, duration, status));
+            winsArray.add(new HistoryChallenge(type, true, description, duration, status));
         }
 
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-        HistoryChallengeAdapter adapter = new HistoryChallengeAdapter(all, getContext());
+        HistoryChallengeAdapter adapter = new HistoryChallengeAdapter(winsArray, getContext());
         rvContacts.setAdapter(adapter);
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         return view;

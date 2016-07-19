@@ -1,6 +1,6 @@
 package com.example.ivan.champy_v2.interfaces;
 
-import com.example.ivan.champy_v2.MainPojo;
+import com.example.ivan.champy_v2.model.MainPojo;
 
 import java.util.List;
 

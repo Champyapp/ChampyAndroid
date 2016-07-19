@@ -1,7 +1,7 @@
 package com.example.ivan.champy_v2;
 
 /**
- * Created by ivan on 05.02.16.
+ * Don't replace this class.
  */
 public class Friend {
 

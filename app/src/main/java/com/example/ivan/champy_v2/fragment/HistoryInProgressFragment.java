@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.ivan.champy_v2.HistoryChallenge;
+import com.example.ivan.champy_v2.model.HistoryChallenge;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.adapter.HistoryChallengeAdapter;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
@@ -35,10 +35,12 @@ public class HistoryInProgressFragment extends Fragment{
 
         for (int i=0; i<self_improvement.size(); i++) {
             SelfImprovement_model item = self_improvement.get(i);
-            String descritption = item.getGoal();
+            String description = item.getGoal();
             String duration = item.getDays();
+            String status = item.getStatus();
+            String type = item.getType();
 
-            all.add(new HistoryChallenge(item.getType(),true,descritption, duration, item.getStatus()));
+            all.add(new HistoryChallenge(type, true, description, duration, status));
         }
 
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);

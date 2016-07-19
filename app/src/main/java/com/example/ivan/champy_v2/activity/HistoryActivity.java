@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.ivan.champy_v2.Friend;
 import com.example.ivan.champy_v2.adapter.HistoryPagerAdapter;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
@@ -58,7 +59,7 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final SessionManager sessionManager = new SessionManager(this);
-        HashMap<String, String> user = new HashMap<>();
+        HashMap<String, String> user;
         user = sessionManager.getUserDetails();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -97,9 +98,11 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
 
         String name = user.get("name");
 
+
         ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        TextView textView = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        textView.setText(name);
+        TextView tvUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        TextView tvUserLevel = (TextView) headerLayout.findViewById(R.id.level);
+        tvUserName.setText(name);
         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
@@ -149,7 +152,7 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         return super.onOptionsItemSelected(item);
     }
 
-
+    @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         OfflineMode offlineMode = new OfflineMode();
         if (offlineMode.isConnectedToRemoteAPI(this)) {

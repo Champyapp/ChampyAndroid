@@ -23,7 +23,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.Friend;
 import com.example.ivan.champy_v2.OfflineMode;
-import com.example.ivan.champy_v2.Other;
+import com.example.ivan.champy_v2.model.Other;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.interfaces.Friends;
@@ -108,8 +108,8 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
         HashMap<String, String> champy = sessionManager.getChampyOptions();
 
         // Set item views based on the data model
-        TextView textView = viewHolder.nameTextView;
-        textView.setText(contact.getName());
+        TextView nameTextView = viewHolder.nameTextView;
+        nameTextView.setText(contact.getName());
 
         Log.i("Selected", "" + selected.contains(position));
 
@@ -166,7 +166,7 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
 
             // отвечает за лвл юзера в свернутом виде
             TextView tvUserLevelOpen = (TextView)viewHolder.itemView.findViewById(R.id.textViewWinsCounter);
-            tvUserLevelOpen.setText("Level " + contact.getmLevel() + "level" + " Champy");
+            tvUserLevelOpen.setText("Level " + contact.getmLevel() + " Champy");
 
             // делаем view open видимой, view close невидимой
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.VISIBLE);

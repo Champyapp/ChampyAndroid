@@ -1,4 +1,4 @@
-package com.example.ivan.champy_v2;
+package com.example.ivan.champy_v2.model;
 
 /**
  * Created by ivan on 05.02.16.

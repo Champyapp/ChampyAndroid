@@ -1,13 +1,23 @@
-package com.example.ivan.champy_v2;
+package com.example.ivan.champy_v2.model;
 
 public class HistoryChallenge {
 
     boolean active;
 
+    String level;
+
     String type;
     String description;
     String duration;
     String status;
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
 
     public String getStatus() {
         return status;
