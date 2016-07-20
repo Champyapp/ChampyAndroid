@@ -86,13 +86,15 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
             int colchallenge_id = c.getColumnIndex("challenge_id");
             do {
                 o++;
-                if (o > position + 1) break;
-                if (o == position + 1) {
-                    name = c.getString(nameColIndex);
-                    description = c.getString(coldescription);
-                    duration = c.getString(colduration);
-                    challenge_id = c.getString(colchallenge_id);
-                }
+                //if (!c.getString(nameColIndex).equals("User_Challenge")) {
+                    if (o > position + 1) break;
+                    if (o == position + 1) {
+                        name = c.getString(nameColIndex);
+                        description = c.getString(coldescription);
+                        duration = c.getString(colduration);
+                        challenge_id = c.getString(colchallenge_id);
+                    }
+                //}
             } while (c.moveToNext());
         }
         c.close();
@@ -110,46 +112,41 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         }
 
         tvGoal.setText(description);
-        tvGoal.setTypeface(typeface);
-        tvGoal.setVisibility(View.VISIBLE);
-
         tvDays.setText("" + days);
+        tvGoal.setTypeface(typeface);
         tvDays.setTypeface(typeface);
-        tvDays.setVisibility(View.VISIBLE);
-
-        etGoal.setVisibility(View.INVISIBLE);
-        etDays.setVisibility(View.INVISIBLE);
+        //tvGoal.setVisibility(View.VISIBLE);
+        //tvDays.setVisibility(View.VISIBLE);
+        //etGoal.setVisibility(View.INVISIBLE);
+        //etDays.setVisibility(View.INVISIBLE);
 
         Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView)view.findViewById(R.id.imageViewAcceptButton));
 
         if (!isActive(description)){
-            final int[] finalposition = new int[1];
+            //final int[] finalposition = new int[1];
             final ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.pager);
             CHSetupUI chSetupUI = new CHSetupUI();
             chSetupUI.setupUI(getActivity().findViewById(R.id.selfimprovement), getActivity());
             chSetupUI.setupUI(view, getActivity());
-            if (position == size || name.equals("User_Challenge")) {
-                etGoal.setText(description);
+            if (position == size) {
                 etGoal.setTypeface(typeface);
-                etGoal.setVisibility(View.VISIBLE);
-
                 etDays.setTypeface(typeface);
-                if (duration != null && duration != "") {
-                    days = Integer.parseInt(duration) / 86400;
-                }
-                etDays.setText("" + days);
+                //if (duration != null && duration != "") {
+                //    days = Integer.parseInt(duration) / 86400;
+                //}
+                //etDays.setText("" + days);
+                //tvGoal.setVisibility(View.INVISIBLE);
+                etGoal.setText(description);
                 etDays.setHint("21");
                 etDays.setVisibility(View.VISIBLE);
-                TextView daysText = (TextView) view.findViewById(R.id.tvDays);
-                daysText.setTypeface(typeface);
-                tvGoal.setVisibility(View.INVISIBLE);
+                etGoal.setVisibility(View.VISIBLE);
                 tvDays.setVisibility(View.INVISIBLE);
             }
 
-            ImageButton imageButton = (ImageButton) getActivity().findViewById(R.id.imageButtonAcceptSelfImprovement);
-            imageButton.setVisibility(View.VISIBLE);
-            imageButton.setOnClickListener(this);
-            imageButton.setOnLongClickListener(new View.OnLongClickListener() {
+            ImageButton buttonAccept = (ImageButton) getActivity().findViewById(R.id.imageButtonAcceptSelfImprovement);
+            //buttonAccept.setVisibility(View.VISIBLE);
+            buttonAccept.setOnClickListener(this);
+            buttonAccept.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     String name = "";
@@ -159,12 +156,12 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                     int days = 21;
 
                     EditText etGoal = (EditText) view.findViewById(R.id.et_goal);
-                    description = etGoal.getText().toString();
                     EditText etDays = (EditText) view.findViewById(R.id.et_days);
+                    description = etGoal.getText().toString();
                     duration = etDays.getText().toString();
 
                     if (!etDays.getText().toString().isEmpty()){
-                        days = Integer.parseInt(etDays.getText().toString());
+                        days = Integer.parseInt(duration);
                     }
 
                     Cursor c = db.query("selfimprovement", null, null, null, null, null, null);
@@ -172,8 +169,10 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                     int size = sessionManager.getSelfSize();
                     OfflineMode offlineMode = new OfflineMode();
                     if (position == size) {
+                        // тут би треба було days присваювати значення, яке вводить юзер
                         if ((!isActive(description)) && offlineMode.isConnectedToRemoteAPI(getActivity()) && (!description.isEmpty()) &&
                                 (!description.startsWith(" ")) && (days != 0) && (!duration.isEmpty()) && (!isActive(description))) {
+
                             days = Integer.parseInt(duration);
                             Create_new_challenge(description, days);
                             Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
@@ -183,10 +182,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                                 Toast.makeText(getContext(), "Already exist", Toast.LENGTH_SHORT).show();
                                 return true;
                             }
-                            //if ((description.isEmpty() || description.startsWith(" ")) && (days == 0 || duration.isEmpty())) {
-                            //    Toast.makeText(getContext(), "Card is empty!", Toast.LENGTH_SHORT).show();
-                            //    return true;
-                            //}
                             if (description.isEmpty() || description.startsWith(" ")) {
                                 Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();
                                 return true;
@@ -198,6 +193,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                         }
                     }
                     else {
+                        // тут би треба було days присваювати значення, яке вводить юзер
                         int o = 0;
                         if (c.moveToFirst()) {
                             int idColIndex = c.getColumnIndex("id");
@@ -303,7 +299,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 
     public void StartSingleInProgress(final String challenge) {
         final SessionManager sessionManager = new SessionManager(getContext());
-        HashMap<String, String> user = new HashMap<>();
+        HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         String token = user.get("token");
 
@@ -314,26 +310,22 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                 .build();
 
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
-        Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call =
-                singleinprogress.start_single_in_progress(
-                        challenge,
-                        token
-                );  
+        Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call = singleinprogress.start_single_in_progress(challenge, token);
         call.enqueue(new Callback<com.example.ivan.champy_v2.single_inprogress.SingleInProgress>() {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    Log.i("stat", "Status: Starting OK");
+                    //Log.i("stat", "Status: Starting OK");
                     ContentValues cv = new ContentValues();
                     com.example.ivan.champy_v2.single_inprogress.SingleInProgress data = response.body();
                     cv.put("challenge_id", data.getData().get_id());
-                    Log.d("myLogs", "Added: " + data.getData().get_id());
+                    //Log.d("myLogs", "Added: " + data.getData().get_id());
                     cv.put("updated", "false");
                     DBHelper dbHelper = new DBHelper(getActivity());
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
                     db.insert("updated", null, cv);
                     generate();
-                } else Log.i("stat", "Status: Starting WRONG" + response.code());
+                } //else Log.i("stat", "Status: Starting WRONG" + response.code());
             }
 
             @Override
@@ -380,8 +372,15 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                             duration = "" + days;
                         }
                         String challenge_id = datum.get_id();
-                        if (challenge.getDescription().equals("Wake Up")) cv.put("name", "Wake Up");
-                        else cv.put("name", "Self Improvement");
+                        // добавить дуели?
+                        if (challenge.getDescription().equals("Wake Up")) {
+                            cv.put("name", "Wake Up");
+                        } else if (challenge.getDescription().equals("Self Improvement")) {
+                            cv.put("name", "Self Improvement");
+                        } else {
+                          cv.put("name", "Duel");
+                        }
+
                         cv.put("description", desctiption);
                         cv.put("duration", duration);
                         cv.put("challenge_id", challenge_id);

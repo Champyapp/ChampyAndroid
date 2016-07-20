@@ -66,8 +66,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer,
-                toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
@@ -213,47 +212,46 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("selfimprovement", null, null);
         final ContentValues cv = new ContentValues();
-
         final String API_URL = "http://46.101.213.24:3007";
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         final SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         String token = user.get("token");
+
         com.example.ivan.champy_v2.interfaces.SelfImprovement selfImprovement = retrofit.create(com.example.ivan.champy_v2.interfaces.SelfImprovement.class);
         Call<com.example.ivan.champy_v2.model.Self.SelfImprovement> call = selfImprovement.getChallenges(token);
-        Log.i("stat", "Status: RUN");
+        //Log.i("stat", "Status: RUN");
         call.enqueue(new Callback<com.example.ivan.champy_v2.model.Self.SelfImprovement>() {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.model.Self.SelfImprovement> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    Log.i("stat", "Status: OK");
+                    //Log.i("stat", "Status: OK" + response.message());
                     List<Datum> data = response.body().getData();
+                    //Log.i("TAG", "DATAAAAAAAA: " );
                     int data_size = 0;
                     for (int i = 0; i < data.size(); i++) {
+
                         com.example.ivan.champy_v2.model.Self.Datum datum = data.get(i);
-                        Log.i("stat", "Status: " + datum.getType().getName());
-                        if (datum.getType().getName().equals("self improvement")) {
-                            if (check(datum.get_id())) {
+                        String datumType = datum.getType().getName();
+                        //Log.i("stat", "Status: " + datum.getAdditionalProperties());
+                        //Log.i("asdsad", "onResponse: " + datum);
+                        if (datumType.equals("self improvement") /*&& !datumType.equals("wake up") && !datumType.equals("duels")*/) {
+                            if (check(datum.get_id())) { // карточка не активна - ок
                                 cv.put("name", datum.getName());
-                                Log.i("stat", "Status: " + datum.getName());
                                 cv.put("description", datum.getDescription());
                                 cv.put("duration", datum.getDuration());
                                 cv.put("challenge_id", datum.get_id());
                                 db.insert("selfimprovement", null, cv);
+                                //Log.i("stat", "Status: " + datum.getName());
                                 data_size++;
-                            }
-                            else {
+                            } else {  // карточка активка - кидаем имя "active"
                                 cv.put("name", "active");
-                                Log.i("stat", "Status: " + "active");
                                 cv.put("description", datum.getDescription());
                                 cv.put("duration", datum.getDuration());
                                 cv.put("challenge_id", datum.get_id());
                                 db.insert("selfimprovement", null, cv);
+                                //Log.i("stat", "Status: " + "active");
                                 data_size++;
                             }
                         }
@@ -270,7 +268,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
                     viewPager.setClipToPadding(false);
                     viewPager.setPadding(90, 0, 90, 0);
 
-                } else Log.i("stat", "Status: WRONG");
+                } //else Log.i("stat", "Status: WRONG");
             }
 
             @Override

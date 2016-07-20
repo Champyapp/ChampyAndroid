@@ -10,6 +10,7 @@ public class Datum {
     private String name;
     private Type type;
     private String description;
+    private String createdBy;
     private String details;
     private Integer created;
     private Integer updated;
@@ -66,6 +67,16 @@ public class Datum {
 
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
+    }
+
+
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
     }
 
 

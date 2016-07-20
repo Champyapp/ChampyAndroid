@@ -1,4 +1,3 @@
-
 package com.example.ivan.champy_v2.model.Self;
 
 import java.util.ArrayList;
@@ -12,6 +11,7 @@ public class SelfImprovement {
     private String description;
     private List<Datum> data = new ArrayList<Datum>();
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
 
     /**
      * 

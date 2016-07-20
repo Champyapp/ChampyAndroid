@@ -106,65 +106,47 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
             } while (c.moveToNext());
         }
         c.close();
-        if (isActive(description)) {
-            Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
-            TextView textView = (TextView)view.findViewById(R.id.goal_text);
-            textView.setText(description);
-            textView.setTypeface(typeface);
-            textView.setVisibility(View.VISIBLE);
-            textView = (TextView)view.findViewById(R.id.days_text);
-            int days = 0;
-            if (duration != null && duration != "") {
-                days = Integer.parseInt(duration) / 86400;
-            }
-            textView.setText("" + days);
-            textView.setTypeface(typeface);
-            textView.setVisibility(View.VISIBLE);
-            EditText editText = (EditText) view.findViewById(R.id.et_goal);
-            editText.setVisibility(View.INVISIBLE);
-            editText = (EditText)view.findViewById(R.id.et_days);
-            editText.setVisibility(View.INVISIBLE);
-            Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
+        final SessionManager sessionManager = new SessionManager(getContext());
+        int size = sessionManager.getSelfSize();
+        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
+        TextView tvGoal = (TextView)view.findViewById(R.id.goal_text);
+        TextView tvDays = (TextView)view.findViewById(R.id.days_text);
+        EditText etGoal = (EditText)view.findViewById(R.id.et_goal);
+        EditText etDays = (EditText)view.findViewById(R.id.et_days);
+
+        int days = 0;
+        if (duration != null && duration != "") {
+            days = Integer.parseInt(duration) / 86400;
         }
-        else {
+
+        tvGoal.setText(description);
+        tvDays.setText("" + days);
+        tvGoal.setTypeface(typeface);
+        tvDays.setTypeface(typeface);
+        tvDays.setVisibility(View.VISIBLE);
+        tvGoal.setVisibility(View.VISIBLE);
+        etDays.setVisibility(View.INVISIBLE);
+        etGoal.setVisibility(View.INVISIBLE);
+        Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
+        ImageButton imageButtonAccept = (ImageButton) getActivity().findViewById(R.id.ok);
+
+        if (!isActive(description)) {
             final int[] finalposition = new int[1];
             final ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.pager_duel);
             CHSetupUI chSetupUI = new CHSetupUI();
             chSetupUI.setupUI(getActivity().findViewById(R.id.duel_back), getActivity());
             chSetupUI.setupUI(view, getActivity());
 
-            Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
-            EditText editText = (EditText) view.findViewById(R.id.et_goal);
-            editText.setText(description);
-            editText.setTypeface(typeface);
-            editText.setVisibility(View.VISIBLE);
-            editText = (EditText) view.findViewById(R.id.et_days);
-            editText.setTypeface(typeface);
-            int days = 0;
-            if (duration != null && duration != "") {
-                days = Integer.parseInt(duration) / 86400;
+            if (position == size) {
+                etDays.setVisibility(View.VISIBLE);
+                etGoal.setVisibility(View.VISIBLE);
             }
-            editText.setText("" + days);
-            editText.setVisibility(View.VISIBLE);
-            TextView textView = (TextView) view.findViewById(R.id.tvDays);
-            textView.setTypeface(typeface);
-            textView = (TextView)view.findViewById(R.id.goal_text);
-            textView.setVisibility(View.INVISIBLE);
-            textView = (TextView)view.findViewById(R.id.days_text);
-            textView.setVisibility(View.INVISIBLE);
-            Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
-            editText = (EditText) view.findViewById(R.id.et_goal);
-            description = editText.getText().toString();
-            editText = (EditText) view.findViewById(R.id.et_days);
-            days = Integer.parseInt(editText.getText().toString());
-            Log.i("stat", "Description: " + description);
-            ImageButton imageButton = (ImageButton) getActivity().findViewById(R.id.ok);
-            imageButton.setVisibility(View.VISIBLE);
 
-            imageButton.setOnClickListener(this);
+
+            imageButtonAccept.setOnClickListener(this);
 
             final String finalFriend_id = friend_id;
-            imageButton.setOnLongClickListener(new View.OnLongClickListener() {
+            imageButtonAccept.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     String name = "";
@@ -181,9 +163,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
                     } else days = Integer.parseInt(editTextGoal.getText().toString());
                     Cursor c = db.query("duel", null, null, null, null, null, null);
                     int position = viewPager.getCurrentItem();
-                    final SessionManager sessionManager = new SessionManager(getContext());
                     int size = sessionManager.getSelfSize();
-
                     Log.i("stat", "Click: " + position + " " + size);
                     if (position == size) {
                         editTextGoal = (EditText) view.findViewById(R.id.et_goal);
