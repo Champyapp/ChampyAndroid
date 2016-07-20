@@ -3,27 +3,23 @@
     package="com.example.ivan.champy_v2"
     android:installLocation="auto">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="com.example.ivan.champy_v2.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <permission
-        android:name="com.example.ivan.champy_v2.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
-
-    <uses-permission android:name="com.example.ivan.champy_v2.permission.C2D_MESSAGE" />
-
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <uses-feature android:name="android.hardware.touchscreen.multitouch" android:required="false" />
-
     <uses-feature android:name="android.hardware.camera" android:required="true" />
+
+    <permission android:name="com.example.ivan.champy_v2.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
 
     <application
         android:allowBackup="true"
@@ -31,29 +27,26 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/app_id" />
 
-        <activity
-            android:name="com.facebook.FacebookActivity"
+        <activity android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity
-            android:name=".activity.RoleControllerActivity"
+        <activity android:name=".activity.RoleControllerActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity
-            android:name=".activity.MainActivity"
+        <activity android:name=".activity.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activity.LoginActivity"
+        <activity android:name=".activity.LoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
@@ -62,82 +55,57 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".activity.FriendsActivity"
+        <activity android:name=".activity.FriendsActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activity.SettingsActivity"
+        <activity android:name=".activity.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activity.TermsActivity"
+        <activity android:name=".activity.TermsActivity"
             android:label="Terms"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activity.PrivacyActivity"
+        <activity android:name=".activity.PrivacyActivity"
             android:label="Privacy"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activity.ContactUsActivity"
+        <activity android:name=".activity.ContactUsActivity"
             android:label="Contact Us"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Photo" />
-        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
-        <activity
-            android:name=".activity.SelfImprovementActivity"
+        <activity android:name=".activity.SelfImprovementActivity"
             android:label="@string/title_activity_self_improvement1"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activity.HistoryActivity"
+        <activity android:name=".activity.HistoryActivity"
             android:label="@string/title_activity_history"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activity.WakeUpActivity"
+        <activity android:name=".activity.WakeUpActivity"
             android:label="@string/title_activity_wake_up"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activity.AlarmReceiverActivity"
+        <activity android:name=".activity.AlarmReceiverActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-
-        <service
-            android:name=".AlarmService"
-            android:enabled="true" />
-
-        <receiver android:name=".AlarmReceiver" />
-        <receiver android:name=".AlarmSchedule" />
-
-        <activity
-            android:name=".activity.DuelActivity"
+        <activity android:name=".activity.DuelActivity"
             android:label="@string/title_activity_duel"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activity.PendingDuelActivity"
+        <activity android:name=".activity.PendingDuelActivity"
             android:label="@string/title_activity_pending__duel"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Photo"
+            android:screenOrientation="portrait"/>
 
-        <service
-            android:name="com.example.ivan.champy_v2.MyGcmListenerService"
-            android:exported="false" >
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-            </intent-filter>
-        </service>
-
-        <receiver
-            android:name="com.google.android.gms.gcm.GcmReceiver"
+        <receiver android:name=".AlarmReceiver" />
+        <receiver android:name=".AlarmSchedule" />
+        <receiver android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
@@ -145,6 +113,16 @@
                 <category android:name="com.example.ivan.champy_v2" />
             </intent-filter>
         </receiver>
+
+        <service android:name=".AlarmService"
+        android:enabled="true" />
+        <service android:name="com.example.ivan.champy_v2.MyGcmListenerService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>

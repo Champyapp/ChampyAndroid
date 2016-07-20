@@ -12,7 +12,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView13"
+        android:id="@+id/imageViewLogo"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:src="@mipmap/ic_launcher"
@@ -31,7 +31,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="32dp"
-        android:layout_below="@+id/imageView13" />
+        android:layout_below="@+id/imageViewLogo" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager_pending_duel"

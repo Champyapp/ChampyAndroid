@@ -105,7 +105,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         EditText etDays = (EditText)view.findViewById(R.id.et_days);
 
         int days = 21;
-        if (duration != null && duration != "") {
+        if (duration != null && !duration.isEmpty()) {
             days = Integer.parseInt(duration) / 86400;
         }
 

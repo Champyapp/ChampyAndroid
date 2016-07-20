@@ -148,7 +148,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
             TextView counterInProgressOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_inProgress);
             TextView counterTotalOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
             TextView counterWinsOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_wins);
-            counterInProgressOpen.setText(contact.getmChallenges());
+            counterInProgressOpen.setText(champy.get("challenges"));
             counterTotalOpen.setText(champy.get("total"));
             counterWinsOpen.setText(champy.get("wins"));
 
@@ -188,12 +188,12 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
 
             // отвечает за счетчики в свернутом виде
             TextView counterInProgressClose = (TextView)viewHolder.itemView.findViewById(R.id.counterInProgress);
-            TextView counterWinsClose       = (TextView)viewHolder.itemView.findViewById(R.id.counterWins);
-            TextView counterTotalClose      = (TextView)viewHolder.itemView.findViewById(R.id.counterTotal);
+            TextView counterTotalClose = (TextView)viewHolder.itemView.findViewById(R.id.counterTotal);
+            TextView counterWinsClose = (TextView)viewHolder.itemView.findViewById(R.id.counterWins);
 
             counterInProgressClose.setText(champy.get("challenges"));
-            counterWinsClose.setText(champy.get("wins"));
             counterTotalClose.setText(champy.get("total"));
+            counterWinsClose.setText(champy.get("wins"));
 
             // отвечает за лвл юзера в свернутом виде
             TextView tvUserLevelClose = (TextView)viewHolder.itemView.findViewById(R.id.level);

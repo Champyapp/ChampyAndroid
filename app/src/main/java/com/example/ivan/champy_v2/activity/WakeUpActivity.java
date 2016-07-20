@@ -40,7 +40,6 @@ import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
-import com.facebook.login.LoginManager;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -78,8 +77,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
             startActivity(intent);
         }
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
@@ -105,7 +103,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         TextView tvDuration = (TextView)findViewById(R.id.textView23);
         tvDuration.setTypeface(typeface);
 
-        Glide.with(this).load(R.drawable.wakeupwhite).override(110, 110).into((ImageView) findViewById(R.id.imageView13));
+        Glide.with(this).load(R.drawable.wakeupwhite).override(110, 110).into((ImageView) findViewById(R.id.imageViewLogo));
         Glide.with(this).load(R.drawable.wakeuptext).override(180, 150).into((ImageView) findViewById(R.id.imageView12));
 
         RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.wake_up);

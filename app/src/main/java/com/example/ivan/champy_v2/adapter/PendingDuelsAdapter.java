@@ -12,6 +12,7 @@ import com.example.ivan.champy_v2.fragment.PendingDuelFragment;
  * Created by ivan on 14.03.16.
  */
 public class PendingDuelsAdapter extends FragmentStatePagerAdapter {
+
     SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
     int size = 0;
 

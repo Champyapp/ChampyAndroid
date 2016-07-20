@@ -19,7 +19,7 @@ import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.R;
 
 /**
- * Created by ivan on 14.03.16.
+ * Fragment отвечающий за принятие или отмену дуели (то самое секретное меню)
  */
 public class PendingDuelFragment extends Fragment {
 
@@ -36,7 +36,7 @@ public class PendingDuelFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.i("stat", "Status: Created");
+        Log.i("stat", "Status: PendingDuelFragment Created");
         super.onCreate(savedInstanceState);
     }
 
@@ -79,24 +79,26 @@ public class PendingDuelFragment extends Fragment {
             } while (c.moveToNext());
         }
         c.close();
-        TextView textView = (TextView)view.findViewById(R.id.tvYouVsSomebody);
+        TextView tvUserVsUser = (TextView)view.findViewById(R.id.tvYouVsSomebody);
         if (recipient.equals("true")) {
-            textView.setText(versus + " vs YOU");
+            tvUserVsUser.setText(versus + " vs YOU");
         } else {
-            textView.setText("YOU vs " + versus);
+            tvUserVsUser.setText("YOU vs " + versus);
             view.findViewById(R.id.imageButtonCancelBattle).setVisibility(View.INVISIBLE);
             view.findViewById(R.id.imageButtonAcceptBattle).setVisibility(View.INVISIBLE);
         }
 
         Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
         Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
-        textView.setTypeface(typeface);
+        tvUserVsUser.setTypeface(typeface);
 
 
-      //  int days = Integer.parseInt(duration);
         int days = 21;
-        textView = (TextView)view.findViewById(R.id.textViewDuring);
-        textView.setText("During " + days + "days");
+        if (duration != null && !duration.isEmpty()) {
+            days = Integer.parseInt(duration) / 86400;
+        }
+        tvUserVsUser = (TextView)view.findViewById(R.id.textViewDuring);
+        tvUserVsUser.setText("During " + days + "days");
 
         TextView etGoal = (TextView)view.findViewById(R.id.tv_goal);
         etGoal.setText(description);

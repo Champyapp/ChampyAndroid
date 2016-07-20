@@ -84,21 +84,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Duel"
-        android:id="@+id/duel"
-        android:layout_below="@+id/imageView17"
-        android:layout_centerHorizontal="true"
-        android:textColor="#ffffff"
-        android:layout_marginTop="16dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
+        android:text="Duel with UserName"
         android:id="@+id/tvYouVsFriend"
-        android:layout_below="@+id/duel"
-        android:layout_centerHorizontal="true"
-        android:textColor="#ffffff" />
+        android:textColor="#ffffff"
+        android:layout_below="@+id/imageView17"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

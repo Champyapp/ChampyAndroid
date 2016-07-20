@@ -27,7 +27,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -38,7 +37,6 @@ import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.model.Self.*;
 import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -91,7 +89,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         TextView tvIChallengeMyFriendTo = (TextView)findViewById(R.id.textView20);
         tvIChallengeMyFriendTo.setTypeface(typeface);
 
-        Glide.with(this).load(R.drawable.selfimprovementicon).override(130, 130).into((ImageView) findViewById(R.id.imageView13));
+        Glide.with(this).load(R.drawable.selfimprovementicon).override(130, 130).into((ImageView) findViewById(R.id.imageViewLogo));
         Glide.with(this).load(R.drawable.selfimprtext).override(200, 170).into((ImageView) findViewById(R.id.imageView12));
 
         RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.selfimprovement);

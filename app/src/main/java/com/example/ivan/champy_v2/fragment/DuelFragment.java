@@ -46,7 +46,7 @@ import retrofit.Retrofit;
 
 // TODO: 12.07.2016 тут логика окна дуелей с другом: friends -> make challenge -> here.
 // TODO: 12.07.2016 переписать это так как SelfImprovementFragment.
-public class DuelFragment extends Fragment {
+public class DuelFragment extends Fragment implements View.OnClickListener {
 
     public static final String ARG_PAGE = "ARG_PAGE";
 
@@ -106,9 +106,7 @@ public class DuelFragment extends Fragment {
             } while (c.moveToNext());
         }
         c.close();
-        Log.i("stat", "Name: " + name);
         if (isActive(description)) {
-            Log.i("stat", "Status: Active");
             Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
             TextView textView = (TextView)view.findViewById(R.id.goal_text);
             textView.setText(description);
@@ -163,12 +161,7 @@ public class DuelFragment extends Fragment {
             ImageButton imageButton = (ImageButton) getActivity().findViewById(R.id.ok);
             imageButton.setVisibility(View.VISIBLE);
 
-            imageButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(getActivity(), "Tap & Hold", Toast.LENGTH_SHORT).show();
-                }
-            });
+            imageButton.setOnClickListener(this);
 
             final String finalFriend_id = friend_id;
             imageButton.setOnLongClickListener(new View.OnLongClickListener() {
@@ -264,6 +257,12 @@ public class DuelFragment extends Fragment {
                 }
             });}
         return view;
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        Toast.makeText(getActivity(), "Tap & Hold", Toast.LENGTH_SHORT).show();
     }
 
 

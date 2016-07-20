@@ -60,28 +60,30 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_duel);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        String newString, name = "" , friend_id = "";
+        String newString, name = "", friend_id = "";
         Bundle extras = getIntent().getExtras();
         if(extras == null) {
-            newString= null;
+            newString = null;
         } else {
-            newString= extras.getString("friend");
+            newString = extras.getString("friend");
             name = extras.getString("name");
             friend_id = extras.getString("id");
         }
 
         int x = round(getWindowManager().getDefaultDisplay().getWidth() / 2);
+
         TextView tvIChallengeMyFriendTo = (TextView)findViewById(R.id.tvIChallengeMyFriendTo);
-        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
-        tvIChallengeMyFriendTo.setTypeface(typeface);
-        TextView textViewDuel = (TextView)findViewById(R.id.duel);
-        textViewDuel.setTypeface(typeface);
         TextView textViewYouVsFriend = (TextView)findViewById(R.id.tvYouVsFriend);
-        textViewYouVsFriend.setText("You vs "+name);
+        //TextView textViewDuel = (TextView)findViewById(R.id.duel);
+        ImageView ivUser2 = (ImageView)findViewById(R.id.user2);
+        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
+
+        textViewYouVsFriend.setText("Duel with " + name);
         textViewYouVsFriend.setTypeface(typeface);
-        ImageView imageViewUser2 = (ImageView)findViewById(R.id.user2);
-        imageViewUser2.getLayoutParams().width = x;
-        imageViewUser2.getLayoutParams().height = x;
+        //textViewDuel.setTypeface(typeface);
+        tvIChallengeMyFriendTo.setTypeface(typeface);
+        ivUser2.getLayoutParams().width = x;
+        ivUser2.getLayoutParams().height = x; // щоб була квадратна
 
         RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.duel_back);
         relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementback));
@@ -116,9 +118,9 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
 
         try {
             Drawable dr = Init("/data/data/com.example.ivan.champy_v2/app_imageDir/");
-            imageViewUser2 = (ImageView) headerLayout.findViewById(R.id.slide_background);
-            imageViewUser2.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageViewUser2.setImageDrawable(dr); final String API_URL = "http://46.101.213.24:3007";
+            ivUser2 = (ImageView) headerLayout.findViewById(R.id.slide_background);
+            ivUser2.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            ivUser2.setImageDrawable(dr); final String API_URL = "http://46.101.213.24:3007";
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -299,8 +301,9 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
             int colduration = c.getColumnIndex("duration");
             int colchallenge_id = c.getColumnIndex("challenge_id");
             do {
-                String checked = c.getString(colchallenge_id);
-                if (checked.equals(id) && (c.getString(nameColIndex).equals("duel"))) {
+                String checkedChallengeId = c.getString(colchallenge_id);
+                String checkedIndex = c.getString(idColIndex);
+                if (checkedChallengeId.equals(id) && (checkedIndex.equals("duel"))) {
                     Log.i("stat", "Cheked");
                     ok = false;
                     break;

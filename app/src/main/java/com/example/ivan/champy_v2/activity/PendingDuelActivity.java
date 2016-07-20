@@ -17,14 +17,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -32,7 +30,6 @@ import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.adapter.PendingDuelsAdapter;
-import com.facebook.login.LoginManager;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -51,8 +48,7 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -67,7 +63,7 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.pending_duel);
         relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementback));
 
-        Glide.with(this).load(R.drawable.duel_blue).override(130, 130).into((ImageView)findViewById(R.id.imageView13));
+        Glide.with(this).load(R.drawable.duel_blue).override(130, 130).into((ImageView)findViewById(R.id.imageViewLogo));
 
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user;
@@ -88,7 +84,7 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
             Drawable dr = Init("/data/data/com.example.ivan.champy_v2/app_imageDir/");
             ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setImageDrawable(dr); final String API_URL = "http://46.101.213.24:3007";
+            imageView.setImageDrawable(dr);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
