@@ -121,8 +121,11 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         //etDays.setVisibility(View.INVISIBLE);
 
         Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView)view.findViewById(R.id.imageViewAcceptButton));
+        ImageButton buttonAccept = (ImageButton) getActivity().findViewById(R.id.imageButtonAcceptSelfImprovement);
+        buttonAccept.setOnClickListener(this);
 
-        if (!isActive(description)){
+
+        if (!isActive(description)) {
             //final int[] finalposition = new int[1];
             final ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.pager);
             CHSetupUI chSetupUI = new CHSetupUI();
@@ -143,9 +146,8 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                 tvDays.setVisibility(View.INVISIBLE);
             }
 
-            ImageButton buttonAccept = (ImageButton) getActivity().findViewById(R.id.imageButtonAcceptSelfImprovement);
+
             //buttonAccept.setVisibility(View.VISIBLE);
-            buttonAccept.setOnClickListener(this);
             buttonAccept.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
@@ -375,10 +377,8 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                         // добавить дуели?
                         if (challenge.getDescription().equals("Wake Up")) {
                             cv.put("name", "Wake Up");
-                        } else if (challenge.getDescription().equals("Self Improvement")) {
-                            cv.put("name", "Self Improvement");
                         } else {
-                          cv.put("name", "Duel");
+                            cv.put("name", "Self Improvement");
                         }
 
                         cv.put("description", desctiption);

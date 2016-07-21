@@ -237,22 +237,24 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
                         //Log.i("stat", "Status: " + datum.getAdditionalProperties());
                         //Log.i("asdsad", "onResponse: " + datum);
                         if (datumType.equals("self improvement") /*&& !datumType.equals("wake up") && !datumType.equals("duels")*/) {
-                            if (check(datum.get_id())) { // карточка не активна - ок
-                                cv.put("name", datum.getName());
-                                cv.put("description", datum.getDescription());
-                                cv.put("duration", datum.getDuration());
-                                cv.put("challenge_id", datum.get_id());
-                                db.insert("selfimprovement", null, cv);
-                                //Log.i("stat", "Status: " + datum.getName());
-                                data_size++;
-                            } else {  // карточка активка - кидаем имя "active"
-                                cv.put("name", "active");
-                                cv.put("description", datum.getDescription());
-                                cv.put("duration", datum.getDuration());
-                                cv.put("challenge_id", datum.get_id());
-                                db.insert("selfimprovement", null, cv);
-                                //Log.i("stat", "Status: " + "active");
-                                data_size++;
+                            if (!datum.getName().equals("User_Challenge")) {
+                                if (check(datum.get_id())) { // карточка не активна - ок
+                                    cv.put("name", datum.getName());
+                                    cv.put("description", datum.getDescription());
+                                    cv.put("duration", datum.getDuration());
+                                    cv.put("challenge_id", datum.get_id());
+                                    db.insert("selfimprovement", null, cv);
+                                    //Log.i("stat", "Status: " + datum.getName());
+                                    data_size++;
+                                } else {  // карточка активка - кидаем имя "active"
+                                    cv.put("name", "active");
+                                    cv.put("description", datum.getDescription());
+                                    cv.put("duration", datum.getDuration());
+                                    cv.put("challenge_id", datum.get_id());
+                                    db.insert("selfimprovement", null, cv);
+                                    //Log.i("stat", "Status: " + "active");
+                                    data_size++;
+                                }
                             }
                         }
                     }
