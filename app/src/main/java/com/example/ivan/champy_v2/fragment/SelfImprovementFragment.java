@@ -86,15 +86,13 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
             int colchallenge_id = c.getColumnIndex("challenge_id");
             do {
                 o++;
-                //if (!c.getString(nameColIndex).equals("User_Challenge")) {
-                    if (o > position + 1) break;
-                    if (o == position + 1) {
-                        name = c.getString(nameColIndex);
-                        description = c.getString(coldescription);
-                        duration = c.getString(colduration);
-                        challenge_id = c.getString(colchallenge_id);
-                    }
-                //}
+                if (o > position + 1) break;
+                if (o == position + 1) {
+                    name = c.getString(nameColIndex);
+                    description = c.getString(coldescription);
+                    duration = c.getString(colduration);
+                    challenge_id = c.getString(colchallenge_id);
+                }
             } while (c.moveToNext());
         }
         c.close();
@@ -115,137 +113,104 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         tvDays.setText("" + days);
         tvGoal.setTypeface(typeface);
         tvDays.setTypeface(typeface);
-        //tvGoal.setVisibility(View.VISIBLE);
-        //tvDays.setVisibility(View.VISIBLE);
-        //etGoal.setVisibility(View.INVISIBLE);
-        //etDays.setVisibility(View.INVISIBLE);
 
         Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView)view.findViewById(R.id.imageViewAcceptButton));
         ImageButton buttonAccept = (ImageButton) getActivity().findViewById(R.id.imageButtonAcceptSelfImprovement);
-        buttonAccept.setOnClickListener(this);
 
+        final ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.pager);
+        CHSetupUI chSetupUI = new CHSetupUI();
+        chSetupUI.setupUI(getActivity().findViewById(R.id.selfimprovement), getActivity());
+        chSetupUI.setupUI(view, getActivity());
 
-        if (!isActive(description)) {
-            //final int[] finalposition = new int[1];
-            final ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.pager);
-            CHSetupUI chSetupUI = new CHSetupUI();
-            chSetupUI.setupUI(getActivity().findViewById(R.id.selfimprovement), getActivity());
-            chSetupUI.setupUI(view, getActivity());
-            if (position == size) {
-                etGoal.setTypeface(typeface);
-                etDays.setTypeface(typeface);
-                //if (duration != null && duration != "") {
-                //    days = Integer.parseInt(duration) / 86400;
-                //}
-                //etDays.setText("" + days);
-                //tvGoal.setVisibility(View.INVISIBLE);
-                etGoal.setText(description);
-                etDays.setHint("21");
-                etDays.setVisibility(View.VISIBLE);
-                etGoal.setVisibility(View.VISIBLE);
-                tvDays.setVisibility(View.INVISIBLE);
-            }
-
-
-            //buttonAccept.setVisibility(View.VISIBLE);
-            buttonAccept.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    String name = "";
-                    String duration = "";
-                    String description = "";
-                    String challenge_id = "";
-                    int days = 21;
-
-                    EditText etGoal = (EditText) view.findViewById(R.id.et_goal);
-                    EditText etDays = (EditText) view.findViewById(R.id.et_days);
-                    description = etGoal.getText().toString();
-                    duration = etDays.getText().toString();
-
-                    if (!etDays.getText().toString().isEmpty()){
-                        days = Integer.parseInt(duration);
-                    }
-
-                    Cursor c = db.query("selfimprovement", null, null, null, null, null, null);
-                    int position = viewPager.getCurrentItem();
-                    int size = sessionManager.getSelfSize();
-                    OfflineMode offlineMode = new OfflineMode();
-                    if (position == size) {
-                        // тут би треба було days присваювати значення, яке вводить юзер
-                        if ((!isActive(description)) && offlineMode.isConnectedToRemoteAPI(getActivity()) && (!description.isEmpty()) &&
-                                (!description.startsWith(" ")) && (days != 0) && (!duration.isEmpty()) && (!isActive(description))) {
-
-                            days = Integer.parseInt(duration);
-                            Create_new_challenge(description, days);
-                            Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
-                            return true;
-                        } else {
-                            if (isActive(description)) {
-                                Toast.makeText(getContext(), "Already exist", Toast.LENGTH_SHORT).show();
-                                return true;
-                            }
-                            if (description.isEmpty() || description.startsWith(" ")) {
-                                Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();
-                                return true;
-                            }
-                            if (duration.isEmpty() || days == 0) {
-                                Toast.makeText(getContext(), "Min 1 day!", Toast.LENGTH_SHORT).show();
-                                return true;
-                            }
-                        }
-                    }
-                    else {
-                        // тут би треба було days присваювати значення, яке вводить юзер
-                        int o = 0;
-                        if (c.moveToFirst()) {
-                            int idColIndex = c.getColumnIndex("id");
-                            int nameColIndex = c.getColumnIndex("name");
-                            int coldescription = c.getColumnIndex("description");
-                            int colduration = c.getColumnIndex("duration");
-                            int colchallenge_id = c.getColumnIndex("challenge_id");
-                            do {
-                                o++;
-                                if (o > position + 1) break;
-                                if (o == position + 1) {
-                                    name = c.getString(nameColIndex);
-                                    description = c.getString(coldescription);
-                                    duration = c.getString(colduration);
-                                    challenge_id = c.getString(colchallenge_id);
-                                    break;
-                                }
-                            } while (c.moveToNext());
-                        }
-                        c.close();
-
-                        if ((!isActive(description)) && offlineMode.isConnectedToRemoteAPI(getActivity())
-                                && (!description.equals("active")) && (!description.isEmpty()) && (!description.startsWith(" "))
-                                && (days != 0) && (!duration.isEmpty())) {
-                            Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
-                            StartSingleInProgress(challenge_id);
-                            return true;
-                        } else {
-                            //if ((description.isEmpty() || description.startsWith(" ")) && (days == 0 || duration.isEmpty())) {
-                            //    Toast.makeText(getContext(), "Card is empty!", Toast.LENGTH_SHORT).show();
-                            //    return true;
-                            //}
-                            if (isActive(description)) {
-                                Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
-                                return true;
-                            }
-                            if (description.isEmpty() || description.startsWith(" ")) {
-                                Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();
-                                return true;
-                            }
-                            if (duration.isEmpty() || days == 0) {
-                                Toast.makeText(getContext(), "Min 1 day!", Toast.LENGTH_SHORT).show();
-                                return true;
-                            }
-                        }
-                    }
-                    return true;
-                }
-            });
+        if (position == size) {
+            etGoal.setTypeface(typeface);
+            etDays.setTypeface(typeface);
+            etGoal.setText(description);
+            etDays.setHint("21");
+            etDays.setVisibility(View.VISIBLE);
+            etGoal.setVisibility(View.VISIBLE);
+            tvDays.setVisibility(View.INVISIBLE);
         }
+
+        buttonAccept.setOnClickListener(this);
+        buttonAccept.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String name = "";
+                String duration = "";
+                String description = "";
+                String challenge_id = "";
+                int days = 21;
+
+                EditText etGoal = (EditText) view.findViewById(R.id.et_goal);
+                EditText etDays = (EditText) view.findViewById(R.id.et_days);
+                description = etGoal.getText().toString();
+                duration = etDays.getText().toString();
+
+                if (!etDays.getText().toString().isEmpty()){
+                    days = Integer.parseInt(duration);
+                }
+
+                Cursor c = db.query("selfimprovement", null, null, null, null, null, null);
+                int position = viewPager.getCurrentItem();
+                int size = sessionManager.getSelfSize();
+                OfflineMode offlineMode = new OfflineMode();
+                if (position == size) {
+                    // тут би треба було days присваювати значення, яке вводить юзер
+                    if ((!isActive(description)) && offlineMode.isConnectedToRemoteAPI(getActivity()) && (!description.isEmpty()) &&
+                            (!description.startsWith(" ")) && (days != 0) && (!duration.isEmpty())) {
+
+                        days = Integer.parseInt(duration);
+                        Create_new_challenge(description, days);
+                        Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
+                        return true;
+                    } else {
+                        if (isActive(description)) {
+                            Toast.makeText(getContext(), "Already exist", Toast.LENGTH_SHORT).show();
+                            return true;
+                        }
+                        if (description.isEmpty() || description.startsWith(" ")) {
+                            Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();
+                            return true;
+                        }
+                        if (duration.isEmpty() || days == 0) {
+                            Toast.makeText(getContext(), "Min 1 day!", Toast.LENGTH_SHORT).show();
+                            return true;
+                        }
+                    }
+                }
+                else {
+                    // тут би треба було days присваювати значення, яке вводить юзер
+                    int o = 0;
+                    if (c.moveToFirst()) {
+                        int idColIndex = c.getColumnIndex("id");
+                        int nameColIndex = c.getColumnIndex("name");
+                        int coldescription = c.getColumnIndex("description");
+                        int colduration = c.getColumnIndex("duration");
+                        int colchallenge_id = c.getColumnIndex("challenge_id");
+                        do {
+                            o++;
+                            if (o > position + 1) break;
+                            if (o == position + 1) {
+                                name = c.getString(nameColIndex);
+                                description = c.getString(coldescription);
+                                duration = c.getString(colduration);
+                                challenge_id = c.getString(colchallenge_id);
+                                break;
+                            }
+                        } while (c.moveToNext());
+                    }
+                    c.close();
+                    if ((!isActive(description)) && offlineMode.isConnectedToRemoteAPI(getActivity())) {
+                        Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
+                        StartSingleInProgress(challenge_id);
+                    } else {
+                        Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                return true;
+            }
+        });
         return view;
     }
 
