@@ -141,18 +141,6 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.history, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_settings) {return true;}
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         OfflineMode offlineMode = new OfflineMode();
         if (offlineMode.isConnectedToRemoteAPI(this)) {

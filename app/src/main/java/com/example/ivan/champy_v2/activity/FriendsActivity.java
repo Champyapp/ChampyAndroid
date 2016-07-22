@@ -82,13 +82,11 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }*/
-        final SessionManager sessionManager = new SessionManager(this);
-        sessionManager.checkLogin();
-
         setContentView(R.layout.activity_friends);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        final SessionManager sessionManager = new SessionManager(this);
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         //String update = user.get("updateDB");
@@ -262,12 +260,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
             startActivity(intent);
             super.onBackPressed();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main_drawer, menu);
-        return true;
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

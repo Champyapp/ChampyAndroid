@@ -430,27 +430,4 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         return ok;
     }
 
-
-    /*public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
-    }
-
-
-    public void setupUI(View view) {
-
-        //Set up touch listener for non-text box views to hide keyboard.
-        if (!(view instanceof EditText)) {
-
-            view.setOnTouchListener(new View.OnTouchListener() {
-
-                public boolean onTouch(View v, MotionEvent event) {
-                    hideSoftKeyboard(getActivity());
-                    return false;
-                }
-
-            });
-        }
-
-    }*/
 }

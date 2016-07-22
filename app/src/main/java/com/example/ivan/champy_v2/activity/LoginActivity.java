@@ -282,58 +282,6 @@ public class LoginActivity extends AppCompatActivity {
         initializeLogin.Init();
     }
 
-
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Log.d(TAG, "lalala: " + urldisplay);
-
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            Log.i("Icon :", mIcon11.toString());
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            // Do your staff here to save image
-            String string = saveToInternalStorage(result);
-            loadImageFromStorage(string);
-        }
-
-    }
-
-
-    private String saveToInternalStorage(Bitmap bitmapImage){
-        ContextWrapper cw = new ContextWrapper(getApplicationContext());
-        // path to /data/data/yourapp/app_data/imageDir
-        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
-        // Create imageDir
-        File mypath = new File(directory,"profile.jpg");
-
-        Log.d(TAG, "MY_PATH: "+mypath.toString());
-
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(mypath);
-            // Use the compress method on the BitMap object to write image to the OutputStream
-            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
-            fos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return directory.getAbsolutePath();
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -457,8 +405,8 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d(TAG, "Status: " + id + " " +fb_id);
 
                     SessionManager sessionManager = new SessionManager(getApplicationContext());
-                    sessionManager.setRefreshPending("false");
-                    sessionManager.setRefreshFriends("false");
+                    sessionManager.setRefreshPending("true");
+                    sessionManager.setRefreshFriends("true");
                     sessionManager.createUserLoginSession(user_name, email, fb_id, path_to_pic, jwtString, id, pushN, newChallReq, acceptedYour, challegeEnd, "true");
                     sessionManager.setChampyOptions(
                             data.getAllChallengesCount().toString(),
@@ -640,39 +588,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    public void loadImageFromStorage(String path) {
-        try {
-            File f=new File(path, "profile.jpg");
-            File file = new File(path, "blured2.jpg");
-            if (file.exists()) {
-                return;
-            } else {
-                file.createNewFile();
-                Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-
-                Blur blur = new Blur();
-
-                Bitmap blured = blur.blurRenderScript(getApplicationContext(), b, 10);
-
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                blured.compress(Bitmap.CompressFormat.PNG, 0, bos);
-                byte[] bitmapdata = bos.toByteArray();
-
-                FileOutputStream fos = new FileOutputStream(file);
-                fos.write(bitmapdata);
-                fos.flush();
-                fos.close();
-                Log.d(TAG, "Image: Blured");
-            }
-        }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
     public Boolean getContact(String id) {
         DBHelper dbHelper = new DBHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -785,6 +700,94 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+
+    /*private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Log.d(TAG, "lalala: " + urldisplay);
+
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            Log.i("Icon :", mIcon11.toString());
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            // Do your staff here to save image
+            String string = saveToInternalStorage(result);
+            loadImageFromStorage(string);
+        }
+
+    }
+
+
+    private String saveToInternalStorage(Bitmap bitmapImage){
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        // path to /data/data/yourapp/app_data/imageDir
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        // Create imageDir
+        File mypath = new File(directory,"profile.jpg");
+
+        Log.d(TAG, "MY_PATH: "+mypath.toString());
+
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(mypath);
+            // Use the compress method on the BitMap object to write image to the OutputStream
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return directory.getAbsolutePath();
+    }
+
+
+
+
+    public void loadImageFromStorage(String path) {
+        try {
+            File f=new File(path, "profile.jpg");
+            File file = new File(path, "blured2.jpg");
+            if (file.exists()) {
+                return;
+            } else {
+                file.createNewFile();
+                Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+
+                Blur blur = new Blur();
+
+                Bitmap blured = blur.blurRenderScript(getApplicationContext(), b, 10);
+
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                blured.compress(Bitmap.CompressFormat.PNG, 0, bos);
+                byte[] bitmapdata = bos.toByteArray();
+
+                FileOutputStream fos = new FileOutputStream(file);
+                fos.write(bitmapdata);
+                fos.flush();
+                fos.close();
+                Log.d(TAG, "Image: Blured");
+            }
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public void Upload_photo(String path, String id, String token) {
         final String API_URL = "http://46.101.213.24:3007";
         Retrofit retrofit = new Retrofit.Builder()
@@ -815,7 +818,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d(TAG, "Status: "+t);
             }
         });
-    }
+    }*/
 
 }
 

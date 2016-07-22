@@ -108,18 +108,6 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main_drawer, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_settings) { return true; }
-        return super.onOptionsItemSelected(item);
-    }
-
 
     public boolean onNavigationItemSelected(MenuItem item) {
         OfflineMode offlineMode = new OfflineMode();
