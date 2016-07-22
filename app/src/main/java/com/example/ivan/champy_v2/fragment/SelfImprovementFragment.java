@@ -35,6 +35,7 @@ import com.example.ivan.champy_v2.model.active_in_progress.Datum;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -44,12 +45,10 @@ import retrofit.Retrofit;
 
 import static java.lang.Math.round;
 
-// TODO: 13.07.2016 показати до і після мене цей клас на review
 public class SelfImprovementFragment extends Fragment implements View.OnClickListener {
 
     public static final String ARG_PAGE = "ARG_PAGE";
     private long mLastClickTime = 0;
-
     public static SelfImprovementFragment newInstance(int page) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
@@ -57,6 +56,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         fragment.setArguments(args);
         return fragment;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -146,7 +146,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                 String duration = "";
                 String description = "";
                 String challenge_id = "";
-                int days = 21;
+                int days;
 
                 EditText etGoal = (EditText) view.findViewById(R.id.et_goal);
                 EditText etDays = (EditText) view.findViewById(R.id.et_days);
@@ -160,17 +160,9 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                 int size = sessionManager.getSelfSize();
 
                 if (position == size) {
-                    if ((!isActive(description)) && (!description.isEmpty()) && (!description.startsWith(" ")) && (days != 0) && (!duration.isEmpty())) {
+                    if ((checkInputUserData(description, duration))) {
                         days = Integer.parseInt(duration);
                         Create_new_challenge(description, days);
-                        Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
-                        return true;
-                    } else {
-                        if (isActive(description))
-                            Toast.makeText(getContext(), "Already exist", Toast.LENGTH_SHORT).show();
-                        else
-                            Toast.makeText(getContext(), "Complete all fields", Toast.LENGTH_SHORT).show();
-
                     }
                 } else {
                     int o = 0;
@@ -193,17 +185,34 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                         } while (c.moveToNext());
                     }
                     c.close();
-                    if (!isActive(description)) {
-                        Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
+
+                    if (checkInputUserData(description, duration)) {
                         StartSingleInProgress(challenge_id);
-                    } else {
-                        Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
                     }
                 }
                 return true;
             }
         });
         return view;
+    }
+
+
+    // проверяем данные для создания челенджа
+    private boolean checkInputUserData(String description, String duration) {
+        int days = 21;
+        if (!duration.isEmpty()) {
+            days = Integer.parseInt(duration);
+        }
+        if (!isActive(description) && !description.isEmpty() && !description.startsWith(" ") && !duration.isEmpty() && days != 0) {
+            Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (isActive(description)) {
+            Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
+            return false;
+        } else {
+            Toast.makeText(getContext(), "Complete all fields", Toast.LENGTH_SHORT).show();
+            return false;
+        }
     }
 
 
@@ -289,7 +298,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
     }
 
 
-    // генерируем челедж и добавляем его в мейн активити
+    // генерируем челендж и добавляем его в мейн активити
     public void generate() {
         DBHelper dbHelper = new DBHelper(getContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
