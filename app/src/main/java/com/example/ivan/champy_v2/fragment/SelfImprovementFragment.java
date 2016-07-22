@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -47,6 +48,7 @@ import static java.lang.Math.round;
 public class SelfImprovementFragment extends Fragment implements View.OnClickListener {
 
     public static final String ARG_PAGE = "ARG_PAGE";
+    private long mLastClickTime = 0;
 
     public static SelfImprovementFragment newInstance(int page) {
         Bundle args = new Bundle();
@@ -60,6 +62,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
 
     @Nullable
     @Override
@@ -132,6 +135,9 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
             tvDays.setVisibility(View.INVISIBLE);
         }
 
+        OfflineMode offlineMode = new OfflineMode();
+        offlineMode.isConnectedToRemoteAPI(getActivity());
+
         buttonAccept.setOnClickListener(this);
         buttonAccept.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -147,40 +153,26 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                 description = etGoal.getText().toString();
                 duration = etDays.getText().toString();
 
-                if (!etDays.getText().toString().isEmpty()){
-                    days = Integer.parseInt(duration);
-                }
+                if (!duration.isEmpty()){ days = Integer.parseInt(duration); }
 
                 Cursor c = db.query("selfimprovement", null, null, null, null, null, null);
                 int position = viewPager.getCurrentItem();
                 int size = sessionManager.getSelfSize();
-                OfflineMode offlineMode = new OfflineMode();
-                if (position == size) {
-                    // тут би треба було days присваювати значення, яке вводить юзер
-                    if ((!isActive(description)) && offlineMode.isConnectedToRemoteAPI(getActivity()) && (!description.isEmpty()) &&
-                            (!description.startsWith(" ")) && (days != 0) && (!duration.isEmpty())) {
 
+                if (position == size) {
+                    if ((!isActive(description)) && (!description.isEmpty()) && (!description.startsWith(" ")) && (days != 0) && (!duration.isEmpty())) {
                         days = Integer.parseInt(duration);
                         Create_new_challenge(description, days);
                         Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
                         return true;
                     } else {
-                        if (isActive(description)) {
+                        if (isActive(description))
                             Toast.makeText(getContext(), "Already exist", Toast.LENGTH_SHORT).show();
-                            return true;
-                        }
-                        if (description.isEmpty() || description.startsWith(" ")) {
-                            Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();
-                            return true;
-                        }
-                        if (duration.isEmpty() || days == 0) {
-                            Toast.makeText(getContext(), "Min 1 day!", Toast.LENGTH_SHORT).show();
-                            return true;
-                        }
+                        else
+                            Toast.makeText(getContext(), "Complete all fields", Toast.LENGTH_SHORT).show();
+
                     }
-                }
-                else {
-                    // тут би треба було days присваювати значення, яке вводить юзер
+                } else {
                     int o = 0;
                     if (c.moveToFirst()) {
                         int idColIndex = c.getColumnIndex("id");
@@ -201,7 +193,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                         } while (c.moveToNext());
                     }
                     c.close();
-                    if ((!isActive(description)) && offlineMode.isConnectedToRemoteAPI(getActivity())) {
+                    if (!isActive(description)) {
                         Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
                         StartSingleInProgress(challenge_id);
                     } else {
@@ -214,16 +206,19 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         return view;
     }
 
+
     @Override
     public void onClick(View v) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) return;
+        mLastClickTime = SystemClock.elapsedRealtime();
         Toast.makeText(getActivity(), "Tap & Hold", Toast.LENGTH_SHORT).show();
     }
 
-
+    // создаем кастомные челенджи
     public void Create_new_challenge(String description, int days) {
         String type_id = "567d51c48322f85870fd931a";
         final SessionManager sessionManager = new SessionManager(getContext());
-        HashMap<String, String> user = new HashMap<>();
+        HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         String token = user.get("token");
         String duration = "" + (days * 86400);
@@ -250,10 +245,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
             public void onResponse(Response<com.example.ivan.champy_v2.create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String challenge = response.body().getData().get_id();
-                    Log.i("stat", "Status: " + challenge);
                     StartSingleInProgress(challenge);
-                    Log.i("stat", "Status: Challenge Created");
-
                 } else Log.i("stat", "Status: Error Creating");
             }
 
@@ -264,6 +256,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
     }
 
 
+    // создаем стандартные челенджи
     public void StartSingleInProgress(final String challenge) {
         final SessionManager sessionManager = new SessionManager(getContext());
         HashMap<String, String> user;
@@ -271,10 +264,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         String token = user.get("token");
 
         final String API_URL = "http://46.101.213.24:3007";
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
         Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call = singleinprogress.start_single_in_progress(challenge, token);
@@ -282,40 +272,34 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    //Log.i("stat", "Status: Starting OK");
                     ContentValues cv = new ContentValues();
                     com.example.ivan.champy_v2.single_inprogress.SingleInProgress data = response.body();
                     cv.put("challenge_id", data.getData().get_id());
-                    //Log.d("myLogs", "Added: " + data.getData().get_id());
                     cv.put("updated", "false");
                     DBHelper dbHelper = new DBHelper(getActivity());
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
                     db.insert("updated", null, cv);
                     generate();
-                } //else Log.i("stat", "Status: Starting WRONG" + response.code());
+                } else Log.i("stat", "Status: Starting WRONG" + response.code());
             }
 
             @Override
-            public void onFailure(Throwable t) {
-
-            }
+            public void onFailure(Throwable t) { }
         });
     }
 
 
+    // генерируем челедж и добавляем его в мейн активити
     public void generate() {
         DBHelper dbHelper = new DBHelper(getContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int clearCount = db.delete("myChallenges", null, null);
+        int clearCount = db.delete("myChallenges", null, null); // don't touch this line.
         final ContentValues cv = new ContentValues();
         final String API_URL = "http://46.101.213.24:3007";
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
         final SessionManager sessionManager = new SessionManager(getContext());
-        HashMap<String, String> user = new HashMap<>();
+        HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         String token = user.get("token");
         String id = user.get("id");
@@ -339,7 +323,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                             duration = "" + days;
                         }
                         String challenge_id = datum.get_id();
-                        // добавить дуели?
+
                         if (challenge.getDescription().equals("Wake Up")) {
                             cv.put("name", "Wake Up");
                         } else {
@@ -360,89 +344,52 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
             }
 
             @Override
-            public void onFailure(Throwable t) {
-            }
+            public void onFailure(Throwable t) { }
         });
     }
 
 
-    /*public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
-    }
-
-
-    public void setupUI(View view) {
-
-        //Set up touch listener for non-text box views to hide keyboard.
-        if (!(view instanceof EditText)) {
-
-            view.setOnTouchListener(new View.OnTouchListener() {
-
-                public boolean onTouch(View v, MotionEvent event) {
-                    hideSoftKeyboard(getActivity());
-                    return false;
-                }
-
-            });
-        }
-
-    }*/
-
-
+    // проверяем таблицу "update" в бд, пересоздаем и обновляем даннные.
+    // Если challenge_id (из update) = challenge_id (из стандардатных)
     public String find(String challenge_id) {
         DBHelper dbHelper = new DBHelper(getActivity());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("updated", null, null, null, null, null, null);
         String ok = "false";
-        int o = 0;
         if (c.moveToFirst()) {
-            int idColIndex = c.getColumnIndex("id");
             int colchallenge_id = c.getColumnIndex("challenge_id");
             do {
                 if (c.getString(colchallenge_id).equals(challenge_id)){
                     ok = c.getString(c.getColumnIndex("updated"));
-                    Log.i("stat", "Find: "+ok);
                     break;
                 }
             } while (c.moveToNext());
-        } else
-            Log.i("stat", "0 rows");
+        }
         c.close();
         return ok;
     }
 
 
+    // проверяем активный ли челендж
     public boolean isActive(String description) {
         DBHelper dbHelper = new DBHelper(getActivity());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final ContentValues cv = new ContentValues();
-        final Bundle args = this.getArguments();
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-        int position = args.getInt(ARG_PAGE);
-        Log.i("stat", "Status: " + position);
         description = description + " during this period";
         boolean ok = false;
-        int o = 0;
         if (c.moveToFirst()) {
-            int idColIndex = c.getColumnIndex("id");
-            int nameColIndex = c.getColumnIndex("name");
             int coldescription = c.getColumnIndex("description");
-            int colduration = c.getColumnIndex("duration");
-            int colchallenge_id = c.getColumnIndex("challenge_id");
             do {
                 if (c.getString(c.getColumnIndex("status")).equals("started")){
-                    Log.i("stat", "Equals: "+c.getString(coldescription)+" "+description);
                     if (c.getString(coldescription).equals(description)) {
-                        Log.i("stat", "Equals: true");
                         ok = true;
                     }
                 }
             } while (c.moveToNext());
-        } else
-            Log.i("stat", "0 rows");
+        }
         c.close();
-
         return ok;
     }
+
+
 }

@@ -221,38 +221,35 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
 
         com.example.ivan.champy_v2.interfaces.SelfImprovement selfImprovement = retrofit.create(com.example.ivan.champy_v2.interfaces.SelfImprovement.class);
         Call<com.example.ivan.champy_v2.model.Self.SelfImprovement> call = selfImprovement.getChallenges(token);
-        //Log.i("stat", "Status: RUN");
+
         call.enqueue(new Callback<com.example.ivan.champy_v2.model.Self.SelfImprovement>() {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.model.Self.SelfImprovement> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    //Log.i("stat", "Status: OK" + response.message());
+
                     List<Datum> data = response.body().getData();
-                    //Log.i("TAG", "DATAAAAAAAA: " );
+
                     int data_size = 0;
                     for (int i = 0; i < data.size(); i++) {
 
                         com.example.ivan.champy_v2.model.Self.Datum datum = data.get(i);
                         String datumType = datum.getType().getName();
-                        //Log.i("stat", "Status: " + datum.getAdditionalProperties());
-                        //Log.i("asdsad", "onResponse: " + datum);
-                        if (datumType.equals("self improvement") /*&& !datumType.equals("wake up") && !datumType.equals("duels")*/) {
+
+                        if (datumType.equals("self improvement")) {
                             if (!datum.getName().equals("User_Challenge")) {
-                                if (check(datum.get_id())) { // карточка не активна - ок
+                                if (check(datum.get_id())) {
                                     cv.put("name", datum.getName());
                                     cv.put("description", datum.getDescription());
                                     cv.put("duration", datum.getDuration());
                                     cv.put("challenge_id", datum.get_id());
                                     db.insert("selfimprovement", null, cv);
-                                    //Log.i("stat", "Status: " + datum.getName());
                                     data_size++;
-                                } else {  // карточка активка - кидаем имя "active"
+                                } else {
                                     cv.put("name", "active");
                                     cv.put("description", datum.getDescription());
                                     cv.put("duration", datum.getDuration());
                                     cv.put("challenge_id", datum.get_id());
                                     db.insert("selfimprovement", null, cv);
-                                    //Log.i("stat", "Status: " + "active");
                                     data_size++;
                                 }
                             }
@@ -269,14 +266,11 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
                     viewPager.setPageMargin(20);
                     viewPager.setClipToPadding(false);
                     viewPager.setPadding(90, 0, 90, 0);
-
-                } //else Log.i("stat", "Status: WRONG");
+                }
             }
 
             @Override
-            public void onFailure(Throwable t) {
-
-            }
+            public void onFailure(Throwable t) { }
         });
 
     }
