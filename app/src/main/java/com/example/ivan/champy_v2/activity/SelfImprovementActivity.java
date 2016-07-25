@@ -66,24 +66,29 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
             }
         };
-
         drawer.setDrawerListener(toggle);
         toggle.setDrawerIndicatorEnabled(true);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
+
         int count = check_pending();
+
         TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
         view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+
         if (count == 0) { hideItem(); }
+
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         TextView tvIChallengeMyFriendTo = (TextView)findViewById(R.id.textView20);
         tvIChallengeMyFriendTo.setTypeface(typeface);

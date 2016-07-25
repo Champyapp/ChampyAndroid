@@ -49,6 +49,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 
     public static final String ARG_PAGE = "ARG_PAGE";
     private long mLastClickTime = 0;
+
     public static SelfImprovementFragment newInstance(int page) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
@@ -112,10 +113,10 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
             days = Integer.parseInt(duration) / 86400;
         }
 
-        tvGoal.setText(description);
         tvDays.setText("" + days);
-        tvGoal.setTypeface(typeface);
         tvDays.setTypeface(typeface);
+        tvGoal.setText(description);
+        tvGoal.setTypeface(typeface);
 
         Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView)view.findViewById(R.id.imageViewAcceptButton));
         ImageButton buttonAccept = (ImageButton) getActivity().findViewById(R.id.imageButtonAcceptSelfImprovement);
@@ -222,6 +223,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         mLastClickTime = SystemClock.elapsedRealtime();
         Toast.makeText(getActivity(), "Tap & Hold", Toast.LENGTH_SHORT).show();
     }
+
 
     // создаем кастомные челенджи
     public void Create_new_challenge(String description, int days) {

@@ -405,7 +405,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d(TAG, "Status: " + id + " " +fb_id);
 
                     SessionManager sessionManager = new SessionManager(getApplicationContext());
-                    sessionManager.setRefreshPending("true");
+                    sessionManager.setRefreshPending("false");
                     sessionManager.setRefreshFriends("true");
                     sessionManager.createUserLoginSession(user_name, email, fb_id, path_to_pic, jwtString, id, pushN, newChallReq, acceptedYour, challegeEnd, "true");
                     sessionManager.setChampyOptions(

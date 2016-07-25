@@ -57,6 +57,7 @@ public class AlarmReceiverActivity extends Activity {
         playSound(this, getAlarmUri());
     }
 
+
     private void playSound(Context context, Uri alert) {
         mMediaPlayer = new MediaPlayer();
         mMediaPlayer.setLooping(true);
@@ -73,6 +74,7 @@ public class AlarmReceiverActivity extends Activity {
         }
     }
 
+
     private Uri getAlarmUri() {
         Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         if (alert == null) {
@@ -83,4 +85,5 @@ public class AlarmReceiverActivity extends Activity {
         }
         return alert;
     }
+
 }
