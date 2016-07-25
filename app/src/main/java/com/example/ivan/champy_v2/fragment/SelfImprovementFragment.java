@@ -50,6 +50,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
     public static final String ARG_PAGE = "ARG_PAGE";
     private long mLastClickTime = 0;
 
+
     public static SelfImprovementFragment newInstance(int page) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
@@ -187,8 +188,11 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                     }
                     c.close();
 
-                    if (checkInputUserData(description, duration)) {
+                    if (isActive(description)) {
+                        Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
+                    } else {
                         StartSingleInProgress(challenge_id);
+                        Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
                     }
                 }
                 return true;
@@ -391,7 +395,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         if (c.moveToFirst()) {
             int coldescription = c.getColumnIndex("description");
             do {
-                if (c.getString(c.getColumnIndex("status")).equals("started")){
+                if (c.getString(c.getColumnIndex("status")).equals("started")) {
                     if (c.getString(coldescription).equals(description)) {
                         ok = true;
                     }

@@ -118,9 +118,9 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
 
         try {
             Drawable dr = Init("/data/data/com.example.ivan.champy_v2/app_imageDir/");
-            ivUser2 = (ImageView) headerLayout.findViewById(R.id.slide_background);
-            ivUser2.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            ivUser2.setImageDrawable(dr); final String API_URL = "http://46.101.213.24:3007";
+            ImageView slideBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
+            slideBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            slideBackground.setImageDrawable(dr);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -218,35 +218,31 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         String token = user.get("token");
         com.example.ivan.champy_v2.interfaces.SelfImprovement selfImprovement = retrofit.create(com.example.ivan.champy_v2.interfaces.SelfImprovement.class);
         Call<com.example.ivan.champy_v2.model.Self.SelfImprovement> call = selfImprovement.getChallenges(token);
-        Log.i("stat", "Status: RUN");
         call.enqueue(new Callback<SelfImprovement>() {
             @Override
             public void onResponse(Response<SelfImprovement> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    Log.i("stat", "Status: OK");
                     List<Datum> data = response.body().getData();
                     int data_size = 0;
                     for (int i = 0; i < data.size(); i++) {
                         com.example.ivan.champy_v2.model.Self.Datum datum = data.get(i);
-                        Log.i("stat", "Status: " + datum.getType().getName());
                         if (datum.getType().getName().equals("duel")) {
-                            if (check(datum.get_id())) {
-                                cv.put("name", datum.getName());
-                                Log.i("stat", "Status: " + datum.getName());
-                                cv.put("description", datum.getDescription());
-                                cv.put("duration", datum.getDuration());
-                                cv.put("challenge_id", datum.get_id());
-                                db.insert("duel", null, cv);
-                                data_size++;
-                            }
-                            else {
-                                cv.put("name", "active");
-                                Log.i("stat", "Status: " + "active");
-                                cv.put("description", datum.getDescription());
-                                cv.put("duration", datum.getDuration());
-                                cv.put("challenge_id", datum.get_id());
-                                db.insert("duel", null, cv);
-                                data_size++;
+                            if (!datum.getName().equals("User_Challenge")) {
+                                if (check(datum.get_id())) {
+                                    cv.put("name", datum.getName());
+                                    cv.put("description", datum.getDescription());
+                                    cv.put("duration", datum.getDuration());
+                                    cv.put("challenge_id", datum.get_id());
+                                    db.insert("duel", null, cv);
+                                    data_size++;
+                                } else {
+                                    cv.put("name", "active");
+                                    cv.put("description", datum.getDescription());
+                                    cv.put("duration", datum.getDuration());
+                                    cv.put("challenge_id", datum.get_id());
+                                    db.insert("duel", null, cv);
+                                    data_size++;
+                                }
                             }
                         }
                     }
@@ -262,7 +258,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
                     viewPager.setClipToPadding(false);
                     viewPager.setPadding(90, 0, 90, 0);
 
-                } else Log.i("stat", "Status: WRONG");
+                }
             }
 
             @Override

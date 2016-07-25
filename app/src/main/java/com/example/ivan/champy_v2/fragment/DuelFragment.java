@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -49,6 +50,8 @@ import retrofit.Retrofit;
 public class DuelFragment extends Fragment implements View.OnClickListener {
 
     public static final String ARG_PAGE = "ARG_PAGE";
+    private long mLastClickTime = 0;
+
 
     public static DuelFragment newInstance(int page) {
         Bundle args = new Bundle();
@@ -58,11 +61,12 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.i("stat", "Status: Created");
         super.onCreate(savedInstanceState);
     }
+
 
     @Nullable
     @Override
@@ -115,133 +119,123 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         EditText etDays = (EditText)view.findViewById(R.id.et_days);
 
         int days = 0;
-        if (duration != null && duration != "") {
+        if (duration != null && !duration.isEmpty()) {
             days = Integer.parseInt(duration) / 86400;
         }
 
-        tvGoal.setText(description);
         tvDays.setText("" + days);
-        tvGoal.setTypeface(typeface);
         tvDays.setTypeface(typeface);
-        tvDays.setVisibility(View.VISIBLE);
-        tvGoal.setVisibility(View.VISIBLE);
-        etDays.setVisibility(View.INVISIBLE);
-        etGoal.setVisibility(View.INVISIBLE);
+        tvGoal.setText(description);
+        tvGoal.setTypeface(typeface);
+
         Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
         ImageButton imageButtonAccept = (ImageButton) getActivity().findViewById(R.id.ok);
 
-        if (!isActive(description)) {
-            final int[] finalposition = new int[1];
-            final ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.pager_duel);
-            CHSetupUI chSetupUI = new CHSetupUI();
-            chSetupUI.setupUI(getActivity().findViewById(R.id.duel_back), getActivity());
-            chSetupUI.setupUI(view, getActivity());
+        final int[] finalposition = new int[1];
+        final ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.pager_duel);
+        CHSetupUI chSetupUI = new CHSetupUI();
+        chSetupUI.setupUI(getActivity().findViewById(R.id.duel_back), getActivity());
+        chSetupUI.setupUI(view, getActivity());
 
-            if (position == size) {
-                etDays.setVisibility(View.VISIBLE);
-                etGoal.setVisibility(View.VISIBLE);
-            }
+        if (position == size) {
+            etGoal.setTypeface(typeface);
+            etDays.setTypeface(typeface);
+            etGoal.setText(description);
+            etDays.setHint("21");
+            etDays.setVisibility(View.VISIBLE);
+            etGoal.setVisibility(View.VISIBLE);
+            tvDays.setVisibility(View.INVISIBLE);
+        }
 
+        OfflineMode offlineMode = new OfflineMode();
+        offlineMode.isConnectedToRemoteAPI(getActivity());
+        final String finalFriend_id = friend_id;
+        imageButtonAccept.setOnClickListener(this);
+        imageButtonAccept.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String name = "";
+                String duration = "";
+                String description = "";
+                String challenge_id = "";
+                int days = 0;
 
-            imageButtonAccept.setOnClickListener(this);
+                EditText etGoal = (EditText) view.findViewById(R.id.et_goal);
+                EditText etDays = (EditText) view.findViewById(R.id.et_days);
+                description = etGoal.getText().toString();
+                duration = etDays.getText().toString();
 
-            final String finalFriend_id = friend_id;
-            imageButtonAccept.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    String name = "";
-                    String duration = "";
-                    String description = "";
-                    String challenge_id = "";
-                    int days = 0;
-                    EditText editTextGoal = (EditText) view.findViewById(R.id.et_goal);
-                    description = editTextGoal.getText().toString();
-                    editTextGoal = (EditText) view.findViewById(R.id.et_days);
-                    Log.i("stat", "Descrition :"+description+ " " + description.length());
-                    if (editTextGoal.getText().toString().equals("")){
-                        Toast.makeText(getContext(), "Duration is empty!!!", Toast.LENGTH_SHORT).show();
-                    } else days = Integer.parseInt(editTextGoal.getText().toString());
-                    Cursor c = db.query("duel", null, null, null, null, null, null);
-                    int position = viewPager.getCurrentItem();
-                    int size = sessionManager.getSelfSize();
-                    Log.i("stat", "Click: " + position + " " + size);
-                    if (position == size) {
-                        editTextGoal = (EditText) view.findViewById(R.id.et_goal);
-                        description = editTextGoal.getText().toString();
-                        Log.i("stat", "Click: clicked");
-                        Log.i("stat", "Click: " + description);
-                        editTextGoal = (EditText) view.findViewById(R.id.et_days);
-                        if (editTextGoal.getText().toString().equals("") || days == 0) {
-                            Toast.makeText(getContext(), "Min 1 day!", Toast.LENGTH_SHORT).show();
-                        } else if (description.equals(" ") || description.startsWith(" ") || description.isEmpty()) {
-                            Toast.makeText(getContext(), "Goal is empty!!!", Toast.LENGTH_SHORT).show();
-                        } else if (name.equals("active")) {
-                            Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-                            OfflineMode offlineMode = new OfflineMode();
-                            if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
-                                days = Integer.parseInt(editTextGoal.getText().toString());
-                                Create_new_challenge(description, days, finalFriend_id);
-                                Toast.makeText(getContext(), "Challenge created", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    } else {
-                        Log.i("stat", "Status: Poehali");
-                        int o = 0;
-                        if (c.moveToFirst()) {
-                            int idColIndex = c.getColumnIndex("id");
-                            int nameColIndex = c.getColumnIndex("name");
-                            int coldescription = c.getColumnIndex("description");
-                            int colduration = c.getColumnIndex("duration");
-                            int colchallenge_id = c.getColumnIndex("challenge_id");
-
-                            do {
-                                o++;
-                                if (o > position + 1) break;
-                                if (o == position + 1) {
-                                    name = c.getString(nameColIndex);
-                                    description = c.getString(coldescription);
-                                    duration = c.getString(colduration);
-                                    challenge_id = c.getString(colchallenge_id);
-                                    break;
-                                }
-                            } while (c.moveToNext());
-                        } else Log.i("stat", "0 rows");
-                        c.close();
-                        description = ((EditText) view.findViewById(R.id.et_goal)).getText().toString();
-                        Log.i("stat", "Description :" + description + " " + description.length());
-                        if (duration != null && duration != "") {
-                            days = Integer.parseInt(duration) / 86400;
-                        }
-                        Log.i("stat", "Click: " + viewPager.getCurrentItem());
-
-                        if (name.equals("active")) {
-                            Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
-                        } else if (description.equals("") || description.startsWith(" ")) {
-                            Toast.makeText(getContext(), "Goal is empty!", Toast.LENGTH_SHORT).show();
-                        } else if (days == 0) {
-                            Toast.makeText(getContext(), "Min 1 day", Toast.LENGTH_SHORT).show();
-                        } else {
-                            OfflineMode offlineMode = new OfflineMode();
-                            if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
-                                StartSingleInProgress(challenge_id, finalFriend_id);
-                                HashMap<String, String> user = new HashMap<>();
-                                user = sessionManager.getUserDetails();
-                                String token = user.get("token");
-                                Log.i("stat", "Nam nado: " + challenge_id + " " + finalFriend_id + " " + token);
-                            }
-                        }
-                    }
-                    return true;
+                if (!duration.isEmpty()) {
+                    days = Integer.parseInt(duration);
                 }
-            });}
+
+                Cursor c = db.query("duel", null, null, null, null, null, null);
+                int position = viewPager.getCurrentItem();
+                int size = sessionManager.getSelfSize();
+
+                if (position == size) {
+                    if ((checkInputUserData(description, duration))) {
+                        days = Integer.parseInt(duration);
+                        Create_new_challenge(description, days, finalFriend_id);
+                    }
+                } else {
+                    int o = 0;
+                    if (c.moveToFirst()) {
+                        int idColIndex = c.getColumnIndex("id");
+                        int nameColIndex = c.getColumnIndex("name");
+                        int coldescription = c.getColumnIndex("description");
+                        int colduration = c.getColumnIndex("duration");
+                        int colchallenge_id = c.getColumnIndex("challenge_id");
+                        do {
+                            o++;
+                            if (o > position + 1) break;
+                            if (o == position + 1) {
+                                name = c.getString(nameColIndex);
+                                description = c.getString(coldescription);
+                                duration = c.getString(colduration);
+                                challenge_id = c.getString(colchallenge_id);
+                                break;
+                            }
+                        } while (c.moveToNext());
+                    }
+                    c.close();
+                    description = ((EditText) view.findViewById(R.id.et_goal)).getText().toString();
+
+                    if (isActive(description)) {
+                        Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
+                    } else {
+                        StartSingleInProgress(challenge_id, finalFriend_id);
+                        Toast.makeText(getActivity(), "Sent duel request", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                return true;
+            }
+        });
         return view;
     }
 
 
+    private boolean checkInputUserData(String description, String duration) {
+        int days = 21;
+        if (!duration.isEmpty()) {
+            days = Integer.parseInt(duration);
+        }
+        if (!isActive(description) && !description.isEmpty() && !description.startsWith(" ") && !duration.isEmpty() && days != 0) {
+            Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (isActive(description)) {
+            Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
+            return false;
+        } else {
+            Toast.makeText(getContext(), "Complete all fields", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
+
     @Override
     public void onClick(View v) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) return;
+        mLastClickTime = SystemClock.elapsedRealtime();
         Toast.makeText(getActivity(), "Tap & Hold", Toast.LENGTH_SHORT).show();
     }
 
@@ -384,7 +378,6 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
                             db.insert("pending_duel", null, cv);
                         }
                     }
-                    Toast.makeText(getActivity(), "Sended duel Request!!!", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
                 }
