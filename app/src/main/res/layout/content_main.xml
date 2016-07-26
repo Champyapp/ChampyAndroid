@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:windowEnableSplitTouch="false"
     android:splitMotionEvents="false"
-    android:touchscreenBlocksFocus="true"
+    android:background="@drawable/blured2"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".activity.MainActivity"
     tools:showIn="@layout/app_bar_main"
@@ -23,8 +23,8 @@
     <!-- Bar with counters -->
     <ImageView
         android:id="@+id/imageView_challenges_animation"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
         android:background="@drawable/score_animation"
         android:layout_alignTop="@+id/imageView_wins_animation"
         android:layout_alignParentLeft="true"
@@ -33,8 +33,8 @@
 
     <ImageView
         android:id="@+id/imageView_wins_animation"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
         android:background="@drawable/score_animation"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
@@ -42,8 +42,8 @@
 
     <ImageView
         android:id="@+id/imageView_total_animation"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
         android:background="@drawable/score_animation"
         android:layout_alignTop="@+id/imageView_wins_animation"
         android:layout_alignParentRight="true"
@@ -60,6 +60,7 @@
         android:id="@+id/textViewChallengesCounter"
         android:textIsSelectable="true"
         android:textSize="40dp"
+        android:text="0"
         android:layout_centerInParent="@+id/imageView_challenges_animation"
         android:gravity="center_vertical|center_horizontal"
         android:textColor="#ffffff"
@@ -82,6 +83,7 @@
         android:layout_alignParentTop="true"
         android:gravity="center_vertical|center_horizontal"
         android:textSize="40dp"
+        android:text="0"
         android:textColor="#ffffff"
         android:layout_alignBottom="@+id/imageView_wins_logo"
         android:layout_alignRight="@+id/imageView_wins_animation"
@@ -97,6 +99,7 @@
         android:layout_alignLeft="@+id/imageView_total_animation"
         android:layout_alignStart="@+id/imageView_total_animation"
         android:textSize="40dp"
+        android:text="0"
         android:gravity="center_vertical|center_horizontal"
         android:textColor="#ffffff"
         android:layout_alignBottom="@+id/imageView_total_logo"
@@ -111,27 +114,28 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/textViewChallenges"
+        android:text="In progress"
+        android:textColor="#ffffff"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_below="@+id/imageView_challenges_animation"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/imageView_challenges_animation"
         android:layout_alignEnd="@+id/imageView_challenges_animation"
         android:gravity="center_vertical|center_horizontal"
-        android:textColor="#ffffff"
         android:layout_marginLeft="@dimen/activity_vertical_margin"
         android:paddingBottom="30dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/textViewWins"
+        android:text="Wins"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_below="@+id/imageView_wins_animation"
         android:layout_alignLeft="@+id/imageView_wins_animation"
         android:layout_alignStart="@+id/imageView_wins_animation"
-        android:layout_toStartOf="@+id/imageView_total_animation"
         android:layout_alignRight="@+id/imageView_wins_animation"
         android:layout_alignEnd="@+id/imageView_wins_animation"
         android:gravity="center_vertical|center_horizontal"
@@ -141,8 +145,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/textViewTotal"
+        android:text="Total"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_below="@+id/imageView_total_animation"
         android:layout_alignRight="@+id/imageView_total_animation"
         android:layout_alignEnd="@+id/imageView_total_animation"
@@ -157,9 +162,10 @@
 
     <!-- Icons in bar -->
     <ImageView
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:id="@+id/imageView_challenges_logo"
+        android:src="@drawable/challenges"
         android:layout_alignBottom="@+id/imageView_challenges_animation"
         android:layout_marginBottom="10dp"
         android:layout_alignRight="@+id/imageView_challenges_animation"
@@ -169,9 +175,10 @@
         android:layout_marginLeft="@dimen/activity_vertical_margin"/>
 
     <ImageView
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:id="@+id/imageView_wins_logo"
+        android:src="@drawable/wins"
         android:layout_alignLeft="@+id/imageView_wins_animation"
         android:layout_alignStart="@+id/imageView_wins_animation"
         android:layout_alignTop="@+id/imageView_challenges_logo"
@@ -179,9 +186,10 @@
         android:layout_alignEnd="@+id/imageView_wins_animation" />
 
     <ImageView
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:id="@+id/imageView_total_logo"
+        android:src="@drawable/total"
         android:layout_alignRight="@+id/imageView_total_animation"
         android:layout_alignEnd="@+id/imageView_total_animation"
         android:layout_alignTop="@+id/imageView_wins_logo"

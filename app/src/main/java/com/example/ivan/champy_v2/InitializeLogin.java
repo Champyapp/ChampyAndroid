@@ -36,35 +36,31 @@ public class InitializeLogin {
         Point size = new Point();
         display.getSize(size);
         int width = size.x;
-        int height = size.y;
+        //int height = size.y;
         int x = round(width / 100);
-        int y = round(height / 100);
-        Log.i("XX", "XX: " + x);
+        //int y = round(height / 100);
+        //Log.i("XX", "XX: " + x);
 
 
         ImageButton button = (ImageButton)activity.findViewById(R.id.login_button);
-        Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
-                R.drawable.champy_icon);
-        Bitmap login = BitmapFactory.decodeResource(context.getResources(),
-                R.drawable.facebook);
+        //Bitmap icon  = BitmapFactory.decodeResource(context.getResources(), R.drawable.champy_icon);
+        Bitmap login = BitmapFactory.decodeResource(context.getResources(), R.drawable.facebook);
 
         login = imageModule.getResizedBitmap(login, x*90, x*20);
-
-        TextView loginText = (TextView)activity.findViewById(R.id.login_text);
-       /* Typeface face = Typeface.createFromAsset(context.getAssets(),
-                "fonts/bebas_neue.ttf");*/
-       // loginText.setTypeface(face);
-        loginText.setTextSize((float) ((float) y/x * 10));
-
         button.setImageBitmap(login);
 
-        Bitmap bitmap = imageModule.getResizedBitmap(icon, x*35, x*35);
-        icon = imageModule.getRoundedCornerBitmap(bitmap, 20);
-        ImageView Champy_icon= (ImageView)this.activity.findViewById(R.id.Champy_image);
-        Champy_icon.setImageBitmap(icon);
+        //TextView loginText = (TextView)activity.findViewById(R.id.login_text);
+        //loginText.setTypeface(face);
+        //loginText.setTextSize((float) ((float) y/x * 10));
 
-        RelativeLayout relativeLayout = (RelativeLayout)activity.findViewById(R.id.login);
-        relativeLayout.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.champy_background));
+
+        //Bitmap bitmap = imageModule.getResizedBitmap(icon, x*35, x*35);
+        //icon = imageModule.getRoundedCornerBitmap(bitmap, 20);
+        //ImageView Champy_icon= (ImageView)this.activity.findViewById(R.id.Champy_image);
+        //Champy_icon.setImageBitmap(icon);
+
+        //RelativeLayout relativeLayout = (RelativeLayout)activity.findViewById(R.id.login);
+        //relativeLayout.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.champy_background));
 
 
     }
