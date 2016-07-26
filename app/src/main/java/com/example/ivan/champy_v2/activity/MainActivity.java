@@ -795,10 +795,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             // cardImage.setImageDrawable(RecyclerView_Activity.this.getResources().getDrawable(R.drawable.card_image));
 
-            Button button = (Button) tempView.findViewById(R.id.buttonGiveUp);
-            button.getLayoutParams().width = x*10;
-            button.getLayoutParams().height = x*10;
-            button.setOnClickListener(new View.OnClickListener() {
+            Button buttonGiveUp = (Button) tempView.findViewById(R.id.buttonGiveUp);
+            buttonGiveUp.getLayoutParams().width = x*10;
+            buttonGiveUp.getLayoutParams().height = x*10;
+            buttonGiveUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {

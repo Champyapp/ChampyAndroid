@@ -61,12 +61,10 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         return fragment;
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
 
     @Nullable
     @Override
@@ -309,17 +307,17 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onResponse(Response<Duel> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    Log.i("stat", "Status: Starting OK");
+                    //Log.i("stat", "Status: Starting OK");
                     ContentValues cv = new ContentValues();
-                    Duel data = response.body();
-                    cv.put("challenge_id", data.getData().getId());
-                    Log.d("myLogs", "Added: " + data.getData().getId());
+                    Duel duel = response.body();
+                    cv.put("challenge_id", duel.getData().getId());
+                    //Log.d("myLogs", "Added: " + duel.getData().getId());
                     cv.put("updated", "false");
                     DBHelper dbHelper = new DBHelper(getActivity());
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
                     db.insert("updated", null, cv);
                     generate();
-                } else Log.i("stat", "Status: Starting WRONG" + response.code());
+                } //else Log.i("stat", "Status: Starting WRONG" + response.code());
             }
 
             @Override
@@ -336,20 +334,15 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         final int clearCount = db.delete("pending_duel", null, null);
         final ContentValues cv = new ContentValues();
         final String API_URL = "http://46.101.213.24:3007";
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         final SessionManager sessionManager = new SessionManager(getContext());
-        HashMap<String, String> user = new HashMap<>();
+        HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         String token = user.get("token");
         final String id = user.get("id");
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
         final long unixTime = System.currentTimeMillis() / 1000L;
-        final String update = "1457019726";
+        final String update = "0"; //1457019726
         Log.i("stat", "Nam nado: " + id + " " + update + " " + token);
         Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(id, update, token);
         call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {

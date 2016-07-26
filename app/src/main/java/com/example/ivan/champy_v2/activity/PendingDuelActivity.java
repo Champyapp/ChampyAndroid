@@ -17,7 +17,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -100,7 +99,9 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         viewPager.setClipToPadding(false);
         viewPager.setPadding(90, 0, 90, 0);
 
+
     }
+
 
 
     private Drawable Init(String path) throws FileNotFoundException {
@@ -126,6 +127,7 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
             super.onBackPressed();
         }
     }
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -169,6 +171,7 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 
 
 }

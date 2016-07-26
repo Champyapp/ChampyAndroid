@@ -90,8 +90,8 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         if (count == 0) { hideItem(); }
 
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
-        TextView tvIChallengeMyFriendTo = (TextView)findViewById(R.id.textView20);
-        tvIChallengeMyFriendTo.setTypeface(typeface);
+        TextView tvIChallengeMySelfTo = (TextView)findViewById(R.id.textView20);
+        tvIChallengeMySelfTo.setTypeface(typeface);
 
         Glide.with(this).load(R.drawable.selfimprovementicon).override(130, 130).into((ImageView) findViewById(R.id.imageViewLogo));
         Glide.with(this).load(R.drawable.selfimprtext).override(200, 170).into((ImageView) findViewById(R.id.imageView12));
@@ -118,7 +118,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
             Drawable dr = Init("/data/data/com.example.ivan.champy_v2/app_imageDir/");
             ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setImageDrawable(dr); final String API_URL = "http://46.101.213.24:3007";
+            imageView.setImageDrawable(dr);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

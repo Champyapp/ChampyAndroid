@@ -1,22 +1,35 @@
 package com.example.ivan.champy_v2.fragment;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.ivan.champy_v2.ChallengeController;
+import com.example.ivan.champy_v2.OfflineMode;
+import com.example.ivan.champy_v2.activity.MainActivity;
+import com.example.ivan.champy_v2.activity.PendingDuelActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.R;
+
+import java.io.IOException;
+
+import static java.lang.Math.round;
 
 /**
  * Fragment отвечающий за принятие или отмену дуели (то самое секретное меню)
@@ -24,6 +37,7 @@ import com.example.ivan.champy_v2.R;
 public class PendingDuelFragment extends Fragment {
 
     public static final String ARG_PAGE = "ARG_PAGE";
+
 
     public static PendingDuelFragment newInstance(int page) {
         Bundle args = new Bundle();
@@ -84,11 +98,11 @@ public class PendingDuelFragment extends Fragment {
             tvUserVsUser.setText(versus + " vs YOU");
         } else {
             tvUserVsUser.setText("YOU vs " + versus);
-            view.findViewById(R.id.imageButtonCancelBattle).setVisibility(View.INVISIBLE);
+            //view.findViewById(R.id.imageButtonCancelBattle).setVisibility(View.INVISIBLE);
             view.findViewById(R.id.imageButtonAcceptBattle).setVisibility(View.INVISIBLE);
         }
 
-        Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
+        Glide.with(getContext()).load(R.drawable.points).override(200, 200).into((ImageView)view.findViewById(R.id.imageViewAcceptButton));
         Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
         tvUserVsUser.setTypeface(typeface);
 
@@ -98,10 +112,66 @@ public class PendingDuelFragment extends Fragment {
             days = Integer.parseInt(duration) / 86400;
         }
         tvUserVsUser = (TextView)view.findViewById(R.id.textViewDuring);
-        tvUserVsUser.setText("During " + days + "days");
+        tvUserVsUser.setText(days + " Days");
 
         TextView etGoal = (TextView)view.findViewById(R.id.tv_goal);
         etGoal.setText(description);
+
+
+        ImageButton buttonCancelBattle = (ImageButton)view.findViewById(R.id.imageButtonCancelBattle);
+        buttonCancelBattle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogInterface.OnClickListener dialog = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DialogInterface.BUTTON_POSITIVE:
+                                OfflineMode offlineMode = new OfflineMode();
+                                if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
+                                    Toast.makeText(getContext(), "Coming soon", Toast.LENGTH_SHORT).show();
+                                }
+                                break;
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                break;
+                        }
+                    }
+                };
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setMessage("Are you sure you want to cancel request?")
+                        .setPositiveButton("Yes!", dialog)
+                        .setNegativeButton("No!",  dialog).show();
+            }
+        });
+
+
+
+        ImageButton buttonAcceptBattle = (ImageButton)view.findViewById(R.id.imageButtonAcceptBattle);
+        buttonAcceptBattle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogInterface.OnClickListener dialog = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DialogInterface.BUTTON_POSITIVE:
+                                //ChallengeController challengeController = new ChallengeController(getContext(), getActivity(), 0, 0);
+                                //challengeController.generate();
+                                //Toast.makeText(getContext(), "Challenge Accepted", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Coming soon", Toast.LENGTH_SHORT).show();
+                                break;
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                break;
+                        }
+                    }
+                };
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setMessage("Are you sure you want to accept request?")
+                        .setPositiveButton("Yes!", dialog)
+                        .setNegativeButton("No!",  dialog).show();
+            }
+        });
+
         return view;
     }
 
