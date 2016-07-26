@@ -26,4 +26,6 @@
     <include layout="@layout/content_pending_duel" />
 
 
+
+
 </android.support.design.widget.CoordinatorLayout>

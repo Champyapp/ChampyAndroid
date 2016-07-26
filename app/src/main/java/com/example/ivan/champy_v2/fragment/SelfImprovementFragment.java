@@ -35,7 +35,6 @@ import com.example.ivan.champy_v2.model.active_in_progress.Datum;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import retrofit.Call;
 import retrofit.Callback;

@@ -5,16 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.SelfImprovementActivity"
+    android:background="@drawable/selfimprovementback"
     tools:showIn="@layout/app_bar_self_improvement"
     android:id="@+id/selfimprovement">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:id="@+id/imageViewLogo"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:src="@mipmap/ic_launcher"
+        android:src="@drawable/selfimprovementicon"
         android:layout_marginTop="24dp" />
 
     <TextView
@@ -33,12 +34,12 @@
         android:layout_marginTop="32dp" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="125dp"
+        android:layout_height="25dp"
         android:id="@+id/imageView12"
         android:layout_below="@+id/imageViewLogo"
         android:layout_centerHorizontal="true"
-        android:src="@mipmap/ic_launcher"
+        android:src="@drawable/selfimprtext"
         android:layout_marginTop="16dp" />
 
     <android.support.v4.view.ViewPager

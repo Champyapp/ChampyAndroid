@@ -863,7 +863,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             buttonDoneForToday.getLayoutParams().height = x*10;
             final Button finalButton = buttonDoneForToday;
             if (item.getUpdated() != null){
-                if (!item.getType().equals("Wake Up")) {
+                if (!item.getType().equals("Wake Up")) { //?
                     if (item.getUpdated().equals("false")) {
                         buttonDoneForToday.setBackgroundDrawable(MainActivity.this.getResources().getDrawable(R.drawable.accept1));
                     }
@@ -873,13 +873,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 @Override
                 public void onClick(View v) {
                     String id = item.getId();
-                    Log.d("myLogs", "Click " + id);
+                    //Log.d("myLogs", "Click " + id);
                     SQLiteDatabase localSQLiteDatabase = new DBHelper(MainActivity.this).getWritableDatabase();
                     ContentValues localContentValues = new ContentValues();
                     localContentValues.put("updated", "true");
                     localSQLiteDatabase.update("myChallenges", localContentValues, "challenge_id = ?", new String[]{id});
                     int i = localSQLiteDatabase.update("updated", localContentValues, "challenge_id = ?", new String[]{id});
-                    Log.d("myLogs", "Updated: " + i);
+                    //Log.d("myLogs", "Updated: " + i);
                     finalButton.setBackgroundDrawable(MainActivity.this.getResources().getDrawable(R.drawable.icon_share));
                 }
             });

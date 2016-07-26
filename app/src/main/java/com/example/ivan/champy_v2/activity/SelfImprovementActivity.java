@@ -78,15 +78,11 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
-
         int count = check_pending();
-
         TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
         view.setText("+" + (count > 0 ? String.valueOf(count) : null));
-
         if (count == 0) { hideItem(); }
 
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
@@ -94,7 +90,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         tvIChallengeMySelfTo.setTypeface(typeface);
 
         Glide.with(this).load(R.drawable.selfimprovementicon).override(130, 130).into((ImageView) findViewById(R.id.imageViewLogo));
-        Glide.with(this).load(R.drawable.selfimprtext).override(200, 170).into((ImageView) findViewById(R.id.imageView12));
+        Glide.with(this).load(R.drawable.selfimprtext).override(280, 250).into((ImageView) findViewById(R.id.imageView12));
 
         RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.selfimprovement);
         relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementback));

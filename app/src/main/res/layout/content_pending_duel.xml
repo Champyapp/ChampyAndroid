@@ -7,24 +7,26 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".activity.PendingDuelActivity"
     tools:showIn="@layout/app_bar_pending__duel"
+    android:background="@drawable/selfimprovementback"
     android:id="@+id/pending_duel">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:id="@+id/imageViewLogo"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:src="@mipmap/ic_launcher"
+        android:src="@drawable/duel_blue"
         android:layout_marginTop="24dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Pending Duels"
+        android:text="Pending duels"
         android:id="@+id/textView20"
         android:textColor="#ffffff"
+        android:textAllCaps="true"
         android:gravity="center_vertical|center_horizontal"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -40,7 +42,28 @@
         android:layout_below="@+id/textView20"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="32dp" />
+        android:layout_marginTop="32dp"
+        android:layout_above="@+id/imageButtonCancelBattle"
+        android:layout_marginBottom="8dp" />
+
+    <ImageButton
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/imageButtonCancelBattle"
+        android:background="@drawable/cancel"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/imageViewLogo"
+        android:layout_toStartOf="@+id/imageViewLogo"
+        android:layout_marginBottom="8dp" />
+
+    <ImageButton
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/imageButtonAcceptBattle"
+        android:background="@drawable/accept"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/imageViewLogo"
+        android:layout_toEndOf="@+id/imageViewLogo"
+        android:layout_marginBottom="8dp" />
 
 </RelativeLayout>

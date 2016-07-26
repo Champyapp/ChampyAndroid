@@ -27,6 +27,8 @@ import com.example.ivan.champy_v2.activity.PendingDuelActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.R;
 
+import org.w3c.dom.Text;
+
 import java.io.IOException;
 
 import static java.lang.Math.round;
@@ -42,7 +44,6 @@ public class PendingDuelFragment extends Fragment {
     public static PendingDuelFragment newInstance(int page) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
-
         PendingDuelFragment fragment = new PendingDuelFragment();
         fragment.setArguments(args);
         return fragment;
@@ -50,7 +51,6 @@ public class PendingDuelFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.i("stat", "Status: PendingDuelFragment Created");
         super.onCreate(savedInstanceState);
     }
 
@@ -93,35 +93,37 @@ public class PendingDuelFragment extends Fragment {
             } while (c.moveToNext());
         }
         c.close();
+        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
+        TextView tvDays = (TextView)view.findViewById(R.id.textViewDuring);
+        TextView tvGoal = (TextView)view.findViewById(R.id.tv_goal);
         TextView tvUserVsUser = (TextView)view.findViewById(R.id.tvYouVsSomebody);
+
         if (recipient.equals("true")) {
             tvUserVsUser.setText(versus + " vs YOU");
         } else {
             tvUserVsUser.setText("YOU vs " + versus);
             //view.findViewById(R.id.imageButtonCancelBattle).setVisibility(View.INVISIBLE);
-            view.findViewById(R.id.imageButtonAcceptBattle).setVisibility(View.INVISIBLE);
+            //view.findViewById(R.id.imageButtonAcceptBattle).setVisibility(View.INVISIBLE);
         }
 
         Glide.with(getContext()).load(R.drawable.points).override(200, 200).into((ImageView)view.findViewById(R.id.imageViewAcceptButton));
-        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
         tvUserVsUser.setTypeface(typeface);
-
 
         int days = 21;
         if (duration != null && !duration.isEmpty()) {
             days = Integer.parseInt(duration) / 86400;
         }
-        tvUserVsUser = (TextView)view.findViewById(R.id.textViewDuring);
-        tvUserVsUser.setText(days + " Days");
 
-        TextView etGoal = (TextView)view.findViewById(R.id.tv_goal);
-        etGoal.setText(description);
+        tvDays.setText(days + "");
+        tvGoal.setText(description);
+        tvDays.setTypeface(typeface);
+        tvGoal.setTypeface(typeface);
 
-
-        ImageButton buttonCancelBattle = (ImageButton)view.findViewById(R.id.imageButtonCancelBattle);
+        /*ImageButton buttonCancelBattle = (ImageButton) getActivity().findViewById(R.id.imageButtonCancelBattle);
         buttonCancelBattle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 DialogInterface.OnClickListener dialog = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -137,16 +139,16 @@ public class PendingDuelFragment extends Fragment {
                         }
                     }
                 };
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getContext());
                 builder.setMessage("Are you sure you want to cancel request?")
                         .setPositiveButton("Yes!", dialog)
                         .setNegativeButton("No!",  dialog).show();
             }
-        });
+        });*/
 
 
 
-        ImageButton buttonAcceptBattle = (ImageButton)view.findViewById(R.id.imageButtonAcceptBattle);
+        /*ImageButton buttonAcceptBattle = (ImageButton)findViewById(R.id.imageButtonAcceptBattle);
         buttonAcceptBattle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,19 +160,19 @@ public class PendingDuelFragment extends Fragment {
                                 //ChallengeController challengeController = new ChallengeController(getContext(), getActivity(), 0, 0);
                                 //challengeController.generate();
                                 //Toast.makeText(getContext(), "Challenge Accepted", Toast.LENGTH_SHORT).show();
-                                Toast.makeText(getContext(), "Coming soon", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Coming soon", Toast.LENGTH_SHORT).show();
                                 break;
                             case DialogInterface.BUTTON_NEGATIVE:
                                 break;
                         }
                     }
                 };
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
                 builder.setMessage("Are you sure you want to accept request?")
                         .setPositiveButton("Yes!", dialog)
                         .setNegativeButton("No!",  dialog).show();
             }
-        });
+        });*/
 
         return view;
     }

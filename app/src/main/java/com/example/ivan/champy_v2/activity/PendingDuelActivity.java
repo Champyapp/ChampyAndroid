@@ -1,5 +1,7 @@
 package com.example.ivan.champy_v2.activity;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,16 +17,20 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
@@ -33,6 +39,7 @@ import com.example.ivan.champy_v2.adapter.PendingDuelsAdapter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -56,13 +63,10 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         navigationView.setNavigationItemSelectedListener(this);
 
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
-        TextView tvPendingDuels = (TextView)findViewById(R.id.textView20);
+        TextView tvPendingDuels = (TextView) findViewById(R.id.textView20);
         tvPendingDuels.setTypeface(typeface);
 
-        RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.pending_duel);
-        relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementback));
-
-        Glide.with(this).load(R.drawable.duel_blue).override(130, 130).into((ImageView)findViewById(R.id.imageViewLogo));
+        Glide.with(this).load(R.drawable.duel_blue).override(130, 130).into((ImageView) findViewById(R.id.imageViewLogo));
 
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user;
@@ -99,8 +103,74 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         viewPager.setClipToPadding(false);
         viewPager.setPadding(90, 0, 90, 0);
 
+        ImageButton buttonAcceptBattle = (ImageButton)findViewById(R.id.imageButtonAcceptBattle);
+        buttonAcceptBattle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                OfflineMode offlineMode = new OfflineMode();
+                                if (offlineMode.isConnectedToRemoteAPI(PendingDuelActivity.this)){
+                                    Toast.makeText(getApplicationContext(), "Challenge Accepted", Toast.LENGTH_SHORT).show();
+                                }
+                                break;
 
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked
+                                break;
+                        }
+                    }
+                };
+
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(PendingDuelActivity.this);
+                builder.setTitle("Are you sure")
+                        .setMessage("You wanna accept request?")
+                        .setIcon(R.drawable.challengecceptedmeme)
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No",  dialogClickListener).show();
+
+            }
+        });
+
+        ImageButton buttonCancelBattle = (ImageButton) findViewById(R.id.imageButtonCancelBattle);
+        buttonCancelBattle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                OfflineMode offlineMode = new OfflineMode();
+                                if (offlineMode.isConnectedToRemoteAPI(PendingDuelActivity.this)){
+                                    Toast.makeText(getApplicationContext(), "Canceled", Toast.LENGTH_SHORT).show();
+                                }
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked
+                                break;
+                        }
+                    }
+                };
+
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(PendingDuelActivity.this);
+                builder.setTitle("Are you sure")
+                        .setMessage("You wanna cancel request?")
+                        .setIcon(R.drawable.duel_blue)
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No",  dialogClickListener).show();
+
+            }
+        });
     }
+
+
 
 
 
@@ -171,7 +241,6 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 
 
 }
