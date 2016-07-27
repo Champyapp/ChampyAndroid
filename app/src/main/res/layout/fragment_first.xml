@@ -22,9 +22,9 @@
         android:src="@drawable/foreveralonememe"
         android:id="@+id/foreverAlonePhoto"
         android:visibility="invisible"
+        android:layout_marginTop="110dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="66dp" />
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"

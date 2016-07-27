@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:windowEnableSplitTouch="false"
     android:splitMotionEvents="false"
-    android:background="@drawable/blured2"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".activity.MainActivity"
     tools:showIn="@layout/app_bar_main"

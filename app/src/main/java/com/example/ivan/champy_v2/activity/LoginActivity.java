@@ -699,7 +699,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-    /*private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
         protected Bitmap doInBackground(String... urls) {
             String urldisplay = urls[0];
@@ -816,7 +816,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d(TAG, "Status: "+t);
             }
         });
-    }*/
+    }
 
 }
 

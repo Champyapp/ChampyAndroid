@@ -344,7 +344,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile_image);
         /*CHMakeScoreWithAnim chMakeScoreWithAnim = new CHMakeScoreWithAnim(getApplicationContext());
         chMakeScoreWithAnim.*/
-        new DownloadImageTask().buildAnim(this);
+        buildAnim(this);
         ViewServer.get(this).addWindow(this);
     }
 
@@ -418,7 +418,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         /*CHMakeScoreWithAnim chMakeScoreWithAnim = new CHMakeScoreWithAnim(getApplicationContext());
         chMakeScoreWithAnim.*/
 
-        new DownloadImageTask().buildAnim(this);
+        buildAnim(this);
+    }
+
+
+    public void uploadPhoto(String path) {
+        final String API_URL = "http://46.101.213.24:3007";
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        SessionManager sessionManager = new SessionManager(getApplicationContext());
+        HashMap<String, String> user;
+        user = sessionManager.getUserDetails();
+        String token = user.get("token");
+
+        String id = user.get("id");
+        File f = new File(path);
+        Log.d(TAG, "USER: " + token + " " + id);
+        Log.d(TAG, "Status: " + f);
+
+        RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), f);
+
+        Update_user update_user = retrofit.create(Update_user.class);
+        Call<User> call = update_user.update_photo(id, token, requestBody);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Response<User> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    Log.d(TAG, "Status: photo_uploaded");
+                } else Log.d(TAG, "Status :" + response.code());
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.d(TAG, "Status: " + t);
+            }
+        });
     }
 
 
@@ -448,7 +481,173 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    public void buildAnim(Activity activity) {
+        int width = activity.getWindowManager().getDefaultDisplay().getWidth();
+        makeResponsiveScore(width);
+        ImageView mImageViewFilling0 = (ImageView) findViewById(R.id.imageView_challenges_animation);
+        ImageView mImageViewFilling1 = (ImageView) findViewById(R.id.imageView_wins_animation);
+        ImageView mImageViewFilling2 = (ImageView) findViewById(R.id.imageView_total_animation);
+        ((AnimationDrawable) mImageViewFilling0.getBackground()).start();
+        ((AnimationDrawable) mImageViewFilling1.getBackground()).start();
+        ((AnimationDrawable) mImageViewFilling2.getBackground()).start();
 
+        final TextView tvChallengesCounter = (TextView) findViewById(R.id.textViewChallengesCounter);
+        final TextView tvWinsCounter       = (TextView) findViewById(R.id.textViewWinsCounter);
+        final TextView tvTotalCounter      = (TextView) findViewById(R.id.textViewTotalCounter);
+
+        SessionManager sessionManager = new SessionManager(activity);
+
+        String challenges = sessionManager.getChampyOptions().get("challenges");
+        String wins       = sessionManager.getChampyOptions().get("wins");
+        String total      = sessionManager.getChampyOptions().get("total");
+
+        final int challengesInteger = Integer.parseInt(challenges);
+        final int totalInteger      = Integer.parseInt(total);
+        final int winsInteger       = Integer.parseInt(wins);
+
+        // animator for In progress
+        ValueAnimator animatorInProgress = new ValueAnimator();
+        animatorInProgress.setObjectValues(0, challengesInteger);
+        animatorInProgress.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            public void onAnimationUpdate(ValueAnimator animation) {
+                tvTotalCounter.setText(String.valueOf(animation.getAnimatedValue()));
+            }
+        });
+        animatorInProgress.setEvaluator(new TypeEvaluator<Integer>() {
+            public Integer evaluate(float fraction, Integer startValue, Integer endValue) {
+                return Math.round(startValue + (endValue - startValue) * fraction);
+            }
+        });
+        animatorInProgress.setDuration(1000);
+
+        // animator for Total
+        ValueAnimator animatorWins = new ValueAnimator();
+        animatorWins.setObjectValues(0, winsInteger);
+        animatorWins.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            public void onAnimationUpdate(ValueAnimator animation) {
+                tvWinsCounter.setText(String.valueOf(animation.getAnimatedValue()));
+            }
+        });
+        animatorWins.setEvaluator(new TypeEvaluator<Integer>() {
+            public Integer evaluate(float fraction, Integer startValue, Integer endValue) {
+                return Math.round(startValue + (endValue - startValue) * fraction);
+            }
+        });
+        animatorWins.setDuration(1000);
+
+        // animator for total
+        ValueAnimator animatorTotal = new ValueAnimator();
+        animatorTotal.setObjectValues(0, totalInteger);
+        animatorTotal.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            public void onAnimationUpdate(ValueAnimator animation) {
+                tvChallengesCounter.setText(String.valueOf(animation.getAnimatedValue()));
+            }
+        });
+        animatorTotal.setEvaluator(new TypeEvaluator<Integer>() {
+            public Integer evaluate(float fraction, Integer startValue, Integer endValue) {
+                return Math.round(startValue + (endValue - startValue) * fraction);
+            }
+        });
+        animatorTotal.setDuration(1000);
+
+        animatorTotal.start();
+        animatorWins.start();
+        animatorInProgress.start();
+
+        final TextView textViewChallenges       = (TextView)  findViewById(R.id.textViewChallenges);
+        final TextView textViewWins             = (TextView)  findViewById(R.id.textViewWins);
+        final TextView textViewTotal            = (TextView)  findViewById(R.id.textViewTotal);
+        final ImageView imageViewChallengesLogo = (ImageView) findViewById(R.id.imageView_challenges_logo);
+        final ImageView imageViewWinsLogo       = (ImageView) findViewById(R.id.imageView_wins_logo);
+        final ImageView imageViewTotalLogo      = (ImageView) findViewById(R.id.imageView_total_logo);
+
+        final Animation alphaAnimation          = new AlphaAnimation(0.0f, 1.0f);
+        alphaAnimation.setDuration(3000);
+
+        textViewChallenges.setText("In Progress"); // TODO: 22.06.2016 Change to Challenges
+        textViewChallenges.startAnimation(alphaAnimation);
+        textViewWins.setText("Wins");
+        textViewWins.startAnimation(alphaAnimation);
+        textViewTotal.setText("Total");
+        textViewTotal.startAnimation(alphaAnimation);
+
+        Uri uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/challenges");
+        Glide.with(activity).load(uri).into(imageViewChallengesLogo);
+        imageViewChallengesLogo.startAnimation(alphaAnimation);
+
+        uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/wins");
+        Glide.with(activity).load(uri).into(imageViewWinsLogo);
+        imageViewWinsLogo.startAnimation(alphaAnimation);
+
+        uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/total");
+        Glide.with(activity).load(uri).into(imageViewTotalLogo);
+        imageViewTotalLogo.startAnimation(alphaAnimation);
+
+    }
+
+
+    public void makeResponsiveScore(int width) {
+        int x = round(width/100);
+
+        //-------------------------- Animation ---------------------------//
+        ImageView imageView = (ImageView)findViewById(R.id.imageView_challenges_animation);
+        imageView.getLayoutParams().width = x*25;
+        imageView.getLayoutParams().height = x*25;
+
+        imageView = (ImageView)findViewById(R.id.imageView_wins_animation);
+        imageView.getLayoutParams().width = x*25;
+        imageView.getLayoutParams().height = x*25;
+
+        imageView = (ImageView)findViewById(R.id.imageView_total_animation);
+        imageView.getLayoutParams().width = x*25;
+        imageView.getLayoutParams().height = x*25;
+
+        //---------------------------- Logo -----------------------------//
+        imageView = (ImageView)findViewById(R.id.imageView_wins_logo);
+        imageView.getLayoutParams().width = x*5;
+        imageView.getLayoutParams().height = x*5;
+
+        imageView = (ImageView)findViewById(R.id.imageView_total_logo);
+        imageView.getLayoutParams().width = x*5;
+        imageView.getLayoutParams().height = x*5;
+
+        imageView = (ImageView)findViewById(R.id.imageView_challenges_logo);
+        imageView.getLayoutParams().width = x*5;
+        imageView.getLayoutParams().height = x*5;
+
+        //---------------------------- Fab -----------------------------//
+        ImageButton fab = (ImageButton)findViewById(R.id.fabPlus);
+        fab.getLayoutParams().width = x*20;
+        fab.getLayoutParams().height = x*20;
+
+        /*imageView = (ImageView)findViewById(R.id.profile_image);
+        imageView.getLayoutParams().width = x*25;
+        imageView.getLayoutParams().height = x*25;*/
+
+        //--------------------------- Score ----------------------------//
+        Float y = x*(float)3.5;
+
+        TextView textViewScoreChallenges = (TextView)findViewById(R.id.textViewChallengesCounter);
+        textViewScoreChallenges.setTextSize(y);
+
+        TextView textViewScoreWins = (TextView)findViewById(R.id.textViewWinsCounter);
+        textViewScoreWins.setTextSize(y);
+
+        TextView textViewScoreTotal = (TextView)findViewById(R.id.textViewTotalCounter);
+        textViewScoreTotal.setTextSize(y);
+
+        //------------------------- TextViews -------------------------//
+        y = x*(float)1.5;
+        TextView textViewChallenges = (TextView)findViewById(R.id.textViewChallenges);
+        TextView textViewWins = (TextView)findViewById(R.id.textViewWins);
+        TextView textViewTotal = (TextView)findViewById(R.id.textViewTotal);
+        textViewChallenges.setTextSize(y);
+        textViewWins.setTextSize(y);
+        textViewTotal.setTextSize(y);
+
+
+
+    }
 
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
@@ -491,8 +690,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            CHUploadPhoto chUploadPhoto = new CHUploadPhoto();
-            chUploadPhoto.uploadPhoto(Uri.fromFile(file).getPath());
+
+            uploadPhoto(Uri.fromFile(file).getPath());
 
             File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
             // Create imageDir
@@ -584,173 +783,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // Do your staff here to save image
             saveToInternalStorage(result);
             loadImageFromStorage("/data/data/com.example.ivan.champy_v2/app_imageDir/");
-        }
-
-        public void buildAnim(Activity activity) {
-            int width = activity.getWindowManager().getDefaultDisplay().getWidth();
-            makeResponsiveScore(width);
-            ImageView mImageViewFilling0 = (ImageView) findViewById(R.id.imageView_challenges_animation);
-            ImageView mImageViewFilling1 = (ImageView) findViewById(R.id.imageView_wins_animation);
-            ImageView mImageViewFilling2 = (ImageView) findViewById(R.id.imageView_total_animation);
-            ((AnimationDrawable) mImageViewFilling0.getBackground()).start();
-            ((AnimationDrawable) mImageViewFilling1.getBackground()).start();
-            ((AnimationDrawable) mImageViewFilling2.getBackground()).start();
-
-            final TextView tvChallengesCounter = (TextView) findViewById(R.id.textViewChallengesCounter);
-            final TextView tvWinsCounter       = (TextView) findViewById(R.id.textViewWinsCounter);
-            final TextView tvTotalCounter      = (TextView) findViewById(R.id.textViewTotalCounter);
-
-            SessionManager sessionManager = new SessionManager(activity);
-
-            String challenges = sessionManager.getChampyOptions().get("challenges");
-            String wins       = sessionManager.getChampyOptions().get("wins");
-            String total      = sessionManager.getChampyOptions().get("total");
-
-            final int challengesInteger = Integer.parseInt(challenges);
-            final int totalInteger      = Integer.parseInt(total);
-            final int winsInteger       = Integer.parseInt(wins);
-
-            // animator for In progress
-            ValueAnimator animatorInProgress = new ValueAnimator();
-            animatorInProgress.setObjectValues(0, challengesInteger);
-            animatorInProgress.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    tvTotalCounter.setText(String.valueOf(animation.getAnimatedValue()));
-                }
-            });
-            animatorInProgress.setEvaluator(new TypeEvaluator<Integer>() {
-                public Integer evaluate(float fraction, Integer startValue, Integer endValue) {
-                    return Math.round(startValue + (endValue - startValue) * fraction);
-                }
-            });
-            animatorInProgress.setDuration(1000);
-
-            // animator for Total
-            ValueAnimator animatorWins = new ValueAnimator();
-            animatorWins.setObjectValues(0, winsInteger);
-            animatorWins.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    tvWinsCounter.setText(String.valueOf(animation.getAnimatedValue()));
-                }
-            });
-            animatorWins.setEvaluator(new TypeEvaluator<Integer>() {
-                public Integer evaluate(float fraction, Integer startValue, Integer endValue) {
-                    return Math.round(startValue + (endValue - startValue) * fraction);
-                }
-            });
-            animatorWins.setDuration(1000);
-
-            // animator for total
-            ValueAnimator animatorTotal = new ValueAnimator();
-            animatorTotal.setObjectValues(0, totalInteger);
-            animatorTotal.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    tvChallengesCounter.setText(String.valueOf(animation.getAnimatedValue()));
-                }
-            });
-            animatorTotal.setEvaluator(new TypeEvaluator<Integer>() {
-                public Integer evaluate(float fraction, Integer startValue, Integer endValue) {
-                    return Math.round(startValue + (endValue - startValue) * fraction);
-                }
-            });
-            animatorTotal.setDuration(1000);
-
-            animatorTotal.start();
-            animatorWins.start();
-            animatorInProgress.start();
-
-            final TextView textViewChallenges       = (TextView)  findViewById(R.id.textViewChallenges);
-            final TextView textViewWins             = (TextView)  findViewById(R.id.textViewWins);
-            final TextView textViewTotal            = (TextView)  findViewById(R.id.textViewTotal);
-            final ImageView imageViewChallengesLogo = (ImageView) findViewById(R.id.imageView_challenges_logo);
-            final ImageView imageViewWinsLogo       = (ImageView) findViewById(R.id.imageView_wins_logo);
-            final ImageView imageViewTotalLogo      = (ImageView) findViewById(R.id.imageView_total_logo);
-
-            final Animation alphaAnimation          = new AlphaAnimation(0.0f, 1.0f);
-            alphaAnimation.setDuration(3000);
-
-            textViewChallenges.setText("In Progress"); // TODO: 22.06.2016 Change to Challenges
-            textViewChallenges.startAnimation(alphaAnimation);
-            textViewWins.setText("Wins");
-            textViewWins.startAnimation(alphaAnimation);
-            textViewTotal.setText("Total");
-            textViewTotal.startAnimation(alphaAnimation);
-
-            Uri uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/challenges");
-            Glide.with(activity).load(uri).into(imageViewChallengesLogo);
-            imageViewChallengesLogo.startAnimation(alphaAnimation);
-
-            uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/wins");
-            Glide.with(activity).load(uri).into(imageViewWinsLogo);
-            imageViewWinsLogo.startAnimation(alphaAnimation);
-
-            uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/total");
-            Glide.with(activity).load(uri).into(imageViewTotalLogo);
-            imageViewTotalLogo.startAnimation(alphaAnimation);
-
-        }
-
-        public void makeResponsiveScore(int width) {
-            int x = round(width/100);
-
-            //-------------------------- Animation ---------------------------//
-            ImageView imageView = (ImageView)findViewById(R.id.imageView_challenges_animation);
-            imageView.getLayoutParams().width = x*25;
-            imageView.getLayoutParams().height = x*25;
-
-            imageView = (ImageView)findViewById(R.id.imageView_wins_animation);
-            imageView.getLayoutParams().width = x*25;
-            imageView.getLayoutParams().height = x*25;
-
-            imageView = (ImageView)findViewById(R.id.imageView_total_animation);
-            imageView.getLayoutParams().width = x*25;
-            imageView.getLayoutParams().height = x*25;
-
-            //---------------------------- Logo -----------------------------//
-            imageView = (ImageView)findViewById(R.id.imageView_wins_logo);
-            imageView.getLayoutParams().width = x*5;
-            imageView.getLayoutParams().height = x*5;
-
-            imageView = (ImageView)findViewById(R.id.imageView_total_logo);
-            imageView.getLayoutParams().width = x*5;
-            imageView.getLayoutParams().height = x*5;
-
-            imageView = (ImageView)findViewById(R.id.imageView_challenges_logo);
-            imageView.getLayoutParams().width = x*5;
-            imageView.getLayoutParams().height = x*5;
-
-            //---------------------------- Fab -----------------------------//
-            ImageButton fab = (ImageButton)findViewById(R.id.fabPlus);
-            fab.getLayoutParams().width = x*20;
-            fab.getLayoutParams().height = x*20;
-
-        /*imageView = (ImageView)findViewById(R.id.profile_image);
-        imageView.getLayoutParams().width = x*25;
-        imageView.getLayoutParams().height = x*25;*/
-
-            //--------------------------- Score ----------------------------//
-            Float y = x*(float)3.5;
-
-            TextView textViewScoreChallenges = (TextView)findViewById(R.id.textViewChallengesCounter);
-            textViewScoreChallenges.setTextSize(y);
-
-            TextView textViewScoreWins = (TextView)findViewById(R.id.textViewWinsCounter);
-            textViewScoreWins.setTextSize(y);
-
-            TextView textViewScoreTotal = (TextView)findViewById(R.id.textViewTotalCounter);
-            textViewScoreTotal.setTextSize(y);
-
-            //------------------------- TextViews -------------------------//
-            y = x*(float)1.5;
-            TextView textViewChallenges = (TextView)findViewById(R.id.textViewChallenges);
-            TextView textViewWins = (TextView)findViewById(R.id.textViewWins);
-            TextView textViewTotal = (TextView)findViewById(R.id.textViewTotal);
-            textViewChallenges.setTextSize(y);
-            textViewWins.setTextSize(y);
-            textViewTotal.setTextSize(y);
-
-
-
         }
 
     }

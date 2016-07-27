@@ -324,7 +324,7 @@ public class DuelFragment extends Fragment {
                     Duel duel = response.body();
                     cv.put("challenge_id", duel.getData().getId());
                     //Log.d("myLogs", "Added: " + duel.getData().getId());
-                    cv.put("updated", "false");
+                    cv.put("updated", "false"); // почему false?
                     DBHelper dbHelper = new DBHelper(getActivity());
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
                     db.insert("updated", null, cv);

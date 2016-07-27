@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/champy_background">
 
     <ImageView
         android:layout_width="fill_parent"
@@ -45,7 +46,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textAppearance="?android:attr/textAppearanceMedium"
-    android:text="Level # Champy"
+    android:text="@string/level_0_champy"
     android:textColor="#339997"
     android:id="@+id/textView9"
     android:layout_below="@+id/name"
@@ -55,7 +56,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textAppearance="?android:attr/textAppearanceMedium"
-    android:text="General:"
+    android:text="@string/general"
     android:id="@+id/tvGeneral"
     android:layout_below="@+id/textView9"
     android:layout_alignParentLeft="true"
@@ -76,7 +77,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Enter new name"
+        android:text="@string/enter_new_name"
         android:id="@+id/tvEntedYourName"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
@@ -95,6 +96,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        android:maxLength="25"
         android:singleLine="true"
         android:visibility="gone"
         android:textColor="#ffffff" />
@@ -112,7 +114,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Name"
+        android:text="@string/name"
         android:id="@+id/tvName"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -175,7 +177,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Delete Account"
+        android:text="@string/delete_account"
         android:id="@+id/delete_acc"
         android:layout_below="@+id/view1"
         android:layout_alignParentLeft="true"
@@ -201,7 +203,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Notifications:"
+        android:text="@string/notifications"
         android:id="@+id/tvNotifications"
         android:layout_below="@+id/view2"
         android:layout_alignParentLeft="true"
@@ -213,7 +215,7 @@
     <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Push Notifications"
+        android:text="@string/push_notifications"
         android:id="@+id/switch1"
         android:layout_below="@+id/tvNotifications"
         android:layout_alignParentLeft="true"
@@ -238,7 +240,7 @@
     <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Challenge Requests"
+        android:text="@string/new_challenge_requests"
         android:id="@+id/switch2"
         android:layout_below="@+id/view3"
         android:layout_alignParentLeft="true"
@@ -262,7 +264,7 @@
     <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Accepted Your Challenge"
+        android:text="@string/accepted_your_challenge"
         android:id="@+id/switch3"
         android:layout_below="@+id/view4"
         android:layout_alignParentLeft="true"
@@ -287,7 +289,7 @@
         <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Challenge End"
+        android:text="@string/challenge_end"
         android:id="@+id/switch4"
         android:layout_below="@+id/view5"
         android:layout_alignParentLeft="true"
@@ -313,7 +315,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Legal:"
+        android:text="@string/legal"
         android:id="@+id/tvLegal"
         android:layout_below="@+id/view6"
         android:layout_alignParentLeft="true"
@@ -326,7 +328,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="About"
+        android:text="@string/about"
         android:id="@+id/about"
         android:layout_below="@+id/tvLegal"
         android:layout_alignParentLeft="true"
@@ -352,7 +354,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Privacy Policy"
+        android:text="@string/privacy_policy"
         android:id="@+id/privacy"
         android:layout_below="@+id/view7"
         android:layout_alignParentLeft="true"
@@ -363,6 +365,7 @@
         android:layout_alignRight="@+id/switch4"
         android:layout_alignEnd="@+id/switch4"
         android:clickable="true" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -378,7 +381,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Terms"
+        android:text="@string/terms"
         android:id="@+id/terms"
         android:layout_below="@+id/view8"
         android:layout_alignParentLeft="true"
@@ -389,6 +392,7 @@
         android:layout_alignRight="@+id/switch4"
         android:layout_alignEnd="@+id/switch4"
         android:clickable="true" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -404,7 +408,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Contact Us"
+        android:text="@string/contact_us"
         android:id="@+id/contact_us"
         android:layout_below="@+id/view9"
         android:layout_alignParentLeft="true"
@@ -416,6 +420,7 @@
         android:layout_alignEnd="@+id/switch4"
         android:clickable="true"
         android:layout_marginBottom="8dp" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -426,6 +431,7 @@
         android:layout_below="@+id/privacy"
         android:layout_alignRight="@+id/change_name"
         android:layout_alignEnd="@+id/change_name" />
+
     </RelativeLayout>
 
     </ScrollView>

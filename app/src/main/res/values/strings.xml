@@ -119,5 +119,20 @@
     <string name="wins">Wins</string>
     <string name="in_progress">In progress</string>
     <string name="zero">0</string>
+    <string name="level_0_champy">Level 0 Champy</string>
+    <string name="general">General:</string>
+    <string name="enter_new_name">Enter new name</string>
+    <string name="name">Name</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="notifications">Notifications:</string>
+    <string name="push_notifications">Push Notifications</string>
+    <string name="new_challenge_requests">New Challenge Requests</string>
+    <string name="accepted_your_challenge">Accepted Your Challenge</string>
+    <string name="challenge_end">Challenge End</string>
+    <string name="terms">Terms</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="about">About</string>
+    <string name="legal">Legal:</string>
+    <string name="contact_us">Contact Us</string>
 
 </resources>
