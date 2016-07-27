@@ -1,6 +1,7 @@
 package com.example.ivan.champy_v2.fragment;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -44,10 +45,9 @@ import retrofit.Retrofit;
 
 import static java.lang.Math.round;
 
-public class SelfImprovementFragment extends Fragment implements View.OnClickListener {
+public class SelfImprovementFragment extends Fragment {
 
     public static final String ARG_PAGE = "ARG_PAGE";
-    private long mLastClickTime = 0;
 
 
     public static SelfImprovementFragment newInstance(int page) {
@@ -139,62 +139,84 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         OfflineMode offlineMode = new OfflineMode();
         offlineMode.isConnectedToRemoteAPI(getActivity());
 
-        buttonAccept.setOnClickListener(this);
-        buttonAccept.setOnLongClickListener(new View.OnLongClickListener() {
+        buttonAccept.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
-                String name = "";
-                String duration = "";
-                String description = "";
-                String challenge_id = "";
-                int days;
+            public void onClick(View v) {
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String name = "";
+                        String duration = "";
+                        String description = "";
+                        String challenge_id = "";
+                        int days;
 
-                EditText etGoal = (EditText) view.findViewById(R.id.et_goal);
-                EditText etDays = (EditText) view.findViewById(R.id.et_days);
-                description = etGoal.getText().toString();
-                duration = etDays.getText().toString();
+                        EditText etGoal = (EditText) view.findViewById(R.id.et_goal);
+                        EditText etDays = (EditText) view.findViewById(R.id.et_days);
+                        description = etGoal.getText().toString();
+                        duration = etDays.getText().toString();
 
-                if (!duration.isEmpty()){ days = Integer.parseInt(duration); }
+                        if (!duration.isEmpty()){ days = Integer.parseInt(duration); }
 
-                Cursor c = db.query("selfimprovement", null, null, null, null, null, null);
-                int position = viewPager.getCurrentItem();
-                int size = sessionManager.getSelfSize();
+                        Cursor c = db.query("selfimprovement", null, null, null, null, null, null);
+                        int position = viewPager.getCurrentItem();
+                        int size = sessionManager.getSelfSize();
 
-                if (position == size) {
-                    if ((checkInputUserData(description, duration))) {
-                        days = Integer.parseInt(duration);
-                        Create_new_challenge(description, days);
-                    }
-                } else {
-                    int o = 0;
-                    if (c.moveToFirst()) {
-                        int idColIndex = c.getColumnIndex("id");
-                        int nameColIndex = c.getColumnIndex("name");
-                        int coldescription = c.getColumnIndex("description");
-                        int colduration = c.getColumnIndex("duration");
-                        int colchallenge_id = c.getColumnIndex("challenge_id");
-                        do {
-                            o++;
-                            if (o > position + 1) break;
-                            if (o == position + 1) {
-                                name = c.getString(nameColIndex);
-                                description = c.getString(coldescription);
-                                duration = c.getString(colduration);
-                                challenge_id = c.getString(colchallenge_id);
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                if (position == size) {
+                                    if ((checkInputUserData(description, duration))) {
+                                        days = Integer.parseInt(duration);
+                                        Create_new_challenge(description, days);
+                                    }
+                                } else {
+                                    int o = 0;
+                                    if (c.moveToFirst()) {
+                                        int idColIndex = c.getColumnIndex("id");
+                                        int nameColIndex = c.getColumnIndex("name");
+                                        int coldescription = c.getColumnIndex("description");
+                                        int colduration = c.getColumnIndex("duration");
+                                        int colchallenge_id = c.getColumnIndex("challenge_id");
+                                        do {
+                                            o++;
+                                            if (o > position + 1) break;
+                                            if (o == position + 1) {
+                                                name = c.getString(nameColIndex);
+                                                description = c.getString(coldescription);
+                                                duration = c.getString(colduration);
+                                                challenge_id = c.getString(colchallenge_id);
+                                                break;
+                                            }
+                                        } while (c.moveToNext());
+                                    }
+                                    c.close();
+
+                                    if (isActive(description)) {
+                                        Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        StartSingleInProgress(challenge_id);
+                                        Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
                                 break;
-                            }
-                        } while (c.moveToNext());
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked
+                                break;
+                        }
                     }
-                    c.close();
+                };
 
-                    if (isActive(description)) {
-                        Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
-                    } else {
-                        StartSingleInProgress(challenge_id);
-                        Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                return true;
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
+                builder.setTitle("Are you sure")
+                        .setMessage("You wanna create this challenge?")
+                        .setIcon(R.drawable.challengecceptedmeme)
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No",  dialogClickListener).show();
+
+
+
+
             }
         });
         return view;
@@ -217,14 +239,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
             Toast.makeText(getContext(), "Complete all fields", Toast.LENGTH_SHORT).show();
             return false;
         }
-    }
-
-
-    @Override
-    public void onClick(View v) {
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) return;
-        mLastClickTime = SystemClock.elapsedRealtime();
-        Toast.makeText(getActivity(), "Tap & Hold", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -361,7 +375,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
             public void onFailure(Throwable t) { }
         });
     }
-
 
     // проверяем таблицу "update" в бд, пересоздаем и обновляем даннные.
     // Если challenge_id (из update) = challenge_id (из стандардатных)

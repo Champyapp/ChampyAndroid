@@ -274,16 +274,16 @@ public class LoginActivity extends AppCompatActivity {
         moveTaskToBack(false);
     }
 
-
-    public void Init() throws IOException {
-        InitializeLogin initializeLogin = new InitializeLogin(this, getApplicationContext(), new ImageModule(getApplicationContext()));
-        initializeLogin.Init();
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         ViewServer.get(this).removeWindow(this);
+    }
+
+
+    public void Init() throws IOException {
+        InitializeLogin initializeLogin = new InitializeLogin(this, getApplicationContext(), new ImageModule(getApplicationContext()));
+        initializeLogin.Init();
     }
 
 

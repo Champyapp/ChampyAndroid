@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="I challenge myself to"
+        android:textAllCaps="true"
         android:id="@+id/textView20"
         android:textColor="#ffffff"
         android:gravity="center_vertical|center_horizontal"

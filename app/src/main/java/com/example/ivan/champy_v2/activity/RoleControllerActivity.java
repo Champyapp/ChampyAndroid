@@ -17,10 +17,10 @@ public class RoleControllerActivity extends AppCompatActivity {
 
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         Intent goToActivity;
-        if (!sessionManager.isUserLoggedIn()) {
-            goToActivity = new Intent(this, LoginActivity.class);
-        } else {
+        if (sessionManager.isUserLoggedIn()) {
             goToActivity = new Intent(this, MainActivity.class);
+        } else {
+            goToActivity = new Intent(this, LoginActivity.class);
         }
         startActivity(goToActivity);
 
