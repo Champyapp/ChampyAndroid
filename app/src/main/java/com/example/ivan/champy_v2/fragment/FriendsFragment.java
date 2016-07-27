@@ -3,6 +3,7 @@ package com.example.ivan.champy_v2.fragment;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,6 +13,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ivan.champy_v2.interfaces.CustomItemClickListener;
@@ -82,7 +85,21 @@ public class FriendsFragment extends Fragment {
         c.close();
 
         Log.i("stat", "FriendsActivity :"+friends);
-
+        Typeface typeFace = Typeface.createFromAsset(getResources().getAssets(), "fonts/bebasneue.ttf");
+        ImageView foreverAlonePhoto = (ImageView)view.findViewById(R.id.foreverAlonePhoto);
+        TextView foreverAloneText1 = (TextView)view.findViewById(R.id.foreveralonetext1);
+        TextView foreverAloneText2 = (TextView)view.findViewById(R.id.foreveralonetext2);
+        foreverAloneText1.setTypeface(typeFace);
+        foreverAloneText2.setTypeface(typeFace);
+        if (friends.isEmpty()) {
+            foreverAlonePhoto.setVisibility(View.VISIBLE);
+            foreverAloneText1.setVisibility(View.VISIBLE);
+            foreverAloneText2.setVisibility(View.VISIBLE);
+        } else {
+            foreverAlonePhoto.setVisibility(View.INVISIBLE);
+            foreverAloneText1.setVisibility(View.INVISIBLE);
+            foreverAloneText2.setVisibility(View.INVISIBLE);
+        }
 
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
         final FriendsAdapter adapter = new FriendsAdapter(friends, getContext(), getActivity(), new CustomItemClickListener() {

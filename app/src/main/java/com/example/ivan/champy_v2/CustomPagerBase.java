@@ -117,11 +117,11 @@ public class CustomPagerBase {
             int firstTouchX;
 
             public boolean onTouch(View v, MotionEvent event) {
-                Log.d("TAG", "Touch :" + isTouchEnabled);
+                //Log.d("TAG", "Touch :" + isTouchEnabled);
 
                 if(isTouchEnabled){
                     int width = Math.round(HelperClass.getWindowWidth(context) / 100);
-                    Log.d("TAG", "Width: ="+width);
+                    //Log.d("TAG", "Width: ="+width);
 
                     final int X = (int) event.getRawX();
 
@@ -143,7 +143,7 @@ public class CustomPagerBase {
 
                             lastX = X;
                             //   Log.d("TAG", "Move "+ViewHelper.getAlpha(nextItem));
-                            Log.d("TAG", "Move " + ViewHelper.getScaleX(itemView));
+                            //Log.d("TAG", "Move " + ViewHelper.getScaleX(itemView));
                             ViewHelper.setScaleY(itemView, getScaleValue(viewXPosition));
                             ViewHelper.setScaleX(itemView, getScaleValue(viewXPosition));
 
@@ -163,7 +163,7 @@ public class CustomPagerBase {
                                 }
                                 else if (currentItem != null) {
                                     currentItem.bringToFront();
-                                    Log.d("TAG", "Bring to Front");
+                                    //Log.d("TAG", "Bring to Front");
                                 }
                             } else if (lastX - firstTouchX > 10 && previousItem != null) {
                                 if (ViewHelper.getAlpha(previousItem) < 0.93f) {
@@ -180,10 +180,10 @@ public class CustomPagerBase {
                                 }
                                 else if (currentItem != null) {
                                     currentItem.bringToFront();
-                                    Log.d("TAG", "Bring to Front");
+                                    //Log.d("TAG", "Bring to Front");
                                 }
                             } else if  (currentItem != null) {
-                                Log.d("TAG", "Bring to Front");
+                                //Log.d("TAG", "Bring to Front");
                                 currentItem.bringToFront();
                             }
                             break;
@@ -209,7 +209,7 @@ public class CustomPagerBase {
                                 // поворот карточок зліва на право
                             } else if (firstTouchX - lastX > 100) {
                                 if (nextItem != null) {
-                                    Log.d("TAG", "Ready to next:"+(firstTouchX - lastX));
+                                    //Log.d("TAG", "Ready to next:"+(firstTouchX - lastX));
                                     changePageTo(NEXT_PAGE);}
                                 else {
                                     AnimatorSet set = new AnimatorSet();
@@ -241,7 +241,7 @@ public class CustomPagerBase {
                                     );
                                     set.setDuration(90);
                                     currentItem.bringToFront();
-                                    Log.d("TAG", "Bring to Front");
+                                    //Log.d("TAG", "Bring to Front");
                                     set.start();
                                 }
                                 // збільшує праву, якщо вибрана сама ліва
@@ -337,7 +337,7 @@ public class CustomPagerBase {
                         ViewHelper.setScaleY(nextNext, 0.8f);
                         ViewHelper.setAlpha(nextNext, 0.8f);
                         currentItem.bringToFront();
-                        Log.d("TAG", "Bring to Front");
+                        //Log.d("TAG", "Bring to Front");
                         rootView.invalidate();
                         ObjectAnimator anim = ObjectAnimator.ofFloat(nextNext, "translationX", ViewHelper.getX(nextNext), ViewHelper.getX(nextNext));
                         anim.setDuration(90);
@@ -417,7 +417,7 @@ public class CustomPagerBase {
                         anim.setDuration(90);
                         anim.start();
                         currentItem.bringToFront();
-                        Log.d("TAG", "Bring to Front");
+                        //Log.d("TAG", "Bring to Front");
                         rootView.invalidate();
                         previousItem = prevPrev;
                     }

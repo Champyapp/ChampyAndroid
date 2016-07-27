@@ -110,6 +110,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         //SessionManager sessionManager = new SessionManager(_context);
         //HashMap<String, String> champy = sessionManager.getChampyOptions();
 
+
         // Set item views based on the data model
         TextView textView = viewHolder.nameTextView;
         textView.setText(contact.getName());
@@ -292,6 +293,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
         public TextView nameTextView;
+
         public ImageView friendImage;
         public ImageView challenges;
         public ImageView wins;
@@ -307,7 +309,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         public RelativeLayout info;
 
         public ImageView dop;
-
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -332,8 +333,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
             block = (ImageButton)itemView.findViewById(R.id.imageButtonBlockUser);
             add = (ImageButton)itemView.findViewById(R.id.imageButtonAddUser);
-
-
         }
 
     }

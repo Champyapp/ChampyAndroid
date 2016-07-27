@@ -53,13 +53,13 @@ dependencies {
     compile 'com.android.support:support-annotations:23.4.0'
 
     androidTestCompile 'com.android.support:support-annotations:23.4.0'
-    androidTestCompile 'com.android.support.test:runner:0.5'                      // говно, которое делает ClassRule.class и ActiveTestSuite (junit-dep-4.12.sources)
-    androidTestCompile 'com.android.support.test:rules:0.5'                       // говно, которое делает ClassRule.class и ActiveTestSuite (junit-dep-4.12.sources)
-    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'    // говно, которое делает ClassRule.class и ActiveTestSuite (junit-dep-4.12.sources)
-    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2.2' // говно, которое делает ClassRule.class и ActiveTestSuite (junit-dep-4.12.sources)
-    //androidTestCompile 'com.android.support.test.espresso:espresso-web:2.2.2'     // говно, которое делает ClassRule.class и ActiveTestSuite (junit-dep-4.12.sources)
+    androidTestCompile 'com.android.support.test:runner:0.5'                      // делает ClassRule.class и ActiveTestSuite (junit-dep-4.12.sources)
+    androidTestCompile 'com.android.support.test:rules:0.5'                       // делает ClassRule.class и ActiveTestSuite (junit-dep-4.12.sources)
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'    // делает ClassRule.class и ActiveTestSuite (junit-dep-4.12.sources)
+    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2.2' // делает ClassRule.class и ActiveTestSuite (junit-dep-4.12.sources)
+    //androidTestCompile 'com.android.support.test.espresso:espresso-web:2.2.2'   // делает ClassRule.class и ActiveTestSuite (junit-dep-4.12.sources)
     androidTestCompile 'com.android.support.test.espresso:espresso-idling-resource:2.2.2'
-    //androidTestCompile 'com.android.support.test:testing-support-lib:0.1' // говно, которое делает ClassRule.class и ActiveTestSuite (junit-dep-4.10.sources)
+    //androidTestCompile 'com.android.support.test:testing-support-lib:0.1'       // делает ClassRule.class и ActiveTestSuite (junit-dep-4.10.sources)
 
     testCompile 'org.mockito:mockito-core:1.9.5'
 

@@ -113,5 +113,11 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="loginText">\'\'it\'s your thinking that \n decides whether you\'re \n going to succeed or fail\'\' - \n henry ford</string>
+    <string name="foreveralonetext">You don\'t seem to be that guy</string>
+    <string name="foreveralonetext2">get extra motivation and have fun challenging your \n friends. improve together and compete to become the \n ultimate champy!</string>
+    <string name="total">Total</string>
+    <string name="wins">Wins</string>
+    <string name="in_progress">In progress</string>
+    <string name="zero">0</string>
 
 </resources>

@@ -99,9 +99,9 @@ public class PendingDuelFragment extends Fragment {
         TextView tvUserVsUser = (TextView)view.findViewById(R.id.tvYouVsSomebody);
 
         if (recipient.equals("true")) {
-            tvUserVsUser.setText(versus + " vs YOU");
+            tvUserVsUser.setText(versus + " want to \nchallenge with you");
         } else {
-            tvUserVsUser.setText("YOU vs " + versus);
+            tvUserVsUser.setText("You'r challenge with \n" + versus);
             //view.findViewById(R.id.imageButtonCancelBattle).setVisibility(View.INVISIBLE);
             //view.findViewById(R.id.imageButtonAcceptBattle).setVisibility(View.INVISIBLE);
         }
