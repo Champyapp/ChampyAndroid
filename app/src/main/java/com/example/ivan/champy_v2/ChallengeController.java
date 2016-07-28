@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.example.ivan.champy_v2.activity.MainActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
+import com.example.ivan.champy_v2.duel.Duel;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
 import com.example.ivan.champy_v2.interfaces.CreateChallenge;
 import com.example.ivan.champy_v2.interfaces.SingleInProgress;
@@ -174,8 +175,7 @@ public class ChallengeController {
 
                         if (challenge.getDescription().equals("Wake Up")) {
                             cv.put("name", "Wake Up");
-                        }
-                        else {
+                        } else {
                             cv.put("name", "Self Improvement");
                         }
                         cv.put("description", description);
@@ -208,7 +208,7 @@ public class ChallengeController {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-       SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
+        SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
 
         Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call = activeInProgress.Surrender(id, token);
         call.enqueue(new Callback<com.example.ivan.champy_v2.single_inprogress.SingleInProgress>() {
@@ -221,15 +221,10 @@ public class ChallengeController {
                    if (data.getChallenge().getType().equals("567d51c48322f85870fd931c")) {
                        String s = data.getChallenge().getDetails();
                        Log.i("stat", "Give up: "+s);
-
                        int i = Integer.parseInt(s);
-
                        Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
-
                        PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, i, myIntent, 0);
-
                        Log.i("stat", "Give up: "+i);
-
                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                        alarmManager.cancel(pendingIntent);
                    }
@@ -245,6 +240,80 @@ public class ChallengeController {
 
        });
     }
+
+
+    public void StartDuelInProgress(String id) {
+        final SessionManager sessionManager = new SessionManager(context);
+        HashMap<String, String> user;
+        user = sessionManager.getUserDetails();
+        String token = user.get("token");
+
+        final String API_URL = "http://46.101.213.24:3007";
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
+        Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call = singleinprogress.Surrender(id, token);
+        call.enqueue(new Callback<com.example.ivan.champy_v2.single_inprogress.SingleInProgress>() {
+            @Override
+            public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    Log.i("TAG", "onResponse: LADNO" );
+                } else {
+                    Log.i("TAG", "onResponse: NE LADNO " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.i("TAG", "onFailure: its over");
+            }
+        });
+
+    }
+
+
+    /*public void cancelDuel(String recipient, String challenge) throws IOException {
+        final SessionManager sessionManager = new SessionManager(context);
+        HashMap<String, String> user;
+        user = sessionManager.getUserDetails();
+        String token = user.get("token");
+
+        final String API_URL = "http://46.101.213.24:3007";
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
+
+        Call<Duel> call = activeInProgress.Start_duel(recipient, challenge, token);
+        call.enqueue(new Callback<Duel>() {
+            @Override
+            public void onResponse(Response<Duel> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    com.example.ivan.champy_v2.duel.Data data = response.body().getData();
+                    if (data.getChallenge().getType().equals("567d51c48322f85870fd931b")) {
+                        String s = data.getChallenge().getDetails();
+                        int i = Integer.parseInt(s);
+                        Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, i, myIntent, 0);
+                        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+                        alarmManager.cancel(pendingIntent);
+                    }
+                    generate();
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
+
+    }*/
 
 
 }

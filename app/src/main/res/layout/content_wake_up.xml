@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="I challenge myself to"
+        android:text="@string/i_challenge_myself_to"
         android:id="@+id/textView20"
         android:textColor="#ffffff"
         android:gravity="center_vertical|center_horizontal"
@@ -68,7 +68,7 @@
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                 android:typeface="normal"
                 android:textColor="#339997"
-                android:text="WAKE UP AT"
+                android:text="@string/wake_up_at"
                 android:layout_alignParentTop="true" />
 
             <ImageView
@@ -86,7 +86,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Level 1 Challenge"
+                android:text="@string/level_1_challenge"
                 android:id="@+id/tvLevel1Chall"
                 android:layout_alignBottom="@+id/imageViewAcceptButton"
                 android:layout_alignParentLeft="true"
@@ -101,7 +101,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:text="Reward +10 points"
+                android:text="@string/reward_10_points"
                 android:id="@+id/tvRewardPlus10Points"
                 android:layout_alignTop="@+id/imageViewAcceptButton"
                 android:layout_toRightOf="@+id/imageViewAcceptButton"
@@ -118,13 +118,14 @@
                 android:timePickerMode="spinner"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/goal_text"
-                android:layout_above="@+id/textView22" />
+                android:layout_above="@+id/textView22"
+                tools:targetApi="lollipop" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="everyday for next"
+                android:text="@string/everyday_for_next"
                 android:id="@+id/textView22"
                 android:layout_above="@+id/textView23"
                 android:layout_centerHorizontal="true" />
@@ -133,7 +134,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="21 DAYS"
+                android:text="@string/_21_days"
                 android:id="@+id/textView23"
                 android:layout_above="@+id/imageViewAcceptButton"
                 android:layout_centerHorizontal="true"

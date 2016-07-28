@@ -35,10 +35,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 + "photo text,"
                 + "user_id text,"
                 + "fb_id text"
-               /* + "challenges text,"
-                + "wins text,"
-                + "total text,"
-                + "level text"*/
                 + ");");
 
         db.execSQL("create table pending ("

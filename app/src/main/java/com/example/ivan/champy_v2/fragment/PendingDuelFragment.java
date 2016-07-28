@@ -108,8 +108,8 @@ public class PendingDuelFragment extends Fragment {
         }
         c.close();
         Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
-        TextView tvDays = (TextView)view.findViewById(R.id.textViewDuring);
-        TextView tvGoal = (TextView)view.findViewById(R.id.tv_goal);
+        final TextView tvDays = (TextView)view.findViewById(R.id.textViewDuring);
+        final TextView tvGoal = (TextView)view.findViewById(R.id.tv_goal);
         TextView tvUserVsUser = (TextView)view.findViewById(R.id.tvYouVsSomebody);
 
         if (recipient.equals("true")) {
@@ -134,9 +134,12 @@ public class PendingDuelFragment extends Fragment {
         tvGoal.setTypeface(typeface);
 
         ImageButton buttonAcceptBattle = (ImageButton)getActivity().findViewById(R.id.imageButtonAcceptBattle);
+        final String finalChallenge_id = challenge_id;
         buttonAcceptBattle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final String description = tvGoal.getText().toString();
+                final int days = Integer.parseInt(tvDays.getText().toString());
                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -144,6 +147,8 @@ public class PendingDuelFragment extends Fragment {
                             case DialogInterface.BUTTON_POSITIVE:
                                 OfflineMode offlineMode = new OfflineMode();
                                 if (offlineMode.isConnectedToRemoteAPI(getActivity())){
+                                    ChallengeController cc = new ChallengeController(getContext(), getActivity(), 0, 0);
+                                    cc.Create_new_challenge(description, days, "567d51c48322f85870fd931b");
                                     Toast.makeText(getContext(), "Challenge Accepted", Toast.LENGTH_SHORT).show();
                                 }
                                 break;
@@ -202,6 +207,28 @@ public class PendingDuelFragment extends Fragment {
 
 
         return view;
+    }
+
+
+
+    public boolean isActive(String description) {
+        DBHelper dbHelper = new DBHelper(getActivity());
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor c = db.query("pending_duel", null, null, null, null, null, null);
+        description = description + " during this period";
+        boolean ok = false;
+        if (c.moveToFirst()) {
+            int coldescription = c.getColumnIndex("description");
+            do {
+                if (c.getString(c.getColumnIndex("status")).equals("started")) {
+                    if (c.getString(coldescription).equals(description)) {
+                        ok = true;
+                    }
+                }
+            } while (c.moveToNext());
+        }
+        c.close();
+        return ok;
     }
 
 

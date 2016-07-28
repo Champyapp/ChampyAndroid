@@ -1,6 +1,5 @@
 package com.example.ivan.champy_v2.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -20,10 +19,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -40,6 +37,7 @@ import java.util.HashMap;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class PendingDuelActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,74 +96,7 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         viewPager.setClipToPadding(false);
         viewPager.setPadding(90, 0, 90, 0);
 
-        /*ImageButton buttonAcceptBattle = (ImageButton)findViewById(R.id.imageButtonAcceptBattle);
-        buttonAcceptBattle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which){
-                            case DialogInterface.BUTTON_POSITIVE:
-                                OfflineMode offlineMode = new OfflineMode();
-                                if (offlineMode.isConnectedToRemoteAPI(PendingDuelActivity.this)){
-                                    Toast.makeText(getApplicationContext(), "Challenge Accepted", Toast.LENGTH_SHORT).show();
-                                }
-                                break;
-
-                            case DialogInterface.BUTTON_NEGATIVE:
-                                //No button clicked
-                                break;
-                        }
-                    }
-                };
-
-                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(PendingDuelActivity.this);
-                builder.setTitle("Are you sure")
-                        .setMessage("You wanna accept request?")
-                        .setIcon(R.drawable.challengecceptedmeme)
-                        .setCancelable(false)
-                        .setPositiveButton("Yes", dialogClickListener)
-                        .setNegativeButton("No",  dialogClickListener).show();
-
-            }
-        });*/
-
-        /*ImageButton buttonCancelBattle = (ImageButton) findViewById(R.id.imageButtonCancelBattle);
-        buttonCancelBattle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which){
-                            case DialogInterface.BUTTON_POSITIVE:
-                                OfflineMode offlineMode = new OfflineMode();
-                                if (offlineMode.isConnectedToRemoteAPI(PendingDuelActivity.this)){
-                                    Toast.makeText(getApplicationContext(), "Canceled", Toast.LENGTH_SHORT).show();
-                                }
-                                break;
-
-                            case DialogInterface.BUTTON_NEGATIVE:
-                                //No button clicked
-                                break;
-                        }
-                    }
-                };
-
-                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(PendingDuelActivity.this);
-                builder.setTitle("Are you sure")
-                        .setMessage("You wanna cancel request?")
-                        .setIcon(R.drawable.duel_blue)
-                        .setCancelable(false)
-                        .setPositiveButton("Yes", dialogClickListener)
-                        .setNegativeButton("No",  dialogClickListener).show();
-
-            }
-        });*/
     }
-
-
 
 
 

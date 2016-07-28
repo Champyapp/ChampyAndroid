@@ -3,6 +3,7 @@ package com.example.ivan.champy_v2.activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -140,68 +141,82 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Tap & Hold", Toast.LENGTH_SHORT).show();
-            }
-        });
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                alarmTimePicker = (TimePicker)findViewById(R.id.timePicker);
 
-        imageButton.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                alarmTimePicker = (TimePicker)findViewById(R.id.timePicker);
+                                int hour = alarmTimePicker.getCurrentHour();
+                                int minute = alarmTimePicker.getCurrentMinute();
 
-                int hour = alarmTimePicker.getCurrentHour();
-                int minute = alarmTimePicker.getCurrentMinute();
+                                String sHour = "" + hour;
+                                String sMinute = "" + minute;
 
-                String sHour = "" + hour;
-                String sMinute = "" + minute;
+                                if (hour < 10) {
+                                    sHour = "0" + sHour;
+                                }
+                                if (minute < 10) {
+                                    sMinute = "0" + sMinute;
+                                }
+                                //Log.i("stat", "Give up: " + sHour + " " + sMinute);
 
-                if (hour < 10) {
-                    sHour = "0" + sHour;
-                }
-                if (minute < 10) {
-                    sMinute = "0" + sMinute;
-                }
-                Log.i("stat", "Give up: " + sHour + " " + sMinute);
+                                boolean ok = check(sHour + sMinute);
+                                OfflineMode offlineMode = new OfflineMode();
+                                if (offlineMode.isConnectedToRemoteAPI(WakeUpActivity.this)) {
+                                    if (ok) {
+                                        Calendar calendar = Calendar.getInstance();
+                                        Date date = new Date();
+                                        date.setHours(alarmTimePicker.getCurrentHour());
+                                        date.setMinutes(alarmTimePicker.getCurrentMinute());
+                                        calendar.set(Calendar.SECOND, 0);
+                                        calendar.setTime(date);
 
-                boolean ok = check(sHour + sMinute);
-                OfflineMode offlineMode = new OfflineMode();
-                if (offlineMode.isConnectedToRemoteAPI(WakeUpActivity.this)) {
-                    if (ok) {
-                        Calendar calendar = Calendar.getInstance();
-                        Date date = new Date();
-                        date.setHours(alarmTimePicker.getCurrentHour());
-                        date.setMinutes(alarmTimePicker.getCurrentMinute());
-                        calendar.set(Calendar.SECOND, 0);
-                        calendar.setTime(date);
+                                        long current = Calendar.getInstance().getTimeInMillis();
+                                        calendar.set(Calendar.SECOND, 0);
+                                        long time = calendar.getTimeInMillis();
 
-                        long current = Calendar.getInstance().getTimeInMillis();
-                        calendar.set(Calendar.SECOND, 0);
-                        long time = calendar.getTimeInMillis();
+                                        time = time - (time % 60000);
+                                        if (current > time) {
+                                            calendar.add(Calendar.DATE, 1);
+                                        }
+                                        time = calendar.getTimeInMillis();
 
-                        time = time - (time % 60000);
-                        if (current > time) {
-                            calendar.add(Calendar.DATE, 1);
+                                        //Log.i("stat", "Time: " + (Calendar.getInstance().getTimeInMillis() - calendar.getTimeInMillis()));
+
+                                        Intent myIntent = new Intent(WakeUpActivity.this, AlarmReceiver.class);
+                                        int id = Integer.parseInt(sHour + sMinute);
+                                        pendingIntent = PendingIntent.getBroadcast(WakeUpActivity.this, id, myIntent, 0);
+                                        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, 24 * 60 * 60 * 1000, pendingIntent); // 24*60*60*1000 = 1 day;
+
+                                        Toast.makeText(WakeUpActivity.this, "Challenge created", Toast.LENGTH_SHORT).show();
+                                        ChallengeController challengeController = new ChallengeController(WakeUpActivity.this, WakeUpActivity.this, hour, minute);
+                                        challengeController.Create_new_challenge("Wake Up", 21, "567d51c48322f85870fd931c");
+
+                                    } else {
+                                        Toast.makeText(WakeUpActivity.this, "Already exist!", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked
+                                break;
                         }
-                        time = calendar.getTimeInMillis();
-
-                        Log.i("stat", "Time: " + (Calendar.getInstance().getTimeInMillis() - calendar.getTimeInMillis()));
-
-                        Intent myIntent = new Intent(WakeUpActivity.this, AlarmReceiver.class);
-                        int id = Integer.parseInt(sHour + sMinute);
-                        pendingIntent = PendingIntent.getBroadcast(WakeUpActivity.this, id, myIntent, 0);
-                        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, 24 * 60 * 60 * 1000, pendingIntent); // 24*60*60*1000 = 1 day;
-
-                        Toast.makeText(WakeUpActivity.this, "Challenge created", Toast.LENGTH_SHORT).show();
-                        ChallengeController challengeController = new ChallengeController(WakeUpActivity.this, WakeUpActivity.this, hour, minute);
-                        challengeController.Create_new_challenge("Wake Up", 21, "567d51c48322f85870fd931c");
-
-                    } else {
-                        Toast.makeText(WakeUpActivity.this, "Already exist!", Toast.LENGTH_SHORT).show();
                     }
-                }
-                return true;
+                };
+
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(WakeUpActivity.this);
+                builder.setTitle("Are you sure")
+                        .setMessage("You wanna create this challenge?")
+                        .setIcon(R.drawable.challengecceptedmeme)
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No",  dialogClickListener).show();
             }
         });
+
 
 
     }

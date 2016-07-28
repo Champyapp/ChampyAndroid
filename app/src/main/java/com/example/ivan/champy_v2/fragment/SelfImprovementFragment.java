@@ -239,7 +239,7 @@ public class SelfImprovementFragment extends Fragment {
 
 
     // создаем кастомные челенджи
-    public void Create_new_challenge(String description, int days) {
+    private void Create_new_challenge(String description, int days) {
         String type_id = "567d51c48322f85870fd931a";
         final SessionManager sessionManager = new SessionManager(getContext());
         HashMap<String, String> user;
@@ -281,7 +281,7 @@ public class SelfImprovementFragment extends Fragment {
 
 
     // создаем стандартные челенджи
-    public void StartSingleInProgress(final String challenge) {
+    private void StartSingleInProgress(final String challenge) {
         final SessionManager sessionManager = new SessionManager(getContext());
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
@@ -314,7 +314,7 @@ public class SelfImprovementFragment extends Fragment {
 
 
     // генерируем челендж и добавляем его в мейн активити
-    public void generate() {
+    private void generate() {
         DBHelper dbHelper = new DBHelper(getContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("myChallenges", null, null); // don't touch this line.
@@ -372,9 +372,9 @@ public class SelfImprovementFragment extends Fragment {
         });
     }
 
+
     // проверяем таблицу "update" в бд, пересоздаем и обновляем даннные.
-    // Если challenge_id (из update) = challenge_id (из стандардатных)
-    public String find(String challenge_id) {
+    private String find(String challenge_id) {
         DBHelper dbHelper = new DBHelper(getActivity());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("updated", null, null, null, null, null, null);
@@ -394,7 +394,7 @@ public class SelfImprovementFragment extends Fragment {
 
 
     // проверяем активный ли челендж
-    public boolean isActive(String description) {
+    private boolean isActive(String description) {
         DBHelper dbHelper = new DBHelper(getActivity());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
