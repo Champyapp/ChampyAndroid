@@ -1,6 +1,5 @@
 package com.example.ivan.champy_v2.activity;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,20 +16,17 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
@@ -39,7 +35,6 @@ import com.example.ivan.champy_v2.adapter.PendingDuelsAdapter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.HashMap;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -103,7 +98,7 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         viewPager.setClipToPadding(false);
         viewPager.setPadding(90, 0, 90, 0);
 
-        ImageButton buttonAcceptBattle = (ImageButton)findViewById(R.id.imageButtonAcceptBattle);
+        /*ImageButton buttonAcceptBattle = (ImageButton)findViewById(R.id.imageButtonAcceptBattle);
         buttonAcceptBattle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -134,9 +129,9 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
                         .setNegativeButton("No",  dialogClickListener).show();
 
             }
-        });
+        });*/
 
-        ImageButton buttonCancelBattle = (ImageButton) findViewById(R.id.imageButtonCancelBattle);
+        /*ImageButton buttonCancelBattle = (ImageButton) findViewById(R.id.imageButtonCancelBattle);
         buttonCancelBattle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -167,7 +162,7 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
                         .setNegativeButton("No",  dialogClickListener).show();
 
             }
-        });
+        });*/
     }
 
 

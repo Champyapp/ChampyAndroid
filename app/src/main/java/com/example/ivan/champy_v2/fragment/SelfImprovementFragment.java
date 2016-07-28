@@ -213,10 +213,6 @@ public class SelfImprovementFragment extends Fragment {
                         .setCancelable(false)
                         .setPositiveButton("Yes", dialogClickListener)
                         .setNegativeButton("No",  dialogClickListener).show();
-
-
-
-
             }
         });
         return view;

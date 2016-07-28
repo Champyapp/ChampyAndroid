@@ -1,14 +1,17 @@
 package com.example.ivan.champy_v2.fragment;
 
-import android.app.AlertDialog;
+import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,26 +23,37 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.ivan.champy_v2.AlarmReceiver;
 import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.OfflineMode;
-import com.example.ivan.champy_v2.activity.MainActivity;
-import com.example.ivan.champy_v2.activity.PendingDuelActivity;
-import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.R;
-
-import org.w3c.dom.Text;
+import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.data.DBHelper;
+import com.example.ivan.champy_v2.duel.Duel;
+import com.example.ivan.champy_v2.interfaces.SingleInProgress;
+import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
+import com.example.ivan.champy_v2.single_inprogress.Data;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
-import static java.lang.Math.round;
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.GsonConverterFactory;
+import retrofit.Response;
+import retrofit.Retrofit;
+
+import static com.example.ivan.champy_v2.model.SelfImprovement_model.generate;
 
 /**
  * Fragment отвечающий за принятие или отмену дуели (то самое секретное меню)
+ * table: pending_duel
  */
 public class PendingDuelFragment extends Fragment {
 
     public static final String ARG_PAGE = "ARG_PAGE";
-
+    Activity firstActivity;
 
     public static PendingDuelFragment newInstance(int page) {
         Bundle args = new Bundle();
@@ -119,62 +133,76 @@ public class PendingDuelFragment extends Fragment {
         tvDays.setTypeface(typeface);
         tvGoal.setTypeface(typeface);
 
-        /*ImageButton buttonCancelBattle = (ImageButton) getActivity().findViewById(R.id.imageButtonCancelBattle);
-        buttonCancelBattle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                DialogInterface.OnClickListener dialog = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case DialogInterface.BUTTON_POSITIVE:
-                                OfflineMode offlineMode = new OfflineMode();
-                                if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
-                                    Toast.makeText(getContext(), "Coming soon", Toast.LENGTH_SHORT).show();
-                                }
-                                break;
-                            case DialogInterface.BUTTON_NEGATIVE:
-                                break;
-                        }
-                    }
-                };
-                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getContext());
-                builder.setMessage("Are you sure you want to cancel request?")
-                        .setPositiveButton("Yes!", dialog)
-                        .setNegativeButton("No!",  dialog).show();
-            }
-        });*/
-
-
-
-        /*ImageButton buttonAcceptBattle = (ImageButton)findViewById(R.id.imageButtonAcceptBattle);
+        ImageButton buttonAcceptBattle = (ImageButton)getActivity().findViewById(R.id.imageButtonAcceptBattle);
         buttonAcceptBattle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogInterface.OnClickListener dialog = new DialogInterface.OnClickListener() {
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
+                        switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
-                                //ChallengeController challengeController = new ChallengeController(getContext(), getActivity(), 0, 0);
-                                //challengeController.generate();
-                                //Toast.makeText(getContext(), "Challenge Accepted", Toast.LENGTH_SHORT).show();
-                                Toast.makeText(getApplicationContext(), "Coming soon", Toast.LENGTH_SHORT).show();
+                                OfflineMode offlineMode = new OfflineMode();
+                                if (offlineMode.isConnectedToRemoteAPI(getActivity())){
+                                    Toast.makeText(getContext(), "Challenge Accepted", Toast.LENGTH_SHORT).show();
+                                }
                                 break;
+
                             case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked
                                 break;
                         }
                     }
                 };
-                AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-                builder.setMessage("Are you sure you want to accept request?")
-                        .setPositiveButton("Yes!", dialog)
-                        .setNegativeButton("No!",  dialog).show();
+
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
+                builder.setTitle("Are you sure")
+                        .setMessage("You wanna accept request?")
+                        .setIcon(R.drawable.challengecceptedmeme)
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No",  dialogClickListener).show();
+
             }
-        });*/
+        });
+
+
+        ImageButton buttonCancelBattle = (ImageButton)getActivity().findViewById(R.id.imageButtonCancelBattle);
+        buttonCancelBattle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                OfflineMode offlineMode = new OfflineMode();
+                                if (offlineMode.isConnectedToRemoteAPI(getActivity())){
+                                    Toast.makeText(getContext(), "Canceled", Toast.LENGTH_SHORT).show();
+                                }
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked
+                                break;
+                        }
+                    }
+                };
+
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
+                builder.setTitle("Are you sure")
+                        .setMessage("You wanna cancel request?")
+                        .setIcon(R.drawable.duel_blue)
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No",  dialogClickListener).show();
+
+            }
+        });
+
 
         return view;
     }
+
 
 }

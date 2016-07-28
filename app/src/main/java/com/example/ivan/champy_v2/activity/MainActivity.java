@@ -58,6 +58,7 @@ import com.example.ivan.champy_v2.CustomPagerBase;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
+import com.example.ivan.champy_v2.duel.Duel;
 import com.example.ivan.champy_v2.helper.CHMakeScoreWithAnim;
 import com.example.ivan.champy_v2.helper.CHUploadPhoto;
 import com.example.ivan.champy_v2.interfaces.NewUser;
