@@ -273,8 +273,8 @@ public class DuelFragment extends Fragment {
                         description,
                         details,
                         duration,
-                        token
-                );
+                        token);
+
         call.enqueue(new Callback<com.example.ivan.champy_v2.create_challenge.CreateChallenge>() {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.create_challenge.CreateChallenge> response, Retrofit retrofit) {
@@ -309,12 +309,7 @@ public class DuelFragment extends Fragment {
                 .build();
 
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
-        Call<com.example.ivan.champy_v2.duel.Duel> call =
-                singleinprogress.Start_duel(
-                        recipient,
-                        challenge,
-                        token
-                );
+        Call<com.example.ivan.champy_v2.duel.Duel> call = singleinprogress.Start_duel(recipient, challenge, token);
         call.enqueue(new Callback<Duel>() {
             @Override
             public void onResponse(Response<Duel> response, Retrofit retrofit) {
@@ -329,7 +324,7 @@ public class DuelFragment extends Fragment {
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
                     db.insert("updated", null, cv);
                     generate();
-                } //else Log.i("stat", "Status: Starting WRONG" + response.code());
+                } else Log.i("stat", "Status: Starting WRONG" + response.code());
             }
 
             @Override
