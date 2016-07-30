@@ -200,6 +200,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    // отображаем стандартные карточки в активити
     public void getChallenges() {
         DBHelper dbHelper = new DBHelper(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -268,6 +269,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    // проверяем равен ли challengeId(id) и index("duel")
     public boolean check(String id) {
         boolean ok = true;
         DBHelper dbHelper = new DBHelper(this);
@@ -291,8 +293,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
                     break;
                 }
             } while (c.moveToNext());
-        } else
-            Log.i("stat", "kwo0 rows");
+        }
         c.close();
         return ok;
     }

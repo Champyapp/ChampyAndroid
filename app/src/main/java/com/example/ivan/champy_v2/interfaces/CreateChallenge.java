@@ -6,10 +6,8 @@ import retrofit.http.FormUrlEncoded;
 import retrofit.http.POST;
 import retrofit.http.Query;
 
-/**
- * Created by ivan on 16.03.16.
- */
 public interface CreateChallenge {
+
     @FormUrlEncoded
     @POST("/v1/challenges")
     Call<com.example.ivan.champy_v2.create_challenge.CreateChallenge> createChallenge(

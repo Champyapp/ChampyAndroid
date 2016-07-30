@@ -3,12 +3,14 @@ package com.example.ivan.champy_v2.fragment;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,12 +24,18 @@ import com.bumptech.glide.Glide;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.activity.MainActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.duel.Duel;
+import com.example.ivan.champy_v2.helper.CHSetupUI;
+import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
 import com.example.ivan.champy_v2.interfaces.CreateChallenge;
 import com.example.ivan.champy_v2.interfaces.SingleInProgress;
+import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
+import com.example.ivan.champy_v2.model.active_in_progress.Datum;
 
 import java.util.HashMap;
+import java.util.List;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -98,12 +106,19 @@ public class PendingDuelFragment extends Fragment {
             } while (c.moveToNext());
         }
         c.close();
+        final SessionManager sessionManager = new SessionManager(getContext());
+        int size = sessionManager.getSelfSize();
         final Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
         final TextView tvDays = (TextView)view.findViewById(R.id.textViewDuring);
         final TextView tvGoal = (TextView)view.findViewById(R.id.tv_goal);
         TextView tvUserVsUser = (TextView)view.findViewById(R.id.tvYouVsSomebody);
         final ImageButton buttonAcceptBattle = (ImageButton)getActivity().findViewById(R.id.imageButtonAcceptBattle);
         final ImageButton buttonCancelBattle = (ImageButton)getActivity().findViewById(R.id.imageButtonCancelBattle);
+
+        final ViewPager viewPager = (ViewPager)getActivity().findViewById(R.id.pager_pending_duel);
+        CHSetupUI chSetupUI = new CHSetupUI();
+        chSetupUI.setupUI(getActivity().findViewById(R.id.pending_duel), getActivity());
+        chSetupUI.setupUI(view, getActivity());
 
         if (recipient.equals("true")) {
             tvUserVsUser.setText(versus + " want to \nchallenge with you");
@@ -136,15 +151,13 @@ public class PendingDuelFragment extends Fragment {
                         String challenge_id = "";
                         String status = "";
                         String recipient = "";
-                        int mDays = 0;
-
-                        if (!duration.isEmpty()) { mDays = Integer.parseInt(duration); }
-
+                        int position = viewPager.getCurrentItem();
+                        int size = sessionManager.getSelfSize();
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
                                 final Bundle args = getArguments();
                                 Cursor c = db.query("pending_duel", null, null, null, null, null, null);
-                                int position = args.getInt(ARG_PAGE);
+                                //int position = args.getInt(ARG_PAGE);
                                 int o = 0;
                                 if (c.moveToFirst()) {
                                     int idColIndex = c.getColumnIndex("id");
@@ -165,11 +178,9 @@ public class PendingDuelFragment extends Fragment {
                                         }
                                     } while (c.moveToNext());
                                 }
+                                int days = Integer.parseInt(duration);
                                 c.close();
-                                description = tvGoal.getText().toString();
-                                duration    = tvDays.getText().toString();
-
-                                createNewDuelChallenge(description, mDays, recipient);
+                                //Create_new_challenge(description, days);
                                 Toast.makeText(getContext(), "Challenge Accepted", Toast.LENGTH_SHORT).show();
                                 break;
 
@@ -229,77 +240,6 @@ public class PendingDuelFragment extends Fragment {
     }
 
 
-    private void createNewDuelChallenge(String description, int days, final String recipient) {
-        final SessionManager sessionManager = new SessionManager(getContext());
-        String type_id = "567d51c48322f85870fd931b";
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        final String token = user.get("token");
-        final String API_URL = "http://46.101.213.24:3007";
-        String details = description + " during this period";
-        String duration = "" + (days * 86400);
-        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-
-        CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
-        Call<com.example.ivan.champy_v2.create_challenge.CreateChallenge> call =
-                createChallenge.createChallenge(
-                        "User_Challenge",
-                        type_id,
-                        description,
-                        details,
-                        duration,
-                        token);
-
-        call.enqueue(new Callback<com.example.ivan.champy_v2.create_challenge.CreateChallenge>() {
-            @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.create_challenge.CreateChallenge> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    Log.i("Duel", "onResponse 'createDuelChallenge': OKAY");
-                    String challenge = response.body().getData().get_id();
-                    startSingleInProgress(challenge, recipient);
-                } else {
-                    Log.i("DUEL", "onResponse 'createDuelChallenge': NE OKAY \n ERROR = " + response.code() + response.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-
-            }
-        });
-
-
-    }
-
-
-    private void startSingleInProgress(final String challenge, final String recipient) {
-        final SessionManager sessionManager = new SessionManager(getContext());
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        String token = user.get("token");
-        final String API_URL = "http://46.101.213.24:3007";
-        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-
-        SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
-        /*Call<Duel> call = singleinprogress.Join(challenge, token);
-        call.enqueue(new Callback<Duel>() {
-            @Override
-            public void onResponse(Response<Duel> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    Log.i("DUEL", "onResponse 'startSingleInProgress': OKAY");
-                } else {
-                    Log.i("DUEL", "onResponse 'startSingleInProgress': NE OKAY \n ERROR = " + response.code() + " " + response.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                Log.i("Duel", "onResponse 'startSingleInProgress': WTF");
-            }
-        });*/
-
-
-    }
 
 
 

@@ -1,6 +1,9 @@
 package com.example.ivan.champy_v2.activity;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -17,6 +20,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -27,14 +31,24 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.adapter.PagerAdapterDuel;
 import com.example.ivan.champy_v2.adapter.PendingDuelsAdapter;
+import com.example.ivan.champy_v2.data.DBHelper;
+import com.example.ivan.champy_v2.model.Self.Datum;
+import com.example.ivan.champy_v2.model.Self.SelfImprovement;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
+import java.util.List;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.GsonConverterFactory;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 public class PendingDuelActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -166,6 +180,106 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+
+    // отображаем стандартные карточки в активити
+    public void getChallenges() {
+        DBHelper dbHelper = new DBHelper(this);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        int clearCount = db.delete("duel", null, null);
+        final ContentValues cv = new ContentValues();
+
+        final String API_URL = "http://46.101.213.24:3007";
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        final SessionManager sessionManager = new SessionManager(getApplicationContext());
+        HashMap<String, String> user = new HashMap<>();
+        user = sessionManager.getUserDetails();
+        String token = user.get("token");
+        com.example.ivan.champy_v2.interfaces.SelfImprovement selfImprovement = retrofit.create(com.example.ivan.champy_v2.interfaces.SelfImprovement.class);
+        Call<SelfImprovement> call = selfImprovement.getChallenges(token);
+        call.enqueue(new Callback<SelfImprovement>() {
+            @Override
+            public void onResponse(Response<SelfImprovement> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    List<Datum> data = response.body().getData();
+                    int data_size = 0;
+                    for (int i = 0; i < data.size(); i++) {
+                        com.example.ivan.champy_v2.model.Self.Datum datum = data.get(i);
+                        if (datum.getType().getName().equals("duel")) {
+                            if (!datum.getName().equals("User_Challenge")) {
+                                if (check(datum.get_id())) {
+                                    cv.put("name", datum.getName());
+                                    cv.put("description", datum.getDescription());
+                                    cv.put("duration", datum.getDuration());
+                                    cv.put("challenge_id", datum.get_id());
+                                    db.insert("duel", null, cv);
+                                    data_size++;
+                                } else {
+                                    cv.put("name", "active");
+                                    cv.put("description", datum.getDescription());
+                                    cv.put("duration", datum.getDuration());
+                                    cv.put("challenge_id", datum.get_id());
+                                    db.insert("duel", null, cv);
+                                    data_size++;
+                                }
+                            }
+                        }
+                    }
+                    sessionManager.setSelfSize(data_size);
+                    SessionManager sessionManager = new SessionManager(getApplicationContext());
+                    int size = sessionManager.getSelfSize();
+                    PagerAdapterDuel pagerAdapter = new PagerAdapterDuel(getSupportFragmentManager());
+                    final ViewPager viewPager = (ViewPager) findViewById(R.id.pager_duel);
+                    pagerAdapter.setCount(size);
+                    viewPager.setAdapter(pagerAdapter);
+                    viewPager.setOffscreenPageLimit(1);
+                    viewPager.setPageMargin(20);
+                    viewPager.setClipToPadding(false);
+                    viewPager.setPadding(90, 0, 90, 0);
+
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+            }
+        });
+    }
+
+
+    // проверяем равен ли challengeId(id) и index("duel")
+    public boolean check(String id) {
+        boolean ok = true;
+        DBHelper dbHelper = new DBHelper(this);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        final ContentValues cv = new ContentValues();
+        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
+        int o = 0;
+        if (c.moveToFirst()) {
+            int idColIndex = c.getColumnIndex("id");
+            int nameColIndex = c.getColumnIndex("name");
+            int coldescription = c.getColumnIndex("description");
+            int colduration = c.getColumnIndex("duration");
+            int colchallenge_id = c.getColumnIndex("challenge_id");
+            do {
+                String checkedChallengeId = c.getString(colchallenge_id);
+                String checkedIndex = c.getString(idColIndex);
+                if (checkedChallengeId.equals(id) && (checkedIndex.equals("duel"))) {
+                    Log.i("stat", "Cheked");
+                    ok = false;
+                    break;
+                }
+            } while (c.moveToNext());
+        }
+        c.close();
+        return ok;
     }
 
 

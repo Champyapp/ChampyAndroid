@@ -10,9 +10,6 @@ import retrofit.http.POST;
 import retrofit.http.Path;
 import retrofit.http.Query;
 
-/**
- * Created by ivan on 16.03.16.
- */
 public interface SingleInProgress {
 
     @FormUrlEncoded
@@ -21,11 +18,12 @@ public interface SingleInProgress {
             @Field("challenge") String challenge,
             @Query("token") String token
     );
+
     @GET("/v1/in-progress-challenges/{id}/surrender")
     Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> Surrender(
                     @Path("id") String id,
                     @Query("token") String token
-            );
+    );
 
     @GET("/v1/in-progress-challenges/{id}/join")
     Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> Join (
