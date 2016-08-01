@@ -21,6 +21,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -68,6 +69,10 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
+        int count = check_pending();
+        TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+        view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+        if (count == 0) hideItem();
 
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         TextView tvPendingDuels = (TextView) findViewById(R.id.textView20);
@@ -184,102 +189,32 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
 
 
 
-    // отображаем стандартные карточки в активити
-    public void getChallenges() {
+    public int check_pending() {
         DBHelper dbHelper = new DBHelper(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int clearCount = db.delete("duel", null, null);
         final ContentValues cv = new ContentValues();
-
-        final String API_URL = "http://46.101.213.24:3007";
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final SessionManager sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user = new HashMap<>();
-        user = sessionManager.getUserDetails();
-        String token = user.get("token");
-        com.example.ivan.champy_v2.interfaces.SelfImprovement selfImprovement = retrofit.create(com.example.ivan.champy_v2.interfaces.SelfImprovement.class);
-        Call<SelfImprovement> call = selfImprovement.getChallenges(token);
-        call.enqueue(new Callback<SelfImprovement>() {
-            @Override
-            public void onResponse(Response<SelfImprovement> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    List<Datum> data = response.body().getData();
-                    int data_size = 0;
-                    for (int i = 0; i < data.size(); i++) {
-                        com.example.ivan.champy_v2.model.Self.Datum datum = data.get(i);
-                        if (datum.getType().getName().equals("duel")) {
-                            if (!datum.getName().equals("User_Challenge")) {
-                                if (check(datum.get_id())) {
-                                    cv.put("name", datum.getName());
-                                    cv.put("description", datum.getDescription());
-                                    cv.put("duration", datum.getDuration());
-                                    cv.put("challenge_id", datum.get_id());
-                                    db.insert("duel", null, cv);
-                                    data_size++;
-                                } else {
-                                    cv.put("name", "active");
-                                    cv.put("description", datum.getDescription());
-                                    cv.put("duration", datum.getDuration());
-                                    cv.put("challenge_id", datum.get_id());
-                                    db.insert("duel", null, cv);
-                                    data_size++;
-                                }
-                            }
-                        }
-                    }
-                    sessionManager.setSelfSize(data_size);
-                    SessionManager sessionManager = new SessionManager(getApplicationContext());
-                    int size = sessionManager.getSelfSize();
-                    PagerAdapterDuel pagerAdapter = new PagerAdapterDuel(getSupportFragmentManager());
-                    final ViewPager viewPager = (ViewPager) findViewById(R.id.pager_duel);
-                    pagerAdapter.setCount(size);
-                    viewPager.setAdapter(pagerAdapter);
-                    viewPager.setOffscreenPageLimit(1);
-                    viewPager.setPageMargin(20);
-                    viewPager.setClipToPadding(false);
-                    viewPager.setPadding(90, 0, 90, 0);
-
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-            }
-        });
+        Cursor c = db.query("pending_duel", null, null, null, null, null, null);
+        int o = 0;
+        if (c.moveToFirst()) {
+            do {
+                o++;
+            } while (c.moveToNext());
+        } else {
+            Log.i("stat", "kwo0 rows");
+        }
+        c.close();
+        SessionManager sessionManager = new SessionManager(this);
+        sessionManager.set_duel_pending("" + o);
+        Log.d("TAG", "O: " + o);
+        return o;
     }
 
 
-    // проверяем равен ли challengeId(id) и index("duel")
-    public boolean check(String id) {
-        boolean ok = true;
-        DBHelper dbHelper = new DBHelper(this);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        final ContentValues cv = new ContentValues();
-        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-        int o = 0;
-        if (c.moveToFirst()) {
-            int idColIndex = c.getColumnIndex("id");
-            int nameColIndex = c.getColumnIndex("name");
-            int coldescription = c.getColumnIndex("description");
-            int colduration = c.getColumnIndex("duration");
-            int colchallenge_id = c.getColumnIndex("challenge_id");
-            do {
-                String checkedChallengeId = c.getString(colchallenge_id);
-                String checkedIndex = c.getString(idColIndex);
-                if (checkedChallengeId.equals(id) && (checkedIndex.equals("duel"))) {
-                    Log.i("stat", "Cheked");
-                    ok = false;
-                    break;
-                }
-            } while (c.moveToNext());
-        }
-        c.close();
-        return ok;
+    private void hideItem() {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Menu nav_Menu = navigationView.getMenu();
+        nav_Menu.findItem(R.id.pending_duels).setVisible(false);
     }
 
 

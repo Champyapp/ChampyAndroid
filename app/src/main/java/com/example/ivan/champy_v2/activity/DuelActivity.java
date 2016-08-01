@@ -142,6 +142,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

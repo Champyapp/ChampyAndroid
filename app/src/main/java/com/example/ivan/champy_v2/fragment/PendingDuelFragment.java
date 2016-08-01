@@ -3,7 +3,6 @@ package com.example.ivan.champy_v2.fragment;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
@@ -24,24 +23,19 @@ import com.bumptech.glide.Glide;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
-import com.example.ivan.champy_v2.activity.MainActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.duel.Duel;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
-import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
-import com.example.ivan.champy_v2.interfaces.CreateChallenge;
 import com.example.ivan.champy_v2.interfaces.SingleInProgress;
-import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
-import com.example.ivan.champy_v2.model.active_in_progress.Datum;
 
 import java.util.HashMap;
-import java.util.List;
 
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
+import rx.Single;
 
 import static java.lang.Math.round;
 
@@ -123,7 +117,7 @@ public class PendingDuelFragment extends Fragment {
         if (recipient.equals("true")) {
             tvUserVsUser.setText(versus + " want to \nchallenge with you");
         } else {
-            tvUserVsUser.setText("You'r challenge with \n" + versus);
+            tvUserVsUser.setText("Your challenge with \n" + versus);
         }
 
         Glide.with(getContext()).load(R.drawable.points).override(200, 200).into((ImageView)view.findViewById(R.id.imageViewAcceptButton));
@@ -151,6 +145,7 @@ public class PendingDuelFragment extends Fragment {
                         String challenge_id = "";
                         String status = "";
                         String recipient = "";
+                        String id = "";
                         int position = viewPager.getCurrentItem();
                         int size = sessionManager.getSelfSize();
                         switch (which){
@@ -175,12 +170,25 @@ public class PendingDuelFragment extends Fragment {
                                             duration = c.getString(colduration);
                                             challenge_id = c.getString(colchallenge_id);
                                             recipient = c.getString(colrecipient);
+                                            id = c.getString(idColIndex);
                                         }
                                     } while (c.moveToNext());
                                 }
                                 int days = Integer.parseInt(duration);
                                 c.close();
-                                //Create_new_challenge(description, days);
+                                if (recipient.equals("true")) {
+                                    joinToChallenge(id);
+                                    Log.i("myLogs", "################## onClick AcceptBattle ################# "
+                                            + "\n challenge_id = " + challenge_id
+                                            + "\n description  = " + description
+                                            + "\n duration     = " + duration
+                                            + "\n versus       = " + versus
+                                            + "\n recipient    = " + recipient
+                                            + "\n id           = " + id);
+                                } else {
+                                    Log.i("myLogs", "################# onClick AcceptBattle #################" +
+                                            "\nYou can't accept this challenge because you're Sender!" );
+                                }
                                 Toast.makeText(getContext(), "Challenge Accepted", Toast.LENGTH_SHORT).show();
                                 break;
 
@@ -239,6 +247,39 @@ public class PendingDuelFragment extends Fragment {
         return view;
     }
 
+
+    public void joinToChallenge(final String challengeId) {
+        final SessionManager sessionManager = new SessionManager(getContext());
+        HashMap<String, String> user;
+        user = sessionManager.getUserDetails();
+        String token = user.get("token");
+        final String mToken = token;
+        final String API_URL = "http://46.101.213.24:3007";
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+
+        SingleInProgress singleInProgress = retrofit.create(SingleInProgress.class);
+        Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call = singleInProgress.Join(challengeId, token);
+        call.enqueue(new Callback<com.example.ivan.champy_v2.single_inprogress.SingleInProgress>() {
+            @Override
+            public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    Log.i("stat", "Status: Starting OK"
+                            + "\n ChallengeID = " + challengeId
+                            + "\n TOKEN = " + mToken);
+                } else {
+                    Log.i("myLogs", "onResponse: NE OK "
+                            + "\n ERROR = " + response.code() + response.message()
+                            + "\n ChallengeID = " + challengeId
+                            + "\n TOKEN = " + mToken);
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
+    }
 
 
 

@@ -107,8 +107,7 @@ public class ChallengeController {
                 .build();
 
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
-        Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call =
-                singleinprogress.start_single_in_progress(challenge, token);
+        Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call = singleinprogress.start_single_in_progress(challenge, token);
         call.enqueue(new Callback<com.example.ivan.champy_v2.single_inprogress.SingleInProgress>() {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {

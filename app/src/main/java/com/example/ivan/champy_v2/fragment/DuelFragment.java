@@ -279,9 +279,9 @@ public class DuelFragment extends Fragment {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    String challenge = response.body().getData().get_id();
-                    Log.i("stat", "Status: " + challenge);
-                    StartSingleInProgress(challenge, friend_id);
+                    String challengeId = response.body().getData().get_id();
+                    Log.i("stat", "Status: " + challengeId);
+                    StartSingleInProgress(challengeId, friend_id);
                     Log.i("stat", "Status: Challenge Created");
 
                 } else Log.i("stat", "Status: Error Creating");
@@ -350,7 +350,7 @@ public class DuelFragment extends Fragment {
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
         final long unixTime = System.currentTimeMillis() / 1000L;
         final String update = "0"; //1457019726
-        Log.i("stat", "Nam nado: " + id + " " + update + " " + token);
+        Log.i("stat", "Nam nado: \nID= " + id + " \nUPDATE = " + update + "\n TOKEN = " + token);
         Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(id, update, token);
         call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
             @Override
