@@ -318,12 +318,13 @@ public class DuelFragment extends Fragment {
                     ContentValues cv = new ContentValues();
                     Duel duel = response.body();
                     cv.put("challenge_id", duel.getData().getId());
-                    //Log.d("myLogs", "Added: " + duel.getData().getId());
                     cv.put("updated", "false"); // почему false?
                     DBHelper dbHelper = new DBHelper(getActivity());
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
                     db.insert("updated", null, cv);
                     generate();
+                    Log.d("DuelFragment", "StartSingleInProgress: " +
+                            "\n Duel_Id = " + duel.getData().getId());
                 } else Log.i("stat", "Status: Starting WRONG" + response.code());
             }
 
@@ -376,6 +377,12 @@ public class DuelFragment extends Fragment {
                             cv.put("description", challenge.getDescription());
                             cv.put("duration", challenge.getDuration());
                             db.insert("pending_duel", null, cv);
+                            Log.d("DuelFragment", "Generate: "
+                                    + "\n Chall_Description = " + challenge.getDescription()
+                                    + "\n Chall_Id          = " + challenge.get_id()
+                                    + "\n Chall_Duration    = " + challenge.getDuration()
+                                    + "\n Recipient_ID      = " + recipient.getId()
+                                    + "\n Sender_ID         = " + sender.get_id());
                         }
                     }
                     Intent intent = new Intent(getActivity(), MainActivity.class);

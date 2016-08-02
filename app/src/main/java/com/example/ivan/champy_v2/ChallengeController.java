@@ -174,6 +174,8 @@ public class ChallengeController {
 
                         if (challenge.getDescription().equals("Wake Up")) {
                             cv.put("name", "Wake Up");
+                        } else if (challenge.getDescription().equals("Duel")) {
+                            cv.put("name", "Duel");
                         } else {
                             cv.put("name", "Self Improvement");
                         }

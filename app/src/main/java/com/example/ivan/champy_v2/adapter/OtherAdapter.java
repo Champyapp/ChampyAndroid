@@ -242,8 +242,6 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
                                 .setPositiveButton("Yes", dialogClickListener)
                                 .setNegativeButton("No", dialogClickListener)
                                 .show();
-                    } else if (friend.equals(id)) {
-                        Toast.makeText(_context, "This user has not installed Champy", Toast.LENGTH_SHORT).show();
                     } else {
                         // dialog "Do you want add this user to your friends list?"
                         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {

@@ -23,12 +23,17 @@ import com.bumptech.glide.Glide;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.create_challenge.Data;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.duel.Duel;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
+import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
+import com.example.ivan.champy_v2.interfaces.CreateChallenge;
 import com.example.ivan.champy_v2.interfaces.SingleInProgress;
+import com.example.ivan.champy_v2.model.active_in_progress.Datum;
 
 import java.util.HashMap;
+import java.util.List;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -78,7 +83,7 @@ public class PendingDuelFragment extends Fragment {
         final Bundle args = this.getArguments();
         Cursor c = db.query("pending_duel", null, null, null, null, null, null);
         int position = args.getInt(ARG_PAGE);
-        Log.i("stat", "Status: " + position);
+        //Log.i("stat", "Status: " + position);
         int o = 0;
         if (c.moveToFirst()) {
             int idColIndex = c.getColumnIndex("id");
@@ -177,16 +182,16 @@ public class PendingDuelFragment extends Fragment {
                                 int days = Integer.parseInt(duration);
                                 c.close();
                                 if (recipient.equals("true")) {
-                                    joinToChallenge(id);
-                                    Log.i("myLogs", "################## onClick AcceptBattle ################# "
-                                            + "\n challenge_id = " + challenge_id
-                                            + "\n description  = " + description
-                                            + "\n duration     = " + duration
-                                            + "\n versus       = " + versus
-                                            + "\n recipient    = " + recipient
-                                            + "\n id           = " + id);
+                                    createNewChallenge(description, days);
+                                    Log.i("OnCreateView", "Status: OK"
+                                            + "\n       challenge_id = " + challenge_id
+                                            + "\n       description  = " + description
+                                            + "\n       duration     = " + duration
+                                            + "\n       versus       = " + versus
+                                            + "\n       recipient    = " + recipient
+                                            + "\n       id           = " + id);
                                 } else {
-                                    Log.i("myLogs", "################# onClick AcceptBattle #################" +
+                                    Log.i("OnCreateView", "Status: WTF" +
                                             "\nYou can't accept this challenge because you're Sender!" );
                                 }
                                 Toast.makeText(getContext(), "Challenge Accepted", Toast.LENGTH_SHORT).show();
@@ -248,29 +253,46 @@ public class PendingDuelFragment extends Fragment {
     }
 
 
-    public void joinToChallenge(final String challengeId) {
+    private void createNewChallenge(final String description, int days) {
+        final String type_id = "567d51c48322f85870fd931b";
         final SessionManager sessionManager = new SessionManager(getContext());
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         String token = user.get("token");
-        final String mToken = token;
-        final String API_URL = "http://46.101.213.24:3007";
-        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        final String duration = "" + (days * 86400);
+        final String details = description + " during this period";
 
-        SingleInProgress singleInProgress = retrofit.create(SingleInProgress.class);
-        Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call = singleInProgress.Join(challengeId, token);
-        call.enqueue(new Callback<com.example.ivan.champy_v2.single_inprogress.SingleInProgress>() {
+        final String API_URL = "http://46.101.213.24:3007";
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
+        Call<com.example.ivan.champy_v2.create_challenge.CreateChallenge> call =
+                createChallenge.createChallenge(
+                        "User_Challenge",
+                        type_id,
+                        description,
+                        details,
+                        duration,
+                        token
+                );
+        call.enqueue(new Callback<com.example.ivan.champy_v2.create_challenge.CreateChallenge>() {
             @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
+            public void onResponse(Response<com.example.ivan.champy_v2.create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    Log.i("stat", "Status: Starting OK"
-                            + "\n ChallengeID = " + challengeId
-                            + "\n TOKEN = " + mToken);
+                    String _id = response.body().getData().get_id();
+                    joinToChallenge(_id);
+                    Log.i("CreateNewChallenge", "Status: OK"
+                            + "\n _ID         = " + _id
+                            + "\n TYPE_ID     = " + type_id
+                            + "\n DESCRIPTION = " + description
+                            + "\n DETAILS     = " + details
+                            + "\n DURATION    = " + duration);
                 } else {
-                    Log.i("myLogs", "onResponse: NE OK "
-                            + "\n ERROR = " + response.code() + response.message()
-                            + "\n ChallengeID = " + challengeId
-                            + "\n TOKEN = " + mToken);
+                    Log.i("CreateNewChallenge", "Status: WTF"
+                            + "\n       ERROR = " + response.code() + response.message());
                 }
             }
 
@@ -280,6 +302,41 @@ public class PendingDuelFragment extends Fragment {
             }
         });
     }
+
+    public void joinToChallenge(final String _id) {
+        final SessionManager sessionManager = new SessionManager(getContext());
+        HashMap<String, String> user;
+        user = sessionManager.getUserDetails();
+        String token = user.get("token");
+        final String mToken = token;
+        final String API_URL = "http://46.101.213.24:3007";
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+
+
+        SingleInProgress singleInProgress = retrofit.create(SingleInProgress.class);
+        Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call = singleInProgress.Join(_id, token);
+        call.enqueue(new Callback<com.example.ivan.champy_v2.single_inprogress.SingleInProgress>() {
+            @Override
+            public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    Log.i("JoinToChallenge", "Status: VSE OK"
+                            + "\n _ID         = " + _id
+                            + "\n TOKEN       = " + mToken);
+                } else {
+                    Log.i("JoinToChallenge", "Status: WTF"
+                            + "\n    ERROR        = " + response.code() + response.message()
+                            + "\n    _ID          = " + _id
+                            + "\n    TOKEN        = " + mToken);
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
+    }
+
 
 
 
