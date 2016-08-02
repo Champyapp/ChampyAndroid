@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -33,6 +32,8 @@ import com.example.ivan.champy_v2.interfaces.CreateChallenge;
 import com.example.ivan.champy_v2.interfaces.SingleInProgress;
 import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
 import com.example.ivan.champy_v2.model.active_in_progress.Datum;
+
+import org.json.JSONException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -362,6 +363,7 @@ public class SelfImprovementFragment extends Fragment {
                         cv.put("updated", updated);
                         db.insert("myChallenges", null, cv);
                     }
+
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
                 }

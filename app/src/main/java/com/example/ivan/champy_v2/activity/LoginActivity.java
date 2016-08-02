@@ -331,7 +331,8 @@ public class LoginActivity extends AppCompatActivity {
                         sessionManager.setRefreshPending("false");
                         sessionManager.setRefreshFriends("false");
                         sessionManager.createUserLoginSession(user_name, email, fb_id, path_to_pic, jwtString, id, pushN, newChallReq, acceptedYour, challegeEnd, "true");
-                        sessionManager.setChampyOptions(data.getAllChallengesCount().toString(),
+                        sessionManager.setChampyOptions(
+                                data.getAllChallengesCount().toString(),
                                 data.getSuccessChallenges().toString(),
                                 data.getInProgressChallengesCount().toString(),
                                 data.getLevel().getNumber().toString());

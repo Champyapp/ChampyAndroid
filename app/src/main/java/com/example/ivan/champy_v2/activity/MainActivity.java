@@ -485,26 +485,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void buildAnim(Activity activity) {
         int width = activity.getWindowManager().getDefaultDisplay().getWidth();
         makeResponsiveScore(width);
-        ImageView mImageViewFilling0 = (ImageView) findViewById(R.id.imageView_challenges_animation);
+        /*ImageView mImageViewFilling0 = (ImageView) findViewById(R.id.imageView_challenges_animation);
         ImageView mImageViewFilling1 = (ImageView) findViewById(R.id.imageView_wins_animation);
         ImageView mImageViewFilling2 = (ImageView) findViewById(R.id.imageView_total_animation);
         ((AnimationDrawable) mImageViewFilling0.getBackground()).start();
         ((AnimationDrawable) mImageViewFilling1.getBackground()).start();
-        ((AnimationDrawable) mImageViewFilling2.getBackground()).start();
+        ((AnimationDrawable) mImageViewFilling2.getBackground()).start();*/
 
         final TextView tvChallengesCounter = (TextView) findViewById(R.id.textViewChallengesCounter);
         final TextView tvWinsCounter       = (TextView) findViewById(R.id.textViewWinsCounter);
         final TextView tvTotalCounter      = (TextView) findViewById(R.id.textViewTotalCounter);
 
         SessionManager sessionManager = new SessionManager(activity);
-
+        Data data = new Data();
         String challenges = sessionManager.getChampyOptions().get("challenges");
         String wins       = sessionManager.getChampyOptions().get("wins");
         String total      = sessionManager.getChampyOptions().get("total");
 
-        final int challengesInteger = Integer.parseInt(challenges);
-        final int totalInteger      = Integer.parseInt(total);
-        final int winsInteger       = Integer.parseInt(wins);
+        int challengesInteger = Integer.parseInt(challenges);
+        int totalInteger      = Integer.parseInt(total);
+        int winsInteger       = Integer.parseInt(wins);
 
         // animator for In progress
         ValueAnimator animatorInProgress = new ValueAnimator();

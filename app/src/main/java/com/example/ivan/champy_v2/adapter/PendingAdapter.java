@@ -264,9 +264,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                     final String id = user.get("id");
                     String friend = mContacts.get(position).getID();
                     Log.d(TAG, "User: " + friend);
-                    if (friend == null && friend.equals(id)) {
-                        Toast.makeText(_context, "This user has not installed Champy", Toast.LENGTH_SHORT).show();
-                    } else {
+                    if (friend != null) {
                         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -283,14 +281,14 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                                         final SQLiteDatabase db = dbHelper.getWritableDatabase();
                                         final ContentValues cv = new ContentValues();
                                         com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(Friends.class);
-                                        Log.d(TAG, "Status: " + id + " " + friend + " " + token);
+                                        //Log.d(TAG, "Status: " + id + " " + friend + " " + token);
 
                                         Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.acceptFriendRequest(id, friend, token);
                                         call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
                                             @Override
                                             public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
                                                 if (response.isSuccess()) {
-                                                    Log.d(TAG, "Status: Accepted");
+                                                    //Log.d(TAG, "Status: Accepted");
                                                     cv.put("name", mContacts.get(position).getName());
                                                     cv.put("photo", mContacts.get(position).getPicture());
                                                     cv.put("user_id", mContacts.get(position).getID());

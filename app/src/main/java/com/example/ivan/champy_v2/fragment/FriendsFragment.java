@@ -68,6 +68,7 @@ public class FriendsFragment extends Fragment {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         Cursor c = db.query("friends", null, null, null, null, null, null);
+        Log.i("FriendsFragment", "onCreateView: CURSOR COUNT = " + c.getCount());
         if (c.moveToFirst()) {
             int idColIndex = c.getColumnIndex("id");
             int nameColIndex = c.getColumnIndex("name");
@@ -84,7 +85,7 @@ public class FriendsFragment extends Fragment {
         } //else Log.i("stat", "friends_null");
         c.close();
 
-        Log.i("stat", "FriendsActivity :"+friends);
+        /*Log.i("stat", "FriendsActivity :"+friends);
         Typeface typeFace = Typeface.createFromAsset(getResources().getAssets(), "fonts/bebasneue.ttf");
         ImageView foreverAlonePhoto = (ImageView)view.findViewById(R.id.foreverAlonePhoto);
         TextView foreverAloneText1 = (TextView)view.findViewById(R.id.foreveralonetext1);
@@ -99,7 +100,7 @@ public class FriendsFragment extends Fragment {
             foreverAlonePhoto.setVisibility(View.INVISIBLE);
             foreverAloneText1.setVisibility(View.INVISIBLE);
             foreverAloneText2.setVisibility(View.INVISIBLE);
-        }
+        }*/
 
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
         final FriendsAdapter adapter = new FriendsAdapter(friends, getContext(), getActivity(), new CustomItemClickListener() {
@@ -110,11 +111,12 @@ public class FriendsFragment extends Fragment {
         });
         SessionManager sessionManager = new SessionManager(getActivity());
         String refresh = sessionManager.getRefreshFriends();
-        String inProgressCount = sessionManager.getChampyOptions().get("challenges");
+
         if (refresh.equals("true")) {
             UpdateFriendsList();
             sessionManager.setRefreshFriends("false");
         }
+
         FloatingActionButton floatingActionButton = (FloatingActionButton)getActivity().findViewById(R.id.fabPlus);
         floatingActionButton.attachToRecyclerView(rvContacts);
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -222,7 +224,7 @@ public class FriendsFragment extends Fragment {
 
     }
 
-
+    // если этого метода не будет, то когда мы удалим друга, а потом свапнем туда-сюда, то он появится опять
     public void UpdateFriendsList() {
         final String API_URL = "http://46.101.213.24:3007";
         SessionManager sessionManager = new SessionManager(getActivity());
