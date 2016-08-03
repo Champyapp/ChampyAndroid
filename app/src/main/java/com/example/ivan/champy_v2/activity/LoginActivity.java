@@ -493,7 +493,7 @@ public class LoginActivity extends AppCompatActivity {
                     clearCount = db.delete("myChallenges", null, null);
                     ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
                     final long unixTime = System.currentTimeMillis() / 1000L;
-                    String update = "1457019726";
+                    String update = "0"; //1457019726
                     Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(id, update, jwtString);
                     try {
                         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -512,6 +512,17 @@ public class LoginActivity extends AppCompatActivity {
                                 int days = round((end - unixTime) / 86400);
                                 duration = "" + days;
                             }
+                            /*switch (challenge.getType()) {
+                                case "567d51c48322f85870fd931a":
+                                    cv.put("name", "Wake Up");
+                                    break;
+                                case "567d51c48322f85870fd931b":
+                                    cv.put("name", "Duel");
+                                    break;
+                                case "567d51c48322f85870fd931c":
+                                    cv.put("name", "Self Improvement");
+                                    break;
+                            }*/
                             String challenge_id = datum.get_id();
                             if (challenge.getDescription().equals("Wake Up")) {
                                 cv.put("name", "Wake Up");
@@ -750,8 +761,6 @@ public class LoginActivity extends AppCompatActivity {
         }
         return directory.getAbsolutePath();
     }
-
-
 
 
     public void loadImageFromStorage(String path) {

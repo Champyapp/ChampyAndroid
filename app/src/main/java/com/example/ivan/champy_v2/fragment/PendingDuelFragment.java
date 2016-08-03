@@ -150,7 +150,7 @@ public class PendingDuelFragment extends Fragment {
                         String challenge_id = "";
                         String status = "";
                         String recipient = "";
-                        String id = "";
+                        String index = "";
                         int position = viewPager.getCurrentItem();
                         int size = sessionManager.getSelfSize();
                         switch (which){
@@ -175,7 +175,7 @@ public class PendingDuelFragment extends Fragment {
                                             duration = c.getString(colduration);
                                             challenge_id = c.getString(colchallenge_id);
                                             recipient = c.getString(colrecipient);
-                                            id = c.getString(idColIndex);
+                                            index = c.getString(idColIndex);
                                         }
                                     } while (c.moveToNext());
                                 }
@@ -183,13 +183,13 @@ public class PendingDuelFragment extends Fragment {
                                 c.close();
                                 if (recipient.equals("true")) {
                                     createNewChallenge(description, days);
-                                    Log.i("OnCreateView", "Status: OK"
+                                    Log.i("OnCreateView", "Status: VSE OK"
                                             + "\n       challenge_id = " + challenge_id
                                             + "\n       description  = " + description
                                             + "\n       duration     = " + duration
                                             + "\n       versus       = " + versus
                                             + "\n       recipient    = " + recipient
-                                            + "\n       id           = " + id);
+                                            + "\n       id           = " + index);
                                 } else {
                                     Log.i("OnCreateView", "Status: WTF" +
                                             "\nYou can't accept this challenge because you're Sender!" );
@@ -282,14 +282,12 @@ public class PendingDuelFragment extends Fragment {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    String _id = response.body().getData().get_id();
+
+                    String _id = ""; // тут треба брати _ID (не челенджа)
                     joinToChallenge(_id);
-                    Log.i("CreateNewChallenge", "Status: OK"
+                    Log.i("CreateNewChallenge", "Status: VSE OK"
                             + "\n _ID         = " + _id
-                            + "\n TYPE_ID     = " + type_id
-                            + "\n DESCRIPTION = " + description
-                            + "\n DETAILS     = " + details
-                            + "\n DURATION    = " + duration);
+                            + "\n DESCRIPTION = " + description);
                 } else {
                     Log.i("CreateNewChallenge", "Status: WTF"
                             + "\n       ERROR = " + response.code() + response.message());
@@ -320,8 +318,9 @@ public class PendingDuelFragment extends Fragment {
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     Log.i("JoinToChallenge", "Status: VSE OK"
-                            + "\n _ID         = " + _id
-                            + "\n TOKEN       = " + mToken);
+                            + "\n     _ID         = " + _id
+                            + "\n     TOKEN       = " + mToken);
+                    //generate();
                 } else {
                     Log.i("JoinToChallenge", "Status: WTF"
                             + "\n    ERROR        = " + response.code() + response.message()
@@ -338,7 +337,7 @@ public class PendingDuelFragment extends Fragment {
     }
 
 
-
+    //private void generate() { }
 
 
 

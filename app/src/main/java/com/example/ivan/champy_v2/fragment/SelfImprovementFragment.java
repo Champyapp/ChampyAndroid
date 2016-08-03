@@ -240,14 +240,14 @@ public class SelfImprovementFragment extends Fragment {
 
 
     // создаем кастомные челенджи
-    private void Create_new_challenge(String description, int days) {
-        String type_id = "567d51c48322f85870fd931a";
+    private void Create_new_challenge(final String description, int days) {
+        final String type_id = "567d51c48322f85870fd931a";
         final SessionManager sessionManager = new SessionManager(getContext());
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         String token = user.get("token");
-        String duration = "" + (days * 86400);
-        String details = description + " during this period";
+        final String duration = "" + (days * 86400);
+        final String details = description + " during this period";
 
         final String API_URL = "http://46.101.213.24:3007";
         final Retrofit retrofit = new Retrofit.Builder()
@@ -271,6 +271,12 @@ public class SelfImprovementFragment extends Fragment {
                 if (response.isSuccess()) {
                     String challenge = response.body().getData().get_id();
                     StartSingleInProgress(challenge);
+                    Log.i("SelfImprovement", "CreateNewChallenge Status: OK"
+                            + "\n create_challenge.CreateChallenge data = " + challenge
+                            + "\n TYPE_ID     = " + type_id
+                            + "\n DESCRIPTION = " + description
+                            + "\n DETAILS     = " + details
+                            + "\n DURATION    = " + duration);
                 } else Log.i("stat", "Status: Error Creating");
             }
 
@@ -305,6 +311,8 @@ public class SelfImprovementFragment extends Fragment {
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
                     db.insert("updated", null, cv);
                     generate();
+                    Log.i("SelfImprovement", "StartSingleInProgress Status: OK"
+                            + "\n ID = " + data.getData().get_id() + "\n");
                 } else Log.i("stat", "Status: Starting WRONG" + response.code());
             }
 
