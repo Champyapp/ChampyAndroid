@@ -339,6 +339,36 @@ public class PendingDuelFragment extends Fragment {
 
     //private void generate() { }
 
+    /*
+    call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
+        @Override
+        public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
+            if (response.isSuccess()) {
+                List<com.example.ivan.champy_v2.model.active_in_progress.Datum> data = response.body().getData();
+                for (int i = 0; i < data.size(); i++) {
+                    com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
+                    Challenge challenge = datum.getChallenge();
+                    cv.clear();
+                    String desctiption = challenge.getDescription();
+                    int end = datum.getEnd();
+                    int days = round((end - unixTime) / 86400);
+                    String duration = "" + days;
+                    String challenge_id = challenge.get_id();
+                    cv.put("name", "Self Improvement");
+                    cv.put("description", desctiption);
+                    cv.put("duration", duration);
+                    cv.put("challenge_id", challenge_id);
+                    db.insert("myChallenges", null, cv);
+                    Log.d(TAG, "Challenge: "+desctiption);
+                }
+            }
+        }
+
+        @Override
+        public void onFailure(Throwable t) {
+        }
+    });*/
+
 
 
 }

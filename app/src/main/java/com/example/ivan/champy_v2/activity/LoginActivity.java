@@ -502,37 +502,31 @@ public class LoginActivity extends AppCompatActivity {
                         for (int i = 0; i < list.size(); i++) {
                             com.example.ivan.champy_v2.model.active_in_progress.Datum datum = list.get(i);
                             Challenge challenge = datum.getChallenge();
-                            String desctiption = challenge.getDetails();
-                            //int end = datum.getEnd();
-                            //int days = (int) ((end - unixTime) / 86400);
-                            //String duration = "" + 21;  // тут треба присваювати реальну цифру, а не цю хрень!
+                            String challenge_description = challenge.getDescription(); // bla-bla
+                            String challenge_detail = challenge.getDetails(); // $challenge_description + " during this period"
+                            String challenge_status = datum.getStatus();      // active or not
+                            String challenge_id = datum.get_id();
+                            String challenge_type = challenge.getType(); // self, duel or wake up
                             String duration = "";
                             if (datum.getEnd() != null) {
                                 int end = datum.getEnd();
                                 int days = round((end - unixTime) / 86400);
                                 duration = "" + days;
                             }
-                            /*switch (challenge.getType()) {
-                                case "567d51c48322f85870fd931a":
-                                    cv.put("name", "Wake Up");
-                                    break;
-                                case "567d51c48322f85870fd931b":
-                                    cv.put("name", "Duel");
-                                    break;
-                                case "567d51c48322f85870fd931c":
-                                    cv.put("name", "Self Improvement");
-                                    break;
-                            }*/
-                            String challenge_id = datum.get_id();
-                            if (challenge.getDescription().equals("Wake Up")) {
+
+                            if (challenge_description.equals("Wake Up")) {
                                 cv.put("name", "Wake Up");
                             }
-                            else cv.put("name", "Self Improvement");
+                            else if (challenge_type.equals("567d51c48322f85870fd931a")) {
+                                cv.put("name", "Self-Improvement");
+                            } else if (challenge_type.equals("567d51c48322f85870fd931b")) {
+                                cv.put("name", "Duel");
+                            }
 
-                            cv.put("description", desctiption);
+                            cv.put("description", challenge_detail);
                             cv.put("duration", duration);
                             cv.put("challenge_id", challenge_id);
-                            cv.put("status", datum.getStatus());
+                            cv.put("status", challenge_status);
                             db.insert("myChallenges", null, cv);
                         }
 
