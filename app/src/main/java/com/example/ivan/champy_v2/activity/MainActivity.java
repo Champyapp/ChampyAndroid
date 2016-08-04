@@ -158,8 +158,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final ImageButton actionButton = (ImageButton)findViewById(R.id.fabPlus);
         final SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
         final SubActionButton buttonWakeUpChallenge = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeupcolor)).build();
-        final SubActionButton buttonDuelChallenge   = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.duelcolor)).build();
-        final SubActionButton buttonSelfImprovement = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementcolor)).build();
+        final SubActionButton buttonDuelChallenge   = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.duel_yellow)).build();
+        final SubActionButton buttonSelfImprovement = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.self_yellow)).build();
 
         int width = getWindowManager().getDefaultDisplay().getWidth();
         int x = round(width/100);
@@ -852,18 +852,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                         }
                                     }
                                     break;
-
                                 case DialogInterface.BUTTON_NEGATIVE:
-                                    //No button clicked
                                     break;
                             }
                         }
                     };
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    builder.setMessage("Are you sure you want to give up?")
-                            .setPositiveButton("Yes!", dialogClickListener)
-                            .setNegativeButton("No!", dialogClickListener).show();
+                    builder.setTitle("Are you sure")
+                            .setMessage("you want to give up?")
+                            .setIcon(R.drawable.ic_action_warn)
+                            .setCancelable(false)
+                            .setPositiveButton("Yes", dialogClickListener)
+                            .setNegativeButton("No", dialogClickListener).show();
 
                 }
             });
@@ -871,17 +872,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             if (y > 10) y = 10;
 
-            TextView textView  = (TextView) tempView.findViewById(R.id.textViewSIC);
-            textView.setText(item.getType());
+            TextView tvSelfImprovement  = (TextView) tempView.findViewById(R.id.textViewSIC);
+            tvSelfImprovement.setText(item.getType());
             String s = item.getGoal();
+            ImageView imageView = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
             if (item.getType().equals("Wake Up")) {
-                ImageView imageView = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
-                imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeupwhite));
-                s = "Wake up at "+s.substring(0, 2)+":"+s.substring(2,4);
+                imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeup_white));
+                s = "Wake up at " + s.substring(0, 2) + ":" + s.substring(2,4) + " during this period";
+            } else if (item.getType().equals("Duel")) {
+                imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.duel_white));
+            } else {
+                imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.self_white));
             }
-            textView.setTextSize((float)(y*1.3));
+            tvSelfImprovement.setTextSize((float)(y*1.3));
             Typeface typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
-            textView.setTypeface(typeface);
+            tvSelfImprovement.setTypeface(typeface);
 
             TextView tvChallengeName = (TextView) tempView.findViewById(R.id.textViewChallengeName);
             tvChallengeName.setText(s);

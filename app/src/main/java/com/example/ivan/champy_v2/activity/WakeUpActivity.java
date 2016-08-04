@@ -210,7 +210,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(WakeUpActivity.this);
                 builder.setTitle("Are you sure")
                         .setMessage("You wanna create this challenge?")
-                        .setIcon(R.drawable.challengecceptedmeme)
+                        .setIcon(R.drawable.wakeup_blue)
                         .setCancelable(false)
                         .setPositiveButton("Yes", dialogClickListener)
                         .setNegativeButton("No",  dialogClickListener).show();

@@ -98,7 +98,7 @@
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="@drawable/icon_self_improv"
+        android:background="@drawable/self_white"
         android:id="@+id/imageViewChallengeLogo"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"

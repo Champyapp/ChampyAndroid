@@ -3,6 +3,7 @@ package com.example.ivan.champy_v2.fragment;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
@@ -23,13 +24,16 @@ import com.bumptech.glide.Glide;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.activity.MainActivity;
 import com.example.ivan.champy_v2.create_challenge.Data;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.duel.Duel;
+import com.example.ivan.champy_v2.helper.CHLoadUserProgressBarInfo;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
 import com.example.ivan.champy_v2.interfaces.CreateChallenge;
 import com.example.ivan.champy_v2.interfaces.SingleInProgress;
+import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
 import com.example.ivan.champy_v2.model.active_in_progress.Datum;
 
 import java.util.HashMap;
@@ -183,6 +187,7 @@ public class PendingDuelFragment extends Fragment {
                                 c.close();
                                 if (recipient.equals("true")) {
                                     createNewChallenge(description, days);
+                                    //methodDeleteCurrentCardIfChallengeCreated();
                                     Log.i("OnCreateView", "Status: VSE OK"
                                             + "\n       challenge_id = " + challenge_id
                                             + "\n       description  = " + description
@@ -207,7 +212,7 @@ public class PendingDuelFragment extends Fragment {
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
                 builder.setTitle("Are you sure")
                         .setMessage("You wanna accept request?")
-                        .setIcon(R.drawable.challengecceptedmeme)
+                        .setIcon(R.drawable.duel_blue)
                         .setCancelable(false)
                         .setPositiveButton("Yes", dialogClickListener)
                         .setNegativeButton("No",  dialogClickListener).show();
@@ -301,6 +306,7 @@ public class PendingDuelFragment extends Fragment {
         });
     }
 
+
     public void joinToChallenge(final String _id) {
         final SessionManager sessionManager = new SessionManager(getContext());
         HashMap<String, String> user;
@@ -320,7 +326,8 @@ public class PendingDuelFragment extends Fragment {
                     Log.i("JoinToChallenge", "Status: VSE OK"
                             + "\n     _ID         = " + _id
                             + "\n     TOKEN       = " + mToken);
-                    //generate();
+
+                    generate();
                 } else {
                     Log.i("JoinToChallenge", "Status: WTF"
                             + "\n    ERROR        = " + response.code() + response.message()
@@ -337,37 +344,93 @@ public class PendingDuelFragment extends Fragment {
     }
 
 
-    //private void generate() { }
+    private void generate() {
+        DBHelper dbHelper = new DBHelper(getContext());
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        int clearCount = db.delete("myChallenges", null, null); // don't touch this line.
+        final ContentValues cv = new ContentValues();
+        final String API_URL = "http://46.101.213.24:3007";
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
-    /*
-    call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
-        @Override
-        public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
-            if (response.isSuccess()) {
-                List<com.example.ivan.champy_v2.model.active_in_progress.Datum> data = response.body().getData();
-                for (int i = 0; i < data.size(); i++) {
-                    com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
-                    Challenge challenge = datum.getChallenge();
-                    cv.clear();
-                    String desctiption = challenge.getDescription();
-                    int end = datum.getEnd();
-                    int days = round((end - unixTime) / 86400);
-                    String duration = "" + days;
-                    String challenge_id = challenge.get_id();
-                    cv.put("name", "Self Improvement");
-                    cv.put("description", desctiption);
-                    cv.put("duration", duration);
-                    cv.put("challenge_id", challenge_id);
-                    db.insert("myChallenges", null, cv);
-                    Log.d(TAG, "Challenge: "+desctiption);
+        final SessionManager sessionManager = new SessionManager(getContext());
+        HashMap<String, String> user;
+        user = sessionManager.getUserDetails();
+        String token = user.get("token");
+        String id = user.get("id");
+        ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
+        final long unixTime = System.currentTimeMillis() / 1000L;
+        final String update = "0"; //1457019726
+        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(id, update, token);
+        call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
+            @Override
+            public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    List<Datum> data = response.body().getData();
+                    for (int i = 0; i < data.size(); i++) {
+                        com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
+                        Challenge challenge = datum.getChallenge();
+                        String challenge_description = challenge.getDescription(); // bla-bla
+                        String challenge_detail = challenge.getDetails(); // $challenge_description + " during this period"
+                        String challenge_status = datum.getStatus();      // active or not
+                        String challenge_id = datum.get_id();
+                        String challenge_type = challenge.getType(); // self, duel or wake up
+                        String duration = "";
+                        if (datum.getEnd() != null) {
+                            int end = datum.getEnd();
+                            int days = round((end - unixTime) / 86400);
+                            duration = "" + days;
+                        }
+
+                        if (challenge_description.equals("Wake Up")) {
+                            cv.put("name", "Wake Up");
+                        } else if (challenge_type.equals("567d51c48322f85870fd931a")) {
+                            cv.put("name", "Self-Improvement");
+                        } else if (challenge_type.equals("567d51c48322f85870fd931b")) {
+                            cv.put("name", "Duel");
+                        }
+
+                        cv.put("description", challenge_detail);
+                        cv.put("duration", duration);
+                        cv.put("challenge_id", challenge_id);
+                        cv.put("status", challenge_status);
+                        String updated = find(challenge_id);
+                        cv.put("updated", updated);
+                        db.insert("myChallenges", null, cv);
+                    }
+                    Log.i("Generate Method:", "Status: VSE OK \n *****Good Luck Bro*****");
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    startActivity(intent);
                 }
             }
-        }
 
-        @Override
-        public void onFailure(Throwable t) {
+            @Override
+            public void onFailure(Throwable t) { }
+        });
+
+
+        CHLoadUserProgressBarInfo loadData = new CHLoadUserProgressBarInfo(getActivity());
+        loadData.loadUserProgressBarInfo();
+    }
+
+
+    // проверяем таблицу "update" в бд, пересоздаем и обновляем даннные.
+    private String find(String challenge_id) {
+        DBHelper dbHelper = new DBHelper(getActivity());
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor c = db.query("updated", null, null, null, null, null, null);
+        String ok = "false";
+        if (c.moveToFirst()) {
+            int colchallenge_id = c.getColumnIndex("challenge_id");
+            do {
+                if (c.getString(colchallenge_id).equals(challenge_id)){
+                    ok = c.getString(c.getColumnIndex("updated"));
+                    break;
+                }
+            } while (c.moveToNext());
         }
-    });*/
+        c.close();
+        return ok;
+    }
 
 
 

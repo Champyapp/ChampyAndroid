@@ -6,15 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".activity.SelfImprovementActivity"
     tools:showIn="@layout/app_bar_wake_up"
+    android:background="@drawable/selfimprovementback"
     android:id="@+id/wake_up">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:id="@+id/imageViewLogo"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:src="@mipmap/ic_launcher"
+        android:src="@drawable/wakeup_white"
         android:layout_marginTop="24dp" />
 
     <TextView
@@ -38,7 +39,7 @@
         android:id="@+id/imageView12"
         android:layout_below="@+id/imageViewLogo"
         android:layout_centerHorizontal="true"
-        android:src="@mipmap/ic_launcher"
+        android:src="@drawable/wakeuptext"
         android:layout_marginTop="16dp" />
 
     <android.support.v7.widget.CardView
@@ -72,12 +73,12 @@
                 android:layout_alignParentTop="true" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:id="@+id/imageViewAcceptButton"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:src="@mipmap/ic_launcher"
+                android:src="@drawable/points"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="8dp" />

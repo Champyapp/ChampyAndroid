@@ -35,7 +35,10 @@ import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.adapter.PagerAdapter;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.interfaces.NewUser;
 import com.example.ivan.champy_v2.model.Self.*;
+import com.example.ivan.champy_v2.model.User.Data;
+import com.example.ivan.champy_v2.model.User.User;
 import com.facebook.FacebookSdk;
 
 import java.io.File;
@@ -89,7 +92,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         TextView tvIChallengeMySelfTo = (TextView)findViewById(R.id.textView20);
         tvIChallengeMySelfTo.setTypeface(typeface);
 
-        Glide.with(this).load(R.drawable.selfimprovementicon).override(130, 130).into((ImageView) findViewById(R.id.imageViewLogo));
+        Glide.with(this).load(R.drawable.self_white).override(130, 130).into((ImageView) findViewById(R.id.imageViewLogo));
         Glide.with(this).load(R.drawable.selfimprtext).override(280, 250).into((ImageView) findViewById(R.id.imageView12));
 
         RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.selfimprovement);
@@ -210,7 +213,6 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
 
         com.example.ivan.champy_v2.interfaces.SelfImprovement selfImprovement = retrofit.create(com.example.ivan.champy_v2.interfaces.SelfImprovement.class);
         Call<com.example.ivan.champy_v2.model.Self.SelfImprovement> call = selfImprovement.getChallenges(token);
-
         call.enqueue(new Callback<com.example.ivan.champy_v2.model.Self.SelfImprovement>() {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.model.Self.SelfImprovement> response, Retrofit retrofit) {
@@ -261,6 +263,8 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
             @Override
             public void onFailure(Throwable t) { }
         });
+
+
 
     }
 

@@ -220,7 +220,7 @@ public class DuelFragment extends Fragment {
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
                 builder.setTitle("Are you sure")
                         .setMessage("You wanna send this request?")
-                        .setIcon(R.drawable.challengecceptedmeme)
+                        .setIcon(R.drawable.duel_blue)
                         .setCancelable(false)
                         .setPositiveButton("Yes", dialogClickListener)
                         .setNegativeButton("No",  dialogClickListener).show();

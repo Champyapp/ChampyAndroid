@@ -26,10 +26,14 @@ import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.activity.MainActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
+import com.example.ivan.champy_v2.helper.CHLoadUserProgressBarInfo;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
 import com.example.ivan.champy_v2.interfaces.CreateChallenge;
+import com.example.ivan.champy_v2.interfaces.NewUser;
 import com.example.ivan.champy_v2.interfaces.SingleInProgress;
+import com.example.ivan.champy_v2.model.User.Data;
+import com.example.ivan.champy_v2.model.User.User;
 import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
 import com.example.ivan.champy_v2.model.active_in_progress.Datum;
 
@@ -210,7 +214,7 @@ public class SelfImprovementFragment extends Fragment {
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
                 builder.setTitle("Are you sure")
                         .setMessage("You wanna create this challenge?")
-                        .setIcon(R.drawable.challengecceptedmeme)
+                        .setIcon(R.drawable.self_blue)
                         .setCancelable(false)
                         .setPositiveButton("Yes", dialogClickListener)
                         .setNegativeButton("No",  dialogClickListener).show();
@@ -348,25 +352,30 @@ public class SelfImprovementFragment extends Fragment {
                     for (int i = 0; i < data.size(); i++) {
                         com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
                         Challenge challenge = datum.getChallenge();
-                        String desctiption = challenge.getDetails();
+                        String challenge_description = challenge.getDescription(); // bla-bla
+                        String challenge_detail = challenge.getDetails(); // $challenge_description + " during this period"
+                        String challenge_status = datum.getStatus();      // active or not
+                        String challenge_id = datum.get_id();
+                        String challenge_type = challenge.getType(); // self, duel or wake up
                         String duration = "";
                         if (datum.getEnd() != null) {
                             int end = datum.getEnd();
                             int days = round((end - unixTime) / 86400);
                             duration = "" + days;
                         }
-                        String challenge_id = datum.get_id();
 
-                        if (challenge.getDescription().equals("Wake Up")) {
+                        if (challenge_description.equals("Wake Up")) {
                             cv.put("name", "Wake Up");
-                        } else {
-                            cv.put("name", "Self Improvement");
+                        } else if (challenge_type.equals("567d51c48322f85870fd931a")) {
+                            cv.put("name", "Self-Improvement");
+                        } else if (challenge_type.equals("567d51c48322f85870fd931b")) {
+                            cv.put("name", "Duel");
                         }
 
-                        cv.put("description", desctiption);
+                        cv.put("description", challenge_detail);
                         cv.put("duration", duration);
                         cv.put("challenge_id", challenge_id);
-                        cv.put("status", datum.getStatus());
+                        cv.put("status", challenge_status);
                         String updated = find(challenge_id);
                         cv.put("updated", updated);
                         db.insert("myChallenges", null, cv);
@@ -380,6 +389,11 @@ public class SelfImprovementFragment extends Fragment {
             @Override
             public void onFailure(Throwable t) { }
         });
+
+
+        CHLoadUserProgressBarInfo loadData = new CHLoadUserProgressBarInfo(getActivity());
+        loadData.loadUserProgressBarInfo();
+
     }
 
 

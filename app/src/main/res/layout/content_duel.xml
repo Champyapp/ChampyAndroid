@@ -42,10 +42,10 @@
         android:layout_alignBottom="@+id/user2" />
 
     <ImageView
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:id="@+id/imageView17"
-        android:src="@drawable/duel_blue"
+        android:src="@drawable/duel_white"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="24dp" />

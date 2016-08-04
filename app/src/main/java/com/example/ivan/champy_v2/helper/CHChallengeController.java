@@ -1,4 +1,4 @@
-package com.example.ivan.champy_v2;
+package com.example.ivan.champy_v2.helper;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -10,10 +10,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.example.ivan.champy_v2.AlarmReceiver;
+import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.activity.MainActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
-import com.example.ivan.champy_v2.duel.Duel;
-import com.example.ivan.champy_v2.helper.CHLoadUserProgressBarInfo;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
 import com.example.ivan.champy_v2.interfaces.CreateChallenge;
 import com.example.ivan.champy_v2.interfaces.SingleInProgress;
@@ -33,35 +33,25 @@ import retrofit.Retrofit;
 
 import static java.lang.Math.round;
 
-/**
- * Created by ivan on 28.03.16.
- */
-public class ChallengeController {
+public class CHChallengeController {
 
     Context context;
-    Activity firstActivity;
-    int hour, minute;
+    Activity activity;
 
-    public ChallengeController(Context mContext, Activity activity, int mHour, int mMinute) {
-        context = mContext;
-        firstActivity = activity;
-        hour = mHour;
-        minute = mMinute;
+
+    public CHChallengeController(Context context) {
+        this.context = context;
+        this.activity = activity;
     }
 
-
-    public void Create_new_challenge(final String description, int days, final String type_id) {
+    private void Create_new_challenge(final String description, int days) {
+        final String type_id = "567d51c48322f85870fd931a";
         final SessionManager sessionManager = new SessionManager(context);
-        HashMap<String, String> user = new HashMap<>();
+        HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         String token = user.get("token");
-
         final String duration = "" + (days * 86400);
-        String sHour = "" + hour;
-        String sMinute = "" + minute;
-        if (hour < 10) sHour = "0" + sHour;
-        if (minute < 10) sMinute = "0" + sMinute;
-        final String details = sHour + sMinute;
+        final String details = description + " during this period";
 
         final String API_URL = "http://46.101.213.24:3007";
         final Retrofit retrofit = new Retrofit.Builder()
@@ -84,20 +74,20 @@ public class ChallengeController {
             public void onResponse(Response<com.example.ivan.champy_v2.create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String challenge = response.body().getData().get_id();
-                    Log.i("stat", "Status: " + challenge);
                     StartSingleInProgress(challenge);
-                    Log.i("ChallengeController", "CreateNewChallenge Status: OK"
+                    Log.i("SelfImprovement", "CreateNewChallenge Status: OK"
                             + "\n create_challenge.CreateChallenge data = " + challenge
                             + "\n TYPE_ID     = " + type_id
                             + "\n DESCRIPTION = " + description
                             + "\n DETAILS     = " + details
                             + "\n DURATION    = " + duration);
-                } else Log.i("ChallengeController", "CreateNewChallenge Status: Failed");
+                } else Log.i("stat", "Status: Error Creating");
             }
 
             @Override
             public void onFailure(Throwable t) {}
         });
+
     }
 
 
@@ -186,7 +176,7 @@ public class ChallengeController {
                         db.insert("myChallenges", null, cv);
                     }
                     Log.i("Generate Method:", "Status: VSE OK \n *****Good Luck Bro*****");
-                    Intent intent = new Intent(firstActivity, MainActivity.class);
+                    Intent intent = new Intent(context, MainActivity.class);
                     context.startActivity(intent);
                 }
             }
@@ -196,7 +186,7 @@ public class ChallengeController {
         });
 
 
-        CHLoadUserProgressBarInfo loadData = new CHLoadUserProgressBarInfo(firstActivity);
+        CHLoadUserProgressBarInfo loadData = new CHLoadUserProgressBarInfo(activity);
         loadData.loadUserProgressBarInfo();
     }
 
@@ -217,38 +207,38 @@ public class ChallengeController {
 
         Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call = activeInProgress.Surrender(id, token);
         call.enqueue(new Callback<com.example.ivan.champy_v2.single_inprogress.SingleInProgress>() {
-           @Override
-           public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
-               if (response.isSuccess()){
-                   Log.i("stat", "Surrender: Success");
-                   Data data = response.body().getData();
-                   Log.i("stat", "Give up: "+data.getChallenge().getType());
-                   if (data.getChallenge().getType().equals("567d51c48322f85870fd931c")) {
-                       String s = data.getChallenge().getDetails();
-                       Log.i("stat", "Give up: "+s);
-                       int i = Integer.parseInt(s);
-                       Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
-                       PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, i, myIntent, 0);
-                       Log.i("stat", "Give up: "+i);
-                       AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                       alarmManager.cancel(pendingIntent);
-                   }
+            @Override
+            public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
+                if (response.isSuccess()){
+                    Log.i("stat", "Surrender: Success");
+                    Data data = response.body().getData();
+                    Log.i("stat", "Give up: "+data.getChallenge().getType());
+                    if (data.getChallenge().getType().equals("567d51c48322f85870fd931c")) {
+                        String s = data.getChallenge().getDetails();
+                        Log.i("stat", "Give up: "+s);
+                        int i = Integer.parseInt(s);
+                        Intent myIntent = new Intent(activity, AlarmReceiver.class);
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(activity, i, myIntent, 0);
+                        Log.i("stat", "Give up: "+i);
+                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                        alarmManager.cancel(pendingIntent);
+                    }
 
-                   generate();
+                    generate();
 
-               } else Log.i("stat", "Surrender: Fail"+response.code());
-           }
+                } else Log.i("stat", "Surrender: Fail"+response.code());
+            }
 
-           @Override
-           public void onFailure(Throwable t) {
-           }
+            @Override
+            public void onFailure(Throwable t) {
+            }
 
-       });
+        });
     }
 
 
     private String find(String challenge_id) {
-        DBHelper dbHelper = new DBHelper(firstActivity);
+        DBHelper dbHelper = new DBHelper(activity);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("updated", null, null, null, null, null, null);
         String ok = "false";
