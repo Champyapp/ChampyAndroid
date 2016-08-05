@@ -144,6 +144,9 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
+                        final String type_id = "567d51c48322f85870fd931c";
+
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
                                 alarmTimePicker = (TimePicker)findViewById(R.id.timePicker);
@@ -192,7 +195,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
 
                                         Toast.makeText(WakeUpActivity.this, "Challenge created", Toast.LENGTH_SHORT).show();
                                         ChallengeController challengeController = new ChallengeController(WakeUpActivity.this, WakeUpActivity.this, hour, minute);
-                                        challengeController.Create_new_challenge("Wake Up", 21, "567d51c48322f85870fd931c");
+                                        challengeController.createNewWakeUpChallenge("Wake Up", 21, type_id);
 
                                     } else {
                                         Toast.makeText(WakeUpActivity.this, "Already exist!", Toast.LENGTH_SHORT).show();

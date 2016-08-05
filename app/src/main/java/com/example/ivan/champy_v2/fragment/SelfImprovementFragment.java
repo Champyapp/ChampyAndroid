@@ -2,7 +2,6 @@ package com.example.ivan.champy_v2.fragment;
 
 import android.content.ContentValues;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
@@ -21,32 +20,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
-import com.example.ivan.champy_v2.activity.MainActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
-import com.example.ivan.champy_v2.helper.CHLoadUserProgressBarInfo;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
-import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
-import com.example.ivan.champy_v2.interfaces.CreateChallenge;
-import com.example.ivan.champy_v2.interfaces.NewUser;
-import com.example.ivan.champy_v2.interfaces.SingleInProgress;
-import com.example.ivan.champy_v2.model.User.Data;
-import com.example.ivan.champy_v2.model.User.User;
-import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
-import com.example.ivan.champy_v2.model.active_in_progress.Datum;
-
-import org.json.JSONException;
-
-import java.util.HashMap;
-import java.util.List;
-
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.GsonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
 
 import static java.lang.Math.round;
 
@@ -154,6 +133,7 @@ public class SelfImprovementFragment extends Fragment {
                         String duration = "";
                         String description = "";
                         String challenge_id = "";
+                        String type_id = "567d51c48322f85870fd931a";
                         int days;
 
                         EditText etGoal = (EditText) view.findViewById(R.id.et_goal);
@@ -167,12 +147,13 @@ public class SelfImprovementFragment extends Fragment {
                         int position = viewPager.getCurrentItem();
                         int size = sessionManager.getSelfSize();
 
+                        ChallengeController cc = new ChallengeController(getContext(), getActivity(), 0, 0);
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
                                 if (position == size) {
                                     if ((checkInputUserData(description, duration))) {
                                         days = Integer.parseInt(duration);
-                                        Create_new_challenge(description, days);
+                                        cc.createNewSelfImprovementChallenge(description, days);
                                     }
                                 } else {
                                     int o = 0;
@@ -199,7 +180,8 @@ public class SelfImprovementFragment extends Fragment {
                                     if (isActive(description)) {
                                         Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        StartSingleInProgress(challenge_id);
+                                        cc.startSingleInProgress(challenge_id);
+                                        //startSingleInProgress(challenge_id);
                                         Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
                                     }
                                 }
@@ -243,7 +225,7 @@ public class SelfImprovementFragment extends Fragment {
     }
 
 
-    // создаем кастомные челенджи
+    /*// создаем кастомные челенджи
     private void Create_new_challenge(final String description, int days) {
         final String type_id = "567d51c48322f85870fd931a";
         final SessionManager sessionManager = new SessionManager(getContext());
@@ -274,7 +256,7 @@ public class SelfImprovementFragment extends Fragment {
             public void onResponse(Response<com.example.ivan.champy_v2.create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String challenge = response.body().getData().get_id();
-                    StartSingleInProgress(challenge);
+                    startSingleInProgress(challenge);
                     Log.i("SelfImprovement", "CreateNewChallenge Status: OK"
                             + "\n create_challenge.CreateChallenge data = " + challenge
                             + "\n TYPE_ID     = " + type_id
@@ -292,7 +274,7 @@ public class SelfImprovementFragment extends Fragment {
 
 
     // создаем стандартные челенджи
-    private void StartSingleInProgress(final String challenge) {
+    private void startSingleInProgress(final String challenge) {
         final SessionManager sessionManager = new SessionManager(getContext());
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
@@ -315,7 +297,7 @@ public class SelfImprovementFragment extends Fragment {
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
                     db.insert("updated", null, cv);
                     generate();
-                    Log.i("SelfImprovement", "StartSingleInProgress Status: OK"
+                    Log.i("SelfImprovement", "startSingleInProgress Status: OK"
                             + "\n ID = " + data.getData().get_id() + "\n");
                 } else Log.i("stat", "Status: Starting WRONG" + response.code());
             }
@@ -414,7 +396,7 @@ public class SelfImprovementFragment extends Fragment {
         }
         c.close();
         return ok;
-    }
+    }*/
 
 
     // проверяем активный ли челендж

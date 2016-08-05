@@ -33,9 +33,7 @@ import retrofit.Retrofit;
 
 import static java.lang.Math.round;
 
-/**
- * Created by ivan on 28.03.16.
- */
+// эта какаха относится к "wake up" и наследовать я ёё не могу
 public class ChallengeController {
 
     Context context;
@@ -50,7 +48,99 @@ public class ChallengeController {
     }
 
 
-    public void Create_new_challenge(final String description, int days, final String type_id) {
+
+    public void createNewSelfImprovementChallenge(final String description, int days) {
+        final String type_id = "567d51c48322f85870fd931a";
+        final SessionManager sessionManager = new SessionManager(context);
+        HashMap<String, String> user;
+        user = sessionManager.getUserDetails();
+        String token = user.get("token");
+        final String duration = "" + (days * 86400);
+        final String details = description + " during this period";
+
+        final String API_URL = "http://46.101.213.24:3007";
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
+        Call<com.example.ivan.champy_v2.create_challenge.CreateChallenge> call =
+                createChallenge.createChallenge(
+                        "User_Challenge",
+                        type_id,
+                        description,
+                        details,
+                        duration,
+                        token
+                );
+        call.enqueue(new Callback<com.example.ivan.champy_v2.create_challenge.CreateChallenge>() {
+            @Override
+            public void onResponse(Response<com.example.ivan.champy_v2.create_challenge.CreateChallenge> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    String challenge = response.body().getData().get_id();
+                    startSingleInProgress(challenge);
+                    Log.i("createNewSIC", "CreateNewChallenge Status: VSE OK"
+                            + "\n create_challenge.CreateChallenge data = " + challenge
+                            + "\n TYPE_ID     = " + type_id
+                            + "\n DESCRIPTION = " + description
+                            + "\n DETAILS     = " + details
+                            + "\n DURATION    = " + duration);
+                } else Log.i("createNewSIC", "CreateNewChallenge Status: Failed");
+            }
+
+            @Override
+            public void onFailure(Throwable t) {}
+        });
+
+    }
+
+    public void createNewDuelChallenge(String description, int days, final String friend_id) {
+        String type_id = "567d51c48322f85870fd931b";
+        final SessionManager sessionManager = new SessionManager(context);
+        HashMap<String, String> user = new HashMap<>();
+        user = sessionManager.getUserDetails();
+        String token = user.get("token");
+        String duration = "" + (days * 86400);
+        String details = description + " during this period";
+
+        final String API_URL = "http://46.101.213.24:3007";
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
+        Call<com.example.ivan.champy_v2.create_challenge.CreateChallenge> call =
+                createChallenge.createChallenge(
+                        "User_Challenge",
+                        type_id,
+                        description,
+                        details,
+                        duration,
+                        token);
+
+        call.enqueue(new Callback<com.example.ivan.champy_v2.create_challenge.CreateChallenge>() {
+            @Override
+            public void onResponse(Response<com.example.ivan.champy_v2.create_challenge.CreateChallenge> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    String challengeId = response.body().getData().get_id();
+                    startSingleInProgressForDuel(challengeId, friend_id);
+                    Log.i("createNewDuelChallenge", "OnResponse: VSE OK");
+                    //Log.i("stat", "Status: " + challengeId);
+                    //Log.i("stat", "Status: Challenge Created");
+                } else Log.i("createNewDuelChallenge", "OnResponse: Failed");
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
+
+    }
+
+    public void createNewWakeUpChallenge(final String description, int days, final String type_id) {
         final SessionManager sessionManager = new SessionManager(context);
         HashMap<String, String> user = new HashMap<>();
         user = sessionManager.getUserDetails();
@@ -83,16 +173,16 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    String challenge = response.body().getData().get_id();
-                    Log.i("stat", "Status: " + challenge);
-                    StartSingleInProgress(challenge);
-                    Log.i("ChallengeController", "CreateNewChallenge Status: OK"
-                            + "\n create_challenge.CreateChallenge data = " + challenge
+                    String challengeId = response.body().getData().get_id();
+                    Log.i("stat", "Status: " + challengeId);
+                    startSingleInProgress(challengeId);
+                    Log.i("makeNewWakeUpChallenge", "createNewWakeUpChallenge Status: OK"
+                            + "\n _ID         = " + challengeId
                             + "\n TYPE_ID     = " + type_id
                             + "\n DESCRIPTION = " + description
                             + "\n DETAILS     = " + details
                             + "\n DURATION    = " + duration);
-                } else Log.i("ChallengeController", "CreateNewChallenge Status: Failed");
+                } else Log.i("makeNewWakeUpChallenge", "CreateNewChallenge Status: Failed");
             }
 
             @Override
@@ -101,9 +191,11 @@ public class ChallengeController {
     }
 
 
-    public void StartSingleInProgress(String challenge) {
+
+
+    public void startSingleInProgress(String challenge) {
         final SessionManager sessionManager = new SessionManager(context);
-        HashMap<String, String> user = new HashMap<>();
+        HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         String token = user.get("token");
 
@@ -119,8 +211,86 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    Log.i("stat", "Status: Starting OK");
-                    generate();
+                    Log.i("startSingleInProgress", "Status: VSE OK");
+                    // if (duel) {
+                    // goto joinToChallenge;
+                    // } else {
+                    generateCardsForMainActivity();
+                    // }
+                } else Log.i("startSingleInProgress", "Status: FAILED");
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
+    }
+
+    public void startSingleInProgressForDuel(final String challenge, String recipientId) {
+        final SessionManager sessionManager = new SessionManager(context);
+        HashMap<String, String> user = new HashMap<>();
+        user = sessionManager.getUserDetails();
+        String token = user.get("token");
+
+        final String API_URL = "http://46.101.213.24:3007";
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
+        Call<com.example.ivan.champy_v2.duel.Duel> call = singleinprogress.Start_duel(recipientId, challenge, token);
+        call.enqueue(new Callback<Duel>() {
+            @Override
+            public void onResponse(Response<Duel> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    //Log.i("stat", "Status: Starting OK");
+                    ContentValues cv = new ContentValues();
+                    Duel duel = response.body();
+                    cv.put("challenge_id", duel.getData().getId());
+                    cv.put("updated", "false");
+                    DBHelper dbHelper = new DBHelper(firstActivity);
+                    SQLiteDatabase db = dbHelper.getWritableDatabase();
+                    db.insert("updated", null, cv);
+                    generateCardsForMainActivity();
+                    Log.d("startDuelInProgress", "startDuelInProgress: " + "\n DUEL_ID = " + duel.getData().getId() + "\n\n");
+                } else Log.i("startDuelInProgress", "Status: FAILED" + response.code() + response.message());
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
+    }
+
+    public void joinToChallenge(final String _id) {
+        final SessionManager sessionManager = new SessionManager(context);
+        HashMap<String, String> user;
+        user = sessionManager.getUserDetails();
+        String token = user.get("token");
+        final String mToken = token;
+        final String API_URL = "http://46.101.213.24:3007";
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+
+
+        SingleInProgress singleInProgress = retrofit.create(SingleInProgress.class);
+        Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call = singleInProgress.Join(_id, token);
+        call.enqueue(new Callback<com.example.ivan.champy_v2.single_inprogress.SingleInProgress>() {
+            @Override
+            public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    Log.i("JoinToChallenge", "Status: VSE OK"
+                            + "\n     _ID         = " + _id
+                            + "\n     TOKEN       = " + mToken);
+
+                    generateCardsForMainActivity();
+                } else {
+                    Log.i("JoinToChallenge", "Status: WTF"
+                            + "\n    ERROR        = " + response.code() + response.message()
+                            + "\n    _ID          = " + _id
+                            + "\n    TOKEN        = " + mToken);
                 }
             }
 
@@ -132,7 +302,9 @@ public class ChallengeController {
     }
 
 
-    private void generate() {
+
+
+    private void generateCardsForMainActivity() {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("myChallenges", null, null);
@@ -200,43 +372,37 @@ public class ChallengeController {
         loadData.loadUserProgressBarInfo();
     }
 
-
     public void give_up(String id) throws IOException {
         final SessionManager sessionManager = new SessionManager(context);
-        HashMap<String, String> user = new HashMap<>();
+        HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         String token = user.get("token");
-
         final String API_URL = "http://46.101.213.24:3007";
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
-
         Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call = activeInProgress.Surrender(id, token);
         call.enqueue(new Callback<com.example.ivan.champy_v2.single_inprogress.SingleInProgress>() {
            @Override
            public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
                if (response.isSuccess()){
-                   Log.i("stat", "Surrender: Success");
+                   //Log.i("stat", "Surrender: Success");
                    Data data = response.body().getData();
-                   Log.i("stat", "Give up: "+data.getChallenge().getType());
-                   if (data.getChallenge().getType().equals("567d51c48322f85870fd931c")) {
+                   String type = data.getChallenge().getType();
+                   //Log.i("stat", "Give up: "+data.getChallenge().getType());
+                   if (type.equals("567d51c48322f85870fd931c")) { //wtf
                        String s = data.getChallenge().getDetails();
-                       Log.i("stat", "Give up: "+s);
+                       //Log.i("stat", "Give up: "+s);
                        int i = Integer.parseInt(s);
                        Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
                        PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, i, myIntent, 0);
-                       Log.i("stat", "Give up: "+i);
+                       //Log.i("stat", "Give up: "+i);
                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                        alarmManager.cancel(pendingIntent);
                    }
 
-                   generate();
+                   generateCardsForMainActivity();
 
-               } else Log.i("stat", "Surrender: Fail"+response.code());
+               }
            }
 
            @Override
@@ -245,7 +411,6 @@ public class ChallengeController {
 
        });
     }
-
 
     private String find(String challenge_id) {
         DBHelper dbHelper = new DBHelper(firstActivity);

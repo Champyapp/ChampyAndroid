@@ -860,7 +860,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                     builder.setTitle("Are you sure")
-                            .setMessage("you want to give up?")
+                            .setMessage("You want to give up?")
                             .setIcon(R.drawable.ic_action_warn)
                             .setCancelable(false)
                             .setPositiveButton("Yes", dialogClickListener)
@@ -876,13 +876,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             tvSelfImprovement.setText(item.getType());
             String s = item.getGoal();
             ImageView imageView = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
-            if (item.getType().equals("Wake Up")) {
-                imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeup_white));
-                s = "Wake up at " + s.substring(0, 2) + ":" + s.substring(2,4) + " during this period";
-            } else if (item.getType().equals("Duel")) {
-                imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.duel_white));
-            } else {
-                imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.self_white));
+            switch (item.getType()) {
+                case "Wake Up":
+                    imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeup_white));
+                    s = "Wake up at " + s.substring(0, 2) + ":" + s.substring(2, 4) + " during this period";
+                    break;
+                case "Duel":
+                    imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.duel_white));
+                    break;
+                case "Self-Improvement":
+                    imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.self_white));
+                    break;
             }
             tvSelfImprovement.setTextSize((float)(y*1.3));
             Typeface typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");

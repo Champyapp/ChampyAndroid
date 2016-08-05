@@ -84,6 +84,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         tvIChallengeMyFriendTo.setTypeface(typeface);
         ivUser2.getLayoutParams().width = x;
         ivUser2.getLayoutParams().height = x; // щоб була квадратна
+        SessionManager sessionManager = new SessionManager(getApplicationContext());
 
         RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.duel_back);
         relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementback));
@@ -101,7 +102,19 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
-        SessionManager sessionManager = new SessionManager(getApplicationContext());
+
+        int count = 0;
+
+        String s = sessionManager.get_duel_pending();
+        if (s != null) { count = Integer.parseInt(s); }
+
+        TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+        if (count == 0) {
+            hideItem();
+        } else {
+            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+        }
+
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
@@ -127,6 +140,13 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
 
         getChallenges();
 
+    }
+
+
+    private void hideItem() {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Menu nav_Menu = navigationView.getMenu();
+        nav_Menu.findItem(R.id.pending_duels).setVisible(false);
     }
 
 

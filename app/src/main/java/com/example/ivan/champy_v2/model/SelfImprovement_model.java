@@ -79,21 +79,6 @@ public class SelfImprovement_model {
     public static ArrayList<SelfImprovement_model> generate(Context context) {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        final ContentValues cv = new ContentValues();
-
-        final String API_URL = "http://46.101.213.24:3007";
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-
-        final SessionManager sessionManager = new SessionManager(context);
-        HashMap<String, String> user = new HashMap<>();
-        user = sessionManager.getUserDetails();
-        String token = user.get("token");
-        String id = user.get("id");
         ArrayList<SelfImprovement_model> arrayList = new ArrayList<>();
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
         int o = 0;
@@ -115,8 +100,7 @@ public class SelfImprovement_model {
                         "started",
                         c.getString(updated)));
             } while (c.moveToNext());
-        } else
-            Log.i("stat", "kwo0 rows");
+        }
         c.close();
         return  arrayList;
     }
@@ -124,19 +108,6 @@ public class SelfImprovement_model {
     public static ArrayList<SelfImprovement_model> generateAll(Context context) {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final ContentValues cv = new ContentValues();
-
-        final String API_URL = "http://46.101.213.24:3007";
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final SessionManager sessionManager = new SessionManager(context);
-        HashMap<String, String> user = new HashMap<>();
-        user = sessionManager.getUserDetails();
-        String token = user.get("token");
-        String id = user.get("id");
         ArrayList<SelfImprovement_model> arrayList = new ArrayList<>();
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
         int o = 0;
@@ -158,8 +129,7 @@ public class SelfImprovement_model {
                         c.getString(status),
                         c.getString(updated)));
             } while (c.moveToNext());
-        } else
-            Log.i("stat", "kwo0 rows");
+        }
         c.close();
         return  arrayList;
     }
@@ -167,18 +137,6 @@ public class SelfImprovement_model {
     public static ArrayList<SelfImprovement_model> generateWins(Context context) {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final ContentValues cv = new ContentValues();
-        final String API_URL = "http://46.101.213.24:3007";
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final SessionManager sessionManager = new SessionManager(context);
-        HashMap<String, String> user = new HashMap<>();
-        user = sessionManager.getUserDetails();
-        String token = user.get("token");
-        String id = user.get("id");
         ArrayList<SelfImprovement_model> arrayList = new ArrayList<>();
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
         int o = 0;
@@ -200,8 +158,7 @@ public class SelfImprovement_model {
                         "finished",
                         c.getString(updated)));
             } while (c.moveToNext());
-        } else
-            Log.i("stat", "kwo0 rows");
+        }
         c.close();
         return  arrayList;
     }
@@ -209,18 +166,6 @@ public class SelfImprovement_model {
     public static ArrayList<SelfImprovement_model> generateFailed(Context context) {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final ContentValues cv = new ContentValues();
-        final String API_URL = "http://46.101.213.24:3007";
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final SessionManager sessionManager = new SessionManager(context);
-        HashMap<String, String> user = new HashMap<>();
-        user = sessionManager.getUserDetails();
-        String token = user.get("token");
-        String id = user.get("id");
         ArrayList<SelfImprovement_model> arrayList = new ArrayList<>();
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
         int o = 0;
@@ -242,8 +187,7 @@ public class SelfImprovement_model {
                         "failed",
                         c.getString(updated)));
             } while (c.moveToNext());
-        } else
-            Log.i("stat", "kwo0 rows");
+        }
         c.close();
         return  arrayList;
     }

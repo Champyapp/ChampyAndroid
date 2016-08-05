@@ -2,12 +2,10 @@ package com.example.ivan.champy_v2.fragment;
 
 import android.content.ContentValues;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -22,29 +20,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
-import com.example.ivan.champy_v2.activity.MainActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
-import com.example.ivan.champy_v2.duel.Duel;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
-import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
-import com.example.ivan.champy_v2.interfaces.CreateChallenge;
-import com.example.ivan.champy_v2.interfaces.SingleInProgress;
-import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
-import com.example.ivan.champy_v2.model.active_in_progress.Datum;
-import com.example.ivan.champy_v2.model.active_in_progress.Recipient;
-import com.example.ivan.champy_v2.model.active_in_progress.Sender;
-
-import java.util.HashMap;
-import java.util.List;
-
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.GsonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
 
 // TODO: 12.07.2016 тут логика окна дуелей с другом: friends -> make challenge -> here.
 // TODO: 12.07.2016 переписать это так как SelfImprovementFragment.
@@ -147,7 +128,7 @@ public class DuelFragment extends Fragment {
 
         OfflineMode offlineMode = new OfflineMode();
         offlineMode.isConnectedToRemoteAPI(getActivity());
-        final String finalFriend_id = friend_id;
+        final String recipientId = friend_id;
         imageButtonAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -173,12 +154,13 @@ public class DuelFragment extends Fragment {
                         int position = viewPager.getCurrentItem();
                         int size = sessionManager.getSelfSize();
 
+                        ChallengeController cc = new ChallengeController(getContext(), getActivity(), 0, 0);
                         switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
                                 if (position == size) {
                                     if ((checkInputUserData(description, duration))) {
                                         days = Integer.parseInt(duration);
-                                        Create_new_challenge(description, days, finalFriend_id);
+                                        cc.createNewDuelChallenge(description, days, recipientId);
                                     }
                                 } else {
                                     int o = 0;
@@ -206,7 +188,7 @@ public class DuelFragment extends Fragment {
                                     if (isActive(description)) {
                                         Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        StartSingleInProgress(challenge_id, finalFriend_id);
+                                        cc.startSingleInProgressForDuel(challenge_id, recipientId);
                                         Toast.makeText(getActivity(), "Sent duel request", Toast.LENGTH_SHORT).show();
                                     }
                                 }
@@ -250,50 +232,7 @@ public class DuelFragment extends Fragment {
     }
 
 
-    public void Create_new_challenge(String description, int days, final String friend_id) {
-        String type_id = "567d51c48322f85870fd931b";
-        final SessionManager sessionManager = new SessionManager(getContext());
-        HashMap<String, String> user = new HashMap<>();
-        user = sessionManager.getUserDetails();
-        String token = user.get("token");
-        String duration = "" + (days * 86400);
-        String details = description + " during this period";
-
-        final String API_URL = "http://46.101.213.24:3007";
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
-        Call<com.example.ivan.champy_v2.create_challenge.CreateChallenge> call =
-                createChallenge.createChallenge(
-                        "User_Challenge",
-                        type_id,
-                        description,
-                        details,
-                        duration,
-                        token);
-
-        call.enqueue(new Callback<com.example.ivan.champy_v2.create_challenge.CreateChallenge>() {
-            @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.create_challenge.CreateChallenge> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    String challengeId = response.body().getData().get_id();
-                    Log.i("stat", "Status: " + challengeId);
-                    StartSingleInProgress(challengeId, friend_id);
-                    Log.i("stat", "Status: Challenge Created");
-
-                } else Log.i("stat", "Status: Error Creating");
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-
-            }
-        });
-
-    }
+   /*
 
 
     public void StartSingleInProgress(final String challenge, String recipient) {
@@ -376,12 +315,12 @@ public class DuelFragment extends Fragment {
                             cv.put("description", challenge.getDescription());
                             cv.put("duration", challenge.getDuration());
                             db.insert("pending_duel", null, cv);
-                            /*Log.d("DuelFragment", "Generate: "
+                            *//*Log.d("DuelFragment", "Generate: "
                                     + "\n Chall_Description = " + challenge.getDescription()
                                     + "\n Chall_Id          = " + challenge.get_id()
                                     + "\n Chall_Duration    = " + challenge.getDuration()
                                     + "\n Recipient_ID      = " + recipient.getId()
-                                    + "\n Sender_ID         = " + sender.get_id());*/
+                                    + "\n Sender_ID         = " + sender.get_id());*//*
                         }
                     }
                     Intent intent = new Intent(getActivity(), MainActivity.class);
@@ -393,7 +332,7 @@ public class DuelFragment extends Fragment {
             public void onFailure(Throwable t) {
             }
         });
-    }
+    }*/
 
 
     public boolean isActive(String description) {

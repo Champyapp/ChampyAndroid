@@ -137,9 +137,7 @@ public class OtherFragment extends Fragment {
                         // Проверка на оффлайн вкладке OTHERS
                         OfflineMode offlineMode = new OfflineMode();
                         if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
-                            final GraphRequest request = GraphRequest.newMyFriendsRequest(
-                                    AccessToken.getCurrentAccessToken(),
-
+                            final GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(),
                                     new GraphRequest.GraphJSONArrayCallback() {
                                         @Override
                                         public void onCompleted(JSONArray array, GraphResponse response) {

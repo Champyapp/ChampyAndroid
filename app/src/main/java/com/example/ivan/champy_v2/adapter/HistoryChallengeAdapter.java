@@ -20,9 +20,6 @@ import com.example.ivan.champy_v2.R;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by ivan on 23.03.16.
- */
 public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallengeAdapter.ViewHolder> {
 
     final private String API_URL = "http://46.101.213.24:3007";
@@ -51,7 +48,6 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         tvUserName.setTypeface(typeFace);
 
         // Return a new holder instance
-        final ViewHolder viewHolder = new ViewHolder(contactView);
         //viewHolder.item_friends_open.setVisibility(View.VISIBLE);
        /* viewHolder.item_friends_close.setVisibility(View.GONE);
 
@@ -73,12 +69,12 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
             }
         });*/
 
-        return viewHolder;
+        return new ViewHolder(contactView);
     }
 
     @Override
     public void onBindViewHolder(final HistoryChallengeAdapter.ViewHolder viewHolder, int position) {
-        HistoryChallenge contact = mContacts.get(position);
+        HistoryChallenge itemRow = mContacts.get(position);
         TextView nameTextView = viewHolder.nameTextView;
         TextView level = viewHolder.level;
 
@@ -90,25 +86,26 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         /*TextView level = viewholder.level;
         level.setText("Level " + contact.getLevel() + " Champy");*/
 
-        String type = contact.getType();
-        Log.i(TAG, "onBindViewHolder: " + type);
+        String type = itemRow.getType();
+        //Log.i(TAG, "onBindViewHolder: " + type);
 
+        // Here "type" in stupid string format. its works.
         switch (type) {
-            case "Duels":
+            case "Duel":
                 nameTextView.setText("Duel Challenge");
                 Glide.with(_context).load(R.drawable.duel_yellow).override(80, 80).into(viewHolder.image);
-                break;
-            case "Self Improvement":
-                nameTextView.setText("Self-Improvement Challenge");
-                Glide.with(_context).load(R.drawable.self_yellow).override(80, 80).into(viewHolder.image);
                 break;
             case "Wake Up":
                 nameTextView.setText("Wake Up");
                 Glide.with(_context).load(R.drawable.wakeup_yellow).override(80, 80).into(viewHolder.image);
                 break;
+            case "Self-Improvement":
+                nameTextView.setText("Self-Improvement Challenge");
+                Glide.with(_context).load(R.drawable.self_yellow).override(80, 80).into(viewHolder.image);
+                break;
         }
 
-        switch (contact.getStatus()) {
+        switch (itemRow.getStatus()) {
             case "started":
                 nameTextView = (TextView) viewHolder.itemView.findViewById(R.id.counterWins);
                 nameTextView.setText("In Progress");

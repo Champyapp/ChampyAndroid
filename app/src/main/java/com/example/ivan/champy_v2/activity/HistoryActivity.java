@@ -47,8 +47,6 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 // history wins?
 public class HistoryActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private FloatingActionMenu actionMenu;
-    private final String TAG = "myLogs";
     FragmentPagerAdapter adapterViewPager;
 
     @Override

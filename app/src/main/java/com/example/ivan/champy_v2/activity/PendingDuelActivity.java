@@ -194,19 +194,19 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final ContentValues cv = new ContentValues();
         Cursor c = db.query("pending_duel", null, null, null, null, null, null);
-        int o = 0;
+        int pendingDuelCounter = 0;
         if (c.moveToFirst()) {
             do {
-                o++;
+                pendingDuelCounter++;
             } while (c.moveToNext());
         } else {
-            Log.i("stat", "kwo0 rows");
+            Log.i("CheckPending Method", "pending duel counter: 0!");
         }
         c.close();
         SessionManager sessionManager = new SessionManager(this);
-        sessionManager.set_duel_pending("" + o);
-        Log.d("TAG", "O: " + o);
-        return o;
+        sessionManager.set_duel_pending("" + pendingDuelCounter);
+        Log.d("CheckPending Method", "pending duel counter: " + pendingDuelCounter);
+        return pendingDuelCounter;
     }
 
 
