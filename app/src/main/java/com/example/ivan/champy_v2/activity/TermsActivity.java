@@ -17,14 +17,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
@@ -32,7 +29,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
-import com.facebook.login.LoginManager;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -50,7 +46,7 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
         setContentView(R.layout.activity_terms);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        new LoadText().execute();
+        new LoadTermsText().execute();
 
         TextView tvTerms = (TextView)findViewById(R.id.textView_terms);
         tvTerms.setVisibility(View.INVISIBLE);
@@ -163,7 +159,7 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
     }
 
 
-    private class LoadText extends AsyncTask<String, Void, String> {
+    private class LoadTermsText extends AsyncTask<String, Void, String> {
 
         protected String doInBackground(String... urls) {
             String text  = "<p lang=\"en-US\">\n" +
@@ -747,11 +743,11 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
 
         protected void onPostExecute(String result) {
             // Do your staff here to save image
-            TextView textView = (TextView) findViewById(R.id.textView_terms);
-            textView.setText(result, TextView.BufferType.SPANNABLE);
+            TextView tvTerms = (TextView) findViewById(R.id.textView_terms);
+            tvTerms.setText(result, TextView.BufferType.SPANNABLE);
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
             progressBar.setVisibility(View.INVISIBLE);
-            textView.setVisibility(View.VISIBLE);
+            tvTerms.setVisibility(View.VISIBLE);
         }
     }
 

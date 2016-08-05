@@ -30,7 +30,7 @@ public class MainActivityFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.item_row, container, false);
+        final View view = inflater.inflate(R.layout.activity_main, container, false);
 
 
 

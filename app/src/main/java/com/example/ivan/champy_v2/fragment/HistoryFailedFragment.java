@@ -15,9 +15,6 @@ import com.example.ivan.champy_v2.model.SelfImprovement_model;
 
 import java.util.ArrayList;
 
-/**
- * Created by ivan on 30.03.16.
- */
 public class HistoryFailedFragment extends Fragment {
 
     @Override
