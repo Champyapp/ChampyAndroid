@@ -175,7 +175,7 @@ public class CHChallengeController {
                         cv.put("updated", updated);
                         db.insert("myChallenges", null, cv);
                     }
-                    Log.i("Generate Method:", "Status: VSE OK \n *****Good Luck Bro*****");
+                    Log.i("Generate Method:", "Status: VSE OK");
                     Intent intent = new Intent(context, MainActivity.class);
                     context.startActivity(intent);
                 }

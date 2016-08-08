@@ -25,6 +25,8 @@ import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.data.DBHelper;
+import com.example.ivan.champy_v2.duel.Challenge;
+import com.example.ivan.champy_v2.duel.Data;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
 
 import static java.lang.Math.round;
@@ -89,6 +91,7 @@ public class PendingDuelFragment extends Fragment {
                 }
             } while (c.moveToNext());
         }
+
         c.close();
         final SessionManager sessionManager = new SessionManager(getContext());
         int size = sessionManager.getSelfSize();
@@ -170,21 +173,19 @@ public class PendingDuelFragment extends Fragment {
                                 }
                                 int days = Integer.parseInt(duration);
                                 c.close();
-                                if (recipient.equals("true")) {
-                                    cc.startSingleInProgressForDuel(description, recipient);
-                                    //methodDeleteCurrentCardIfChallengeCreated();
-                                    Log.i("OnCreateView", "Status: VSE OK"
-                                            + "\n       challenge_id = " + challenge_id
-                                            + "\n       description  = " + description
-                                            + "\n       duration     = " + duration
-                                            + "\n       versus       = " + versus
-                                            + "\n       recipient    = " + recipient
-                                            + "\n       id           = " + index);
-                                } else {
-                                    Log.i("OnCreateView", "Status: WTF" +
-                                            "\nYou can't accept this challenge because you're Sender!" );
+
+                                String inProgressId = "";
+                                if (checkRecipientAndActive(description, recipient)) {
+                                    //cc.joinToChallenge();
                                 }
-                                Toast.makeText(getContext(), "Challenge Accepted", Toast.LENGTH_SHORT).show();
+
+                                Log.i("OnCreateView", "Status: VSE OK"
+                                        + "\n       challenge_id = " + challenge_id
+                                        + "\n       description  = " + description
+                                        + "\n       duration     = " + duration
+                                        + "\n       versus       = " + versus
+                                        + "\n       recipient    = " + recipient
+                                        + "\n       id           = " + index);
                                 break;
 
                             case DialogInterface.BUTTON_NEGATIVE:
@@ -242,6 +243,52 @@ public class PendingDuelFragment extends Fragment {
         return view;
     }
 
+
+    private boolean checkRecipientAndActive(String description, String recipient) {
+
+        if (!isActive(description) && recipient.equals("true")) {
+            Toast.makeText(getContext(), "Challenge Accepted", Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (isActive(description)) {
+            Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
+            return false;
+        } else {
+            Toast.makeText(getContext(), "You can't accept this challenge because you're Sender!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+    }
+
+
+    public boolean isActive(String description) {
+        DBHelper dbHelper = new DBHelper(getActivity());
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        final ContentValues cv = new ContentValues();
+        final Bundle args = this.getArguments();
+        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
+        int position = args.getInt(ARG_PAGE);
+        Log.i("stat", "Status: " + position);
+        description = description + " during this period";
+        boolean ok = false;
+        int o = 0;
+        if (c.moveToFirst()) {
+            int idColIndex = c.getColumnIndex("id");
+            int nameColIndex = c.getColumnIndex("name");
+            int coldescription = c.getColumnIndex("description");
+            int colduration = c.getColumnIndex("duration");
+            int colchallenge_id = c.getColumnIndex("challenge_id");
+            do {
+                if (c.getString(c.getColumnIndex("status")).equals("started")){
+                    if (c.getString(coldescription).equals(description)){
+                        ok = true;
+                    }
+                }
+            } while (c.moveToNext());
+        }
+        c.close();
+
+        return ok;
+    }
 
 
 }

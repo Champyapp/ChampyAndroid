@@ -128,7 +128,7 @@ public class DuelFragment extends Fragment {
 
         OfflineMode offlineMode = new OfflineMode();
         offlineMode.isConnectedToRemoteAPI(getActivity());
-        final String recipientId = friend_id;
+        final String friendId = friend_id;
         imageButtonAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -160,7 +160,7 @@ public class DuelFragment extends Fragment {
                                 if (position == size) {
                                     if ((checkInputUserData(description, duration))) {
                                         days = Integer.parseInt(duration);
-                                        cc.createNewDuelChallenge(description, days, recipientId);
+                                        cc.createNewDuelChallenge(description, days, friendId);
                                     }
                                 } else {
                                     int o = 0;
@@ -188,7 +188,7 @@ public class DuelFragment extends Fragment {
                                     if (isActive(description)) {
                                         Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        cc.startSingleInProgressForDuel(challenge_id, recipientId);
+                                        cc.sendSingleInProgressForDuel(challenge_id, friendId);
                                         Toast.makeText(getActivity(), "Sent duel request", Toast.LENGTH_SHORT).show();
                                     }
                                 }
@@ -232,7 +232,7 @@ public class DuelFragment extends Fragment {
     }
 
 
-    public boolean isActive(String description) {
+    private boolean isActive(String description) {
         DBHelper dbHelper = new DBHelper(getActivity());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final ContentValues cv = new ContentValues();
@@ -258,8 +258,7 @@ public class DuelFragment extends Fragment {
                     }
                 }
             } while (c.moveToNext());
-        } else
-            Log.i("stat", "0 rows");
+        }
         c.close();
 
         return ok;

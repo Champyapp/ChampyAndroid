@@ -39,14 +39,12 @@ public class ChallengeController {
     Context context;
     Activity firstActivity;
     int hour, minute;
-
     public ChallengeController(Context mContext, Activity activity, int mHour, int mMinute) {
         context = mContext;
         firstActivity = activity;
         hour = mHour;
         minute = mMinute;
     }
-
 
 
     public void createNewSelfImprovementChallenge(final String description, int days) {
@@ -68,7 +66,7 @@ public class ChallengeController {
             public void onResponse(Response<com.example.ivan.champy_v2.create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String challenge = response.body().getData().get_id();
-                    startSingleInProgressForSelfOrWakeUp(challenge);
+                    sendSingleInProgressForSelfOrWakeUp(challenge);
                     Log.i("createNewSIC", "CreateNewChallenge Status: VSE OK"
                             + "\n create_challenge.CreateChallenge data = " + challenge
                             + "\n TYPE_ID     = " + type_id
@@ -108,7 +106,7 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
                     Log.i("stat", "Status: " + challengeId);
-                    startSingleInProgressForSelfOrWakeUp(challengeId);
+                    sendSingleInProgressForSelfOrWakeUp(challengeId);
                     Log.i("makeNewWakeUpChallenge", "createNewWakeUpChallenge Status: OK"
                             + "\n _ID         = " + challengeId
                             + "\n TYPE_ID     = " + type_id
@@ -131,29 +129,18 @@ public class ChallengeController {
         String token = user.get("token");
         String duration = "" + (days * 86400);
         String details = description + " during this period";
-
         final String API_URL = "http://46.101.213.24:3007";
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
-        Call<com.example.ivan.champy_v2.create_challenge.CreateChallenge> call =
-                createChallenge.createChallenge(
-                        "User_Challenge",
-                        type_id,
-                        description,
-                        details,
-                        duration,
-                        token);
 
+        Call<com.example.ivan.champy_v2.create_challenge.CreateChallenge> call = createChallenge.createChallenge("User_Challenge", type_id, description, details, duration, token);
         call.enqueue(new Callback<com.example.ivan.champy_v2.create_challenge.CreateChallenge>() {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
-                    startSingleInProgressForDuel(challengeId, friend_id);
+                    sendSingleInProgressForDuel(challengeId, friend_id);
                     Log.i("createNewDuelChallenge", "OnResponse: VSE OK" +
                             "\n ChallengeId = " + challengeId +
                             "\n recipientId = " + friend_id);
@@ -170,7 +157,7 @@ public class ChallengeController {
 
 
 
-    public void startSingleInProgressForSelfOrWakeUp(String challenge) {
+    public void sendSingleInProgressForSelfOrWakeUp(String challenge) {
         final SessionManager sessionManager = new SessionManager(context);
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
@@ -185,7 +172,9 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    Log.i("startSingleInProgress", "Status: VSE OK");
+                    com.example.ivan.champy_v2.single_inprogress.SingleInProgress data = response.body();
+                    String _id = data.getData().get_id();
+                    Log.i("startSingleInProgress", "Status: VSE OK" + "\n_ID! = " + _id);
                     generateCardsForMainActivity();
                 } else Log.i("startSingleInProgress", "Status: FAILED");
             }
@@ -197,7 +186,7 @@ public class ChallengeController {
         });
     }
 
-    public void startSingleInProgressForDuel(final String challenge, final String friend_id) {
+    public void sendSingleInProgressForDuel(final String challenge, final String friend_id) {
         final SessionManager sessionManager = new SessionManager(context);
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
@@ -214,13 +203,15 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     ContentValues cv = new ContentValues();
                     Duel duel = response.body();
-                    cv.put("challenge_id", duel.getData().getId());
+                    String inProgressId = duel.getData().getId();
+                    cv.put("challenge_id", inProgressId);
                     cv.put("updated", "false");
                     DBHelper dbHelper = new DBHelper(firstActivity);
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
                     db.insert("updated", null, cv);
-                    generateCardsForMainActivity();
-                    Log.i("startDuelInProgress", "startDuelInProgress: " + "\n DUEL_ID = " + duel.getData().getId() + "\n\n friend_id = " + friend_id);
+                    //myRetrieveInProgressChallengeById(_id);
+                    //generateCardsForMainActivity();
+                    Log.i("startDuelInProgress", "startDuelInProgress: " + "\n DUEL_ID = " + inProgressId + "\n friend_id = " + friend_id);
                 } else Log.i("startDuelInProgress", "Status: FAILED" + response.code() + response.message());
             }
 
@@ -231,7 +222,42 @@ public class ChallengeController {
 
 
 
-    public void joinToChallenge(final String _id) {
+
+    public void myRetrieveInProgressChallengeById(final String inProgressId) {
+        final SessionManager sessionManager = new SessionManager(context);
+        HashMap<String, String> user;
+        user = sessionManager.getUserDetails();
+        String token = user.get("token");
+        final String update = "0";
+        final String API_URL = "http://46.101.213.24:3007";
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+
+        ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
+        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call = activeInProgress.getActiveInProgress(inProgressId, update, token);
+        call.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
+            @Override
+            public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    Log.i("RetrieveInProgress", "onResponse: VSE OK \n inProgressId = " + inProgressId);
+
+                } else {
+                    Log.i("RetrieveInProgress", "onResponse: FAILED");
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
+
+    }
+
+
+
+
+
+    public void joinToChallenge(final String inProgressId) {
         final SessionManager sessionManager = new SessionManager(context);
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
@@ -239,23 +265,21 @@ public class ChallengeController {
         final String mToken = token;
         final String API_URL = "http://46.101.213.24:3007";
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-
-
         SingleInProgress singleInProgress = retrofit.create(SingleInProgress.class);
-        Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call = singleInProgress.Join(_id, token);
+        Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call = singleInProgress.Join(inProgressId, token);
         call.enqueue(new Callback<com.example.ivan.champy_v2.single_inprogress.SingleInProgress>() {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     Log.i("JoinToChallenge", "Status: VSE OK"
-                            + "\n     _ID         = " + _id
+                            + "\n     DataId      = "
                             + "\n     TOKEN       = " + mToken);
 
                     generateCardsForMainActivity();
                 } else {
                     Log.i("JoinToChallenge", "Status: WTF"
                             + "\n    ERROR        = " + response.code() + response.message()
-                            + "\n    _ID          = " + _id
+                            + "\n    DataId       = "
                             + "\n    TOKEN        = " + mToken);
                 }
             }
@@ -266,6 +290,12 @@ public class ChallengeController {
             }
         });
     }
+
+
+
+
+
+
 
 
 
@@ -296,7 +326,7 @@ public class ChallengeController {
                         com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
                         Challenge challenge = datum.getChallenge();
                         String challenge_description = challenge.getDescription(); // bla-bla
-                        String challenge_detail = challenge.getDetails(); // $challenge_description + " during this period"
+                        String challenge_detail = challenge.getDetails(); // bla-bla + " during this period"
                         String challenge_status = datum.getStatus();      // active or not
                         String challenge_id = datum.get_id();
                         String challenge_type = challenge.getType(); // self, duel or wake up
@@ -355,7 +385,7 @@ public class ChallengeController {
                if (response.isSuccess()){
                    Data data = response.body().getData();
                    String type = data.getChallenge().getType();
-                   //если это wake up, то отключаем будильник, если нет, то и так give_up сработает
+                   //если это wake up, то отключаем будильник, если нет, то call мы и так уже скинули и все ок
                    if (type.equals("567d51c48322f85870fd931c")) {
                        String s = data.getChallenge().getDetails();
                        int i = Integer.parseInt(s);

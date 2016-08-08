@@ -180,8 +180,8 @@ public class SelfImprovementFragment extends Fragment {
                                     if (isActive(description)) {
                                         Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        cc.startSingleInProgressForSelfOrWakeUp(challenge_id);
-                                        //startSingleInProgressForSelfOrWakeUp(challenge_id);
+                                        cc.sendSingleInProgressForSelfOrWakeUp(challenge_id);
+                                        //sendSingleInProgressForSelfOrWakeUp(challenge_id);
                                         Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
                                     }
                                 }
