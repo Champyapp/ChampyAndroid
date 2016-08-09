@@ -18,14 +18,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
-import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.StrictMode;
 import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -58,32 +56,16 @@ import com.example.ivan.champy_v2.CustomPagerBase;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
-import com.example.ivan.champy_v2.duel.Duel;
-import com.example.ivan.champy_v2.helper.CHMakeScoreWithAnim;
-import com.example.ivan.champy_v2.helper.CHUploadPhoto;
-import com.example.ivan.champy_v2.interfaces.NewUser;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
 import com.example.ivan.champy_v2.SessionManager;
-import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
 import com.example.ivan.champy_v2.interfaces.Update_user;
 import com.example.ivan.champy_v2.model.User.Data;
 import com.example.ivan.champy_v2.model.User.User;
-import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
-import com.example.ivan.champy_v2.model.active_in_progress.Datum;
-import com.example.ivan.champy_v2.model.active_in_progress.Recipient;
-import com.example.ivan.champy_v2.model.active_in_progress.Sender;
-import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.RequestBody;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -92,16 +74,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Random;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import retrofit.Call;
 import retrofit.Callback;
@@ -335,7 +312,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 blurScreenClick.setImageDrawable(Init(path));
             }   catch (FileNotFoundException e) {
                 e.printStackTrace();
-            } else {
+            }
+        else {
             new DownloadImageTask().execute(url);
         }
 
@@ -846,7 +824,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     if (offlineMode.isConnectedToRemoteAPI(MainActivity.this)){
                                         ChallengeController challengeController = new ChallengeController(MainActivity.this, MainActivity.this, 0 , 0);
                                         try {
-                                            challengeController.give_up(item.getId());
+                                            challengeController.giveUp(item.getId());
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }

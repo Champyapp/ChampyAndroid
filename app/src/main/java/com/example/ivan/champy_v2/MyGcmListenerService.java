@@ -99,7 +99,6 @@ public class MyGcmListenerService extends GcmListenerService {
             intent = new Intent(this, FriendsActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("friend_request", "true");
-
         } else {
             refreshPendingDuels(message);
             return;
@@ -127,19 +126,17 @@ public class MyGcmListenerService extends GcmListenerService {
         final int clearCount = db.delete("pending_duel", null, null);
         final ContentValues cv = new ContentValues();
         final String API_URL = "http://46.101.213.24:3007";
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         final SessionManager sessionManager = new SessionManager(this);
-        HashMap<String, String> user = new HashMap<>();
+        final String update = "0"; //1457019726
+        HashMap<String, String> user;
         user = sessionManager.getUserDetails();
-        String token = user.get("token");
         final String id = user.get("id");
+        String token = user.get("token");
+
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
-        final long unixTime = System.currentTimeMillis() / 1000L;
-        final String update = "1457019726";
-        Log.i("stat", "Nam nado: " + id + " " + update + " " + token);
+
+        //Log.i("stat", "Nam nado: " + id + " " + update + " " + token);
         Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(id, update, token);
         call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
             @Override
@@ -151,27 +148,30 @@ public class MyGcmListenerService extends GcmListenerService {
                         Recipient recipient = datum.getRecipient();
                         Sender sender = datum.getSender();
                         Challenge challenge = datum.getChallenge();
+                        String inProgressId = datum.get_id();
+                        String challengeId = challenge.get_id();
+                        String challengeDescription = challenge.getDescription();
+                        int challengeDuration = challenge.getDuration();
+
                         cv.clear();
                         if (challenge.getType().equals("567d51c48322f85870fd931b")) {
                             if (id.equals(recipient.getId())) {
                                 cv.put("recipient", "true");
                                 cv.put("versus", sender.getName());
-                            }
-                            if (id.equals(sender.get_id())) {
+                            } else {
                                 cv.put("recipient", "false");
                                 cv.put("versus", recipient.getName());
                             }
-                            cv.put("challenge_id", challenge.get_id());
-                            cv.put("description", challenge.getDescription());
-                            cv.put("duration", challenge.getDuration());
+                            cv.put("challenge_id", inProgressId);
+                            cv.put("description", challengeDescription);
+                            cv.put("duration", challengeDuration);
                             db.insert("pending_duel", null, cv);
                         }
                     }
-                    Intent intent = new Intent(MyGcmListenerService.this, PendingDuelActivity.class);
+                    Intent intent = new Intent(MyGcmListenerService.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.putExtra("refres_duel", "true");
-                    PendingIntent pendingIntent = PendingIntent.getActivity(MyGcmListenerService.this, 0 /* Request code */, intent,
-                            PendingIntent.FLAG_ONE_SHOT);
+                    intent.putExtra("refresh_duel", "true");
+                    PendingIntent pendingIntent = PendingIntent.getActivity(MyGcmListenerService.this, 0 /* Request code */, intent, PendingIntent.FLAG_ONE_SHOT);
 
                     Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                     NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(MyGcmListenerService.this)
@@ -182,16 +182,14 @@ public class MyGcmListenerService extends GcmListenerService {
                             .setSound(defaultSoundUri)
                             .setContentIntent(pendingIntent);
 
-                    NotificationManager notificationManager =
-                            (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-                    notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+                    NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    nm.notify(0 /* ID of notification */, notificationBuilder.build());
                 }
             }
 
             @Override
-            public void onFailure(Throwable t) {
-            }
+            public void onFailure(Throwable t) { }
         });
     }
+
 }

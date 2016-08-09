@@ -25,6 +25,12 @@ public interface SingleInProgress {
                     @Query("token") String token
     );
 
+    @GET("/v1/in-progress-challenges/{id}/reject")
+    Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> Reject(
+            @Path("id") String id,
+            @Query("token") String token
+    );
+
     @GET("/v1/in-progress-challenges/{id}/join")
     Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> Join (
             @Path("id") String id,

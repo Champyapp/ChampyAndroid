@@ -158,7 +158,6 @@ public class ChallengeController {
 
 
 
-
     public void sendSingleInProgressForSelfOrWakeUp(String challenge) {
         final SessionManager sessionManager = new SessionManager(context);
         HashMap<String, String> user;
@@ -211,8 +210,6 @@ public class ChallengeController {
                     DBHelper dbHelper = new DBHelper(firstActivity);
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
                     db.insert("updated", null, cv);
-                    //myRetrieveInProgressChallengeById(_id);
-                    //generateCardsForMainActivity();
                     Intent intent = new Intent(firstActivity, MainActivity.class);
                     context.startActivity(intent);
                     Log.i("startDuelInProgress", "startDuelInProgress: " + "\n DUEL_ID = " + inProgressId + "\n friend_id = " + friend_id);
@@ -272,14 +269,14 @@ public class ChallengeController {
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     Log.i("JoinToChallenge", "Status: VSE OK"
-                            + "\n     DataId      = "
+                            + "\n     DataId      = " + inProgressId
                             + "\n     TOKEN       = " + mToken);
 
                     generateCardsForMainActivity();
                 } else {
                     Log.i("JoinToChallenge", "Status: WTF"
                             + "\n    ERROR        = " + response.code() + response.message()
-                            + "\n    DataId       = "
+                            + "\n    DataId       = " + inProgressId
                             + "\n    TOKEN        = " + mToken);
                 }
             }
@@ -362,7 +359,7 @@ public class ChallengeController {
         loadData.loadUserProgressBarInfo();
     }
 
-    public void give_up(String id) throws IOException {
+    public void giveUp(String id) throws IOException {
         final SessionManager sessionManager = new SessionManager(context);
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
@@ -396,6 +393,32 @@ public class ChallengeController {
            @Override
            public void onFailure(Throwable t) { }
        });
+    }
+
+    public void rejectInviteForPendingDuel(String inProgressId) throws IOException {
+        final SessionManager sessionManager = new SessionManager(context);
+        HashMap<String, String> user;
+        user = sessionManager.getUserDetails();
+        String token = user.get("token");
+        final String API_URL = "http://46.101.213.24:3007";
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+
+        SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
+
+        Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call = activeInProgress.Reject(inProgressId, token);
+        call.enqueue(new Callback<com.example.ivan.champy_v2.single_inprogress.SingleInProgress>() {
+            @Override
+            public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
+                if (response.isSuccess()){
+                    Log.i("rejectInviteForDuel", "onResponse: VSE OK \nInvite Canceled");
+                } else {
+                    Log.i("rejectInviteForDuel", "onResponse: FAILED " + "\n ERROR: " + response.code() + " " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) { }
+        });
     }
 
     private String find(String challenge_id) {
