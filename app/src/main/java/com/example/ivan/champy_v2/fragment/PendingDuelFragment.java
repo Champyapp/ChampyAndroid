@@ -180,6 +180,7 @@ public class PendingDuelFragment extends Fragment {
                                 if (checkRecipientAndActive(description, recipient)) {
                                     ChallengeController cc = new ChallengeController(getContext(), getActivity(), 0, 0);
                                     cc.joinToChallenge(challenge_id);
+                                    //final int clearCount = db.delete("pending_duel", null, null);
                                 }
 
                                 Log.i("OnCreateView", "Status: VSE OK"
@@ -262,6 +263,7 @@ public class PendingDuelFragment extends Fragment {
                                     cc.rejectInviteForPendingDuel(challenge_id);
                                     Intent goToMainActivity = new Intent(getContext(), MainActivity.class);
                                     startActivity(goToMainActivity);
+                                    //final int clearCount = db.delete("pending_duel", null, null);
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }

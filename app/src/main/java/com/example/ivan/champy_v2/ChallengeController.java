@@ -33,7 +33,6 @@ import retrofit.Retrofit;
 
 import static java.lang.Math.round;
 
-// эта какаха относится к "wake up" и наследовать я ёё не могу
 public class ChallengeController {
 
     Context context;
@@ -291,7 +290,7 @@ public class ChallengeController {
 
 
 
-    private void generateCardsForMainActivity() {
+    public void generateCardsForMainActivity() {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("myChallenges", null, null);

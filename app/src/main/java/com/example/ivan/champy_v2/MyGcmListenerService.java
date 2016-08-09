@@ -99,6 +99,8 @@ public class MyGcmListenerService extends GcmListenerService {
             intent = new Intent(this, FriendsActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("friend_request", "true");
+        } else if (title.equals("Friend request")) {
+
         } else {
             refreshPendingDuels(message);
             return;
@@ -168,7 +170,7 @@ public class MyGcmListenerService extends GcmListenerService {
                             db.insert("pending_duel", null, cv);
                         }
                     }
-                    Intent intent = new Intent(MyGcmListenerService.this, MainActivity.class);
+                    Intent intent = new Intent(MyGcmListenerService.this, PendingDuelActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.putExtra("refresh_duel", "true");
                     PendingIntent pendingIntent = PendingIntent.getActivity(MyGcmListenerService.this, 0 /* Request code */, intent, PendingIntent.FLAG_ONE_SHOT);
