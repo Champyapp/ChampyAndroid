@@ -5,10 +5,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-
-/**
- * Created by SONU on 25/09/15.
- */
 public class RecyclerViewHolder extends RecyclerView.ViewHolder  {
 
     public EditText goal;

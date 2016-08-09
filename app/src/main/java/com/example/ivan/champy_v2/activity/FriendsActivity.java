@@ -29,7 +29,7 @@ import android.widget.TextView;
 import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.ivan.champy_v2.ImageModule;
+import com.example.ivan.champy_v2.helper.CHImageModule;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.model.Pending_friend;
 import com.example.ivan.champy_v2.R;
@@ -230,8 +230,8 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile);
 
         try {
-            ImageModule imageModule = new ImageModule(this);
-            Drawable dr = imageModule.Init("/data/data/com.example.ivan.champy_v2/app_imageDir/", FriendsActivity.this);
+            CHImageModule CHImageModule = new CHImageModule(this);
+            Drawable dr = CHImageModule.Init("/data/data/com.example.ivan.champy_v2/app_imageDir/", FriendsActivity.this);
             imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setImageDrawable(dr);

@@ -157,6 +157,8 @@ public class ChallengeController {
 
 
 
+
+
     public void sendSingleInProgressForSelfOrWakeUp(String challenge) {
         final SessionManager sessionManager = new SessionManager(context);
         HashMap<String, String> user;
@@ -211,6 +213,8 @@ public class ChallengeController {
                     db.insert("updated", null, cv);
                     //myRetrieveInProgressChallengeById(_id);
                     //generateCardsForMainActivity();
+                    Intent intent = new Intent(firstActivity, MainActivity.class);
+                    context.startActivity(intent);
                     Log.i("startDuelInProgress", "startDuelInProgress: " + "\n DUEL_ID = " + inProgressId + "\n friend_id = " + friend_id);
                 } else Log.i("startDuelInProgress", "Status: FAILED" + response.code() + response.message());
             }
@@ -253,10 +257,6 @@ public class ChallengeController {
 
     }
 
-
-
-
-
     public void joinToChallenge(final String inProgressId) {
         final SessionManager sessionManager = new SessionManager(context);
         HashMap<String, String> user;
@@ -290,12 +290,6 @@ public class ChallengeController {
             }
         });
     }
-
-
-
-
-
-
 
 
 

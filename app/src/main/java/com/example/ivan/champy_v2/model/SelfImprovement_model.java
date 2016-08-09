@@ -75,7 +75,7 @@ public class SelfImprovement_model {
         this.updated = mUpdated;
     }
 
-    //generate in progress (don't rename. it will make crash)
+    //генерирует InProgress в History и с этими же данными генерирует карточки для MainActivity
     public static ArrayList<SelfImprovement_model> generate(Context context) {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -105,35 +105,8 @@ public class SelfImprovement_model {
         return  arrayList;
     }
 
-    public static ArrayList<SelfImprovement_model> generateAll(Context context) {
-        DBHelper dbHelper = new DBHelper(context);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ArrayList<SelfImprovement_model> arrayList = new ArrayList<>();
-        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-        int o = 0;
-        if (c.moveToFirst()) {
-            int idColIndex = c.getColumnIndex("id");
-            int nameColIndex = c.getColumnIndex("name");
-            int coldescription = c.getColumnIndex("description");
-            int colduration = c.getColumnIndex("duration");
-            int colchallenge_id = c.getColumnIndex("challenge_id");
-            int status = c.getColumnIndex("status");
-            int updated = c.getColumnIndex("updated");
-            Log.i("stat", "Statuskwo: o="+o);
-            do {
-                arrayList.add (new SelfImprovement_model(
-                        c.getString(coldescription),
-                        c.getString(colduration),
-                        c.getString(nameColIndex),
-                        c.getString(colchallenge_id),
-                        c.getString(status),
-                        c.getString(updated)));
-            } while (c.moveToNext());
-        }
-        c.close();
-        return  arrayList;
-    }
 
+    //генерирует Wins в History
     public static ArrayList<SelfImprovement_model> generateWins(Context context) {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -163,6 +136,7 @@ public class SelfImprovement_model {
         return  arrayList;
     }
 
+    //генерирует Fails в History
     public static ArrayList<SelfImprovement_model> generateFailed(Context context) {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();

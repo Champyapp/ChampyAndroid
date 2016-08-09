@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.example.ivan.champy_v2.adapter.CustomPagerAdapter;
+import com.example.ivan.champy_v2.helper.CHWindowView;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.Animator.AnimatorListener;
 import com.nineoldandroids.animation.AnimatorSet;
@@ -52,9 +53,9 @@ public class CustomPagerBase {
     }
 
     public void preparePager(int position) {
-        int width = HelperClass.getWindowWidth(context);
-        nextItemXPosition     = HelperClass.getCurrentCardPositionX(context) + Math.round(width/8);
-        previousItemXPosition = HelperClass.getCurrentCardPositionX(context) - Math.round(width/8);
+        int width = CHWindowView.getWindowWidth(context);
+        nextItemXPosition     = CHWindowView.getCurrentCardPositionX(context) + Math.round(width/8);
+        previousItemXPosition = CHWindowView.getCurrentCardPositionX(context) - Math.round(width/8);
         if (pagerAdapter != null && pagerAdapter.dataCount() > 0) {
             if (position != 0 && pagerAdapter.dataCount() > 1) {
                 // Create previous view
@@ -76,7 +77,7 @@ public class CustomPagerBase {
                 // Create the view for the selected position
                 currentItem = createCardLayout(position);
                 setTouchListenerToView(currentItem, true);
-                ObjectAnimator.ofFloat(currentItem, "translationX", 0, HelperClass.getCurrentCardPositionX(context)).setDuration(1).start();
+                ObjectAnimator.ofFloat(currentItem, "translationX", 0, CHWindowView.getCurrentCardPositionX(context)).setDuration(1).start();
             }
         }
         currentPosition = position;
@@ -120,7 +121,7 @@ public class CustomPagerBase {
                 //Log.d("TAG", "Touch :" + isTouchEnabled);
 
                 if(isTouchEnabled){
-                    int width = Math.round(HelperClass.getWindowWidth(context) / 100);
+                    int width = Math.round(CHWindowView.getWindowWidth(context) / 100);
                     //Log.d("TAG", "Width: ="+width);
 
                     final int X = (int) event.getRawX();
@@ -198,7 +199,7 @@ public class CustomPagerBase {
                                 else {
                                     AnimatorSet set = new AnimatorSet();
                                     set.playTogether(
-                                            ObjectAnimator.ofFloat(itemView, "translationX", viewXPosition, HelperClass.getCurrentCardPositionX(context)),
+                                            ObjectAnimator.ofFloat(itemView, "translationX", viewXPosition, CHWindowView.getCurrentCardPositionX(context)),
                                             ObjectAnimator.ofFloat(itemView, "scaleX", ViewHelper.getScaleX(itemView), 1f),
                                             ObjectAnimator.ofFloat(itemView, "scaleY", ViewHelper.getScaleY(itemView), 1f),
                                             ObjectAnimator.ofFloat(itemView, "alpha", ViewHelper.getAlpha(itemView), 1f)
@@ -214,7 +215,7 @@ public class CustomPagerBase {
                                 else {
                                     AnimatorSet set = new AnimatorSet();
                                     set.playTogether(
-                                            ObjectAnimator.ofFloat(itemView, "translationX", viewXPosition, HelperClass.getCurrentCardPositionX(context)),
+                                            ObjectAnimator.ofFloat(itemView, "translationX", viewXPosition, CHWindowView.getCurrentCardPositionX(context)),
                                             ObjectAnimator.ofFloat(itemView, "scaleX", ViewHelper.getScaleX(itemView), 1f),
                                             ObjectAnimator.ofFloat(itemView, "scaleY", ViewHelper.getScaleY(itemView), 1f),
                                             ObjectAnimator.ofFloat(itemView, "alpha", ViewHelper.getAlpha(itemView), 1f)
@@ -227,7 +228,7 @@ public class CustomPagerBase {
                                 if (nextItem != null && previousItem != null) {
                                     AnimatorSet set = new AnimatorSet();
                                     set.playTogether(
-                                            ObjectAnimator.ofFloat(itemView, "translationX", viewXPosition, HelperClass.getCurrentCardPositionX(context)),
+                                            ObjectAnimator.ofFloat(itemView, "translationX", viewXPosition, CHWindowView.getCurrentCardPositionX(context)),
                                             ObjectAnimator.ofFloat(itemView, "scaleX", ViewHelper.getScaleX(itemView), 1f),
                                             ObjectAnimator.ofFloat(itemView, "scaleY", ViewHelper.getScaleY(itemView), 1f),
                                             ObjectAnimator.ofFloat(itemView, "alpha", ViewHelper.getAlpha(itemView), 1f),
@@ -248,7 +249,7 @@ public class CustomPagerBase {
                                 else if (nextItem == null && previousItem != null){
                                     AnimatorSet set = new AnimatorSet();
                                     set.playTogether(
-                                            ObjectAnimator.ofFloat(itemView, "translationX", viewXPosition, HelperClass.getCurrentCardPositionX(context)),
+                                            ObjectAnimator.ofFloat(itemView, "translationX", viewXPosition, CHWindowView.getCurrentCardPositionX(context)),
                                             ObjectAnimator.ofFloat(itemView, "scaleX", ViewHelper.getScaleX(itemView), 1f),
                                             ObjectAnimator.ofFloat(itemView, "scaleY", ViewHelper.getScaleY(itemView), 1f),
                                             ObjectAnimator.ofFloat(itemView, "alpha", ViewHelper.getAlpha(itemView), 1f),
@@ -266,7 +267,7 @@ public class CustomPagerBase {
                                 else if (previousItem == null && nextItem != null) {
                                     AnimatorSet set = new AnimatorSet();
                                     set.playTogether(
-                                            ObjectAnimator.ofFloat(itemView, "translationX", viewXPosition, HelperClass.getCurrentCardPositionX(context)),
+                                            ObjectAnimator.ofFloat(itemView, "translationX", viewXPosition, CHWindowView.getCurrentCardPositionX(context)),
                                             ObjectAnimator.ofFloat(itemView, "scaleX", ViewHelper.getScaleX(itemView), 1f),
                                             ObjectAnimator.ofFloat(itemView, "scaleY", ViewHelper.getScaleY(itemView), 1f),
                                             ObjectAnimator.ofFloat(itemView, "alpha", ViewHelper.getAlpha(itemView), 1f),
@@ -305,7 +306,7 @@ public class CustomPagerBase {
                     ObjectAnimator.ofFloat(currentItem, "scaleY", ViewHelper.getScaleY(currentItem), 0.8f),
                     ObjectAnimator.ofFloat(currentItem, "alpha", ViewHelper.getAlpha(currentItem), 0.8f),
 
-                    ObjectAnimator.ofFloat(nextItem, "translationX", nextItemXPosition, HelperClass.getCurrentCardPositionX(context)),
+                    ObjectAnimator.ofFloat(nextItem, "translationX", nextItemXPosition, CHWindowView.getCurrentCardPositionX(context)),
                     ObjectAnimator.ofFloat(nextItem, "scaleX", ViewHelper.getScaleX(nextItem), 1f),
                     ObjectAnimator.ofFloat(nextItem, "scaleY", ViewHelper.getScaleY(nextItem), 1f),
                     ObjectAnimator.ofFloat(nextItem, "alpha", ViewHelper.getAlpha(nextItem), 1f)
@@ -382,7 +383,7 @@ public class CustomPagerBase {
                     ObjectAnimator.ofFloat(currentItem, "scaleY", ViewHelper.getScaleY(currentItem), 0.8f),
                     ObjectAnimator.ofFloat(currentItem, "alpha", ViewHelper.getAlpha(currentItem), 0.8f),
 
-                    ObjectAnimator.ofFloat(previousItem, "translationX", previousItemXPosition, HelperClass.getCurrentCardPositionX(context)),
+                    ObjectAnimator.ofFloat(previousItem, "translationX", previousItemXPosition, CHWindowView.getCurrentCardPositionX(context)),
                     ObjectAnimator.ofFloat(previousItem, "scaleX", ViewHelper.getScaleX(previousItem), 1f),
                     ObjectAnimator.ofFloat(previousItem, "scaleY", ViewHelper.getScaleY(previousItem), 1f),
                     ObjectAnimator.ofFloat(previousItem, "alpha", ViewHelper.getAlpha(previousItem), 1f)
@@ -446,7 +447,7 @@ public class CustomPagerBase {
 
 
     private float getScaleValue(float currentPoint) {
-        float value = (float) (((HelperClass.getCurrentCardPositionX(context) - currentPoint) * 0.5) / HelperClass.getCurrentCardPositionX(context));
+        float value = (float) (((CHWindowView.getCurrentCardPositionX(context) - currentPoint) * 0.5) / CHWindowView.getCurrentCardPositionX(context));
         if (1 - value * value < 0.8f)
             return 0.8f;
         return 1 - value * value;

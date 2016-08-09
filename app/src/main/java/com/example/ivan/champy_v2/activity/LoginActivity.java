@@ -13,10 +13,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
@@ -24,13 +22,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.debug.hv.ViewServer;
 import com.example.ivan.champy_v2.Blur;
 import com.example.ivan.champy_v2.data.DBHelper;
-import com.example.ivan.champy_v2.ImageModule;
-import com.example.ivan.champy_v2.InitializeLogin;
+import com.example.ivan.champy_v2.helper.CHImageModule;
+import com.example.ivan.champy_v2.helper.CHInitializeLogin;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
@@ -79,7 +76,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -282,8 +278,8 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void Init() throws IOException {
-        InitializeLogin initializeLogin = new InitializeLogin(this, getApplicationContext(), new ImageModule(getApplicationContext()));
-        initializeLogin.Init();
+        CHInitializeLogin CHInitializeLogin = new CHInitializeLogin(this, getApplicationContext(), new CHImageModule(getApplicationContext()));
+        CHInitializeLogin.Init();
     }
 
 

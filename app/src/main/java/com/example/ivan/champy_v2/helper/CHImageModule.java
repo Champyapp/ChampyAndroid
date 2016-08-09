@@ -1,5 +1,4 @@
-package com.example.ivan.champy_v2;
-
+package com.example.ivan.champy_v2.helper;
 
 import android.app.Activity;
 import android.content.Context;
@@ -18,18 +17,17 @@ import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.example.ivan.champy_v2.R;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-/**
- * Created by ivan on 11.01.16.
- */
-public class ImageModule {
+public class CHImageModule {
 
     private final Context context;
 
-    public ImageModule (Context context){
+    public CHImageModule(Context context){
         this.context = context;
     }
 

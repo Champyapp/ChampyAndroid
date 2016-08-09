@@ -6,7 +6,7 @@ import android.os.Build;
 
 import com.example.ivan.champy_v2.BuildConfig;
 import com.example.ivan.champy_v2.activity.FriendsActivity;
-import com.example.ivan.champy_v2.ImageModule;
+import com.example.ivan.champy_v2.helper.CHImageModule;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +27,7 @@ import static junit.framework.Assert.assertNotNull;
 @Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.LOLLIPOP)
 @RunWith(RobolectricGradleTestRunner.class)
 public class Image_module {
-    private ImageModule imagemodule;
+    private CHImageModule imagemodule;
     private Context context;
     private FriendsActivity activity;
 
@@ -39,7 +39,7 @@ public class Image_module {
 
     @Test
     public void test_Image_module_init() throws URISyntaxException, FileNotFoundException {
-        imagemodule = new ImageModule(context);
+        imagemodule = new CHImageModule(context);
         String filePath = RuntimeEnvironment.application.getPackageResourcePath() + "/src/test/res";
         Drawable dr = imagemodule.Init(filePath, null);
         assertNotNull("Ok!!", dr);
@@ -48,7 +48,7 @@ public class Image_module {
     @Test
     public void test_Image_module_rounded_corners()
     {
-        imagemodule = new ImageModule(context);
+        imagemodule = new CHImageModule(context);
         String filePath = RuntimeEnvironment.application.getPackageResourcePath() + "/src/test/res/blured2.jpg";
         Bitmap bitmap = BitmapFactory.decodeFile(filePath);
         assertNotNull(imagemodule.getRoundedCornerBitmap(bitmap, 15));
@@ -57,7 +57,7 @@ public class Image_module {
     @Test
     public void test_Image_module_get_resized_bitmap()
     {
-        imagemodule = new ImageModule(context);
+        imagemodule = new CHImageModule(context);
         String filePath = RuntimeEnvironment.application.getPackageResourcePath() + "/src/test/res/blured2.jpg";
         Bitmap bitmap = BitmapFactory.decodeFile(filePath);
         assertNotNull(imagemodule.getResizedBitmap(bitmap, 150, 150));

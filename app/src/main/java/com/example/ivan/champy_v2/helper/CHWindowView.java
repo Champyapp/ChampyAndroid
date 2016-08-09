@@ -1,4 +1,4 @@
-package com.example.ivan.champy_v2;
+package com.example.ivan.champy_v2.helper;
 
 import android.content.Context;
 import android.graphics.Point;
@@ -8,7 +8,7 @@ import android.view.WindowManager;
 /**
  * Created by ivan on 09.12.15.
  */
-public class HelperClass {
+public class CHWindowView {
 
     private static Point screenSize;
 
