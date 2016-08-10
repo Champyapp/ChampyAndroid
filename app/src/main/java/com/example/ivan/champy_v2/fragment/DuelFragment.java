@@ -27,8 +27,7 @@ import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
 
-// TODO: 12.07.2016 тут логика окна дуелей с другом: friends -> make challenge -> here.
-// TODO: 12.07.2016 переписать это так как SelfImprovementFragment.
+//12.07.2016 тут логика окна дуелей с другом: friends -> make challenge -> here.
 public class DuelFragment extends Fragment {
 
     public static final String ARG_PAGE = "ARG_PAGE";
@@ -110,7 +109,6 @@ public class DuelFragment extends Fragment {
         Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
         ImageButton imageButtonAccept = (ImageButton) getActivity().findViewById(R.id.ok);
 
-        final int[] finalposition = new int[1];
         final ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.pager_duel);
         CHSetupUI chSetupUI = new CHSetupUI();
         chSetupUI.setupUI(getActivity().findViewById(R.id.duel_back), getActivity());

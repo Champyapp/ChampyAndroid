@@ -227,18 +227,15 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("duel", null, null);
         final ContentValues cv = new ContentValues();
-
         final String API_URL = "http://46.101.213.24:3007";
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         final SessionManager sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user = new HashMap<>();
+        HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         String token = user.get("token");
+
         com.example.ivan.champy_v2.interfaces.SelfImprovement selfImprovement = retrofit.create(com.example.ivan.champy_v2.interfaces.SelfImprovement.class);
+
         Call<com.example.ivan.champy_v2.model.Self.SelfImprovement> call = selfImprovement.getChallenges(token);
         call.enqueue(new Callback<SelfImprovement>() {
             @Override

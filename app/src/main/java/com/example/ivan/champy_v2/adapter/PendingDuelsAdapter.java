@@ -8,16 +8,13 @@ import android.view.ViewGroup;
 
 import com.example.ivan.champy_v2.fragment.PendingDuelFragment;
 
-/**
- * Created by ivan on 14.03.16.
- */
 public class PendingDuelsAdapter extends FragmentStatePagerAdapter {
 
     SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
     int size = 0;
 
-    public PendingDuelsAdapter(FragmentManager fm) {
-        super(fm);
+    public PendingDuelsAdapter(FragmentManager fragmentManager) {
+        super(fragmentManager);
     }
 
     @Override
@@ -42,9 +39,10 @@ public class PendingDuelsAdapter extends FragmentStatePagerAdapter {
         return fragment;
     }
 
-    @Override
+
     public void destroyItem(ViewGroup container, int position, Object object) {
         registeredFragments.remove(position);
+        notifyDataSetChanged();
         super.destroyItem(container, position, object);
     }
 

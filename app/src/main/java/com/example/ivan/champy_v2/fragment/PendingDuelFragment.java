@@ -26,20 +26,13 @@ import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.activity.MainActivity;
-import com.example.ivan.champy_v2.activity.PendingDuelActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
-import com.example.ivan.champy_v2.duel.Challenge;
-import com.example.ivan.champy_v2.duel.Data;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
 
 import java.io.IOException;
 
 import static java.lang.Math.round;
 
-/**
- * Fragment отвечающий за принятие или отмену дуели (то самое секретное меню)
- * table: pending_duel
- */
 public class PendingDuelFragment extends Fragment {
 
     public static final String ARG_PAGE = "ARG_PAGE";
@@ -111,7 +104,6 @@ public class PendingDuelFragment extends Fragment {
         CHSetupUI chSetupUI = new CHSetupUI();
         chSetupUI.setupUI(getActivity().findViewById(R.id.pending_duel), getActivity());
         chSetupUI.setupUI(view, getActivity());
-
         if (recipient.equals("true")) {
             tvUserVsUser.setText(versus + " want to \nchallenge with you");
         } else {
@@ -147,7 +139,6 @@ public class PendingDuelFragment extends Fragment {
                         String index = "";
                         String type_id = "567d51c48322f85870fd931b";
                         int position = viewPager.getCurrentItem();
-                        int size = sessionManager.getSelfSize();
 
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
@@ -180,7 +171,8 @@ public class PendingDuelFragment extends Fragment {
                                 if (checkRecipientAndActive(description, recipient)) {
                                     ChallengeController cc = new ChallengeController(getContext(), getActivity(), 0, 0);
                                     cc.joinToChallenge(challenge_id);
-                                    //final int clearCount = db.delete("pending_duel", null, null);
+                                    cc.generateCardsForPendingDuel();
+                                    cc.generateCardsForMainActivity();
                                 }
 
                                 Log.i("OnCreateView", "Status: VSE OK"

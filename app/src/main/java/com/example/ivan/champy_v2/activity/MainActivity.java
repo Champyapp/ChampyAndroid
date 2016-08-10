@@ -439,17 +439,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final ContentValues cv = new ContentValues();
         Cursor c = db.query("pending_duel", null, null, null, null, null, null);
-        int o = 0;
+        int countOfPendingDuel = 0;
         if (c.moveToFirst()) {
             do {
-                o++;
+                countOfPendingDuel++;
             } while (c.moveToNext());
         }
         c.close();
         SessionManager sessionManager = new SessionManager(this);
-        sessionManager.set_duel_pending("" + o);
-        Log.d(TAG, "O: " + o);
-        return o;
+        sessionManager.set_duel_pending("" + countOfPendingDuel);
+        Log.d(TAG, "countOfPendingDuel: " + countOfPendingDuel);
+        return countOfPendingDuel;
     }
 
 

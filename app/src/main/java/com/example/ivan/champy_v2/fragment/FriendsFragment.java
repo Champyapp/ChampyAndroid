@@ -68,7 +68,7 @@ public class FriendsFragment extends Fragment {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         Cursor c = db.query("friends", null, null, null, null, null, null);
-        Log.i("FriendsFragment", "onCreateView: CURSOR COUNT = " + c.getCount());
+        //Log.i("FriendsFragment", "onCreateView: CURSOR COUNT = " + c.getCount());
         if (c.moveToFirst()) {
             int idColIndex = c.getColumnIndex("id");
             int nameColIndex = c.getColumnIndex("name");

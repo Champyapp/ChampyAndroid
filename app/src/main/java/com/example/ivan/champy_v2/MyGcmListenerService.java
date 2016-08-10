@@ -99,8 +99,8 @@ public class MyGcmListenerService extends GcmListenerService {
             intent = new Intent(this, FriendsActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("friend_request", "true");
-        } else if (title.equals("Friend request")) {
-
+        } else if (title.equals("Congratulations")) {
+            intent = new Intent(this, MainActivity.class);
         } else {
             refreshPendingDuels(message);
             return;
@@ -152,22 +152,25 @@ public class MyGcmListenerService extends GcmListenerService {
                         Challenge challenge = datum.getChallenge();
                         String inProgressId = datum.get_id();
                         String challengeId = challenge.get_id();
+                        String challengeStatus = datum.getStatus();
                         String challengeDescription = challenge.getDescription();
                         int challengeDuration = challenge.getDuration();
 
-                        cv.clear();
+                        //cv.clear();
                         if (challenge.getType().equals("567d51c48322f85870fd931b")) {
-                            if (id.equals(recipient.getId())) {
-                                cv.put("recipient", "true");
-                                cv.put("versus", sender.getName());
-                            } else {
-                                cv.put("recipient", "false");
-                                cv.put("versus", recipient.getName());
+                            if (!challengeStatus.equals("started")) { //or .equals("pending");
+                                if (id.equals(recipient.getId())) {
+                                    cv.put("recipient", "true");
+                                    cv.put("versus", sender.getName());
+                                } else {
+                                    cv.put("recipient", "false");
+                                    cv.put("versus", recipient.getName());
+                                }
+                                cv.put("challenge_id", inProgressId);
+                                cv.put("description", challengeDescription);
+                                cv.put("duration", challengeDuration);
+                                db.insert("pending_duel", null, cv);
                             }
-                            cv.put("challenge_id", inProgressId);
-                            cv.put("description", challengeDescription);
-                            cv.put("duration", challengeDuration);
-                            db.insert("pending_duel", null, cv);
                         }
                     }
                     Intent intent = new Intent(MyGcmListenerService.this, PendingDuelActivity.class);

@@ -2,15 +2,20 @@ package com.example.ivan.champy_v2;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.example.ivan.champy_v2.activity.MainActivity;
+import com.example.ivan.champy_v2.activity.PendingDuelActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.duel.Duel;
 import com.example.ivan.champy_v2.helper.CHLoadUserProgressBarInfo;
@@ -19,6 +24,8 @@ import com.example.ivan.champy_v2.interfaces.CreateChallenge;
 import com.example.ivan.champy_v2.interfaces.SingleInProgress;
 import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
 import com.example.ivan.champy_v2.model.active_in_progress.Datum;
+import com.example.ivan.champy_v2.model.active_in_progress.Recipient;
+import com.example.ivan.champy_v2.model.active_in_progress.Sender;
 import com.example.ivan.champy_v2.single_inprogress.Data;
 
 import java.io.IOException;
@@ -267,23 +274,79 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    Log.i("JoinToChallenge", "Status: VSE OK"
-                            + "\n     DataId      = " + inProgressId
-                            + "\n     TOKEN       = " + mToken);
-
-                    generateCardsForMainActivity();
+                    Log.i("JoinToChallenge", "Status: VSE OK" + "\nDataId = " + inProgressId + "\nTOKEN = " + mToken);
                 } else {
-                    Log.i("JoinToChallenge", "Status: WTF"
-                            + "\n    ERROR        = " + response.code() + response.message()
-                            + "\n    DataId       = " + inProgressId
-                            + "\n    TOKEN        = " + mToken);
+                    Log.i("JoinToChallenge", "Status: WTF" + "\nERROR = " + response.code() +"\nDataId = " + inProgressId);
                 }
             }
 
             @Override
-            public void onFailure(Throwable t) {
+            public void onFailure(Throwable t) { }
+        });
+    }
 
+
+
+    public void generateCardsForPendingDuel() {
+        DBHelper dbHelper = new DBHelper(context);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        final int clearCount = db.delete("pending_duel", null, null);
+        final ContentValues cv = new ContentValues();
+        final String API_URL = "http://46.101.213.24:3007";
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        final SessionManager sessionManager = new SessionManager(context);
+        final String update = "0"; //1457019726
+        HashMap<String, String> user;
+        user = sessionManager.getUserDetails();
+        final String id = user.get("id");
+        String token = user.get("token");
+
+        ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
+
+        //Log.i("stat", "Nam nado: " + id + " " + update + " " + token);
+        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(id, update, token);
+        call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
+            @Override
+            public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    List<Datum> data = response.body().getData();
+                    for (int i = 0; i < data.size(); i++) {
+                        com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
+                        Recipient recipient = datum.getRecipient();
+                        Sender sender = datum.getSender();
+                        Challenge challenge = datum.getChallenge();
+                        String inProgressId = datum.get_id();
+                        String challengeId = challenge.get_id();
+                        String challengeStatus = datum.getStatus();
+                        String challengeDescription = challenge.getDescription();
+                        int challengeDuration = challenge.getDuration();
+
+                        //cv.clear();
+                        if (challenge.getType().equals("567d51c48322f85870fd931b")) {
+                            if (!challengeStatus.equals("started")) {
+                                if (id.equals(recipient.getId())) {
+                                    cv.put("recipient", "true");
+                                    cv.put("versus", sender.getName());
+                                } else {
+                                    cv.put("recipient", "false");
+                                    cv.put("versus", recipient.getName());
+                                }
+                                cv.put("challenge_id", inProgressId);
+                                cv.put("description", challengeDescription);
+                                cv.put("duration", challengeDuration);
+                                db.insert("pending_duel", null, cv);
+                            }
+                        }
+                    }
+                    //Intent intent = new Intent(firstActivity, PendingDuelActivity.class);
+                    //firstActivity.startActivity(intent);
+                    //generateCardsForMainActivity();
+
+                }
             }
+
+            @Override
+            public void onFailure(Throwable t) { }
         });
     }
 
