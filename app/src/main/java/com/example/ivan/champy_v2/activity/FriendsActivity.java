@@ -152,18 +152,14 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         navigationView.setNavigationItemSelectedListener(this);
 
         int count = 0;
-
         String s = sessionManager.get_duel_pending();
         if (s != null) {
             count = Integer.parseInt(s);
         }
-
         TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-        if (count == 0) {
-            hideItem();
-        } else {
-            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
-        }
+        if (count == 0) hideItem();
+        else view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         adapterViewPager = new SampleFragmentPagerAdapter(getSupportFragmentManager(), getApplicationContext());

@@ -133,13 +133,13 @@ public class MyGcmListenerService extends GcmListenerService {
         final String update = "0"; //1457019726
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
-        final String id = user.get("id");
+        final String userId = user.get("id");
         String token = user.get("token");
 
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
 
         //Log.i("stat", "Nam nado: " + id + " " + update + " " + token);
-        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(id, update, token);
+        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userId, update, token);
         call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
@@ -158,18 +158,24 @@ public class MyGcmListenerService extends GcmListenerService {
 
                         //cv.clear();
                         if (challenge.getType().equals("567d51c48322f85870fd931b")) {
-                            if (!challengeStatus.equals("started")) { //or .equals("pending");
-                                if (id.equals(recipient.getId())) {
-                                    cv.put("recipient", "true");
-                                    cv.put("versus", sender.getName());
-                                } else {
-                                    cv.put("recipient", "false");
-                                    cv.put("versus", recipient.getName());
+                            if (challengeStatus.equals("pending")) { //!challengeStatus.equals("started"))7
+                                if (!challengeStatus.equals("failedBySender")) {
+                                    if (!challengeStatus.equals("rejectedByRecipient")) {
+                                        //if (userId.equals(recipient.getId())) {
+                                        if (userId.equals(recipient.getId())) {
+                                            cv.put("recipient", "true");
+                                            cv.put("versus", sender.getName());
+                                        } else {
+                                            cv.put("recipient", "false");
+                                            cv.put("versus", recipient.getName());
+                                        }
+                                        cv.put("challenge_id", inProgressId);
+                                        cv.put("description", challengeDescription);
+                                        cv.put("duration", challengeDuration);
+                                        db.insert("pending_duel", null, cv);
+                                        //}
+                                    }
                                 }
-                                cv.put("challenge_id", inProgressId);
-                                cv.put("description", challengeDescription);
-                                cv.put("duration", challengeDuration);
-                                db.insert("pending_duel", null, cv);
                             }
                         }
                     }

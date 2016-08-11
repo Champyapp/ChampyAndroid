@@ -35,6 +35,7 @@ public class CHLoadUserProgressBarInfo {
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
         NewUser newUser = retrofit.create(NewUser.class);
+
         Call<User> userCall = newUser.getUserInfo(token);
         userCall.enqueue(new Callback<User>() {
             @Override
@@ -62,10 +63,9 @@ public class CHLoadUserProgressBarInfo {
             }
 
             @Override
-            public void onFailure(Throwable t) {
-
-            }
+            public void onFailure(Throwable t) { }
         });
+
     }
 
 }
