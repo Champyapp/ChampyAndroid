@@ -3,7 +3,6 @@ package com.example.ivan.champy_v2.fragment;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
@@ -25,13 +24,10 @@ import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
-import com.example.ivan.champy_v2.activity.MainActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
 
 import java.io.IOException;
-
-import static java.lang.Math.round;
 
 public class PendingDuelFragment extends Fragment {
 
@@ -99,7 +95,7 @@ public class PendingDuelFragment extends Fragment {
         TextView tvUserVsUser = (TextView)view.findViewById(R.id.tvYouVsSomebody);
         final ImageButton buttonAcceptBattle = (ImageButton)getActivity().findViewById(R.id.imageButtonAcceptBattle);
         final ImageButton buttonCancelBattle = (ImageButton)getActivity().findViewById(R.id.imageButtonCancelBattle);
-
+        final OfflineMode offlineMode = new OfflineMode();
         final ViewPager viewPager = (ViewPager)getActivity().findViewById(R.id.pager_pending_duel);
         CHSetupUI chSetupUI = new CHSetupUI();
         chSetupUI.setupUI(getActivity().findViewById(R.id.pending_duel), getActivity());
@@ -123,68 +119,43 @@ public class PendingDuelFragment extends Fragment {
         tvDays.setTypeface(typeface);
         tvGoal.setTypeface(typeface);
 
-
         buttonAcceptBattle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String versus = "";
-                        String duration = "";
                         String description = "";
                         String challenge_id = "";
-                        String status = "";
                         String recipient = "";
-                        String index = "";
-                        String type_id = "567d51c48322f85870fd931b";
                         int position = viewPager.getCurrentItem();
-
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
                                 Cursor c = db.query("pending_duel", null, null, null, null, null, null);
-                                //int position = args.getInt(ARG_PAGE);
                                 int o = 0;
                                 if (c.moveToFirst()) {
-                                    int idColIndex = c.getColumnIndex("id");
-                                    int versusColIndex = c.getColumnIndex("versus");
                                     int coldescription = c.getColumnIndex("description");
-                                    int colduration = c.getColumnIndex("duration");
                                     int colchallenge_id = c.getColumnIndex("challenge_id");
                                     int colrecipient = c.getColumnIndex("recipient");
                                     do {
                                         o++;
                                         if (o > position + 1) break;
                                         if (o == position + 1) {
-                                            versus = c.getString(versusColIndex);
                                             description = c.getString(coldescription);
-                                            duration = c.getString(colduration);
                                             challenge_id = c.getString(colchallenge_id);
                                             recipient = c.getString(colrecipient);
-                                            index = c.getString(idColIndex);
                                         }
                                     } while (c.moveToNext());
                                 }
-                                int days = Integer.parseInt(duration);
                                 c.close();
+                                offlineMode.isConnectedToRemoteAPI(getActivity());
                                 if (checkRecipientAndActive(description, recipient)) {
                                     ChallengeController cc = new ChallengeController(getContext(), getActivity(), 0, 0);
                                     cc.joinToChallenge(challenge_id);
-                                    cc.generateCardsForMainActivity();
-                                    cc.refreshCardsForPendingDuel();
+                                    Log.i("OnClickButtonAccept", "    onResponse: VSE OK");
                                 }
-
-                                Log.i("OnCreateView", "Status: VSE OK"
-                                        + "\n       challenge_id = " + challenge_id
-                                        + "\n       description  = " + description
-                                        + "\n       duration     = " + duration
-                                        + "\n       versus       = " + versus
-                                        + "\n       recipient    = " + recipient
-                                        + "\n       id           = " + index);
                                 break;
-
                             case DialogInterface.BUTTON_NEGATIVE:
-                                //No button clicked
                                 break;
                         }
                     }
@@ -208,60 +179,36 @@ public class PendingDuelFragment extends Fragment {
                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String versus = "";
-                        String duration = "";
-                        String description = "";
                         String challenge_id = "";
-                        String status = "";
-                        String recipient = "";
-                        String index = "";
-                        String type_id = "567d51c48322f85870fd931b";
-                        int position = viewPager.getCurrentItem();
-                        int size = sessionManager.getSelfSize();
-
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
                                 Cursor c = db.query("pending_duel", null, null, null, null, null, null);
-                                //int position = args.getInt(ARG_PAGE);
+                                int position = viewPager.getCurrentItem();
                                 int o = 0;
                                 if (c.moveToFirst()) {
-                                    int idColIndex = c.getColumnIndex("id");
-                                    int versusColIndex = c.getColumnIndex("versus");
-                                    int coldescription = c.getColumnIndex("description");
-                                    int colduration = c.getColumnIndex("duration");
                                     int colchallenge_id = c.getColumnIndex("challenge_id");
-                                    int colrecipient = c.getColumnIndex("recipient");
                                     do {
                                         o++;
                                         if (o > position + 1) break;
                                         if (o == position + 1) {
-                                            versus = c.getString(versusColIndex);
-                                            description = c.getString(coldescription);
-                                            duration = c.getString(colduration);
                                             challenge_id = c.getString(colchallenge_id);
-                                            recipient = c.getString(colrecipient);
-                                            index = c.getString(idColIndex);
                                         }
                                     } while (c.moveToNext());
                                 }
-                                int days = Integer.parseInt(duration);
                                 c.close();
-                                OfflineMode offlineMode = new OfflineMode();
                                 offlineMode.isConnectedToRemoteAPI(getActivity());
-                                Toast.makeText(getContext(), "Canceled", Toast.LENGTH_SHORT).show();
                                 ChallengeController cc = new ChallengeController(getContext(), getActivity(), 0, 0);
                                 try {
                                     cc.rejectInviteForPendingDuel(challenge_id);
-                                    cc.refreshCardsForPendingDuel();
-                                    Intent goToMainActivity = new Intent(getContext(), MainActivity.class);
-                                    startActivity(goToMainActivity);
+                                    Toast.makeText(getContext(), "Canceled", Toast.LENGTH_SHORT).show();
+                                    Log.i("OnClickButtonCancel", "    onResponse: VSE OK");
                                 } catch (IOException e) {
                                     e.printStackTrace();
+                                    Log.i("OnClickButtonCancel", "    onResponse: FAILED");
                                 }
-                                break;
 
+                                break;
                             case DialogInterface.BUTTON_NEGATIVE:
-                                //No button clicked
                                 break;
                         }
                     }
@@ -287,12 +234,16 @@ public class PendingDuelFragment extends Fragment {
 
         if (!isActive(description) && recipient.equals("true")) {
             Toast.makeText(getContext(), "Challenge Accepted", Toast.LENGTH_SHORT).show();
+            Log.i("OnClickAccept", "          onResponse: VSE OK");
             return true;
         } else if (isActive(description)) {
             Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
+
+            Log.i("OnClickAccept", "          onResponse: IS ACTIVE");
             return false;
         } else {
             Toast.makeText(getContext(), "You can't accept this challenge because you're Sender!", Toast.LENGTH_SHORT).show();
+            Log.i("OnClickAccept", "          onResponse: YOU ARE SENDER");
             return false;
         }
 
