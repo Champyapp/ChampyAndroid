@@ -140,5 +140,6 @@
     <string name="_21_days">21 DAYS</string>
     <string name="wake_up_at">WAKE UP AT</string>
     <string name="i_challenge_myself_to">I challenge myself to</string>
+    <string name="wake_up">wake up!</string>
 
 </resources>

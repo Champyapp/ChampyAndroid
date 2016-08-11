@@ -167,12 +167,11 @@ public class PendingDuelFragment extends Fragment {
                                 }
                                 int days = Integer.parseInt(duration);
                                 c.close();
-                                String inProgressId = "";
                                 if (checkRecipientAndActive(description, recipient)) {
                                     ChallengeController cc = new ChallengeController(getContext(), getActivity(), 0, 0);
                                     cc.joinToChallenge(challenge_id);
-                                    cc.generateCardsForPendingDuel();
                                     cc.generateCardsForMainActivity();
+                                    cc.refreshCardsForPendingDuel();
                                 }
 
                                 Log.i("OnCreateView", "Status: VSE OK"
@@ -253,13 +252,12 @@ public class PendingDuelFragment extends Fragment {
                                 ChallengeController cc = new ChallengeController(getContext(), getActivity(), 0, 0);
                                 try {
                                     cc.rejectInviteForPendingDuel(challenge_id);
+                                    cc.refreshCardsForPendingDuel();
                                     Intent goToMainActivity = new Intent(getContext(), MainActivity.class);
                                     startActivity(goToMainActivity);
-                                    //final int clearCount = db.delete("pending_duel", null, null);
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
-
                                 break;
 
                             case DialogInterface.BUTTON_NEGATIVE:

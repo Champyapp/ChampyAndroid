@@ -321,8 +321,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Uri uri = Uri.fromFile(file);
         Glide.with(this).load(uri).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile_image);
-        /*CHMakeScoreWithAnim chMakeScoreWithAnim = new CHMakeScoreWithAnim(getApplicationContext());
-        chMakeScoreWithAnim.*/
         buildAnim(this);
         ViewServer.get(this).addWindow(this);
     }
@@ -824,7 +822,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     if (offlineMode.isConnectedToRemoteAPI(MainActivity.this)){
                                         ChallengeController challengeController = new ChallengeController(MainActivity.this, MainActivity.this, 0 , 0);
                                         try {
-                                            challengeController.giveUp(item.getId());
+                                            challengeController.give_up(item.getId());
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }

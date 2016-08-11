@@ -1,4 +1,4 @@
-package com.example.ivan.champy_v2;
+package com.example.ivan.champy_v2.activity;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -18,7 +18,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.ivan.champy_v2.activity.MainActivity;
+import com.example.ivan.champy_v2.Blur;
+import com.example.ivan.champy_v2.R;
+import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.interfaces.Update_user;
 import com.example.ivan.champy_v2.model.User.User;
 import com.soundcloud.android.crop.Crop;
@@ -38,7 +40,7 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-public class Photo extends AppCompatActivity {
+public class PhotoActivity extends AppCompatActivity {
 
     private static final int CAMERA_REQUEST = 1888;
     private static final int SELECT_FILE = 1999;
@@ -78,7 +80,7 @@ public class Photo extends AppCompatActivity {
         gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Crop.pickImage(Photo.this);
+                Crop.pickImage(PhotoActivity.this);
             }
         });
     }
@@ -92,7 +94,7 @@ public class Photo extends AppCompatActivity {
                 Bitmap thePic = extras.getParcelable("data");
                 savePhoto(thePic);
                 Upload_photo(SaveFromCamera(thePic));
-                Intent intent = new Intent(Photo.this, MainActivity.class);
+                Intent intent = new Intent(PhotoActivity.this, MainActivity.class);
                 startActivity(intent);
                 Toast.makeText(getApplicationContext(), "Changed", Toast.LENGTH_SHORT).show();
             } else if (requestCode == CROP_PIC){
@@ -100,7 +102,7 @@ public class Photo extends AppCompatActivity {
                 // get the cropped bitmap
                 Bitmap thePic = extras.getParcelable("data");
                 savePhoto(thePic);
-                Intent intent = new Intent(Photo.this, MainActivity.class);
+                Intent intent = new Intent(PhotoActivity.this, MainActivity.class);
                 startActivity(intent);
                 Toast.makeText(getApplicationContext(), "Changed", Toast.LENGTH_SHORT).show();
             } if (requestCode == Crop.REQUEST_PICK && resultCode == RESULT_OK) {
@@ -165,7 +167,7 @@ public class Photo extends AppCompatActivity {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),uri);
             Log.i("CROP", "CROP: "+bitmap);
             savePhoto(bitmap);
-            Intent intent = new Intent(Photo.this, MainActivity.class);
+            Intent intent = new Intent(PhotoActivity.this, MainActivity.class);
             startActivity(intent);
             Toast.makeText(getApplicationContext(), "Changed", Toast.LENGTH_SHORT).show();
         } else if (resultCode == Crop.RESULT_ERROR) {

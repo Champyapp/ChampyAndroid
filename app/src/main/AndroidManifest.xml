@@ -100,7 +100,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name="com.soundcloud.android.crop.CropImageActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".Photo"
+        <activity android:name=".activity.PhotoActivity"
             android:screenOrientation="portrait"/>
 
         <receiver android:name=".AlarmReceiver" />

@@ -230,36 +230,6 @@ public class ChallengeController {
 
 
 
-    public void myRetrieveInProgressChallengeById(final String inProgressId) {
-        final SessionManager sessionManager = new SessionManager(context);
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        String token = user.get("token");
-        final String update = "0";
-        final String API_URL = "http://46.101.213.24:3007";
-        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-
-        ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
-        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call = activeInProgress.getActiveInProgress(inProgressId, update, token);
-        call.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
-            @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    Log.i("RetrieveInProgress", "onResponse: VSE OK \n inProgressId = " + inProgressId);
-
-                } else {
-                    Log.i("RetrieveInProgress", "onResponse: FAILED");
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-
-            }
-        });
-
-    }
-
     public void joinToChallenge(final String inProgressId) {
         final SessionManager sessionManager = new SessionManager(context);
         HashMap<String, String> user;
@@ -285,9 +255,72 @@ public class ChallengeController {
         });
     }
 
+    public void rejectInviteForPendingDuel(String inProgressId) throws IOException {
+        final SessionManager sessionManager = new SessionManager(context);
+        HashMap<String, String> user;
+        user = sessionManager.getUserDetails();
+        String token = user.get("token");
+        final String API_URL = "http://46.101.213.24:3007";
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+
+        SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
+
+        Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call = activeInProgress.Reject(inProgressId, token);
+        call.enqueue(new Callback<com.example.ivan.champy_v2.single_inprogress.SingleInProgress>() {
+            @Override
+            public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
+                if (response.isSuccess()){
+                    Log.i("rejectInviteForDuel", "onResponse: VSE OK \nInvite Canceled");
+                } else {
+                    Log.i("rejectInviteForDuel", "onResponse: FAILED " + "\n ERROR: " + response.code() + " " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) { }
+        });
+    }
+
+    public void give_up(String id) throws IOException {
+        final SessionManager sessionManager = new SessionManager(context);
+        HashMap<String, String> user;
+        user = sessionManager.getUserDetails();
+        String token = user.get("token");
+        final String API_URL = "http://46.101.213.24:3007";
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+
+        SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
+
+        Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call = activeInProgress.Surrender(id, token);
+        call.enqueue(new Callback<com.example.ivan.champy_v2.single_inprogress.SingleInProgress>() {
+            @Override
+            public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
+                if (response.isSuccess()){
+                    Data data = response.body().getData();
+                    String type = data.getChallenge().getType();
+                    //если это wake up, то отключаем будильник, если нет, то call мы и так уже скинули и все ок
+                    if (type.equals("567d51c48322f85870fd931c")) {
+                        String s = data.getChallenge().getDetails();
+                        int i = Integer.parseInt(s);
+                        Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, i, myIntent, 0);
+                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                        alarmManager.cancel(pendingIntent);
+                    }
+
+                    generateCardsForMainActivity();
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) { }
+        });
+    }
 
 
-    public void generateCardsForPendingDuel() {
+
+
+    public void refreshCardsForPendingDuel() {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final int clearCount = db.delete("pending_duel", null, null);
@@ -303,7 +336,6 @@ public class ChallengeController {
 
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
 
-        //Log.i("stat", "Nam nado: " + id + " " + update + " " + token);
         Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(id, update, token);
         call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
             @Override
@@ -349,9 +381,6 @@ public class ChallengeController {
             public void onFailure(Throwable t) { }
         });
     }
-
-
-
 
     public void generateCardsForMainActivity() {
         DBHelper dbHelper = new DBHelper(context);
@@ -407,6 +436,7 @@ public class ChallengeController {
                         db.insert("myChallenges", null, cv);
                     }
                     Log.i("Generate Method:", "Status: VSE OK");
+
                     Intent intent = new Intent(firstActivity, MainActivity.class);
                     context.startActivity(intent);
                 }
@@ -416,72 +446,13 @@ public class ChallengeController {
             public void onFailure(Throwable t) { }
         });
 
-
         CHLoadUserProgressBarInfo loadData = new CHLoadUserProgressBarInfo(firstActivity);
         loadData.loadUserProgressBarInfo();
+
     }
 
-    public void giveUp(String id) throws IOException {
-        final SessionManager sessionManager = new SessionManager(context);
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        String token = user.get("token");
-        final String API_URL = "http://46.101.213.24:3007";
-        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
-        SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
 
-        Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call = activeInProgress.Surrender(id, token);
-        call.enqueue(new Callback<com.example.ivan.champy_v2.single_inprogress.SingleInProgress>() {
-           @Override
-           public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
-               if (response.isSuccess()){
-                   Data data = response.body().getData();
-                   String type = data.getChallenge().getType();
-                   //если это wake up, то отключаем будильник, если нет, то call мы и так уже скинули и все ок
-                   if (type.equals("567d51c48322f85870fd931c")) {
-                       String s = data.getChallenge().getDetails();
-                       int i = Integer.parseInt(s);
-                       Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
-                       PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, i, myIntent, 0);
-                       AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                       alarmManager.cancel(pendingIntent);
-                   }
-
-                   generateCardsForMainActivity();
-               }
-           }
-
-           @Override
-           public void onFailure(Throwable t) { }
-       });
-    }
-
-    public void rejectInviteForPendingDuel(String inProgressId) throws IOException {
-        final SessionManager sessionManager = new SessionManager(context);
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        String token = user.get("token");
-        final String API_URL = "http://46.101.213.24:3007";
-        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-
-        SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
-
-        Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call = activeInProgress.Reject(inProgressId, token);
-        call.enqueue(new Callback<com.example.ivan.champy_v2.single_inprogress.SingleInProgress>() {
-            @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
-                if (response.isSuccess()){
-                    Log.i("rejectInviteForDuel", "onResponse: VSE OK \nInvite Canceled");
-                } else {
-                    Log.i("rejectInviteForDuel", "onResponse: FAILED " + "\n ERROR: " + response.code() + " " + response.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable t) { }
-        });
-    }
 
     private String find(String challenge_id) {
         DBHelper dbHelper = new DBHelper(firstActivity);
@@ -501,7 +472,34 @@ public class ChallengeController {
         return ok;
     }
 
+    public void myRetrieveInProgressChallengeById(final String inProgressId) {
+        final SessionManager sessionManager = new SessionManager(context);
+        HashMap<String, String> user;
+        user = sessionManager.getUserDetails();
+        String token = user.get("token");
+        final String update = "0";
+        final String API_URL = "http://46.101.213.24:3007";
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
+        ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
+        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call = activeInProgress.getActiveInProgress(inProgressId, update, token);
+        call.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
+            @Override
+            public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    Log.i("RetrieveInProgress", "onResponse: VSE OK \n inProgressId = " + inProgressId);
 
+                } else {
+                    Log.i("RetrieveInProgress", "onResponse: FAILED");
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
+
+    }
 
 }

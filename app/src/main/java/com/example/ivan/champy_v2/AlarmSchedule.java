@@ -11,24 +11,24 @@ import android.util.Log;
 
 import com.example.ivan.champy_v2.data.DBHelper;
 
-/**
- * Created by ivan on 04.04.16.
- */
 public class AlarmSchedule extends WakefulBroadcastReceiver {
-
 
     @Override
     public void onReceive(Context context, Intent intent) {
         String newString;
-        Log.d("myLogs", "Updated schedule");
+        //Log.d("myLogs", "Updated schedule");
         Bundle extras = intent.getExtras();
         if(extras == null) {
             newString = null;
         } else {
             newString = extras.getString("alarm");
-        }   //newString.equals("reset")
+        }
+
+        //newString.equals("reset");
+
+
         if ("reset".equals(newString)) {
-            Log.d("myLogs", "Updated schedule");
+            //Log.d("myLogs", "Updated schedule");
             DBHelper dbHelper = new DBHelper(context);
             final SQLiteDatabase db = dbHelper.getWritableDatabase();
             final ContentValues cv = new ContentValues();

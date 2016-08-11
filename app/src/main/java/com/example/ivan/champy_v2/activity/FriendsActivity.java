@@ -242,13 +242,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         ViewServer.get(this).addWindow(this);
     }
 
-
-    private void hideItem() {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        Menu nav_Menu = navigationView.getMenu();
-        nav_Menu.findItem(R.id.pending_duels).setVisible(false);
-    }
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -527,5 +520,11 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 
     }
 
+
+    private void hideItem() {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Menu nav_Menu = navigationView.getMenu();
+        nav_Menu.findItem(R.id.pending_duels).setVisible(false);
+    }
 
 }

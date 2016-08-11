@@ -24,9 +24,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -40,7 +38,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.OfflineMode;
-import com.example.ivan.champy_v2.Photo;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
@@ -215,7 +212,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                 OfflineMode offlineMode = new OfflineMode();
                 if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
                     updateProfile(map);
-                    Intent intent = new Intent(SettingsActivity.this, Photo.class);
+                    Intent intent = new Intent(SettingsActivity.this, PhotoActivity.class);
                     startActivity(intent);
                 }
             }
@@ -381,7 +378,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                 OfflineMode offlineMode = new OfflineMode();
                 if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
                     updateProfile(map);
-                    Intent intent = new Intent(SettingsActivity.this, Photo.class);
+                    Intent intent = new Intent(SettingsActivity.this, PhotoActivity.class);
                     startActivity(intent);
                 }
             }

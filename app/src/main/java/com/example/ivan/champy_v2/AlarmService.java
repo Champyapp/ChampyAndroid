@@ -15,8 +15,6 @@ import com.example.ivan.champy_v2.activity.WakeUpActivity;
 
 public class AlarmService extends IntentService {
 
-    private NotificationManager alarmNotificationManager;
-
     public AlarmService() {
         super("AlarmService");
     }
@@ -28,9 +26,12 @@ public class AlarmService extends IntentService {
 
     private void sendNotification(String msg) {
         Log.d("AlarmService", "Preparing to send notification...: " + msg);
-        alarmNotificationManager = (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, WakeUpActivity.class), 0);
+        NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        Intent goToWakeUp = new Intent(this, WakeUpActivity.class);
+
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, goToWakeUp, 0);
 
         NotificationCompat.Builder alarmNotificationBuilder = new NotificationCompat.Builder(this)
                 .setContentTitle("Alarm")
@@ -39,7 +40,7 @@ public class AlarmService extends IntentService {
                 .setContentText(msg);
 
         alarmNotificationBuilder.setContentIntent(contentIntent);
-        alarmNotificationManager.notify(1, alarmNotificationBuilder.build());
+        notificationManager.notify(1, alarmNotificationBuilder.build());
         Log.d("AlarmService", "Notification sent.");
     }
 
