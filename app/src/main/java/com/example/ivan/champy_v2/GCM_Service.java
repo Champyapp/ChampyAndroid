@@ -10,11 +10,7 @@ import com.google.android.gms.iid.InstanceID;
 
 import java.io.IOException;
 
-/**
- * Created by ivan on 19.04.16.
- */
 public class GCM_Service extends IntentService {
-
 
     private static final String TAG = "RegIntentService";
     private static final String[] TOPICS = {"global"};

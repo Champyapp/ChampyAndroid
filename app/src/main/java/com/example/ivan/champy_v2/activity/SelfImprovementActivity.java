@@ -21,7 +21,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -35,10 +34,8 @@ import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.adapter.PagerAdapter;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
-import com.example.ivan.champy_v2.interfaces.NewUser;
+import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.model.Self.*;
-import com.example.ivan.champy_v2.model.User.Data;
-import com.example.ivan.champy_v2.model.User.User;
 import com.facebook.FacebookSdk;
 
 import java.io.File;
@@ -64,12 +61,6 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        /*OfflineMode offlineMode = new OfflineMode();
-        if (!offlineMode.isConnectedToRemoteAPI(this)){
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-        }*/
-
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -83,10 +74,12 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
-        int count = check_pending();
+
+        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+        int count = checker.checkPending();
         TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
         view.setText("+" + (count > 0 ? String.valueOf(count) : null));
-        if (count == 0) { hideItem(); }
+        if (count == 0) checker.hideItem();
 
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         TextView tvIChallengeMySelfTo = (TextView)findViewById(R.id.textView20);
@@ -171,6 +164,16 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        OfflineMode offlineMode = new OfflineMode();
+        if (!offlineMode.isConnectedToRemoteAPI(this)){
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -266,33 +269,6 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
 
 
 
-    }
-
-
-    private void hideItem() {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        Menu nav_Menu = navigationView.getMenu();
-        nav_Menu.findItem(R.id.pending_duels).setVisible(false);
-    }
-
-
-    public int check_pending() {
-        DBHelper dbHelper = new DBHelper(this);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final ContentValues cv = new ContentValues();
-        Cursor c = db.query("pending_duel", null, null, null, null, null, null);
-        int o = 0;
-        if (c.moveToFirst()) {
-            do {
-                o++;
-            } while (c.moveToNext());
-        } else
-            Log.i("stat", "kwo0 rows");
-        c.close();
-        SessionManager sessionManager = new SessionManager(this);
-        sessionManager.set_duel_pending("" + o);
-        Log.d("TAG", "O: " + o);
-        return o;
     }
 
 

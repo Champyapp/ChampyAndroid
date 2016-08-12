@@ -20,7 +20,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -29,6 +28,7 @@ import android.widget.TextView;
 import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHImageModule;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.model.Pending_friend;
@@ -107,17 +107,17 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                     FacebookCallback<AppInviteDialog.Result> facebookCallback= new FacebookCallback<AppInviteDialog.Result>() {
                         @Override
                         public void onSuccess(AppInviteDialog.Result result) {
-                            Log.i(TAG, "MainACtivity, InviteCallback - SUCCESS!" + result.getData());
+                            Log.i(TAG, "FriendsActivity, InviteCallback - SUCCESS!" + result.getData());
                         }
 
                         @Override
                         public void onCancel() {
-                            Log.i(TAG, "MainACtivity, InviteCallback - CANCEL!");
+                            Log.i(TAG, "FriendsActivity, InviteCallback - CANCEL!");
                         }
 
                         @Override
                         public void onError(FacebookException e) {
-                            Log.e(TAG, "MainACtivity, InviteCallback - ERROR! " + e.getMessage());
+                            Log.e(TAG, "FriendsActivity, InviteCallback - ERROR! " + e.getMessage());
                         }
 
                     };
@@ -151,15 +151,14 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
 
-        int count = 0;
-        String s = sessionManager.get_duel_pending();
-        if (s != null) {
-            count = Integer.parseInt(s);
-        }
-        TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-        if (count == 0) hideItem();
-        else view.setText("+" + (count > 0 ? String.valueOf(count) : null));
 
+        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+        int count = checker.checkPending();
+        TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+        view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+        if (count == 0) checker.hideItem();
+
+        String s = sessionManager.get_duel_pending();
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         adapterViewPager = new SampleFragmentPagerAdapter(getSupportFragmentManager(), getApplicationContext());
@@ -298,7 +297,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         super.onStart();
         OfflineMode offlineMode = new OfflineMode();
         if (!offlineMode.isConnectedToRemoteAPI(this)){
-            Intent intent = new Intent(FriendsActivity.this, MainActivity.class);
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
     }
@@ -516,11 +515,5 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 
     }
 
-
-    private void hideItem() {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        Menu nav_Menu = navigationView.getMenu();
-        nav_Menu.findItem(R.id.pending_duels).setVisible(false);
-    }
 
 }

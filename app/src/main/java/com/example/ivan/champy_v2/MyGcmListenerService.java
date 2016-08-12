@@ -1,10 +1,12 @@
 package com.example.ivan.champy_v2;
 
+import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -16,6 +18,7 @@ import com.example.ivan.champy_v2.activity.FriendsActivity;
 import com.example.ivan.champy_v2.activity.MainActivity;
 import com.example.ivan.champy_v2.activity.PendingDuelActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
+import com.example.ivan.champy_v2.helper.CHLoadUserProgressBarInfo;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
 import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
 import com.example.ivan.champy_v2.model.active_in_progress.Datum;
@@ -31,6 +34,8 @@ import retrofit.Callback;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
+
+import static java.lang.Math.round;
 
 public class MyGcmListenerService extends GcmListenerService {
 
@@ -50,21 +55,21 @@ public class MyGcmListenerService extends GcmListenerService {
 
         final SessionManager sessionManager = new SessionManager(this);
         if (sessionManager.isUserLoggedIn()) {
-            HashMap<String, String> user = new HashMap<>();
+            HashMap<String, String> user;
             user = sessionManager.getUserDetails();
             String name = user.get("name");
 
             String message = data.getString("gcm.notification.body");
             String title = data.getString("gcm.notification.title");
-            if (data != null) Log.d(TAG, "Bundle not null");
+            //if (data != null) Log.d(TAG, "Bundle not null");
             Log.d(TAG, "From: " + from + " " + name);
             Log.d(TAG, "Message: " + message);
 
-            if (from.startsWith("/topics/")) {
+            /*if (from.startsWith("/topics/")) {
                 // message received from some topic.
             } else {
                 // normal downstream message.
-            }
+            }*/
 
             // [START_EXCLUDE]
             /**
@@ -94,16 +99,26 @@ public class MyGcmListenerService extends GcmListenerService {
     private void sendNotification(String message, String title) {
         Log.d(TAG, title);
         Intent intent = new Intent(this, MainActivity.class);
+
+
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        if (title.equals("Friend request")) {
-            intent = new Intent(this, FriendsActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.putExtra("friend_request", "true");
-        } else if (title.equals("Congratulations")) {
-            intent = new Intent(this, MainActivity.class);
-        } else {
-            refreshPendingDuels(message);
-            return;
+        switch (title) {
+            case "Friend request":
+                intent = new Intent(this, FriendsActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("friend_request", "true");
+                break;
+            case "Challenge accepted'":
+                intent = new Intent(this, MainActivity.class);
+                break;
+            case "Win":
+                intent = new Intent(this, MainActivity.class);
+                break;
+            case "Challenge request":
+                // go to PendingDuels Activity
+                refreshPendingDuels(message);
+                return;
+
         }
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent, PendingIntent.FLAG_ONE_SHOT);
@@ -118,9 +133,9 @@ public class MyGcmListenerService extends GcmListenerService {
                 .setContentIntent(pendingIntent);
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
+
 
     public void refreshPendingDuels(final String message) {
         DBHelper dbHelper = new DBHelper(this);
@@ -158,7 +173,7 @@ public class MyGcmListenerService extends GcmListenerService {
 
                         //cv.clear();
                         if (challenge.getType().equals("567d51c48322f85870fd931b")) {
-                            if (challengeStatus.equals("pending")) { //!challengeStatus.equals("started"))7
+                            if (challengeStatus.equals("pending")) { //!challengeStatus.equals("started"))
                                 if (!challengeStatus.equals("failedBySender")) {
                                     if (!challengeStatus.equals("rejectedByRecipient")) {
                                         //if (userId.equals(recipient.getId())) {
@@ -181,7 +196,7 @@ public class MyGcmListenerService extends GcmListenerService {
                     }
                     Intent intent = new Intent(MyGcmListenerService.this, PendingDuelActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.putExtra("refresh_duel", "true");
+                    //intent.putExtra("refresh_duel", "true");
                     PendingIntent pendingIntent = PendingIntent.getActivity(MyGcmListenerService.this, 0 /* Request code */, intent, PendingIntent.FLAG_ONE_SHOT);
 
                     Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);

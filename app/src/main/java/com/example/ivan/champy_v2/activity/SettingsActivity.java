@@ -1,10 +1,8 @@
 package com.example.ivan.champy_v2.activity;
 
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,7 +20,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -40,6 +37,7 @@ import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
 import com.example.ivan.champy_v2.interfaces.Update_user;
 import com.example.ivan.champy_v2.model.User.Delete;
@@ -70,10 +68,6 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SessionManager sessionManager1 = new SessionManager(getApplicationContext());
-        if (!sessionManager1.isUserLoggedIn()) {
-            Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
-            startActivity(intent);
-        }
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_settings);
 
@@ -97,10 +91,11 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
-        int count = checkPending();
-        TextView tvPendingDuels = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-        tvPendingDuels.setText("+" + (count > 0 ? String.valueOf(count) : null));
-        if (count == 0) hideItem();
+        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+        int count = checker.checkPending();
+        TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+        view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+        if (count == 0) checker.hideItem();
 
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user;
@@ -387,34 +382,14 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         ViewServer.get(this).addWindow(this);
     }
 
-
-    private void setNewName(String newName) {
-        SessionManager sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        String id = user.get("id");
-        String token = user.get("token");
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        Update_user update_user = retrofit.create(Update_user.class);
-        Call<User> call = update_user.update_user_name(id, token, newName);
-        Log.i("Token" , "Token: "+token);
-
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Response<User> response, Retrofit retrofit) {
-               if (response.isSuccess()) recreate();
-               else Log.i("Status" , "Status: "+response.code());
-            }
-            @Override
-            public void onFailure(Throwable t) {
-                Log.i("Status" , "Status: "+t);
-            }
-        });
+    @Override
+    public void onStart() {
+        super.onStart();
+        OfflineMode offlineMode = new OfflineMode();
+        if (!offlineMode.isConnectedToRemoteAPI(this)){
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -494,31 +469,33 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
     }
 
 
-    public int checkPending() {
-        DBHelper dbHelper = new DBHelper(this);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final ContentValues cv = new ContentValues();
-        Cursor c = db.query("pending_duel", null, null, null, null, null, null);
-        int o = 0;
-        if (c.moveToFirst()) {
+    private void setNewName(String newName) {
+        SessionManager sessionManager = new SessionManager(getApplicationContext());
+        HashMap<String, String> user;
+        user = sessionManager.getUserDetails();
+        String id = user.get("id");
+        String token = user.get("token");
 
-            do {
-                o++;
-            } while (c.moveToNext());
-        } else
-            Log.i("stat", "kwo0 rows");
-        c.close();
-        SessionManager sessionManager = new SessionManager(this);
-        sessionManager.set_duel_pending("" + o);
-        Log.d(TAG, "O: " + o);
-        return o;
-    }
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
+        Update_user update_user = retrofit.create(Update_user.class);
+        Call<User> call = update_user.update_user_name(id, token, newName);
+        Log.i("Token" , "Token: "+token);
 
-    private void hideItem() {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        Menu nav_Menu = navigationView.getMenu();
-        nav_Menu.findItem(R.id.pending_duels).setVisible(false);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Response<User> response, Retrofit retrofit) {
+                if (response.isSuccess()) recreate();
+                else Log.i("Status" , "Status: "+response.code());
+            }
+            @Override
+            public void onFailure(Throwable t) {
+                Log.i("Status" , "Status: "+t);
+            }
+        });
     }
 
 

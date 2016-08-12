@@ -32,7 +32,6 @@ import java.io.IOException;
 public class PendingDuelFragment extends Fragment {
 
     public static final String ARG_PAGE = "ARG_PAGE";
-    Activity firstActivity;
 
     public static PendingDuelFragment newInstance(int page) {
         Bundle args = new Bundle();
@@ -87,8 +86,7 @@ public class PendingDuelFragment extends Fragment {
         }
 
         c.close();
-        final SessionManager sessionManager = new SessionManager(getContext());
-        int size = sessionManager.getSelfSize();
+
         final Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
         final TextView tvDays = (TextView)view.findViewById(R.id.textViewDuring);
         final TextView tvGoal = (TextView)view.findViewById(R.id.tv_goal);

@@ -18,25 +18,20 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.ivan.champy_v2.Friend;
 import com.example.ivan.champy_v2.adapter.HistoryPagerAdapter;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
-import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -75,17 +70,11 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
 
-        int count = 0;
-
-        String s = sessionManager.get_duel_pending();
-        if (s != null) { count = Integer.parseInt(s); }
-
+        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+        int count = checker.checkPending();
         TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-        if (count == 0) {
-            hideItem();
-        } else {
-            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
-        }
+        view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+        if (count == 0) checker.hideItem();
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager_history);
         adapterViewPager = new HistoryPagerAdapter(getSupportFragmentManager(), getApplicationContext());
@@ -119,12 +108,6 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         ViewServer.get(this).addWindow(this);
     }
 
-
-    private void hideItem() {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        Menu nav_Menu = navigationView.getMenu();
-        nav_Menu.findItem(R.id.pending_duels).setVisible(false);
-    }
 
     @Override
     public void onBackPressed() {

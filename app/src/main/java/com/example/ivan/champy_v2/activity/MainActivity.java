@@ -11,7 +11,6 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -34,7 +33,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -56,6 +54,7 @@ import com.example.ivan.champy_v2.CustomPagerBase;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
+import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.interfaces.Update_user;
@@ -178,6 +177,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         blurScreen.setVisibility(View.INVISIBLE);
                         cardsLayout.setVisibility(View.VISIBLE);
                     } else {
+                        blurScreen.setVisibility(View.VISIBLE);
+                        cardsLayout.setVisibility(View.INVISIBLE);
                         buttonSelfImprovement.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -199,8 +200,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 startActivity(intent);
                             }
                         });
-                        blurScreen.setVisibility(View.VISIBLE);
-                        cardsLayout.setVisibility(View.INVISIBLE);
+
                     }
                 }
             }
@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // клик по меню фаба
         actionButton.setOnClickListener(onClickFab);
 
-        ImageView blurScreenClick = (ImageView)findViewById(R.id.blurScreen);
+        /*ImageView blurScreenClick = (ImageView)findViewById(R.id.blurScreen);
         blurScreenClick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -256,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 }
             }
-        });
+        });*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
@@ -277,13 +277,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
 
-        int count = checkPending();
+        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+        int count = checker.checkPending();
         TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
         view.setText("+" + (count > 0 ? String.valueOf(count) : null));
-        if (count == 0) hideItem();
+        if (count == 0) checker.hideItem();
 
-        //SessionManager sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user = new HashMap<>();
+        HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         String url = user.get("path_to_pic");
         Log.d(TAG, "Url :" + url);
@@ -297,10 +297,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         Log.d(TAG, "Image: "+url);
 
-        RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.slider);
+        //RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.slider);
         ImageView profile_image       = (ImageView)headerLayout.findViewById(R.id.profile_image);
         TextView tvUserName           = (TextView)headerLayout.findViewById(R.id.tvUserName);
-        blurScreenClick               = (ImageView)headerLayout.findViewById(R.id.slide_background);
+        ImageView blurScreenClick     = (ImageView)headerLayout.findViewById(R.id.slide_background);
         tvUserName.setText(name);
 
         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
@@ -429,32 +429,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Log.d(TAG, "Status: " + t);
             }
         });
-    }
-
-
-    public int checkPending() {
-        DBHelper dbHelper = new DBHelper(this);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final ContentValues cv = new ContentValues();
-        Cursor c = db.query("pending_duel", null, null, null, null, null, null);
-        int countOfPendingDuel = 0;
-        if (c.moveToFirst()) {
-            do {
-                countOfPendingDuel++;
-            } while (c.moveToNext());
-        }
-        c.close();
-        SessionManager sessionManager = new SessionManager(this);
-        sessionManager.set_duel_pending("" + countOfPendingDuel);
-        Log.d(TAG, "countOfPendingDuel: " + countOfPendingDuel);
-        return countOfPendingDuel;
-    }
-
-
-    private void hideItem() {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        Menu nav_Menu = navigationView.getMenu();
-        nav_Menu.findItem(R.id.pending_duels).setVisible(false);
     }
 
 

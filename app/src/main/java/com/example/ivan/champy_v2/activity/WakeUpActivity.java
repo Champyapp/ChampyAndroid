@@ -23,7 +23,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -41,6 +40,7 @@ import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -61,9 +61,11 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
     private TextView alarmTextView;
     public static WakeUpActivity inst;
 
+
     public static WakeUpActivity instance() {
         return inst;
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,12 +73,6 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         setContentView(R.layout.activity_wake_up);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        OfflineMode offlineMode = new OfflineMode();
-        if (!offlineMode.isConnectedToRemoteAPI(this)){
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-        }
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
             @Override
@@ -91,10 +87,11 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
-        int count = check_pending();
+        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+        int count = checker.checkPending();
         TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
         view.setText("+" + (count > 0 ? String.valueOf(count) : null));
-        if (count == 0) hideItem();
+        if (count == 0) checker.hideItem();
 
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         TextView tvIChallengeMyselfTo = (TextView)findViewById(R.id.textView20);
@@ -224,45 +221,14 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
 
     }
 
-
-    public boolean check(String time) {
-        boolean ok = true;
-        DBHelper dbHelper = new DBHelper(this);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final ContentValues cv = new ContentValues();
-        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-        int o = 0;
-        if (c.moveToFirst()) {
-            int nameColIndex = c.getColumnIndex("name");
-            int status = c.getColumnIndex("status");
-            Log.i("stat", "Statuskwo: o=" + o);
-            do {
-                o++;
-                if (c.getString(nameColIndex).equals("Wake Up")){
-                    if (c.getString(status).equals("started")) {
-                        Log.i("stat", "Time : " + c.getString(c.getColumnIndex("description")) + " " + time);
-                        if (c.getString(c.getColumnIndex("description")).equals(time)) {
-                            ok = false;
-                            break;
-                        }
-                    }
-                }
-            } while (c.moveToNext());
+    @Override
+    public void onStart() {
+        super.onStart();
+        OfflineMode offlineMode = new OfflineMode();
+        if (!offlineMode.isConnectedToRemoteAPI(this)){
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
         }
-        c.close();
-        return ok;
-    }
-
-
-    private Drawable Init(String path) throws FileNotFoundException {
-        File file = new File(path, "blured2.jpg");
-        Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
-
-        //Log.d("TAG", "x_y" + bitmap.getWidth() + " " + bitmap.getHeight());
-        Drawable dr = new BitmapDrawable(getResources(), bitmap);
-        dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
-
-        return dr;
     }
 
     @Override
@@ -325,31 +291,44 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
     }
 
 
-    public int check_pending() {
-        DBHelper dbHelper = new DBHelper(this);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final ContentValues cv = new ContentValues();
-        Cursor c = db.query("pending_duel", null, null, null, null, null, null);
-        int o = 0;
-        if (c.moveToFirst()) {
-            do {
-                o++;
-            } while (c.moveToNext());
-        } else {
-            Log.i("stat", "kwo0 rows");
-        }
-        c.close();
-        SessionManager sessionManager = new SessionManager(this);
-        sessionManager.set_duel_pending("" + o);
-        Log.d("TAG", "O: " + o);
-        return o;
+    private Drawable Init(String path) throws FileNotFoundException {
+        File file = new File(path, "blured2.jpg");
+        Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
+
+        //Log.d("TAG", "x_y" + bitmap.getWidth() + " " + bitmap.getHeight());
+        Drawable dr = new BitmapDrawable(getResources(), bitmap);
+        dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
+
+        return dr;
     }
 
 
-    private void hideItem() {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        Menu nav_Menu = navigationView.getMenu();
-        nav_Menu.findItem(R.id.pending_duels).setVisible(false);
+    public boolean check(String time) {
+        boolean ok = true;
+        DBHelper dbHelper = new DBHelper(this);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        final ContentValues cv = new ContentValues();
+        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
+        int o = 0;
+        if (c.moveToFirst()) {
+            int nameColIndex = c.getColumnIndex("name");
+            int status = c.getColumnIndex("status");
+            Log.i("stat", "Statuskwo: o=" + o);
+            do {
+                o++;
+                if (c.getString(nameColIndex).equals("Wake Up")){
+                    if (c.getString(status).equals("started")) {
+                        Log.i("stat", "Time : " + c.getString(c.getColumnIndex("description")) + " " + time);
+                        if (c.getString(c.getColumnIndex("description")).equals(time)) {
+                            ok = false;
+                            break;
+                        }
+                    }
+                }
+            } while (c.moveToNext());
+        }
+        c.close();
+        return ok;
     }
 
 }

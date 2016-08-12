@@ -54,9 +54,6 @@ public class PhotoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
 
-        SessionManager sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user = new HashMap<>();
-
         RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.change_photo);
         relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.champy_background));
         final String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
@@ -71,7 +68,7 @@ public class PhotoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                File f=new File(path, "test.jpg");
+                File f = new File(path, "test.jpg");
                 picUri = Uri.fromFile(f);
                 startActivityForResult(intent, CAMERA_REQUEST);
             }
