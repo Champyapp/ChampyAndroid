@@ -49,15 +49,15 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.ivan.champy_v2.AlarmSchedule;
 import com.example.ivan.champy_v2.Blur;
 import com.example.ivan.champy_v2.ChallengeController;
-import com.example.ivan.champy_v2.adapter.CustomPagerAdapter;
 import com.example.ivan.champy_v2.CustomPagerBase;
-import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
-import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
-import com.example.ivan.champy_v2.model.SelfImprovement_model;
 import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.adapter.CustomPagerAdapter;
+import com.example.ivan.champy_v2.data.DBHelper;
+import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.interfaces.Update_user;
+import com.example.ivan.champy_v2.model.SelfImprovement_model;
 import com.example.ivan.champy_v2.model.User.Data;
 import com.example.ivan.champy_v2.model.User.User;
 import com.facebook.FacebookSdk;
@@ -85,7 +85,6 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-import static java.lang.Math.max;
 import static java.lang.Math.round;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -96,8 +95,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private int total = 30;
     private PendingIntent pendingIntent;
     private FloatingActionMenu actionMenu;
-    private Context _context;
-    private Activity activity;
+    public Context _context;
+    public Activity activity;
     private CustomPagerBase pager;
     AlarmManager alarmManager;
 
@@ -209,54 +208,54 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // клик по меню фаба
         actionButton.setOnClickListener(onClickFab);
 
-        /*ImageView blurScreenClick = (ImageView)findViewById(R.id.blurScreen);
-        blurScreenClick.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.cards);
-                ImageView screen = (ImageView) findViewById(R.id.blurScreen);
-                if (actionMenu.isOpen()) {
-                    actionMenu.getSubActionItems();
-                    OfflineMode offlineMode = new OfflineMode();
-                    if (offlineMode.isConnectedToRemoteAPI(MainActivity.this)) {
-                        buttonSelfImprovement.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(MainActivity.this, SelfImprovementActivity.class);
-                                startActivity(intent);
-                            }
-                        });
-                        buttonDuelChallenge.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
-                                startActivity(intent);
-                            }
-                        });
-                        buttonWakeUpChallenge.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(MainActivity.this, WakeUpActivity.class);
-                                startActivity(intent);
-                            }
-                        });
-                    }
-                    actionMenu.close(true);
-                    if (!actionMenu.isOpen()) {
-                        screen.setVisibility(View.INVISIBLE);
-                        relativeLayout.setVisibility(View.VISIBLE);
-                        actionButton.setImageDrawable(getResources().getDrawable(R.drawable.plus));
-                    }
-                } else {
-                    actionMenu.close(false);
-                    if (actionMenu.isOpen()) {
-                        screen.setVisibility(View.VISIBLE);
-                        relativeLayout.setVisibility(View.INVISIBLE);
-                        actionButton.setImageDrawable(getResources().getDrawable(R.drawable.plus));
-                    }
-                }
-            }
-        });*/
+//        ImageView blurScreenClick = (ImageView)findViewById(R.id.blurScreen);
+//        blurScreenClick.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.cards);
+//                ImageView screen = (ImageView) findViewById(R.id.blurScreen);
+//                if (actionMenu.isOpen()) {
+//                    actionMenu.getSubActionItems();
+//                    OfflineMode offlineMode = new OfflineMode();
+//                    if (offlineMode.isConnectedToRemoteAPI(MainActivity.this)) {
+//                        buttonSelfImprovement.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                Intent intent = new Intent(MainActivity.this, SelfImprovementActivity.class);
+//                                startActivity(intent);
+//                            }
+//                        });
+//                        buttonDuelChallenge.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
+//                                startActivity(intent);
+//                            }
+//                        });
+//                        buttonWakeUpChallenge.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                Intent intent = new Intent(MainActivity.this, WakeUpActivity.class);
+//                                startActivity(intent);
+//                            }
+//                        });
+//                    }
+//                    actionMenu.close(true);
+//                    if (!actionMenu.isOpen()) {
+//                        screen.setVisibility(View.INVISIBLE);
+//                        relativeLayout.setVisibility(View.VISIBLE);
+//                        actionButton.setImageDrawable(getResources().getDrawable(R.drawable.plus));
+//                    }
+//                } else {
+//                    actionMenu.close(false);
+//                    if (actionMenu.isOpen()) {
+//                        screen.setVisibility(View.VISIBLE);
+//                        relativeLayout.setVisibility(View.INVISIBLE);
+//                        actionButton.setImageDrawable(getResources().getDrawable(R.drawable.plus));
+//                    }
+//                }
+//            }
+//        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
@@ -286,28 +285,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         String url = user.get("path_to_pic");
-        Log.d(TAG, "Url :" + url);
         String name = user.get("name");
 
         if (url == null) {
-            Log.d(TAG, "intent");
+            Log.d("GetUserPhoto", "User Photo == NULL");
             intent = getIntent();
             url = intent.getExtras().getString("path_to_pic");
             name = intent.getExtras().getString("name");
         }
-        Log.d(TAG, "Image: "+url);
 
-        //RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.slider);
+        ImageView blurScreenClick     = (ImageView)headerLayout.findViewById(R.id.slide_background);
         ImageView profile_image       = (ImageView)headerLayout.findViewById(R.id.profile_image);
         TextView tvUserName           = (TextView)headerLayout.findViewById(R.id.tvUserName);
-        ImageView blurScreenClick     = (ImageView)headerLayout.findViewById(R.id.slide_background);
         tvUserName.setText(name);
 
         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "blured2.jpg");
         if (file.exists())
             try {
-                //Log.d(TAG, "Image: Exist");
                 blurScreenClick.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 blurScreenClick.setImageDrawable(Init(path));
             }   catch (FileNotFoundException e) {
@@ -321,8 +316,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Uri uri = Uri.fromFile(file);
         Glide.with(this).load(uri).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile_image);
-        buildAnim(this);
         ViewServer.get(this).addWindow(this);
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        buildAnim(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        }
+        actionMenu.close(true);
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.cards);
+        relativeLayout.setVisibility(View.VISIBLE);
+        ImageView screen = (ImageView) findViewById(R.id.blurScreen);
+        screen.setVisibility(View.INVISIBLE);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ViewServer.get(this).removeWindow(this);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -366,36 +387,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        }
-        actionMenu.close(true);
-        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.cards);
-        relativeLayout.setVisibility(View.VISIBLE);
-        ImageView screen = (ImageView) findViewById(R.id.blurScreen);
-        screen.setVisibility(View.INVISIBLE);
-
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ViewServer.get(this).removeWindow(this);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        ViewServer.get(this).setFocusedWindow(this);
-        /*CHMakeScoreWithAnim chMakeScoreWithAnim = new CHMakeScoreWithAnim(getApplicationContext());
-        chMakeScoreWithAnim.*/
-
-        buildAnim(this);
     }
 
 

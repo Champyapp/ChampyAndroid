@@ -33,10 +33,10 @@ import android.widget.Toast;
 import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
 import com.example.ivan.champy_v2.interfaces.Update_user;
@@ -286,8 +286,6 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                                     String id = user.get("id");
                                     String token = user.get("token");
 
-                                    Toast.makeText(getApplicationContext(), "Bye Bye!!!", Toast.LENGTH_SHORT).show();
-
                                     Retrofit retrofit = new Retrofit.Builder()
                                             .baseUrl(API_URL)
                                             .addConverterFactory(GsonConverterFactory.create())
@@ -333,7 +331,11 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                 };
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
-                builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
+                builder.setTitle("Are you sure?")
+                        .setMessage("You want to delete your account?")
+                        .setIcon(R.drawable.warn)
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", dialogClickListener)
                         .setNegativeButton("No", dialogClickListener).show();
                 }
 

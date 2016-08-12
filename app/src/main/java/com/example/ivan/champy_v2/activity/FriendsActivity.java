@@ -75,13 +75,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
-        //AppEventsLogger logger = AppEventsLogger.newLogger(this);
-
-        /*OfflineMode offlineMode = new OfflineMode();
-        if (!offlineMode.isConnectedToRemoteAPI(this)){
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-        }*/
         setContentView(R.layout.activity_friends);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

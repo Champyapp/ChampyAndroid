@@ -35,7 +35,7 @@ import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.adapter.PagerAdapterDuel;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
-import com.example.ivan.champy_v2.model.Self.*;
+import com.example.ivan.champy_v2.model.Self.Datum;
 import com.example.ivan.champy_v2.model.Self.SelfImprovement;
 
 import java.io.File;

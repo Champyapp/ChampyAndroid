@@ -26,10 +26,10 @@ import android.widget.TextView;
 import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.ivan.champy_v2.adapter.HistoryPagerAdapter;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.adapter.HistoryPagerAdapter;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.facebook.FacebookSdk;
 
@@ -39,7 +39,7 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
-// history wins?
+
 public class HistoryActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     FragmentPagerAdapter adapterViewPager;
@@ -108,7 +108,6 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         ViewServer.get(this).addWindow(this);
     }
 
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -164,7 +163,7 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
     }
 
 
-    public Drawable Init(String path) throws FileNotFoundException {
+    private Drawable Init(String path) throws FileNotFoundException {
         File file = new File(path, "blured2.jpg");
         Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
 
