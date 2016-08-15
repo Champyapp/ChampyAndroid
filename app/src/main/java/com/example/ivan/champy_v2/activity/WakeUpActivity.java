@@ -154,41 +154,39 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
                                 String sHour = "" + hour;
                                 String sMinute = "" + minute;
 
-                                if (hour < 10) {
-                                    sHour = "0" + sHour;
-                                }
-                                if (minute < 10) {
-                                    sMinute = "0" + sMinute;
-                                }
+                                if (hour < 10)   sHour   = "0" + sHour;
+                                if (minute < 10) sMinute = "0" + sMinute;
+
                                 //Log.i("stat", "Give up: " + sHour + " " + sMinute);
 
                                 boolean ok = check(sHour + sMinute);
                                 OfflineMode offlineMode = new OfflineMode();
                                 if (offlineMode.isConnectedToRemoteAPI(WakeUpActivity.this)) {
                                     if (ok) {
-                                        Calendar calendar = Calendar.getInstance();
-                                        Date date = new Date();
-                                        date.setHours(alarmTimePicker.getCurrentHour());
-                                        date.setMinutes(alarmTimePicker.getCurrentMinute());
-                                        calendar.set(Calendar.SECOND, 0);
-                                        calendar.setTime(date);
+                                        Calendar myCalendar = Calendar.getInstance();               // создаем календарь
+                                        Date date = new Date();                                     // создаем дану
+                                        date.setHours(alarmTimePicker.getCurrentHour());            // устанавливаем дане "Час" с нашего TimePicker-а
+                                        date.setMinutes(alarmTimePicker.getCurrentMinute());        // устанавливаем дане "Мин" с нашего TimePicker-а
+                                        myCalendar.set(Calendar.SECOND, 0);                         // устанавлием календарю значение секунд "0" (хотя было бы умнее сделать оффсет на 5-10)
+                                        myCalendar.setTime(date);                                   // устанавлием календарю время
 
-                                        long current = Calendar.getInstance().getTimeInMillis();
-                                        calendar.set(Calendar.SECOND, 0);
-                                        long time = calendar.getTimeInMillis();
+                                        long current = Calendar.getInstance().getTimeInMillis();    // берем текущее время глобально
+                                        long userInputTime = myCalendar.getTimeInMillis();          // берем время которое вводит юзер
 
-                                        time = time - (time % 60000);
-                                        if (current > time) {
-                                            calendar.add(Calendar.DATE, 1);
+                                        userInputTime = userInputTime - (userInputTime % 60000);    // хуй знает что такое
+
+                                        if (current > userInputTime) {                              // если текущее больше чем то, что ввел юзер
+                                            myCalendar.add(Calendar.DATE, 1);                       // то ставит wakeup на следующий день
                                         }
-                                        time = calendar.getTimeInMillis();
 
-                                        //Log.i("stat", "Time: " + (Calendar.getInstance().getTimeInMillis() - calendar.getTimeInMillis()));
+                                        userInputTime = myCalendar.getTimeInMillis();               // опять берем время которое ввел юзер
+
+                                        Log.i("WakeUpActivity", "Time: " + (current - userInputTime));
 
                                         Intent myIntent = new Intent(WakeUpActivity.this, AlarmReceiver.class);
                                         int id = Integer.parseInt(sHour + sMinute);
                                         pendingIntent = PendingIntent.getBroadcast(WakeUpActivity.this, id, myIntent, 0);
-                                        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, 24 * 60 * 60 * 1000, pendingIntent); // 24*60*60*1000 = 1 day;
+                                        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, userInputTime, 24 * 60 * 60 * 1000, pendingIntent); // 24*60*60*1000 = 1 day;
 
                                         Toast.makeText(WakeUpActivity.this, "Challenge created", Toast.LENGTH_SHORT).show();
                                         ChallengeController cc = new ChallengeController(WakeUpActivity.this, WakeUpActivity.this, hour, minute);
@@ -307,18 +305,15 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         boolean ok = true;
         DBHelper dbHelper = new DBHelper(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final ContentValues cv = new ContentValues();
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
         int o = 0;
         if (c.moveToFirst()) {
             int nameColIndex = c.getColumnIndex("name");
             int status = c.getColumnIndex("status");
-            Log.i("stat", "Statuskwo: o=" + o);
             do {
                 o++;
                 if (c.getString(nameColIndex).equals("Wake Up")){
                     if (c.getString(status).equals("started")) {
-                        Log.i("stat", "Time : " + c.getString(c.getColumnIndex("description")) + " " + time);
                         if (c.getString(c.getColumnIndex("description")).equals(time)) {
                             ok = false;
                             break;

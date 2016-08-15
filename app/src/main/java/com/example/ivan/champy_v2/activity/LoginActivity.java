@@ -494,12 +494,12 @@ public class LoginActivity extends AppCompatActivity {
                     try {
                         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
                         StrictMode.setThreadPolicy(policy);
-                        List<com.example.ivan.champy_v2.model.active_in_progress.Datum>  list  = call1.execute().body().getData();
+                        List<com.example.ivan.champy_v2.model.active_in_progress.Datum> list  = call1.execute().body().getData();
                         for (int i = 0; i < list.size(); i++) {
                             com.example.ivan.champy_v2.model.active_in_progress.Datum datum = list.get(i);
                             Challenge challenge = datum.getChallenge();
                             String challenge_description = challenge.getDescription(); // bla-bla
-                            String challenge_detail = challenge.getDetails(); // $challenge_description + " during this period"
+                            String challenge_detail = challenge.getDetails(); // $bla-bla + " during this period"
                             String challenge_status = datum.getStatus();      // active or not
                             String challenge_id = datum.get_id();
                             String challenge_type = challenge.getType(); // self, duel or wake up
@@ -700,7 +700,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+    /*private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
         protected Bitmap doInBackground(String... urls) {
             String urldisplay = urls[0];
@@ -796,8 +796,7 @@ public class LoginActivity extends AppCompatActivity {
 
         Log.d(TAG, "Status: " + f);
 
-        RequestBody requestBody =
-                RequestBody.create(MediaType.parse("image/jpeg"), f);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), f);
 
         Update_user update_user = retrofit.create(Update_user.class);
         Call<User> call = update_user.update_photo(id, token, requestBody);
@@ -815,7 +814,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d(TAG, "Status: "+t);
             }
         });
-    }
+    }*/
 
 }
 

@@ -100,7 +100,6 @@ public class MyGcmListenerService extends GcmListenerService {
         Log.d(TAG, title);
         Intent intent = new Intent(this, MainActivity.class);
 
-
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         switch (title) {
             case "Friend request":
@@ -108,16 +107,25 @@ public class MyGcmListenerService extends GcmListenerService {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("friend_request", "true");
                 break;
+            case "Challenge request":
+                refreshPendingDuels(message); // go to PendingDuels Activity
+                return;
             case "Challenge accepted'":
-                intent = new Intent(this, MainActivity.class);
+                //intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
                 break;
             case "Win":
-                intent = new Intent(this, MainActivity.class);
+                //intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
                 break;
-            case "Challenge request":
-                // go to PendingDuels Activity
-                refreshPendingDuels(message);
-                return;
+            case "Challenges for today":
+                //intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                break;
+            case "Submit for approve":
+                //intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                break;
 
         }
 
