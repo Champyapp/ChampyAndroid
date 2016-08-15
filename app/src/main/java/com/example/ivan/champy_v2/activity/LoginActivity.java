@@ -13,6 +13,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -188,7 +189,7 @@ public class LoginActivity extends AppCompatActivity {
                                         } catch (MalformedURLException e) {
                                             e.printStackTrace();
                                         }
-                                        Log.d(TAG, path_to_pic);
+                                        Log.d("ProfilePicture", "= " + path_to_pic);
 
                                         new Thread(new Runnable() {
                                             public void run() {
@@ -198,7 +199,7 @@ public class LoginActivity extends AppCompatActivity {
                                                     token_android = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
                                                             GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
 
-                                                    Log.d(TAG, "GCM Registration Token: " + token_android);
+                                                    Log.d("GCM", "GCM Registration Token: " + token_android);
                                                     JSONObject manJson = new JSONObject();
                                                     manJson.put("token", token_android);
                                                     manJson.put("timeZone", "-2");
@@ -295,7 +296,7 @@ public class LoginActivity extends AppCompatActivity {
         String string2 = "{facebookId:'"+fb_id+"', AndroidOS:{token:'"+gcm+"', timeZone:2}";
         String string = jsonObject.toString();
         final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
-        Log.d(TAG, "TOKEN: "+string + "\n fb_id" + string2);
+        Log.d("RegisterUser", "TOKEN: "+string + "\n fb_id" + string2);
         NewUser newUser = retrofit.create(NewUser.class);
 
         Call<User> call = newUser.register(new LoginData(facebookId, name, email));
@@ -339,7 +340,7 @@ public class LoginActivity extends AppCompatActivity {
                             if (!f.exists()) {
                                 com.example.ivan.champy_v2.model.User.Photo photo = data.getPhoto();
                                 api_path = API_URL + photo.getLarge();
-                                Log.d(TAG, "Image: " + api_path);
+                                Log.d("RegisterUser", "Image: " + api_path);
                             }
                         }
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -359,6 +360,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d(TAG, "VSE huynya");
             }
         });
+
     }
 
 
@@ -370,24 +372,17 @@ public class LoginActivity extends AppCompatActivity {
         jsonObject.put("AndroidOS", gcm);
         String string = jsonObject.toString();
         final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
-        Log.d(TAG, "TOKEN: "+jwtString);
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        NewUser newUser = retrofit.create(NewUser.class);
-        Call<User> call = newUser.getUserInfo(jwtString);
+        Log.d("GetUserData", "TOKEN: "+jwtString);
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
-        final String finalId = fb_id;
-        call.enqueue(new Callback<User>() {
+        NewUser newUser = retrofit.create(NewUser.class);
+
+        Call<User> callGetUserInfo = newUser.getUserInfo(jwtString);
+        callGetUserInfo.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
-                Log.d(TAG, "Status: get_user" + response.code());
                 User decodedResponse = response.body();
                 if (response.isSuccess()) {
-                 /*   Log.d("TAG", "Status: " + decodedResponse.getDescription());
-                    Log.d("TAG", "Status: "+jwtString);*/
-
                     Data data = decodedResponse.getData();
                     String email = data.getEmail();
                     final String user_name = data.getName();
@@ -397,7 +392,7 @@ public class LoginActivity extends AppCompatActivity {
                     String newChallReq = data.getProfileOptions().getNewChallengeRequests().toString();
                     String acceptedYour = data.getProfileOptions().getAcceptedYourChallenge().toString();
                     String challegeEnd = data.getProfileOptions().getChallengeEnd().toString();
-                    Log.d(TAG, "Status: " + id + " " +fb_id);
+                    Log.i("GetUserData", "UserId = " + id + "\nFacebook_Id = " + fb_id);
 
                     SessionManager sessionManager = new SessionManager(getApplicationContext());
                     sessionManager.setRefreshPending("false");
@@ -417,8 +412,8 @@ public class LoginActivity extends AppCompatActivity {
 
                     com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
 
-                    Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.getUserFriends(id, jwtString);
-                    call.enqueue(new Callback<Friend>() {
+                    Call<com.example.ivan.champy_v2.model.Friend.Friend> callGetUserFriends = friends.getUserFriends(id, jwtString);
+                    callGetUserFriends.enqueue(new Callback<Friend>() {
                         @Override
                         public void onResponse(Response<Friend> response, Retrofit retrofit) {
                             if (response.isSuccess()){
@@ -490,19 +485,19 @@ public class LoginActivity extends AppCompatActivity {
                     ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
                     final long unixTime = System.currentTimeMillis() / 1000L;
                     String update = "0"; //1457019726
-                    Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(id, update, jwtString);
+                    Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> callActiveInProgress = activeInProgress.getActiveInProgress(id, update, jwtString);
                     try {
                         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
                         StrictMode.setThreadPolicy(policy);
-                        List<com.example.ivan.champy_v2.model.active_in_progress.Datum> list  = call1.execute().body().getData();
+                        List<com.example.ivan.champy_v2.model.active_in_progress.Datum> list  = callActiveInProgress.execute().body().getData();
                         for (int i = 0; i < list.size(); i++) {
                             com.example.ivan.champy_v2.model.active_in_progress.Datum datum = list.get(i);
                             Challenge challenge = datum.getChallenge();
                             String challenge_description = challenge.getDescription(); // bla-bla
                             String challenge_detail = challenge.getDetails(); // $bla-bla + " during this period"
                             String challenge_status = datum.getStatus();      // active or not
-                            String challenge_id = datum.get_id();
-                            String challenge_type = challenge.getType(); // self, duel or wake up
+                            String challenge_id = datum.get_id();             // us magic id
+                            String challenge_type = challenge.getType();      // self, duel or wake up
                             String duration = "";
                             if (datum.getEnd() != null) {
                                 int end = datum.getEnd();
@@ -559,24 +554,24 @@ public class LoginActivity extends AppCompatActivity {
                     String api_path = null;
                     if (data.getPhoto() != null){
                         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
-                        File f=new File(path, "profile.jpg");
-                        if (!f.exists()){
+                        File file = new File(path, "profile.jpg");
+                        if (!file.exists()){
                             com.example.ivan.champy_v2.model.User.Photo photo = data.getPhoto();
-                            api_path = API_URL+photo.getLarge();
-                            Log.d(TAG, "Image: "+api_path);
+                            api_path = API_URL + photo.getLarge();
+                            Log.d("data.getPhoto()", "Image: " + api_path);
                         }
                     }
 
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    if (api_path == null) intent.putExtra("path_to_pic", path_to_pic);
-                    else {
+                    if (api_path == null) {
+                        intent.putExtra("path_to_pic", path_to_pic);
+                    } else {
                         intent.putExtra("path_to_pic", api_path);
                         sessionManager.change_avatar(api_path);
                     }
                     intent.putExtra("name", user_name) ;
                     startActivity(intent);
-                }
-                else Log.d("TAG", "Status: "+decodedResponse);
+                } else Log.d("TAG", "Status: FAILED = " + decodedResponse);
             }
             @Override
             public void onFailure(Throwable t) {
@@ -587,13 +582,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+    // get pending
     public Boolean getContact(String id) {
         DBHelper dbHelper = new DBHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Boolean ok = false;
         Cursor c = db.query("pending", null, null, null, null, null, null);
         if (c.moveToFirst()) {
-
             int index = c.getColumnIndex("user_id");
             do {
                 String user_id = c.getString(index);
@@ -602,8 +597,7 @@ public class LoginActivity extends AppCompatActivity {
                     break;
                 }
             } while (c.moveToNext());
-        } else
-            Log.i("stat", "0 rows");
+        }
         c.close();
         return ok;
     }
@@ -611,11 +605,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void getFriends(final String gcm) {
         final String API_URL = "http://46.101.213.24:3007";
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         final NewUser newUser = retrofit.create(NewUser.class);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -665,7 +655,7 @@ public class LoginActivity extends AppCompatActivity {
                                             cv.put("total", ""+data.getScore());
                                             cv.put("level", ""+data.getLevel().getNumber());
                                             if (!getContact(data.get_id())) db.insert("mytable", null, cv);
-                                            else Log.d(TAG, "DBase: not added");
+                                            else Log.d("GetFriends", "DBase: not added");
                                         } else {
                                             URL profile_pic = null;
                                             String photo = null;
@@ -699,12 +689,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
-    /*private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+/*    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
         protected Bitmap doInBackground(String... urls) {
             String urldisplay = urls[0];
-            Log.d(TAG, "lalala: " + urldisplay);
+            Log.d("LoginActivity", "DownLoadImageTask: doInBackground --- url display: " + urldisplay);
 
             Bitmap mIcon11 = null;
             try {
@@ -738,7 +727,6 @@ public class LoginActivity extends AppCompatActivity {
         File mypath = new File(directory,"profile.jpg");
 
         Log.d(TAG, "MY_PATH: "+mypath.toString());
-
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(mypath);

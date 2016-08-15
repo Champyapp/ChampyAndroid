@@ -281,13 +281,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
-        String url = user.get("path_to_pic");
+        String path_to_pic = user.get("path_to_pic");
         String name = user.get("name");
 
-        if (url == null) {
+        if (path_to_pic == null) {
             Log.i("GetUserPhoto", "User Photo == NULL");
             intent = getIntent();
-            url = intent.getExtras().getString("path_to_pic");
+            path_to_pic = intent.getExtras().getString("path_to_pic");
             name = intent.getExtras().getString("name");
         }
 
@@ -306,7 +306,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 e.printStackTrace();
             }
         else {
-            new DownloadImageTask().execute(url);
+            //Log.i("onCreate", "onCreate: pizdec bro...");
+            new DownloadImageTask().execute(path_to_pic);
         }
 
         file = new File(path, "profile.jpg");
@@ -399,8 +400,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         String id = user.get("id");
         File f = new File(path);
-        Log.d(TAG, "USER: " + token + " " + id);
-        Log.d(TAG, "Status: " + f);
+        Log.d("UploadPhoto", "Token: " + token + "\n Id = " + id);
+        Log.d("UploadPhoto", "File = " + f);
 
         RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), f);
 
@@ -410,8 +411,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    Log.d(TAG, "Status: photo_uploaded");
-                } else Log.d(TAG, "Status :" + response.code());
+                    Log.d("UploadPhoto", "Status: VSE OK");
+                } else Log.d("UploadPhoto", "Status :" + response.code());
             }
 
             @Override

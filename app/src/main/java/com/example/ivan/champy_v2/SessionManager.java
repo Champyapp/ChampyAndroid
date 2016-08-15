@@ -183,6 +183,7 @@ public class SessionManager {
 
     public void logoutUser(){
         // Clearing all user data from Shared Preferences
+        //editor.remove(KEY_PATH);
         editor.clear();
         editor.commit();
         // After logout redirect user to Login Activity
