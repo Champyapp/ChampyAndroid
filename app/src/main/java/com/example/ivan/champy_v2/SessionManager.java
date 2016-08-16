@@ -11,9 +11,6 @@ import com.facebook.login.LoginManager;
 
 import java.util.HashMap;
 
-/**
- * Created by ivan on 15.01.16.
- */
 public class SessionManager {
 
     SharedPreferences pref;
@@ -157,9 +154,9 @@ public class SessionManager {
     public HashMap<String, String> getChampyOptions(){
         HashMap<String, String> champy = new HashMap<String, String>();
         champy.put("challenges", pref.getString("challenges", null));
-        champy.put("wins",       pref.getString("wins", null));
-        champy.put("total",      pref.getString("total", null));
-        champy.put("level",      pref.getString("level", null));
+        champy.put("wins",       pref.getString("wins",       null));
+        champy.put("total",      pref.getString("total",      null));
+        champy.put("level",      pref.getString("level",      null));
         return champy;
     }
 
@@ -183,7 +180,6 @@ public class SessionManager {
 
     public void logoutUser(){
         // Clearing all user data from Shared Preferences
-        //editor.remove(KEY_PATH);
         editor.clear();
         editor.commit();
         // After logout redirect user to Login Activity

@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -44,12 +45,14 @@ public class ChallengeController {
 
     Context context;
     Activity firstActivity;
-    int hour, minute;
-    public ChallengeController(Context mContext, Activity activity, int mHour, int mMinute) {
+    int hour, minute, seconds;
+
+    public ChallengeController(Context mContext, Activity activity, int mHour, int mMinute, int mSeconds) {
         context = mContext;
         firstActivity = activity;
         hour = mHour;
         minute = mMinute;
+        seconds = mSeconds;
     }
 
 
@@ -99,7 +102,7 @@ public class ChallengeController {
         String sMinute = "" + minute;
         if (hour < 10) sHour = "0" + sHour;
         if (minute < 10) sMinute = "0" + sMinute;
-        final String details = sHour + sMinute;
+        final String details = sHour + sMinute + seconds;
         final String API_URL = "http://46.101.213.24:3007";
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 

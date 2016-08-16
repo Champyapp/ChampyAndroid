@@ -189,9 +189,8 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
                                         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, userInputTime, 24 * 60 * 60 * 1000, pendingIntent); // 24*60*60*1000 = 1 day;
 
                                         Toast.makeText(WakeUpActivity.this, "Challenge created", Toast.LENGTH_SHORT).show();
-                                        ChallengeController cc = new ChallengeController(WakeUpActivity.this, WakeUpActivity.this, hour, minute);
+                                        ChallengeController cc = new ChallengeController(WakeUpActivity.this, WakeUpActivity.this, hour, minute, 0);
                                         cc.createNewWakeUpChallenge("Wake Up", 21, type_id);
-
                                     } else {
                                         Toast.makeText(WakeUpActivity.this, "Already exist!", Toast.LENGTH_SHORT).show();
                                     }

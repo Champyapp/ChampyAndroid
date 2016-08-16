@@ -782,7 +782,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 case DialogInterface.BUTTON_POSITIVE:
                                     OfflineMode offlineMode = new OfflineMode();
                                     if (offlineMode.isConnectedToRemoteAPI(MainActivity.this)){
-                                        ChallengeController challengeController = new ChallengeController(MainActivity.this, MainActivity.this, 0 , 0);
+                                        ChallengeController challengeController = new ChallengeController(MainActivity.this, MainActivity.this, 0 , 0, 0);
                                         try {
                                             challengeController.give_up(item.getId());
                                         } catch (IOException e) {

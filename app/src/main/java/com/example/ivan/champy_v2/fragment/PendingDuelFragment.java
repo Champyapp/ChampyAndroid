@@ -148,7 +148,7 @@ public class PendingDuelFragment extends Fragment {
                                 c.close();
                                 offlineMode.isConnectedToRemoteAPI(getActivity());
                                 if (checkRecipientAndActive(description, recipient)) {
-                                    ChallengeController cc = new ChallengeController(getContext(), getActivity(), 0, 0);
+                                    ChallengeController cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
                                     cc.joinToChallenge(challenge_id);
                                     Log.i("OnClickButtonAccept", "    onResponse: VSE OK");
                                 }
@@ -195,7 +195,7 @@ public class PendingDuelFragment extends Fragment {
                                 }
                                 c.close();
                                 offlineMode.isConnectedToRemoteAPI(getActivity());
-                                ChallengeController cc = new ChallengeController(getContext(), getActivity(), 0, 0);
+                                ChallengeController cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
                                 try {
                                     cc.rejectInviteForPendingDuel(challenge_id);
                                     Toast.makeText(getContext(), "Canceled", Toast.LENGTH_SHORT).show();

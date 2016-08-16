@@ -152,7 +152,7 @@ public class DuelFragment extends Fragment {
                         int position = viewPager.getCurrentItem();
                         int size = sessionManager.getSelfSize();
 
-                        ChallengeController cc = new ChallengeController(getContext(), getActivity(), 0, 0);
+                        ChallengeController cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
                         switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
                                 if (position == size) {
