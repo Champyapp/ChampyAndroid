@@ -167,19 +167,21 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
                                         Date date = new Date();                                     // создаем дану
                                         date.setHours(alarmTimePicker.getCurrentHour());            // устанавливаем дане "Час" с нашего TimePicker-а
                                         date.setMinutes(alarmTimePicker.getCurrentMinute());        // устанавливаем дане "Мин" с нашего TimePicker-а
+                                        date.setSeconds(0);
                                         myCalendar.set(Calendar.SECOND, 0);                         // устанавлием календарю значение секунд "0" (хотя было бы умнее сделать оффсет на 5-10)
                                         myCalendar.setTime(date);                                   // устанавлием календарю время
 
                                         long current = Calendar.getInstance().getTimeInMillis();    // берем текущее время глобально
                                         long userInputTime = myCalendar.getTimeInMillis();          // берем время которое вводит юзер
-
-                                        userInputTime = userInputTime - (userInputTime % 60000);    // хуй знает что такое
+                                        Log.i("onClick - 1", "onClick: " + userInputTime);
+                                        userInputTime = userInputTime - (userInputTime % 60000);    // clearing millisec
+                                        Log.i("onClick - 2", "onClick: " + userInputTime);
 
                                         if (current > userInputTime) {                              // если текущее больше чем то, что ввел юзер
                                             myCalendar.add(Calendar.DATE, 1);                       // то ставит wakeup на следующий день
                                         }
 
-                                        userInputTime = myCalendar.getTimeInMillis();               // опять берем время которое ввел юзер
+                                        //userInputTime = myCalendar.getTimeInMillis();               // опять берем время которое ввел юзер
 
                                         Log.i("WakeUpActivity", "Time: " + (current - userInputTime));
 

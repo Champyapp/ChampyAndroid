@@ -814,6 +814,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             tvSelfImprovement.setText(item.getType());
             String s = item.getGoal();
             ImageView imageView = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
+
+            /*if (item.getGoal().equals("Wake Up")) {
+                imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeup_white));
+                s = "Wake up at " + s.substring(0, 2) + ":" + s.substring(2, 4) + " during this period";
+            } else if(item.getType().equals("567d51c48322f85870fd931a")) {
+                imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.self_white));
+            } else if(item.getType().equals("567d51c48322f85870fd931b")) {
+                imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.duel_white));
+            }*/
+
+
             switch (item.getType()) {
                 case "Wake Up":
                     imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeup_white));

@@ -30,6 +30,10 @@ import com.example.ivan.champy_v2.model.active_in_progress.Sender;
 import com.example.ivan.champy_v2.single_inprogress.Data;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -102,13 +106,30 @@ public class ChallengeController {
         String sMinute = "" + minute;
         if (hour < 10) sHour = "0" + sHour;
         if (minute < 10) sMinute = "0" + sMinute;
-        final String details = sHour + sMinute + seconds;
+        long currentTime = System.currentTimeMillis() / 1000;
+
+        Date date = new Date(); // given date
+        Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
+        calendar.setTime(date); // assigns calendar to given date
+        calendar.get(Calendar.HOUR_OF_DAY); // gets hour in 24h format
+        calendar.get(Calendar.HOUR); // gets hour in 12h format
+        calendar.get(Calendar.MONTH);
+
+        long currentMidnight = currentTime - (calendar.get(Calendar.HOUR_OF_DAY) * 60 * 60) - (calendar.get(Calendar.MINUTE) * 60) - (calendar.get(Calendar.SECOND));
+
+        final String[] details = new String[21];
+        for (int i = 0; i <= 20; i++) {
+            details[i] = String.valueOf(minute * 60 + hour * 60 * 60 + i*(24*60*60) + currentMidnight) ;
+            //Log.i("WAKEUP", "DETAILS: NAW FOR = \n" + details[i]);
+        }
+        //Log.i("onResponse", "onResponse: BEST LOGI EVER = " + Arrays.toString(details));
+        final String myDetails = Arrays.toString(details);
         final String API_URL = "http://46.101.213.24:3007";
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
 
-        Call<com.example.ivan.champy_v2.create_challenge.CreateChallenge> call = createChallenge.createChallenge("User_Challenge", type_id, description, details, duration, token);
+        Call<com.example.ivan.champy_v2.create_challenge.CreateChallenge> call = createChallenge.createChallenge("User_Challenge", type_id, description, myDetails, duration, token);
         call.enqueue(new Callback<com.example.ivan.champy_v2.create_challenge.CreateChallenge>() {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.create_challenge.CreateChallenge> response, Retrofit retrofit) {
@@ -116,12 +137,13 @@ public class ChallengeController {
                     String challengeId = response.body().getData().get_id();
                     Log.i("stat", "Status: " + challengeId);
                     sendSingleInProgressForSelfOrWakeUp(challengeId);
+
                     Log.i("makeNewWakeUpChallenge", "createNewWakeUpChallenge Status: OK"
                             + "\n _ID         = " + challengeId
                             + "\n TYPE_ID     = " + type_id
                             + "\n DESCRIPTION = " + description
-                            + "\n DETAILS     = " + details
-                            + "\n DURATION    = " + duration);
+                            + "\n DETAILS     = " + myDetails
+                            + "\n DURATION    = " + duration + " (21 day)");
                 } else Log.i("makeNewWakeUpChallenge", "CreateNewChallenge Status: Failed");
             }
 
@@ -184,7 +206,7 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     //com.example.ivan.champy_v2.single_inprogress.SingleInProgress data = response.body();
                     //String _id = data.getData().get_id();
-                    Log.i("sendSingleInProgress", "Status: VSE OK"/* + "\n_ID! = " + _id*/);
+                    Log.i("sendSingleInProgress", "   onResponse: VSE OK");
                     generateCardsForMainActivity();
                 } else Log.i("sendSingleInProgress", "Status: FAILED: " + response.code());
             }
@@ -301,11 +323,11 @@ public class ChallengeController {
                     //если это wake up, то отключаем будильник, если нет, то call мы и так уже скинули и все ок
                     if (type.equals("567d51c48322f85870fd931c")) {
                         String s = data.getChallenge().getDetails();
-                        int i = Integer.parseInt(s);
-                        Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, i, myIntent, 0);
-                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                        alarmManager.cancel(pendingIntent);
+                        //int i = Integer.parseInt(s);
+                        //Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
+                        //PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, i, myIntent, 0);
+                        //AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                        //alarmManager.cancel(pendingIntent);
                     }
                     refreshCardsForPendingDuel();
                     Log.i("GiveUp", "onResponse: VSE OK");
