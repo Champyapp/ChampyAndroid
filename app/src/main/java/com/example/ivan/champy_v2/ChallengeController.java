@@ -78,10 +78,10 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    String challenge = response.body().getData().get_id();
-                    sendSingleInProgressForSelfOrWakeUp(challenge);
+                    String challengeId = response.body().getData().get_id();
+                    sendSingleInProgressForSelfOrWakeUp(challengeId);
                     Log.i("createNewSIC", "CreateNewChallenge Status: VSE OK"
-                            + "\n create_challenge.CreateChallenge data = " + challenge
+                            + "\n CHALL_ID    = " + challengeId
                             + "\n TYPE_ID     = " + type_id
                             + "\n DESCRIPTION = " + description
                             + "\n DETAILS     = " + details
@@ -323,14 +323,14 @@ public class ChallengeController {
                     //если это wake up, то отключаем будильник, если нет, то call мы и так уже скинули и все ок
                     if (type.equals("567d51c48322f85870fd931c")) {
                         String s = data.getChallenge().getDetails();
-                        //int i = Integer.parseInt(s);
-                        //Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
-                        //PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, i, myIntent, 0);
-                        //AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                        //alarmManager.cancel(pendingIntent);
+                        int i = Integer.parseInt(s);
+                        Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, i, myIntent, 0);
+                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                        alarmManager.cancel(pendingIntent);
                     }
                     refreshCardsForPendingDuel();
-                    Log.i("GiveUp", "onResponse: VSE OK");
+                    Log.i("GiveUp", "                 onResponse: VSE OK");
                 } else Log.i("GiveUp", "onResponse: FAILED: " + response.code());
             }
 
@@ -448,6 +448,10 @@ public class ChallengeController {
 
                         if (challenge_description.equals("Wake Up")) {
                             cv.put("name", "Wake Up");
+
+                            // set up wake up here...
+
+
                         } else if (challenge_type.equals("567d51c48322f85870fd931a")) {
                             cv.put("name", "Self-Improvement");
                         } else if (challenge_type.equals("567d51c48322f85870fd931b")) {

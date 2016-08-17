@@ -115,12 +115,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 
         Calendar calendar = Calendar.getInstance();
+        Log.i("onCreate", "calendar = " + calendar);
         calendar.set(Calendar.HOUR_OF_DAY, 0);  // було 18 ?
         calendar.set(Calendar.MINUTE, 0);        //  було 6 ?
         calendar.set(Calendar.SECOND, 0);
+        Log.i("onCreate", "calender. getTimeInMillis = " + calendar.getTimeInMillis());
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        
         RelativeLayout cards = (RelativeLayout)findViewById(R.id.cards);
-
         CustomAdapter adapter = new CustomAdapter(this, SelfImprovement_model.generate(this));
         if (adapter.dataCount() > 0){
             pager = new CustomPagerBase(this,  cards, adapter);
@@ -306,7 +308,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 e.printStackTrace();
             }
         else {
-            //Log.i("onCreate", "onCreate: pizdec bro...");
             new DownloadImageTask().execute(path_to_pic);
         }
 
@@ -828,7 +829,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             switch (item.getType()) {
                 case "Wake Up":
                     imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeup_white));
-                    s = "Wake up at " + s.substring(0, 2) + ":" + s.substring(2, 4) + " during this period";
+                    //s = "Wake up at " + s.substring(0, 2) + ":" + s.substring(2, 4) + " during this period";
+                    s = "Wake up at " + "__:__" + " during this period";
                     break;
                 case "Duel":
                     imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.duel_white));

@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/wake_up"
-        android:id="@+id/textView24"
+        android:id="@+id/wakeup_text"
         android:textColor="#339997"
         android:gravity="center_vertical|center_horizontal"
         android:textSize="60dp"
@@ -62,5 +62,6 @@
         android:layout_marginRight="64dp"
         android:layout_marginBottom="64dp"
         android:background="@drawable/accept" />
+
 
 </RelativeLayout>

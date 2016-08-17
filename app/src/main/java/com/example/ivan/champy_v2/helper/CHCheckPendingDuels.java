@@ -37,7 +37,8 @@ public class CHCheckPendingDuels {
         c.close();
         SessionManager sessionManager = new SessionManager(context);
         sessionManager.set_duel_pending("" + countOfPendingDuel);
-        Log.i("CheckPending", "countOfPendingDuel: " + countOfPendingDuel);
+        Log.i("CheckPending", "           Pend_Count: " + countOfPendingDuel);
+        Log.i("RefreshPendingDuels", "    onResponse: VSE OK");
         return countOfPendingDuel;
     }
 
@@ -45,7 +46,7 @@ public class CHCheckPendingDuels {
         NavigationView navigationView = (NavigationView)view.findViewById(R.id.nav_view);
         Menu nav_Menu = navigationView.getMenu();
         nav_Menu.findItem(R.id.pending_duels).setVisible(false);
-        Log.i("CheckPending", "hideItem: VSE OK");
+        Log.i("CheckPending", "             hideItem: VSE OK");
     }
 
 }

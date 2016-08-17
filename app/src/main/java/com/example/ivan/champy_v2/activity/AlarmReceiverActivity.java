@@ -24,18 +24,16 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.data.DBHelper;
-import com.example.ivan.champy_v2.model.SelfImprovement_model;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 
 public class AlarmReceiverActivity extends Activity {
 
+    public static final String ARG_PAGE = "ARG_PAGE";
     private MediaPlayer mMediaPlayer;
     public Context context;
     public Activity activity;
@@ -48,12 +46,12 @@ public class AlarmReceiverActivity extends Activity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.alarm);
 
-        RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.alarm);
-        relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementback));
+        //RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.alarm);
+        //relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementback));
         Glide.with(this).load(R.drawable.wakeupwhite).override(130, 130).into((ImageView) findViewById(R.id.imageViewWakeUpLogo));
         Glide.with(this).load(R.drawable.wakeuptext).override(200, 170).into((ImageView) findViewById(R.id.imageViewWakeUpText));
 
-        TextView textView = (TextView)findViewById(R.id.textView24);
+        TextView textView = (TextView)findViewById(R.id.wakeup_text);
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         textView.setTypeface(typeface); // закоментити
         Window window = this.getWindow();
