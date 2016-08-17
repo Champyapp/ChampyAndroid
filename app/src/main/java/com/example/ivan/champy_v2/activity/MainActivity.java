@@ -100,28 +100,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         SessionManager sessionManager = new SessionManager(this);
         FacebookSdk.sdkInitialize(getApplicationContext());
+        setContentView(R.layout.activity_main);
 
         // get_right_token();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_gradient));
         setSupportActionBar(toolbar);
 
-        alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
-        Intent intent = new Intent(this, AlarmSchedule.class);
-        intent.putExtra("alarm", "reset");
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+//        alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+//        Intent intent = new Intent(this, AlarmSchedule.class);
+//        intent.putExtra("alarm", "reset");
+//
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.set(Calendar.HOUR_OF_DAY, Calendar.getInstance().get(Calendar.HOUR_OF_DAY));  // було 18 ?
+//        calendar.set(Calendar.MINUTE, Calendar.getInstance().get(Calendar.MINUTE));        //  було 6 ?
+//        calendar.set(Calendar.SECOND, 0);
+//        Log.i("onCreate", "calender. getTimeInMillis = " + calendar.getTimeInMillis());
+//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
 
-        Calendar calendar = Calendar.getInstance();
-        Log.i("onCreate", "calendar = " + calendar);
-        calendar.set(Calendar.HOUR_OF_DAY, 0);  // було 18 ?
-        calendar.set(Calendar.MINUTE, 0);        //  було 6 ?
-        calendar.set(Calendar.SECOND, 0);
-        Log.i("onCreate", "calender. getTimeInMillis = " + calendar.getTimeInMillis());
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-        
         RelativeLayout cards = (RelativeLayout)findViewById(R.id.cards);
         CustomAdapter adapter = new CustomAdapter(this, SelfImprovement_model.generate(this));
         if (adapter.dataCount() > 0){
@@ -288,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (path_to_pic == null) {
             Log.i("GetUserPhoto", "User Photo == NULL");
-            intent = getIntent();
+            Intent intent = getIntent();
             path_to_pic = intent.getExtras().getString("path_to_pic");
             name = intent.getExtras().getString("name");
         }
@@ -807,7 +806,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 }
             });
-            //Log.d("TAG", "X: "+x*y);
 
             if (y > 10) y = 10;
 
@@ -816,15 +814,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String s = item.getGoal();
             ImageView imageView = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
 
-            /*if (item.getGoal().equals("Wake Up")) {
-                imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeup_white));
-                s = "Wake up at " + s.substring(0, 2) + ":" + s.substring(2, 4) + " during this period";
-            } else if(item.getType().equals("567d51c48322f85870fd931a")) {
-                imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.self_white));
-            } else if(item.getType().equals("567d51c48322f85870fd931b")) {
-                imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.duel_white));
-            }*/
-
+//            if (item.getGoal().equals("Wake Up")) {
+//                imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeup_white));
+//                s = "Wake up at " + s.substring(0, 2) + ":" + s.substring(2, 4) + " during this period";
+//            } else if(item.getType().equals("567d51c48322f85870fd931a")) {
+//                imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.self_white));
+//            } else if(item.getType().equals("567d51c48322f85870fd931b")) {
+//                imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.duel_white));
+//            }
 
             switch (item.getType()) {
                 case "Wake Up":
