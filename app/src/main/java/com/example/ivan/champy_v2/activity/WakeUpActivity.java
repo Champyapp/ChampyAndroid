@@ -2,7 +2,6 @@ package com.example.ivan.champy_v2.activity;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -34,25 +33,19 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.ivan.champy_v2.AlarmReceiver;
 import com.example.ivan.champy_v2.ChallengeController;
-import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
-
-import static java.lang.Math.round;
 
 public class WakeUpActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -166,12 +159,11 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
                                 OfflineMode offlineMode = new OfflineMode();
                                 if (offlineMode.isConnectedToRemoteAPI(WakeUpActivity.this)) {
                                     if (ok) {
-                                        //Calendar myCalendar = Calendar.getInstance();               // создаем календарь
-                                        /*Date date = new Date();                                     // создаем дану
+                                        /*Calendar myCalendar = Calendar.getInstance();               // создаем календарь
+                                        Date date = new Date();                                     // создаем дану
                                         date.setHours(alarmTimePicker.getCurrentHour());            // устанавливаем данные "Час" с нашего TimePicker-а
                                         date.setMinutes(alarmTimePicker.getCurrentMinute());        // устанавливаем данные "Мин" с нашего TimePicker-а
                                         date.setSeconds(0);*/
-
                                         Toast.makeText(WakeUpActivity.this, "Challenge created", Toast.LENGTH_SHORT).show();
                                         ChallengeController cc = new ChallengeController(WakeUpActivity.this, WakeUpActivity.this, hour, minute, 0);
                                         cc.createNewWakeUpChallenge("Wake Up", 21, type_id);

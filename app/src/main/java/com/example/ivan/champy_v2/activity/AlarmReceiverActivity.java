@@ -24,12 +24,14 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.data.DBHelper;
 
 import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 public class AlarmReceiverActivity extends Activity {
 
@@ -37,11 +39,14 @@ public class AlarmReceiverActivity extends Activity {
     private MediaPlayer mMediaPlayer;
     public Context context;
     public Activity activity;
-    private TimePicker alarmTimePicker;
-
+    public String challengeId = "";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        final String challengeId = this.getIntent().getStringExtra("finalInProgressChallengeId");
+        Log.i("onCreate", "NEED THIS ID = " + challengeId);
+
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.alarm);
@@ -59,11 +64,19 @@ public class AlarmReceiverActivity extends Activity {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         ImageButton buttonWakeUpDoneForToday = (ImageButton) findViewById(R.id.buttonWakeUpDoneForToday);
+        final ChallengeController cc = new ChallengeController(getApplicationContext(), AlarmReceiverActivity.this, 0, 0, 0);
+
+        //final String finalChallengeId = challengeId;
         buttonWakeUpDoneForToday.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View arg0, MotionEvent arg1) {
                 mMediaPlayer.stop();
+                try {
+
+                    cc.doneForToday(challengeId);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 finish();
-                // create method "Done for today"
                 return false;
             }
         });
@@ -76,7 +89,11 @@ public class AlarmReceiverActivity extends Activity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 Toast.makeText(AlarmReceiverActivity.this, "Bla-Bla", Toast.LENGTH_SHORT).show();
-
+                try {
+                    cc.give_up(challengeId);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 return false;
             }
         });
