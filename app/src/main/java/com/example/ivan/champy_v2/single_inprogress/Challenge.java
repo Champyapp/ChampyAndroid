@@ -19,7 +19,17 @@ public class Challenge {
     private Boolean active;
     private Integer duration;
     private Integer points;
+    private Integer senderProgress;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
+
+    public Integer getSenderProgress() {
+        return senderProgress;
+    }
+
+    public void setSenderProgress(Integer senderProgress) {
+        this.senderProgress = senderProgress;
+    }
 
     /**
      * 

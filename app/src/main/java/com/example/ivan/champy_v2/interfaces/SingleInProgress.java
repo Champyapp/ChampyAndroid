@@ -43,6 +43,12 @@ public interface SingleInProgress {
             @Query("token") String token
     );
 
+    @GET("/v1/in-progress-challenges/{id}/check")
+    Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> CheckChallenge(
+            @Path("id") String id,
+            @Query("token") String token
+    );
+
     @FormUrlEncoded
     @POST("/v1/in-progress-challenges/duel")
     Call<Duel> Start_duel(

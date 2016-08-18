@@ -151,8 +151,8 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
 
                                 int hour = alarmTimePicker.getCurrentHour();
                                 int minute = alarmTimePicker.getCurrentMinute();
-                                Log.i("onClick", "HOUR   = " + hour);
-                                Log.i("onClick", "MINUTE = " + minute);
+                                Log.i("WakeUpActivity", "HOUR   = " + hour);
+                                Log.i("WakeUpActivity", "MINUTE = " + minute);
 
                                 String sHour = "" + hour;
                                 String sMinute = "" + minute;
@@ -171,46 +171,6 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
                                         date.setHours(alarmTimePicker.getCurrentHour());            // устанавливаем данные "Час" с нашего TimePicker-а
                                         date.setMinutes(alarmTimePicker.getCurrentMinute());        // устанавливаем данные "Мин" с нашего TimePicker-а
                                         date.setSeconds(0);*/
-
-                                        long currentTime = System.currentTimeMillis() / 1000;
-                                        Log.i("onClick", "System Time = " + currentTime);
-                                        Date date = new Date(); // given date
-                                        Log.i("onClick", "Prosto Data = " + date);
-                                        Calendar myCalendar = Calendar.getInstance(); // creates a new calendar instance
-                                        Log.i("onClick", "System Data = " + myCalendar);
-                                        myCalendar.setTime(date); // assigns calendar to given date
-                                        Log.i("onClick", "myCalendar.setTime(date)");
-
-                                        long currentMidnight = currentTime - (myCalendar.get(Calendar.HOUR_OF_DAY) * 60 * 60) - (myCalendar.get(Calendar.MINUTE) * 60) - (myCalendar.get(Calendar.SECOND));
-                                        Log.i("WakeUpActivity", "CurrentMidnight = " + currentMidnight + " = 00:00:00");
-
-                                        date.setTime(((minute * 60) + (hour * 60 * 60) + currentMidnight) * 1000);
-                                        Log.i("WakeUpActivity", "WakeUp Time = " + date);
-
-
-                                        myCalendar.setTime(date);                                   // устанавлием календарю время
-                                        myCalendar.set(Calendar.SECOND, 0);                         // устанавлием календарю значение секунд "0" (хотя было бы умнее сделать оффсет на 5-10)
-                                        Log.i("onClick", "myCalendar = " + myCalendar);
-
-                                        long current = Calendar.getInstance().getTimeInMillis();    // берем текущее время глобально
-                                        Log.i("CurrentTime", "in Milliseconds = " + current);
-                                        long userInputTime = myCalendar.getTimeInMillis();          // берем время которое вводит юзер
-                                        Log.i("UserInputTime", "in Milliseconds = " + userInputTime);
-                                        //userInputTime = userInputTime - (userInputTime % 60000);    // удаляем милисекунды от времени
-                                        //Log.i("userInputTime", "without milliseconds " + userInputTime);
-
-                                        if (current > userInputTime) {                              // если текущее больше чем то, что ввел юзер
-                                            myCalendar.add(Calendar.DATE, 1);                       // то ставит wakeup на следующий день
-                                        }
-
-                                        //userInputTime = myCalendar.getTimeInMillis();               // опять берем время которое ввел юзер
-
-                                        Log.i("WakeUpActivity", "Current - UserInputTime = " + (current - userInputTime)); // разница между текущим временем и временем которое ввел юзер
-
-                                        Intent myIntent = new Intent(WakeUpActivity.this, AlarmReceiver.class);
-                                        int id = Integer.parseInt(sHour + sMinute);
-                                        pendingIntent = PendingIntent.getBroadcast(WakeUpActivity.this, id, myIntent, 0);
-                                        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, userInputTime, AlarmManager.INTERVAL_DAY, pendingIntent); // 24*60*60*1000 = 1 day;
 
                                         Toast.makeText(WakeUpActivity.this, "Challenge created", Toast.LENGTH_SHORT).show();
                                         ChallengeController cc = new ChallengeController(WakeUpActivity.this, WakeUpActivity.this, hour, minute, 0);

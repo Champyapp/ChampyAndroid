@@ -45,9 +45,7 @@ public class AlarmReceiverActivity extends Activity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.alarm);
-
-        //RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.alarm);
-        //relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementback));
+        playSound(this, getAlarmUri());
         Glide.with(this).load(R.drawable.wakeupwhite).override(130, 130).into((ImageView) findViewById(R.id.imageViewWakeUpLogo));
         Glide.with(this).load(R.drawable.wakeuptext).override(200, 170).into((ImageView) findViewById(R.id.imageViewWakeUpText));
 
@@ -69,7 +67,8 @@ public class AlarmReceiverActivity extends Activity {
                 return false;
             }
         });
-        playSound(this, getAlarmUri());
+
+        //playSound(this, getAlarmUri());
 
 
         ImageButton buttonWakeUpSurrender = (ImageButton) findViewById(R.id.buttonWakeUpSurrender);
