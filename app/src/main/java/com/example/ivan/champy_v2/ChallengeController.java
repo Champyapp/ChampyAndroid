@@ -30,6 +30,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -73,7 +74,7 @@ public class ChallengeController {
             public void onResponse(Response<com.example.ivan.champy_v2.create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
-                    sendSingleInProgressForSelfOrWakeUp(challengeId);
+                    sendSingleInProgressForSelf(challengeId);
                     Log.i("createNewSIC", "CreateNewChallenge Status: VSE OK"
                             + "\n CHALL_ID    = " + challengeId
                             + "\n TYPE_ID     = " + type_id
@@ -102,11 +103,11 @@ public class ChallengeController {
         if (minute < 10) sMinute = "0" + sMinute;
         long currentTime = System.currentTimeMillis() / 1000;
 
-        Date date = new Date(); // given date
-        Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
-        calendar.setTime(date); // assigns calendar to given date
-        calendar.get(Calendar.HOUR_OF_DAY); // gets hour in 24h format
-        calendar.get(Calendar.HOUR); // gets hour in 12h format
+        Date date = new Date();
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.setTime(date);
+        calendar.get(Calendar.HOUR_OF_DAY);
+        calendar.get(Calendar.HOUR);
         calendar.get(Calendar.MONTH);
 
         long currentMidnight = currentTime - (calendar.get(Calendar.HOUR_OF_DAY) * 60 * 60) - (calendar.get(Calendar.MINUTE) * 60) - (calendar.get(Calendar.SECOND));
@@ -114,9 +115,7 @@ public class ChallengeController {
         final String[] details = new String[21];
         for (int i = 0; i <= 20; i++) {
             details[i] = String.valueOf(minute * 60 + hour * 60 * 60 + i*(24*60*60) + currentMidnight) ;
-            //Log.i("WAKEUP", "DETAILS: NAW FOR = \n" + details[i]);
         }
-        //Log.i("onResponse", "onResponse: BEST LOGI EVER = " + Arrays.toString(details));
         final String myDetails = Arrays.toString(details);
         final String API_URL = "http://46.101.213.24:3007";
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
@@ -131,29 +130,7 @@ public class ChallengeController {
             public void onResponse(Response<com.example.ivan.champy_v2.create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
-                    sendSingleInProgressForSelfOrWakeUp(challengeId);
-
-                    long currentTime = System.currentTimeMillis() / 1000;
-                    Date date = new Date();
-                    Calendar myCalendar = Calendar.getInstance();
-                    long currentMidnight = currentTime - (myCalendar.get(Calendar.HOUR_OF_DAY) * 60 * 60) - (myCalendar.get(Calendar.MINUTE) * 60) - (myCalendar.get(Calendar.SECOND));
-                    date.setTime(((minute * 60) + (hour * 60 * 60) + currentMidnight) * 1000);
-                    myCalendar.setTime(date);
-                    myCalendar.set(Calendar.SECOND, 0);
-                    long current = Calendar.getInstance().getTimeInMillis();
-                    long userInputTime = myCalendar.getTimeInMillis();
-
-                    if (current > userInputTime) {
-                        myCalendar.add(Calendar.DATE, 1);
-                    }
-
-                    Log.i("WakeUpActivity", "Current - UserInputTime = " + (current - userInputTime));
-                    Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
-                    int inProgressIntentId = Integer.parseInt(finalSHour + finalSMinute);
-                    myIntent.putExtra("inProgressId", challengeId);
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, inProgressIntentId, myIntent, 0);
-                    AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, userInputTime, AlarmManager.INTERVAL_DAY, pendingIntent); // 24*60*60*1000 = 1 day;
+                    sendSingleInProgressForWakeUp(challengeId, finalSHour, finalSMinute);
 
                     Log.i("makeNewWakeUpChallenge", "createNewWakeUpChallenge Status: OK"
                             + "\n _ID         = " + challengeId
@@ -205,7 +182,7 @@ public class ChallengeController {
 
 
 
-    public void sendSingleInProgressForSelfOrWakeUp(String challenge) {
+    public void sendSingleInProgressForSelf(String challenge) {
         final SessionManager sessionManager = new SessionManager(context);
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
@@ -224,6 +201,62 @@ public class ChallengeController {
                     String inProgressId = data.getData().get_id();
                     Log.i("sendSingleInProgress", "   onResponse: VSE OK \n   InProgressId = " + inProgressId);
                     generateCardsForMainActivity();
+                } else Log.i("sendSingleInProgress", "Status: FAILED: " + response.code());
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
+    }
+
+    public void sendSingleInProgressForWakeUp(String challenge, final String finalSHour, final String finalSMinute) {
+        final SessionManager sessionManager = new SessionManager(context);
+        HashMap<String, String> user;
+        user = sessionManager.getUserDetails();
+        String token = user.get("token");
+        final String API_URL = "http://46.101.213.24:3007";
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+
+        SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
+
+        Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call = singleinprogress.start_single_in_progress(challenge, token);
+        call.enqueue(new Callback<com.example.ivan.champy_v2.single_inprogress.SingleInProgress>() {
+            @Override
+            public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    com.example.ivan.champy_v2.single_inprogress.SingleInProgress data = response.body();
+                    String inProgressId = data.getData().get_id();
+                    List<Object> senderProgress = response.body().getData().getSenderProgress();
+
+                    long currentTime = System.currentTimeMillis() / 1000;
+                    Date date = new Date();
+                    Calendar myCalendar = Calendar.getInstance();
+                    long currentMidnight = currentTime - (myCalendar.get(Calendar.HOUR_OF_DAY) * 60 * 60) - (myCalendar.get(Calendar.MINUTE) * 60) - (myCalendar.get(Calendar.SECOND));
+                    date.setTime(((minute * 60) + (hour * 60 * 60) + currentMidnight) * 1000);
+                    myCalendar.setTime(date);
+                    myCalendar.set(Calendar.SECOND, 0);
+                    long current = Calendar.getInstance().getTimeInMillis();
+                    long userInputTime = myCalendar.getTimeInMillis();
+
+                    if (current > userInputTime) {
+                        myCalendar.add(Calendar.DATE, 1);
+                    }
+
+                    Log.i("WakeUpActivity", "Current - UserInputTime = " + (current - userInputTime));
+                    Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
+                    int intentId = Integer.parseInt(finalSHour + finalSMinute);
+                    myIntent.putExtra("inProgressId", inProgressId);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, intentId, myIntent, 0);
+                    AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                    //alarmManager.set(AlarmManager.RTC_WAKEUP, userInputTime, pendingIntent);
+                    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, userInputTime, AlarmManager.INTERVAL_DAY, pendingIntent);
+
+                    generateCardsForMainActivity();
+
+                    Log.i("sendSingleInProgress", "     intentId: " + intentId);
+                    Log.i("sendSingleInProgress", "   onResponse: VSE OK \n   InProgressId = " + inProgressId);
                 } else Log.i("sendSingleInProgress", "Status: FAILED: " + response.code());
             }
 
@@ -335,8 +368,16 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                       Log.i("DoneForToday", "           onResponse: VSE OK");
-                } else Log.i("DoneForToday", "           onResponse: FAILED ");
+                    Log.i("DoneForToday", "           onResponse: VSE OK");
+                    String challengeType = response.body().getData().getChallenge().getType();
+
+                    /*if (challengeType.equals("567d51c48322f85870fd931c")) {
+                        // set sender progress +1;
+                    }*/
+
+                } else {
+                    Log.i("DoneForToday", "           onResponse: FAILED ");
+                }
             }
 
             @Override
@@ -365,17 +406,18 @@ public class ChallengeController {
 
                     //если это wake up, то отключаем будильник
                     if (type.equals("567d51c48322f85870fd931c")) {
-                        String s = data.getChallenge().getDetails();
-                        s = s.replace("[", "");
-                        s = s.replace("]", "");
-                        String[] array = s.split(", ");
+                        String challengeDetails = data.getChallenge().getDetails();
+                        challengeDetails = challengeDetails.replace("[", "");
+                        challengeDetails = challengeDetails.replace("]", "");
+                        String[] array = challengeDetails.split(", ");
 
-                        Log.i("GIVE_UP", "OUR ARRAY = " + array[0]);
-                        /*int i = Integer.parseInt(s);
+                        Log.i("GiveUp", "OUR ARRAY = " + Arrays.toString(array));
+                        String i = array[1];
+                        int intentId = Integer.parseInt(i); // TODO: 19.08.2016 need take current 'N'
                         Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, i, myIntent, 0);
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, intentId, myIntent, 0);
                         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                        alarmManager.cancel(pendingIntent);*/
+                        alarmManager.cancel(pendingIntent);
                     }
 
                     refreshCardsForPendingDuel();

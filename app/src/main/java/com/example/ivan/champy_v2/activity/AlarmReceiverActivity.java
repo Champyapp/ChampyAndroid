@@ -44,8 +44,8 @@ public class AlarmReceiverActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final String challengeId = this.getIntent().getStringExtra("finalInProgressChallengeId");
-        Log.i("onCreate", "NEED THIS ID = " + challengeId);
+        final String finalInProgressChallengeId = this.getIntent().getStringExtra("finalInProgressChallengeId");
+        Log.i("onCreate", "Our InProgressId = " + finalInProgressChallengeId);
 
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -71,8 +71,7 @@ public class AlarmReceiverActivity extends Activity {
             public boolean onTouch(View arg0, MotionEvent arg1) {
                 mMediaPlayer.stop();
                 try {
-
-                    cc.doneForToday(challengeId);
+                    cc.doneForToday(finalInProgressChallengeId);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -90,7 +89,7 @@ public class AlarmReceiverActivity extends Activity {
             public boolean onTouch(View v, MotionEvent event) {
                 Toast.makeText(AlarmReceiverActivity.this, "Bla-Bla", Toast.LENGTH_SHORT).show();
                 try {
-                    cc.give_up(challengeId);
+                    cc.give_up(finalInProgressChallengeId);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

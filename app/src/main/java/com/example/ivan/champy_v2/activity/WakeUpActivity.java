@@ -159,11 +159,11 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
                                 OfflineMode offlineMode = new OfflineMode();
                                 if (offlineMode.isConnectedToRemoteAPI(WakeUpActivity.this)) {
                                     if (ok) {
-                                        /*Calendar myCalendar = Calendar.getInstance();               // создаем календарь
-                                        Date date = new Date();                                     // создаем дану
-                                        date.setHours(alarmTimePicker.getCurrentHour());            // устанавливаем данные "Час" с нашего TimePicker-а
-                                        date.setMinutes(alarmTimePicker.getCurrentMinute());        // устанавливаем данные "Мин" с нашего TimePicker-а
-                                        date.setSeconds(0);*/
+//                                        Calendar myCalendar = Calendar.getInstance();               // создаем календарь
+//                                        Date date = new Date();                                     // создаем дану
+//                                        date.setHours(alarmTimePicker.getCurrentHour());            // устанавливаем данные "Час" с нашего TimePicker-а
+//                                        date.setMinutes(alarmTimePicker.getCurrentMinute());        // устанавливаем данные "Мин" с нашего TimePicker-а
+//                                        date.setSeconds(0);
                                         Toast.makeText(WakeUpActivity.this, "Challenge created", Toast.LENGTH_SHORT).show();
                                         ChallengeController cc = new ChallengeController(WakeUpActivity.this, WakeUpActivity.this, hour, minute, 0);
                                         cc.createNewWakeUpChallenge("Wake Up", 21, type_id);

@@ -228,6 +228,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
             } while (c.moveToNext());
         }
         c.close();
+
         return ok;
     }
 
