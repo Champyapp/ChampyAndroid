@@ -75,6 +75,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("create table myChallenges("
                 + "id integer primary key autoincrement,"
                 + "name text,"
+                + "challengeName text DEFAULT 'challenge',"
                 + "description text,"
                 + "duration text,"
                 + "challenge_id text,"

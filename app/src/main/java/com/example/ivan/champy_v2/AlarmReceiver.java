@@ -14,6 +14,9 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
     public void onReceive(final Context context, Intent intent) {
 
         String challengeId = intent.getStringExtra("inProgressId");
+
+//        String intentId = intent.getStringExtra("intentId");
+//        Log.i("onReceive", "intentId: " + intentId);
 //        AlarmReceiverActivity alarmReceiverActivity = new AlarmReceiverActivity();
 //        alarmReceiverActivity.challengeId = challengeId;
         Intent newIntent = new Intent();

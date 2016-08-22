@@ -153,6 +153,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
                                 if (hour < 10)   sHour   = "0" + sHour;
                                 if (minute < 10) sMinute = "0" + sMinute;
 
+                                String userInputTime = sHour + ":" + sMinute;
                                 //Log.i("stat", "Give up: " + sHour + " " + sMinute);
 
                                 boolean ok = check(sHour + sMinute);

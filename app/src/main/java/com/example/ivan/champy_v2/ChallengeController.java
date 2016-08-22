@@ -24,6 +24,8 @@ import com.example.ivan.champy_v2.model.active_in_progress.Sender;
 import com.example.ivan.champy_v2.single_inprogress.Data;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -102,7 +104,7 @@ public class ChallengeController {
         if (hour < 10) sHour = "0" + sHour;
         if (minute < 10) sMinute = "0" + sMinute;
         long currentTime = System.currentTimeMillis() / 1000;
-
+        String wakeUpName = "Wake up at "+ sHour +":"+ sMinute +" during this period";
         Date date = new Date();
         Calendar calendar = GregorianCalendar.getInstance();
         calendar.setTime(date);
@@ -122,7 +124,7 @@ public class ChallengeController {
 
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
 
-        Call<com.example.ivan.champy_v2.create_challenge.CreateChallenge> call = createChallenge.createChallenge("User_Challenge", type_id, description, myDetails, duration, token);
+        Call<com.example.ivan.champy_v2.create_challenge.CreateChallenge> call = createChallenge.createChallenge(wakeUpName, type_id, description, myDetails, duration, token);
         final String finalSHour = sHour;
         final String finalSMinute = sMinute;
         call.enqueue(new Callback<com.example.ivan.champy_v2.create_challenge.CreateChallenge>() {
@@ -245,17 +247,22 @@ public class ChallengeController {
                     }
 
                     Log.i("WakeUpActivity", "Current - UserInputTime = " + (current - userInputTime));
+
                     Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
+
                     int intentId = Integer.parseInt(finalSHour + finalSMinute);
+
+                    //myIntent.putExtra("intentId", intentId);
                     myIntent.putExtra("inProgressId", inProgressId);
+
+
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, intentId, myIntent, 0);
                     AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                    //alarmManager.set(AlarmManager.RTC_WAKEUP, userInputTime, pendingIntent);
                     alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, userInputTime, AlarmManager.INTERVAL_DAY, pendingIntent);
 
                     generateCardsForMainActivity();
 
-                    Log.i("sendSingleInProgress", "     intentId: " + intentId);
+                    Log.i("sendSingleInProgress", "   Intent__Id: " + intentId);
                     Log.i("sendSingleInProgress", "   onResponse: VSE OK \n   InProgressId = " + inProgressId);
                 } else Log.i("sendSingleInProgress", "Status: FAILED: " + response.code());
             }
@@ -525,7 +532,12 @@ public class ChallengeController {
                     List<Datum> data = response.body().getData();
                     for (int i = 0; i < data.size(); i++) {
                         com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
+
                         Challenge challenge = datum.getChallenge();
+
+                        String challenge_name = challenge.getName();
+
+                        Log.i("onResponse", "onResponse: " + challenge_name);
                         String challenge_description = challenge.getDescription(); // bla-bla
                         String challenge_detail = challenge.getDetails(); // bla-bla + " during this period"
                         String challenge_status = datum.getStatus();      // active or not
@@ -540,16 +552,13 @@ public class ChallengeController {
 
                         if (challenge_description.equals("Wake Up")) {
                             cv.put("name", "Wake Up");
-
-                            // set up wake up here...
-
-
+                        // set up wake up here..
                         } else if (challenge_type.equals("567d51c48322f85870fd931a")) {
                             cv.put("name", "Self-Improvement");
                         } else if (challenge_type.equals("567d51c48322f85870fd931b")) {
                             cv.put("name", "Duel");
                         }
-
+                        cv.put("challengeName", challenge_name);
                         cv.put("description", challenge_detail);
                         cv.put("duration", duration);
                         cv.put("challenge_id", challenge_id);

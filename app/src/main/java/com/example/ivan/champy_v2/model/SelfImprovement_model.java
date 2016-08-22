@@ -26,6 +26,24 @@ public class SelfImprovement_model {
     String updated;
     String status;
     String type;
+    String name;
+    String challengeName;
+
+    public String getChallengeName() {
+        return challengeName;
+    }
+
+    public void setChallengeName(String challengeName) {
+        this.challengeName = challengeName;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getUpdated() {
         return updated;
@@ -66,13 +84,14 @@ public class SelfImprovement_model {
     }
 
 
-    public SelfImprovement_model( String mGoal, String mDays, String mType, String mid ,String mStatus, String mUpdated) {
+    public SelfImprovement_model( String mGoal, String mDays, String mType, String mid ,String mStatus, String mUpdated, String mChallengeName) {
         this.goal = mGoal;
         this.days = mDays;
         this.type = mType;
         this.id = mid;
         this.status = mStatus;
         this.updated = mUpdated;
+        this.challengeName = mChallengeName;
     }
 
     //генерирует InProgress в History и с этими же данными генерирует карточки для MainActivity
@@ -90,7 +109,8 @@ public class SelfImprovement_model {
             int colchallenge_id = c.getColumnIndex("challenge_id");
             int status = c.getColumnIndex("status");
             int updated = c.getColumnIndex("updated");
-            Log.i("stat", "Statuskwo: o="+o);
+            int challengeName = c.getColumnIndex("challengeName");
+            Log.i("SelfImprovement_Model", "Cards Counter =" + o);
             do {
                 if (c.getString(status).equals("started")) arrayList.add (new SelfImprovement_model(
                         c.getString(coldescription),
@@ -98,7 +118,8 @@ public class SelfImprovement_model {
                         c.getString(nameColIndex),
                         c.getString(colchallenge_id),
                         "started",
-                        c.getString(updated)));
+                        c.getString(updated),
+                        c.getString(challengeName)));
             } while (c.moveToNext());
         }
         c.close();
@@ -121,6 +142,7 @@ public class SelfImprovement_model {
             int colchallenge_id = c.getColumnIndex("challenge_id");
             int status = c.getColumnIndex("status");
             int updated = c.getColumnIndex("updated");
+            int challengeName = c.getColumnIndex("challengeName");
             Log.i("GenerateWins", "CursorCounter: " + o);
             do {
                 if (c.getString(status).equals("finished")) {
@@ -131,7 +153,8 @@ public class SelfImprovement_model {
                                 c.getString(nameColIndex),
                                 c.getString(colchallenge_id),
                                 "finished",
-                                c.getString(updated)));
+                                c.getString(updated),
+                                c.getString(challengeName)));
                     }
                 }
             } while (c.moveToNext());
@@ -155,6 +178,7 @@ public class SelfImprovement_model {
             int colchallenge_id = c.getColumnIndex("challenge_id");
             int status = c.getColumnIndex("status");
             int updated = c.getColumnIndex("updated");
+            int challengeName = c.getColumnIndex("challengeName");
             Log.i("generateFailed", "MyChallengesCursorCounter = " + o);
             do {
                 if (c.getString(status).equals("failedBySender")) {
@@ -164,7 +188,8 @@ public class SelfImprovement_model {
                             c.getString(nameColIndex),
                             c.getString(colchallenge_id),
                             "failed",
-                            c.getString(updated)));
+                            c.getString(updated),
+                            c.getString(challengeName)));
                 }
             } while (c.moveToNext());
         }

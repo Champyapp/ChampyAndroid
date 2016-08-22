@@ -109,17 +109,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_gradient));
         setSupportActionBar(toolbar);
 
-//        alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
-//        Intent intent = new Intent(this, AlarmSchedule.class);
-//        intent.putExtra("alarm", "reset");
-//
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.set(Calendar.HOUR_OF_DAY, Calendar.getInstance().get(Calendar.HOUR_OF_DAY));  // було 18 ?
-//        calendar.set(Calendar.MINUTE, Calendar.getInstance().get(Calendar.MINUTE));        //  було 6 ?
-//        calendar.set(Calendar.SECOND, 0);
-//        Log.i("onCreate", "calender. getTimeInMillis = " + calendar.getTimeInMillis());
-//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmSchedule.class);
+        intent.putExtra("alarm", "reset");
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, Calendar.getInstance().get(Calendar.HOUR_OF_DAY));  // було 18 ?
+        calendar.set(Calendar.MINUTE, Calendar.getInstance().get(Calendar.MINUTE));        //  було 6 ?
+        calendar.set(Calendar.SECOND, 0);
+        //Log.i("MainActivity", "calender. getTimeInMillis = " + calendar.getTimeInMillis());
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
 
         RelativeLayout cards = (RelativeLayout)findViewById(R.id.cards);
         CustomAdapter adapter = new CustomAdapter(this, SelfImprovement_model.generate(this));
@@ -287,9 +287,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (path_to_pic == null) {
             Log.i("GetUserPhoto", "User Photo == NULL");
-            Intent intent = getIntent();
-            path_to_pic = intent.getExtras().getString("path_to_pic");
-            name = intent.getExtras().getString("name");
+            Intent fromLogin = getIntent();
+            path_to_pic = fromLogin.getExtras().getString("path_to_pic");
+            name = fromLogin.getExtras().getString("name");
         }
 
         ImageView background     = (ImageView)headerLayout.findViewById(R.id.slide_background);
@@ -809,11 +809,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             if (y > 10) y = 10;
 
+            //Intent takeTime = new Intent();
+            //String wakeUpTime = takeTime.getStringExtra("wakeUpTime");
+            //final String finalInProgressChallengeId = this.getIntent().getStringExtra("finalInProgressChallengeId");
+
+            //String extras = getIntent().getStringExtra("wakeUpTime");
+            //Log.i("getView", "WakeUpTime = " + extras);
             TextView tvSelfImprovement  = (TextView) tempView.findViewById(R.id.textViewSIC);
             tvSelfImprovement.setText(item.getType());
-            String s = item.getGoal();
+            String itemGoal = item.getGoal();
             ImageView imageView = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
-
+            Log.i("getView asddasdas", "getView: " + item.getGoal());
 //            if (item.getGoal().equals("Wake Up")) {
 //                imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeup_white));
 //                s = "Wake up at " + s.substring(0, 2) + ":" + s.substring(2, 4) + " during this period";
@@ -826,8 +832,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             switch (item.getType()) {
                 case "Wake Up":
                     imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeup_white));
-                    //s = "Wake up at " + s.substring(0, 2) + ":" + s.substring(2, 4) + " during this period";
-                    s = "Wake up at " + "__:__" + " during this period";
+
+                    //itemGoal = "Wake up at " + itemGoal + " during this period";
+
+                    itemGoal = item.getChallengeName(); // "Wake up at " + "__:__" + " during this period";
+//                    itemGoal = item.get
                     break;
                 case "Duel":
                     imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.duel_white));
@@ -841,7 +850,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             tvSelfImprovement.setTypeface(typeface);
 
             TextView tvChallengeName = (TextView) tempView.findViewById(R.id.textViewChallengeName);
-            tvChallengeName.setText(s);
+            tvChallengeName.setText(itemGoal);
             tvChallengeName.setTextSize(y);
 
             TextView tvDuration = (TextView) tempView.findViewById(R.id.textViewDuration);
