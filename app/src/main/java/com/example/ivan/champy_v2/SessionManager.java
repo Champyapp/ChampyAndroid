@@ -28,6 +28,7 @@ public class SessionManager {
     public static final String KEY_EMAIL = "email";
     public static final String KEY_ID    = "facebook_id";
     public static final String KEY_PATH  = "path_to_pic";
+    public static final String KEY_GCM  = "gcm";
 
     // Constructor
     public SessionManager(Context context){
@@ -39,7 +40,7 @@ public class SessionManager {
 
     //Create login session
     public void createUserLoginSession(String name, String email, String facebook_id, String path_to_pic, String token, String id,
-                                       String pushN, String newChallReq, String acceptedYour, String challengeEnd, String updateDB) {
+                                       String pushN, String newChallReq, String acceptedYour, String challengeEnd, String updateDB, String gcm) {
         // Storing login value as TRUE
         editor.putBoolean(IS_USER_LOGIN, true);
 
@@ -66,6 +67,8 @@ public class SessionManager {
         editor.putString("challengeEnd", challengeEnd);
 
         editor.putString("updateDB", updateDB);
+
+        editor.putString(KEY_GCM, gcm);
 
         Log.i("YO", "LOGINED");
 
@@ -108,6 +111,11 @@ public class SessionManager {
         editor.commit();
     }
 
+    public String getFacebookId() {
+        String s = pref.getString("facebook_id", null);
+        return s;
+    }
+
     public String getRefreshPending() {
         String s = pref.getString("pendingRefresh", null);
         return s;
@@ -130,6 +138,11 @@ public class SessionManager {
 
     public String getRefreshFriends() {
         String s = pref.getString("friendsRefresh", null);
+        return s;
+    }
+
+    public String getGCM() {
+        String s = pref.getString(KEY_GCM, null);
         return s;
     }
 

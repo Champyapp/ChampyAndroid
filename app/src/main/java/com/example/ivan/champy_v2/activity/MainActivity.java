@@ -22,6 +22,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemClock;
+import android.provider.SyncStateContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -51,12 +52,15 @@ import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.adapter.CustomPagerAdapter;
 import com.example.ivan.champy_v2.data.DBHelper;
+import com.example.ivan.champy_v2.helper.AppSync;
 import com.example.ivan.champy_v2.helper.CHBuildAnim;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.interfaces.Update_user;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
 import com.example.ivan.champy_v2.model.User.User;
 import com.facebook.FacebookSdk;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.iid.InstanceID;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 import com.squareup.okhttp.MediaType;
@@ -69,6 +73,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -80,6 +85,11 @@ import retrofit.Callback;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
+import com.github.nkzawa.emitter.Emitter;
+
+import org.json.JSONObject;
 
 import static java.lang.Math.round;
 
@@ -95,11 +105,100 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public Activity activity;
     private CustomPagerBase pager;
     AlarmManager alarmManager;
+    AppSync sync;
+    HashMap<String,String> user;
 
+    private Socket mSocket;
+    {
+        try {
+            mSocket = IO.socket("http://46.101.213.24:3007");
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Emitter.Listener onConnect = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            final SessionManager sessionManager = new SessionManager(getApplicationContext());
+            HashMap<String, String> user;
+            user = sessionManager.getUserDetails();
+            String token = user.get("token");
+            mSocket.emit("ready", token);
+            Log.i("call", "call: minden fasza");
+        }
+    };
+
+    private Emitter.Listener onConnected = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+
+            Log.i("call", "call: connected okay");
+        }
+    };
+
+    private Emitter.Listener onNewRelationship = new Emitter.Listener() {
+
+        @Override
+        public void call(final Object... args) {
+
+            Log.i("call", "new friend request");
+        }
+    };
+
+    private Emitter.Listener onNewChallenge = new Emitter.Listener()  {
+
+        @Override
+        public void call(final Object... args) {
+            /*String userId = user.get("id");
+            Log.i("call", "call: new challenge request for duel 1");
+            try {
+
+
+                //Log.i("call", "call: " + facebookId);
+
+                sync.getInProgressChallenges(userId);
+                Log.i("call", "call: new challenge request for duel2");
+            } catch (Exception e) {
+                Log.i("call", "call: ERROR: " + e);
+            }*/
+
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /*try {
+            SessionManager session = new SessionManager(getApplicationContext());
+            this.user = session.getUserDetails();
+            String userId = user.get("id");
+            String facebookId = session.getFacebookId();
+            String gcm = session.getGCM();
+            this.sync = new AppSync(facebookId, gcm);
+        } catch (Exception e) {
+            Log.i("onCreate", "Error in on create: " + e);
+        }*/
+        mSocket.on("connect", onConnect);
+        mSocket.on("connected", onConnected);
+        mSocket.on("Relationship:new", onNewRelationship);
+//        mSocket.on("Relationship:created", onNewRelationship);
+//        mSocket.on("Relationship:removed", onNewRelationship);
+//        mSocket.on("Relationship:accepted", onNewRelationship);
+//        mSocket.on("Relationship:new:removed", onNewRelationship);
+//        mSocket.on("Relationship:new:accepted", onNewRelationship);
+
+        mSocket.on("InProgressChallenge:new", onNewChallenge);
+//        mSocket.on("InProgressChallenge:accepted", onNewRelationship);
+//        mSocket.on("InProgressChallenge:failed", onNewRelationship);
+//        mSocket.on("InProgressChallenge:won", onNewRelationship);
+//        mSocket.on("InProgressChallenge:checked", onNewRelationship);
+//        mSocket.on("InProgressChallenge:updated", onNewRelationship);
+
+
+        mSocket.connect();
+
         SessionManager sessionManager = new SessionManager(this);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_main);
@@ -115,10 +214,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, Calendar.getInstance().get(Calendar.HOUR_OF_DAY));  // було 18 ?
-        calendar.set(Calendar.MINUTE, Calendar.getInstance().get(Calendar.MINUTE));        //  було 6 ?
+        calendar.set(Calendar.HOUR_OF_DAY, Calendar.getInstance().get(Calendar.HOUR_OF_DAY));  // було 18
+        calendar.set(Calendar.MINUTE, Calendar.getInstance().get(Calendar.MINUTE));        //  було 6
         calendar.set(Calendar.SECOND, 0);
-        //Log.i("MainActivity", "calender. getTimeInMillis = " + calendar.getTimeInMillis());
+
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
 
         RelativeLayout cards = (RelativeLayout)findViewById(R.id.cards);
@@ -292,9 +391,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             name = fromLogin.getExtras().getString("name");
         }
 
-        ImageView background     = (ImageView)headerLayout.findViewById(R.id.slide_background);
-        ImageView profile_image       = (ImageView)headerLayout.findViewById(R.id.profile_image);
-        TextView tvUserName           = (TextView)headerLayout.findViewById(R.id.tvUserName);
+        ImageView background    = (ImageView)headerLayout.findViewById(R.id.slide_background);
+        ImageView profile_image = (ImageView)headerLayout.findViewById(R.id.profile_image);
+        TextView tvUserName     = (TextView)headerLayout.findViewById(R.id.tvUserName);
         tvUserName.setText(name);
 
         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
@@ -323,7 +422,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onStart();
         CHBuildAnim chBuildAnim = new CHBuildAnim();
         chBuildAnim.buildAnim(this);
-        //buildAnim(this);
     }
 
     @Override
@@ -764,10 +862,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             ImageView cardImage = (ImageView)tempView.findViewById(R.id.cardImage);
             int x = round(getWindowManager().getDefaultDisplay().getWidth() / 100);
             int y = round(getWindowManager().getDefaultDisplay().getHeight() / 100);
-            cardImage.getLayoutParams().width = x*65;
+            cardImage.getLayoutParams().width  = x*65;
             cardImage.getLayoutParams().height = y*50;
+            if (y > 10) y = 10;
 
-            // cardImage.setImageDrawable(RecyclerView_Activity.this.getResources().getDrawable(R.drawable.card_image));
+            TextView tvSelfImprovement  = (TextView) tempView.findViewById(R.id.textViewSIC);
+            tvSelfImprovement.setText(item.getType());
+            String itemGoal = item.getGoal();
+            ImageView imageView = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
+            //Log.i("getView asddasdas", "getView: " + item.getGoal());
+
+            switch (item.getType()) {
+                case "Wake Up":
+                    imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeup_white));
+                    itemGoal = item.getChallengeName(); // "Wake up at " + "__:__" + " during this period";
+                    break;
+                case "Duel":
+                    imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.duel_white));
+                    break;
+                case "Self-Improvement":
+                    imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.self_white));
+                    break;
+            }
+            tvSelfImprovement.setTextSize((float)(y*1.3));
+            Typeface typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
+            tvSelfImprovement.setTypeface(typeface);
+
+            TextView tvChallengeName = (TextView) tempView.findViewById(R.id.textViewChallengeName);
+            tvChallengeName.setText(itemGoal);
+            tvChallengeName.setTextSize(y);
+
+            TextView tvDuration = (TextView) tempView.findViewById(R.id.textViewDuration);
+            tvDuration.setText(item.getDays() + " DAYS TO GO");
+            tvDuration.setTextSize(y*2);
+
+            TextView tvLevelAndPoints = (TextView) tempView.findViewById(R.id.textViewLevelAndPoints);
+            tvLevelAndPoints.setTextSize(y);
 
             Button buttonGiveUp = (Button) tempView.findViewById(R.id.buttonGiveUp);
             buttonGiveUp.getLayoutParams().width = x*10;
@@ -807,58 +937,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             });
 
-            if (y > 10) y = 10;
-
-            //Intent takeTime = new Intent();
-            //String wakeUpTime = takeTime.getStringExtra("wakeUpTime");
-            //final String finalInProgressChallengeId = this.getIntent().getStringExtra("finalInProgressChallengeId");
-
-            //String extras = getIntent().getStringExtra("wakeUpTime");
-            //Log.i("getView", "WakeUpTime = " + extras);
-            TextView tvSelfImprovement  = (TextView) tempView.findViewById(R.id.textViewSIC);
-            tvSelfImprovement.setText(item.getType());
-            String itemGoal = item.getGoal();
-            ImageView imageView = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
-            Log.i("getView asddasdas", "getView: " + item.getGoal());
-//            if (item.getGoal().equals("Wake Up")) {
-//                imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeup_white));
-//                s = "Wake up at " + s.substring(0, 2) + ":" + s.substring(2, 4) + " during this period";
-//            } else if(item.getType().equals("567d51c48322f85870fd931a")) {
-//                imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.self_white));
-//            } else if(item.getType().equals("567d51c48322f85870fd931b")) {
-//                imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.duel_white));
-//            }
-
-            switch (item.getType()) {
-                case "Wake Up":
-                    imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeup_white));
-
-                    //itemGoal = "Wake up at " + itemGoal + " during this period";
-
-                    itemGoal = item.getChallengeName(); // "Wake up at " + "__:__" + " during this period";
-//                    itemGoal = item.get
-                    break;
-                case "Duel":
-                    imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.duel_white));
-                    break;
-                case "Self-Improvement":
-                    imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.self_white));
-                    break;
-            }
-            tvSelfImprovement.setTextSize((float)(y*1.3));
-            Typeface typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
-            tvSelfImprovement.setTypeface(typeface);
-
-            TextView tvChallengeName = (TextView) tempView.findViewById(R.id.textViewChallengeName);
-            tvChallengeName.setText(itemGoal);
-            tvChallengeName.setTextSize(y);
-
-            TextView tvDuration = (TextView) tempView.findViewById(R.id.textViewDuration);
-            tvDuration.setText(item.getDays() + " DAYS TO GO");
-            tvDuration.setTextSize(y*2);
-
-            TextView tvLevelAndPoints = (TextView) tempView.findViewById(R.id.textViewLevelAndPoints);
-            tvLevelAndPoints.setTextSize(y);
 
             Button buttonDoneForToday = (Button) tempView.findViewById(R.id.buttonDoneForToday);
             buttonDoneForToday.getLayoutParams().width = x*10;

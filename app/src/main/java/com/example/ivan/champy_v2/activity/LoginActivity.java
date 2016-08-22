@@ -2,19 +2,13 @@ package com.example.ivan.champy_v2.activity;
 
 import android.app.Activity;
 import android.content.ContentValues;
-import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
@@ -25,24 +19,17 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.debug.hv.ViewServer;
-import com.example.ivan.champy_v2.Blur;
-import com.example.ivan.champy_v2.data.DBHelper;
-import com.example.ivan.champy_v2.helper.CHImageModule;
-import com.example.ivan.champy_v2.helper.CHInitializeLogin;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
-import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
+import com.example.ivan.champy_v2.data.DBHelper;
+import com.example.ivan.champy_v2.helper.AppSync;
+import com.example.ivan.champy_v2.helper.CHImageModule;
+import com.example.ivan.champy_v2.helper.CHInitializeLogin;
 import com.example.ivan.champy_v2.interfaces.NewUser;
-import com.example.ivan.champy_v2.interfaces.Update_user;
-import com.example.ivan.champy_v2.model.Friend.Datum;
-import com.example.ivan.champy_v2.model.Friend.Friend;
-import com.example.ivan.champy_v2.model.Friend.Friend_;
-import com.example.ivan.champy_v2.model.Friend.Owner;
 import com.example.ivan.champy_v2.model.User.Data;
 import com.example.ivan.champy_v2.model.User.LoginData;
 import com.example.ivan.champy_v2.model.User.User;
-import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -57,26 +44,19 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.RequestBody;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -85,8 +65,6 @@ import retrofit.Callback;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
-
-import static java.lang.Math.round;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -284,7 +262,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    private void Register_User(String facebookId, String name, String email, String gcm) throws JSONException {
+    private void Register_User(String facebookId, String name, String email, final String gcm) throws JSONException {
         final String API_URL = "http://46.101.213.24:3007";
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(API_URL)
@@ -327,7 +305,7 @@ public class LoginActivity extends AppCompatActivity {
                         SessionManager sessionManager = new SessionManager(getApplicationContext());
                         sessionManager.setRefreshPending("false");
                         sessionManager.setRefreshFriends("false");
-                        sessionManager.createUserLoginSession(user_name, email, fb_id, path_to_pic, jwtString, id, pushN, newChallReq, acceptedYour, challegeEnd, "true");
+                        sessionManager.createUserLoginSession(user_name, email, fb_id, path_to_pic, jwtString, id, pushN, newChallReq, acceptedYour, challegeEnd, "true", gcm);
                         sessionManager.setChampyOptions(
                                 data.getAllChallengesCount().toString(),
                                 data.getSuccessChallenges().toString(),
@@ -367,217 +345,34 @@ public class LoginActivity extends AppCompatActivity {
     public void getUserData(final String fb_id, final String path_to_pic, String gcm) throws JSONException {
         final String API_URL = "http://46.101.213.24:3007";
 
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("facebookId", fb_id);
-        jsonObject.put("AndroidOS", gcm);
-        String string = jsonObject.toString();
-        final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
-        Log.d("GetUserData", "TOKEN: "+jwtString);
-        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        AppSync sync = new AppSync(fb_id, gcm);
 
-        NewUser newUser = retrofit.create(NewUser.class);
+        sync.getUserProfile();
 
-        Call<User> callGetUserInfo = newUser.getUserInfo(jwtString);
-        callGetUserInfo.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Response<User> response, Retrofit retrofit) {
-                User decodedResponse = response.body();
-                if (response.isSuccess()) {
-                    Data data = decodedResponse.getData();
-                    String email = data.getEmail();
-                    final String user_name = data.getName();
-                    final String id = data.get_id();
 
-                    String pushN = data.getProfileOptions().getPushNotifications().toString();
-                    String newChallReq = data.getProfileOptions().getNewChallengeRequests().toString();
-                    String acceptedYour = data.getProfileOptions().getAcceptedYourChallenge().toString();
-                    String challegeEnd = data.getProfileOptions().getChallengeEnd().toString();
-                    Log.i("GetUserData", "UserId = " + id + "\nFacebook_Id = " + fb_id);
+        SessionManager session = new SessionManager(getApplicationContext());
+        HashMap<String, String> user;
+        String userId = session.getUserDetails().get("id");
 
-                    SessionManager sessionManager = new SessionManager(getApplicationContext());
-                    sessionManager.setRefreshPending("false");
-                    sessionManager.setRefreshFriends("true");
-                    sessionManager.createUserLoginSession(user_name, email, fb_id, path_to_pic, jwtString, id, pushN, newChallReq, acceptedYour, challegeEnd, "true");
-                    sessionManager.setChampyOptions(
-                            data.getAllChallengesCount().toString(),
-                            data.getSuccessChallenges().toString(),
-                            data.getScore().toString(),
-                            data.getLevel().getNumber().toString()
-                    );
-                    DBHelper dbHelper = new DBHelper(LoginActivity.this);
-                    final SQLiteDatabase db = dbHelper.getWritableDatabase();
-                    int clearCount = db.delete("pending", null, null);
-                    final ContentValues cv = new ContentValues();
-                    final String  user_id = id;
 
-                    com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
+        sync.getInProgressChallenges(userId);
 
-                    Call<com.example.ivan.champy_v2.model.Friend.Friend> callGetUserFriends = friends.getUserFriends(id, jwtString);
-                    callGetUserFriends.enqueue(new Callback<Friend>() {
-                        @Override
-                        public void onResponse(Response<Friend> response, Retrofit retrofit) {
-                            if (response.isSuccess()){
-                                List<Datum> data = response.body().getData();
-                                Log.d(TAG, "Status: " + data.size());
+//        final String API_URL = "http://46.101.213.24:3007";
 
-                                for (int i=0; i<data.size(); i++) {
-                                    Datum datum = data.get(i);
-                                    Log.d(TAG, "Status: " + response.body().toString());
+//        JSONObject jsonObject = new JSONObject();
+//        jsonObject.put("facebookId", fb_id);
+//        jsonObject.put("AndroidOS", gcm);
+//        String string = jsonObject.toString();
+//        final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
+//
 
-                                    if ((datum.getFriend() != null) && (datum.getOwner() != null)) {
-                                        if (datum.getStatus().toString().equals("false")) {
-                                            Log.d(TAG, "Status: "+datum.getOwner().get_id());
-                                            if (datum.getOwner().get_id().equals(user_id)) {
-                                                Friend_ friend = datum.getFriend();
-                                                //Log.d(TAG, "Status: "+friend);
-                                                if (friend.getName() != null) {
-                                                    cv.put("name", friend.getName());
-                                                }
-                                                //Log.d(TAG, "Status: "+friend.getPhoto());
-                                                if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
-                                                else cv.put("photo", "");
 
-                                                Log.d(TAG, "Friend");
-                                                cv.put("user_id", friend.getId());
-                                                cv.put("owner", "false");
-                                                db.insert("pending", null, cv);}
 
-                                            else if (datum.getStatus().toString().equals("true")) {
-                                                Friend_ friend = datum.getFriend();
-                                                Log.d(TAG, "Status: "+friend);
 
-                                                if (friend.getName() != null) {
-                                                    cv.put("name", friend.getName());
-                                                }
-                                                Log.d(TAG, "Status: "+friend.getPhoto());
-                                                if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
-                                                else cv.put("photo", "");
-                                                //Log.d(TAG, "Friend");
-                                                cv.put("user_id", friend.getId());
-                                                cv.put("owner", "false");
-                                                db.insert("friends", null, cv);
-                                            }
-                                            else {
-                                                Owner friend = datum.getOwner();
-                                                cv.put("name", friend.getName());
-                                                if (friend.getPhoto() != null) {
-                                                    cv.put("photo", friend.getPhoto().getMedium());
-                                                }
-                                                else {
-                                                    cv.put("photo", "");
-                                                }
-                                                Log.d(TAG, "Owner");
-                                                cv.put("user_id", friend.get_id());
-                                                cv.put("owner", "true");
-                                                //db.insert("pending", null, cv); //comment this line if something goes wrong
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        @Override
-                        public void onFailure(Throwable t) {
-                        }
-                    });
 
-                    clearCount = db.delete("myChallenges", null, null);
-                    ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
-                    final long unixTime = System.currentTimeMillis() / 1000L;
-                    String update = "0"; //1457019726
-                    Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> callActiveInProgress = activeInProgress.getActiveInProgress(id, update, jwtString);
-                    try {
-                        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-                        StrictMode.setThreadPolicy(policy);
-                        List<com.example.ivan.champy_v2.model.active_in_progress.Datum> list  = callActiveInProgress.execute().body().getData();
-                        for (int i = 0; i < list.size(); i++) {
-                            com.example.ivan.champy_v2.model.active_in_progress.Datum datum = list.get(i);
-                            Challenge challenge = datum.getChallenge();
-                            String challenge_description = challenge.getDescription(); // bla-bla
-                            String challenge_detail = challenge.getDetails(); // $bla-bla + " during this period"
-                            String challenge_status = datum.getStatus();      // active or not
-                            String challenge_id = datum.get_id();             // us magic id
-                            String challenge_type = challenge.getType();      // self, duel or wake up
-                            String duration = "";
-                            if (datum.getEnd() != null) {
-                                int end = datum.getEnd();
-                                int days = round((end - unixTime) / 86400);
-                                duration = "" + days;
-                            }
 
-                            if (challenge_description.equals("Wake Up")) {
-                                cv.put("name", "Wake Up");
-                            } else if (challenge_type.equals("567d51c48322f85870fd931a")) {
-                                cv.put("name", "Self-Improvement");
-                            } else if (challenge_type.equals("567d51c48322f85870fd931b")) {
-                                cv.put("name", "Duel");
-                            }
 
-                            cv.put("description", challenge_detail);
-                            cv.put("duration", duration);
-                            cv.put("challenge_id", challenge_id);
-                            cv.put("status", challenge_status);
-                            db.insert("myChallenges", null, cv);
-                        }
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                  /*  call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
-                        @Override
-                        public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
-                            if (response.isSuccess()) {
-                                List<com.example.ivan.champy_v2.model.active_in_progress.Datum> data = response.body().getData();
-                                for (int i = 0; i < data.size(); i++) {
-                                    com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
-                                    Challenge challenge = datum.getChallenge();
-                                    cv.clear();
-                                    String desctiption = challenge.getDescription();
-                                    int end = datum.getEnd();
-                                    int days = round((end - unixTime) / 86400);
-                                    String duration = "" + days;
-                                    String challenge_id = challenge.get_id();
-                                    cv.put("name", "Self Improvement");
-                                    cv.put("description", desctiption);
-                                    cv.put("duration", duration);
-                                    cv.put("challenge_id", challenge_id);
-                                    db.insert("myChallenges", null, cv);
-                                    Log.d(TAG, "Challenge: "+desctiption);
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Throwable t) {
-                        }
-                    });*/
-                    String api_path = null;
-                    if (data.getPhoto() != null){
-                        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
-                        File file = new File(path, "profile.jpg");
-                        if (!file.exists()){
-                            com.example.ivan.champy_v2.model.User.Photo photo = data.getPhoto();
-                            api_path = API_URL + photo.getLarge();
-                            Log.d("data.getPhoto()", "Image: " + api_path);
-                        }
-                    }
-
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    if (api_path == null) {
-                        intent.putExtra("path_to_pic", path_to_pic);
-                    } else {
-                        intent.putExtra("path_to_pic", api_path);
-                        sessionManager.change_avatar(api_path);
-                    }
-                    intent.putExtra("name", user_name) ;
-                    startActivity(intent);
-                } else Log.d("TAG", "Status: FAILED = " + decodedResponse);
-            }
-            @Override
-            public void onFailure(Throwable t) {
-                Log.d(TAG, "VSE huynya");
-            }
-        });
 
     }
 
