@@ -68,7 +68,6 @@ import retrofit.Retrofit;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static final String TAG = "myLogs";
     private boolean ok;
     private AccessTokenTracker mTokenTracker;
     private ProfileTracker mProfileTracker;
@@ -160,8 +159,6 @@ public class LoginActivity extends AppCompatActivity {
                                         } catch (MalformedURLException e) {
                                             e.printStackTrace();
                                         }
-                                        Log.i("LoginActivity", "PhotoPath = " + path_to_pic);
-
                                         new Thread(new Runnable() {
                                             public void run() {
                                                 try {
@@ -170,19 +167,21 @@ public class LoginActivity extends AppCompatActivity {
                                                     token_android = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
                                                             GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
 
-                                                    Log.d("LoginActivity", "GCM Registration Token: " + token_android);
+                                                    Log.i("LoginActivity", "GCM Registration Token: " + token_android);
                                                     JSONObject manJson = new JSONObject();
                                                     manJson.put("token", token_android);
                                                     manJson.put("timeZone", "-2");
 
                                                     String json = manJson.toString();
-                                                    Log.i("LOGIN DATA", "FB_ID = " + fb_id + "\nPATH_TO_PIC = " + path_to_pic + "\nJSON = " + json);
+                                                    Log.i("LoginActivity ", "DATA:\nGCM Registration Token = " + token_android + "\nFB_ID = "
+                                                            + fb_id + "\nPATH_TO_PIC = " + path_to_pic + "\nJSON = " + json);
 
                                                     getUserData(fb_id, path_to_pic, json);
                                                     getFriendsInfo(json);
                                                     Register_User(fb_id, name, user_email, json);
+
                                                 } catch (Exception e) {
-                                                    Log.d("LoginActivity", "Failed to complete token refresh", e);
+                                                    Log.i("LoginActivity", "Failed to complete token refresh", e);
                                                 }
                                             }
                                         }).start();
@@ -196,6 +195,7 @@ public class LoginActivity extends AppCompatActivity {
                         parameters.putString("fields", "id, first_name, last_name, email,gender, birthday, location");
                         request.setParameters(parameters);
                         request.executeAsync();
+
                     }
 
                     @Override
@@ -219,6 +219,8 @@ public class LoginActivity extends AppCompatActivity {
         AppSync sync = new AppSync(fb_id, gcm, path_to_pic, this);
         sync.getToken(fb_id, gcm);
         sync.getUserProfile();
+
+
 
     }
 
@@ -303,6 +305,9 @@ public class LoginActivity extends AppCompatActivity {
                             }
 
                         }
+
+                        // intent go to RoleActivity
+
                     }
                 });
         request.executeAndWait();
@@ -389,7 +394,7 @@ public class LoginActivity extends AppCompatActivity {
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
-                Log.d(TAG, "Status: register " + response.code());
+                Log.d("LoginActivity", "Response Status: register " + response.code());
                 User decodedResponse = response.body();
                 if (response.isSuccess()) {
                     if (response.isSuccess()) {
@@ -405,8 +410,8 @@ public class LoginActivity extends AppCompatActivity {
                         String newChallReq = data.getProfileOptions().getNewChallengeRequests().toString();
                         String acceptedYour = data.getProfileOptions().getAcceptedYourChallenge().toString();
                         String challegeEnd = data.getProfileOptions().getChallengeEnd().toString();
-                        Log.d(TAG, "Status: " + id);
-                        Log.d(TAG, "FB: " + fb_id);
+                        Log.d("LoginActivity", "ID: " + id);
+                        Log.d("LoginActivity", "FB: " + fb_id);
 
                         // "http://graph.facebook.com/" + fb_id + "/picture?type=large&redirect=true&width=500&height=500"
                         SessionManager sessionManager = new SessionManager(getApplicationContext());
@@ -425,7 +430,7 @@ public class LoginActivity extends AppCompatActivity {
                             if (!f.exists()) {
                                 com.example.ivan.champy_v2.model.User.Photo photo = data.getPhoto();
                                 api_path = API_URL + photo.getLarge();
-                                Log.d("RegisterUser", "Image: " + api_path);
+                                Log.i("LoginActivity", "Image: " + api_path);
                             }
                         }
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -442,7 +447,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Throwable t) {
-                Log.d(TAG, "VSE huynya");
+                Log.d("LoginActivity", "VSE huynya");
             }
         });
 

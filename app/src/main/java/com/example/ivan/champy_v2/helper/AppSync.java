@@ -15,6 +15,7 @@ import android.util.Log;
 import com.example.ivan.champy_v2.Blur;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.activity.MainActivity;
+import com.example.ivan.champy_v2.activity.RoleControllerActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
 import com.example.ivan.champy_v2.interfaces.Friends;
@@ -71,7 +72,7 @@ public class AppSync {
         jsonObject.put("AndroidOS", gcm);
         String string = jsonObject.toString();
         final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
-        Log.i("AppSync", "getToken: " + jwtString);
+        //Log.i("AppSync", "getToken: " + jwtString);
         return jwtString;
     }
 
@@ -126,12 +127,17 @@ public class AppSync {
                             api_path = API_URL + photo.getLarge();
                             Log.i("AppSync", "GetUserProfile | GetPhoto = " + api_path);
                         } else {
-                            new DownloadImageTask();
+                            //new DownloadImageTask();
+                            Log.i("AppSync", "GetUserProfile: Houston, we got a problem o_O");
                         }
                     }
 
 
-                } else Log.d("AppSync", "GetUserProfile: FAILED = " + decodedResponse);
+                    Intent goToRoleActivity = new Intent(context, RoleControllerActivity.class);
+                    context.startActivity(goToRoleActivity);
+
+
+                } else Log.d("AppSync", "GetUserProfile: OnResponse FAILED = " + decodedResponse);
             }
             @Override
             public void onFailure(Throwable t) {
