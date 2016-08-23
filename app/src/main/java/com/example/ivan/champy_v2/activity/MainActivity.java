@@ -105,67 +105,67 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public Activity activity;
     private CustomPagerBase pager;
     AlarmManager alarmManager;
-    AppSync sync;
+    //AppSync sync;
     HashMap<String,String> user;
 
-    private Socket mSocket;
-    {
-        try {
-            mSocket = IO.socket("http://46.101.213.24:3007");
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private Emitter.Listener onConnect = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-            final SessionManager sessionManager = new SessionManager(getApplicationContext());
-            HashMap<String, String> user;
-            user = sessionManager.getUserDetails();
-            String token = user.get("token");
-            mSocket.emit("ready", token);
-            Log.i("call", "call: minden fasza");
-        }
-    };
-
-    private Emitter.Listener onConnected = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-
-            Log.i("call", "call: connected okay");
-        }
-    };
-
-    private Emitter.Listener onNewRelationship = new Emitter.Listener() {
-
-        @Override
-        public void call(final Object... args) {
-
-            Log.i("call", "new friend request");
-        }
-    };
-
-    private Emitter.Listener onNewChallenge = new Emitter.Listener()  {
-
-        @Override
-        public void call(final Object... args) {
-            /*String userId = user.get("id");
-            Log.i("call", "call: new challenge request for duel 1");
-            try {
-
-
-                //Log.i("call", "call: " + facebookId);
-
-                sync.getInProgressChallenges(userId);
-                Log.i("call", "call: new challenge request for duel2");
-            } catch (Exception e) {
-                Log.i("call", "call: ERROR: " + e);
-            }*/
-
-
-        }
-    };
+//    private Socket mSocket;
+//    {
+//        try {
+//            mSocket = IO.socket("http://46.101.213.24:3007");
+//        } catch (URISyntaxException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+//
+//    private Emitter.Listener onConnect = new Emitter.Listener() {
+//        @Override
+//        public void call(final Object... args) {
+//            final SessionManager sessionManager = new SessionManager(getApplicationContext());
+//            HashMap<String, String> user;
+//            user = sessionManager.getUserDetails();
+//            String token = user.get("token");
+//            mSocket.emit("ready", token);
+//            Log.i("call", "call: minden fasza");
+//        }
+//    };
+//
+//    private Emitter.Listener onConnected = new Emitter.Listener() {
+//        @Override
+//        public void call(final Object... args) {
+//
+//            Log.i("call", "call: connected okay");
+//        }
+//    };
+//
+//    private Emitter.Listener onNewRelationship = new Emitter.Listener() {
+//
+//        @Override
+//        public void call(final Object... args) {
+//
+//            Log.i("call", "new friend request");
+//        }
+//    };
+//
+//    private Emitter.Listener onNewChallenge = new Emitter.Listener()  {
+//
+//        @Override
+//        public void call(final Object... args) {
+//            String userId = user.get("id");
+//            Log.i("call", "call: new challenge request for duel 1");
+//            try {
+//
+//
+//                //Log.i("call", "call: " + facebookId);
+//
+//                sync.getInProgressChallenges(userId);
+//                Log.i("call", "call: new challenge request for duel2");
+//            } catch (Exception e) {
+//                Log.i("call", "call: ERROR: " + e);
+//            }
+//
+//
+//        }
+//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,16 +180,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } catch (Exception e) {
             Log.i("onCreate", "Error in on create: " + e);
         }*/
-        mSocket.on("connect", onConnect);
-        mSocket.on("connected", onConnected);
-        mSocket.on("Relationship:new", onNewRelationship);
+
+//        mSocket.on("connect", onConnect);
+//        mSocket.on("connected", onConnected);
+//        mSocket.on("Relationship:new", onNewRelationship);
 //        mSocket.on("Relationship:created", onNewRelationship);
 //        mSocket.on("Relationship:removed", onNewRelationship);
 //        mSocket.on("Relationship:accepted", onNewRelationship);
 //        mSocket.on("Relationship:new:removed", onNewRelationship);
 //        mSocket.on("Relationship:new:accepted", onNewRelationship);
 
-        mSocket.on("InProgressChallenge:new", onNewChallenge);
+//        mSocket.on("InProgressChallenge:new", onNewChallenge);
 //        mSocket.on("InProgressChallenge:accepted", onNewRelationship);
 //        mSocket.on("InProgressChallenge:failed", onNewRelationship);
 //        mSocket.on("InProgressChallenge:won", onNewRelationship);
@@ -197,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        mSocket.on("InProgressChallenge:updated", onNewRelationship);
 
 
-        mSocket.connect();
+//        mSocket.connect();
 
         SessionManager sessionManager = new SessionManager(this);
         FacebookSdk.sdkInitialize(getApplicationContext());
@@ -393,7 +394,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         ImageView background    = (ImageView)headerLayout.findViewById(R.id.slide_background);
         ImageView profile_image = (ImageView)headerLayout.findViewById(R.id.profile_image);
-        TextView tvUserName     = (TextView)headerLayout.findViewById(R.id.tvUserName);
+        TextView  tvUserName    = (TextView)headerLayout.findViewById(R.id.tvUserName);
         tvUserName.setText(name);
 
         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
@@ -755,6 +756,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             try {
                 File f = new File(path, "profile.jpg");
                 Uri uri = Uri.fromFile(f);
+                Log.i("DownloadImageTask", "loadImageFromStorage: URI = " + uri);
                 Glide.with(getApplicationContext())
                         .load(uri)
                         .bitmapTransform(new CropCircleTransformation(getApplicationContext()))

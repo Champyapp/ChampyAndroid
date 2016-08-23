@@ -3,11 +3,16 @@ package com.example.ivan.champy_v2.helper;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.util.Log;
 
+import com.example.ivan.champy_v2.Blur;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.activity.MainActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
@@ -26,8 +31,13 @@ import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import io.jsonwebtoken.Jwts;
@@ -44,14 +54,15 @@ public class AppSync {
 
     final String API_URL = "http://46.101.213.24:3007";
     Context context;
-    String fbId, gcm, token;
+    String fbId, gcm, token, path;
 
 
-    public AppSync(String fb_id, String gcm) throws JSONException {
+    public AppSync(String fb_id, String gcm, String path_to_pic, Context context) throws JSONException {
         this.fbId = fb_id;
         this.gcm = gcm;
         this.token = getToken(this.fbId, this.gcm);
-
+        this.path = path_to_pic;
+        this.context = context;
     }
 
     public String getToken(String fb_id, String gcm)  throws JSONException {
@@ -60,17 +71,18 @@ public class AppSync {
         jsonObject.put("AndroidOS", gcm);
         String string = jsonObject.toString();
         final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
-
+        Log.i("AppSync", "getToken: " + jwtString);
         return jwtString;
     }
+
 
     public void getUserProfile() {
         final String facebookId = this.fbId;
         final String jwtString = this.token;
-        final String path_to_pic = ""; // TODO
-
+        final String path_to_pic = this.path; // TODO: 23.08.2016 Change PATH
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
+        Log.i("AppSync", "getUserProfile | DATA:\nFacebookId = " + facebookId + "\njwtString = " + jwtString + "\nPath_To_Pic = " + path_to_pic);
         NewUser newUser = retrofit.create(NewUser.class);
 
         Call<User> callGetUserInfo = newUser.getUserInfo(jwtString);
@@ -82,18 +94,18 @@ public class AppSync {
                     Data data = decodedResponse.getData();
                     String email = data.getEmail();
                     final String user_name = data.getName();
-                    final String id = data.get_id();
+                    final String userId = data.get_id();
 
                     String pushN = data.getProfileOptions().getPushNotifications().toString();
                     String newChallReq = data.getProfileOptions().getNewChallengeRequests().toString();
                     String acceptedYour = data.getProfileOptions().getAcceptedYourChallenge().toString();
                     String challegeEnd = data.getProfileOptions().getChallengeEnd().toString();
-                    Log.i("GetUserData", "UserId = " + id + "\nFacebook_Id = " + facebookId);
+                    //Log.i("GetUserProfile", "UserId = " + userId + "\nFacebook_Id = " + facebookId);
 
                     SessionManager sessionManager = new SessionManager(context);
                     sessionManager.setRefreshPending("false");
                     sessionManager.setRefreshFriends("true");
-                    sessionManager.createUserLoginSession(user_name, email, facebookId, path_to_pic, jwtString, id, pushN, newChallReq, acceptedYour, challegeEnd, "true", gcm);
+                    sessionManager.createUserLoginSession(user_name, email, facebookId, path_to_pic, jwtString, userId, pushN, newChallReq, acceptedYour, challegeEnd, "true", gcm);
                     sessionManager.setChampyOptions(
                             data.getAllChallengesCount().toString(),
                             data.getSuccessChallenges().toString(),
@@ -102,6 +114,9 @@ public class AppSync {
                     );
 
 
+                    getUserFriends(userId);
+                    getInProgressChallenges(userId);
+
                     String api_path = null;
                     if (data.getPhoto() != null){
                         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
@@ -109,12 +124,14 @@ public class AppSync {
                         if (!file.exists()){
                             com.example.ivan.champy_v2.model.User.Photo photo = data.getPhoto();
                             api_path = API_URL + photo.getLarge();
-                            Log.d("data.getPhoto()", "Image: " + api_path);
+                            Log.i("AppSync", "GetUserProfile | GetPhoto = " + api_path);
+                        } else {
+                            new DownloadImageTask();
                         }
                     }
 
 
-                } else Log.d("TAG", "Status: FAILED = " + decodedResponse);
+                } else Log.d("AppSync", "GetUserProfile: FAILED = " + decodedResponse);
             }
             @Override
             public void onFailure(Throwable t) {
@@ -125,7 +142,8 @@ public class AppSync {
 
     }
 
-    public void getFriends(final String userId) {
+
+    public void getUserFriends(final String userId) {
 
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
@@ -133,7 +151,7 @@ public class AppSync {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("pending", null, null);
         final ContentValues cv = new ContentValues();
-
+        Log.i("AppSync", "getUserFriends: userId = " + userId);
         com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
         Call<com.example.ivan.champy_v2.model.Friend.Friend> callGetUserFriends = friends.getUserFriends(userId, this.token);
         callGetUserFriends.enqueue(new Callback<Friend>() {
@@ -192,9 +210,6 @@ public class AppSync {
 
     }
 
-    public void getUsers() {}
-
-    public void getChallenges() {}
 
     public void getInProgressChallenges(final String userId) {
 
@@ -203,7 +218,7 @@ public class AppSync {
         int clearCount = db.delete("myChallenges", null, null);
         final ContentValues cv = new ContentValues();
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-
+        Log.i("AppSync", "getInProgressChallenges: userId = " + userId);
         final long unixTime = System.currentTimeMillis() / 1000L;
         String update = "0"; //1457019726
 
@@ -253,5 +268,87 @@ public class AppSync {
     }
 
 
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Log.d("LoginActivity", "DownLoadImageTask: doInBackground --- url display: " + urldisplay);
+
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            Log.i("Icon :", mIcon11.toString());
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            // Do your staff here to save image
+            String string = saveToInternalStorage(result);
+            loadImageFromStorage(string);
+        }
+
+    }
+
+
+    private String saveToInternalStorage(Bitmap bitmapImage){
+        ContextWrapper cw = new ContextWrapper(context);
+        // path to /data/data/yourapp/app_data/imageDir
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        // Create imageDir
+        File mypath = new File(directory,"profile.jpg");
+
+        Log.d("TAG", "MY_PATH: "+mypath.toString());
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(mypath);
+            // Use the compress method on the BitMap object to write image to the OutputStream
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return directory.getAbsolutePath();
+    }
+
+
+    public void loadImageFromStorage(String path) {
+        try {
+            File f=new File(path, "profile.jpg");
+            File file = new File(path, "blured2.jpg");
+            if (file.exists()) {
+                return;
+            } else {
+                file.createNewFile();
+                Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+
+                Blur blur = new Blur();
+
+                Bitmap blured = blur.blurRenderScript(context, b, 10);
+
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                blured.compress(Bitmap.CompressFormat.PNG, 0, bos);
+                byte[] bitmapdata = bos.toByteArray();
+
+                FileOutputStream fos = new FileOutputStream(file);
+                fos.write(bitmapdata);
+                fos.flush();
+                fos.close();
+                Log.d("TAG", "Image: Blured");
+            }
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

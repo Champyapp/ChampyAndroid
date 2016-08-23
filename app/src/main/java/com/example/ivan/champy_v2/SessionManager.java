@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.example.ivan.champy_v2.activity.LoginActivity;
+import com.example.ivan.champy_v2.activity.RoleControllerActivity;
 import com.facebook.login.LoginManager;
 
 import java.util.HashMap;
@@ -205,7 +206,7 @@ public class SessionManager {
     public void logout(Activity activity) {
         LoginManager.getInstance().logOut();
         logoutUser();
-        Intent intent = new Intent(activity, LoginActivity.class);
+        Intent intent = new Intent(activity, RoleControllerActivity.class);
         activity.startActivity(intent);
     }
 
