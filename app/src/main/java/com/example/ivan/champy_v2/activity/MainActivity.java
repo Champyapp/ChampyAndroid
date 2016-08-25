@@ -865,7 +865,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             tvSelfImprovement.setText(item.getType());
             String itemGoal = item.getGoal();
             ImageView imageView = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
-            //Log.i("getView asddasdas", "getView: " + item.getGoal());
 
             switch (item.getType()) {
                 case "Wake Up":
@@ -879,6 +878,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.self_white));
                     break;
             }
+
             tvSelfImprovement.setTextSize((float)(y*1.3));
             Typeface typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
             tvSelfImprovement.setTypeface(typeface);

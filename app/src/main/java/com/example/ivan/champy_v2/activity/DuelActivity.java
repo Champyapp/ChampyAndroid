@@ -74,13 +74,11 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
 
         TextView tvIChallengeMyFriendTo = (TextView)findViewById(R.id.tvIChallengeMyFriendTo);
         TextView textViewYouVsFriend = (TextView)findViewById(R.id.tvYouVsFriend);
-        //TextView textViewDuel = (TextView)findViewById(R.id.duel);
         ImageView ivUser2 = (ImageView)findViewById(R.id.user2);
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
 
         textViewYouVsFriend.setText("Duel with " + name);
         textViewYouVsFriend.setTypeface(typeface);
-        //textViewDuel.setTypeface(typeface);
         tvIChallengeMyFriendTo.setTypeface(typeface);
         ivUser2.getLayoutParams().width = x;
         ivUser2.getLayoutParams().height = x; // щоб була квадратна
@@ -244,7 +242,6 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         return dr;
 
     }
-
 
     @Override
     public void onBackPressed() {
