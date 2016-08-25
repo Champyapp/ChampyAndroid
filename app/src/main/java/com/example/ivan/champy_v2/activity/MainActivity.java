@@ -105,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public Activity activity;
     private CustomPagerBase pager;
     AlarmManager alarmManager;
-    //AppSync sync;
     HashMap<String,String> user;
 
 //    private Socket mSocket;
@@ -157,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //
 //                //Log.i("call", "call: " + facebookId);
 //
-//                sync.getInProgressChallenges(userId);
+//                sync.getUserInProgressChallenges(userId);
 //                Log.i("call", "call: new challenge request for duel2");
 //            } catch (Exception e) {
 //                Log.i("call", "call: ERROR: " + e);
@@ -356,8 +355,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
@@ -416,7 +415,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile_image);
         ViewServer.get(this).addWindow(this);
     }
-
 
     @Override
     protected void onStart() {
@@ -498,20 +496,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String token = user.get("token");
 
         String id = user.get("id");
-        File f = new File(path);
-        Log.d("UploadPhoto", "Token: " + token + "\n Id = " + id);
-        Log.d("UploadPhoto", "File = " + f);
-
-        RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), f);
+        File file = new File(path);
+        Log.i("MainActivity", "UploadPhotoFile: " + file);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), file);
 
         Update_user update_user = retrofit.create(Update_user.class);
         Call<User> call = update_user.update_photo(id, token, requestBody);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    Log.d("UploadPhoto", "Status: VSE OK");
-                } else Log.d("UploadPhoto", "Status :" + response.code());
+                if (response.isSuccess()) Log.d("UploadPhoto", "Status: VSE OK");
+                else Log.d("UploadPhoto", "Status :" + response.code());
             }
 
             @Override
@@ -520,7 +515,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
-
 
 //    public void buildAnim(Activity activity) {
 //        int width = activity.getWindowManager().getDefaultDisplay().getWidth();
@@ -689,7 +683,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //
 //    }
 
-
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
         protected Bitmap doInBackground(String... urls) {
@@ -737,7 +730,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // Create imageDir
             File myPath = new File(directory,"profile.jpg");
 
-            Log.i("DownloadImageTask", "saveToInternalStorage: MyPath = " + myPath.toString());
+            Log.i("DownloadImageTask", "saveToInternalStorage | PhotoPath: " + myPath.toString());
 
             FileOutputStream fos = null;
             try {
@@ -756,7 +749,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             try {
                 File f = new File(path, "profile.jpg");
                 Uri uri = Uri.fromFile(f);
-                Log.i("DownloadImageTask", "loadImageFromStorage: URI = " + uri);
+                Log.i("DownloadImageTask", "LoadImageFromStorage: URI = " + uri);
                 Glide.with(getApplicationContext())
                         .load(uri)
                         .bitmapTransform(new CropCircleTransformation(getApplicationContext()))

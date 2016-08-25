@@ -201,7 +201,7 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     com.example.ivan.champy_v2.single_inprogress.SingleInProgress data = response.body();
                     String inProgressId = data.getData().get_id();
-                    Log.i("sendSingleInProgress", "   onResponse: VSE OK \n   InProgressId = " + inProgressId);
+                    Log.i("sendSingleInProgress", "InProgressId: " + inProgressId);
                     generateCardsForMainActivity();
                 } else Log.i("sendSingleInProgress", "Status: FAILED: " + response.code());
             }
@@ -262,8 +262,8 @@ public class ChallengeController {
 
                     generateCardsForMainActivity();
 
-                    Log.i("sendSingleInProgress", "   Intent__Id: " + intentId);
-                    Log.i("sendSingleInProgress", "   onResponse: VSE OK \n   InProgressId = " + inProgressId);
+                    Log.i("sendSingleInProgress", "IntentId: " + intentId);
+                    Log.i("sendSingleInProgress", "InProgressId: " + inProgressId);
                 } else Log.i("sendSingleInProgress", "Status: FAILED: " + response.code());
             }
 
@@ -299,7 +299,7 @@ public class ChallengeController {
                     db.insert("updated", null, cv);
                     Intent intent = new Intent(firstActivity, MainActivity.class);
                     context.startActivity(intent);
-                    Log.i("startDuelInProgress", "Status: VSE OK" /*+ "\n DUEL_ID = " + inProgressId + "\n friend_id = " + friend_id*/);
+                    Log.i("startDuelInProgress", "Status: VSE OK");
                 } else Log.i("startDuelInProgress", "Status: FAILED" + response.code() + response.message());
             }
 
@@ -323,9 +323,9 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    Log.i("JoinToChallenge", "        onResponse: VSE OK" /*+ "\nDataId = " + inProgressId + "\nTOKEN = " + mToken*/);
+                    Log.i("JoinToChallenge", "onResponse: VSE OK");
                     refreshCardsForPendingDuel();
-                } else Log.i("JoinToChallenge", "onResponse: WTF" + "\nERROR = " + response.code() +"\nDataId = " + inProgressId);
+                } else Log.i("JoinToChallenge", "onResponse: WTF" + " | ERROR = " + response.code());
             }
 
             @Override
@@ -348,9 +348,9 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()){
-                    Log.i("RejectInviteForDuel", "    onResponse: VSE OK");
+                    Log.i("RejectInviteForDuel", "onResponse: VSE OK");
                     refreshCardsForPendingDuel();
-                } else Log.i("RejectInviteForDuel", "onResponse: FAILED " + "\n ERROR: " + response.code() + " " + response.message());
+                } else Log.i("RejectInviteForDuel", "onResponse: FAILED" + " | ERROR: " + response.code() + " " + response.message());
             }
 
             @Override
@@ -375,7 +375,7 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    Log.i("DoneForToday", "           onResponse: VSE OK");
+                    Log.i("DoneForToday", "onResponse: VSE OK");
                     String challengeType = response.body().getData().getChallenge().getType();
 
                     /*if (challengeType.equals("567d51c48322f85870fd931c")) {
@@ -383,7 +383,7 @@ public class ChallengeController {
                     }*/
 
                 } else {
-                    Log.i("DoneForToday", "           onResponse: FAILED ");
+                    Log.i("DoneForToday", "onResponse: FAILED ");
                 }
             }
 
@@ -429,7 +429,7 @@ public class ChallengeController {
 
                     refreshCardsForPendingDuel();
 
-                    Log.i("GiveUp", "                 onResponse: VSE OK");
+                    Log.i("GiveUp", "onResponse: VSE OK");
                 } else Log.i("GiveUp", "onResponse: FAILED: " + response.code());
             }
 
@@ -497,7 +497,7 @@ public class ChallengeController {
                     }
 
                     generateCardsForMainActivity();
-                    Log.i("RefreshPendingDuels", "    onResponse: VSE OK");
+                    Log.i("RefreshPendingDuels", "onResponse: VSE OK");
                 } else {
                     Log.i("RefreshPendingDuels", "onResponse: FAILED: " + response.code());
                 }
@@ -568,7 +568,7 @@ public class ChallengeController {
                         db.insert("myChallenges", null, cv);
                     }
 
-                    Log.i("GenerateMethod", "         onResponse: VSE OK");
+                    Log.i("GenerateMethod", "onResponse: VSE OK");
                     Intent intent = new Intent(firstActivity, MainActivity.class);
                     context.startActivity(intent);
                 } else {
@@ -605,34 +605,5 @@ public class ChallengeController {
         return ok;
     }
 
-    public void myRetrieveInProgressChallengeById(final String inProgressId) {
-        final SessionManager sessionManager = new SessionManager(context);
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        String token = user.get("token");
-        final String update = "0";
-        final String API_URL = "http://46.101.213.24:3007";
-        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-
-        ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
-        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call = activeInProgress.getActiveInProgress(inProgressId, update, token);
-        call.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
-            @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    Log.i("RetrieveInProgress", "onResponse: VSE OK \n inProgressId = " + inProgressId);
-
-                } else {
-                    Log.i("RetrieveInProgress", "onResponse: FAILED");
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-
-            }
-        });
-
-    }
 
 }

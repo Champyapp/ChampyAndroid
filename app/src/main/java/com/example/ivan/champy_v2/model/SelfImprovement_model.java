@@ -110,7 +110,7 @@ public class SelfImprovement_model {
             int status = c.getColumnIndex("status");
             int updated = c.getColumnIndex("updated");
             int challengeName = c.getColumnIndex("challengeName");
-            Log.i("SelfImprovement_Model", "Cards Counter =" + o);
+            Log.i("SelfImprovement_Model", "Cards Counter: " + o);
             do {
                 if (c.getString(status).equals("started")) arrayList.add (new SelfImprovement_model(
                         c.getString(coldescription),
