@@ -490,6 +490,7 @@ public class ChallengeController {
                                         cv.put("description", challengeDescription);
                                         cv.put("duration", challengeDuration);
                                         db.insert("pending_duel", null, cv);
+
                                     //}
                                 }
                             }
@@ -520,7 +521,7 @@ public class ChallengeController {
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         String token = user.get("token");
-        String id = user.get("id");
+        final String id = user.get("id");
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
         final long unixTime = System.currentTimeMillis() / 1000L;
         final String update = "0"; //1457019726
@@ -532,18 +533,18 @@ public class ChallengeController {
                     List<Datum> data = response.body().getData();
                     for (int i = 0; i < data.size(); i++) {
                         com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
-
                         Challenge challenge = datum.getChallenge();
+                        Recipient recipient = datum.getRecipient();
+                        Sender sender = datum.getSender();
 
                         String challenge_name = challenge.getName();
-
-                        Log.i("onResponse", "onResponse: " + challenge_name);
                         String challenge_description = challenge.getDescription(); // bla-bla
                         String challenge_detail = challenge.getDetails(); // bla-bla + " during this period"
                         String challenge_status = datum.getStatus();      // active or not
                         String challenge_id = datum.get_id();
                         String challenge_type = challenge.getType(); // self, duel or wake up
                         String duration = "";
+
                         if (datum.getEnd() != null) {
                             int end = datum.getEnd();
                             int days = round((end - unixTime) / 86400);
@@ -552,12 +553,20 @@ public class ChallengeController {
 
                         if (challenge_description.equals("Wake Up")) {
                             cv.put("name", "Wake Up");
-                        // set up wake up here..
                         } else if (challenge_type.equals("567d51c48322f85870fd931a")) {
                             cv.put("name", "Self-Improvement");
                         } else if (challenge_type.equals("567d51c48322f85870fd931b")) {
                             cv.put("name", "Duel");
+
+                            if (id.equals(recipient.getId())) {
+                                cv.put("recipient", "true");
+                                cv.put("versus", sender.getName());
+                            } else /*if (id.equals(sender.get_id()))*/{
+                                cv.put("recipient", "false");
+                                cv.put("versus", recipient.getName());
+                            }
                         }
+
                         cv.put("challengeName", challenge_name);
                         cv.put("description", challenge_detail);
                         cv.put("duration", duration);

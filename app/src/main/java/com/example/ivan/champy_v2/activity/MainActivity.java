@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         SessionManager sessionManager = new SessionManager(this);
         FacebookSdk.sdkInitialize(getApplicationContext());
-        setContentView(R.layout.activity_main);
+         setContentView(R.layout.activity_main);
 
         // get_right_token();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -869,9 +869,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             switch (item.getType()) {
                 case "Wake Up":
                     imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeup_white));
-                    itemGoal = item.getChallengeName(); // "Wake up at " + "__:__" + " during this period";
+                    itemGoal = item.getChallengeName();
                     break;
                 case "Duel":
+                    itemGoal = item.getGoal();
                     imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.duel_white));
                     break;
                 case "Self-Improvement":

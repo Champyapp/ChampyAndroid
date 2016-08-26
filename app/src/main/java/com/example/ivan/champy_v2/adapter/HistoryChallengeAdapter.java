@@ -78,16 +78,17 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         TextView nameTextView = viewHolder.nameTextView;
         TextView level = viewHolder.level;
 
-        String type = itemRow.getType();
-        String goal = itemRow.getGoal();
-        String challengeName = itemRow.getChallengeName();
+        String type = itemRow.getType(); // self / duel / wake up
+        String challengeName = itemRow.getChallengeName(); // no alcohol | if custom -> "User_Challenge"
+        String goal = itemRow.getGoal();               // alcohol free life during this period
         String description = itemRow.getDescription();
-        String duration = itemRow.getDuration();
+        String duration = itemRow.getDuration(); // index
+        String versus = itemRow.getVersus();
 
         // Here "type" in stupid string format. its works.
         switch (type) {
             case "Duel":
-                nameTextView.setText("Duel with ______");
+                nameTextView.setText(goal + " during this period: " + duration + "\nwith " + versus);
                 Glide.with(_context).load(R.drawable.duel_yellow).override(80, 80).into(viewHolder.image);
                 break;
             case "Wake Up":
@@ -95,7 +96,7 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
                 Glide.with(_context).load(R.drawable.wakeup_yellow).override(80, 80).into(viewHolder.image);
                 break;
             case "Self-Improvement":
-                nameTextView.setText(description + ": " + duration);
+                nameTextView.setText(goal + ": " + duration);
                 Glide.with(_context).load(R.drawable.self_yellow).override(80, 80).into(viewHolder.image);
                 break;
         }

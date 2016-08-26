@@ -25,6 +25,11 @@ public class SelfImprovement_model {
     String type;
     String name;
     String challengeName;
+    String versus;
+
+    public String getVersus() {
+        return versus;
+    }
 
     public String getChallengeName() {
         return challengeName;
@@ -49,8 +54,6 @@ public class SelfImprovement_model {
     public String getStatus() {
         return status;
     }
-
-    private Context context;
 
     public String getGoal() {
         return goal;
@@ -81,7 +84,7 @@ public class SelfImprovement_model {
     }
 
 
-    public SelfImprovement_model( String mGoal, String mDays, String mType, String mid ,String mStatus, String mUpdated, String mChallengeName) {
+    public SelfImprovement_model( String mGoal, String mDays, String mType, String mid ,String mStatus, String mUpdated, String mChallengeName, String versus) {
         this.goal = mGoal;
         this.days = mDays;
         this.type = mType;
@@ -89,6 +92,7 @@ public class SelfImprovement_model {
         this.status = mStatus;
         this.updated = mUpdated;
         this.challengeName = mChallengeName;
+        this.versus = versus;
     }
 
     //генерирует InProgress в History и с этими же данными генерирует карточки для MainActivity
@@ -107,6 +111,7 @@ public class SelfImprovement_model {
             int status = c.getColumnIndex("status");
             int updated = c.getColumnIndex("updated");
             int challengeName = c.getColumnIndex("challengeName");
+            int colversus = c.getColumnIndex("versus");
             Log.i("SelfImprovement_Model", "Cards Counter: " + o);
             do {
                 if (c.getString(status).equals("started")) arrayList.add (new SelfImprovement_model(
@@ -116,7 +121,8 @@ public class SelfImprovement_model {
                         c.getString(colchallenge_id),
                         "started",
                         c.getString(updated),
-                        c.getString(challengeName)));
+                        c.getString(challengeName),
+                        c.getString(colversus)));
             } while (c.moveToNext());
         }
         c.close();
@@ -140,6 +146,11 @@ public class SelfImprovement_model {
             int status = c.getColumnIndex("status");
             int updated = c.getColumnIndex("updated");
             int challengeName = c.getColumnIndex("challengeName");
+            int colversus = c.getColumnIndex("versus");
+
+            /**
+             * displayed only challenge wake up & self-improvement, because haven't check statement for duels
+             */
             Log.i("GenerateWins", "CursorCounter: " + o);
             do {
                 if (c.getString(status).equals("finished")) {
@@ -151,7 +162,8 @@ public class SelfImprovement_model {
                                 c.getString(colchallenge_id),
                                 "finished",
                                 c.getString(updated),
-                                c.getString(challengeName)));
+                                c.getString(challengeName),
+                                c.getString(colversus)));
                     }
                 }
             } while (c.moveToNext());
@@ -176,8 +188,16 @@ public class SelfImprovement_model {
             int status = c.getColumnIndex("status");
             int updated = c.getColumnIndex("updated");
             int challengeName = c.getColumnIndex("challengeName");
+            int colversus = c.getColumnIndex("versus");
+            int colrecipient = c.getColumnIndex("recipient"); // check recipient
+
+            /**
+             * now this method displayed only my fails (failedBySender). need to add failed by recipient
+             */
+
             Log.i("GenerateFailed", "CursorCounter = " + o);
             do {
+
                 if (c.getString(status).equals("failedBySender")) {
                     arrayList.add (new SelfImprovement_model(
                             c.getString(coldescription),
@@ -186,7 +206,8 @@ public class SelfImprovement_model {
                             c.getString(colchallenge_id),
                             "failed",
                             c.getString(updated),
-                            c.getString(challengeName)));
+                            c.getString(challengeName),
+                            c.getString(colversus)));
                 }
             } while (c.moveToNext());
         }

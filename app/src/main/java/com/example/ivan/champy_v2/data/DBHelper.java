@@ -4,9 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-/**
- * Created by ivan on 04.03.16.
- */
 public class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper(Context context) {
@@ -76,6 +73,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 + "id integer primary key autoincrement,"
                 + "name text,"
                 + "challengeName text DEFAULT 'challenge',"
+                + "recipient text,"
+                + "versus text,"
                 + "description text,"
                 + "duration text,"
                 + "challenge_id text,"

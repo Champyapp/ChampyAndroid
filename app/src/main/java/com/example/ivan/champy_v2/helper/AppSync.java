@@ -21,6 +21,8 @@ import com.example.ivan.champy_v2.model.Friend.Owner;
 import com.example.ivan.champy_v2.model.User.Data;
 import com.example.ivan.champy_v2.model.User.User;
 import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
+import com.example.ivan.champy_v2.model.active_in_progress.Recipient;
+import com.example.ivan.champy_v2.model.active_in_progress.Sender;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
@@ -100,7 +102,7 @@ public class AppSync {
                     String challegeEnd = data.getProfileOptions().getChallengeEnd().toString();
 
                     SessionManager sessionManager = new SessionManager(context);
-                    sessionManager.setRefreshPending("false");
+                    sessionManager.setRefreshPending("false"); // TODO: 26.08.2016 change for true maybe? for auto update pending list?
                     sessionManager.setRefreshFriends("true");
                     sessionManager.createUserLoginSession(user_name, email, facebookId, path_to_pic,
                             jwtString, userId, pushN, newChallReq, acceptedYour, challegeEnd, "true", gcm);
@@ -237,6 +239,9 @@ public class AppSync {
             for (int i = 0; i < list.size(); i++) {
                 com.example.ivan.champy_v2.model.active_in_progress.Datum datum = list.get(i);
                 Challenge challenge = datum.getChallenge();
+                Recipient recipient = datum.getRecipient();
+                Sender sender = datum.getSender();
+
                 String challenge_description = challenge.getDescription(); // no smoking
                 String challenge_detail = challenge.getDetails(); // no smoking + " during this period"
                 String challenge_status = datum.getStatus();      // active or not
@@ -256,6 +261,15 @@ public class AppSync {
                     cv.put("name", "Self-Improvement");
                 } else if (challenge_type.equals("567d51c48322f85870fd931b")) {
                     cv.put("name", "Duel");
+
+                    if (userId.equals(recipient.getId())) {
+                        cv.put("recipient", "true");
+                        cv.put("versus", sender.getName());
+                    } else /*if (id.equals(sender.get_id()))*/{
+                        cv.put("recipient", "false");
+                        cv.put("versus", recipient.getName());
+                    }
+
                 }
 
                 cv.put("challengeName", challenge_name);

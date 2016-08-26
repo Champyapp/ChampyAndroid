@@ -11,7 +11,11 @@ public class HistoryChallenge {
     String description;
     String duration;
     String status;
+    String versus;
 
+    public String getVersus() {
+        return versus;
+    }
 
     public String getGoal() {
         return goal;
@@ -65,7 +69,7 @@ public class HistoryChallenge {
         this.description = description;
     }
 
-    public HistoryChallenge(String mtype, boolean mactive, String mdescription, String mduration, String mstatus, String goal, String challengeName) {
+    public HistoryChallenge(String mtype, boolean mactive, String mdescription, String mduration, String mstatus, String goal, String challengeName, String versus) {
         this.type = mtype;
         this.active = mactive;
         this.description = mdescription;
@@ -73,6 +77,7 @@ public class HistoryChallenge {
         this.status = mstatus;
         this.goal = goal;
         this.challengeName = challengeName;
+        this.versus = versus;
     }
 
 }

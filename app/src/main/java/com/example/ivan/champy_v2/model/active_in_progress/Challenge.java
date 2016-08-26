@@ -21,6 +21,7 @@ public class Challenge {
     private String type;
     private String description;
     private String details;
+    private String versus;
     private Integer created;
     private Integer updated;
     private Boolean approved;
@@ -29,6 +30,14 @@ public class Challenge {
     private Integer points;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
+
+    public String getVersus() {
+        return versus;
+    }
+
+    public void setVersus(String versus) {
+        this.versus = versus;
+    }
 
     public String getName() {
         return name;
@@ -73,7 +82,6 @@ public class Challenge {
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
     }
-
 
     public void setName(String name) {
         this.name = name;
