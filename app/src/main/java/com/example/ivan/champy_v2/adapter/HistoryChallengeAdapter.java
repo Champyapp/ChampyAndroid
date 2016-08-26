@@ -78,29 +78,24 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         TextView nameTextView = viewHolder.nameTextView;
         TextView level = viewHolder.level;
 
-        SessionManager sessionManager = new SessionManager(_context);
-        HashMap<String, String> champy = sessionManager.getChampyOptions();
-        String userLevel = champy.get("level");
-        level.setText("Level " + userLevel + " Champy");
-        //Log.i(TAG, "FUCKING LEVEL = " + level);
-        /*TextView level = viewholder.level;
-        level.setText("Level " + contact.getLevel() + " Champy");*/
-
         String type = itemRow.getType();
-        //Log.i(TAG, "onBindViewHolder: " + type);
+        String goal = itemRow.getGoal();
+        String challengeName = itemRow.getChallengeName();
+        String description = itemRow.getDescription();
+        String duration = itemRow.getDuration();
 
         // Here "type" in stupid string format. its works.
         switch (type) {
             case "Duel":
-                nameTextView.setText("Duel Challenge");
+                nameTextView.setText("Duel with ______");
                 Glide.with(_context).load(R.drawable.duel_yellow).override(80, 80).into(viewHolder.image);
                 break;
             case "Wake Up":
-                nameTextView.setText("Wake Up");
+                nameTextView.setText(challengeName + ": " + duration);
                 Glide.with(_context).load(R.drawable.wakeup_yellow).override(80, 80).into(viewHolder.image);
                 break;
             case "Self-Improvement":
-                nameTextView.setText("Self-Improvement Challenge");
+                nameTextView.setText(description + ": " + duration);
                 Glide.with(_context).load(R.drawable.self_yellow).override(80, 80).into(viewHolder.image);
                 break;
         }
@@ -119,6 +114,11 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
             nameTextView.setText("Failed");
             break;
         }
+
+        SessionManager sessionManager = new SessionManager(_context);
+        HashMap<String, String> champy = sessionManager.getChampyOptions();
+        String userLevel = champy.get("level");
+        level.setText("Level " + userLevel + " Champy");
 
         Typeface typeFace = Typeface.createFromAsset(_context.getAssets(), "fonts/bebasneue.ttf");
         nameTextView.setTypeface(typeFace);

@@ -19,13 +19,15 @@
         android:layout_alignParentBottom="false"
         android:layout_alignParentLeft="false"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="8dp"
+        android:contentDescription="@string/challengetypeicon" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:text="Large Text"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textSize="16sp"
+        android:text="@string/info_about_challenge"
         android:id="@+id/name"
         android:textColor="#ffffff"
         android:layout_toRightOf="@+id/picture"
@@ -36,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Level # Champy"
+        android:text="@string/level_0_champy"
         android:id="@+id/level"
         android:textColor="#ffffff"
         android:layout_above="@+id/view"
@@ -51,7 +53,8 @@
         android:layout_above="@+id/view"
         android:layout_toLeftOf="@+id/counterWins"
         android:layout_toStartOf="@+id/counterWins"
-        android:layout_marginRight="8dp" />
+        android:layout_marginRight="8dp"
+        android:contentDescription="@string/challengestatus" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -61,13 +64,14 @@
         android:layout_above="@+id/view"
         android:layout_toLeftOf="@+id/counterInProgress"
         android:layout_toStartOf="@+id/counterInProgress"
-        android:layout_marginRight="8dp" />
+        android:layout_marginRight="8dp"
+        android:contentDescription="@string/points" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="10"
+        android:text="@string/count_of_points_10"
         android:id="@+id/counterInProgress"
         android:textColor="#ffffff"
         android:layout_alignBottom="@+id/imageView_total_logo"
@@ -79,7 +83,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:text="In Progress"
+        android:text="@string/status"
         android:id="@+id/counterWins"
         android:textColor="#ffffff"
         android:layout_alignBottom="@+id/imageView_total_logo"

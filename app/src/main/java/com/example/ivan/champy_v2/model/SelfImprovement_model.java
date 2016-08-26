@@ -15,9 +15,6 @@ import java.util.HashMap;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 
-/**
- * Created by ivan on 14.03.16.
- */
 public class SelfImprovement_model {
 
     String goal;
@@ -179,7 +176,7 @@ public class SelfImprovement_model {
             int status = c.getColumnIndex("status");
             int updated = c.getColumnIndex("updated");
             int challengeName = c.getColumnIndex("challengeName");
-            Log.i("generateFailed", "MyChallengesCursorCounter = " + o);
+            Log.i("GenerateFailed", "CursorCounter = " + o);
             do {
                 if (c.getString(status).equals("failedBySender")) {
                     arrayList.add (new SelfImprovement_model(
@@ -193,30 +190,6 @@ public class SelfImprovement_model {
                 }
             } while (c.moveToNext());
         }
-
-//        c = db.query("duel", null, null, null, null, null, null);
-//        o = 0;
-//        if (c.moveToFirst()) {
-//            int idColIndex = c.getColumnIndex("id");
-//            int nameColIndex = c.getColumnIndex("name");
-//            int coldescription = c.getColumnIndex("description");
-//            int colduration = c.getColumnIndex("duration");
-//            int colchallenge_id = c.getColumnIndex("challenge_id");
-//            int status = c.getColumnIndex("status");
-//            int updated = c.getColumnIndex("updated");
-//            Log.i("generateFailed", "DuelCursorCounter = " + o);
-//            do {
-//                if (c.getString(status).equals("failedByRecipient")) {
-//                    arrayList.add (new SelfImprovement_model(
-//                            c.getString(coldescription),
-//                            c.getString(colduration),
-//                            c.getString(nameColIndex),
-//                            c.getString(colchallenge_id),
-//                            "failed",
-//                            c.getString(updated)));
-//                }
-//            } while (c.moveToNext());
-//        }
         c.close();
         return  arrayList;
     }

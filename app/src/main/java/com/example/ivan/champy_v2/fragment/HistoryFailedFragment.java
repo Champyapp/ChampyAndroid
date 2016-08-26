@@ -35,8 +35,10 @@ public class HistoryFailedFragment extends Fragment {
             String duration = item.getDays();
             String status = item.getStatus();
             String type = item.getType();
+            String goal = item.getGoal();
+            String challengeName = item.getChallengeName();
 
-            allArray.add(new HistoryChallenge(type, true, description, duration, status));
+            allArray.add(new HistoryChallenge(type, false, description, duration, status, goal, challengeName));
         }
 
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
