@@ -34,7 +34,11 @@ public class DBHelper extends SQLiteOpenHelper {
                 + "name text,"
                 + "photo text,"
                 + "user_id text,"
-                + "fb_id text"
+                + "fb_id text,"
+                + "inProgressChallengesCount text DEFAULT '0',"
+                + "successChallenges text DEFAULT '0',"
+                + "allChallengesCount text DEFAULT '0',"
+                + "level text DEFAULT '0'"
                 + ");");
 
         db.execSQL("create table pending ("
@@ -42,7 +46,11 @@ public class DBHelper extends SQLiteOpenHelper {
                 + "name text,"
                 + "photo text,"
                 + "user_id text,"
-                + "owner text"
+                + "owner text,"
+                + "inProgressChallengesCount text DEFAULT '0',"
+                + "successChallenges text DEFAULT '0',"
+                + "allChallengesCount text DEFAULT '0',"
+                + "level text DEFAULT '0'"
                 + ");");
 
         db.execSQL("create table selfimprovement("

@@ -117,6 +117,11 @@ public class SessionManager {
         return s;
     }
 
+    //id
+    public String getObjectId() {
+        String s = pref.getString("id", null);
+        return s;
+    }
     public String getRefreshPending() {
         String s = pref.getString("pendingRefresh", null);
         return s;

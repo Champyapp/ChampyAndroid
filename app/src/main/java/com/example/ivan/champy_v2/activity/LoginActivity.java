@@ -135,10 +135,9 @@ public class LoginActivity extends AppCompatActivity {
                 Activity activity = LoginActivity.this;
                 OfflineMode offlineMode = new OfflineMode();
                 offlineMode.isConnectedToRemoteAPI(activity);
-
                 LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile, email, user_friends"));
                 LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
-                    @Override
+                   @Override
                     public void onSuccess(LoginResult loginResult) {
                         final AccessToken accessToken = loginResult.getAccessToken();
                         Profile profile = Profile.getCurrentProfile();
@@ -433,7 +432,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Log.i("LoginActivity", "Image: " + api_path);
                             }
                         }
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        Intent intent = new Intent(LoginActivity.this, RoleControllerActivity.class);
                         if (api_path == null) intent.putExtra("path_to_pic", path_to_pic);
                         else {
                             intent.putExtra("path_to_pic", api_path);

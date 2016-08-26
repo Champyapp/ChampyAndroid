@@ -148,9 +148,14 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
             TextView counterInProgressOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_inProgress);
             TextView counterTotalOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
             TextView counterWinsOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_wins);
-            counterInProgressOpen.setText(champy.get("challenges"));
-            counterTotalOpen.setText(champy.get("total"));
-            counterWinsOpen.setText(champy.get("wins"));
+
+//            counterInProgressOpen.setText(champy.get("challenges"));
+//            counterTotalOpen.setText(champy.get("total"));
+//            counterWinsOpen.setText(champy.get("wins"));
+
+            counterInProgressOpen.setText(contact.getmChallenges());
+            counterTotalOpen.setText(contact.getmTotal());
+            counterWinsOpen.setText(contact.getmWins());
 
             // отвечает за лвл юзера в свернутом виде
             TextView tvUserLevelOpen = (TextView)viewHolder.itemView.findViewById(R.id.textViewWinsCounter);
@@ -191,9 +196,13 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
             TextView counterTotalClose = (TextView)viewHolder.itemView.findViewById(R.id.counterTotal);
             TextView counterWinsClose = (TextView)viewHolder.itemView.findViewById(R.id.counterWins);
 
-            counterInProgressClose.setText(champy.get("challenges"));
-            counterTotalClose.setText(champy.get("total"));
-            counterWinsClose.setText(champy.get("wins"));
+//            counterInProgressClose.setText(champy.get("challenges"));
+//            counterTotalClose.setText(champy.get("total"));
+//            counterWinsClose.setText(champy.get("wins"));
+
+            counterInProgressClose.setText(contact.getmChallenges());
+            counterTotalClose.setText(contact.getmTotal());
+            counterWinsClose.setText(contact.getmWins());
 
             // отвечает за лвл юзера в свернутом виде
             TextView tvUserLevelClose = (TextView)viewHolder.itemView.findViewById(R.id.level);

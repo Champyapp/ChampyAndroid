@@ -159,6 +159,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             TextView counterInProgressOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
             TextView counterTotalOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_inProgress);
             TextView counterWinsOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_wins);
+
             counterInProgressOpen.setText(contact.getmChallenges());
             counterTotalOpen.setText(contact.getmTotal());
             counterWinsOpen.setText(contact.getmWins());

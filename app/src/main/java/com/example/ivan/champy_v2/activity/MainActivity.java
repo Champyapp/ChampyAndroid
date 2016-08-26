@@ -55,6 +55,7 @@ import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.AppSync;
 import com.example.ivan.champy_v2.helper.CHBuildAnim;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
+import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.interfaces.Update_user;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
 import com.example.ivan.champy_v2.model.User.User;
@@ -73,7 +74,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -89,6 +92,7 @@ import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 import com.github.nkzawa.emitter.Emitter;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import static java.lang.Math.round;
@@ -108,43 +112,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //AppSync sync;
     HashMap<String,String> user;
 
-//    private Socket mSocket;
-//    {
-//        try {
-//            mSocket = IO.socket("http://46.101.213.24:3007");
-//        } catch (URISyntaxException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
+    private Socket mSocket;
+    {
+        try {
+            mSocket = IO.socket("http://46.101.213.24:3007");
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
 //
-//    private Emitter.Listener onConnect = new Emitter.Listener() {
-//        @Override
-//        public void call(final Object... args) {
-//            final SessionManager sessionManager = new SessionManager(getApplicationContext());
-//            HashMap<String, String> user;
-//            user = sessionManager.getUserDetails();
-//            String token = user.get("token");
-//            mSocket.emit("ready", token);
-//            Log.i("call", "call: minden fasza");
-//        }
-//    };
+    private Emitter.Listener onConnect = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+
+            CurrentUserHelper currentUser = new CurrentUserHelper(getApplicationContext());
+            mSocket.emit("ready", currentUser.getToken());
+            Log.i("call", "call: minden fasza");
+        }
+    };
 //
-//    private Emitter.Listener onConnected = new Emitter.Listener() {
-//        @Override
-//        public void call(final Object... args) {
+    private Emitter.Listener onConnected = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+             Log.i("call", "call: connected okay");
+        }
+    };
 //
-//            Log.i("call", "call: connected okay");
-//        }
-//    };
-//
-//    private Emitter.Listener onNewRelationship = new Emitter.Listener() {
-//
-//        @Override
-//        public void call(final Object... args) {
-//
-//            Log.i("call", "new friend request");
-//        }
-//    };
+
 //
 //    private Emitter.Listener onNewChallenge = new Emitter.Listener()  {
 //
@@ -167,38 +161,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        }
 //    };
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*try {
-            SessionManager session = new SessionManager(getApplicationContext());
-            this.user = session.getUserDetails();
-            String userId = user.get("id");
-            String facebookId = session.getFacebookId();
-            String gcm = session.getGCM();
-            this.sync = new AppSync(facebookId, gcm);
-        } catch (Exception e) {
-            Log.i("onCreate", "Error in on create: " + e);
-        }*/
-
-//        mSocket.on("connect", onConnect);
-//        mSocket.on("connected", onConnected);
-//        mSocket.on("Relationship:new", onNewRelationship);
-//        mSocket.on("Relationship:created", onNewRelationship);
-//        mSocket.on("Relationship:removed", onNewRelationship);
-//        mSocket.on("Relationship:accepted", onNewRelationship);
-//        mSocket.on("Relationship:new:removed", onNewRelationship);
-//        mSocket.on("Relationship:new:accepted", onNewRelationship);
-
-//        mSocket.on("InProgressChallenge:new", onNewChallenge);
-//        mSocket.on("InProgressChallenge:accepted", onNewRelationship);
-//        mSocket.on("InProgressChallenge:failed", onNewRelationship);
-//        mSocket.on("InProgressChallenge:won", onNewRelationship);
-//        mSocket.on("InProgressChallenge:checked", onNewRelationship);
-//        mSocket.on("InProgressChallenge:updated", onNewRelationship);
 
 
-//        mSocket.connect();
+
+        mSocket.on("connect", onConnect);
+        mSocket.on("connected", onConnected);
+        mSocket.connect();
 
         SessionManager sessionManager = new SessionManager(this);
         FacebookSdk.sdkInitialize(getApplicationContext());
@@ -423,6 +395,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onStart();
         CHBuildAnim chBuildAnim = new CHBuildAnim();
         chBuildAnim.buildAnim(this);
+
     }
 
     @Override

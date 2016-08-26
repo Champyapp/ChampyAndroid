@@ -476,13 +476,22 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                         int photoColIndex = c.getColumnIndex("photo");
                         int index = c.getColumnIndex("user_id");
                         int owner = c.getColumnIndex("owner");
+                        int inProgressChallengesCountIndex = c.getColumnIndex("inProgressChallengesCount");
+                        int successChallenges = c.getColumnIndex("successChallenges");
+                        int allChallengesCount = c.getColumnIndex("allChallengesCount");
+
                         //int challenges = c.getColumnIndex("challenges");
                         do {
                             Log.i("newusers", "NewUser: " + c.getString(nameColIndex) + " Photo: " + c.getString(photoColIndex));
-                            newfriends.add(new Pending_friend(c.getString(nameColIndex),
-                                    API_URL+c.getString(photoColIndex),
+                            newfriends.add(new Pending_friend(
+                                    c.getString(nameColIndex),
+                                    API_URL + c.getString(photoColIndex),
                                     c.getString(index),
-                                    c.getString(owner)));
+                                    c.getString(owner),
+                                    c.getString(successChallenges),
+                                    c.getString(allChallengesCount),
+                                    c.getString(inProgressChallengesCountIndex)
+                            ));
                         } while (c.moveToNext());
                     } else
                         Log.i("stat", "null rows");

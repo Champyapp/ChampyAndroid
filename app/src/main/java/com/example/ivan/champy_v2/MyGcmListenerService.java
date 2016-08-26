@@ -110,7 +110,7 @@ public class MyGcmListenerService extends GcmListenerService {
             case "Challenge request":
                 refreshPendingDuels(message); // go to PendingDuels Activity
                 return;
-            case "Challenge accepted'":
+            case "Challenge accepted":
                 //intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 break;

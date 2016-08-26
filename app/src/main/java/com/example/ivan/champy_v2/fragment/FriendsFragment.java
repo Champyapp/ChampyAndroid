@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.interfaces.CustomItemClickListener;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.Friend;
@@ -27,8 +28,12 @@ import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.model.Friend.Datum;
 import com.example.ivan.champy_v2.model.Friend.Friend_;
 import com.example.ivan.champy_v2.model.Friend.Owner;
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
 import com.melnykov.fab.FloatingActionButton;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +48,28 @@ public class FriendsFragment extends Fragment {
 
     final String API_URL = "http://46.101.213.24:3007";
     public static final String ARG_PAGE = "ARG_PAGE";
+
+    public View gView;
+    public SwipeRefreshLayout gSwipeRefreshlayout;
+
     private int mPage;
+
+    SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+            refreshView(gSwipeRefreshlayout, gView);
+        }
+    };
+
+    private Socket mSocket;
+
+    {
+        try {
+            mSocket = IO.socket("http://46.101.213.24:3007");
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static FriendsFragment newInstance(int page) {
         Bundle args = new Bundle();
@@ -53,6 +79,69 @@ public class FriendsFragment extends Fragment {
         return fragment;
     }
 
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i("Comm:", "onDestroy: viszlat");
+    }
+
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mSocket.disconnect();
+        Log.i("Comm:", "onDestroy: viszlat");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        mSocket.on("connect", onConnect);
+        mSocket.on("connected", onConnected);
+
+        mSocket.on("Relationship:new:accepted", modifiedRelationship);
+        mSocket.on("Relationship:new:removed", modifiedRelationship);
+
+        mSocket.on("Relationship:created:accepted", modifiedRelationship);
+        mSocket.on("Relationship:created:removed", modifiedRelationship);
+        mSocket.connect();
+
+    }
+
+    private Emitter.Listener onConnect = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+
+            CurrentUserHelper currentUser = new CurrentUserHelper(getContext());
+            mSocket.emit("ready", currentUser.getToken());
+            Log.i("call", "call: minden fasza");
+        }
+    };
+
+    //
+    private Emitter.Listener onConnected = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            Log.i("call", "call: connected okay");
+        }
+    };
+
+    //
+    protected Emitter.Listener modifiedRelationship = new Emitter.Listener() {
+
+        @Override
+        public void call(final Object... args) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    refreshView(gSwipeRefreshlayout, gView);
+                }
+            });
+            Log.i("call", "new friend request");
+        }
+    };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +150,7 @@ public class FriendsFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i("stat", "Created friends");
+
         final View view = inflater.inflate(R.layout.fragment_first, container, false);
         final List<com.example.ivan.champy_v2.Friend> friends = new ArrayList<com.example.ivan.champy_v2.Friend>();
 
@@ -73,6 +163,10 @@ public class FriendsFragment extends Fragment {
             int idColIndex = c.getColumnIndex("id");
             int nameColIndex = c.getColumnIndex("name");
             int photoColIndex = c.getColumnIndex("photo");
+            int inProgressChallengesCountIndex = c.getColumnIndex("inProgressChallengesCount");
+            int successChallenges = c.getColumnIndex("successChallenges");
+            int allChallengesCount = c.getColumnIndex("allChallengesCount");
+            int level = c.getColumnIndex("level");
             int index = c.getColumnIndex("user_id");
             do {
                 Log.i("stat", "Status: " + c.getString(photoColIndex));
@@ -80,7 +174,10 @@ public class FriendsFragment extends Fragment {
                         c.getString(nameColIndex),
                         API_URL + c.getString(photoColIndex),
                         c.getString(index),
-                        "0", "0", "0" ,"0"));
+                        "" + c.getString(inProgressChallengesCountIndex),
+                        "" + c.getString(successChallenges),
+                        "" + c.getString(allChallengesCount),
+                        "0"));
             } while (c.moveToNext());
         } //else Log.i("stat", "friends_null");
         c.close();
@@ -122,105 +219,128 @@ public class FriendsFragment extends Fragment {
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         rvContacts.setAdapter(adapter);
 
-        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                swipeRefreshLayout.setRefreshing(true);
-                final String API_URL = "http://46.101.213.24:3007";
-                SessionManager sessionManager = new SessionManager(getContext());
-                HashMap<String, String> user = new HashMap<>();
-                user = sessionManager.getUserDetails();
-                final String id = user.get("id");
-                String token = user.get("token");
-                final Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(API_URL)
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-                DBHelper dbHelper = new DBHelper(getContext());
-                final SQLiteDatabase db = dbHelper.getWritableDatabase();
-                int clearCount = db.delete("friends", null, null);
-                final ContentValues cv = new ContentValues();
 
-                com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
+        gSwipeRefreshlayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
 
-                // Проверка на оффлайн вкладке FriendsActivity
-                OfflineMode offlineMode = new OfflineMode();
-                if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
+        gSwipeRefreshlayout.setOnRefreshListener(onRefreshListener);
 
-                    Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.getUserFriends(id, token);
-                    call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
-                        @Override
-                        public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
-                            if (response.isSuccess()) {
-                                List<Datum> data = response.body().getData();
-                                for (int i = 0; i < data.size(); i++) {
-                                    Datum datum = data.get(i);
-                                    if (datum.getFriend() != null) {
-                                        if (datum.getStatus().toString().equals("true")) {
-                                            if (datum.getOwner().get_id().equals(id)) {
-                                                Friend_ friend = datum.getFriend();
-                                                cv.put("name", friend.getName());
-                                                if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
-                                                else cv.put("photo", "");
-                                                cv.put("user_id", friend.getId());
-                                                db.insert("friends", null, cv);
 
-                                            } else {
-                                                Owner friend = datum.getOwner();
-                                                cv.put("name", friend.getName());
-                                                if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
-                                                else cv.put("photo", "");
-                                                cv.put("user_id", friend.get_id());
-                                                db.insert("friends", null, cv);
-                                            }
-                                        }
+        this.gView = view;
+        return view;
+
+
+    }
+
+    public void refreshView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
+        swipeRefreshLayout.setRefreshing(true);
+        final String API_URL = "http://46.101.213.24:3007";
+        SessionManager sessionManager = new SessionManager(getContext());
+        HashMap<String, String> user = new HashMap<>();
+        user = sessionManager.getUserDetails();
+        final String id = user.get("id");
+        String token = user.get("token");
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        DBHelper dbHelper = new DBHelper(getContext());
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        int clearCount = db.delete("friends", null, null);
+        final ContentValues cv = new ContentValues();
+
+        com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
+
+        // Проверка на оффлайн вкладке FriendsActivity
+        OfflineMode offlineMode = new OfflineMode();
+        if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
+
+            Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.getUserFriends(id, token);
+            call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
+                @Override
+                public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
+                    if (response.isSuccess()) {
+                        List<Datum> data = response.body().getData();
+                        for (int i = 0; i < data.size(); i++) {
+                            Datum datum = data.get(i);
+                            if (datum.getFriend() != null) {
+                                if (datum.getStatus().toString().equals("true")) {
+                                    if (datum.getOwner().get_id().equals(id)) {
+                                        Friend_ friend = datum.getFriend();
+                                        cv.put("name", friend.getName());
+                                        if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
+                                        else cv.put("photo", "");
+                                        cv.put("user_id", friend.getId());
+                                        cv.put("inProgressChallengesCount", friend.getInProgressChallengesCount());
+                                        cv.put("allChallengesCount", friend.getAllChallengesCount());
+                                        cv.put("successChallenges", friend.getSuccessChallenges());
+
+                                        db.insert("friends", null, cv);
+
+
+                                    } else {
+                                        Owner friend = datum.getOwner();
+                                        cv.put("name", friend.getName());
+                                        if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
+                                        else cv.put("photo", "");
+                                        cv.put("user_id", friend.get_id());
+                                        cv.put("inProgressChallengesCount", friend.getInProgressChallengesCount());
+                                        cv.put("allChallengesCount", friend.getAllChallengesCount());
+                                        cv.put("successChallenges", friend.getSuccessChallenges());
+
+                                        db.insert("friends", null, cv);
                                     }
                                 }
-                                final List<Friend> newfriends = new ArrayList<Friend>();
-                                Cursor c = db.query("friends", null, null, null, null, null, null);
-                                if (c.moveToFirst()) {
-                                    int idColIndex = c.getColumnIndex("id");
-                                    int nameColIndex = c.getColumnIndex("name");
-                                    int photoColIndex = c.getColumnIndex("photo");
-                                    int index = c.getColumnIndex("user_id");
-                                    do {
-                                        Log.i("newusers", "NewUser: " + c.getString(nameColIndex) + " Photo: " + c.getString(photoColIndex));
-                                        newfriends.add(new Friend(c.getString(nameColIndex),
-                                                API_URL + c.getString(photoColIndex),
-                                                c.getString(index),
-                                                "0", "0", "0", "0"));
-                                    } while (c.moveToNext());
-                                } //else Log.i("stat", "0 rows");
-                                c.close();
-
-                                Log.i("stat", "FriendsActivity :" + newfriends.toString());
-
-
-                                //  RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-                                final FriendsAdapter adapter = new FriendsAdapter(newfriends, getContext(), getActivity(), new CustomItemClickListener() {
-                                    @Override
-                                    public void onItemClick(View view, int position) {
-                                        Friend friend = newfriends.get(position);
-                                    }
-                                });
-                                rvContacts.setAdapter(adapter);
-                                swipeRefreshLayout.setRefreshing(false);
                             }
                         }
+                        final List<Friend> newfriends = new ArrayList<Friend>();
+                        Cursor c = db.query("friends", null, null, null, null, null, null);
+                        if (c.moveToFirst()) {
+                            int idColIndex = c.getColumnIndex("id");
+                            int nameColIndex = c.getColumnIndex("name");
+                            int photoColIndex = c.getColumnIndex("photo");
+                            int index = c.getColumnIndex("user_id");
+                            int inProgressChallengesCountIndex = c.getColumnIndex("inProgressChallengesCount");
+                            int successChallenges = c.getColumnIndex("successChallenges");
+                            int allChallengesCount = c.getColumnIndex("allChallengesCount");
+                            int level = c.getColumnIndex("level");
+                            do {
+                                Log.i("newusers", "NewUser: " + c.getString(nameColIndex) + " Photo: " + c.getString(photoColIndex));
+                                newfriends.add(new Friend(c.getString(nameColIndex),
+                                        API_URL + c.getString(photoColIndex),
+                                        c.getString(index),
+                                        "" + c.getString(inProgressChallengesCountIndex),
+                                        "" + c.getString(successChallenges),
+                                        "" + c.getString(allChallengesCount),
+                                        "0"));
+                            } while (c.moveToNext());
+                        } //else Log.i("stat", "0 rows");
+                        c.close();
 
-                        @Override
-                        public void onFailure(Throwable t) {
+                        Log.i("stat", "FriendsActivity :" + newfriends.toString());
 
-                        }
-                    });
 
-                } else {
-                    swipeRefreshLayout.setRefreshing(false);
+                        RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
+                        final FriendsAdapter adapter = new FriendsAdapter(newfriends, getContext(), getActivity(), new CustomItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                Friend friend = newfriends.get(position);
+                            }
+                        });
+
+                        rvContacts.setAdapter(adapter);
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
                 }
-            }
-        });
-        return view;
+
+                @Override
+                public void onFailure(Throwable t) {
+
+                }
+            });
+
+        } else {
+            swipeRefreshLayout.setRefreshing(false);
+        }
 
     }
 
