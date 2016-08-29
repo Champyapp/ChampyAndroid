@@ -147,14 +147,43 @@ public class SelfImprovement_model {
             int updated = c.getColumnIndex("updated");
             int challengeName = c.getColumnIndex("challengeName");
             int colversus = c.getColumnIndex("versus");
+            int colrecipient = c.getColumnIndex("recipient");
 
             /**
              * displayed only challenge wake up & self-improvement, because haven't check statement for duels
              */
             Log.i("GenerateWins", "CursorCounter: " + o);
             do {
+//                if (c.getString(status).equals("finished") ) {
+//                    if (c.getString(colrecipient).equals("true")) {
+//                        if (c.getString(status).equals("failedBySender")) {
+//                            arrayList.add(new SelfImprovement_model(
+//                                    c.getString(coldescription),
+//                                    c.getString(colduration),
+//                                    c.getString(nameColIndex),
+//                                    c.getString(colchallenge_id),
+//                                    "finished",
+//                                    c.getString(updated),
+//                                    c.getString(challengeName),
+//                                    c.getString(colversus)));
+//                        }
+//                    }
+//                    if (c.getString(colrecipient).equals("false")) {
+//                        if (c.getString(status).equals("failedByRecipient")) {
+//                            arrayList.add(new SelfImprovement_model(
+//                                    c.getString(coldescription),
+//                                    c.getString(colduration),
+//                                    c.getString(nameColIndex),
+//                                    c.getString(colchallenge_id),
+//                                    "finished",
+//                                    c.getString(updated),
+//                                    c.getString(challengeName),
+//                                    c.getString(colversus)));
+//                        }
+//                    }
+//                }
                 if (c.getString(status).equals("finished")) {
-                    if (c.getString(status).equals("failedByRecipient")) {
+                    if (c.getString(colrecipient).equals("true") && c.getString(status).equals("failedBySender")) {
                         arrayList.add(new SelfImprovement_model(
                                 c.getString(coldescription),
                                 c.getString(colduration),
@@ -199,6 +228,17 @@ public class SelfImprovement_model {
             do {
 
                 if (c.getString(status).equals("failedBySender")) {
+                    arrayList.add (new SelfImprovement_model(
+                            c.getString(coldescription),
+                            c.getString(colduration),
+                            c.getString(nameColIndex),
+                            c.getString(colchallenge_id),
+                            "failed",
+                            c.getString(updated),
+                            c.getString(challengeName),
+                            c.getString(colversus)));
+                }
+                if (c.getString(status).equals("failedByRecipient")) {
                     arrayList.add (new SelfImprovement_model(
                             c.getString(coldescription),
                             c.getString(colduration),

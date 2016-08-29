@@ -88,7 +88,7 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         // Here "type" in stupid string format. its works.
         switch (type) {
             case "Duel":
-                nameTextView.setText(goal + " during this period: " + duration + "\nwith " + versus);
+                nameTextView.setText(goal + ": " + duration + "\nwith " + versus);
                 Glide.with(_context).load(R.drawable.duel_yellow).override(80, 80).into(viewHolder.image);
                 break;
             case "Wake Up":

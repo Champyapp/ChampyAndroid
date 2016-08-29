@@ -81,7 +81,7 @@ public class AppSync {
         final String gcm = this.gcm;
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
-        Log.i("AppSync", "jwtString = " + jwtString);
+        Log.i("AppSync", "TOKEN: " + jwtString);
 
         NewUser newUser = retrofit.create(NewUser.class);
 
