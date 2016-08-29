@@ -38,8 +38,9 @@ public class HistoryWinsFragment extends Fragment {
             String type = item.getType();
             String challengeName = item.getChallengeName();
             String versus = item.getVersus();
+            String recipient = item.getRecipient();
 
-            winsArray.add(new HistoryChallenge(type, false /*was true*/, description, duration, status, goal, challengeName, versus));
+            winsArray.add(new HistoryChallenge(type, false /*was true*/, description, duration, status, goal, challengeName, versus, recipient));
         }
 
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);

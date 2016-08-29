@@ -553,8 +553,10 @@ public class ChallengeController {
 
                         if (challenge_description.equals("Wake Up")) {
                             cv.put("name", "Wake Up");
+                            cv.put("recipient", "false");
                         } else if (challenge_type.equals("567d51c48322f85870fd931a")) {
                             cv.put("name", "Self-Improvement");
+                            cv.put("recipient", "false");
                         } else if (challenge_type.equals("567d51c48322f85870fd931b")) {
                             cv.put("name", "Duel");
 

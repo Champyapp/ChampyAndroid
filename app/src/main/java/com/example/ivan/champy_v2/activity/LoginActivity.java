@@ -150,7 +150,7 @@ public class LoginActivity extends AppCompatActivity {
                                     try {
                                         URL profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
                                         path_to_pic = profile_pic.toString();
-                                        Log.i("LoginActivity", "PathToPic: " + fb_id);
+                                        Log.i("LoginActivity", "PathToPic: " + path_to_pic);
                                         } catch (MalformedURLException e) {
                                             e.printStackTrace();
                                         }
