@@ -19,6 +19,7 @@ import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.helper.AppSync;
+import com.example.ivan.champy_v2.helper.CHImage;
 import com.example.ivan.champy_v2.helper.CHImageModule;
 import com.example.ivan.champy_v2.helper.CHInitializeLogin;
 import com.example.ivan.champy_v2.interfaces.NewUser;
@@ -130,7 +131,7 @@ public class LoginActivity extends AppCompatActivity {
                 offlineMode.isConnectedToRemoteAPI(activity);
                 LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile, email, user_friends"));
                 LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
-                   @Override
+                    @Override
                     public void onSuccess(LoginResult loginResult) {
                         final AccessToken accessToken = loginResult.getAccessToken();
                         Profile profile = Profile.getCurrentProfile();
@@ -150,31 +151,31 @@ public class LoginActivity extends AppCompatActivity {
                                         URL profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
                                         path_to_pic = profile_pic.toString();
                                         Log.i("LoginActivity", "PathToPic: " + path_to_pic);
-                                        } catch (MalformedURLException e) {
-                                            e.printStackTrace();
-                                        }
-                                        new Thread(new Runnable() {
-                                            public void run() {
-                                                try {
-                                                    String token_android;
-                                                    InstanceID instanceID = InstanceID.getInstance(LoginActivity.this);
-                                                    token_android = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+                                    } catch (MalformedURLException e) {
+                                        e.printStackTrace();
+                                    }
+                                    new Thread(new Runnable() {
+                                        public void run() {
+                                            try {
+                                                String token_android;
+                                                InstanceID instanceID = InstanceID.getInstance(LoginActivity.this);
+                                                token_android = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
 
-                                                    JSONObject jsonObject = new JSONObject();
-                                                    jsonObject.put("token", token_android);
-                                                    jsonObject.put("timeZone", "-2");
-                                                    String json = jsonObject.toString();
-                                                    Log.i("LoginActivity", "JSON: " + json);
-                                                    Log.i("LoginActivity", "GCM: "  + token_android);
+                                                JSONObject jsonObject = new JSONObject();
+                                                jsonObject.put("token", token_android);
+                                                jsonObject.put("timeZone", "-2");
+                                                String json = jsonObject.toString();
+                                                Log.i("LoginActivity", "JSON: " + json);
+                                                Log.i("LoginActivity", "GCM: "  + token_android);
 
-                                                    getUserData(fb_id, path_to_pic, json);
-                                                    registerUser(fb_id, name, user_email, json);
+                                                getUserData(fb_id, path_to_pic, json);
+                                                registerUser(fb_id, name, user_email, json);
 
-                                                } catch (Exception e) {
-                                                    Log.i("LoginActivity", "Failed to complete token refresh", e);
-                                                }
+                                            } catch (Exception e) {
+                                                Log.i("LoginActivity", "Failed to complete token refresh", e);
                                             }
-                                        }).start();
+                                        }
+                                    }).start();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -407,6 +408,7 @@ public class LoginActivity extends AppCompatActivity {
                                 data.getInProgressChallengesCount().toString(),
                                 data.getLevel().getNumber().toString());
                         String api_path = null;
+                        String facebookPhotoUrl = "http://graph.facebook.com/" + fb_id + "/picture?type=large&redirect=true&width=500&height=500";
                         if (data.getPhoto() != null) {
                             String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
                             File f = new File(path, "profile.jpg");
@@ -415,7 +417,20 @@ public class LoginActivity extends AppCompatActivity {
                                 api_path = API_URL + photo.getLarge();
                                 //Log.i("LoginActivity", "Image: " + api_path);
                             }
+                        } else {
+                            CHImage imageSaver = new CHImage();
+                            try {
+                                imageSaver.saveImage(facebookPhotoUrl, "/data/data/com.example.ivan.champy_v2/app_imageDir/profile.jpg", false, getApplicationContext());
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
                         }
+
+
+
+
                         Intent intent = new Intent(LoginActivity.this, RoleControllerActivity.class);
                         if (api_path == null) intent.putExtra("path_to_pic", path_to_pic);
                         else {

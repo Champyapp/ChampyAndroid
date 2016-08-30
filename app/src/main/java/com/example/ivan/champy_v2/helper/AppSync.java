@@ -112,6 +112,10 @@ public class AppSync {
                             data.getScore().toString(),
                             data.getLevel().getNumber().toString()
                     );
+                    CurrentUserHelper currentUser = new CurrentUserHelper(context);
+                    CHImage imageSaver = new CHImage();
+
+                    String facebookPhotoUrl = "http://graph.facebook.com/" + currentUser.getFbId() + "/picture?type=large&redirect=true&width=500&height=500";
 
 
                     /**
@@ -125,16 +129,29 @@ public class AppSync {
                     getUserFriendsInfo(gcm);
 
                     String api_path = null;
+                    String photoUrl = "";
+                    boolean isFacebook = false;
                     if (data.getPhoto() != null){
-                        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
-                        File file = new File(path, "profile.jpg");
-                        if (!file.exists()){
-                            com.example.ivan.champy_v2.model.User.Photo photo = data.getPhoto();
-                            api_path = API_URL + photo.getLarge();
-                            Log.i("AppSync", "GetUserPhoto: " + api_path);
-                        } else {
-                            Log.i("AppSync", "GetUserProfile: Houston, we got a problem o_O");
-                        }
+                        photoUrl = "http://46.101.213.24:3007/photos/users/"+ currentUser.getUserObjectId() +"/large.png";
+
+//                        File file = new File(path, "profile.jpg");
+//                        if (!file.exists()){
+//                            com.example.ivan.champy_v2.model.User.Photo photo = data.getPhoto();
+//                            api_path = API_URL + photo.getLarge();
+//                            Log.i("AppSync", "GetUserPhoto: " + api_path);
+//                        } else {
+//                            Log.i("AppSync", "GetUserProfile: Houston, we got a problem o_O");
+//                        }
+                    } else {
+                        photoUrl = facebookPhotoUrl;
+                        isFacebook = true;
+                    }
+
+                    try {
+                        imageSaver.saveImage(photoUrl, "/data/data/com.example.ivan.champy_v2/app_imageDir/profile.jpg", isFacebook, context);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
 
                     Intent goToRoleActivity = new Intent(context, RoleControllerActivity.class);
