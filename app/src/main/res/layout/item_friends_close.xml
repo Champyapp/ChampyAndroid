@@ -19,7 +19,8 @@
         android:layout_alignParentBottom="false"
         android:layout_alignParentLeft="false"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="8dp"
+        android:contentDescription="@string/userPhoto" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -36,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Level # Champy"
+        android:text="@string/level_0_champy"
         android:id="@+id/level"
         android:textColor="#ffffff"
         android:layout_above="@+id/view"
@@ -51,13 +52,14 @@
         android:layout_above="@+id/view"
         android:layout_toLeftOf="@+id/counterInProgress"
         android:layout_toStartOf="@+id/counterInProgress"
-        android:layout_marginRight="8dp" />
+        android:layout_marginRight="8dp"
+        android:contentDescription="@string/smallIcon"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="t"
+        android:text="@string/t"
         android:id="@+id/counterTotal"
         android:textColor="#ffffff"
         android:visibility="visible"
@@ -80,7 +82,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="w"
+        android:text="@string/w"
         android:id="@+id/counterWins"
         android:textColor="#ffffff"
         android:visibility="visible"
@@ -97,14 +99,15 @@
         android:layout_above="@+id/view"
         android:layout_toLeftOf="@+id/counterTotal"
         android:layout_toStartOf="@+id/counterTotal"
-        android:layout_marginRight="8dp" />
+        android:layout_marginRight="8dp"
+        android:contentDescription="@string/smallIcon"/>
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="@android:style/TextAppearance.Medium"
-        android:text="i"
+        android:text="@string/i"
         android:id="@+id/counterInProgress"
         android:textColor="#ffffff"
         android:visibility="visible"

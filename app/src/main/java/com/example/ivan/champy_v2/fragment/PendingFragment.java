@@ -171,7 +171,6 @@ public class PendingFragment extends Fragment {
             int successChallenges = c.getColumnIndex("successChallenges");
             int allChallengesCount = c.getColumnIndex("allChallengesCount");
 
-
             do {
                 Log.i("stat", "Status: "+c.getString(photoColIndex));
                 friends.add(new Pending_friend(
@@ -292,7 +291,7 @@ public class PendingFragment extends Fragment {
                                 db.insert("pending", null, cv);
                             }
                         }
-                        final List<Pending_friend> newfriends = new ArrayList<Pending_friend>();
+                        final List<Pending_friend> newfriends = new ArrayList<>();
                         Cursor c = db.query("pending", null, null, null, null, null, null);
                         if (c.moveToFirst()) {
                             int idColIndex = c.getColumnIndex("id");

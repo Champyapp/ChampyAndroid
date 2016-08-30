@@ -115,9 +115,9 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
         if (selected.contains(position)) {
             // отвечает за значки в развернутом виде
             ImageView imageViewUserAvatar = (ImageView)viewHolder.itemView.findViewById(R.id.imageViewUserAvatar);
-            ImageView imageViewChallengesOpen = viewHolder.mchallenges;
+            ImageView imageViewChallengesOpen = viewHolder.mtotal;
             ImageView imageViewWinsOpen = viewHolder.mwins;
-            ImageView imageViewTotalOpen = viewHolder.mtotal;
+            ImageView imageViewTotalOpen = viewHolder.mchallenges;
 
             Glide.with(_context).load(R.drawable.challenges).override(40, 40).into(imageViewChallengesOpen);
             Glide.with(_context).load(R.drawable.wins).override(40, 40).into(imageViewWinsOpen);
@@ -136,10 +136,11 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
             Typeface typeFace = Typeface.createFromAsset(_context.getAssets(), "fonts/bebasneue.ttf");
             tvUserName.setTypeface(typeFace);
 
+
             // создаем вид счетчиком в развернутом виде
-            TextView tvChallenges = (TextView)viewHolder.itemView.findViewById(R.id.textViewChallenges);
+            TextView tvChallenges = (TextView)viewHolder.itemView.findViewById(R.id.textViewTotal);
             TextView tvWins = (TextView)viewHolder.itemView.findViewById(R.id.textViewWins);
-            TextView tvTotal = (TextView)viewHolder.itemView.findViewById(R.id.textViewTotal);
+            TextView tvTotal = (TextView)viewHolder.itemView.findViewById(R.id.textViewChallenges);
             tvChallenges.setTypeface(typeFace);
             tvWins.setTypeface(typeFace);
             tvTotal.setTypeface(typeFace);
@@ -149,13 +150,14 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
             TextView counterWinsOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_wins);
             TextView counterTotalOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
 
-            counterInProgressOpen.setText(contact.getmChallenges());
+            // TODO: 30.08.2016 CHANGE TOTAL FOR TOTAL
+            counterInProgressOpen.setText(contact.getmTotal());
             counterWinsOpen.setText(contact.getmWins());
-            counterTotalOpen.setText(contact.getmTotal());
+            counterTotalOpen.setText(contact.getmChallenges());
 
             // отвечает за лвл юзера в свернутом виде
             TextView tvUserLevelOpen = (TextView)viewHolder.itemView.findViewById(R.id.textViewWinsCounter);
-            tvUserLevelOpen.setText("Level " + contact.getmLevel() + " Champy");
+            tvUserLevelOpen.setText(_context.getString(R.string.level) + contact.getmLevel() + _context.getString(R.string.champy));
 
             // делаем view open видимой, view close невидимой
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.VISIBLE);
@@ -179,13 +181,14 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
             TextView counterWinsClose = (TextView)viewHolder.itemView.findViewById(R.id.counterWins);
             TextView counterTotalClose = (TextView)viewHolder.itemView.findViewById(R.id.counterTotal);
 
-            counterInProgressClose.setText(contact.getmChallenges());
+            // TODO: 30.08.2016 CHANGE TOTAL FOR TOTAL
+            counterInProgressClose.setText(contact.getmTotal());
             counterWinsClose.setText(contact.getmWins());
-            counterTotalClose.setText(contact.getmTotal());
+            counterTotalClose.setText(contact.getmChallenges());
 
             // отвечает за лвл юзера в свернутом виде
             TextView tvUserLevelClose = (TextView)viewHolder.itemView.findViewById(R.id.level);
-            tvUserLevelClose.setText("Level " + contact.getmLevel()+ " Champy");
+            tvUserLevelClose.setText(_context.getString(R.string.level) + contact.getmLevel() + _context.getString(R.string.champy));
 
             // делаем view open невидимой, view close видимой
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.GONE);

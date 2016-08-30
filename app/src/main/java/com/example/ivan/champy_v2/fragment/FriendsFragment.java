@@ -144,9 +144,8 @@ public class FriendsFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i("stat", "Created friends");
-
         final View view = inflater.inflate(R.layout.fragment_first, container, false);
-        final List<com.example.ivan.champy_v2.Friend> friends = new ArrayList<com.example.ivan.champy_v2.Friend>();
+        final List<com.example.ivan.champy_v2.Friend> friends = new ArrayList<>();
 
         DBHelper dbHelper = new DBHelper(getContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -266,7 +265,7 @@ public class FriendsFragment extends Fragment {
                                 }
                             }
                         }
-                        final List<Friend> newfriends = new ArrayList<Friend>();
+                        final List<Friend> newfriends = new ArrayList<>();
                         Cursor c = db.query("friends", null, null, null, null, null, null);
                         if (c.moveToFirst()) {
                             int idColIndex = c.getColumnIndex("id");
@@ -362,7 +361,7 @@ public class FriendsFragment extends Fragment {
                             }
                         }
                     }
-                    final List<com.example.ivan.champy_v2.Friend> newfriends = new ArrayList<com.example.ivan.champy_v2.Friend>();
+                    final List<com.example.ivan.champy_v2.Friend> newfriends = new ArrayList<>();
                     Cursor c = db.query("friends", null, null, null, null, null, null);
                     if (c.moveToFirst()) {
                         int idColIndex = c.getColumnIndex("id");

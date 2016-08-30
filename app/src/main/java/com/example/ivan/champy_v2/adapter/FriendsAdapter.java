@@ -97,7 +97,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     public void onBindViewHolder(final FriendsAdapter.ViewHolder viewHolder, final int position) {
         // Get the data model based on position
         final Friend contact = mContacts.get(position);
-
         // Set item views based on the data model
         TextView textView = viewHolder.nameTextView;
         textView.setText(contact.getName());
@@ -146,7 +145,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
             // отвечает за лвл юзера в свернутом виде
             TextView tvUserLevelOpen = (TextView)viewHolder.itemView.findViewById(R.id.textViewWinsCounter);
-            tvUserLevelOpen.setText("Level "+ contact.getmLevel() + " Champy");
+            tvUserLevelOpen.setText(_context.getString(R.string.level) + contact.getmLevel() + _context.getString(R.string.champy));
 
             // делаем view open видимой, view close невидимой
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.VISIBLE);
@@ -175,7 +174,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
             // отвечает за лвл юзера в свернутом виде
             TextView tvUserLevelClose = (TextView)viewHolder.itemView.findViewById(R.id.level);
-            tvUserLevelClose.setText("Level " + contact.getmLevel()+ " Champy");
+            tvUserLevelClose.setText(_context.getString(R.string.level) + contact.getmLevel() + _context.getString(R.string.champy));
 
             // делаем view open невидимой, view close видимой
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.GONE);
