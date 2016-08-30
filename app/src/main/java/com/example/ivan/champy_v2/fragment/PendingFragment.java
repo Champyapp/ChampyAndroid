@@ -368,7 +368,7 @@ public class PendingFragment extends Fragment {
         mSocket.on("Relationship:created:accepted", modifiedRelationship);
         mSocket.on("Relationship:created:removed", modifiedRelationship);
         mSocket.on("Relationship:new:removed", modifiedRelationship);
-        mSocket.connect();
+//        mSocket.connect();
 
     }
 
