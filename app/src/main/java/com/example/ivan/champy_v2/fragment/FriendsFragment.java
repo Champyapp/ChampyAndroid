@@ -3,7 +3,6 @@ package com.example.ivan.champy_v2.fragment;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,9 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.interfaces.CustomItemClickListener;
@@ -50,14 +46,12 @@ public class FriendsFragment extends Fragment {
     public static final String ARG_PAGE = "ARG_PAGE";
 
     public View gView;
-    public SwipeRefreshLayout gSwipeRefreshlayout;
-
-    private int mPage;
+    public SwipeRefreshLayout gSwipeRefreshLayout;
 
     SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
         @Override
         public void onRefresh() {
-            refreshView(gSwipeRefreshlayout, gView);
+            refreshView(gSwipeRefreshLayout, gView);
         }
     };
 
@@ -135,7 +129,7 @@ public class FriendsFragment extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    refreshView(gSwipeRefreshlayout, gView);
+                    refreshView(gSwipeRefreshLayout, gView);
                 }
             });
             Log.i("call", "new friend request");
@@ -156,9 +150,7 @@ public class FriendsFragment extends Fragment {
 
         DBHelper dbHelper = new DBHelper(getContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-
         Cursor c = db.query("friends", null, null, null, null, null, null);
-        //Log.i("FriendsFragment", "onCreateView: CURSOR COUNT = " + c.getCount());
         if (c.moveToFirst()) {
             int idColIndex = c.getColumnIndex("id");
             int nameColIndex = c.getColumnIndex("name");
@@ -179,25 +171,8 @@ public class FriendsFragment extends Fragment {
                         "" + c.getString(allChallengesCount),
                         "0"));
             } while (c.moveToNext());
-        } //else Log.i("stat", "friends_null");
+        }
         c.close();
-
-        /*Log.i("stat", "FriendsActivity :"+friends);
-        Typeface typeFace = Typeface.createFromAsset(getResources().getAssets(), "fonts/bebasneue.ttf");
-        ImageView foreverAlonePhoto = (ImageView)view.findViewById(R.id.foreverAlonePhoto);
-        TextView foreverAloneText1 = (TextView)view.findViewById(R.id.foreveralonetext1);
-        TextView foreverAloneText2 = (TextView)view.findViewById(R.id.foreveralonetext2);
-        foreverAloneText1.setTypeface(typeFace);
-        foreverAloneText2.setTypeface(typeFace);
-        if (friends.isEmpty()) {
-            foreverAlonePhoto.setVisibility(View.VISIBLE);
-            foreverAloneText1.setVisibility(View.VISIBLE);
-            foreverAloneText2.setVisibility(View.VISIBLE);
-        } else {
-            foreverAlonePhoto.setVisibility(View.INVISIBLE);
-            foreverAloneText1.setVisibility(View.INVISIBLE);
-            foreverAloneText2.setVisibility(View.INVISIBLE);
-        }*/
 
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
         final FriendsAdapter adapter = new FriendsAdapter(friends, getContext(), getActivity(), new CustomItemClickListener() {
@@ -220,9 +195,8 @@ public class FriendsFragment extends Fragment {
         rvContacts.setAdapter(adapter);
 
 
-        gSwipeRefreshlayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
-
-        gSwipeRefreshlayout.setOnRefreshListener(onRefreshListener);
+        gSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
+        gSwipeRefreshLayout.setOnRefreshListener(onRefreshListener);
 
 
         this.gView = view;
@@ -235,7 +209,7 @@ public class FriendsFragment extends Fragment {
         swipeRefreshLayout.setRefreshing(true);
         final String API_URL = "http://46.101.213.24:3007";
         SessionManager sessionManager = new SessionManager(getContext());
-        HashMap<String, String> user = new HashMap<>();
+        HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         final String id = user.get("id");
         String token = user.get("token");
@@ -313,11 +287,8 @@ public class FriendsFragment extends Fragment {
                                         "" + c.getString(allChallengesCount),
                                         "0"));
                             } while (c.moveToNext());
-                        } //else Log.i("stat", "0 rows");
+                        }
                         c.close();
-
-                        Log.i("stat", "FriendsActivity :" + newfriends.toString());
-
 
                         RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
                         final FriendsAdapter adapter = new FriendsAdapter(newfriends, getContext(), getActivity(), new CustomItemClickListener() {
@@ -348,14 +319,11 @@ public class FriendsFragment extends Fragment {
     public void UpdateFriendsList() {
         final String API_URL = "http://46.101.213.24:3007";
         SessionManager sessionManager = new SessionManager(getActivity());
-        HashMap<String, String> user = new HashMap<>();
+        HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         final String id = user.get("id");
         String token = user.get("token");
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         DBHelper dbHelper = new DBHelper(getActivity());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.delete("friends", null, null);
@@ -409,7 +377,7 @@ public class FriendsFragment extends Fragment {
                                     c.getString(index),
                                     "0", "0", "0" ,"0"));
                         } while (c.moveToNext());
-                    } //else Log.i("stat", "0 0 0 0");
+                    }
                     c.close();
 
                     Log.i("stat", "FriendsActivity :" + newfriends.toString());

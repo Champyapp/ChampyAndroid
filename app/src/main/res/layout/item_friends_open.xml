@@ -6,8 +6,9 @@
     android:id="@+id/row_friends_list_open"
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="false"
-    android:layout_alignParentBottom="true">
+    android:layout_alignParentBottom="true" >
 
+    <!-- фотка, лвл, тест: Champy # level -->
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -40,6 +41,7 @@
         android:textSize="15dp"
         android:layout_marginBottom="8dp" />
 
+    <!-- круги -->
     <ImageView
         android:layout_width="80dp"
         android:layout_height="80dp"
@@ -65,7 +67,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginRight="16dp" />
 
-    <!-- Просто текст  -->
+    <!-- текст над каунтерами  -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -109,7 +111,7 @@
         android:gravity="center_horizontal"
         android:textColor="#ffffff" />
 
-    <!-- конец просто текста-->
+    <!-- полоска в конце контакта -->
 
     <View
         android:layout_width="match_parent"
@@ -122,6 +124,7 @@
         android:layout_alignParentStart="true" />
 
     <!-- ImageView кругов -->
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -153,8 +156,6 @@
         android:layout_alignRight="@+id/imageViewBgForCircleTotal"
         android:layout_alignEnd="@+id/imageViewBgForCircleTotal" />
 
-    <!-- ImageView кругов конец -->
-
     <!--         Кнопки         -->
     <ImageButton
         android:layout_width="40dp"
@@ -173,15 +174,15 @@
         android:layout_above="@+id/textViewWinsCounter"
         android:layout_alignRight="@+id/imageViewBgTotal"
         android:layout_alignEnd="@+id/imageViewBgTotal" />
-    <!--         Кнопки         -->
+
 
     <!-- Текст на кругах! -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:text="Small Text"
-        android:id="@+id/info_total"
+        android:text="i"
+        android:id="@+id/info_inProgress"
         android:layout_alignLeft="@+id/imageViewBgForCircleChall"
         android:layout_alignStart="@+id/imageViewBgForCircleChall"
         android:layout_alignRight="@+id/imageViewBgForCircleChall"
@@ -195,7 +196,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:text="Small Text"
+        android:text="w"
         android:id="@+id/info_wins"
         android:textColor="#ffffff"
         android:gravity="center"
@@ -210,8 +211,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:text="Small Text"
-        android:id="@+id/info_inProgress"
+        android:text="t"
+        android:id="@+id/info_total"
         android:layout_alignLeft="@+id/imageViewBgForCircleTotal"
         android:layout_alignStart="@+id/imageViewBgForCircleTotal"
         android:layout_alignRight="@+id/imageViewBgForCircleTotal"

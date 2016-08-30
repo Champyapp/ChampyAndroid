@@ -834,6 +834,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             cardImage.getLayoutParams().height = y*50;
             if (y > 10) y = 10;
 
+            final ChallengeController challengeController = new ChallengeController(MainActivity.this, MainActivity.this, 0 , 0, 0);
+
             TextView tvSelfImprovement  = (TextView) tempView.findViewById(R.id.textViewSIC);
             tvSelfImprovement.setText(item.getType());
             String itemGoal = item.getGoal();
@@ -881,7 +883,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 case DialogInterface.BUTTON_POSITIVE:
                                     OfflineMode offlineMode = new OfflineMode();
                                     if (offlineMode.isConnectedToRemoteAPI(MainActivity.this)){
-                                        ChallengeController challengeController = new ChallengeController(MainActivity.this, MainActivity.this, 0 , 0, 0);
+
                                         try {
                                             challengeController.give_up(item.getId());
                                         } catch (IOException e) {
@@ -907,10 +909,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
 
 
-            Button buttonDoneForToday = (Button) tempView.findViewById(R.id.buttonDoneForToday);
+            final Button buttonDoneForToday = (Button) tempView.findViewById(R.id.buttonDoneForToday);
             buttonDoneForToday.getLayoutParams().width = x*10;
             buttonDoneForToday.getLayoutParams().height = x*10;
-            final Button finalButton = buttonDoneForToday;
+
+            //final Button finalButton = buttonDoneForToday;
             if (item.getUpdated() != null){
                 if (!item.getType().equals("Wake Up")) { //?
                     if (item.getUpdated().equals("false")) {
@@ -918,18 +921,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 }
             }
+
             buttonDoneForToday.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String id = item.getId();
-                    //Log.d("myLogs", "Click " + id);
+
                     SQLiteDatabase localSQLiteDatabase = new DBHelper(MainActivity.this).getWritableDatabase();
                     ContentValues localContentValues = new ContentValues();
                     localContentValues.put("updated", "true");
                     localSQLiteDatabase.update("myChallenges", localContentValues, "challenge_id = ?", new String[]{id});
                     int i = localSQLiteDatabase.update("updated", localContentValues, "challenge_id = ?", new String[]{id});
-                    //Log.d("myLogs", "Updated: " + i);
-                    finalButton.setBackgroundDrawable(MainActivity.this.getResources().getDrawable(R.drawable.icon_share));
+                    try {
+                        challengeController.doneForToday(id);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    buttonDoneForToday.setBackgroundDrawable(MainActivity.this.getResources().getDrawable(R.drawable.icon_share));
                 }
             });
 

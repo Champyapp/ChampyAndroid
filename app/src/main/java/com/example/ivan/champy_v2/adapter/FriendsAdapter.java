@@ -37,9 +37,6 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-/**
- * Created by ivan on 05.02.16.
- */
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
 
     final private String API_URL = "http://46.101.213.24:3007";
@@ -47,23 +44,17 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     private List<Friend> mContacts;
     private Context _context;
     private Activity activity;
-    int selectedPos = 0;
     CustomItemClickListener listener;
     ArrayList<Integer> selected = new ArrayList<>();
 
     private Other other = new Other(new ArrayList<Friend>());
 
-    // Pass in the contact array into the constructor
+
     public FriendsAdapter(List<Friend> contacts, Context context, Activity activity, CustomItemClickListener customItemClickListener) {
         mContacts = contacts;
         _context = context;
         this.listener = customItemClickListener;
         this.activity = activity;
-    }
-
-
-    public void Add_to_list(Friend friend){
-        mContacts.add(friend);
     }
 
     @Override
@@ -107,21 +98,13 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         // Get the data model based on position
         final Friend contact = mContacts.get(position);
 
-        //SessionManager sessionManager = new SessionManager(_context);
-        //HashMap<String, String> champy = sessionManager.getChampyOptions();
-
-
         // Set item views based on the data model
         TextView textView = viewHolder.nameTextView;
         textView.setText(contact.getName());
 
-        Log.i("Selected", "" + selected.contains(position));
-
         // при нажатии нужно переобъявлять view, поэтому делаем это.
         // отвечает за вид в развернутом состоянии
         if (selected.contains(position)) {
-            Log.i("Selected: ", position + " open");
-
             // отвечает за значки в развернутом виде
             ImageView imageViewUserAvatar = (ImageView)viewHolder.itemView.findViewById(R.id.imageViewUserAvatar);
             ImageView imageViewChallengesOpen = viewHolder.mchallenges;
@@ -146,23 +129,20 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
             // создаем вид счетчиком в развернутом виде
             TextView tvChallenges = (TextView)viewHolder.itemView.findViewById(R.id.textViewChallenges);
-            TextView tvTotal = (TextView)viewHolder.itemView.findViewById(R.id.textViewTotal);
             TextView tvWins = (TextView)viewHolder.itemView.findViewById(R.id.textViewWins);
+            TextView tvTotal = (TextView)viewHolder.itemView.findViewById(R.id.textViewTotal);
             tvChallenges.setTypeface(typeFace);
             tvTotal.setTypeface(typeFace);
             tvWins.setTypeface(typeFace);
 
-            //SessionManager sessionManager = new SessionManager(_context);
-            //HashMap<String, String> champy = sessionManager.getChampyOptions();
-
             // отвечает за счетчики в развернутом виде
-            TextView counterInProgressOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
-            TextView counterTotalOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_inProgress);
+            TextView counterInProgressOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_inProgress);
             TextView counterWinsOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_wins);
+            TextView counterTotalOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
 
             counterInProgressOpen.setText(contact.getmChallenges());
-            counterTotalOpen.setText(contact.getmTotal());
             counterWinsOpen.setText(contact.getmWins());
+            counterTotalOpen.setText(contact.getmTotal());
 
             // отвечает за лвл юзера в свернутом виде
             TextView tvUserLevelOpen = (TextView)viewHolder.itemView.findViewById(R.id.textViewWinsCounter);
@@ -173,7 +153,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             viewHolder.itemView.findViewById(R.id.row_friends_list_close).setVisibility(View.GONE);
         }
         else {
-            Log.i("Selected: ", position + " close");
             // отвечает за значки в свернутом виде
             ImageView imageViewFriendPicture = viewHolder.friendImage;
             ImageView imageViewChallenges = viewHolder.challenges;
@@ -189,9 +168,10 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             TextView counterInProgressClose = (TextView)viewHolder.itemView.findViewById(R.id.counterInProgress);
             TextView counterTotalClose = (TextView)viewHolder.itemView.findViewById(R.id.counterTotal);
             TextView counterWinsClose = (TextView)viewHolder.itemView.findViewById(R.id.counterWins);
+
             counterInProgressClose.setText(contact.getmChallenges());
-            counterTotalClose.setText(contact.getmTotal());
             counterWinsClose.setText(contact.getmWins());
+            counterTotalClose.setText(contact.getmTotal());
 
             // отвечает за лвл юзера в свернутом виде
             TextView tvUserLevelClose = (TextView)viewHolder.itemView.findViewById(R.id.level);
@@ -219,15 +199,10 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                                     user = sessionManager.getUserDetails();
                                     final String token = user.get("token");
                                     final String id = user.get("id");
-
                                     String friend = mContacts.get(position).getID();
+                                    Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
-                                    Retrofit retrofit = new Retrofit.Builder()
-                                            .baseUrl(API_URL)
-                                            .addConverterFactory(GsonConverterFactory.create())
-                                            .build();
                                     com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
-                                    Log.d(TAG, "Status: " + id + " " + friend);
                                     Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.removeFriend(id, friend, token);
                                     call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
                                         @Override
@@ -249,7 +224,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                                     selected.clear();
                                     break;
                                 case DialogInterface.BUTTON_NEGATIVE:
-                                    //No button clicked
                                     break;
                             }
                         }

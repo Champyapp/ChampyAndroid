@@ -219,7 +219,7 @@ public class PendingFragment extends Fragment {
 //    SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
 //        @Override
 //        public void onRefresh() {
-//            refreshView(gSwipeRefreshlayout, view);
+//            refreshView(gSwipeRefreshLayout, view);
 //        }
 //    }
 

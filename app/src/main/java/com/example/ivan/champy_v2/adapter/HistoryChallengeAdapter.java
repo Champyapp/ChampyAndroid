@@ -1,5 +1,6 @@
 package com.example.ivan.champy_v2.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
@@ -46,31 +47,32 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         Typeface typeFace = Typeface.createFromAsset(context.getAssets(), "fonts/bebasneue.ttf");
         tvUserName.setTypeface(typeFace);
 
-        // Return a new holder instance
-        //viewHolder.item_friends_open.setVisibility(View.VISIBLE);
-       /* viewHolder.item_friends_close.setVisibility(View.GONE);
-
-        contactView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (selected.isEmpty()) {
-                    selected.add(viewHolder.getAdapterPosition());
-                    notifyItemChanged(viewHolder.getAdapterPosition());
-
-                } else {
-                    int oldSelected = selected.get(0);
-                    selected.clear();
-                    if (viewHolder.getAdapterPosition() == oldSelected) selected.add(-1);
-                    notifyItemChanged(oldSelected);
-                    // notifyItemChanged(viewHolder.getAdapterPosition());
-
-                }
-            }
-        });*/
+//        Return a new holder instance
+//        viewHolder.item_friends_open.setVisibility(View.VISIBLE);
+//        viewHolder.item_friends_close.setVisibility(View.GONE);
+//
+//        contactView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (selected.isEmpty()) {
+//                    selected.add(viewHolder.getAdapterPosition());
+//                    notifyItemChanged(viewHolder.getAdapterPosition());
+//
+//                } else {
+//                    int oldSelected = selected.get(0);
+//                    selected.clear();
+//                    if (viewHolder.getAdapterPosition() == oldSelected) selected.add(-1);
+//                    notifyItemChanged(oldSelected);
+//                    // notifyItemChanged(viewHolder.getAdapterPosition());
+//
+//                }
+//            }
+//        });
 
         return new ViewHolder(contactView);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(final HistoryChallengeAdapter.ViewHolder viewHolder, int position) {
         HistoryChallenge itemRow = mContacts.get(position);
@@ -88,17 +90,17 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         switch (type) {
             // TODO: 29.08.2016 make auto size for text because '\n' is not good solution
             case "Duel":
-                nameTextView.setText(goal + ": " + duration + "\nwith " + versus);
+                nameTextView.setText(challengeName + " during " + duration + " days\nwith " + versus);
                 Glide.with(_context).load(R.drawable.duel_yellow).override(80, 80).into(viewHolder.image);
                 break;
             case "Wake Up":
                 // challengeName because when we created "wake up challenge" we've set name
                 // "Wake up at $hour : $minute during this period (in ChallengeController);
-                nameTextView.setText(challengeName + ": " + duration);
+                nameTextView.setText(challengeName + ": " + duration + " days");
                 Glide.with(_context).load(R.drawable.wakeup_yellow).override(80, 80).into(viewHolder.image);
                 break;
             case "Self-Improvement":
-                nameTextView.setText(goal + ": " + duration);
+                nameTextView.setText(challengeName + " during " + duration + " days");
                 Glide.with(_context).load(R.drawable.self_yellow).override(80, 80).into(viewHolder.image);
                 break;
             default:

@@ -8,7 +8,7 @@
     android:visibility="visible"
     android:layout_above="@+id/row_friends_list_open"
     android:layout_alignParentRight="true"
-    android:layout_alignParentEnd="true">
+    android:layout_alignParentEnd="true" >
 
 
     <ImageView
@@ -49,19 +49,19 @@
         android:id="@+id/imageView_challenges_logo"
         android:src="@mipmap/ic_launcher"
         android:layout_above="@+id/view"
-        android:layout_toLeftOf="@+id/counterTotal"
-        android:layout_toStartOf="@+id/counterTotal"
+        android:layout_toLeftOf="@+id/counterInProgress"
+        android:layout_toStartOf="@+id/counterInProgress"
         android:layout_marginRight="8dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="#"
-        android:id="@+id/counterInProgress"
+        android:text="t"
+        android:id="@+id/counterTotal"
         android:textColor="#ffffff"
         android:visibility="visible"
-        android:layout_alignBottom="@+id/imageView_total_logo"
+        android:layout_alignBottom="@+id/imageView_challenges_logo"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginRight="8dp" />
@@ -80,7 +80,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="#"
+        android:text="w"
         android:id="@+id/counterWins"
         android:textColor="#ffffff"
         android:visibility="visible"
@@ -95,8 +95,8 @@
         android:id="@+id/imageView_total_logo"
         android:src="@mipmap/ic_launcher"
         android:layout_above="@+id/view"
-        android:layout_toLeftOf="@+id/counterInProgress"
-        android:layout_toStartOf="@+id/counterInProgress"
+        android:layout_toLeftOf="@+id/counterTotal"
+        android:layout_toStartOf="@+id/counterTotal"
         android:layout_marginRight="8dp" />
 
 
@@ -104,8 +104,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="@android:style/TextAppearance.Medium"
-        android:text="#"
-        android:id="@+id/counterTotal"
+        android:text="i"
+        android:id="@+id/counterInProgress"
         android:textColor="#ffffff"
         android:visibility="visible"
         android:layout_above="@+id/view"

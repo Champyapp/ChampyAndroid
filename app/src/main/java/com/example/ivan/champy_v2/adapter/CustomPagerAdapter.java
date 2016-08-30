@@ -3,9 +3,6 @@ package com.example.ivan.champy_v2.adapter;
 import android.content.Context;
 import android.view.View;
 
-/**
- * Created by ivan on 09.12.15.
- */
 public abstract class CustomPagerAdapter {
 
     private Context context;

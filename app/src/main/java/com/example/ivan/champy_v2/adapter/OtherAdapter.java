@@ -103,29 +103,25 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
         // Get the data model based on position
         final Friend contact = mContacts.get(position);
 
-        SessionManager sessionManager = new SessionManager(_context);
-        HashMap<String, String> champy = sessionManager.getChampyOptions();
-
         // Set item views based on the data model
         TextView nameTextView = viewHolder.nameTextView;
         nameTextView.setText(contact.getName());
 
-        Log.i("Selected", "" + selected.contains(position));
-
-        // при нажатии нужно переобъявлять view, поэтому делаем это.
+        /**
+         *   при нажатии нужно переобъявлять view, поэтому делаем это.
+         */
 
         // отвечает за вид в развернутом состоянии
         if (selected.contains(position)) {
-            Log.i("Selected: ", position + " open");
-
             // отвечает за значки в развернутом виде
             ImageView imageViewUserAvatar = (ImageView)viewHolder.itemView.findViewById(R.id.imageViewUserAvatar);
             ImageView imageViewChallengesOpen = viewHolder.mchallenges;
-            ImageView imageViewTotalOpen = viewHolder.mtotal;
             ImageView imageViewWinsOpen = viewHolder.mwins;
+            ImageView imageViewTotalOpen = viewHolder.mtotal;
+
             Glide.with(_context).load(R.drawable.challenges).override(40, 40).into(imageViewChallengesOpen);
-            Glide.with(_context).load(R.drawable.total).override(40, 40).into(imageViewTotalOpen);
             Glide.with(_context).load(R.drawable.wins).override(40, 40).into(imageViewWinsOpen);
+            Glide.with(_context).load(R.drawable.total).override(40, 40).into(imageViewTotalOpen);
             Glide.with(_context).load(contact.getPicture()).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true).transform(new CropCircleTransformation(_context)).placeholder(R.drawable.champy_icon2).override(80, 80).dontAnimate().into(imageViewUserAvatar);
 
@@ -142,22 +138,20 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
 
             // создаем вид счетчиком в развернутом виде
             TextView tvChallenges = (TextView)viewHolder.itemView.findViewById(R.id.textViewChallenges);
-            TextView tvTotal = (TextView)viewHolder.itemView.findViewById(R.id.textViewTotal);
             TextView tvWins = (TextView)viewHolder.itemView.findViewById(R.id.textViewWins);
+            TextView tvTotal = (TextView)viewHolder.itemView.findViewById(R.id.textViewTotal);
             tvChallenges.setTypeface(typeFace);
-            tvTotal.setTypeface(typeFace);
             tvWins.setTypeface(typeFace);
-
-            //SessionManager sessionManager = new SessionManager(_context);
-            //HashMap<String, String> champy = sessionManager.getChampyOptions();
+            tvTotal.setTypeface(typeFace);
 
             // отвечает за счетчики в развернутом виде
             TextView counterInProgressOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_inProgress);
-            TextView counterTotalOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
             TextView counterWinsOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_wins);
+            TextView counterTotalOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
+
             counterInProgressOpen.setText(contact.getmChallenges());
-            counterTotalOpen.setText(contact.getmTotal());
             counterWinsOpen.setText(contact.getmWins());
+            counterTotalOpen.setText(contact.getmTotal());
 
             // отвечает за лвл юзера в свернутом виде
             TextView tvUserLevelOpen = (TextView)viewHolder.itemView.findViewById(R.id.textViewWinsCounter);
@@ -169,25 +163,25 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
 
         }
         else {
-            Log.i("Selected: ", position + " close");
             // отвечает за значки в свернутом виде
             ImageView imageViewChallenges = viewHolder.challenges;
             ImageView imageViewWins = viewHolder.wins;
             ImageView imageViewTotal = viewHolder.total;
             ImageView imageViewFriendPicture = viewHolder.friendImage;
             Glide.with(_context).load(R.drawable.challenges).override(40, 40).into(imageViewChallenges);
-            Glide.with(_context).load(R.drawable.total).override(40, 40).into(imageViewTotal);
             Glide.with(_context).load(R.drawable.wins).override(40, 40).into(imageViewWins);
+            Glide.with(_context).load(R.drawable.total).override(40, 40).into(imageViewTotal);
             Glide.with(_context).load(contact.getPicture()).asBitmap().transform(new CropCircleTransformation(_context)).
                     placeholder(R.drawable.champy_icon2).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).override(80, 80).dontAnimate().into(imageViewFriendPicture);
 
             // отвечает за счетчики в свернутом виде
             TextView counterInProgressClose = (TextView)viewHolder.itemView.findViewById(R.id.counterInProgress);
-            TextView counterTotalClose = (TextView)viewHolder.itemView.findViewById(R.id.counterTotal);
             TextView counterWinsClose = (TextView)viewHolder.itemView.findViewById(R.id.counterWins);
+            TextView counterTotalClose = (TextView)viewHolder.itemView.findViewById(R.id.counterTotal);
+
             counterInProgressClose.setText(contact.getmChallenges());
-            counterTotalClose.setText(contact.getmTotal());
             counterWinsClose.setText(contact.getmWins());
+            counterTotalClose.setText(contact.getmTotal());
 
             // отвечает за лвл юзера в свернутом виде
             TextView tvUserLevelClose = (TextView)viewHolder.itemView.findViewById(R.id.level);
@@ -198,19 +192,20 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
             viewHolder.itemView.findViewById(R.id.row_friends_list_close).setVisibility(View.VISIBLE);
         }
 
-        viewHolder.block.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                OfflineMode offlineMode = new OfflineMode();
-                if (offlineMode.isConnectedToRemoteAPI(activity)) {
-                    mContacts.remove(position);
-                    notifyItemRemoved(position);
-                    selected.clear();
-                }
-            }
-        });
+//        viewHolder.block.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                OfflineMode offlineMode = new OfflineMode();
+//                if (offlineMode.isConnectedToRemoteAPI(activity)) {
+//                    mContacts.remove(position);
+//                    notifyItemRemoved(position);
+//                    selected.clear();
+//                }
+//            }
+//        });
 
         // button add user
+
         viewHolder.add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -347,7 +342,7 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
             simple = (RelativeLayout)itemView.findViewById(R.id.row_friends_list_close);
             info = (RelativeLayout)itemView.findViewById(R.id.row_friends_list_open);
 
-            block = (ImageButton)itemView.findViewById(R.id.imageButtonBlockUser);
+            //block = (ImageButton)itemView.findViewById(R.id.imageButtonBlockUser);
             add = (ImageButton)itemView.findViewById(R.id.imageButtonAddUser);
 
 
