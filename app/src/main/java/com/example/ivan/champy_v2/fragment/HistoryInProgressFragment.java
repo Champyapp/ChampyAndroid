@@ -15,9 +15,6 @@ import com.example.ivan.champy_v2.model.SelfImprovement_model;
 
 import java.util.ArrayList;
 
-/**
- * Created by ivan on 23.03.16.
- */
 public class HistoryInProgressFragment extends Fragment{
 
 
@@ -39,8 +36,12 @@ public class HistoryInProgressFragment extends Fragment{
             String duration = item.getDays();
             String status = item.getStatus();
             String type = item.getType();
+            String goal = item.getGoal();
+            String challengeName = item.getChallengeName();
+            String versus = item.getVersus();
+            String recipient = item.getRecipient();
 
-            all.add(new HistoryChallenge(type, true, description, duration, status));
+            all.add(new HistoryChallenge(type, true, description, duration, status, goal, challengeName, versus, recipient));
         }
 
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);

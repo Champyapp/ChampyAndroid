@@ -25,6 +25,7 @@
 
     <application
         android:allowBackup="true"
+        android:largeHeap="true"
         android:icon="@drawable/champy_icon2"
         android:label="@string/app_name"
         android:supportsRtl="true"

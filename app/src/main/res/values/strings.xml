@@ -141,5 +141,15 @@
     <string name="wake_up_at">WAKE UP AT</string>
     <string name="i_challenge_myself_to">I challenge myself to</string>
     <string name="wake_up">wake up!</string>
+    <string name="enter_your_challenge">Enter your challenge</string>
+    <string name="hint_21">21</string>
+    <string name="days">Days</string>
+    <string name="everyday_for_the_next">everyday for the next</string>
+    <string name="info_about_challenge">Info about challenge</string>
+    <string name="challengestatus">challengeStatus</string>
+    <string name="points">points</string>
+    <string name="count_of_points_10">10</string>
+    <string name="status">Status</string>
+    <string name="challengetypeicon">challengeTypeIcon</string>
 
 </resources>

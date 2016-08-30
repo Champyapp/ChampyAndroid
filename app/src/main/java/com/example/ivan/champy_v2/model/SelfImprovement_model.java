@@ -15,9 +15,6 @@ import java.util.HashMap;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 
-/**
- * Created by ivan on 14.03.16.
- */
 public class SelfImprovement_model {
 
     String goal;
@@ -28,13 +25,23 @@ public class SelfImprovement_model {
     String type;
     String name;
     String challengeName;
+    String versus;
+    String recipient;
+
+    public String getRecipient() {
+        return recipient;
+    }
+
+    public void setRecipient(String recipient) {
+        this.recipient = recipient;
+    }
+
+    public String getVersus() {
+        return versus;
+    }
 
     public String getChallengeName() {
         return challengeName;
-    }
-
-    public void setChallengeName(String challengeName) {
-        this.challengeName = challengeName;
     }
 
     public String getName() {
@@ -53,14 +60,8 @@ public class SelfImprovement_model {
         return status;
     }
 
-    private Context context;
-
     public String getGoal() {
         return goal;
-    }
-
-    public void setGoal(String goal) {
-        this.goal = goal;
     }
 
     public String getDays() {
@@ -84,7 +85,7 @@ public class SelfImprovement_model {
     }
 
 
-    public SelfImprovement_model( String mGoal, String mDays, String mType, String mid ,String mStatus, String mUpdated, String mChallengeName) {
+    public SelfImprovement_model( String mGoal, String mDays, String mType, String mid ,String mStatus, String mUpdated, String mChallengeName, String versus, String recipient) {
         this.goal = mGoal;
         this.days = mDays;
         this.type = mType;
@@ -92,6 +93,8 @@ public class SelfImprovement_model {
         this.status = mStatus;
         this.updated = mUpdated;
         this.challengeName = mChallengeName;
+        this.versus = versus;
+        this.recipient = recipient;
     }
 
     //генерирует InProgress в History и с этими же данными генерирует карточки для MainActivity
@@ -100,7 +103,7 @@ public class SelfImprovement_model {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         ArrayList<SelfImprovement_model> arrayList = new ArrayList<>();
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-        int o = 0;
+
         if (c.moveToFirst()) {
             int idColIndex = c.getColumnIndex("id");
             int nameColIndex = c.getColumnIndex("name");
@@ -110,7 +113,9 @@ public class SelfImprovement_model {
             int status = c.getColumnIndex("status");
             int updated = c.getColumnIndex("updated");
             int challengeName = c.getColumnIndex("challengeName");
-            Log.i("SelfImprovement_Model", "Cards Counter =" + o);
+            int colversus = c.getColumnIndex("versus");
+            int colrecipient = c.getColumnIndex("recipient");
+
             do {
                 if (c.getString(status).equals("started")) arrayList.add (new SelfImprovement_model(
                         c.getString(coldescription),
@@ -119,7 +124,9 @@ public class SelfImprovement_model {
                         c.getString(colchallenge_id),
                         "started",
                         c.getString(updated),
-                        c.getString(challengeName)));
+                        c.getString(challengeName),
+                        c.getString(colversus),
+                        c.getString(colrecipient)));
             } while (c.moveToNext());
         }
         c.close();
@@ -133,7 +140,7 @@ public class SelfImprovement_model {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         ArrayList<SelfImprovement_model> arrayList = new ArrayList<>();
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-        int o = 0;
+
         if (c.moveToFirst()) {
             int idColIndex = c.getColumnIndex("id");
             int nameColIndex = c.getColumnIndex("name");
@@ -143,24 +150,42 @@ public class SelfImprovement_model {
             int status = c.getColumnIndex("status");
             int updated = c.getColumnIndex("updated");
             int challengeName = c.getColumnIndex("challengeName");
-            Log.i("GenerateWins", "CursorCounter: " + o);
+            int colversus = c.getColumnIndex("versus");
+            int colrecipient = c.getColumnIndex("recipient");
+
             do {
-                if (c.getString(status).equals("finished")) {
-                    if (c.getString(status).equals("failedByRecipient")) {
-                        arrayList.add(new SelfImprovement_model(
-                                c.getString(coldescription),
-                                c.getString(colduration),
-                                c.getString(nameColIndex),
-                                c.getString(colchallenge_id),
-                                "finished",
-                                c.getString(updated),
-                                c.getString(challengeName)));
+                    if (c.getString(colrecipient).equals("true")) {
+                        if (c.getString(status).equals("failedBySender")) {
+                            arrayList.add(new SelfImprovement_model(
+                                    c.getString(coldescription),
+                                    c.getString(colduration),
+                                    c.getString(nameColIndex),
+                                    c.getString(colchallenge_id),
+                                    "finished",
+                                    c.getString(updated),
+                                    c.getString(challengeName),
+                                    c.getString(colversus),
+                                    c.getString(colrecipient)));
+                        }
                     }
-                }
+                    if (c.getString(colrecipient).equals("false")) {
+                        if (c.getString(status).equals("failedByRecipient")) {
+                            arrayList.add(new SelfImprovement_model(
+                                    c.getString(coldescription),
+                                    c.getString(colduration),
+                                    c.getString(nameColIndex),
+                                    c.getString(colchallenge_id),
+                                    "finished",
+                                    c.getString(updated),
+                                    c.getString(challengeName),
+                                    c.getString(colversus),
+                                    c.getString(colrecipient)));
+                        }
+                    }
             } while (c.moveToNext());
         }
         c.close();
-        return  arrayList;
+        return arrayList;
     }
 
     //генерирует Fails в History
@@ -169,7 +194,7 @@ public class SelfImprovement_model {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         ArrayList<SelfImprovement_model> arrayList = new ArrayList<>();
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-        int o = 0;
+
         if (c.moveToFirst()) {
             int idColIndex = c.getColumnIndex("id");
             int nameColIndex = c.getColumnIndex("name");
@@ -179,44 +204,40 @@ public class SelfImprovement_model {
             int status = c.getColumnIndex("status");
             int updated = c.getColumnIndex("updated");
             int challengeName = c.getColumnIndex("challengeName");
-            Log.i("generateFailed", "MyChallengesCursorCounter = " + o);
+            int colversus = c.getColumnIndex("versus");
+            int colrecipient = c.getColumnIndex("recipient"); // check recipient
+
             do {
-                if (c.getString(status).equals("failedBySender")) {
-                    arrayList.add (new SelfImprovement_model(
-                            c.getString(coldescription),
-                            c.getString(colduration),
-                            c.getString(nameColIndex),
-                            c.getString(colchallenge_id),
-                            "failed",
-                            c.getString(updated),
-                            c.getString(challengeName)));
+                if (c.getString(colrecipient).equals("true")) {
+                    if (c.getString(status).equals("failedByRecipient")) {
+                        arrayList.add(new SelfImprovement_model(
+                                c.getString(coldescription),
+                                c.getString(colduration),
+                                c.getString(nameColIndex),
+                                c.getString(colchallenge_id),
+                                "failed",
+                                c.getString(updated),
+                                c.getString(challengeName),
+                                c.getString(colversus),
+                                c.getString(colrecipient)));
+                    }
+                }
+                if (c.getString(colrecipient).equals("false")) {
+                    if (c.getString(status).equals("failedBySender")) {
+                        arrayList.add(new SelfImprovement_model(
+                                c.getString(coldescription),
+                                c.getString(colduration),
+                                c.getString(nameColIndex),
+                                c.getString(colchallenge_id),
+                                "failed",
+                                c.getString(updated),
+                                c.getString(challengeName),
+                                c.getString(colversus),
+                                c.getString(colrecipient)));
+                    }
                 }
             } while (c.moveToNext());
         }
-
-//        c = db.query("duel", null, null, null, null, null, null);
-//        o = 0;
-//        if (c.moveToFirst()) {
-//            int idColIndex = c.getColumnIndex("id");
-//            int nameColIndex = c.getColumnIndex("name");
-//            int coldescription = c.getColumnIndex("description");
-//            int colduration = c.getColumnIndex("duration");
-//            int colchallenge_id = c.getColumnIndex("challenge_id");
-//            int status = c.getColumnIndex("status");
-//            int updated = c.getColumnIndex("updated");
-//            Log.i("generateFailed", "DuelCursorCounter = " + o);
-//            do {
-//                if (c.getString(status).equals("failedByRecipient")) {
-//                    arrayList.add (new SelfImprovement_model(
-//                            c.getString(coldescription),
-//                            c.getString(colduration),
-//                            c.getString(nameColIndex),
-//                            c.getString(colchallenge_id),
-//                            "failed",
-//                            c.getString(updated)));
-//                }
-//            } while (c.moveToNext());
-//        }
         c.close();
         return  arrayList;
     }
