@@ -10,14 +10,6 @@ import javax.annotation.Generated;
 @Generated("org.jsonschema2pojo")
 public class Datum {
 
-    public String get_id() {
-        return _id;
-    }
-
-    public void set_id(String _id) {
-        this._id = _id;
-    }
-
     private String _id;
     private Sender sender;
     private Recipient recipient;
@@ -34,8 +26,17 @@ public class Datum {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
 
+
     public Recipient getRecipient() {
         return recipient;
+    }
+
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
     public Challenge getChallenge() {
@@ -85,7 +86,6 @@ public class Datum {
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
     }
-
 
 
     public void setSender(Sender sender) {

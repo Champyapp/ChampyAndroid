@@ -16,7 +16,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -73,7 +72,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         // Inflate the custom layout
         View contactView = inflater.inflate(R.layout.item_friends, parent, false);
 
-        TextView tvUserName = (TextView)contactView.findViewById(R.id.name);
+        TextView tvUserName = (TextView)contactView.findViewById(R.id.challengeNameInHistory);
         Typeface typeFace = Typeface.createFromAsset(context.getAssets(), "fonts/bebasneue.ttf");
         tvUserName.setTypeface(typeFace);
 
@@ -345,7 +344,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         public ViewHolder(View itemView) {
             super(itemView);
 
-            nameTextView = (TextView) itemView.findViewById(R.id.name);
+            nameTextView = (TextView) itemView.findViewById(R.id.challengeNameInHistory);
             friendImage = (ImageView) itemView.findViewById(R.id.picture);
             challenges = (ImageView) itemView.findViewById(R.id.imageView_challenges_logo);
             wins = (ImageView) itemView.findViewById(R.id.imageView_wins_logo);

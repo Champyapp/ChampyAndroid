@@ -3,24 +3,17 @@ package com.example.ivan.champy_v2.helper;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.util.Log;
 
-import com.example.ivan.champy_v2.Blur;
 import com.example.ivan.champy_v2.SessionManager;
-import com.example.ivan.champy_v2.activity.MainActivity;
 import com.example.ivan.champy_v2.activity.RoleControllerActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
-import com.example.ivan.champy_v2.interfaces.Friends;
 import com.example.ivan.champy_v2.interfaces.NewUser;
-import com.example.ivan.champy_v2.interfaces.SingleInProgress;
 import com.example.ivan.champy_v2.model.Friend.Datum;
 import com.example.ivan.champy_v2.model.Friend.Friend;
 import com.example.ivan.champy_v2.model.Friend.Friend_;
@@ -28,17 +21,20 @@ import com.example.ivan.champy_v2.model.Friend.Owner;
 import com.example.ivan.champy_v2.model.User.Data;
 import com.example.ivan.champy_v2.model.User.User;
 import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
+import com.example.ivan.champy_v2.model.active_in_progress.Recipient;
+import com.example.ivan.champy_v2.model.active_in_progress.Sender;
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 import io.jsonwebtoken.Jwts;
@@ -66,6 +62,7 @@ public class AppSync {
         this.context = context;
     }
 
+
     public String getToken(String fb_id, String gcm)  throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("facebookId", fb_id);
@@ -81,9 +78,11 @@ public class AppSync {
         final String facebookId = this.fbId;
         final String jwtString = this.token;
         final String path_to_pic = this.path; // TODO: 23.08.2016 Change PATH
+        final String gcm = this.gcm;
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
-        Log.i("AppSync", "getUserProfile | DATA:\nFacebookId = " + facebookId + "\njwtString = " + jwtString + "\nPath_To_Pic = " + path_to_pic);
+        Log.i("AppSync", "TOKEN: " + jwtString);
+
         NewUser newUser = retrofit.create(NewUser.class);
 
         Call<User> callGetUserInfo = newUser.getUserInfo(jwtString);
@@ -101,12 +100,12 @@ public class AppSync {
                     String newChallReq = data.getProfileOptions().getNewChallengeRequests().toString();
                     String acceptedYour = data.getProfileOptions().getAcceptedYourChallenge().toString();
                     String challegeEnd = data.getProfileOptions().getChallengeEnd().toString();
-                    //Log.i("GetUserProfile", "UserId = " + userId + "\nFacebook_Id = " + facebookId);
 
                     SessionManager sessionManager = new SessionManager(context);
-                    sessionManager.setRefreshPending("false");
+                    sessionManager.setRefreshPending("false"); // TODO: 26.08.2016 change for true maybe? for auto update pending list?
                     sessionManager.setRefreshFriends("true");
-                    sessionManager.createUserLoginSession(user_name, email, facebookId, path_to_pic, jwtString, userId, pushN, newChallReq, acceptedYour, challegeEnd, "true", gcm);
+                    sessionManager.createUserLoginSession(user_name, email, facebookId, path_to_pic,
+                            jwtString, userId, pushN, newChallReq, acceptedYour, challegeEnd, "true", gcm);
                     sessionManager.setChampyOptions(
                             data.getAllChallengesCount().toString(),
                             data.getSuccessChallenges().toString(),
@@ -115,8 +114,15 @@ public class AppSync {
                     );
 
 
+                    /**
+                     * у нас был Call с помощью которого мы брали данные юзера, а внутри call-а
+                     * мы делали еще 2, чтобы взять его InProgressChallenges и UserFriends.
+                     * поэтому здесь надо вызывать эти 2 метода. После вызывался отдельный метод
+                     * который брал инфу про друзей. Сейчас мы вызываем его здесь.
+                     */
+                    getUserInProgressChallenges(userId);
                     getUserFriends(userId);
-                    getInProgressChallenges(userId);
+                    getUserFriendsInfo(gcm);
 
                     String api_path = null;
                     if (data.getPhoto() != null){
@@ -125,20 +131,18 @@ public class AppSync {
                         if (!file.exists()){
                             com.example.ivan.champy_v2.model.User.Photo photo = data.getPhoto();
                             api_path = API_URL + photo.getLarge();
-                            Log.i("AppSync", "GetUserProfile | GetPhoto = " + api_path);
+                            Log.i("AppSync", "GetUserPhoto: " + api_path);
                         } else {
-                            //new DownloadImageTask();
                             Log.i("AppSync", "GetUserProfile: Houston, we got a problem o_O");
                         }
                     }
 
-
                     Intent goToRoleActivity = new Intent(context, RoleControllerActivity.class);
                     context.startActivity(goToRoleActivity);
 
-
-                } else Log.d("AppSync", "GetUserProfile: OnResponse FAILED = " + decodedResponse);
+                }
             }
+
             @Override
             public void onFailure(Throwable t) {
                 Log.d("TAG", "VSE huynya");
@@ -157,7 +161,6 @@ public class AppSync {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("pending", null, null);
         final ContentValues cv = new ContentValues();
-        Log.i("AppSync", "getUserFriends: userId = " + userId);
         com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
         Call<com.example.ivan.champy_v2.model.Friend.Friend> callGetUserFriends = friends.getUserFriends(userId, this.token);
         callGetUserFriends.enqueue(new Callback<Friend>() {
@@ -217,14 +220,12 @@ public class AppSync {
     }
 
 
-    public void getInProgressChallenges(final String userId) {
-
+    public void getUserInProgressChallenges(final String userId) {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("myChallenges", null, null);
         final ContentValues cv = new ContentValues();
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        Log.i("AppSync", "getInProgressChallenges: userId = " + userId);
         final long unixTime = System.currentTimeMillis() / 1000L;
         String update = "0"; //1457019726
 
@@ -238,12 +239,15 @@ public class AppSync {
             for (int i = 0; i < list.size(); i++) {
                 com.example.ivan.champy_v2.model.active_in_progress.Datum datum = list.get(i);
                 Challenge challenge = datum.getChallenge();
-                String challenge_description = challenge.getDescription(); // bla-bla
-                String challenge_detail = challenge.getDetails(); // $bla-bla + " during this period"
+                Recipient recipient = datum.getRecipient();
+                Sender sender = datum.getSender();
+
+                String challenge_description = challenge.getDescription(); // no smoking
+                String challenge_detail = challenge.getDetails(); // no smoking + " during this period"
                 String challenge_status = datum.getStatus();      // active or not
                 String challenge_id = datum.get_id();             // us magic id
                 String challenge_type = challenge.getType();      // self, duel or wake up
-                String challenge_name = challenge.getName();
+                String challenge_name = challenge.getName();      // name like "wake up"
                 String duration = "";
                 if (datum.getEnd() != null) {
                     int end = datum.getEnd();
@@ -253,10 +257,20 @@ public class AppSync {
 
                 if (challenge_description.equals("Wake Up")) {
                     cv.put("name", "Wake Up");
+                    cv.put("recipient", "false");
                 } else if (challenge_type.equals("567d51c48322f85870fd931a")) {
                     cv.put("name", "Self-Improvement");
+                    cv.put("recipient", "false");
                 } else if (challenge_type.equals("567d51c48322f85870fd931b")) {
                     cv.put("name", "Duel");
+
+                    if (userId.equals(recipient.getId())) {
+                        cv.put("recipient", "true");
+                        cv.put("versus", sender.getName());
+                    } else /*if (id.equals(sender.get_id()))*/{
+                        cv.put("recipient", "false");
+                        cv.put("versus", recipient.getName());
+                    }
                 }
 
                 cv.put("challengeName", challenge_name);
@@ -274,87 +288,165 @@ public class AppSync {
     }
 
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+    public void getUserFriendsInfo(final String gcm) {
+        final String API_URL = "http://46.101.213.24:3007";
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        final NewUser newUser = retrofit.create(NewUser.class);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        DBHelper dbHelper = new DBHelper(context);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        int clearCount = db.delete("mytable", null, null);
+        final ContentValues cv = new ContentValues();
 
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Log.d("LoginActivity", "DownLoadImageTask: doInBackground --- url display: " + urldisplay);
+        final GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(),
+                new GraphRequest.GraphJSONArrayCallback() {
+                    @Override
+                    public void onCompleted(JSONArray array, GraphResponse response) {
+                        for (int i = 0; i < array.length(); i++) {
+                            try {
+                                final String fb_id = array.getJSONObject(i).getString("id");
+                                final String user_name = array.getJSONObject(i).getString("name");
+                                JSONObject jsonObject = new JSONObject();
+                                jsonObject.put("facebookId", fb_id);
+                                jsonObject.put("AndroidOS", gcm);
+                                String string = jsonObject.toString();
+                                final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
+                                Call<User> call = newUser.getUserInfo(jwtString);
+                                call.enqueue(new Callback<User>() {
+                                    @Override
+                                    public void onResponse(Response<User> response, Retrofit retrofit) {
+                                        if (response.isSuccess()) {
+                                            Data data = response.body().getData();
+                                            String photo = null;
 
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            Log.i("Icon :", mIcon11.toString());
-            return mIcon11;
-        }
+                                            if (data.getPhoto() != null) photo = API_URL + data.getPhoto().getMedium();
+                                            else {
+                                                try {
+                                                    URL profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
+                                                    photo = profile_pic.toString();
+                                                } catch (MalformedURLException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                            String name = data.getName();
+                                            cv.put("name", name);
+                                            cv.put("photo", photo);
+                                            cv.put("user_id", data.get_id());
+                                            cv.put("challenges", ""+data.getAllChallengesCount());
+                                            cv.put("wins", ""+data.getSuccessChallenges());
+                                            cv.put("total", ""+data.getScore());
+                                            cv.put("level", ""+data.getLevel().getNumber());
+                                            if (!checkPendingFriends(data.get_id())) db.insert("mytable", null, cv);
+                                            else Log.i("AppSync", "GetFriends | DBase: not added");
+                                        } else {
+                                            URL profile_pic; // was "= null"
+                                            String photo = null;
+                                            try {
+                                                profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
+                                                photo = profile_pic.toString();
+                                            } catch (MalformedURLException e) {
+                                                e.printStackTrace();
+                                            }
+                                            cv.put("name", user_name);
+                                            cv.put("photo", photo);
+                                            cv.put("challenges", "0");
+                                            cv.put("wins", "0");
+                                            cv.put("total", "0");
+                                            cv.put("level", "0");
+                                            db.insert("mytable", null, cv);
+                                        }
+                                    }
 
-        protected void onPostExecute(Bitmap result) {
-            // Do your staff here to save image
-            String string = saveToInternalStorage(result);
-            loadImageFromStorage(string);
-        }
+                                    @Override
+                                    public void onFailure(Throwable t) {}
+                                });
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
 
+                        }
+
+                    }
+                });
+        request.executeAndWait();
     }
 
 
-    private String saveToInternalStorage(Bitmap bitmapImage){
-        ContextWrapper cw = new ContextWrapper(context);
-        // path to /data/data/yourapp/app_data/imageDir
-        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-        if (!directory.exists()) {
-            directory.mkdirs();
+    public Boolean checkPendingFriends(String id) {
+        DBHelper dbHelper = new DBHelper(context);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Boolean ok = false;
+        Cursor c = db.query("pending", null, null, null, null, null, null);
+        if (c.moveToFirst()) {
+            int index = c.getColumnIndex("user_id");
+            do {
+                String user_id = c.getString(index);
+                if (user_id.equals(id)) {
+                    ok = true;
+                    break;
+                }
+            } while (c.moveToNext());
         }
-        // Create imageDir
-        File mypath = new File(directory,"profile.jpg");
-
-        Log.d("TAG", "MY_PATH: "+mypath.toString());
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(mypath);
-            // Use the compress method on the BitMap object to write image to the OutputStream
-            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
-            fos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return directory.getAbsolutePath();
+        c.close();
+        return ok;
     }
 
 
-    public void loadImageFromStorage(String path) {
-        try {
-            File f=new File(path, "profile.jpg");
-            File file = new File(path, "blured2.jpg");
-            if (file.exists()) {
-                return;
-            } else {
-                file.createNewFile();
-                Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-
-                Blur blur = new Blur();
-
-                Bitmap blured = blur.blurRenderScript(context, b, 10);
-
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                blured.compress(Bitmap.CompressFormat.PNG, 0, bos);
-                byte[] bitmapdata = bos.toByteArray();
-
-                FileOutputStream fos = new FileOutputStream(file);
-                fos.write(bitmapdata);
-                fos.flush();
-                fos.close();
-                Log.d("TAG", "Image: Blured");
-            }
-        }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    private String saveToInternalStorage(Bitmap bitmapImage){
+//        ContextWrapper cw = new ContextWrapper(context);
+//        // path to /data/data/yourapp/app_data/imageDir
+//        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+//        if (!directory.exists()) {
+//            directory.mkdirs();
+//        }
+//        // Create imageDir
+//        File mypath = new File(directory,"profile.jpg");
+//
+//        Log.d("TAG", "MY_PATH: "+mypath.toString());
+//        FileOutputStream fos = null;
+//        try {
+//            fos = new FileOutputStream(mypath);
+//            // Use the compress method on the BitMap object to write image to the OutputStream
+//            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+//            fos.close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return directory.getAbsolutePath();
+//    }
+//
+//
+//    public void loadImageFromStorage(String path) {
+//        try {
+//            File f=new File(path, "profile.jpg");
+//            File file = new File(path, "blured2.jpg");
+//            if (file.exists()) {
+//                return;
+//            } else {
+//                file.createNewFile();
+//                Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+//
+//                Blur blur = new Blur();
+//
+//                Bitmap blured = blur.blurRenderScript(context, b, 10);
+//
+//                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//                blured.compress(Bitmap.CompressFormat.PNG, 0, bos);
+//                byte[] bitmapdata = bos.toByteArray();
+//
+//                FileOutputStream fos = new FileOutputStream(file);
+//                fos.write(bitmapdata);
+//                fos.flush();
+//                fos.close();
+//                Log.d("TAG", "Image: Blured");
+//            }
+//        }
+//        catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 }

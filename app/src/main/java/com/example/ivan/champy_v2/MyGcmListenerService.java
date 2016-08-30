@@ -82,9 +82,14 @@ public class MyGcmListenerService extends GcmListenerService {
             /**
              * In some cases it may be useful to show a notification indicating to the user
              * that a message was received.
+             *
+
+               if (!message.toLowerCase().contains(name.toLowerCase()))
+               sendNotification(message, title);
+
              */
 
-            if (!message.toLowerCase().contains(name.toLowerCase()))
+            if (message != null && !message.toLowerCase().contains(name.toLowerCase()))
                 sendNotification(message, title);
         }
         // [END_EXCLUDE]
@@ -98,54 +103,40 @@ public class MyGcmListenerService extends GcmListenerService {
      */
     private void sendNotification(String message, String title) {
         Log.d(TAG, title);
-        Intent intent = new Intent(this, MainActivity.class);
-
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        Intent goToMainActivity = new Intent(MyGcmListenerService.this, MainActivity.class);
+        goToMainActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         switch (title) {
             case "Friend request":
-                intent = new Intent(this, FriendsActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("friend_request", "true");
+                // done
+                goToMainActivity = new Intent(this, FriendsActivity.class);
+                goToMainActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                goToMainActivity.putExtra("friend_request", "true");
+                notifyForFriends(goToMainActivity, message);
                 break;
             case "Challenge request":
-                refreshPendingDuels(message); // go to PendingDuels Activity
-                return;
-            case "Challenge accepted'":
-                //intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
+                // done
+                Intent goToPendingDuels = new Intent(MyGcmListenerService.this, PendingDuelActivity.class);
+                refreshPendingDuels();
+                notifyChallenges(goToPendingDuels, message);
+                break;
+            case "Challenge accepted":
+                // done
+                notifyChallenges(goToMainActivity, message);
                 break;
             case "Win":
-                //intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
+                // done
+                notifyChallenges(goToMainActivity, message);
                 break;
             case "Challenges for today":
-                //intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-                break;
-            case "Submit for approve":
-                //intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
+                // don't work
+                notifyChallenges(goToMainActivity, message);
                 break;
 
         }
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent, PendingIntent.FLAG_ONE_SHOT);
-
-        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.champy_icon)
-                .setContentTitle("Champy")
-                .setContentText(message)
-                .setAutoCancel(true)
-                .setSound(defaultSoundUri)
-                .setContentIntent(pendingIntent);
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
 
-
-    public void refreshPendingDuels(final String message) {
+    private void refreshPendingDuels() {
         DBHelper dbHelper = new DBHelper(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final int clearCount = db.delete("pending_duel", null, null);
@@ -202,22 +193,8 @@ public class MyGcmListenerService extends GcmListenerService {
                             }
                         }
                     }
-                    Intent intent = new Intent(MyGcmListenerService.this, PendingDuelActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    //intent.putExtra("refresh_duel", "true");
-                    PendingIntent pendingIntent = PendingIntent.getActivity(MyGcmListenerService.this, 0 /* Request code */, intent, PendingIntent.FLAG_ONE_SHOT);
+                    //
 
-                    Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                    NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(MyGcmListenerService.this)
-                            .setSmallIcon(R.drawable.champy_icon)
-                            .setContentTitle("Champy")
-                            .setContentText(message)
-                            .setAutoCancel(true)
-                            .setSound(defaultSoundUri)
-                            .setContentIntent(pendingIntent);
-
-                    NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    nm.notify(0 /* ID of notification */, notificationBuilder.build());
                 }
             }
 
@@ -225,5 +202,39 @@ public class MyGcmListenerService extends GcmListenerService {
             public void onFailure(Throwable t) { }
         });
     }
+
+    private void notifyChallenges(Intent intent, String message) {
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(MyGcmListenerService.this, 0 /* Request code */, intent, PendingIntent.FLAG_ONE_SHOT);
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.duel_white)
+                .setContentTitle("Champy")
+                .setContentText(message)
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
+
+    private void notifyForFriends(Intent intent, String message) {
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent, PendingIntent.FLAG_ONE_SHOT);
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.friends)
+                .setContentTitle("Champy")
+                .setContentText(message)
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
+
 
 }

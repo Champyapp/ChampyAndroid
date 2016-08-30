@@ -9,9 +9,6 @@ import com.example.ivan.champy_v2.fragment.HistoryFailedFragment;
 import com.example.ivan.champy_v2.fragment.HistoryInProgressFragment;
 import com.example.ivan.champy_v2.fragment.HistoryWinsFragment;
 
-/**
- * Created by ivan on 23.03.16.
- */
 public class HistoryPagerAdapter extends FragmentPagerAdapter {
 
     final int PAGE_COUNT = 3;

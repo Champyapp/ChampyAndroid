@@ -184,7 +184,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         tvUserName.setText(name);
         Typeface typeface = Typeface.createFromAsset(SettingsActivity.this.getAssets(), "fonts/bebasneue.ttf");
 
-        TextView tvName = (TextView)findViewById(R.id.name);
+        TextView tvName = (TextView)findViewById(R.id.userNameInSettings);
         tvName.setText(name);
         tvName.setTypeface(typeface);
 
@@ -252,7 +252,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                             SessionManager sessionManager = new SessionManager(getApplicationContext());
                             sessionManager.change_name(newName);
                             setNewName(newName);
-                            TextView tvName = (TextView)findViewById(R.id.name);
+                            TextView tvName = (TextView)findViewById(R.id.challengeNameInHistory);
                             tvName.setText(editText.getText().toString());
                             tvChangeName.setVisibility(View.VISIBLE);
                             TextView tvEnterYourName = (TextView) findViewById(R.id.tvEntedYourName);
