@@ -133,7 +133,6 @@ public class SelfImprovementFragment extends Fragment {
                         String duration = "";
                         String description = "";
                         String challenge_id = "";
-                        String type_id = "567d51c48322f85870fd931a";
                         int days;
 
                         EditText etGoal = (EditText) view.findViewById(R.id.et_goal);
@@ -181,7 +180,6 @@ public class SelfImprovementFragment extends Fragment {
                                         Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
                                     } else {
                                         cc.sendSingleInProgressForSelf(challenge_id);
-                                        //sendSingleInProgressForSelf(challenge_id);
                                         Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
                                     }
                                 }

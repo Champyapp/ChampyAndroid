@@ -116,23 +116,24 @@ public class ChallengeController {
 
         final String[] details = new String[21];
         for (int i = 0; i <= 20; i++) {
-            details[i] = String.valueOf(minute * 60 + hour * 60 * 60 + i*(24*60*60) + currentMidnight) ;
+            details[i] = String.valueOf(minute * 60 + hour * 60 * 60 + i*(24*60*60) + currentMidnight);
         }
         final String myDetails = Arrays.toString(details);
         final String API_URL = "http://46.101.213.24:3007";
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        final int intentId = Integer.parseInt(sHour + sMinute);
+
+        String fakeDescription = String.valueOf(Integer.parseInt(sHour + sMinute));
 
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
 
         Call<com.example.ivan.champy_v2.create_challenge.CreateChallenge> call = createChallenge.createChallenge(wakeUpName, type_id, description, myDetails, duration, token);
-        final String finalSHour = sHour;
-        final String finalSMinute = sMinute;
         call.enqueue(new Callback<com.example.ivan.champy_v2.create_challenge.CreateChallenge>() {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
-                    sendSingleInProgressForWakeUp(challengeId, finalSHour, finalSMinute);
+                    sendSingleInProgressForWakeUp(challengeId, intentId);
 
                     Log.i("makeNewWakeUpChallenge", "createNewWakeUpChallenge Status: OK"
                             + "\n _ID         = " + challengeId
@@ -213,7 +214,7 @@ public class ChallengeController {
         });
     }
 
-    public void sendSingleInProgressForWakeUp(String challenge, final String finalSHour, final String finalSMinute) {
+    public void sendSingleInProgressForWakeUp(String challenge, final int intentId) {
         final SessionManager sessionManager = new SessionManager(context);
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
@@ -249,8 +250,6 @@ public class ChallengeController {
                     Log.i("WakeUpActivity", "Current - UserInputTime = " + (current - userInputTime));
 
                     Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
-
-                    int intentId = Integer.parseInt(finalSHour + finalSMinute);
 
                     //myIntent.putExtra("intentId", intentId);
                     myIntent.putExtra("inProgressId", inProgressId);
@@ -477,21 +476,20 @@ public class ChallengeController {
                         //cv.clear();
                         if (challenge.getType().equals("567d51c48322f85870fd931b")) {
                             if (challengeStatus.equals("pending")) {
+                                // TODO: 29.08.2016 maybe change for "rejectedBySender"???
                                 if (!challengeStatus.equals("failedBySender") && !challengeStatus.equals("rejectedByRecipient")) {
-                                    //if (userId.equals(recipient.getId())) {
-                                        if (userId.equals(recipient.getId())) {
-                                            cv.put("recipient", "true");
-                                            cv.put("versus", sender.getName());
-                                        } else {
-                                            cv.put("recipient", "false");
-                                            cv.put("versus", recipient.getName());
-                                        }
-                                        cv.put("challenge_id", inProgressId);
-                                        cv.put("description", challengeDescription);
-                                        cv.put("duration", challengeDuration);
-                                        db.insert("pending_duel", null, cv);
 
-                                    //}
+                                    if (userId.equals(recipient.getId())) {
+                                        cv.put("recipient", "true");
+                                        cv.put("versus", sender.getName());
+                                    } else {
+                                        cv.put("recipient", "false");
+                                        cv.put("versus", recipient.getName());
+                                    }
+                                    cv.put("challenge_id", inProgressId);
+                                    cv.put("description", challengeDescription);
+                                    cv.put("duration", challengeDuration);
+                                    db.insert("pending_duel", null, cv);
                                 }
                             }
                         }

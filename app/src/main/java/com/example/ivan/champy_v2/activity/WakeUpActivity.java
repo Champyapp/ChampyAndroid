@@ -141,36 +141,21 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
                                 alarmTimePicker = (TimePicker)findViewById(R.id.timePicker);
-
                                 int hour = alarmTimePicker.getCurrentHour();
                                 int minute = alarmTimePicker.getCurrentMinute();
                                 Log.i("WakeUpActivity", "HOUR   = " + hour);
                                 Log.i("WakeUpActivity", "MINUTE = " + minute);
 
-                                String sHour = "" + hour;
-                                String sMinute = "" + minute;
-
-                                if (hour < 10)   sHour   = "0" + sHour;
-                                if (minute < 10) sMinute = "0" + sMinute;
-
-                                String userInputTime = sHour + ":" + sMinute;
-                                //Log.i("stat", "Give up: " + sHour + " " + sMinute);
-
-                                boolean ok = check(sHour + sMinute);
+                                //boolean ok = check(sHour + sMinute);
                                 OfflineMode offlineMode = new OfflineMode();
                                 if (offlineMode.isConnectedToRemoteAPI(WakeUpActivity.this)) {
-                                    if (ok) {
-//                                        Calendar myCalendar = Calendar.getInstance();               // создаем календарь
-//                                        Date date = new Date();                                     // создаем дану
-//                                        date.setHours(alarmTimePicker.getCurrentHour());            // устанавливаем данные "Час" с нашего TimePicker-а
-//                                        date.setMinutes(alarmTimePicker.getCurrentMinute());        // устанавливаем данные "Мин" с нашего TimePicker-а
-//                                        date.setSeconds(0);
+                                    //if (ok) {
                                         Toast.makeText(WakeUpActivity.this, "Challenge created", Toast.LENGTH_SHORT).show();
                                         ChallengeController cc = new ChallengeController(WakeUpActivity.this, WakeUpActivity.this, hour, minute, 0);
                                         cc.createNewWakeUpChallenge("Wake Up", 21, type_id);
-                                    } else {
-                                        Toast.makeText(WakeUpActivity.this, "Already exist!", Toast.LENGTH_SHORT).show();
-                                    }
+//                                    } else {
+//                                        Toast.makeText(WakeUpActivity.this, "Already exist!", Toast.LENGTH_SHORT).show();
+//                                    }
                                 }
                                 break;
 
@@ -272,30 +257,27 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         return dr;
     }
 
-
-    public boolean check(String time) {
-        boolean ok = true;
-        DBHelper dbHelper = new DBHelper(this);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-        int o = 0;
-        if (c.moveToFirst()) {
-            int nameColIndex = c.getColumnIndex("name");
-            int status = c.getColumnIndex("status");
-            do {
-                o++;
-                if (c.getString(nameColIndex).equals("Wake Up")){
-                    if (c.getString(status).equals("started")) {
-                        if (c.getString(c.getColumnIndex("description")).equals(time)) {
-                            ok = false;
-                            break;
-                        }
-                    }
-                }
-            } while (c.moveToNext());
-        }
-        c.close();
-        return ok;
-    }
+//    public boolean check(String time) {
+//        boolean ok = true;
+//        DBHelper dbHelper = new DBHelper(this);
+//        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+//        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
+//        if (c.moveToFirst()) {
+//            int colDescription = c.getColumnIndex("description");
+//            int status = c.getColumnIndex("status");
+//            do {
+//                if (c.getString(colDescription).equals("Wake Up")) {
+//                    if (c.getString(status).equals("started")) {
+//                        if (c.getString(c.getColumnIndex("description")).equals(time)) {
+//                            ok = false;
+//                            break;
+//                        }
+//                    }
+//                }
+//            } while (c.moveToNext());
+//        }
+//        c.close();
+//        return ok;
+//    }
 
 }

@@ -3,7 +3,6 @@ package com.example.ivan.champy_v2.adapter;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +42,7 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         // Inflate the custom layout
         View contactView = inflater.inflate(R.layout.history_simple, parent, false);
 
-        TextView tvUserName = (TextView)contactView.findViewById(R.id.name);
+        TextView tvUserName = (TextView)contactView.findViewById(R.id.challengeNameInHistory);
         Typeface typeFace = Typeface.createFromAsset(context.getAssets(), "fonts/bebasneue.ttf");
         tvUserName.setTypeface(typeFace);
 
@@ -87,17 +86,23 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
 
         // Here "type" in stupid string format. its works.
         switch (type) {
+            // TODO: 29.08.2016 make auto size for text because '\n' is not good solution
             case "Duel":
                 nameTextView.setText(goal + ": " + duration + "\nwith " + versus);
                 Glide.with(_context).load(R.drawable.duel_yellow).override(80, 80).into(viewHolder.image);
                 break;
             case "Wake Up":
+                // challengeName because when we created "wake up challenge" we've set name
+                // "Wake up at $hour : $minute during this period (in ChallengeController);
                 nameTextView.setText(challengeName + ": " + duration);
                 Glide.with(_context).load(R.drawable.wakeup_yellow).override(80, 80).into(viewHolder.image);
                 break;
             case "Self-Improvement":
                 nameTextView.setText(goal + ": " + duration);
                 Glide.with(_context).load(R.drawable.self_yellow).override(80, 80).into(viewHolder.image);
+                break;
+            default:
+                nameTextView.setText("Lost internet connection");
                 break;
         }
 
@@ -111,9 +116,9 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
                 nameTextView.setText("Wins");
                 break;
             case "failed":
-            nameTextView = (TextView) viewHolder.itemView.findViewById(R.id.counterWins);
-            nameTextView.setText("Failed");
-            break;
+                nameTextView = (TextView) viewHolder.itemView.findViewById(R.id.counterWins);
+                nameTextView.setText("Failed");
+                break;
         }
 
         SessionManager sessionManager = new SessionManager(_context);
@@ -126,6 +131,7 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
 
         Glide.with(_context).load(R.drawable.challenges).override(40, 40).into(viewHolder.wins);
         Glide.with(_context).load(R.drawable.challenge) .override(40, 40).into(viewHolder.total);
+        //Glide.with(_context).load(R.drawable.start_circle_00026).placeholder(R.drawable.champy_icon2).into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleChall));
     }
 
     @Override
@@ -153,7 +159,7 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         public ViewHolder(View itemView) {
             super(itemView);
 
-            nameTextView = (TextView) itemView.findViewById(R.id.name);
+            nameTextView = (TextView) itemView.findViewById(R.id.challengeNameInHistory);
             level = (TextView) itemView.findViewById(R.id.level);
             image = (ImageView) itemView.findViewById(R.id.picture);
             wins = (ImageView) itemView.findViewById(R.id.imageView_wins_logo);
