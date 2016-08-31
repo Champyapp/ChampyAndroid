@@ -26,6 +26,7 @@ import com.example.ivan.champy_v2.model.User.User;
 import com.soundcloud.android.crop.Crop;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.internal.framed.Settings;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -164,9 +165,8 @@ public class PhotoActivity extends AppCompatActivity {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),uri);
             Log.i("CROP", "CROP: "+bitmap);
             savePhoto(bitmap);
-            Intent intent = new Intent(PhotoActivity.this, MainActivity.class);
+            Intent intent = new Intent(PhotoActivity.this, SettingsActivity.class);
             startActivity(intent);
-            Toast.makeText(getApplicationContext(), "Changed", Toast.LENGTH_SHORT).show();
         } else if (resultCode == Crop.RESULT_ERROR) {
             Toast.makeText(this, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -276,20 +276,14 @@ public class PhotoActivity extends AppCompatActivity {
 
     public void Upload_photo(String path) {
         final String API_URL = "http://46.101.213.24:3007";
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user = new HashMap<>();
         user = sessionManager.getUserDetails();
         String token = user.get("token");
-
         String id = user.get("id");
 
-        File f=new File(path);
-
-        Log.d(TAG, "Status: " + f);
+        File f = new File(path);
 
         RequestBody requestBody =
                 RequestBody.create(MediaType.parse("image/jpeg"), f);

@@ -44,7 +44,6 @@ public class FriendsFragment extends Fragment {
 
     final String API_URL = "http://46.101.213.24:3007";
     public static final String ARG_PAGE = "ARG_PAGE";
-
     public View gView;
     public SwipeRefreshLayout gSwipeRefreshLayout;
 
@@ -73,18 +72,43 @@ public class FriendsFragment extends Fragment {
         return fragment;
     }
 
-    public void onDestroy() {
-        super.onDestroy();
-        Log.i("Comm:", "onDestroy: viszlat");
-    }
 
+    private Emitter.Listener onConnect = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
 
+            CurrentUserHelper currentUser = new CurrentUserHelper(getContext());
+            mSocket.emit("ready", currentUser.getToken());
+            Log.i("Sockets", "call: onConnect");
+        }
+    };
+
+    //
+    private Emitter.Listener onConnected = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            Log.i("Sockets", "call: onConnected");
+        }
+    };
+
+    //
+    protected Emitter.Listener modifiedRelationship = new Emitter.Listener() {
+
+        @Override
+        public void call(final Object... args) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    refreshView(gSwipeRefreshLayout, gView);
+                }
+            });
+            Log.i("Sockets", "call: new friends request");
+        }
+    };
 
     @Override
-    public void onStop() {
-        super.onStop();
-        mSocket.disconnect();
-        Log.i("Comm:", "onDestroy: viszlat");
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -103,47 +127,8 @@ public class FriendsFragment extends Fragment {
 
     }
 
-    private Emitter.Listener onConnect = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-
-            CurrentUserHelper currentUser = new CurrentUserHelper(getContext());
-            mSocket.emit("ready", currentUser.getToken());
-            Log.i("call", "call: minden fasza");
-        }
-    };
-
-    //
-    private Emitter.Listener onConnected = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-            Log.i("call", "call: connected okay");
-        }
-    };
-
-    //
-    protected Emitter.Listener modifiedRelationship = new Emitter.Listener() {
-
-        @Override
-        public void call(final Object... args) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    refreshView(gSwipeRefreshLayout, gView);
-                }
-            });
-            Log.i("call", "new friend request");
-        }
-    };
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.i("stat", "Created friends");
         final View view = inflater.inflate(R.layout.fragment_first, container, false);
         final List<com.example.ivan.champy_v2.Friend> friends = new ArrayList<>();
 
@@ -203,6 +188,7 @@ public class FriendsFragment extends Fragment {
 
 
     }
+
 
     public void refreshView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         swipeRefreshLayout.setRefreshing(true);
@@ -399,6 +385,19 @@ public class FriendsFragment extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mSocket.disconnect();
+        Log.i("Comm:", "onDestroy: viszlat");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i("Comm:", "onDestroy: viszlat");
     }
 
 

@@ -61,13 +61,12 @@ import retrofit.Retrofit;
 public class SettingsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     final private String API_URL = "http://46.101.213.24:3007";
-    final private String TAG = "myLogs";
+    final private String TAG = "SettingsActivity";
     HashMap<String, String> map = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SessionManager sessionManager1 = new SessionManager(getApplicationContext());
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_settings);
 
@@ -78,8 +77,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         chSetupUI.setupUI(findViewById(R.id.settings_layout), this);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
@@ -101,8 +99,6 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         final String name = user.get("name");
-        String id = user.get("id");
-        String token = user.get("token");
         String pushN = user.get("pushN");
         String newChallReq = user.get("newChallReq");
         String acceptedYour = user.get("acceptedYour");
@@ -118,57 +114,52 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         map.put("pushNotifications", pushN);
 
         Switch switchForPushNotif = (Switch) findViewById(R.id.switch1);
-        if (pushN.equals("true")) {
-            switchForPushNotif.setChecked(true);
-        } else {
-            switchForPushNotif.setChecked(false);
-        }
+                if (pushN.equals("true")) switchForPushNotif.setChecked(true);
+                else switchForPushNotif.setChecked(false);
+
         switchForPushNotif.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.d(TAG, "Push Notifications: " + isChecked);
                 if (isChecked) map.put("pushNotifications", "true");
                 else map.put("pushNotifications", "false");
             }
         });
 
         Switch switchorNewChallRequests = (Switch) findViewById(R.id.switch2);
-        if (newChallReq.equals("true")) {
-            switchorNewChallRequests.setChecked(true);
-        } else {
-            switchorNewChallRequests.setChecked(false);
-        }
+                if (newChallReq.equals("true")) switchorNewChallRequests.setChecked(true);
+                else switchorNewChallRequests.setChecked(false);
+
         switchorNewChallRequests.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.d(TAG, "Status: " + isChecked);
+                Log.d(TAG, "New Challenge Request: " + isChecked);
                 if (isChecked) map.put("newChallengeRequests", "true");
                 else map.put("newChallengeRequests", "false");
             }
         });
 
         Switch switchForAcceptedYourChall = (Switch) findViewById(R.id.switch3);
-        if (acceptedYour.equals("true")) {
-            switchForAcceptedYourChall.setChecked(true);
-        } else {
-            switchForAcceptedYourChall.setChecked(false);
-        }
+                if (acceptedYour.equals("true")) switchForAcceptedYourChall.setChecked(true);
+                else switchForAcceptedYourChall.setChecked(false);
+
         switchForAcceptedYourChall.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.d(TAG, "Accepted Your Challenge: " + isChecked);
                 if (isChecked) map.put("acceptedYourChallenge", "true");
                 else map.put("acceptedYourChallenge", "false");
             }
         });
 
         Switch switchForChallengesEnd = (Switch) findViewById(R.id.switch4);
-        if (challengeEnd.equals("true")){
-            switchForChallengesEnd.setChecked(true);
-        } else {
-            switchForChallengesEnd.setChecked(false);
-        }
+                if (challengeEnd.equals("true")) switchForChallengesEnd.setChecked(true);
+                else switchForChallengesEnd.setChecked(false);
+
         switchForChallengesEnd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.d(TAG, "Challenge End: " + isChecked);
                 if (isChecked) map.put("challengeEnd", "true");
                 else map.put("challengeEnd", "false");
             }
@@ -184,12 +175,12 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         tvUserName.setText(name);
         Typeface typeface = Typeface.createFromAsset(SettingsActivity.this.getAssets(), "fonts/bebasneue.ttf");
 
-        TextView tvName = (TextView)findViewById(R.id.userNameInSettings);
+        final TextView tvName = (TextView)findViewById(R.id.userNameInSettings);
         tvName.setText(name);
         tvName.setTypeface(typeface);
 
         TextView tvUserLevel = (TextView)findViewById(R.id.textView9);
-        tvUserLevel.setText("Level "+sessionManager.getChampyOptions().get("level")+ " Champy");
+        tvUserLevel.setText(getString(R.string.level) + sessionManager.getChampyOptions().get("level") + getString(R.string.champy));
 
         TextView tvNotifications = (TextView)findViewById(R.id.tvNotifications);
         tvNotifications.setTypeface(typeface);
@@ -229,41 +220,54 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
             @Override
             public void onClick(View v) {
                 tvChangeName.setVisibility(View.INVISIBLE);
-                TextView textView1 = (TextView) findViewById(R.id.tvEntedYourName);
-                textView1.setVisibility(View.VISIBLE);
-                final EditText editText = (EditText) findViewById(R.id.new_name);
-                editText.setVisibility(View.VISIBLE);
-                editText.setText(name);
-                ImageButton imageButton = (ImageButton) findViewById(R.id.imageButtonAcceptMaybe);
-                imageButton.setVisibility(View.VISIBLE);
-                findViewById(R.id.view11).setVisibility(View.VISIBLE);
+                final TextView tvEnterYourName = (TextView) findViewById(R.id.tvEntedYourName);
+                final EditText etNewName = (EditText) findViewById(R.id.new_name);
+                tvEnterYourName.setVisibility(View.VISIBLE);
+                etNewName.setVisibility(View.VISIBLE);
+                etNewName.setText(name);
+                final ImageButton imageButtonAcceptName = (ImageButton) findViewById(R.id.imageButtonAcceptMaybe);
+                imageButtonAcceptName.setVisibility(View.VISIBLE);
+                final View lineOfTheNed = findViewById(R.id.view11);
+                lineOfTheNed.setVisibility(View.VISIBLE);
 
-                imageButton.setOnClickListener(new View.OnClickListener() {
+                imageButtonAcceptName.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        OfflineMode offlineMode = new OfflineMode();
-                        if (!offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
-                            editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_warn, 0);
-                        } else if (editText.getText().toString().isEmpty() || editText.getText().toString().startsWith(" ")) {
-                            Toast.makeText(getApplicationContext(), "Name field is empty!", Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-                            String newName = editText.getText().toString().trim();
+                        OfflineMode offline = new OfflineMode();
+                        String checkName = etNewName.getText().toString();
+                        if (offline.isConnectedToRemoteAPI(SettingsActivity.this) && !checkName.isEmpty() && !checkName.startsWith(" ")) {
+                            String newName = etNewName.getText().toString().trim();
                             SessionManager sessionManager = new SessionManager(getApplicationContext());
                             sessionManager.change_name(newName);
                             setNewName(newName);
-                            TextView tvName = (TextView)findViewById(R.id.challengeNameInHistory);
-                            tvName.setText(editText.getText().toString());
-                            tvChangeName.setVisibility(View.VISIBLE);
-                            TextView tvEnterYourName = (TextView) findViewById(R.id.tvEntedYourName);
-                            tvEnterYourName.setVisibility(View.GONE);
-                            final EditText etNewName = (EditText) findViewById(R.id.new_name);
-                            etNewName.setVisibility(View.GONE);
-                            ImageButton imageButtonAccept = (ImageButton) findViewById(R.id.imageButtonAcceptMaybe);
-                            imageButtonAccept.setVisibility(View.GONE);
-                            findViewById(R.id.view11).setVisibility(View.GONE);
-                        }
 
+                            tvName.setText(etNewName.getText().toString());
+                            imageButtonAcceptName.setVisibility(View.GONE);
+                            tvChangeName.setVisibility(View.VISIBLE);
+                            tvEnterYourName.setVisibility(View.GONE);
+                            lineOfTheNed.setVisibility(View.GONE);
+                            etNewName.setVisibility(View.GONE);
+                        }
+                        etNewName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_warn, 0);
+//                        OfflineMode offlineMode = new OfflineMode();
+//                        if (!offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
+//                            etNewName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_warn, 0);
+//                        } else if (etNewName.getText().toString().isEmpty() || etNewName.getText().toString().startsWith(" ")) {
+//                            Toast.makeText(getApplicationContext(), "Name field is empty!", Toast.LENGTH_SHORT).show();
+//                        }
+//                        else {
+//                            String newName = etNewName.getText().toString().trim();
+//                            SessionManager sessionManager = new SessionManager(getApplicationContext());
+//                            sessionManager.change_name(newName);
+//                            setNewName(newName);
+//
+//                            tvName.setText(etNewName.getText().toString());
+//                            tvChangeName.setVisibility(View.VISIBLE);
+//                            tvEnterYourName.setVisibility(View.GONE);
+//                            etNewName.setVisibility(View.GONE);
+//                            imageButtonAcceptName.setVisibility(View.GONE);
+//                            lineOfTheNed.setVisibility(View.GONE);
+//                        }
                     }
                 });
             }
@@ -281,25 +285,19 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                             case DialogInterface.BUTTON_POSITIVE:
                                 if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
                                     SessionManager sessionManager = new SessionManager(getApplicationContext());
-                                    HashMap<String, String> user = new HashMap<>();
+                                    HashMap<String, String> user;
                                     user = sessionManager.getUserDetails();
                                     String id = user.get("id");
                                     String token = user.get("token");
 
-                                    Retrofit retrofit = new Retrofit.Builder()
-                                            .baseUrl(API_URL)
-                                            .addConverterFactory(GsonConverterFactory.create())
-                                            .build();
+                                    Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
                                     Update_user update_user = retrofit.create(Update_user.class);
                                     Call<Delete> call = update_user.delete_user(id, token);
-                                    Log.i("Token", "Token: " + token);
-
                                     call.enqueue(new Callback<Delete>() {
                                         @Override
                                         public void onResponse(Response<Delete> response, Retrofit retrofit) {
                                             if (response.isSuccess()) {
-                                                Log.i("Status", "Status: OK");
                                                 String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
                                                 File file = new File(path, "blured2.jpg");
                                                 DBHelper dbHelper = new DBHelper(getApplicationContext());
@@ -308,12 +306,12 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                                                 clearCount = db.delete("pending_duel", null, null);
                                                 db.delete("myChallenges", null, null);
                                                 file.delete();
-                                            } else Log.i("Status", "Status: " + response.code());
+                                            }
                                         }
 
                                         @Override
                                         public void onFailure(Throwable t) {
-                                            Log.i("Status", "Status: " + t);
+
                                         }
                                     });
                                     sessionManager.logoutUser();
@@ -324,7 +322,6 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                                 }
 
                             case DialogInterface.BUTTON_NEGATIVE:
-                                //No button clicked
                                 break;
                         }
                     }
@@ -341,14 +338,15 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
 
             }
         });
-        TextView terms = (TextView)findViewById(R.id.terms);
-        terms.setOnClickListener(new View.OnClickListener() {
+
+        TextView about = (TextView)findViewById(R.id.about);
+        about.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SettingsActivity.this, TermsActivity.class);
-                startActivity(intent);
+                Toast.makeText(getApplicationContext(), "Coming soon", Toast.LENGTH_SHORT).show();
             }
         });
+
         TextView privacy = (TextView)findViewById(R.id.privacy);
         privacy.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -359,8 +357,17 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
             }
         });
 
-        TextView contact = (TextView)findViewById(R.id.contact_us);
-        contact.setOnClickListener(new View.OnClickListener() {
+        TextView terms = (TextView)findViewById(R.id.terms);
+        terms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SettingsActivity.this, TermsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        TextView contactUs = (TextView)findViewById(R.id.contact_us);
+        contactUs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updateProfile(map);
@@ -368,16 +375,16 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                 startActivity(intent);
             }
         });
+
         TextView avatar = (TextView)findViewById(R.id.avatar);
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 OfflineMode offlineMode = new OfflineMode();
-                if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
-                    updateProfile(map);
-                    Intent intent = new Intent(SettingsActivity.this, PhotoActivity.class);
-                    startActivity(intent);
-                }
+                updateProfile(map);
+                Intent intent = new Intent(SettingsActivity.this, PhotoActivity.class);
+                startActivity(intent);
+
             }
         });
 
@@ -478,24 +485,19 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         String id = user.get("id");
         String token = user.get("token");
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
         Update_user update_user = retrofit.create(Update_user.class);
         Call<User> call = update_user.update_user_name(id, token, newName);
-        Log.i("Token" , "Token: "+token);
-
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
                 if (response.isSuccess()) recreate();
-                else Log.i("Status" , "Status: "+response.code());
+                else Log.i(TAG , "SetNewName: Vse OK");
             }
             @Override
             public void onFailure(Throwable t) {
-                Log.i("Status" , "Status: "+t);
+                Log.i(TAG , "SetNewName: " + t);
             }
         });
     }
@@ -524,18 +526,13 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         String id = user.get("id");
         String token = user.get("token");
 
-        Log.d(TAG, "Status: "+map);
-
         sessionManager.toogle1(map.get("pushNotifications"));
         sessionManager.toogle2(map.get("newChallengeRequests"));
         sessionManager.toogle3(map.get("acceptedYourChallenge"));
         sessionManager.toogle4(map.get("challengeEnd"));
 
         final String API_URL = "http://46.101.213.24:3007";
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
         Update_user update_user = retrofit.create(Update_user.class);
         Profile_data profile_data = new Profile_data(map);
@@ -544,10 +541,8 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
-                Log.d(TAG, "Response code: " + response.code());
-                User decodedResponse = response.body();
                 if (response.isSuccess()) {
-                    Log.d("TAG", "Status: Profile updated");
+                    Log.d(TAG, "Status: Profile updated");
                 }
             }
             @Override

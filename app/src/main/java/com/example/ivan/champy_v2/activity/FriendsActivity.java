@@ -151,11 +151,12 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         view.setText("+" + (count > 0 ? String.valueOf(count) : null));
         if (count == 0) checker.hideItem();
 
-        String s = sessionManager.get_duel_pending();
+        String s;
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         adapterViewPager = new SampleFragmentPagerAdapter(getSupportFragmentManager(), getApplicationContext());
         viewPager.setAdapter(adapterViewPager);
+
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             s = bundle.getString("friend_request");

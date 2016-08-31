@@ -64,10 +64,9 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         // Inflate the custom layout
         View contactView = inflater.inflate(R.layout.item_friends, parent, false);
 
-        TextView tvUserName = (TextView)contactView.findViewById(R.id.challengeNameInHistory);
+        TextView tvUserName = (TextView)contactView.findViewById(R.id.userName);
         Typeface typeFace = Typeface.createFromAsset(context.getAssets(), "fonts/bebasneue.ttf");
         tvUserName.setTypeface(typeFace);
-
         // Return a new holder instance
         final ViewHolder viewHolder = new ViewHolder(contactView);
         viewHolder.simple.setVisibility(View.VISIBLE);
@@ -291,7 +290,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             // to access the context from any ViewHolder instance.
             super(itemView);
 
-            nameTextView = (TextView) itemView.findViewById(R.id.challengeNameInHistory);
+            nameTextView = (TextView) itemView.findViewById(R.id.userName);
             friendImage = (ImageView) itemView.findViewById(R.id.picture);
             challenges = (ImageView) itemView.findViewById(R.id.imageView_challenges_logo);
             wins = (ImageView) itemView.findViewById(R.id.imageView_wins_logo);

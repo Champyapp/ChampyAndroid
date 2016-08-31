@@ -67,7 +67,7 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
         // Inflate the custom layout
         View contactView = inflater.inflate(R.layout.item_friends, parent, false);
 
-        TextView tvUserName = (TextView)contactView.findViewById(R.id.challengeNameInHistory);
+        TextView tvUserName = (TextView)contactView.findViewById(R.id.userName);
         Typeface typeFace = Typeface.createFromAsset(context.getAssets(), "fonts/bebasneue.ttf");
         tvUserName.setTypeface(typeFace);
 
@@ -138,9 +138,9 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
 
 
             // создаем вид счетчиком в развернутом виде
-            TextView tvChallenges = (TextView)viewHolder.itemView.findViewById(R.id.textViewTotal);
+            TextView tvChallenges = (TextView)viewHolder.itemView.findViewById(R.id.textViewChallenges);
             TextView tvWins = (TextView)viewHolder.itemView.findViewById(R.id.textViewWins);
-            TextView tvTotal = (TextView)viewHolder.itemView.findViewById(R.id.textViewChallenges);
+            TextView tvTotal = (TextView)viewHolder.itemView.findViewById(R.id.textViewTotal);
             tvChallenges.setTypeface(typeFace);
             tvWins.setTypeface(typeFace);
             tvTotal.setTypeface(typeFace);
@@ -218,10 +218,9 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
                     HashMap<String, String> user;
                     user = sessionManager.getUserDetails();
                     final String token = user.get("token");
-                    Log.i("stat", "token: " + token);
                     final String id = user.get("id");
+                    
                     String friend = mContacts.get(position).getID();
-                    Log.d(TAG, "RefreshPending: " + sessionManager.getRefreshPending());
                     if (friend == null) {
                         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                             @Override
@@ -246,23 +245,16 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
                             public void onClick(DialogInterface dialog, int which) {
                                 switch (which) {
                                     case DialogInterface.BUTTON_POSITIVE:
-
                                         String friend = mContacts.get(position).getID();
-                                        Retrofit retrofit = new Retrofit.Builder()
-                                                .baseUrl(API_URL)
-                                                .addConverterFactory(GsonConverterFactory.create())
-                                                .build();
+                                        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
                                         DBHelper dbHelper = new DBHelper(_context);
                                         final SQLiteDatabase db = dbHelper.getWritableDatabase();
                                         final ContentValues cv = new ContentValues();
 
-                                        com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(Friends.class);
-                                        Log.d(TAG, "Status: " + id + " " + friend);
                                         //щоб воно не обновляло (і дублювало) лист друзів після додавання когось, то має юути false
                                         sessionManager.setRefreshPending("false");
 
-                                        Log.d(TAG, "RefreshPending: " + sessionManager.getRefreshPending());
-
+                                        com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(Friends.class);
                                         Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.sendFriendRequest(id, friend, token);
                                         call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
                                             @Override
@@ -331,7 +323,7 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            nameTextView = (TextView) itemView.findViewById(R.id.challengeNameInHistory);
+            nameTextView = (TextView) itemView.findViewById(R.id.userName);
             friendImage = (ImageView) itemView.findViewById(R.id.picture);
             challenges = (ImageView) itemView.findViewById(R.id.imageView_challenges_logo);
             wins = (ImageView) itemView.findViewById(R.id.imageView_wins_logo);

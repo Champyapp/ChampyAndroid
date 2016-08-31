@@ -8,7 +8,7 @@
     android:layout_alignParentStart="false"
     android:layout_alignParentBottom="true" >
 
-    <!-- фотка, лвл, тест: Champy # level -->
+    <!--    user data   -->
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -18,7 +18,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"
         android:contentDescription="@string/userAvatar" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,7 +28,6 @@
         android:layout_below="@+id/imageViewUserAvatar"
         android:layout_centerHorizontal="true"
         android:textSize="20sp" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,7 +40,7 @@
         android:textSize="15sp"
         android:layout_marginBottom="8dp" />
 
-    <!-- круги -->
+    <!--    circles     -->
     <ImageView
         android:layout_width="80dp"
         android:layout_height="80dp"
@@ -52,7 +50,6 @@
         android:layout_alignParentStart="true"
         android:layout_marginLeft="16dp"
         android:contentDescription="@string/backgroundforcircle" />
-
     <ImageView
         android:layout_width="80dp"
         android:layout_height="80dp"
@@ -60,7 +57,6 @@
         android:layout_below="@+id/textViewWinsCounter"
         android:layout_centerHorizontal="true"
         android:contentDescription="@string/backgroundforcircle" />
-
     <ImageView
         android:layout_width="80dp"
         android:layout_height="80dp"
@@ -71,7 +67,7 @@
         android:layout_marginRight="16dp"
         android:contentDescription="@string/backgroundforcircle" />
 
-    <!-- текст над каунтерами  -->
+    <!--    text "wins/total/inProgress"    -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -86,7 +82,6 @@
         android:layout_alignRight="@+id/imageViewBgForCircleWins"
         android:layout_alignEnd="@+id/imageViewBgForCircleWins"
         android:layout_marginBottom="8dp" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -100,7 +95,6 @@
         android:layout_alignStart="@+id/imageViewBgForCircleTotal"
         android:layout_alignRight="@+id/imageViewBgForCircleTotal"
         android:layout_alignEnd="@+id/imageViewBgForCircleTotal" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -115,20 +109,7 @@
         android:gravity="center_horizontal"
         android:textColor="#ffffff" />
 
-    <!-- полоска в конце контакта -->
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#339997"
-        android:id="@+id/view1"
-        android:visibility="visible"
-        android:layout_below="@+id/textViewChallenges"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <!-- ImageView кругов -->
-
+    <!-- background for circles -->
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -140,7 +121,6 @@
         android:layout_alignEnd="@+id/imageViewBgForCircleChall"
         android:layout_alignBottom="@+id/imageViewBgWins"
         android:contentDescription="@string/backgroundforcircle" />
-
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -150,7 +130,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="8dp"
         android:contentDescription="@string/backgroundforcircle" />
-
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -163,7 +142,7 @@
         android:layout_alignEnd="@+id/imageViewBgForCircleTotal"
         android:contentDescription="@string/backgroundforcircle" />
 
-    <!--         Кнопки         -->
+    <!--    buttons    -->
     <ImageButton
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -173,7 +152,6 @@
         android:layout_alignLeft="@+id/imageViewBgForCircleChall"
         android:layout_alignStart="@+id/imageViewBgForCircleChall"
         android:contentDescription="@string/button_block" />
-
     <ImageButton
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -184,8 +162,7 @@
         android:layout_alignEnd="@+id/imageViewBgTotal"
         android:contentDescription="@string/button_add" />
 
-
-    <!-- Текст на кругах! -->
+    <!--    counters-->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -200,7 +177,6 @@
         android:textColor="#ffffff"
         android:layout_above="@+id/textViewChallenges"
         android:layout_alignTop="@+id/imageViewBgForCircleChall" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -215,7 +191,6 @@
         android:layout_alignEnd="@+id/imageViewBgForCircleWins"
         android:layout_above="@+id/textViewChallenges"
         android:layout_alignTop="@+id/imageViewBgForCircleChall" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -230,5 +205,16 @@
         android:textColor="#ffffff"
         android:layout_above="@+id/textViewWins"
         android:layout_alignTop="@+id/imageViewBgForCircleTotal" />
+
+    <!--    line of the end    -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#339997"
+        android:id="@+id/view1"
+        android:visibility="visible"
+        android:layout_below="@+id/textViewChallenges"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
