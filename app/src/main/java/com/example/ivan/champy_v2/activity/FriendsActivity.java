@@ -1,6 +1,5 @@
 package com.example.ivan.champy_v2.activity;
 
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -8,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -42,13 +40,8 @@ import com.example.ivan.champy_v2.interfaces.CustomItemClickListener;
 import com.example.ivan.champy_v2.model.Friend.Datum;
 import com.example.ivan.champy_v2.model.Friend.Friend_;
 import com.example.ivan.champy_v2.model.Friend.Owner;
-import com.facebook.AccessToken;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
-import com.facebook.share.model.AppInviteContent;
-import com.facebook.share.widget.AppInviteDialog;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -85,48 +78,47 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         //String update = user.get("updateDB");
 
         // invite friends button
-        final FloatingActionButton.OnClickListener onClickInviteFriends = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String appLinkUrl, previewImageUrl;
-
-                appLinkUrl = "https://fb.me/583663125129793";
-                previewImageUrl = "http://champyapp.com/images/Icon.png";
-
-                Activity activity = FriendsActivity.this;
-                if (AccessToken.getCurrentAccessToken() != null) {
-                    FacebookSdk.sdkInitialize(FriendsActivity.this.getApplicationContext());
-                    CallbackManager = com.facebook.CallbackManager.Factory.create();
-                    FacebookCallback<AppInviteDialog.Result> facebookCallback= new FacebookCallback<AppInviteDialog.Result>() {
-                        @Override
-                        public void onSuccess(AppInviteDialog.Result result) {
-                            Log.i(TAG, "FriendsActivity, InviteCallback - SUCCESS!" + result.getData());
-                        }
-
-                        @Override
-                        public void onCancel() {
-                            Log.i(TAG, "FriendsActivity, InviteCallback - CANCEL!");
-                        }
-
-                        @Override
-                        public void onError(FacebookException e) {
-                            Log.e(TAG, "FriendsActivity, InviteCallback - ERROR! " + e.getMessage());
-                        }
-
-                    };
-                    AppInviteDialog appInviteDialog = new AppInviteDialog(activity);
-                    if (AppInviteDialog.canShow()) {
-                        AppInviteContent.Builder content = new AppInviteContent.Builder();
-                        content.setApplinkUrl(appLinkUrl);
-                        content.setPreviewImageUrl(previewImageUrl);
-                        AppInviteContent appInviteContent = content.build();
-                        appInviteDialog.registerCallback(CallbackManager, facebookCallback);
-                        AppInviteDialog.show(activity, appInviteContent);
-                    }
-                }
-            }
-        };
-
+//        final FloatingActionButton.OnClickListener onClickInviteFriends = new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String appLinkUrl, previewImageUrl;
+//
+//                appLinkUrl = "https://fb.me/583663125129793";
+//                previewImageUrl = "http://champyapp.com/images/Icon.png";
+//
+//                Activity activity = FriendsActivity.this;
+//                if (AccessToken.getCurrentAccessToken() != null) {
+//                    FacebookSdk.sdkInitialize(FriendsActivity.this.getApplicationContext());
+//                    CallbackManager = com.facebook.CallbackManager.Factory.create();
+//                    FacebookCallback<AppInviteDialog.Result> facebookCallback= new FacebookCallback<AppInviteDialog.Result>() {
+//                        @Override
+//                        public void onSuccess(AppInviteDialog.Result result) {
+//                            Log.i(TAG, "FriendsActivity, InviteCallback - SUCCESS!" + result.getData());
+//                        }
+//
+//                        @Override
+//                        public void onCancel() {
+//                            Log.i(TAG, "FriendsActivity, InviteCallback - CANCEL!");
+//                        }
+//
+//                        @Override
+//                        public void onError(FacebookException e) {
+//                            Log.e(TAG, "FriendsActivity, InviteCallback - ERROR! " + e.getMessage());
+//                        }
+//
+//                    };
+//                    AppInviteDialog appInviteDialog = new AppInviteDialog(activity);
+//                    if (AppInviteDialog.canShow()) {
+//                        AppInviteContent.Builder content = new AppInviteContent.Builder();
+//                        content.setApplinkUrl(appLinkUrl);
+//                        content.setPreviewImageUrl(previewImageUrl);
+//                        AppInviteContent appInviteContent = content.build();
+//                        appInviteDialog.registerCallback(CallbackManager, facebookCallback);
+//                        AppInviteDialog.show(activity, appInviteContent);
+//                    }
+//                }
+//            }
+//        };
 
         ImageView imageView;
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -144,7 +136,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
 
-
         CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
         int count = checker.checkPending();
         TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
@@ -160,7 +151,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             s = bundle.getString("friend_request");
-            UpdatePending();
+            loadUserPending();
             if (s != null) {
                 viewPager.setCurrentItem(1);
             }
@@ -177,23 +168,15 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                 String refreshFriends = sessionManager.getRefreshFriends();
                 Log.d(TAG, "RefreshFriends: " + refreshFriends);
                 if (refreshFriends.equals("true")) {
-                    UpdateFriendsList();
+                    loadUserFriends();
                     sessionManager.setRefreshFriends("false");
                 }
 
                 String refreshPending = sessionManager.getRefreshPending();
-                Log.d(TAG, "RefreshPending: "+refreshPending);
+                Log.d(TAG, "RefreshPending: " + refreshPending);
                 if (refreshPending.equals("true")) {
-                    UpdatePending();
+                    loadUserPending();
                     sessionManager.setRefreshPending("false");
-                }
-
-                com.melnykov.fab.FloatingActionButton floatingActionButton = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.fabPlus);
-                if (position == 2) {
-                    floatingActionButton.setVisibility(View.VISIBLE);
-                    floatingActionButton.setOnClickListener(onClickInviteFriends);
-                } else {
-                    floatingActionButton.setVisibility(View.INVISIBLE);
                 }
             }
 
@@ -321,17 +304,15 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
     }
 
 
-    public void UpdateFriendsList() {
+    public void loadUserFriends() {
+        // TODO: 31.08.2016 use AppSync.loadUserFriends method;
         final String API_URL = "http://46.101.213.24:3007";
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         final String id = user.get("id");
         String token = user.get("token");
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         DBHelper dbHelper = new DBHelper(getApplicationContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.delete("friends", null, null);
@@ -384,7 +365,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                                     c.getString(index),
                                     "0", "0", "0" ,"0"));
                         } while (c.moveToNext());
-                    } //else Log.i("stat", "0 0 0 0");
+                    }
                     c.close();
 
                     Log.i("stat", "FriendsActivity :" + newfriends.toString());
@@ -414,23 +395,19 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
             }
 
             @Override
-            public void onFailure(Throwable t) {
-            }
+            public void onFailure(Throwable t) { }
         });
     }
 
 
-    public void UpdatePending() {
+    public void loadUserPending() {
         final String API_URL = "http://46.101.213.24:3007";
         SessionManager sessionManager = new SessionManager(this);
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         final String id = user.get("id");
         String token = user.get("token");
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         DBHelper dbHelper = new DBHelper(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         //int clearCount = db.delete("pending", null, null);
@@ -469,10 +446,9 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                             }
                         }
                     }
-                    final List<Pending_friend> newfriends = new ArrayList<>();
+                    final List<Pending_friend> pendingFriends = new ArrayList<>();
                     Cursor c = db.query("pending", null, null, null, null, null, null);
                     if (c.moveToFirst()) {
-                        //int idColIndex = c.getColumnIndex("id");
                         int nameColIndex = c.getColumnIndex("name");
                         int photoColIndex = c.getColumnIndex("photo");
                         int index = c.getColumnIndex("user_id");
@@ -481,10 +457,8 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                         int successChallenges = c.getColumnIndex("successChallenges");
                         int allChallengesCount = c.getColumnIndex("allChallengesCount");
 
-                        //int challenges = c.getColumnIndex("challenges");
                         do {
-                            Log.i("newusers", "NewUser: " + c.getString(nameColIndex) + " Photo: " + c.getString(photoColIndex));
-                            newfriends.add(new Pending_friend(
+                            pendingFriends.add(new Pending_friend(
                                     c.getString(nameColIndex),
                                     API_URL + c.getString(photoColIndex),
                                     c.getString(index),
@@ -494,17 +468,16 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                                     c.getString(inProgressChallengesCountIndex)
                             ));
                         } while (c.moveToNext());
-                    } else
-                        Log.i("stat", "null rows");
+                    }
                     c.close();
 
-                    Log.i("stat", "FriendsActivity :" + newfriends.toString());
+                    Log.i("stat", "FriendsActivity :" + pendingFriends.toString());
 
                     RecyclerView rvContacts = (RecyclerView) findViewById(R.id.rvContacts);
-                    final PendingAdapter adapter = new PendingAdapter(newfriends, FriendsActivity.this, FriendsActivity.this, new CustomItemClickListener() {
+                    final PendingAdapter adapter = new PendingAdapter(pendingFriends, FriendsActivity.this, FriendsActivity.this, new CustomItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
-                            Pending_friend friend = newfriends.get(position);
+                            Pending_friend friend = pendingFriends.get(position);
                         }
                     });
                     rvContacts.setAdapter(adapter);

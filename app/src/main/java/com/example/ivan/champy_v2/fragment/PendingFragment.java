@@ -75,6 +75,40 @@ public class PendingFragment extends Fragment {
         }
     };
 
+    private Emitter.Listener onConnect = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+
+            CurrentUserHelper currentUser = new CurrentUserHelper(getContext());
+            mSocket.emit("ready", currentUser.getToken());
+            Log.i("call", "call: minden fasza");
+        }
+    };
+
+    private Emitter.Listener onConnected = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            Log.i("call", "call: connected okay");
+        }
+    };
+
+    protected Emitter.Listener modifiedRelationship = new Emitter.Listener() {
+
+        @Override
+        public void call(final Object... args) {
+            try {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshView(gSwipeRefreshlayout, gView);
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Log.i("call", "new friend request");
+        }
+    };
 
     public static PendingFragment newInstance(int page) {
         Bundle args = new Bundle();
@@ -87,75 +121,13 @@ public class PendingFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
-
     }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.i("Comm:", "onDestroy: viszlat");
-    }
-
-
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        mSocket.disconnect();
-        Log.i("Comm:", "onDestroy: viszlat");
-    }
-
-    //
-    private Emitter.Listener onConnect = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-
-            CurrentUserHelper currentUser = new CurrentUserHelper(getContext());
-            mSocket.emit("ready", currentUser.getToken());
-            Log.i("call", "call: minden fasza");
-        }
-    };
-    //
-    private Emitter.Listener onConnected = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-            Log.i("call", "call: connected okay");
-        }
-    };
-    //
-    protected Emitter.Listener modifiedRelationship = new Emitter.Listener() {
-
-        @Override
-        public void call(final Object... args) {
-
-            try {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        refreshView(gSwipeRefreshlayout, gView);
-                    }
-                });
-
-
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            Log.i("call", "new friend request");
-        }
-    };
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
         Log.i("stat", "Created Pending");
         final View view = inflater.inflate(R.layout.fragment_first, container, false);
-        final List<Pending_friend> friends = new ArrayList<>();
+        final List<Pending_friend> pendingFriends = new ArrayList<>();
 
         DBHelper dbHelper = new DBHelper(getContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -172,8 +144,7 @@ public class PendingFragment extends Fragment {
             int allChallengesCount = c.getColumnIndex("allChallengesCount");
 
             do {
-                Log.i("stat", "Status: "+c.getString(photoColIndex));
-                friends.add(new Pending_friend(
+                pendingFriends.add(new Pending_friend(
                                 c.getString(nameColIndex),
                                 API_URL+c.getString(photoColIndex),
                                 c.getString(index),
@@ -188,13 +159,11 @@ public class PendingFragment extends Fragment {
         }
         c.close();
 
-        Log.i("stat", "Friends :" + friends);
-
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-        final PendingAdapter adapter = new PendingAdapter(friends, getContext(), getActivity(), new CustomItemClickListener() {
+        final PendingAdapter adapter = new PendingAdapter(pendingFriends, getContext(), getActivity(), new CustomItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Pending_friend friend = friends.get(position);
+                Pending_friend friend = pendingFriends.get(position);
             }
         });
         //FloatingActionButton floatingActionButton = (FloatingActionButton)getActivity().findViewById(R.id.fabPlus);
@@ -203,30 +172,52 @@ public class PendingFragment extends Fragment {
         rvContacts.setAdapter(adapter);
 
         gSwipeRefreshlayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
-
         gSwipeRefreshlayout.setOnRefreshListener(onRefreshListener);
-
-
         this.gView = view;
+
         return view;
 
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
 
+//        mSocket.on("connect", onConnect);
+//        mSocket.on("connected", onConnected);
+//
+//        mSocket.on("Relationship:new", modifiedRelationship);
+//        mSocket.on("Relationship:new:accepted", modifiedRelationship);
+//        mSocket.on("Relationship:new:removed", modifiedRelationship);
+//        mSocket.on("Relationship:accepted", modifiedRelationship);
+//
+//        mSocket.on("Relationship:created", modifiedRelationship);
+//        mSocket.on("Relationship:created:accepted", modifiedRelationship);
+//        mSocket.on("Relationship:created:removed", modifiedRelationship);
+//        mSocket.on("Relationship:new:removed", modifiedRelationship);
+//        mSocket.connect();
 
+    }
 
-//    SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
-//        @Override
-//        public void onRefresh() {
-//            refreshView(gSwipeRefreshLayout, view);
-//        }
-//    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        //mSocket.disconnect();
+        Log.i("PendingFragment:", "onStop");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i("PendingFragment:", "onDestroy");
+    }
+
 
     private void refreshView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         CurrentUserHelper currentUser = new CurrentUserHelper(getContext());
         swipeRefreshLayout.setRefreshing(true);
 
-        final String id =currentUser.getUserObjectId();
+        final String id = currentUser.getUserObjectId();
         String token = currentUser.getToken();
 
         final Retrofit retrofit = new Retrofit.Builder()
@@ -331,10 +322,6 @@ public class PendingFragment extends Fragment {
                         });
                         rvContacts.setAdapter(adapter);
                         swipeRefreshLayout.setRefreshing(false);
-
-
-
-
                     }
                     Log.i("Comm:", "onResponse: 12345");
                 }
@@ -351,24 +338,6 @@ public class PendingFragment extends Fragment {
 
 
 
-    @Override
-    public void onStart() {
-        super.onStart();
 
-        mSocket.on("connect", onConnect);
-        mSocket.on("connected", onConnected);
-
-        mSocket.on("Relationship:new", modifiedRelationship);
-        mSocket.on("Relationship:new:accepted", modifiedRelationship);
-        mSocket.on("Relationship:new:removed", modifiedRelationship);
-        mSocket.on("Relationship:accepted", modifiedRelationship);
-
-        mSocket.on("Relationship:created", modifiedRelationship);
-        mSocket.on("Relationship:created:accepted", modifiedRelationship);
-        mSocket.on("Relationship:created:removed", modifiedRelationship);
-        mSocket.on("Relationship:new:removed", modifiedRelationship);
-//        mSocket.connect();
-
-    }
 
 }

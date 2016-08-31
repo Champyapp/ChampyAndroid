@@ -221,76 +221,54 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
                     final String id = user.get("id");
                     
                     String friend = mContacts.get(position).getID();
-                    if (friend == null) {
-                        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+
+                    if (friend != null) {
+                        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+                        DBHelper dbHelper = new DBHelper(_context);
+                        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+                        final ContentValues cv = new ContentValues();
+
+                        //щоб воно не обновляло (і дублювало) лист друзів після додавання когось, то має юути false
+                        sessionManager.setRefreshPending("false");
+
+                        com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(Friends.class);
+                        Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.sendFriendRequest(id, friend, token);
+                        call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                switch (which) {
-                                    case DialogInterface.BUTTON_POSITIVE:
-                                        break;
-                                    case DialogInterface.BUTTON_NEGATIVE:
-                                        break;
-                                }
+                            public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
+                                if (response.isSuccess()) {
+                                    Log.d(TAG, "Status: Sent Friend Request");
+                                    cv.put("name", mContacts.get(position).getName());
+                                    cv.put("photo", mContacts.get(position).getPicture());
+                                    cv.put("user_id", mContacts.get(position).getID());
+                                    cv.put("level", mContacts.get(position).getmLevel());
+                                    cv.put("inProgressChallengesCount", mContacts.get(position).getmChallenges());
+                                    cv.put("successChallenges", mContacts.get(position).getmWins());
+                                    cv.put("allChallengesCount", mContacts.get(position).getmTotal());
+                                    db.insert("pending", null, cv);
+                                } else Log.d(TAG, "Status: " + response.toString());
                             }
-                        };
-                        AlertDialog.Builder builder = new AlertDialog.Builder(_context);
-                        builder.setMessage("This user has not installed Champy. Do you want to send invite?")
-                                .setPositiveButton("Yes", dialogClickListener)
-                                .setNegativeButton("No", dialogClickListener)
-                                .show();
-                    } else {
-                        // dialog "Do you want add this user to your friends list?"
-                        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                switch (which) {
-                                    case DialogInterface.BUTTON_POSITIVE:
-                                        String friend = mContacts.get(position).getID();
-                                        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-                                        DBHelper dbHelper = new DBHelper(_context);
-                                        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-                                        final ContentValues cv = new ContentValues();
-
-                                        //щоб воно не обновляло (і дублювало) лист друзів після додавання когось, то має юути false
-                                        sessionManager.setRefreshPending("false");
-
-                                        com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(Friends.class);
-                                        Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.sendFriendRequest(id, friend, token);
-                                        call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
-                                            @Override
-                                            public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
-                                                if (response.isSuccess()) {
-                                                    Log.d(TAG, "Status: Sended Friend Request");
-                                                    cv.put("name", mContacts.get(position).getName());
-                                                    cv.put("photo", mContacts.get(position).getPicture());
-                                                    cv.put("user_id", mContacts.get(position).getID());
-                                                    db.insert("pending", null, cv);
-                                                } else Log.d(TAG, "Status: " + response.toString());
-                                            }
-
-                                            @Override
-                                            public void onFailure(Throwable t) {
-                                            }
-                                        });
-                                        mContacts.remove(position);
-                                        notifyItemRemoved(position);
-                                        selected.clear();
-                                        break;
-                                    case DialogInterface.BUTTON_NEGATIVE:
-                                        //No button clicked
-                                        break;
-                                }
+                            public void onFailure(Throwable t) {
                             }
-                        };
-                        AlertDialog.Builder builder = new AlertDialog.Builder(_context);
-                        builder.setMessage("Do you want add this user to your friends list?")
-                                .setPositiveButton("Yes", dialogClickListener)
-                                .setNegativeButton("No", dialogClickListener)
-                                .show();
-                    }
+                        });
+                        mContacts.remove(position);
+                        notifyItemRemoved(position);
+                        selected.clear();
+
                 }
             }
-        });
+        };
+//                        AlertDialog.Builder builder = new AlertDialog.Builder(_context);
+//                        builder.setMessage("Do you want add this user to your friends list?")
+//                                .setPositiveButton("Yes", dialogClickListener)
+//                                .setNegativeButton("No", dialogClickListener)
+//                                .show();
+//                    }
+//                }
+//            }
+});
 
     }
 
@@ -337,7 +315,8 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
             simple = (RelativeLayout)itemView.findViewById(R.id.row_friends_list_close);
             info = (RelativeLayout)itemView.findViewById(R.id.row_friends_list_open);
 
-            //block = (ImageButton)itemView.findViewById(R.id.imageButtonBlockUser);
+            block = (ImageButton)itemView.findViewById(R.id.imageButtonBlockUser);
+            block.setVisibility(View.INVISIBLE);
             add = (ImageButton)itemView.findViewById(R.id.imageButtonAddUser);
 
 

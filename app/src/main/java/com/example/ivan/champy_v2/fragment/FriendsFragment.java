@@ -44,16 +44,9 @@ public class FriendsFragment extends Fragment {
 
     final String API_URL = "http://46.101.213.24:3007";
     public static final String ARG_PAGE = "ARG_PAGE";
+
     public View gView;
     public SwipeRefreshLayout gSwipeRefreshLayout;
-
-    SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
-        @Override
-        public void onRefresh() {
-            refreshView(gSwipeRefreshLayout, gView);
-        }
-    };
-
     private Socket mSocket;
 
     {
@@ -63,6 +56,14 @@ public class FriendsFragment extends Fragment {
             throw new RuntimeException(e);
         }
     }
+
+    SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+            refreshView(gSwipeRefreshLayout, gView);
+        }
+    };
+
 
     public static FriendsFragment newInstance(int page) {
         Bundle args = new Bundle();
@@ -76,14 +77,12 @@ public class FriendsFragment extends Fragment {
     private Emitter.Listener onConnect = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-
             CurrentUserHelper currentUser = new CurrentUserHelper(getContext());
             mSocket.emit("ready", currentUser.getToken());
             Log.i("Sockets", "call: onConnect");
         }
     };
 
-    //
     private Emitter.Listener onConnected = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
@@ -91,9 +90,7 @@ public class FriendsFragment extends Fragment {
         }
     };
 
-    //
     protected Emitter.Listener modifiedRelationship = new Emitter.Listener() {
-
         @Override
         public void call(final Object... args) {
             getActivity().runOnUiThread(new Runnable() {
@@ -115,15 +112,15 @@ public class FriendsFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        mSocket.on("connect", onConnect);
-        mSocket.on("connected", onConnected);
-
-        mSocket.on("Relationship:new:accepted", modifiedRelationship);
-        mSocket.on("Relationship:new:removed", modifiedRelationship);
-
-        mSocket.on("Relationship:created:accepted", modifiedRelationship);
-        mSocket.on("Relationship:created:removed", modifiedRelationship);
-        mSocket.connect();
+//        mSocket.on("connect", onConnect);
+//        mSocket.on("connected", onConnected);
+//
+//        mSocket.on("Relationship:new:accepted", modifiedRelationship);
+//        mSocket.on("Relationship:new:removed", modifiedRelationship);
+//        mSocket.on("Relationship:created:accepted", modifiedRelationship);
+//        mSocket.on("Relationship:created:removed", modifiedRelationship);
+//
+//        mSocket.connect();
 
     }
 
@@ -181,9 +178,8 @@ public class FriendsFragment extends Fragment {
 
         gSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
         gSwipeRefreshLayout.setOnRefreshListener(onRefreshListener);
-
-
         this.gView = view;
+
         return view;
 
 
@@ -390,7 +386,7 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        mSocket.disconnect();
+        //mSocket.disconnect();
         Log.i("Comm:", "onDestroy: viszlat");
     }
 

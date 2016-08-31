@@ -47,8 +47,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     CustomItemClickListener listener;
     ArrayList<Integer> selected = new ArrayList<>();
 
-    private Other other = new Other(new ArrayList<Friend>());
-
 
     public FriendsAdapter(List<Friend> contacts, Context context, Activity activity, CustomItemClickListener customItemClickListener) {
         mContacts = contacts;
@@ -186,58 +184,37 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             public void onClick(View v) {
                 OfflineMode offlineMode = new OfflineMode();
                 if (offlineMode.isConnectedToRemoteAPI(activity)) {
-                    // можно добавить диалог типа "ты уверен что хочешь удалить юзера?"
-                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+
+                    final SessionManager sessionManager = new SessionManager(_context);
+                    HashMap<String, String> user;
+                    user = sessionManager.getUserDetails();
+                    final String token = user.get("token");
+                    final String id = user.get("id");
+                    String friend = mContacts.get(position).getID();
+                    Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+
+                    com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
+                    Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.removeFriend(id, friend, token);
+                    call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            switch (which) {
-                                case DialogInterface.BUTTON_POSITIVE:
-                                    final SessionManager sessionManager = new SessionManager(_context);
-                                    HashMap<String, String> user;
-                                    user = sessionManager.getUserDetails();
-                                    final String token = user.get("token");
-                                    final String id = user.get("id");
-                                    String friend = mContacts.get(position).getID();
-                                    Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-
-                                    com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
-                                    Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.removeFriend(id, friend, token);
-                                    call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
-                                        @Override
-                                        public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
-                                            if (response.isSuccess()) {
-                                                Log.d(TAG, "Status: Removed ");
-                                            } else {
-                                                Log.d(TAG, "Status: " + response.toString());
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onFailure(Throwable t) {
-                                        }
-                                    });
-                                    sessionManager.setRefreshFriends("false");
-                                    mContacts.remove(position);
-                                    notifyItemRemoved(position);
-                                    selected.clear();
-                                    break;
-                                case DialogInterface.BUTTON_NEGATIVE:
-                                    break;
-                            }
+                        public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
+                            if (response.isSuccess()) Log.d(TAG, "Status: Removed ");
+                            else Log.d(TAG, "Status: " + response.toString());
                         }
-                    };
-                    AlertDialog.Builder builder = new AlertDialog.Builder(_context);
-                    builder.setMessage("Do you want to delete this user from your friends list?")
-                            .setPositiveButton("Yes", dialogClickListener)
-                            .setNegativeButton("No",  dialogClickListener)
-                            .show();
+
+                        @Override
+                        public void onFailure(Throwable t) { }
+                    });
+                    sessionManager.setRefreshFriends("false");
+                    mContacts.remove(position);
+                    notifyItemRemoved(position);
+                    selected.clear();
                 }
             }
         });
 
         ImageButton imageButtonAdd = viewHolder.add;
         imageButtonAdd.setBackgroundDrawable(_context.getResources().getDrawable(R.drawable.duel));
-
         imageButtonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -208,31 +208,24 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                     user = sessionManager.getUserDetails();
                     final String token = user.get("token");
                     final String id = user.get("id");
-
                     String friend = mContacts.get(position).getID();
-                    Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(API_URL)
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
-
-                    com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
+                    Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
                     Log.d(TAG, "Status: " + id + " " + friend);
 
+                    com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
                     Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.removeFriend(id, friend, token);
                     call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
                         @Override
                         public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
-                            if (response.isSuccess()) {
-                                Log.d(TAG, "Status: Removed ");
-                            } else {
-                                Log.d(TAG, "Status: " + response.toString());
-                            }
+                            if (response.isSuccess()) Log.d(TAG, "Status: Removed ");
+                            else Log.d(TAG, "Status: " + response.toString());
                         }
 
                         @Override
                         public void onFailure(Throwable t) {}
                     });
+
                     //щоб воно не обновляло (і дублювало) лист друзів після додавання когось, то має юути false
                     sessionManager.setRefreshPending("false");
                     mContacts.remove(position);
@@ -256,59 +249,36 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                     String friend = mContacts.get(position).getID();
                     Log.d(TAG, "User: " + friend);
                     if (friend != null) {
-                        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+                        sessionManager.setRefreshFriends("false");
+                        sessionManager.setRefreshPending("false");
+                        DBHelper dbHelper = new DBHelper(context);
+                        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+                        final ContentValues cv = new ContentValues();
+
+                        com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(Friends.class);
+                        Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.acceptFriendRequest(id, friend, token);
+                        call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                switch (which) {
-                                    case DialogInterface.BUTTON_POSITIVE:
-                                        String friend = mContacts.get(position).getID();
-                                        Retrofit retrofit = new Retrofit.Builder()
-                                                .baseUrl(API_URL)
-                                                .addConverterFactory(GsonConverterFactory.create())
-                                                .build();
-                                        sessionManager.setRefreshFriends("false");
-                                        sessionManager.setRefreshPending("false");
-                                        DBHelper dbHelper = new DBHelper(context);
-                                        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-                                        final ContentValues cv = new ContentValues();
-                                        com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(Friends.class);
-                                        //Log.d(TAG, "Status: " + id + " " + friend + " " + token);
-
-                                        Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.acceptFriendRequest(id, friend, token);
-                                        call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
-                                            @Override
-                                            public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
-                                                if (response.isSuccess()) {
-                                                    //Log.d(TAG, "Status: Accepted");
-                                                    cv.put("name", mContacts.get(position).getName());
-                                                    cv.put("photo", mContacts.get(position).getPicture());
-                                                    cv.put("user_id", mContacts.get(position).getID());
-                                                    db.insert("friends", null, cv);
-                                                } //else Log.d(TAG, "Status: " + response.code());
-                                            }
-
-                                            @Override
-                                            public void onFailure(Throwable t) {}
-                                        });
-                                        mContacts.remove(position);
-                                        notifyItemRemoved(position);
-                                        selected.clear();
-                                        break;
-                                    case DialogInterface.BUTTON_NEGATIVE:
-                                        dialog.cancel();
-                                        break;
-
+                            public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
+                                if (response.isSuccess()) {
+                                    cv.put("name", mContacts.get(position).getName());
+                                    cv.put("photo", mContacts.get(position).getPicture());
+                                    cv.put("user_id", mContacts.get(position).getID());
+                                    db.insert("friends", null, cv);
                                 }
                             }
-                        };
-                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                        builder.setMessage("Do you want add this user to your friends list?").setPositiveButton("Yes", dialogClickListener)
-                                .setNegativeButton("No", dialogClickListener).show();
+
+                            @Override
+                            public void onFailure(Throwable t) { }
+                        });
+                        mContacts.remove(position);
+                        notifyItemRemoved(position);
+                        selected.clear();
                     }
                 }
             }
         });
-
 
     }
 
