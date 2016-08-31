@@ -163,5 +163,7 @@
     <string name="level">"Level "</string>
     <string name="champy">" Champy"</string>
     <string name="daysToGo">" DAYS TO GO"</string>
+    <string name="take_photo_from_camera">Take Photo from Camera</string>
+    <string name="take_photo_from_gallery">Take Photo from Gallery</string>
 
 </resources>

@@ -92,7 +92,7 @@ public class PhotoActivity extends AppCompatActivity {
                 Bitmap thePic = extras.getParcelable("data");
                 savePhoto(thePic);
                 Upload_photo(SaveFromCamera(thePic));
-                Intent intent = new Intent(PhotoActivity.this, MainActivity.class);
+                Intent intent = new Intent(PhotoActivity.this, SettingsActivity.class);
                 startActivity(intent);
                 Toast.makeText(getApplicationContext(), "Changed", Toast.LENGTH_SHORT).show();
             } else if (requestCode == CROP_PIC){
@@ -100,7 +100,7 @@ public class PhotoActivity extends AppCompatActivity {
                 // get the cropped bitmap
                 Bitmap thePic = extras.getParcelable("data");
                 savePhoto(thePic);
-                Intent intent = new Intent(PhotoActivity.this, MainActivity.class);
+                Intent intent = new Intent(PhotoActivity.this, SettingsActivity.class);
                 startActivity(intent);
                 Toast.makeText(getApplicationContext(), "Changed", Toast.LENGTH_SHORT).show();
             } if (requestCode == Crop.REQUEST_PICK && resultCode == RESULT_OK) {
@@ -160,10 +160,9 @@ public class PhotoActivity extends AppCompatActivity {
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
-            Log.d(TAG, "File Path: " + path);
+
             Upload_photo(path);
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),uri);
-            Log.i("CROP", "CROP: "+bitmap);
             savePhoto(bitmap);
             Intent intent = new Intent(PhotoActivity.this, SettingsActivity.class);
             startActivity(intent);
