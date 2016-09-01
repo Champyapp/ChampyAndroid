@@ -78,34 +78,27 @@ public class PendingFragment extends Fragment {
     private Emitter.Listener onConnect = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-
             CurrentUserHelper currentUser = new CurrentUserHelper(getContext());
             mSocket.emit("ready", currentUser.getToken());
             Log.i("call", "call: minden fasza");
         }
     };
-
     private Emitter.Listener onConnected = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
             Log.i("call", "call: connected okay");
         }
     };
-
     protected Emitter.Listener modifiedRelationship = new Emitter.Listener() {
 
         @Override
         public void call(final Object... args) {
-            try {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        refreshView(gSwipeRefreshlayout, gView);
-                    }
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    refreshView(gSwipeRefreshlayout, gView);
+                }
+            });
             Log.i("call", "new friend request");
         }
     };
@@ -166,14 +159,22 @@ public class PendingFragment extends Fragment {
                 Pending_friend friend = pendingFriends.get(position);
             }
         });
-        //FloatingActionButton floatingActionButton = (FloatingActionButton)getActivity().findViewById(R.id.fabPlus);
-        //floatingActionButton.attachToRecyclerView(rvContacts);
+
+        SessionManager sessionManager = new SessionManager(getActivity());
+        String refresh = sessionManager.getRefreshFriends();
+
+
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         rvContacts.setAdapter(adapter);
 
         gSwipeRefreshlayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
         gSwipeRefreshlayout.setOnRefreshListener(onRefreshListener);
         this.gView = view;
+
+        if (refresh.equals("true")) {
+            refreshView(gSwipeRefreshlayout, gView);
+            sessionManager.setRefreshFriends("false");
+        }
 
         return view;
 
@@ -216,22 +217,14 @@ public class PendingFragment extends Fragment {
     private void refreshView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         CurrentUserHelper currentUser = new CurrentUserHelper(getContext());
         swipeRefreshLayout.setRefreshing(true);
-
         final String id = currentUser.getUserObjectId();
         String token = currentUser.getToken();
-
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         DBHelper dbHelper = new DBHelper(getContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("pending", null, null);
         final ContentValues cv = new ContentValues();
-        Log.d("PendingFragment", "ID :" + id + " Token: " + token);
         com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
-
         OfflineMode offlineMode = new OfflineMode();
 
         if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
@@ -245,39 +238,34 @@ public class PendingFragment extends Fragment {
                         for (int i = 0; i < data.size(); i++) {
                             Datum datum = data.get(i);
                             if ((datum.getFriend() != null) && (datum.getOwner() != null) && datum.getStatus().toString().equals("false")) {
-                                String status = "";
+                                String status;
 //
                                 if (datum.getOwner().get_id().equals(id)) {
                                     status = "false";
-
                                     Friend_ friend = datum.getFriend();
-
                                     cv.put("name", friend.getName());
-
-                                    if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
+                                    if (friend.getPhoto() != null)
+                                         cv.put("photo", friend.getPhoto().getMedium());
                                     else cv.put("photo", "");
                                     cv.put("user_id", friend.getId());
                                     cv.put("inProgressChallengesCount", friend.getInProgressChallengesCount());
                                     cv.put("allChallengesCount", friend.getAllChallengesCount());
                                     cv.put("successChallenges", friend.getSuccessChallenges());
-
-
+                                    cv.put("owner", status);
                                 } else {
                                     status = "true";
-
                                     Owner friend = datum.getOwner();
                                     cv.put("name", friend.getName());
-                                    if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
+                                    if (friend.getPhoto() != null)
+                                         cv.put("photo", friend.getPhoto().getMedium());
                                     else cv.put("photo", "");
-
                                     cv.put("user_id", friend.get_id());
                                     cv.put("inProgressChallengesCount", friend.getInProgressChallengesCount());
                                     cv.put("allChallengesCount", friend.getAllChallengesCount());
                                     cv.put("successChallenges", friend.getSuccessChallenges());
-
-
+                                    cv.put("owner", status);
                                 }
-                                cv.put("owner", "" + status);
+
 
                                 db.insert("pending", null, cv);
                             }
@@ -310,7 +298,6 @@ public class PendingFragment extends Fragment {
 
                         c.close();
 
-
                         Log.i("stat", "FriendsActivity :" + newfriends.toString());
 
                         RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
@@ -323,7 +310,7 @@ public class PendingFragment extends Fragment {
                         rvContacts.setAdapter(adapter);
                         swipeRefreshLayout.setRefreshing(false);
                     }
-                    Log.i("Comm:", "onResponse: 12345");
+                    Log.i("refreshView:", "onResponse: finish refreshing");
                 }
 
                 @Override

@@ -61,7 +61,7 @@ import static java.lang.Math.round;
 public class FriendsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     FragmentPagerAdapter adapterViewPager;
-    private final String TAG = "myLogs";
+    private final String TAG = "FriendsActivity";
     private com.facebook.CallbackManager CallbackManager;
 
     @Override
@@ -120,27 +120,27 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 
             @Override
             public void onPageSelected(int position) {
-                SessionManager sessionManager = new SessionManager(getApplicationContext());
-                String refreshFriends = sessionManager.getRefreshFriends();
-                Log.d(TAG, "RefreshFriends: " + refreshFriends);
-                if (refreshFriends.equals("true")) {
-                    loadUserFriends();
-                    sessionManager.setRefreshFriends("false");
-                }
+//                SessionManager sessionManager = new SessionManager(getApplicationContext());
+//                String refreshFriends = sessionManager.getRefreshFriends();
+//                Log.d(TAG, "RefreshFriends: " + refreshFriends);
+//                if (refreshFriends.equals("true")) {
+//                    loadUserFriends();
+//                    sessionManager.setRefreshFriends("false");
+//                }
+//
+//                String refreshPending = sessionManager.getRefreshPending();
+//                Log.d(TAG, "RefreshPending: " + refreshPending);
+//                if (refreshPending.equals("true")) {
+//                    loadUserPending();
+//                    sessionManager.setRefreshPending("false");
+//                }
 
-                String refreshPending = sessionManager.getRefreshPending();
-                Log.d(TAG, "RefreshPending: " + refreshPending);
-                if (refreshPending.equals("true")) {
-                    loadUserPending();
-                    sessionManager.setRefreshPending("false");
-                }
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
             }
         });
-
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
@@ -168,6 +168,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         }
 
         ViewServer.get(this).addWindow(this);
+
     }
 
     @Override
@@ -290,14 +291,16 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                                 if (datum.getOwner().get_id().equals(id)) {
                                     Friend_ friend = datum.getFriend();
                                     cv.put("name", friend.getName());
-                                    if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
+                                    if (friend.getPhoto() != null)
+                                         cv.put("photo", friend.getPhoto().getMedium());
                                     else cv.put("photo", "");
                                     cv.put("user_id", friend.getId());
                                     db.insert("friends", null, cv);
                                 } else {
                                     Owner friend = datum.getOwner();
                                     cv.put("name", friend.getName());
-                                    if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
+                                    if (friend.getPhoto() != null)
+                                         cv.put("photo", friend.getPhoto().getMedium());
                                     else cv.put("photo", "");
                                     cv.put("user_id", friend.get_id());
                                     db.insert("friends", null, cv);
@@ -312,19 +315,30 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                         //int idColIndex = c.getColumnIndex("id");
                         int nameColIndex = c.getColumnIndex("name");
                         int photoColIndex = c.getColumnIndex("photo");
+                        int inProgressChallengesCountIndex = c.getColumnIndex("inProgressChallengesCount");
+                        int successChallenges = c.getColumnIndex("successChallenges");
+                        int allChallengesCount = c.getColumnIndex("allChallengesCount");
+                        int level = c.getColumnIndex("level");
                         int index = c.getColumnIndex("user_id");
                         do {
-                            Log.i("newusers", "NewUser: " + c.getString(nameColIndex) + " Photo: " + c.getString(photoColIndex));
+                            Log.i("newusers", "NewUser: " + c.getString(nameColIndex)
+                                    + " i: " + c.getString(inProgressChallengesCountIndex)
+                                    + " w: " + c.getString(successChallenges)
+                                    + " t: " + c.getString(allChallengesCount)
+                                    + " Photo: " + c.getString(photoColIndex));
                             newfriends.add(new com.example.ivan.champy_v2.Friend(
                                     c.getString(nameColIndex),
                                     API_URL + c.getString(photoColIndex),
                                     c.getString(index),
-                                    "0", "0", "0" ,"0"));
+                                    c.getString(inProgressChallengesCountIndex),
+                                    c.getString(successChallenges),
+                                    c.getString(allChallengesCount),
+                                    "0"));
                         } while (c.moveToNext());
                     }
                     c.close();
 
-                    Log.i("stat", "FriendsActivity :" + newfriends.toString());
+                    Log.i(TAG, "Displayed friends: " + newfriends.toString());
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -366,7 +380,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         DBHelper dbHelper = new DBHelper(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int clearCount = db.delete("pending", null, null);
+        //int clearCount = db.delete("pending", null, null);
         final ContentValues cv = new ContentValues();
 
         com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);

@@ -121,10 +121,10 @@ public class AppSync {
                      * который брал инфу про друзей. Сейчас мы вызываем его здесь.
                      */
                     getUserInProgressChallenges(userId);
-                    getUserFriends(userId);
+                    getUserPendingFriends(userId);
                     getUserFriendsInfo(gcm);
 
-                    String api_path = null;
+                    String api_path;
                     if (data.getPhoto() != null){
                         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
                         File file = new File(path, "profile.jpg");
@@ -133,7 +133,7 @@ public class AppSync {
                             api_path = API_URL + photo.getLarge();
                             Log.i("AppSync", "GetUserPhoto: " + api_path);
                         } else {
-                            Log.i("AppSync", "GetUserProfile: Houston, we got a problem o_O");
+                            Log.i("AppSync", "GetUserPhoto: User photo already exist. vse ok");
                         }
                     }
 
@@ -153,7 +153,7 @@ public class AppSync {
     }
 
 
-    public void getUserFriends(final String userId) {
+    public void getUserPendingFriends(final String userId) {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("pending", null, null);
@@ -172,10 +172,9 @@ public class AppSync {
 
                         if ((datum.getFriend() != null) && (datum.getOwner() != null)) {
                             if (datum.getStatus().toString().equals("false")) {
-
                                 if (datum.getOwner().get_id().equals(userId)) {
                                     Friend_ friend = datum.getFriend();
-                                    if (friend.getName() != null)  cv.put("name", friend.getName());
+                                    cv.put("name", friend.getName());
                                     if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
                                     else cv.put("photo", "");
                                     cv.put("user_id", friend.getId());
@@ -188,17 +187,8 @@ public class AppSync {
                                     else cv.put("photo", "");
                                     cv.put("user_id", friend.get_id());
                                     cv.put("owner", "true");
-                                    db.insert("pending", null, cv); //comment this line if something goes wrong
+                                    db.insert("pending", null, cv);
                                 }
-
-                            } else {
-                                Friend_ friend = datum.getFriend();
-                                cv.put("name", friend.getName());
-                                if (friend.getPhoto() != null)
-                                     cv.put("photo", friend.getPhoto().getMedium());
-                                else cv.put("photo", "");
-                                cv.put("user_id", friend.getId());
-                                db.insert("friends", null, cv);
                             }
                         }
                     }
@@ -313,8 +303,7 @@ public class AppSync {
                                             String photo = null;
 
                                             if (data.getPhoto() != null) photo = API_URL + data.getPhoto().getMedium();
-                                            else {
-                                                try {
+                                            else { try {
                                                     URL profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
                                                     photo = profile_pic.toString();
                                                 } catch (MalformedURLException e) {
@@ -325,14 +314,15 @@ public class AppSync {
                                             cv.put("name", name);
                                             cv.put("photo", photo);
                                             cv.put("user_id", data.get_id());
-                                            cv.put("challenges", ""+data.getAllChallengesCount());
-                                            cv.put("wins", ""+data.getSuccessChallenges());
-                                            cv.put("total", ""+data.getScore());
-                                            cv.put("level", ""+data.getLevel().getNumber());
-                                            if (!checkPendingFriends(data.get_id())) db.insert("mytable", null, cv);
-                                            else Log.i("AppSync", "GetFriends | DBase: not added");
+                                            cv.put("challenges", data.getAllChallengesCount());
+                                            cv.put("wins", data.getSuccessChallenges());
+                                            cv.put("total", data.getScore());
+                                            cv.put("level", data.getLevel().getNumber());
+                                            if (!checkPendingFriends(data.get_id())) db.insert("mytable", null, cv); // ?
+                                            else Log.i("AppSync", "GetUserFriendsInfo | DBase: not added");
                                         } else {
-                                            URL profile_pic; // was "= null"
+                                            Log.i("AppSync", "GetUserFriendsInfo | onResponse: " + response.message());
+                                            URL profile_pic;
                                             String photo = null;
                                             try {
                                                 profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
@@ -371,9 +361,9 @@ public class AppSync {
         Boolean ok = false;
         Cursor c = db.query("pending", null, null, null, null, null, null);
         if (c.moveToFirst()) {
-            int index = c.getColumnIndex("user_id");
+            int userId = c.getColumnIndex("user_id");
             do {
-                String user_id = c.getString(index);
+                String user_id = c.getString(userId);
                 if (user_id.equals(id)) {
                     ok = true;
                     break;

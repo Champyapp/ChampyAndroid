@@ -82,14 +82,12 @@ public class FriendsFragment extends Fragment {
             Log.i("Sockets", "call: onConnect");
         }
     };
-
     private Emitter.Listener onConnected = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
             Log.i("Sockets", "call: onConnected");
         }
     };
-
     protected Emitter.Listener modifiedRelationship = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
@@ -147,9 +145,9 @@ public class FriendsFragment extends Fragment {
                         c.getString(nameColIndex),
                         API_URL + c.getString(photoColIndex),
                         c.getString(index),
-                        "" + c.getString(inProgressChallengesCountIndex),
-                        "" + c.getString(successChallenges),
-                        "" + c.getString(allChallengesCount),
+                        c.getString(inProgressChallengesCountIndex),
+                        c.getString(successChallenges),
+                        c.getString(allChallengesCount),
                         "0"));
             } while (c.moveToNext());
         }
@@ -165,13 +163,6 @@ public class FriendsFragment extends Fragment {
         SessionManager sessionManager = new SessionManager(getActivity());
         String refresh = sessionManager.getRefreshFriends();
 
-        if (refresh.equals("true")) {
-            UpdateFriendsList();
-            sessionManager.setRefreshFriends("false");
-        }
-
-        FloatingActionButton floatingActionButton = (FloatingActionButton)getActivity().findViewById(R.id.fabPlus);
-        floatingActionButton.attachToRecyclerView(rvContacts);
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         rvContacts.setAdapter(adapter);
 
@@ -180,8 +171,12 @@ public class FriendsFragment extends Fragment {
         gSwipeRefreshLayout.setOnRefreshListener(onRefreshListener);
         this.gView = view;
 
-        return view;
+        if (refresh.equals("true")) {
+            refreshView(gSwipeRefreshLayout, gView);
+            sessionManager.setRefreshFriends("false");
+        }
 
+        return view;
 
     }
 
@@ -296,7 +291,7 @@ public class FriendsFragment extends Fragment {
 
     }
 
-    // если этого метода не будет, то когда мы удалим друга, а потом свапнем туда-сюда, то он появится опять
+
     public void UpdateFriendsList() {
         final String API_URL = "http://46.101.213.24:3007";
         SessionManager sessionManager = new SessionManager(getActivity());
