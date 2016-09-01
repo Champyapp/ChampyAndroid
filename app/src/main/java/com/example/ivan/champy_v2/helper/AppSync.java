@@ -154,13 +154,11 @@ public class AppSync {
 
 
     public void getUserFriends(final String userId) {
-
-        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("pending", null, null);
         final ContentValues cv = new ContentValues();
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
         Call<com.example.ivan.champy_v2.model.Friend.Friend> callGetUserFriends = friends.getUserFriends(userId, this.token);
         callGetUserFriends.enqueue(new Callback<Friend>() {
@@ -183,37 +181,31 @@ public class AppSync {
                                     cv.put("user_id", friend.getId());
                                     cv.put("owner", "false");
                                     db.insert("pending", null, cv);
-                                }
-
-
-                                else if (datum.getStatus().toString().equals("true")) {
-                                    Friend_ friend = datum.getFriend();
-                                    if (friend.getName() != null) cv.put("name", friend.getName());
-                                    if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
-                                    else cv.put("photo", "");
-                                    cv.put("user_id", friend.getId());
-                                    cv.put("owner", "false");
-                                    db.insert("friends", null, cv);
-                                }
-
-
-                                else {
+                                } else {
                                     Owner friend = datum.getOwner();
                                     cv.put("name", friend.getName());
                                     if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
                                     else cv.put("photo", "");
                                     cv.put("user_id", friend.get_id());
                                     cv.put("owner", "true");
-                                    //db.insert("pending", null, cv); //comment this line if something goes wrong
+                                    db.insert("pending", null, cv); //comment this line if something goes wrong
                                 }
+
+                            } else {
+                                Friend_ friend = datum.getFriend();
+                                cv.put("name", friend.getName());
+                                if (friend.getPhoto() != null)
+                                     cv.put("photo", friend.getPhoto().getMedium());
+                                else cv.put("photo", "");
+                                cv.put("user_id", friend.getId());
+                                db.insert("friends", null, cv);
                             }
                         }
                     }
                 }
             }
             @Override
-            public void onFailure(Throwable t) {
-            }
+            public void onFailure(Throwable t) { }
         });
 
 
