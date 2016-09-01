@@ -172,10 +172,10 @@ public class PendingFragment extends Fragment {
         gSwipeRefreshlayout.setOnRefreshListener(onRefreshListener);
         this.gView = view;
 
-        /*if (refresh.equals("true")) {
+        if (refresh.equals("true")) {
             refreshView(gSwipeRefreshlayout, gView);
             sessionManager.setRefreshFriends("false");
-        }*/
+        }
 
         return view;
 
@@ -185,8 +185,8 @@ public class PendingFragment extends Fragment {
     public void onStart() {
         super.onStart();
         Log.i(TAG, "onStart");
-        mSocket.on("connect", onConnect);
-        mSocket.on("connected", onConnected);
+//        mSocket.on("connect", onConnect);
+//        mSocket.on("connected", onConnected);
 
         mSocket.on("Relationship:new", modifiedRelationship);
         mSocket.on("Relationship:new:accepted", modifiedRelationship);
@@ -197,6 +197,7 @@ public class PendingFragment extends Fragment {
         mSocket.on("Relationship:created:accepted", modifiedRelationship);
         mSocket.on("Relationship:created:removed", modifiedRelationship);
         mSocket.on("Relationship:new:removed", modifiedRelationship);
+
         mSocket.connect();
 
     }

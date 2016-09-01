@@ -113,8 +113,8 @@ public class FriendsFragment extends Fragment {
         super.onStart();
         Log.i(TAG, "onStart");
 
-        mSocket.on("connect", onConnect);
-        mSocket.on("connected", onConnected);
+//        mSocket.on("connect", onConnect);
+//        mSocket.on("connected", onConnected);
 
         mSocket.on("Relationship:new:accepted", modifiedRelationship);
         mSocket.on("Relationship:new:removed", modifiedRelationship);

@@ -98,66 +98,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     AlarmManager alarmManager;
     HashMap<String,String> user;
 
-    private Socket mSocket;
-    {
-        try {
-            mSocket = IO.socket("http://46.101.213.24:3007");
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private Emitter.Listener onConnect = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-
-            CurrentUserHelper currentUser = new CurrentUserHelper(getApplicationContext());
-            mSocket.emit("ready", currentUser.getToken());
-            Log.i(TAG, "Sockets: minden fasza");
-        }
-    };
-
-    private Emitter.Listener onConnected = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-             Log.i(TAG, "Sockets: connected okay");
-        }
-    };
-//
-
-//
-//    private Emitter.Listener onNewChallenge = new Emitter.Listener()  {
-//
-//        @Override
-//        public void call(final Object... args) {
-//            String userId = user.get("id");
-//            Log.i("call", "call: new challenge request for duel 1");
-//            try {
-//
-//
-//                //Log.i("call", "call: " + facebookId);
-//
-//                sync.getUserInProgressChallenges(userId);
-//                Log.i("call", "call: new challenge request for duel2");
-//            } catch (Exception e) {
-//                Log.i("call", "call: ERROR: " + e);
-//            }
-//
-//
-//        }
-//    };
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
-        mSocket.on("connect", onConnect);
-        mSocket.on("connected", onConnected);
-        mSocket.connect();
-
         SessionManager sessionManager = new SessionManager(this);
         FacebookSdk.sdkInitialize(getApplicationContext());
          setContentView(R.layout.activity_main);
