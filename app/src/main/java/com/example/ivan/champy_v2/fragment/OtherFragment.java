@@ -54,6 +54,7 @@ import retrofit.Retrofit;
 public class OtherFragment extends Fragment {
 
     public static final String ARG_PAGE = "ARG_PAGE";
+    public static final String TAG = "OtherFragment";
     private int mPage;
     public View gView;
     public SwipeRefreshLayout gSwipeRefreshlayout;
@@ -68,6 +69,7 @@ public class OtherFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TAG, "onCreate");
         FacebookSdk.sdkInitialize(getContext());
     }
 
@@ -75,7 +77,7 @@ public class OtherFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_first, container, false);
         final List<Friend> friends = new ArrayList<Friend>();
-
+        Log.i(TAG, "onCreateView");
         DBHelper dbHelper = new DBHelper(getContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         SessionManager sessionManager = new SessionManager(getContext());
@@ -132,10 +134,7 @@ public class OtherFragment extends Fragment {
             public void run() {
                 final String API_URL = "http://46.101.213.24:3007";
                 Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-
                 final NewUser newUser = retrofit.create(NewUser.class);
-                //final com.example.ivan.champy_v2.interfaces.Friends friend = retrofit.create(Friends.class);
-
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
                 StrictMode.setThreadPolicy(policy);
                 DBHelper dbHelper = new DBHelper(getActivity());
@@ -203,6 +202,7 @@ public class OtherFragment extends Fragment {
 
                                             }
                                             swipeRefreshLayout.setRefreshing(false);
+                                            Log.i(TAG, "refreshView: finished");
                                         } else {
                                             // отображение всего у человека, который не установил champy
                                             URL profile_pic = null;
@@ -224,7 +224,7 @@ public class OtherFragment extends Fragment {
                                             db.insert("mytable", null, cv);
 
                                             RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-                                            Log.i("stat", "Friends :" + newFriends.toString());
+                                            Log.i(TAG, "Friends: " + newFriends.toString());
                                             OtherAdapter adapter1 = new OtherAdapter(newFriends, getContext(), getActivity());
                                             rvContacts.setAdapter(adapter1);
                                             swipeRefreshLayout.setRefreshing(false);

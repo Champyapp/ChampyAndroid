@@ -77,7 +77,7 @@ public class AppSync {
     public void getUserProfile() {
         final String facebookId = this.fbId;
         final String jwtString = this.token;
-        final String path_to_pic = this.path; // TODO: 23.08.2016 Change PATH
+        final String path_to_pic = this.path;
         final String gcm = this.gcm;
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
@@ -121,7 +121,7 @@ public class AppSync {
                      * который брал инфу про друзей. Сейчас мы вызываем его здесь.
                      */
                     getUserInProgressChallenges(userId);
-                    getUserPendingFriends(userId);
+                    getUserPending(userId);
                     getUserFriendsInfo(gcm);
 
                     String api_path;
@@ -153,7 +153,7 @@ public class AppSync {
     }
 
 
-    public void getUserPendingFriends(final String userId) {
+    public void getUserPending(final String userId) {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("pending", null, null);
@@ -178,6 +178,9 @@ public class AppSync {
                                     if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
                                     else cv.put("photo", "");
                                     cv.put("user_id", friend.getId());
+                                    cv.put("inProgressChallengesCount", friend.getInProgressChallengesCount());
+                                    cv.put("allChallengesCount", friend.getAllChallengesCount());
+                                    cv.put("successChallenges", friend.getSuccessChallenges());
                                     cv.put("owner", "false");
                                     db.insert("pending", null, cv);
                                 } else {
@@ -186,6 +189,9 @@ public class AppSync {
                                     if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
                                     else cv.put("photo", "");
                                     cv.put("user_id", friend.get_id());
+                                    cv.put("inProgressChallengesCount", friend.getInProgressChallengesCount());
+                                    cv.put("allChallengesCount", friend.getAllChallengesCount());
+                                    cv.put("successChallenges", friend.getSuccessChallenges());
                                     cv.put("owner", "true");
                                     db.insert("pending", null, cv);
                                 }

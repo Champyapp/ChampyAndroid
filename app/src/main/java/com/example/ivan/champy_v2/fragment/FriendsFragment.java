@@ -44,6 +44,7 @@ public class FriendsFragment extends Fragment {
 
     final String API_URL = "http://46.101.213.24:3007";
     public static final String ARG_PAGE = "ARG_PAGE";
+    public static final String TAG = "FriendsFragment";
 
     public View gView;
     public SwipeRefreshLayout gSwipeRefreshLayout;
@@ -79,13 +80,13 @@ public class FriendsFragment extends Fragment {
         public void call(final Object... args) {
             CurrentUserHelper currentUser = new CurrentUserHelper(getContext());
             mSocket.emit("ready", currentUser.getToken());
-            Log.i("Sockets", "call: onConnect");
+            Log.i(TAG, "Sockets: onConnect");
         }
     };
     private Emitter.Listener onConnected = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            Log.i("Sockets", "call: onConnected");
+            Log.i(TAG, "Sockets: onConnected");
         }
     };
     protected Emitter.Listener modifiedRelationship = new Emitter.Listener() {
@@ -97,34 +98,37 @@ public class FriendsFragment extends Fragment {
                     refreshView(gSwipeRefreshLayout, gView);
                 }
             });
-            Log.i("Sockets", "call: new friends request");
+            Log.i(TAG, "Sockets: new friends request");
         }
     };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TAG, "onCreate");
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        Log.i(TAG, "onStart");
 
-//        mSocket.on("connect", onConnect);
-//        mSocket.on("connected", onConnected);
-//
-//        mSocket.on("Relationship:new:accepted", modifiedRelationship);
-//        mSocket.on("Relationship:new:removed", modifiedRelationship);
-//        mSocket.on("Relationship:created:accepted", modifiedRelationship);
-//        mSocket.on("Relationship:created:removed", modifiedRelationship);
-//
-//        mSocket.connect();
+        mSocket.on("connect", onConnect);
+        mSocket.on("connected", onConnected);
+
+        mSocket.on("Relationship:new:accepted", modifiedRelationship);
+        mSocket.on("Relationship:new:removed", modifiedRelationship);
+        mSocket.on("Relationship:created:accepted", modifiedRelationship);
+        mSocket.on("Relationship:created:removed", modifiedRelationship);
+
+        mSocket.connect();
 
     }
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_first, container, false);
+        Log.i(TAG, "onCreateView");
         final List<com.example.ivan.champy_v2.Friend> friends = new ArrayList<>();
 
         DBHelper dbHelper = new DBHelper(getContext());
@@ -172,6 +176,7 @@ public class FriendsFragment extends Fragment {
         this.gView = view;
 
         if (refresh.equals("true")) {
+            Log.i(TAG, "refresh = true");
             refreshView(gSwipeRefreshLayout, gView);
             sessionManager.setRefreshFriends("false");
         }
@@ -277,6 +282,7 @@ public class FriendsFragment extends Fragment {
                         rvContacts.setAdapter(adapter);
                         swipeRefreshLayout.setRefreshing(false);
                     }
+                    Log.i(TAG, "refreshView: finish refreshing");
                 }
 
                 @Override
@@ -288,7 +294,6 @@ public class FriendsFragment extends Fragment {
         } else {
             swipeRefreshLayout.setRefreshing(false);
         }
-
     }
 
 
@@ -381,14 +386,14 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        //mSocket.disconnect();
-        Log.i("Comm:", "onDestroy: viszlat");
+        mSocket.disconnect();
+        Log.i(TAG, "onStop: sockets disconnected");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i("Comm:", "onDestroy: viszlat");
+        Log.i(TAG, "onDestroy");
     }
 
 

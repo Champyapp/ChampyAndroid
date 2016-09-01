@@ -90,13 +90,9 @@ import static java.lang.Math.round;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    final String TAG = "myLogs";
+    public static final String TAG = "MainActivity";
     private long mLastClickTime = 0;
     public Activity activity;
-//    private int counter = 0;
-//    private int total = 30;
-//    private PendingIntent pendingIntent;
-//    public Context _context;
     private FloatingActionMenu actionMenu;
     private CustomPagerBase pager;
     AlarmManager alarmManager;
@@ -110,21 +106,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             throw new RuntimeException(e);
         }
     }
-//
+
     private Emitter.Listener onConnect = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
 
             CurrentUserHelper currentUser = new CurrentUserHelper(getApplicationContext());
             mSocket.emit("ready", currentUser.getToken());
-            Log.i("call", "call: minden fasza");
+            Log.i(TAG, "Sockets: minden fasza");
         }
     };
-//
+
     private Emitter.Listener onConnected = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-             Log.i("call", "call: connected okay");
+             Log.i(TAG, "Sockets: connected okay");
         }
     };
 //

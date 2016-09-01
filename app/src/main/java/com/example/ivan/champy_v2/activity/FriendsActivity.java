@@ -68,6 +68,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
+        Log.i(TAG, "onCreate");
         setContentView(R.layout.activity_friends);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -229,27 +230,31 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
     @Override
     public void onStart() {
         super.onStart();
-        OfflineMode offlineMode = new OfflineMode();
-        if (!offlineMode.isConnectedToRemoteAPI(this)){
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-        }
+        Log.i(TAG, "onStart");
+//        OfflineMode offlineMode = new OfflineMode();
+//        if (!offlineMode.isConnectedToRemoteAPI(this)){
+//            Intent intent = new Intent(this, MainActivity.class);
+//            startActivity(intent);
+//        }
     }
 
     @Override
     public void onStop() {
+        Log.i(TAG, "onStop");
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.i(TAG, "onDestroy");
         ViewServer.get(this).removeWindow(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        Log.i(TAG, "onResume");
         ViewServer.get(this).setFocusedWindow(this);
         AppEventsLogger.activateApp(this);
     }
@@ -257,6 +262,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
     @Override
     protected void onPause() {
         super.onPause();
+        Log.i(TAG, "onPause");
         AppEventsLogger.deactivateApp(this);
     }
 
@@ -360,7 +366,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                             });
                         }
                     }).start();
-                    Log.i(TAG, "Refresh FriendsActivity List");
+                    Log.i(TAG, "loadUserFriends: finished");
                 }
             }
 
@@ -449,6 +455,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                     });
                     rvContacts.setAdapter(adapter);
                 }
+                Log.i(TAG, "loadUserPending: finished");
             }
 
             @Override

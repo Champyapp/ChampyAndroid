@@ -53,6 +53,7 @@ import retrofit.Retrofit;
 public class PendingFragment extends Fragment {
 
     public static final String ARG_PAGE = "ARG_PAGE";
+    public static final String TAG = "PendingFragment";
     final String API_URL = "http://46.101.213.24:3007";
 
     public View gView;
@@ -80,13 +81,13 @@ public class PendingFragment extends Fragment {
         public void call(final Object... args) {
             CurrentUserHelper currentUser = new CurrentUserHelper(getContext());
             mSocket.emit("ready", currentUser.getToken());
-            Log.i("call", "call: minden fasza");
+            Log.i(TAG, "Sockets: onConnect");
         }
     };
     private Emitter.Listener onConnected = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            Log.i("call", "call: connected okay");
+            Log.i(TAG, "Sockets: connected okay");
         }
     };
     protected Emitter.Listener modifiedRelationship = new Emitter.Listener() {
@@ -99,7 +100,7 @@ public class PendingFragment extends Fragment {
                     refreshView(gSwipeRefreshlayout, gView);
                 }
             });
-            Log.i("call", "new friend request");
+            Log.i(TAG, "Sockets: friend request");
         }
     };
 
@@ -118,7 +119,7 @@ public class PendingFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-        Log.i("stat", "Created Pending");
+        Log.i(TAG, "onCreateView");
         final View view = inflater.inflate(R.layout.fragment_first, container, false);
         final List<Pending_friend> pendingFriends = new ArrayList<>();
 
@@ -171,10 +172,10 @@ public class PendingFragment extends Fragment {
         gSwipeRefreshlayout.setOnRefreshListener(onRefreshListener);
         this.gView = view;
 
-        if (refresh.equals("true")) {
+        /*if (refresh.equals("true")) {
             refreshView(gSwipeRefreshlayout, gView);
             sessionManager.setRefreshFriends("false");
-        }
+        }*/
 
         return view;
 
@@ -183,27 +184,27 @@ public class PendingFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        Log.i(TAG, "onStart");
+        mSocket.on("connect", onConnect);
+        mSocket.on("connected", onConnected);
 
-//        mSocket.on("connect", onConnect);
-//        mSocket.on("connected", onConnected);
-//
-//        mSocket.on("Relationship:new", modifiedRelationship);
-//        mSocket.on("Relationship:new:accepted", modifiedRelationship);
-//        mSocket.on("Relationship:new:removed", modifiedRelationship);
-//        mSocket.on("Relationship:accepted", modifiedRelationship);
-//
-//        mSocket.on("Relationship:created", modifiedRelationship);
-//        mSocket.on("Relationship:created:accepted", modifiedRelationship);
-//        mSocket.on("Relationship:created:removed", modifiedRelationship);
-//        mSocket.on("Relationship:new:removed", modifiedRelationship);
-//        mSocket.connect();
+        mSocket.on("Relationship:new", modifiedRelationship);
+        mSocket.on("Relationship:new:accepted", modifiedRelationship);
+        mSocket.on("Relationship:new:removed", modifiedRelationship);
+        mSocket.on("Relationship:accepted", modifiedRelationship);
+
+        mSocket.on("Relationship:created", modifiedRelationship);
+        mSocket.on("Relationship:created:accepted", modifiedRelationship);
+        mSocket.on("Relationship:created:removed", modifiedRelationship);
+        mSocket.on("Relationship:new:removed", modifiedRelationship);
+        mSocket.connect();
 
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        //mSocket.disconnect();
+        mSocket.disconnect();
         Log.i("PendingFragment:", "onStop");
     }
 
@@ -298,7 +299,7 @@ public class PendingFragment extends Fragment {
 
                         c.close();
 
-                        Log.i("stat", "FriendsActivity :" + newfriends.toString());
+                        Log.i(TAG, "PendingFragment: " + newfriends.toString());
 
                         RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
                         final PendingAdapter adapter = new PendingAdapter(newfriends, getContext(), getActivity(), new CustomItemClickListener() {
@@ -310,7 +311,7 @@ public class PendingFragment extends Fragment {
                         rvContacts.setAdapter(adapter);
                         swipeRefreshLayout.setRefreshing(false);
                     }
-                    Log.i("refreshView:", "onResponse: finish refreshing");
+                    Log.i(TAG, "refreshView: finish refreshing");
                 }
 
                 @Override
