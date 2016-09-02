@@ -105,14 +105,14 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         adapterViewPager = new SampleFragmentPagerAdapter(getSupportFragmentManager(), getApplicationContext());
         viewPager.setAdapter(adapterViewPager);
 
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            s = bundle.getString("friend_request");
-            loadUserPending();
-            if (s != null) {
-                viewPager.setCurrentItem(1);
-            }
-        }
+//        Bundle bundle = getIntent().getExtras();
+//        if (bundle != null) {
+//            s = bundle.getString("friend_request");
+//            loadUserPending();
+//            if (s != null) {
+//                viewPager.setCurrentItem(1);
+//            }
+//        }
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -135,7 +135,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 //                    loadUserPending();
 //                    sessionManager.setRefreshPending("false");
 //                }
-
             }
 
             @Override

@@ -199,7 +199,6 @@ public class OtherFragment extends Fragment {
                                                 ));
                                             } else {
                                                 Log.i("stat", "DBase: not added " + user_name);
-
                                             }
                                             swipeRefreshLayout.setRefreshing(false);
                                             Log.i(TAG, "refreshView: finished");

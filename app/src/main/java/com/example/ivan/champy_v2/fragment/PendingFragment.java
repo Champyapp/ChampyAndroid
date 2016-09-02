@@ -61,13 +61,6 @@ public class PendingFragment extends Fragment {
     private int mPage;
     private Socket mSocket;
 
-    {
-        try {
-            mSocket = IO.socket("http://46.101.213.24:3007");
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
         @Override
@@ -115,6 +108,11 @@ public class PendingFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try {
+            mSocket = IO.socket("http://46.101.213.24:3007");
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -185,8 +183,9 @@ public class PendingFragment extends Fragment {
     public void onStart() {
         super.onStart();
         Log.i(TAG, "onStart");
-//        mSocket.on("connect", onConnect);
-//        mSocket.on("connected", onConnected);
+
+        mSocket.on("connect", onConnect);
+        mSocket.on("connected", onConnected);
 
         mSocket.on("Relationship:new", modifiedRelationship);
         mSocket.on("Relationship:new:accepted", modifiedRelationship);
@@ -197,7 +196,6 @@ public class PendingFragment extends Fragment {
         mSocket.on("Relationship:created:accepted", modifiedRelationship);
         mSocket.on("Relationship:created:removed", modifiedRelationship);
         mSocket.on("Relationship:new:removed", modifiedRelationship);
-
         mSocket.connect();
 
     }
@@ -205,7 +203,7 @@ public class PendingFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        mSocket.disconnect();
+//        mSocket.disconnect();
         Log.i("PendingFragment:", "onStop");
     }
 
@@ -268,8 +266,8 @@ public class PendingFragment extends Fragment {
                                     cv.put("owner", status);
                                 }
 
-
                                 db.insert("pending", null, cv);
+
                             }
                         }
                         final List<Pending_friend> newfriends = new ArrayList<>();
@@ -300,7 +298,7 @@ public class PendingFragment extends Fragment {
 
                         c.close();
 
-                        Log.i(TAG, "PendingFragment: " + newfriends.toString());
+                        //Log.i(TAG, "PendingFragment: " + newfriends.toString());
 
                         RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
                         final PendingAdapter adapter = new PendingAdapter(newfriends, getContext(), getActivity(), new CustomItemClickListener() {

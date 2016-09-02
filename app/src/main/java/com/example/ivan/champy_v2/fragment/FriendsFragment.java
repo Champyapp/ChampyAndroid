@@ -50,20 +50,6 @@ public class FriendsFragment extends Fragment {
     public SwipeRefreshLayout gSwipeRefreshLayout;
     private Socket mSocket;
 
-    {
-        try {
-            mSocket = IO.socket("http://46.101.213.24:3007");
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
-        @Override
-        public void onRefresh() {
-            refreshView(gSwipeRefreshLayout, gView);
-        }
-    };
 
 
     public static FriendsFragment newInstance(int page) {
@@ -105,6 +91,11 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try {
+            mSocket = IO.socket("http://46.101.213.24:3007");
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
         Log.i(TAG, "onCreate");
     }
 
@@ -113,8 +104,8 @@ public class FriendsFragment extends Fragment {
         super.onStart();
         Log.i(TAG, "onStart");
 
-//        mSocket.on("connect", onConnect);
-//        mSocket.on("connected", onConnected);
+        mSocket.on("connect", onConnect);
+        mSocket.on("connected", onConnected);
 
         mSocket.on("Relationship:new:accepted", modifiedRelationship);
         mSocket.on("Relationship:new:removed", modifiedRelationship);
@@ -144,7 +135,6 @@ public class FriendsFragment extends Fragment {
             int level = c.getColumnIndex("level");
             int index = c.getColumnIndex("user_id");
             do {
-                Log.i("stat", "Status: " + c.getString(photoColIndex));
                 friends.add(new com.example.ivan.champy_v2.Friend(
                         c.getString(nameColIndex),
                         API_URL + c.getString(photoColIndex),
@@ -152,7 +142,7 @@ public class FriendsFragment extends Fragment {
                         c.getString(inProgressChallengesCountIndex),
                         c.getString(successChallenges),
                         c.getString(allChallengesCount),
-                        "0"));
+                        c.getString(level)));
             } while (c.moveToNext());
         }
         c.close();
@@ -172,7 +162,12 @@ public class FriendsFragment extends Fragment {
 
 
         gSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
-        gSwipeRefreshLayout.setOnRefreshListener(onRefreshListener);
+        gSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshView(gSwipeRefreshLayout, gView);
+            }
+        });
         this.gView = view;
 
         if (refresh.equals("true")) {
@@ -386,8 +381,8 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        mSocket.disconnect();
-        Log.i(TAG, "onStop: sockets disconnected");
+//        mSocket.disconnect();
+        Log.i(TAG, "onStop");
     }
 
     @Override
