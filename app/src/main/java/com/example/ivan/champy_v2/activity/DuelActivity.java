@@ -130,13 +130,18 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
             e.printStackTrace();
         }
 
-        getChallenges();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                getChallenges();
+            }
+        });
 
     }
 
 
     // отображаем стандартные карточки в активити
-    public void getChallenges() {
+    private void getChallenges() {
         DBHelper dbHelper = new DBHelper(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("duel", null, null);
@@ -201,14 +206,11 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
     }
 
     // проверяем равен ли challengeId(id) и index("duel")
-    public boolean check(String id) {
+    private boolean check(String id) {
         boolean ok = true;
         DBHelper dbHelper = new DBHelper(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        final ContentValues cv = new ContentValues();
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-        int o = 0;
         if (c.moveToFirst()) {
             int idColIndex = c.getColumnIndex("id");
             int nameColIndex = c.getColumnIndex("name");
@@ -219,14 +221,12 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
                 String checkedChallengeId = c.getString(colchallenge_id);
                 String checkedIndex = c.getString(idColIndex);
                 if (checkedChallengeId.equals(id) && (checkedIndex.equals("duel"))) {
-                    Log.i("stat", "Checked");
                     ok = false;
                     break;
                 }
             } while (c.moveToNext());
         }
         c.close();
-
         return ok;
     }
 
@@ -256,44 +256,40 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        OfflineMode offlineMode = new OfflineMode();
-        if (offlineMode.isConnectedToRemoteAPI(this)) {
-            switch (item.getItemId()) {
-                case R.id.challenges:
-                    Intent goToChallenges = new Intent(this, MainActivity.class);
-                    startActivity(goToChallenges);
-                    break;
-                case R.id.friends:
-                    Intent goToFriends = new Intent(this, FriendsActivity.class);
-                    startActivity(goToFriends);
-                    break;
-                case R.id.pending_duels:
-                    Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
-                    startActivity(goToPendingDuel);
-                    break;
-                case R.id.history:
-                    Intent goToHistory = new Intent(this, HistoryActivity.class);
-                    startActivity(goToHistory);
-                    break;
-                case R.id.settings:
-                    Intent goToSettings = new Intent(this, SettingsActivity.class);
-                    startActivity(goToSettings);
-                    break;
-                case R.id.share:
-                    String message = "Check out Champy - it helps you improve and compete with your friends!";
-                    Intent share = new Intent(Intent.ACTION_SEND);
-                    share.setType("text/plain");
-                    share.putExtra(Intent.EXTRA_TEXT, message);
-                    startActivity(Intent.createChooser(share, "How would you like to share?"));
-                    break;
-                case R.id.nav_logout:
-                    offlineMode = new OfflineMode();
-                    SessionManager sessionManager = new SessionManager(this);
-                    if (offlineMode.isConnectedToRemoteAPI(this)) {
-                        sessionManager.logout(this);
-                    }
-                    break;
-            }
+        switch (item.getItemId()) {
+            case R.id.challenges:
+                Intent goToChallenges = new Intent(this, MainActivity.class);
+                startActivity(goToChallenges);
+                break;
+            case R.id.friends:
+                Intent goToFriends = new Intent(this, FriendsActivity.class);
+                startActivity(goToFriends);
+                break;
+            case R.id.pending_duels:
+                Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
+                startActivity(goToPendingDuel);
+                break;
+            case R.id.history:
+                Intent goToHistory = new Intent(this, HistoryActivity.class);
+                startActivity(goToHistory);
+                break;
+            case R.id.settings:
+                Intent goToSettings = new Intent(this, SettingsActivity.class);
+                startActivity(goToSettings);
+                break;
+            case R.id.share:
+                String message = "Check out Champy - it helps you improve and compete with your friends!";
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("text/plain");
+                share.putExtra(Intent.EXTRA_TEXT, message);
+                startActivity(Intent.createChooser(share, "How would you like to share?"));
+                break;
+            case R.id.nav_logout:
+                OfflineMode offlineMode = new OfflineMode();
+                SessionManager sessionManager = new SessionManager(this);
+                offlineMode.isConnectedToRemoteAPI(this);
+                sessionManager.logout(this);
+                break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

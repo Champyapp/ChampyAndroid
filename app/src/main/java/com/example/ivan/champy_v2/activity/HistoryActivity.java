@@ -56,8 +56,7 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         user = sessionManager.getUserDetails();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
@@ -121,41 +120,44 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    protected void onStart() {
+        super.onStart();
         OfflineMode offlineMode = new OfflineMode();
-        if (offlineMode.isConnectedToRemoteAPI(this)) {
-            switch (item.getItemId()) {
-                case R.id.challenges:
-                    Intent goToChallenges = new Intent(this, MainActivity.class);
-                    startActivity(goToChallenges);
-                    break;
-                case R.id.friends:
-                    Intent goToFriends = new Intent(this, FriendsActivity.class);
-                    startActivity(goToFriends);
-                    break;
-                case R.id.settings:
-                    Intent goToSettings = new Intent(this, SettingsActivity.class);
-                    startActivity(goToSettings);
-                    break;
-                case R.id.pending_duels:
-                    Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
-                    startActivity(goToPendingDuel);
-                    break;
-                case R.id.share:
-                    String message = "Check out Champy - it helps you improve and compete with your friends!";
-                    Intent share = new Intent(Intent.ACTION_SEND);
-                    share.setType("text/plain");
-                    share.putExtra(Intent.EXTRA_TEXT, message);
-                    startActivity(Intent.createChooser(share, "How would you like to share?"));
-                    break;
-                case R.id.nav_logout:
-                    offlineMode = new OfflineMode();
-                    SessionManager sessionManager = new SessionManager(this);
-                    if (offlineMode.isConnectedToRemoteAPI(this)) {
-                        sessionManager.logout(this);
-                    }
-                    break;
-            }
+        offlineMode.isConnectedToRemoteAPI(this);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.challenges:
+                Intent goToChallenges = new Intent(this, MainActivity.class);
+                startActivity(goToChallenges);
+                break;
+            case R.id.friends:
+                Intent goToFriends = new Intent(this, FriendsActivity.class);
+                startActivity(goToFriends);
+                break;
+            case R.id.settings:
+                Intent goToSettings = new Intent(this, SettingsActivity.class);
+                startActivity(goToSettings);
+                break;
+            case R.id.pending_duels:
+                Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
+                startActivity(goToPendingDuel);
+                break;
+            case R.id.share:
+                String message = "Check out Champy - it helps you improve and compete with your friends!";
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("text/plain");
+                share.putExtra(Intent.EXTRA_TEXT, message);
+                startActivity(Intent.createChooser(share, "How would you like to share?"));
+                break;
+            case R.id.nav_logout:
+                SessionManager sessionManager = new SessionManager(this);
+                OfflineMode offlineMode = new OfflineMode();
+                offlineMode.isConnectedToRemoteAPI(this);
+                sessionManager.logout(this);
+                break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -166,17 +168,12 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
     private Drawable Init(String path) throws FileNotFoundException {
         File file = new File(path, "blured2.jpg");
         Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
-
-        //Log.d("TAG", "x_y" + bitmap.getWidth() + " " + bitmap.getHeight());
         Drawable dr = new BitmapDrawable(this.getResources(), bitmap);
         dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
-
         ImageView imageView = (ImageView) findViewById(R.id.history_background);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setImageDrawable(dr);
-
         return dr;
-
     }
 
 }

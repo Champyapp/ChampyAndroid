@@ -273,7 +273,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onStart();
         CHBuildAnim chBuildAnim = new CHBuildAnim();
         chBuildAnim.buildAnim(this);
-
     }
 
     @Override

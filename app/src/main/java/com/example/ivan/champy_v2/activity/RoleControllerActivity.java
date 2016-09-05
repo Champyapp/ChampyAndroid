@@ -1,9 +1,12 @@
 package com.example.ivan.champy_v2.activity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
@@ -19,7 +22,6 @@ public class RoleControllerActivity extends AppCompatActivity {
 
     public static final String TAG = "RoleControllerActivity";
     private Socket mSocket;
-
 
     private Emitter.Listener onConnect = new Emitter.Listener() {
         @Override
@@ -55,7 +57,9 @@ public class RoleControllerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_role_controller);
+
         try {
+            //new ProgressTask().execute();
             mSocket = IO.socket("http://46.101.213.24:3007");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
@@ -70,6 +74,7 @@ public class RoleControllerActivity extends AppCompatActivity {
             Log.i("RoleController", "Login Status: TRUE, go to MainActivity...");
         } else {
             mSocket.disconnect();
+            mSocket.off();
             goToActivity = new Intent(this, LoginActivity.class);
             Log.i("RoleController", "Login Status: FALSE, go to LoginActivity...");
         }
@@ -77,28 +82,26 @@ public class RoleControllerActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
+//    private class ProgressTask extends AsyncTask<Void,Void,Void> {
+//
+//        ProgressBar bar = (ProgressBar)findViewById(R.id.roleProgressBar);
+//
+//        @Override
+//        protected void onPreExecute(){
+//            bar.setVisibility(View.VISIBLE);
+//        }
+//
+//        @Override
+//        protected Void doInBackground(Void... arg0) {
+//            //my stuff is here
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Void result) {
+//            bar.setVisibility(View.GONE);
+//        }
+//    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
 }

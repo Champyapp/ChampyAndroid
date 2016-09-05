@@ -1,6 +1,8 @@
 package com.example.ivan.champy_v2.activity;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -69,7 +71,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_settings);
-
+        final OfflineMode offlineMode = new OfflineMode();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.bringToFront();
@@ -195,7 +197,6 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OfflineMode offlineMode = new OfflineMode();
                 if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
                     updateProfile(map);
                     Intent intent = new Intent(SettingsActivity.this, PhotoActivity.class);
@@ -233,9 +234,8 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                 imageButtonAcceptName.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        OfflineMode offline = new OfflineMode();
                         String checkName = etNewName.getText().toString();
-                        if (offline.isConnectedToRemoteAPI(SettingsActivity.this) && !checkName.isEmpty() && !checkName.startsWith(" ")) {
+                        if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this) && !checkName.isEmpty() && !checkName.startsWith(" ")) {
                             String newName = etNewName.getText().toString().trim();
                             SessionManager sessionManager = new SessionManager(getApplicationContext());
                             sessionManager.change_name(newName);
@@ -249,25 +249,6 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                             etNewName.setVisibility(View.GONE);
                         }
                         etNewName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_warn, 0);
-//                        OfflineMode offlineMode = new OfflineMode();
-//                        if (!offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
-//                            etNewName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_warn, 0);
-//                        } else if (etNewName.getText().toString().isEmpty() || etNewName.getText().toString().startsWith(" ")) {
-//                            Toast.makeText(getApplicationContext(), "Name field is empty!", Toast.LENGTH_SHORT).show();
-//                        }
-//                        else {
-//                            String newName = etNewName.getText().toString().trim();
-//                            SessionManager sessionManager = new SessionManager(getApplicationContext());
-//                            sessionManager.change_name(newName);
-//                            setNewName(newName);
-//
-//                            tvName.setText(etNewName.getText().toString());
-//                            tvChangeName.setVisibility(View.VISIBLE);
-//                            tvEnterYourName.setVisibility(View.GONE);
-//                            etNewName.setVisibility(View.GONE);
-//                            imageButtonAcceptName.setVisibility(View.GONE);
-//                            lineOfTheNed.setVisibility(View.GONE);
-//                        }
                     }
                 });
             }
@@ -276,12 +257,10 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final OfflineMode offlineMode = new OfflineMode();
-                if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
                     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        switch (which){
+                        switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
                                 if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
                                     SessionManager sessionManager = new SessionManager(getApplicationContext());
@@ -304,6 +283,8 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                                                 final SQLiteDatabase db = dbHelper.getWritableDatabase();
                                                 int clearCount = db.delete("pending", null, null);
                                                 clearCount = db.delete("pending_duel", null, null);
+                                                clearCount = db.delete("friends", null, null);
+                                                // TODO: 05.09.2016 alarmManager.cancel(all!);
                                                 db.delete("myChallenges", null, null);
                                                 file.delete();
                                             }
@@ -318,9 +299,8 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                                     LoginManager.getInstance().logOut();
                                     Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
                                     startActivity(intent);
-                                    break;
                                 }
-
+                                    break;
                             case DialogInterface.BUTTON_NEGATIVE:
                                 break;
                         }
@@ -328,15 +308,13 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                 };
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
-                builder.setTitle("Are you sure?")
-                        .setMessage("You want to delete your account?")
+                builder.setTitle(R.string.areYouSure)
+                        .setMessage(R.string.youWantToDeleteYourAcc)
                         .setIcon(R.drawable.warn)
                         .setCancelable(false)
-                        .setPositiveButton("Yes", dialogClickListener)
-                        .setNegativeButton("No", dialogClickListener).show();
+                        .setPositiveButton(R.string.yes, dialogClickListener)
+                        .setNegativeButton(R.string.no, dialogClickListener).show();
                 }
-
-            }
         });
 
         TextView about = (TextView)findViewById(R.id.about);
@@ -380,11 +358,11 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OfflineMode offlineMode = new OfflineMode();
-                updateProfile(map);
-                Intent intent = new Intent(SettingsActivity.this, PhotoActivity.class);
-                startActivity(intent);
-
+                if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
+                    updateProfile(map);
+                    Intent intent = new Intent(SettingsActivity.this, PhotoActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -395,10 +373,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
     public void onStart() {
         super.onStart();
         OfflineMode offlineMode = new OfflineMode();
-        if (!offlineMode.isConnectedToRemoteAPI(this)){
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-        }
+        offlineMode.isConnectedToRemoteAPI(this);
     }
 
     @Override
@@ -429,48 +404,46 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        OfflineMode offlineMode = new OfflineMode();
-        if (offlineMode.isConnectedToRemoteAPI(this)) {
-            switch (item.getItemId()) {
-                case R.id.challenges:
+        switch (item.getItemId()) {
+            case R.id.challenges:
+                updateProfile(map);
+                Intent goToChallenges = new Intent(SettingsActivity.this, MainActivity.class);
+                startActivity(goToChallenges);
+                break;
+            case R.id.friends:
+                updateProfile(map);
+                Intent goToFriends = new Intent(SettingsActivity.this, FriendsActivity.class);
+                startActivity(goToFriends);
+                break;
+            case R.id.history:
+                updateProfile(map);
+                Intent goToHistory = new Intent(SettingsActivity.this, HistoryActivity.class);
+                startActivity(goToHistory);
+                break;
+            case R.id.pending_duels:
+                updateProfile(map);
+                Intent goToPendingDuel = new Intent(SettingsActivity.this, PendingDuelActivity.class);
+                startActivity(goToPendingDuel);
+                break;
+            case R.id.share:
+                updateProfile(map);
+                String message = "Check out Champy - it helps you improve and compete with your friends!";
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("text/plain");
+                share.putExtra(Intent.EXTRA_TEXT, message);
+                startActivity(Intent.createChooser(share, "How would you like to share?"));
+                break;
+            case R.id.nav_logout:
+                OfflineMode offlineMode = new OfflineMode();
+                if (offlineMode.isConnectedToRemoteAPI(this)) {
                     updateProfile(map);
-                    Intent goToChallenges = new Intent(SettingsActivity.this, MainActivity.class);
-                    startActivity(goToChallenges);
-                    break;
-                case R.id.friends:
-                    updateProfile(map);
-                    Intent goToFriends = new Intent(SettingsActivity.this, FriendsActivity.class);
-                    startActivity(goToFriends);
-                    break;
-                case R.id.history:
-                    updateProfile(map);
-                    Intent goToHistory = new Intent(SettingsActivity.this, HistoryActivity.class);
-                    startActivity(goToHistory);
-                    break;
-                case R.id.pending_duels:
-                    updateProfile(map);
-                    Intent goToPendingDuel = new Intent(SettingsActivity.this, PendingDuelActivity.class);
-                    startActivity(goToPendingDuel);
-                    break;
-                case R.id.share:
-                    updateProfile(map);
-                    String message = "Check out Champy - it helps you improve and compete with your friends!";
-                    Intent share = new Intent(Intent.ACTION_SEND);
-                    share.setType("text/plain");
-                    share.putExtra(Intent.EXTRA_TEXT, message);
-                    startActivity(Intent.createChooser(share, "How would you like to share?"));
-                    break;
-                case R.id.nav_logout:
-                    if (offlineMode.isConnectedToRemoteAPI(this)) {
-                        updateProfile(map);
-                        LoginManager.getInstance().logOut();
-                        SessionManager sessionManager = new SessionManager(getApplicationContext());
-                        sessionManager.logoutUser();
-                        Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                    }
-                    break;
-            }
+                    LoginManager.getInstance().logOut();
+                    SessionManager sessionManager = new SessionManager(getApplicationContext());
+                    sessionManager.logoutUser();
+                    Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }
+                break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -506,15 +479,11 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
     private Drawable Init(String path) throws FileNotFoundException {
         File file = new File(path, "blured2.jpg");
         Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
-
-        //Log.d("TAG", "x_y" + bitmap.getWidth() + " " + bitmap.getHeight());
         Drawable dr = new BitmapDrawable(getResources(), bitmap);
         dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
-
         ImageView imageView = (ImageView) findViewById(R.id.back_settings);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setImageDrawable(dr);
-
         return dr;
     }
 

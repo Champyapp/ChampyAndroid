@@ -110,9 +110,7 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        OfflineMode offlineMode = new OfflineMode();
-        if (offlineMode.isConnectedToRemoteAPI(this)) {
-            switch (item.getItemId()) {
+        switch (item.getItemId()) {
                 case R.id.challenges:
                     Intent goToChallenges = new Intent(this, MainActivity.class);
                     startActivity(goToChallenges);
@@ -141,14 +139,12 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
                     startActivity(Intent.createChooser(share, "How would you like to share?"));
                     break;
                 case R.id.nav_logout:
-                    offlineMode = new OfflineMode();
+                    OfflineMode offlineMode = new OfflineMode();
                     SessionManager sessionManager = new SessionManager(this);
-                    if (offlineMode.isConnectedToRemoteAPI(this)) {
-                        sessionManager.logout(this);
-                    }
+                    offlineMode.isConnectedToRemoteAPI(this);
+                    sessionManager.logout(this);
                     break;
             }
-        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

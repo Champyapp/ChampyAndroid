@@ -39,7 +39,8 @@ public class AlarmReceiverActivity extends Activity {
     private MediaPlayer mMediaPlayer;
     public Context context;
     public Activity activity;
-    public String challengeId = "";
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
