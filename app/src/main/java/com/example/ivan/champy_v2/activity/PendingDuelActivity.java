@@ -138,40 +138,37 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        OfflineMode offlineMode = new OfflineMode();
-        if (offlineMode.isConnectedToRemoteAPI(this)) {
-            switch (item.getItemId()) {
-                case R.id.challenges:
-                    Intent goToChallenges = new Intent(this, MainActivity.class);
-                    startActivity(goToChallenges);
-                    break;
-                case R.id.friends:
-                    Intent goToFriends = new Intent(this, FriendsActivity.class);
-                    startActivity(goToFriends);
-                    break;
-                case R.id.history:
-                    Intent goToHistory = new Intent(this, HistoryActivity.class);
-                    startActivity(goToHistory);
-                    break;
-                case R.id.settings:
-                    Intent goToSettings = new Intent(this, SettingsActivity.class);
-                    startActivity(goToSettings);
-                    break;
-                case R.id.share:
-                    String message = "Check out Champy - it helps you improve and compete with your friends!";
-                    Intent share = new Intent(Intent.ACTION_SEND);
-                    share.setType("text/plain");
-                    share.putExtra(Intent.EXTRA_TEXT, message);
-                    startActivity(Intent.createChooser(share, "How would you like to share?"));
-                    break;
-                case R.id.nav_logout:
-                    offlineMode = new OfflineMode();
-                    SessionManager sessionManager = new SessionManager(this);
-                    if (offlineMode.isConnectedToRemoteAPI(this)) {
-                        sessionManager.logout(this);
-                    }
-                    break;
-            }
+        switch (item.getItemId()) {
+            case R.id.challenges:
+                Intent goToChallenges = new Intent(this, MainActivity.class);
+                startActivity(goToChallenges);
+                break;
+            case R.id.friends:
+                Intent goToFriends = new Intent(this, FriendsActivity.class);
+                startActivity(goToFriends);
+                break;
+            case R.id.history:
+                Intent goToHistory = new Intent(this, HistoryActivity.class);
+                startActivity(goToHistory);
+                break;
+            case R.id.settings:
+                Intent goToSettings = new Intent(this, SettingsActivity.class);
+                startActivity(goToSettings);
+                break;
+            case R.id.share:
+                String message = "Check out Champy - it helps you improve and compete with your friends!";
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("text/plain");
+                share.putExtra(Intent.EXTRA_TEXT, message);
+                startActivity(Intent.createChooser(share, "How would you like to share?"));
+                break;
+            case R.id.nav_logout:
+                OfflineMode offlineMode = new OfflineMode();
+                SessionManager sessionManager = new SessionManager(this);
+                if (offlineMode.isConnectedToRemoteAPI(this)) {
+                    sessionManager.logout(this);
+                }
+                break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

@@ -287,8 +287,9 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_logout:
                 OfflineMode offlineMode = new OfflineMode();
                 SessionManager sessionManager = new SessionManager(this);
-                offlineMode.isConnectedToRemoteAPI(this);
-                sessionManager.logout(this);
+                if (offlineMode.isConnectedToRemoteAPI(this)) {
+                    sessionManager.logout(this);
+                }
                 break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

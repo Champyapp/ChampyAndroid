@@ -96,7 +96,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SubActionButton buttonWakeUpChallenge, buttonDuelChallenge, buttonSelfImprovement;
     private FloatingActionMenu actionMenu;
     private CustomPagerBase pager;
-    AlarmManager alarmManager;
     HashMap<String,String> user;
 
     @Override
@@ -151,60 +150,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .setRadius(350).attachTo(actionButton).build();
 
         // клик фаба
-        FloatingActionButton.OnClickListener onClickFab = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                    return;
-                }
-                mLastClickTime = SystemClock.elapsedRealtime();
-                ImageView blurScreen;
-                RelativeLayout contentMain = (RelativeLayout) findViewById(R.id.content_main);
-                contentMain.destroyDrawingCache();
-                contentMain.buildDrawingCache();
-                Bitmap bm = contentMain.getDrawingCache();
-                Bitmap blured = Blur.blurRenderScript(getApplicationContext(), bm, 25);
-                blurScreen = (ImageView) findViewById(R.id.blurScreen);
-                Drawable ob = new BitmapDrawable(getResources(), blured);
-                blurScreen.setImageDrawable(ob);
-                RelativeLayout cardsLayout = (RelativeLayout) findViewById(R.id.cards);
 
-
-                actionMenu.toggle(true);
-                if (!actionMenu.isOpen()) {
-                    blurScreen.setVisibility(View.INVISIBLE);
-                    cardsLayout.setVisibility(View.VISIBLE);
-                } else {
-                    blurScreen.setVisibility(View.VISIBLE);
-                    cardsLayout.setVisibility(View.INVISIBLE);
-                    buttonSelfImprovement.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(MainActivity.this, SelfImprovementActivity.class);
-                            startActivity(intent);
-                        }
-                    });
-                    buttonDuelChallenge.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
-                            startActivity(intent);
-                        }
-                    });
-                    buttonWakeUpChallenge.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(MainActivity.this, WakeUpActivity.class);
-                            startActivity(intent);
-                        }
-                    });
-                }
-
-            }
-        };
 
         // клик по меню фаба
-        actionButton.setOnClickListener(onClickFab);
+        actionButton.setOnClickListener(initStupidClick());
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar,
@@ -268,11 +217,77 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ViewServer.get(this).addWindow(this);
     }
 
+
+    private View.OnClickListener initStupidClick() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+
+                /**
+                 * Here we make our background is blurred
+                 */
+                ImageView blurScreen;
+                RelativeLayout contentMain = (RelativeLayout) findViewById(R.id.content_main);
+                contentMain.destroyDrawingCache();
+                contentMain.buildDrawingCache();
+                Bitmap bm = contentMain.getDrawingCache();
+                Bitmap blured = Blur.blurRenderScript(getApplicationContext(), bm, 25);
+                blurScreen = (ImageView) findViewById(R.id.blurScreen);
+                Drawable ob = new BitmapDrawable(getResources(), blured);
+                blurScreen.setImageDrawable(ob);
+                RelativeLayout cardsLayout = (RelativeLayout) findViewById(R.id.cards);
+
+                /**
+                 * first we check action menu and if "is open" then we setup our inside click for FAB
+                 */
+                actionMenu.toggle(true);
+                if (!actionMenu.isOpen()) {
+                    blurScreen.setVisibility(View.INVISIBLE);
+                    cardsLayout.setVisibility(View.VISIBLE);
+                } else {
+                    blurScreen.setVisibility(View.VISIBLE);
+                    cardsLayout.setVisibility(View.INVISIBLE);
+                    buttonSelfImprovement.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(MainActivity.this, SelfImprovementActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+                    buttonDuelChallenge.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+                    buttonWakeUpChallenge.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(MainActivity.this, WakeUpActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+                }
+
+            }
+        };
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
-        CHBuildAnim chBuildAnim = new CHBuildAnim();
-        chBuildAnim.buildAnim(this);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                CHBuildAnim chBuildAnim = new CHBuildAnim();
+                chBuildAnim.buildAnim(MainActivity.this);
+            }
+        });
     }
 
     @Override
@@ -325,8 +340,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_logout:
                 OfflineMode offlineMode = new OfflineMode();
                 SessionManager sessionManager = new SessionManager(this);
-                offlineMode.isConnectedToRemoteAPI(this);
-                sessionManager.logout(this);
+                if (offlineMode.isConnectedToRemoteAPI(this)) {
+                    sessionManager.logout(this);
+                }
                 break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

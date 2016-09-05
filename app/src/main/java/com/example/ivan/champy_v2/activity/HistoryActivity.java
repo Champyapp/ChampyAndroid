@@ -155,8 +155,9 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
             case R.id.nav_logout:
                 SessionManager sessionManager = new SessionManager(this);
                 OfflineMode offlineMode = new OfflineMode();
-                offlineMode.isConnectedToRemoteAPI(this);
-                sessionManager.logout(this);
+                if (offlineMode.isConnectedToRemoteAPI(this)) {
+                    sessionManager.logout(this);
+                }
                 break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

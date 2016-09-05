@@ -3,6 +3,7 @@ package com.example.ivan.champy_v2.helper;
 import android.animation.TypeEvaluator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -20,12 +21,12 @@ public class CHBuildAnim {
         int width = activity.getWindowManager().getDefaultDisplay().getWidth();
         CHMakeResponsiveScore chMakeResponsiveScore = new CHMakeResponsiveScore(activity);
         chMakeResponsiveScore.makeResponsiveScore(width);
-        /*ImageView mImageViewFilling0 = (ImageView) findViewById(R.id.imageView_challenges_animation);
-        ImageView mImageViewFilling1 = (ImageView) findViewById(R.id.imageView_wins_animation);
-        ImageView mImageViewFilling2 = (ImageView) findViewById(R.id.imageView_total_animation);
+        ImageView mImageViewFilling0 = (ImageView)activity.findViewById(R.id.imageView_challenges_animation);
+        ImageView mImageViewFilling1 = (ImageView)activity.findViewById(R.id.imageView_wins_animation);
+        ImageView mImageViewFilling2 = (ImageView)activity.findViewById(R.id.imageView_total_animation);
         ((AnimationDrawable) mImageViewFilling0.getBackground()).start();
         ((AnimationDrawable) mImageViewFilling1.getBackground()).start();
-        ((AnimationDrawable) mImageViewFilling2.getBackground()).start();*/
+        ((AnimationDrawable) mImageViewFilling2.getBackground()).start();
 
         final TextView tvChallengesCounter = (TextView)activity.findViewById(R.id.textViewChallengesCounter);
         final TextView tvWinsCounter       = (TextView)activity.findViewById(R.id.textViewWinsCounter);
@@ -89,9 +90,9 @@ public class CHBuildAnim {
         animatorWins.start();
         animatorInProgress.start();
 
-        final TextView textViewChallenges       = (TextView)  activity.findViewById(R.id.textViewChallenges);
-        final TextView textViewWins             = (TextView)  activity.findViewById(R.id.textViewWins);
-        final TextView textViewTotal            = (TextView)  activity.findViewById(R.id.textViewTotal);
+        final TextView  textViewChallenges      = (TextView)  activity.findViewById(R.id.textViewChallenges);
+        final TextView  textViewWins            = (TextView)  activity.findViewById(R.id.textViewWins);
+        final TextView  textViewTotal           = (TextView)  activity.findViewById(R.id.textViewTotal);
         final ImageView imageViewChallengesLogo = (ImageView) activity.findViewById(R.id.imageView_challenges_logo);
         final ImageView imageViewWinsLogo       = (ImageView) activity.findViewById(R.id.imageView_wins_logo);
         final ImageView imageViewTotalLogo      = (ImageView) activity.findViewById(R.id.imageView_total_logo);

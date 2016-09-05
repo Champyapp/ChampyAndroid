@@ -94,9 +94,6 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         Glide.with(this).load(R.drawable.self_white).override(130, 130).into((ImageView) findViewById(R.id.imageViewLogo));
         Glide.with(this).load(R.drawable.selfimprtext).override(280, 250).into((ImageView) findViewById(R.id.imageView12));
 
-        RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.selfimprovement);
-        relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementback));
-
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
@@ -122,7 +119,6 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         }
 
         //getChallenges();
-
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -167,8 +163,9 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
             case R.id.nav_logout:
                 OfflineMode offlineMode = new OfflineMode();
                 SessionManager sessionManager = new SessionManager(this);
-                offlineMode.isConnectedToRemoteAPI(this);
-                sessionManager.logout(this);
+                if (offlineMode.isConnectedToRemoteAPI(this)) {
+                    sessionManager.logout(this);
+                }
                 break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
