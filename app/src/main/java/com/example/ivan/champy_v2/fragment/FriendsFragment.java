@@ -61,10 +61,7 @@ public class FriendsFragment extends Fragment {
         user = sessionManager.getUserDetails();
         final String id = user.get("id");
         String token = user.get("token");
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         DBHelper dbHelper = new DBHelper(getContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("friends", null, null);
@@ -97,7 +94,6 @@ public class FriendsFragment extends Fragment {
                                         cv.put("successChallenges", friend.getSuccessChallenges());
 
                                         db.insert("friends", null, cv);
-
 
                                     } else {
                                         Owner friend = datum.getOwner();
@@ -183,9 +179,9 @@ public class FriendsFragment extends Fragment {
         mSocket.on("connected", onConnected);
 
         mSocket.on("Relationship:new:accepted", modifiedRelationship);
-//        mSocket.on("Relationship:new:removed", modifiedRelationship);
+        //mSocket.on("Relationship:new:removed", modifiedRelationship);
         mSocket.on("Relationship:created:accepted", modifiedRelationship);
-        mSocket.on("Relationship:created:removed", modifiedRelationship);
+        //mSocket.on("Relationship:created:removed", modifiedRelationship);
 
         mSocket.connect();
 
@@ -295,6 +291,7 @@ public class FriendsFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         mSocket.disconnect();
+        mSocket.off();
         Log.i(TAG, "onDestroy");
     }
 
@@ -326,7 +323,7 @@ public class FriendsFragment extends Fragment {
                 public void run() {
                     refreshView(gSwipeRefreshLayout, gView);
                 }});
-            Log.i(TAG, "Sockets: new friends request");
+            Log.i(TAG, "Sockets: modifiedRelationship");
         }
     };
 

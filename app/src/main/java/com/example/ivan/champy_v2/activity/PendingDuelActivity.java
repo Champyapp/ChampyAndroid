@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -106,26 +107,19 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
 
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
         OfflineMode offlineMode = new OfflineMode();
-        if (!offlineMode.isConnectedToRemoteAPI(this)){
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-        }
+        offlineMode.isConnectedToRemoteAPI(this);
     }
 
 
     private Drawable Init(String path) throws FileNotFoundException {
         File file = new File(path, "blured2.jpg");
         Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
-
-        //Log.d("TAG", "x_y" + bitmap.getWidth() + " " + bitmap.getHeight());
         Drawable dr = new BitmapDrawable(getResources(), bitmap);
         dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
-
         return dr;
     }
 

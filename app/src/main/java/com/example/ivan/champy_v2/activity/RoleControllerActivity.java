@@ -24,13 +24,11 @@ public class RoleControllerActivity extends AppCompatActivity {
     private Emitter.Listener onConnect = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-
             CurrentUserHelper currentUser = new CurrentUserHelper(getApplicationContext());
             mSocket.emit("ready", currentUser.getToken());
             Log.i(TAG, "Sockets: onConnect");
         }
     };
-
     private Emitter.Listener onConnected = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {

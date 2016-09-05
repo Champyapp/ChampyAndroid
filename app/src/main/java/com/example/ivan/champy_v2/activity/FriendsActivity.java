@@ -230,6 +230,11 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
     public void onStart() {
         super.onStart();
         Log.i(TAG, "onStart");
+        SessionManager sessionManager = new SessionManager(getApplicationContext());
+        if (!sessionManager.isUserLoggedIn()) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
 //        OfflineMode offlineMode = new OfflineMode();
 //        if (!offlineMode.isConnectedToRemoteAPI(this)){
 //            Intent intent = new Intent(this, MainActivity.class);

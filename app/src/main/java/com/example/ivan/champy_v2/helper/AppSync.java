@@ -68,9 +68,8 @@ public class AppSync {
         jsonObject.put("facebookId", fb_id);
         jsonObject.put("AndroidOS", gcm);
         String string = jsonObject.toString();
-        final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
         //Log.i("AppSync", "getToken: " + jwtString);
-        return jwtString;
+        return Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
     }
 
 
@@ -133,7 +132,7 @@ public class AppSync {
                             api_path = API_URL + photo.getLarge();
                             Log.i("AppSync", "GetUserPhoto: " + api_path);
                         } else {
-                            Log.i("AppSync", "GetUserPhoto: User photo already exist. vse ok");
+                            Log.i("AppSync", "GetUserPhoto: User photo already exist");
                         }
                     }
 

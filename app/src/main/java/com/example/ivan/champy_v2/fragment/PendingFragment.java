@@ -271,14 +271,14 @@ public class PendingFragment extends Fragment {
         mSocket.on("connect", onConnect);
         mSocket.on("connected", onConnected);
 
-        mSocket.on("Relationship:new", modifiedRelationship);
+        mSocket.on("Relationship:new", modifiedRelationship);   // incoming new request
         mSocket.on("Relationship:new:accepted", modifiedRelationship);
         mSocket.on("Relationship:new:removed", modifiedRelationship);
-        mSocket.on("Relationship:accepted", modifiedRelationship);
+//        mSocket.on("Relationship:accepted", modifiedRelationship);  // incoming request
 
-        mSocket.on("Relationship:created", modifiedRelationship);
-//        mSocket.on("Relationship:created:accepted", modifiedRelationship);
-//        mSocket.on("Relationship:created:removed", modifiedRelationship);
+        mSocket.on("Relationship:created", modifiedRelationship); // my request
+        mSocket.on("Relationship:created:accepted", modifiedRelationship); // my request accepted
+        mSocket.on("Relationship:created:removed", modifiedRelationship);  // my request removed
         mSocket.connect();
 
     }
@@ -311,6 +311,7 @@ public class PendingFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         mSocket.disconnect();
+        mSocket.off();
         Log.i(TAG, "onDestroy");
     }
 

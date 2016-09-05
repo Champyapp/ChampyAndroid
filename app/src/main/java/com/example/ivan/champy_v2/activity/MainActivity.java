@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final String TAG = "MainActivity";
     private long mLastClickTime = 0;
     public Activity activity;
+    private SubActionButton buttonWakeUpChallenge, buttonDuelChallenge, buttonSelfImprovement;
     private FloatingActionMenu actionMenu;
     private CustomPagerBase pager;
     AlarmManager alarmManager;
@@ -110,30 +111,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_gradient));
         setSupportActionBar(toolbar);
 
-        alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
-        Intent intent = new Intent(this, AlarmSchedule.class);
-        intent.putExtra("alarm", "reset");
-
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, Calendar.getInstance().get(Calendar.HOUR_OF_DAY));  // було 18
-        calendar.set(Calendar.MINUTE, Calendar.getInstance().get(Calendar.MINUTE));        //  було 6
-        calendar.set(Calendar.SECOND, 0);
-
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+//        alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+//        Intent intent = new Intent(this, AlarmSchedule.class);
+//        intent.putExtra("alarm", "reset");
+//
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.set(Calendar.HOUR_OF_DAY, Calendar.getInstance().get(Calendar.HOUR_OF_DAY));  // було 18
+//        calendar.set(Calendar.MINUTE, Calendar.getInstance().get(Calendar.MINUTE));        //  було 6
+//        calendar.set(Calendar.SECOND, 0);
+//
+//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
 
         RelativeLayout cards = (RelativeLayout)findViewById(R.id.cards);
         CustomAdapter adapter = new CustomAdapter(this, SelfImprovement_model.generate(this));
-        if (adapter.dataCount() > 0){
+        if (adapter.dataCount() > 0) {
             pager = new CustomPagerBase(this,  cards, adapter);
             pager.preparePager(0);
         }
 
         final ImageButton actionButton = (ImageButton)findViewById(R.id.fabPlus);
         final SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
-        final SubActionButton buttonWakeUpChallenge = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeupcolor)).build();
-        final SubActionButton buttonDuelChallenge   = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.duel_yellow)).build();
-        final SubActionButton buttonSelfImprovement = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.self_yellow)).build();
+        buttonWakeUpChallenge = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeupcolor)).build();
+        buttonDuelChallenge   = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.duel_yellow)).build();
+        buttonSelfImprovement = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.self_yellow)).build();
 
         int width = getWindowManager().getDefaultDisplay().getWidth();
         int x = round(width/100);
@@ -168,46 +169,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 blurScreen.setImageDrawable(ob);
                 RelativeLayout cardsLayout = (RelativeLayout) findViewById(R.id.cards);
 
-                OfflineMode offlineMode = new OfflineMode();
-                if (offlineMode.isConnectedToRemoteAPI(MainActivity.this)) {
-                    actionMenu.toggle(true);
-                    if (!actionMenu.isOpen()) {
-                        blurScreen.setVisibility(View.INVISIBLE);
-                        cardsLayout.setVisibility(View.VISIBLE);
-                    } else {
-                        blurScreen.setVisibility(View.VISIBLE);
-                        cardsLayout.setVisibility(View.INVISIBLE);
-                        buttonSelfImprovement.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(MainActivity.this, SelfImprovementActivity.class);
-                                startActivity(intent);
-                            }
-                        });
-                        buttonDuelChallenge.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
-                                startActivity(intent);
-                            }
-                        });
-                        buttonWakeUpChallenge.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(MainActivity.this, WakeUpActivity.class);
-                                startActivity(intent);
-                            }
-                        });
 
-                    }
+                actionMenu.toggle(true);
+                if (!actionMenu.isOpen()) {
+                    blurScreen.setVisibility(View.INVISIBLE);
+                    cardsLayout.setVisibility(View.VISIBLE);
+                } else {
+                    blurScreen.setVisibility(View.VISIBLE);
+                    cardsLayout.setVisibility(View.INVISIBLE);
+                    buttonSelfImprovement.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(MainActivity.this, SelfImprovementActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+                    buttonDuelChallenge.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+                    buttonWakeUpChallenge.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(MainActivity.this, WakeUpActivity.class);
+                            startActivity(intent);
+                        }
+                    });
                 }
+
             }
         };
 
         // клик по меню фаба
         actionButton.setOnClickListener(onClickFab);
-
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar,
@@ -302,40 +299,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        OfflineMode offlineMode = new OfflineMode();
-        if (offlineMode.isConnectedToRemoteAPI(this)) {
-            switch (item.getItemId()) {
-                case R.id.friends:
-                    Intent goToFriends = new Intent(this, FriendsActivity.class);
-                    startActivity(goToFriends);
-                    break;
-                case R.id.history:
-                    Intent goToHistory = new Intent(this, HistoryActivity.class);
-                    startActivity(goToHistory);
-                    break;
-                case R.id.settings:
-                    Intent goToSettings = new Intent(this, SettingsActivity.class);
-                    startActivity(goToSettings);
-                    break;
-                case R.id.pending_duels:
-                    Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
-                    startActivity(goToPendingDuel);
-                    break;
-                case R.id.share:
-                    String message = "Check out Champy - it helps you improve and compete with your friends!";
-                    Intent share = new Intent(Intent.ACTION_SEND);
-                    share.setType("text/plain");
-                    share.putExtra(Intent.EXTRA_TEXT, message);
-                    startActivity(Intent.createChooser(share, "How would you like to share?"));
-                    break;
-                case R.id.nav_logout:
-                    offlineMode = new OfflineMode();
-                    SessionManager sessionManager = new SessionManager(this);
-                    if (offlineMode.isConnectedToRemoteAPI(this)) {
-                        sessionManager.logout(this);
-                    }
-                    break;
-            }
+        switch (item.getItemId()) {
+            case R.id.friends:
+                Intent goToFriends = new Intent(this, FriendsActivity.class);
+                startActivity(goToFriends);
+                break;
+            case R.id.history:
+                Intent goToHistory = new Intent(this, HistoryActivity.class);
+                startActivity(goToHistory);
+                break;
+            case R.id.settings:
+                Intent goToSettings = new Intent(this, SettingsActivity.class);
+                startActivity(goToSettings);
+                break;
+            case R.id.pending_duels:
+                Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
+                startActivity(goToPendingDuel);
+                break;
+            case R.id.share:
+                String message = "Check out Champy - it helps you improve and compete with your friends!";
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("text/plain");
+                share.putExtra(Intent.EXTRA_TEXT, message);
+                startActivity(Intent.createChooser(share, "How would you like to share?"));
+                break;
+            case R.id.nav_logout:
+                OfflineMode offlineMode = new OfflineMode();
+                SessionManager sessionManager = new SessionManager(this);
+                offlineMode.isConnectedToRemoteAPI(this);
+                sessionManager.logout(this);
+                break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
