@@ -146,11 +146,11 @@ public class PendingDuelFragment extends Fragment {
                                     } while (c.moveToNext());
                                 }
                                 c.close();
-                                offlineMode.isConnectedToRemoteAPI(getActivity());
-                                if (checkRecipientAndActive(description, recipient)) {
+
+                                if (checkRecipientAndActive(description, recipient) && offlineMode.isConnectedToRemoteAPI(getActivity())) {
                                     ChallengeController cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
                                     cc.joinToChallenge(challenge_id);
-                                    Log.i("OnClickButtonAccept", "    onResponse: VSE OK");
+                                    Log.i("OnClickButtonAccept", "onResponse: VSE OK");
                                 }
                                 break;
                             case DialogInterface.BUTTON_NEGATIVE:
@@ -160,13 +160,12 @@ public class PendingDuelFragment extends Fragment {
                 };
 
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
-                builder.setTitle("Are you sure")
-                        .setMessage("You wanna accept request?")
+                builder.setTitle(R.string.areYouSure)
+                        .setMessage(R.string.youWannaAcceptRequest)
                         .setIcon(R.drawable.duel_blue)
                         .setCancelable(false)
-                        .setPositiveButton("Yes", dialogClickListener)
-                        .setNegativeButton("No",  dialogClickListener).show();
-
+                        .setPositiveButton(R.string.yes, dialogClickListener)
+                        .setNegativeButton(R.string.no,  dialogClickListener).show();
             }
         });
 
@@ -199,10 +198,9 @@ public class PendingDuelFragment extends Fragment {
                                 try {
                                     cc.rejectInviteForPendingDuel(challenge_id);
                                     Toast.makeText(getContext(), "Canceled", Toast.LENGTH_SHORT).show();
-                                    Log.i("OnClickButtonCancel", "    onResponse: VSE OK");
+                                    Log.i("OnClickButtonCancel", "onResponse: VSE OK");
                                 } catch (IOException e) {
                                     e.printStackTrace();
-                                    Log.i("OnClickButtonCancel", "    onResponse: FAILED");
                                 }
 
                                 break;
@@ -213,12 +211,12 @@ public class PendingDuelFragment extends Fragment {
                 };
 
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
-                builder.setTitle("Are you sure")
-                        .setMessage("You wanna cancel request?")
+                builder.setTitle(R.string.areYouSure)
+                        .setMessage(R.string.youWannaCancelRequest)
                         .setIcon(R.drawable.duel_blue)
                         .setCancelable(false)
-                        .setPositiveButton("Yes", dialogClickListener)
-                        .setNegativeButton("No",  dialogClickListener).show();
+                        .setPositiveButton(R.string.yes, dialogClickListener)
+                        .setNegativeButton(R.string.no,  dialogClickListener).show();
 
             }
         });
@@ -232,16 +230,15 @@ public class PendingDuelFragment extends Fragment {
 
         if (!isActive(description) && recipient.equals("true")) {
             Toast.makeText(getContext(), "Challenge Accepted", Toast.LENGTH_SHORT).show();
-            Log.i("OnClickAccept", "          onResponse: VSE OK");
+            Log.i("OnClickAccept", "onResponse: VSE OK");
             return true;
         } else if (isActive(description)) {
             Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
-
-            Log.i("OnClickAccept", "          onResponse: IS ACTIVE");
+            Log.i("OnClickAccept", "onResponse: IS ACTIVE");
             return false;
         } else {
             Toast.makeText(getContext(), "You can't accept this challenge because you're Sender!", Toast.LENGTH_SHORT).show();
-            Log.i("OnClickAccept", "          onResponse: YOU ARE SENDER");
+            Log.i("OnClickAccept", "onResponse: YOU ARE SENDER");
             return false;
         }
 

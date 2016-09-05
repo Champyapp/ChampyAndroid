@@ -56,7 +56,7 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         user = sessionManager.getUserDetails();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
@@ -83,7 +83,6 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         tabLayout.setupWithViewPager(viewPager);
 
         String name = user.get("name");
-
 
         ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
         TextView tvUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
@@ -171,9 +170,9 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
         Drawable dr = new BitmapDrawable(this.getResources(), bitmap);
         dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
-        ImageView imageView = (ImageView) findViewById(R.id.history_background);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imageView.setImageDrawable(dr);
+        ImageView background = (ImageView) findViewById(R.id.history_background);
+        background.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        background.setImageDrawable(dr);
         return dr;
     }
 

@@ -137,16 +137,12 @@ public class DuelFragment extends Fragment {
                         String duration = "";
                         String description = "";
                         String challenge_id = "";
-                        int days = 0;
+                        int days;
 
                         EditText etGoal = (EditText) view.findViewById(R.id.et_goal);
                         EditText etDays = (EditText) view.findViewById(R.id.et_days);
                         description = etGoal.getText().toString();
                         duration = etDays.getText().toString();
-
-                        if (!duration.isEmpty()) {
-                            days = Integer.parseInt(duration);
-                        }
 
                         Cursor c = db.query("duel", null, null, null, null, null, null);
                         int position = viewPager.getCurrentItem();
@@ -155,55 +151,55 @@ public class DuelFragment extends Fragment {
                         ChallengeController cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
                         switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
-                                if (position == size) {
-                                    if ((checkInputUserData(description, duration))) {
-                                        days = Integer.parseInt(duration);
-                                        cc.createNewDuelChallenge(description, days, friendId);
-                                    }
-                                } else {
-                                    int o = 0;
-                                    if (c.moveToFirst()) {
-                                        int idColIndex = c.getColumnIndex("id");
-                                        int nameColIndex = c.getColumnIndex("name");
-                                        int coldescription = c.getColumnIndex("description");
-                                        int colduration = c.getColumnIndex("duration");
-                                        int colchallenge_id = c.getColumnIndex("challenge_id");
-                                        do {
-                                            o++;
-                                            if (o > position + 1) break;
-                                            if (o == position + 1) {
-                                                name = c.getString(nameColIndex);
-                                                description = c.getString(coldescription);
-                                                duration = c.getString(colduration);
-                                                challenge_id = c.getString(colchallenge_id);
-                                                break;
-                                            }
-                                        } while (c.moveToNext());
-                                    }
-                                    c.close();
-                                    description = ((EditText) view.findViewById(R.id.et_goal)).getText().toString();
-
-                                    if (isActive(description)) {
-                                        Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        cc.sendSingleInProgressForDuel(challenge_id, friendId);
-                                        Toast.makeText(getActivity(), "Sent duel request", Toast.LENGTH_SHORT).show();
-                                    }
+                                if (position == size && checkInputUserData(description, duration)) {
+                                    days = Integer.parseInt(duration);
+                                    cc.createNewDuelChallenge(description, days, friendId);
+                                    return;
                                 }
+
+                                int o = 0;
+                                if (c.moveToFirst()) {
+                                    int idColIndex = c.getColumnIndex("id");
+                                    int nameColIndex = c.getColumnIndex("name");
+                                    int coldescription = c.getColumnIndex("description");
+                                    int colduration = c.getColumnIndex("duration");
+                                    int colchallenge_id = c.getColumnIndex("challenge_id");
+                                    do {
+                                        o++;
+                                        if (o > position + 1) break;
+                                        if (o == position + 1) {
+                                            name = c.getString(nameColIndex);
+                                            description = c.getString(coldescription);
+                                            duration = c.getString(colduration);
+                                            challenge_id = c.getString(colchallenge_id);
+                                            break;
+                                        }
+                                    } while (c.moveToNext());
+                                }
+                                c.close();
+
+                                description = ((EditText) view.findViewById(R.id.et_goal)).getText().toString();
+
+                                if (isActive(description)) {
+                                    Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    cc.sendSingleInProgressForDuel(challenge_id, friendId);
+                                    Toast.makeText(getActivity(), "Sent duel request", Toast.LENGTH_SHORT).show();
+                                }
+
                             case DialogInterface.BUTTON_NEGATIVE:
-                                //No button clicked
                                 break;
                         }
                     }
                 };
 
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
-                builder.setTitle("Are you sure")
-                        .setMessage("You wanna send this request?")
+                builder.setTitle(R.string.areYouSure)
+                        .setMessage(R.string.youWannaSendDuelRequest)
                         .setIcon(R.drawable.duel_blue)
                         .setCancelable(false)
-                        .setPositiveButton("Yes", dialogClickListener)
-                        .setNegativeButton("No",  dialogClickListener).show();
+                        .setPositiveButton(R.string.yes, dialogClickListener)
+                        .setNegativeButton(R.string.no, dialogClickListener).show();
 
             }
         });
@@ -236,8 +232,6 @@ public class DuelFragment extends Fragment {
         final ContentValues cv = new ContentValues();
         final Bundle args = this.getArguments();
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-        int position = args.getInt(ARG_PAGE);
-        Log.i("stat", "Status: " + position);
         description = description + " during this period";
         boolean ok = false;
         int o = 0;
@@ -249,9 +243,7 @@ public class DuelFragment extends Fragment {
             int colchallenge_id = c.getColumnIndex("challenge_id");
             do {
                 if (c.getString(c.getColumnIndex("status")).equals("started")){
-                    Log.i("stat", "Equals: "+c.getString(coldescription)+" "+description);
                     if (c.getString(coldescription).equals(description)){
-                        Log.i("stat", "Equals: true");
                         ok = true;
                     }
                 }

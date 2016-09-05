@@ -85,7 +85,8 @@ public class OtherFragment extends Fragment {
                 if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
                     final GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONArrayCallback() {
                         @Override
-                        public void onCompleted(JSONArray array, GraphResponse response) {
+                        public void onCompleted(JSONArray  array, GraphResponse response) {
+                            if (array.length() == 0) return;
                             for (int i = 0; i < array.length(); i++) {
                                 try {
                                     // jwt - Json Web Token...

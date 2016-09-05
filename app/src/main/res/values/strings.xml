@@ -170,5 +170,9 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="youWantToDeleteYourAcc">You want to delete your account?</string>
+    <string name="youWannaAcceptRequest">You wanna accept request?</string>
+    <string name="youWannaCancelRequest">You wanna cancel request?</string>
+    <string name="youWannaSendDuelRequest">You wanna send duel request?</string>
+    <string name="youWantToGiveUp">You want to give up?</string>
 
 </resources>

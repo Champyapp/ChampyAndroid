@@ -603,7 +603,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 case DialogInterface.BUTTON_POSITIVE:
                                     OfflineMode offlineMode = new OfflineMode();
                                     if (offlineMode.isConnectedToRemoteAPI(MainActivity.this)){
-
                                         try {
                                             challengeController.give_up(item.getId());
                                         } catch (IOException e) {
@@ -618,12 +617,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     };
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    builder.setTitle("Are you sure")
-                            .setMessage("You want to give up?")
+                    builder.setTitle(R.string.areYouSure)
+                            .setMessage(R.string.youWantToGiveUp)
                             .setIcon(R.drawable.ic_action_warn)
                             .setCancelable(false)
-                            .setPositiveButton("Yes", dialogClickListener)
-                            .setNegativeButton("No", dialogClickListener).show();
+                            .setPositiveButton(R.string.yes, dialogClickListener)
+                            .setNegativeButton(R.string.no, dialogClickListener).show();
 
                 }
             });

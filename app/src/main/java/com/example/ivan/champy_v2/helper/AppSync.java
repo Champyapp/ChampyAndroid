@@ -254,7 +254,7 @@ public class AppSync {
                     if (userId.equals(recipient.getId())) {
                         cv.put("recipient", "true");
                         cv.put("versus", sender.getName());
-                    } else /*if (id.equals(sender.get_id()))*/{
+                    } else {
                         cv.put("recipient", "false");
                         cv.put("versus", recipient.getName());
                     }

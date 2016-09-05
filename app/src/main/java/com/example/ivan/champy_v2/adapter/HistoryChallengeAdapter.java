@@ -79,11 +79,11 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         TextView nameTextView = viewHolder.nameTextView;
         TextView level = viewHolder.level;
 
-        String type = itemRow.getType(); // self / duel / wake up
-        String challengeName = itemRow.getChallengeName(); // no alcohol | if custom -> "User_Challenge"
-        String goal = itemRow.getGoal();               // alcohol free life during this period
+        String type = itemRow.getType();
+        String challengeName = itemRow.getChallengeName();
+        String goal = itemRow.getGoal();
         String description = itemRow.getDescription();
-        String duration = itemRow.getDuration(); // index
+        String duration = itemRow.getDuration();
         String versus = itemRow.getVersus();
 
         // Here "type" in stupid string format. its works.
@@ -133,7 +133,7 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
 
         Glide.with(_context).load(R.drawable.challenges).override(40, 40).into(viewHolder.wins);
         Glide.with(_context).load(R.drawable.challenge) .override(40, 40).into(viewHolder.total);
-        //Glide.with(_context).load(R.drawable.start_circle_00026).placeholder(R.drawable.champy_icon2).into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleChall));
+
     }
 
     @Override

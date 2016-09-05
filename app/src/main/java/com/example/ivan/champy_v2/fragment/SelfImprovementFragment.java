@@ -122,14 +122,12 @@ public class SelfImprovementFragment extends Fragment {
 
         OfflineMode offlineMode = new OfflineMode();
         offlineMode.isConnectedToRemoteAPI(getActivity());
-
         buttonAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String name = "";
                         String duration = "";
                         String description = "";
                         String challenge_id = "";
@@ -140,8 +138,6 @@ public class SelfImprovementFragment extends Fragment {
                         description = etGoal.getText().toString();
                         duration = etDays.getText().toString();
 
-                        if (!duration.isEmpty()){ days = Integer.parseInt(duration); }
-
                         Cursor c = db.query("selfimprovement", null, null, null, null, null, null);
                         int position = viewPager.getCurrentItem();
                         int size = sessionManager.getSelfSize();
@@ -149,55 +145,47 @@ public class SelfImprovementFragment extends Fragment {
                         ChallengeController cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
-                                if (position == size) {
-                                    if ((checkInputUserData(description, duration))) {
-                                        days = Integer.parseInt(duration);
-                                        cc.createNewSelfImprovementChallenge(description, days);
-                                    }
-                                } else {
-                                    int o = 0;
-                                    if (c.moveToFirst()) {
-                                        int idColIndex = c.getColumnIndex("id");
-                                        int nameColIndex = c.getColumnIndex("name");
-                                        int coldescription = c.getColumnIndex("description");
-                                        int colduration = c.getColumnIndex("duration");
-                                        int colchallenge_id = c.getColumnIndex("challenge_id");
-                                        do {
-                                            o++;
-                                            if (o > position + 1) break;
-                                            if (o == position + 1) {
-                                                name = c.getString(nameColIndex);
-                                                description = c.getString(coldescription);
-                                                duration = c.getString(colduration);
-                                                challenge_id = c.getString(colchallenge_id);
-                                                break;
-                                            }
-                                        } while (c.moveToNext());
-                                    }
-                                    c.close();
+                                if (position == size && checkInputUserData(description, duration)) {
+                                    days = Integer.parseInt(duration);
+                                    cc.createNewSelfImprovementChallenge(description, days);
+                                    return;
+                                }
 
-                                    if (isActive(description)) {
-                                        Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        cc.sendSingleInProgressForSelf(challenge_id);
-                                        Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
-                                    }
+                                if (c.moveToFirst()) {
+                                    int coldescription = c.getColumnIndex("description");
+                                    int colchallenge_id = c.getColumnIndex("challenge_id");
+                                    int o = 0;
+                                    do {
+                                        o++;
+                                        if (o > position + 1) break;
+                                        if (o == position + 1) {
+                                            description = c.getString(coldescription);
+                                            challenge_id = c.getString(colchallenge_id);
+                                        }
+                                    } while (c.moveToNext());
+                                }
+                                c.close();
+
+                                if (isActive(description)) {
+                                    Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    cc.sendSingleInProgressForSelf(challenge_id);
+                                    Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
                                 }
                                 break;
                             case DialogInterface.BUTTON_NEGATIVE:
-                                //No button clicked
                                 break;
                         }
                     }
                 };
 
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
-                builder.setTitle("Are you sure")
-                        .setMessage("You wanna create this challenge?")
+                builder.setTitle(R.string.areYouSure)
+                        .setMessage(R.string.youWannaCreateThisChall)
                         .setIcon(R.drawable.self_blue)
                         .setCancelable(false)
-                        .setPositiveButton("Yes", dialogClickListener)
-                        .setNegativeButton("No",  dialogClickListener).show();
+                        .setPositiveButton(R.string.yes, dialogClickListener)
+                        .setNegativeButton(R.string.no,  dialogClickListener).show();
             }
         });
         return view;
