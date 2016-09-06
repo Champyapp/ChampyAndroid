@@ -70,7 +70,7 @@ public class ChallengeController {
 
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
 
-        Call<com.example.ivan.champy_v2.create_challenge.CreateChallenge> call = createChallenge.createChallenge(description, type_id, description, details, duration, token);
+        Call<com.example.ivan.champy_v2.create_challenge.CreateChallenge> call = createChallenge.createChallenge("User_Challenge", type_id, description, details, duration, token);
         call.enqueue(new Callback<com.example.ivan.champy_v2.create_challenge.CreateChallenge>() {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.create_challenge.CreateChallenge> response, Retrofit retrofit) {
@@ -92,13 +92,14 @@ public class ChallengeController {
 
     }
 
-    public void createNewWakeUpChallenge(final String description, int days, final String type_id) {
+    public void createNewWakeUpChallenge(int days, final String type_id) {
         final SessionManager sessionManager = new SessionManager(context);
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         String token = user.get("token");
 
         final String duration = "" + (days * 86400);
+        final String description = "Wake Up";
         String sHour = "" + hour;
         String sMinute = "" + minute;
         if (hour < 10) sHour = "0" + sHour;
@@ -247,6 +248,11 @@ public class ChallengeController {
                         myCalendar.add(Calendar.DATE, 1);
                     }
 
+
+                    Log.i("WakeUpActivity", "CurrentTime     = " + currentTime);
+                    Log.i("WakeUpActivity", "CurrentMidnight = " + currentMidnight);
+                    Log.i("WakeUpActivity", "UserInputTime   = " + userInputTime);
+                    Log.i("WakeUpActivity", "Current         = " + current);
                     Log.i("WakeUpActivity", "Current - UserInputTime = " + (current - userInputTime));
 
                     Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);

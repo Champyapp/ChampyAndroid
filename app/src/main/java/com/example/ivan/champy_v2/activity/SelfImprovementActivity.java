@@ -221,32 +221,19 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.model.Self.SelfImprovement> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-
                     List<Datum> data = response.body().getData();
-
                     int data_size = 0;
                     for (int i = 0; i < data.size(); i++) {
-
                         com.example.ivan.champy_v2.model.Self.Datum datum = data.get(i);
                         String datumType = datum.getType().getName();
-
                         if (datumType.equals("self improvement")) {
                             if (!datum.getName().equals("User_Challenge")) {
-                                if (check(datum.get_id())) {
-                                    cv.put("name", datum.getName());
-                                    cv.put("description", datum.getDescription());
-                                    cv.put("duration", datum.getDuration());
-                                    cv.put("challenge_id", datum.get_id());
-                                    db.insert("selfimprovement", null, cv);
-                                    data_size++;
-                                } else {
-                                    cv.put("name", "active");
-                                    cv.put("description", datum.getDescription());
-                                    cv.put("duration", datum.getDuration());
-                                    cv.put("challenge_id", datum.get_id());
-                                    db.insert("selfimprovement", null, cv);
-                                    data_size++;
-                                }
+                                cv.put("name", datum.getName());
+                                cv.put("description", datum.getDescription());
+                                cv.put("duration", datum.getDuration());
+                                cv.put("challenge_id", datum.get_id());
+                                db.insert("selfimprovement", null, cv);
+                                data_size++;
                             }
                         }
                     }
@@ -277,19 +264,12 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         boolean ok = true;
         DBHelper dbHelper = new DBHelper(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final ContentValues cv = new ContentValues();
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-        int o = 0;
         if (c.moveToFirst()) {
-            int idColIndex = c.getColumnIndex("id");
-            int nameColIndex = c.getColumnIndex("name");
-            int coldescription = c.getColumnIndex("description");
-            int colduration = c.getColumnIndex("duration");
             int colchallenge_id = c.getColumnIndex("challenge_id");
             do {
                 String checked = c.getString(colchallenge_id);
                 if (checked.equals(id)) {
-                    Log.i("stat", "Checked");
                     ok = false;
                     break;
                 }

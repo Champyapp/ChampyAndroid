@@ -71,7 +71,7 @@ public class OtherFragment extends Fragment {
             @Override
             public void run() {
                 final String API_URL = "http://46.101.213.24:3007";
-                Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+                final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
                 final NewUser newUser = retrofit.create(NewUser.class);
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
                 StrictMode.setThreadPolicy(policy);
@@ -86,7 +86,11 @@ public class OtherFragment extends Fragment {
                     final GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONArrayCallback() {
                         @Override
                         public void onCompleted(JSONArray  array, GraphResponse response) {
-                            if (array.length() == 0) return;
+                            if (array.length() == 0) {
+                                Toast.makeText(getContext(), "You have no friends", Toast.LENGTH_SHORT).show();
+                                swipeRefreshLayout.setRefreshing(false);
+                                return;
+                            }
                             for (int i = 0; i < array.length(); i++) {
                                 try {
                                     // jwt - Json Web Token...

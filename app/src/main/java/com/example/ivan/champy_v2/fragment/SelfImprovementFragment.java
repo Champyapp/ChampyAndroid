@@ -1,5 +1,6 @@
 package com.example.ivan.champy_v2.fragment;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -179,7 +180,7 @@ public class SelfImprovementFragment extends Fragment {
                     }
                 };
 
-                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
+                AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
                 builder.setTitle(R.string.areYouSure)
                         .setMessage(R.string.youWannaCreateThisChall)
                         .setIcon(R.drawable.self_blue)

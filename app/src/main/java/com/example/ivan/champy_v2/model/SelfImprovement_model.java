@@ -97,6 +97,7 @@ public class SelfImprovement_model {
         this.recipient = recipient;
     }
 
+
     //генерирует InProgress в History и с этими же данными генерирует карточки для MainActivity
     public static ArrayList<SelfImprovement_model> generate(Context context) {
         DBHelper dbHelper = new DBHelper(context);
@@ -133,7 +134,6 @@ public class SelfImprovement_model {
         return  arrayList;
     }
 
-
     //генерирует Wins в History
     public static ArrayList<SelfImprovement_model> generateWins(Context context) {
         DBHelper dbHelper = new DBHelper(context);
@@ -154,34 +154,47 @@ public class SelfImprovement_model {
             int colrecipient = c.getColumnIndex("recipient");
 
             do {
-                    if (c.getString(colrecipient).equals("true")) {
-                        if (c.getString(status).equals("failedBySender")) {
-                            arrayList.add(new SelfImprovement_model(
-                                    c.getString(coldescription),
-                                    c.getString(colduration),
-                                    c.getString(nameColIndex),
-                                    c.getString(colchallenge_id),
-                                    "finished",
-                                    c.getString(updated),
-                                    c.getString(challengeName),
-                                    c.getString(colversus),
-                                    c.getString(colrecipient)));
-                        }
+                if (c.getString(colrecipient).equals("true")) {
+                    if (c.getString(status).equals("failedBySender")) {
+                        arrayList.add(new SelfImprovement_model(
+                                c.getString(coldescription),
+                                c.getString(colduration),
+                                c.getString(nameColIndex),
+                                c.getString(colchallenge_id),
+                                "finished",
+                                c.getString(updated),
+                                c.getString(challengeName),
+                                c.getString(colversus),
+                                c.getString(colrecipient)));
                     }
-                    if (c.getString(colrecipient).equals("false")) {
-                        if (c.getString(status).equals("failedByRecipient")) {
-                            arrayList.add(new SelfImprovement_model(
-                                    c.getString(coldescription),
-                                    c.getString(colduration),
-                                    c.getString(nameColIndex),
-                                    c.getString(colchallenge_id),
-                                    "finished",
-                                    c.getString(updated),
-                                    c.getString(challengeName),
-                                    c.getString(colversus),
-                                    c.getString(colrecipient)));
-                        }
+                }
+                if (c.getString(colrecipient).equals("false")) {
+                    if (c.getString(status).equals("failedByRecipient")) {
+                        arrayList.add(new SelfImprovement_model(
+                                c.getString(coldescription),
+                                c.getString(colduration),
+                                c.getString(nameColIndex),
+                                c.getString(colchallenge_id),
+                                "finished",
+                                c.getString(updated),
+                                c.getString(challengeName),
+                                c.getString(colversus),
+                                c.getString(colrecipient)));
                     }
+                    if (c.getString(status).equals("finished")) {
+                        arrayList.add(new SelfImprovement_model(
+                                c.getString(coldescription),
+                                c.getString(colduration),
+                                c.getString(nameColIndex),
+                                c.getString(colchallenge_id),
+                                "finished",
+                                c.getString(updated),
+                                c.getString(challengeName),
+                                c.getString(colversus),
+                                c.getString(colrecipient)));
+                    }
+                }
+
             } while (c.moveToNext());
         }
         c.close();

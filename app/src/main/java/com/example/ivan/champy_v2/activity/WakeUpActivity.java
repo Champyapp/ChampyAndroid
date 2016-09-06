@@ -143,7 +143,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
                                     //if (ok) {
                                         Toast.makeText(WakeUpActivity.this, "Challenge created", Toast.LENGTH_SHORT).show();
                                         ChallengeController cc = new ChallengeController(WakeUpActivity.this, WakeUpActivity.this, hour, minute, 0);
-                                        cc.createNewWakeUpChallenge("Wake Up", 21, type_id);
+                                        cc.createNewWakeUpChallenge(21, type_id);
 //                                    } else {
 //                                        Toast.makeText(WakeUpActivity.this, "Already exist!", Toast.LENGTH_SHORT).show();
 //                                    }
@@ -220,9 +220,8 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
             case R.id.nav_logout:
                 OfflineMode offlineMode = new OfflineMode();
                 SessionManager sessionManager = new SessionManager(this);
-                if (offlineMode.isConnectedToRemoteAPI(this)) {
-                    sessionManager.logout(this);
-                }
+                offlineMode.isConnectedToRemoteAPI(this);
+                sessionManager.logout(this);
                 break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -1,6 +1,7 @@
 package com.example.ivan.champy_v2.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.UiThread;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -49,4 +50,5 @@ public class HistoryFailedFragment extends Fragment {
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         return view;
     }
+
 }

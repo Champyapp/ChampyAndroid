@@ -103,9 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         SessionManager sessionManager = new SessionManager(this);
         FacebookSdk.sdkInitialize(getApplicationContext());
-         setContentView(R.layout.activity_main);
-
-        // get_right_token();
+        setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_gradient));
         setSupportActionBar(toolbar);
@@ -149,15 +147,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .addSubActionView(buttonDuelChallenge).addSubActionView(buttonSelfImprovement)
                 .setRadius(350).attachTo(actionButton).build();
 
-        // клик фаба
-
-
-        // клик по меню фаба
         actionButton.setOnClickListener(initStupidClick());
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
@@ -194,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         ImageView background    = (ImageView)headerLayout.findViewById(R.id.slide_background);
         ImageView profile_image = (ImageView)headerLayout.findViewById(R.id.profile_image);
-        TextView  tvUserName    = (TextView)headerLayout.findViewById(R.id.tvUserName);
+        TextView  tvUserName    = (TextView) headerLayout.findViewById(R.id.tvUserName);
         tvUserName.setText(name);
 
         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
@@ -281,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onStart() {
         super.onStart();
-        runOnUiThread(new Runnable() {
+        this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 CHBuildAnim chBuildAnim = new CHBuildAnim();
@@ -634,7 +627,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             //final Button finalButton = buttonDoneForToday;
             if (item.getUpdated() != null){
-                if (!item.getType().equals("Wake Up")) { //?
+                if (!item.getType().equals("Wake Up")) {
                     if (item.getUpdated().equals("false")) {
                         buttonDoneForToday.setBackgroundDrawable(MainActivity.this.getResources().getDrawable(R.drawable.accept1));
                     }

@@ -130,7 +130,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
             e.printStackTrace();
         }
 
-        runOnUiThread(new Runnable() {
+        this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 getChallenges();

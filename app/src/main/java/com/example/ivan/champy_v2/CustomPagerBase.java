@@ -17,7 +17,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
 
 /**
- * тут анімації, то-се.
+ * тут анімації карточок, то-се.
  */
 public class CustomPagerBase {
 
