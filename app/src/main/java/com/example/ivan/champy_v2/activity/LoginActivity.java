@@ -137,7 +137,7 @@ public class LoginActivity extends AppCompatActivity {
                         GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                             @Override
                             public void onCompleted(JSONObject object, GraphResponse response) {
-                                //Log.i("LoginActivity", "OnClick response: " + response.toString());
+
                                 try {
                                     user_email = object.getString("email");
                                     fb_id = object.getString("id");

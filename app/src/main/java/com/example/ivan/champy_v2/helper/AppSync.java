@@ -101,7 +101,7 @@ public class AppSync {
                     String challegeEnd = data.getProfileOptions().getChallengeEnd().toString();
 
                     SessionManager sessionManager = new SessionManager(context);
-                    sessionManager.setRefreshPending("false"); // TODO: 26.08.2016 change for true maybe? for auto update pending list?
+                    sessionManager.setRefreshPending("true"); // TODO: 26.08.2016 change for true maybe? for auto update pending list?
                     sessionManager.setRefreshFriends("true");
                     sessionManager.createUserLoginSession(user_name, email, facebookId, path_to_pic,
                             jwtString, userId, pushN, newChallReq, acceptedYour, challegeEnd, "true", gcm);

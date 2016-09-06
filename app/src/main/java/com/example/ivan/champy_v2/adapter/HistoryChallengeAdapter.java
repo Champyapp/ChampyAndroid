@@ -58,6 +58,7 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         String duration = itemRow.getDuration();
         String versus = itemRow.getVersus();
 
+
         // Here "type" in stupid string format. its works.
         switch (type) {
             // TODO: 29.08.2016 make auto size for text because '\n' is not good solution

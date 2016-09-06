@@ -179,15 +179,15 @@ public class FriendsFragment extends Fragment {
         mSocket.on("connected", onConnected);
 
         mSocket.on("Relationship:new:accepted", modifiedRelationship);
-        //mSocket.on("Relationship:new:removed", modifiedRelationship);
+        mSocket.on("Relationship:new:removed", modifiedRelationship);
         mSocket.on("Relationship:created:accepted", modifiedRelationship);
-        //mSocket.on("Relationship:created:removed", modifiedRelationship);
+        mSocket.on("Relationship:created:removed", modifiedRelationship);
 
         mSocket.connect();
 
     }
 
-
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_first, container, false);
         Log.i(TAG, "onCreateView");
@@ -290,8 +290,7 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSocket.disconnect();
-        mSocket.off();
+        mSocket.close();
         Log.i(TAG, "onDestroy");
     }
 
