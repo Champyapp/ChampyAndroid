@@ -166,16 +166,20 @@
     <string name="take_photo_from_camera">Take Photo from Camera</string>
     <string name="take_photo_from_gallery">Take Photo from Gallery</string>
     <string name="areYouSure">Are you sure</string>
-    <string name="youWannaCreateThisChall">You wanna create this challenge?</string>
+    <string name="youWannaCreateThisChall">You want to create this challenge?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="youWantToDeleteYourAcc">You want to delete your account?</string>
-    <string name="youWannaAcceptRequest">You wanna accept request?</string>
-    <string name="youWannaCancelRequest">You wanna cancel request?</string>
-    <string name="youWannaSendDuelRequest">You wanna send duel request?</string>
+    <string name="youWannaAcceptRequest">You want to accept request?</string>
+    <string name="youWannaCancelRequest">You want to cancel request?</string>
+    <string name="youWannaSendDuelRequest">You want to send duel request?</string>
     <string name="youWantToGiveUp">You want to give up?</string>
     <string name="inProgress">In Progress</string>
     <string name="failed">Failed</string>
     <string name="lostInternetConnection">Lost internet connection</string>
+    <string name="wake_up_challenge">wake up \n challenge</string>
+    <string name="level_1_challenge_reward_10_points">Level 1 Challenge / Reward + 10 points</string>
+    <string name="duel_challenge_with">Duel Challenge \n with</string>
+    <string name="self_improvement_challenge">self-improvement challenge</string>
 
 </resources>

@@ -103,7 +103,7 @@ public class CustomPagerBase {
         if (state) {
             itemView.setOnTouchListener(touchListener(itemView));
         } else {
-            itemView.setOnTouchListener(null);
+            itemView.setOnTouchListener(null); // mb itemView?
         }
     }
 

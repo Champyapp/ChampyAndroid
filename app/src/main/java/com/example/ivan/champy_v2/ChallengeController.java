@@ -396,7 +396,7 @@ public class ChallengeController {
                     SQLiteDatabase localSQLiteDatabase = new DBHelper(context).getWritableDatabase();
                     ContentValues localContentValues = new ContentValues();
                     localContentValues.put("updated", "true");
-                    localSQLiteDatabase.update("myChallenges", localContentValues, "challenge_id = ?", new String[]{id});
+                    localSQLiteDatabase.update("myChallenges", localContentValues, "challengep_id = ?", new String[]{id});
                     Log.i("DoneForToday", "onResponse: VSE OK");
                     return;
                 }
