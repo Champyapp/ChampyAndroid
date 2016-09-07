@@ -32,8 +32,7 @@ public class Image_module {
     private FriendsActivity activity;
 
     @Before
-    public void set_up() throws Exception
-    {
+    public void set_up() throws Exception {
         context = RuntimeEnvironment.application;
     }
 
@@ -46,8 +45,7 @@ public class Image_module {
     }
 
     @Test
-    public void test_Image_module_rounded_corners()
-    {
+    public void test_Image_module_rounded_corners() {
         imagemodule = new CHImageModule(context);
         String filePath = RuntimeEnvironment.application.getPackageResourcePath() + "/src/test/res/blured2.jpg";
         Bitmap bitmap = BitmapFactory.decodeFile(filePath);
@@ -55,8 +53,7 @@ public class Image_module {
     }
 
     @Test
-    public void test_Image_module_get_resized_bitmap()
-    {
+    public void test_Image_module_get_resized_bitmap() {
         imagemodule = new CHImageModule(context);
         String filePath = RuntimeEnvironment.application.getPackageResourcePath() + "/src/test/res/blured2.jpg";
         Bitmap bitmap = BitmapFactory.decodeFile(filePath);

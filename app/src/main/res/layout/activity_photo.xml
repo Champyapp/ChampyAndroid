@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#e62a5158"
+    android:background="@drawable/champy_background"
     android:id="@+id/change_photo" >
 
     <include layout="@layout/app_bar_photo"

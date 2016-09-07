@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -390,13 +391,16 @@ public class ChallengeController {
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     Log.i("DoneForToday", "onResponse: VSE OK");
-                    String challengeType = response.body().getData().getChallenge().getType();
-                    //                    if (challengeType.equals("567d51c48322f85870fd931c")) {
-//                        // set sender progress +1;
-//                    }
-                } else {
-                    Log.i("DoneForToday", "onResponse: FAILED ");
+                    String id = response.body().getData().getChallenge().getId();
+
+                    SQLiteDatabase localSQLiteDatabase = new DBHelper(context).getWritableDatabase();
+                    ContentValues localContentValues = new ContentValues();
+                    localContentValues.put("updated", "true");
+                    localSQLiteDatabase.update("myChallenges", localContentValues, "challenge_id = ?", new String[]{id});
+                    Log.i("DoneForToday", "onResponse: VSE OK");
+                    return;
                 }
+                Log.i("DoneForToday", "onResponse: FAILED ");
             }
 
             @Override

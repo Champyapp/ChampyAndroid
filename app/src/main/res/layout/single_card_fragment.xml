@@ -26,7 +26,7 @@
     <Button
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:background="@drawable/icon_share"
+        android:background="@drawable/icon_done_for_today"
         android:id="@+id/buttonDoneForToday"
         android:layout_alignRight="@+id/cardImage"
         android:layout_alignEnd="@+id/cardImage"

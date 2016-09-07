@@ -551,9 +551,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             TextView tvSelfImprovement  = (TextView) tempView.findViewById(R.id.textViewSIC);
             tvSelfImprovement.setText(item.getType());
             String itemGoal = item.getGoal();
-            final int intentId = Integer.parseInt(item.getGoal());
-            ImageView imageView = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
 
+            ImageView imageView = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
             switch (item.getType()) {
                 case "Wake Up":
                     imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeup_white));
@@ -598,11 +597,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     OfflineMode offlineMode = new OfflineMode();
                                     if (offlineMode.isConnectedToRemoteAPI(MainActivity.this)){
                                         try {
-                                            challengeController.give_up(item.getId(), intentId);
+                                            if (item.getType().equals("Wake Up")) {
+                                                int intentId = Integer.parseInt(item.getGoal());
+                                                challengeController.give_up(item.getId(), intentId);
+                                            } else {
+                                                challengeController.give_up(item.getId(), 0);
+                                            }
                                             challengeController.refreshCardsForPendingDuel();
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
+                                        } catch (IOException e) { e.printStackTrace(); }
                                     }
                                     break;
                                 case DialogInterface.BUTTON_NEGATIVE:
@@ -622,35 +624,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             });
 
-
             final Button buttonDoneForToday = (Button) tempView.findViewById(R.id.buttonDoneForToday);
             buttonDoneForToday.getLayoutParams().width = x*10;
             buttonDoneForToday.getLayoutParams().height = x*10;
 
-            //final Button finalButton = buttonDoneForToday;
-            if (item.getUpdated() != null){
-                if (!item.getType().equals("Wake Up")) {
-                    if (item.getUpdated().equals("false")) {
-                        buttonDoneForToday.setBackgroundDrawable(MainActivity.this.getResources().getDrawable(R.drawable.accept1));
-                    }
-                }
-            }
-
             buttonDoneForToday.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String id = item.getId();
-                    SQLiteDatabase localSQLiteDatabase = new DBHelper(MainActivity.this).getWritableDatabase();
-                    ContentValues localContentValues = new ContentValues();
-                    localContentValues.put("updated", "true");
-                    localSQLiteDatabase.update("myChallenges", localContentValues, "challenge_id = ?", new String[]{id});
-                    int i = localSQLiteDatabase.update("updated", localContentValues, "challenge_id = ?", new String[]{id});
-                    try {
-                        challengeController.doneForToday(id);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if (item.getType().equals("Wake Up") || item.getUpdated().equals("true")) {
+                        buttonDoneForToday.setBackgroundDrawable(MainActivity.this.getResources().getDrawable(R.drawable.icon_share));
+                        String message = "Champy! I'm done for today with my challenge: " + item.getGoal();
+                        Intent share = new Intent(Intent.ACTION_SEND);
+                        share.setType("text/plain");
+                        share.putExtra(Intent.EXTRA_TEXT, message);
+                        startActivity(Intent.createChooser(share, "How would you like to share?"));
+                    } else {
+                        try {
+                            challengeController.doneForToday(item.getId());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
-                    buttonDoneForToday.setBackgroundDrawable(MainActivity.this.getResources().getDrawable(R.drawable.icon_share));
                 }
             });
 

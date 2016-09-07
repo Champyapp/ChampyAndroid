@@ -55,8 +55,6 @@ public class PhotoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
 
-        RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.change_photo);
-        relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.champy_background));
         final String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
