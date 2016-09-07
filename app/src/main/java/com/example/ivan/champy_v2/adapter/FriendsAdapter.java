@@ -230,7 +230,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         });
 
 
-
     }
 
     @Override

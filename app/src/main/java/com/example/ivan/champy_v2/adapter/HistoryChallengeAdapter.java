@@ -1,6 +1,5 @@
 package com.example.ivan.champy_v2.adapter;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
@@ -25,11 +24,11 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
     final private String API_URL = "http://46.101.213.24:3007";
     final private String TAG = "myLogs";
     private List<HistoryChallenge> mContacts;
-    private Context _context;
+    private Context mContext;
 
     public HistoryChallengeAdapter (List<HistoryChallenge> contacts, Context context){
         mContacts = contacts;
-        _context = context;
+        mContext = context;
     }
 
     @Override
@@ -64,49 +63,49 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
             // TODO: 29.08.2016 make auto size for text because '\n' is not good solution
             case "Duel":
                 nameTextView.setText(description + ": " + duration + " days\nwith " + versus);
-                Glide.with(_context).load(R.drawable.duel_yellow).override(80, 80).into(viewHolder.image);
+                Glide.with(mContext).load(R.drawable.duel_yellow).override(80, 80).into(viewHolder.image);
                 break;
             case "Wake Up":
                 // challengeName because when we created "wake up challenge" we've set name
                 // "Wake up at $hour : $minute during this period (in ChallengeController);
                 nameTextView.setText(challengeName + ": " + duration + " days");
-                Glide.with(_context).load(R.drawable.wakeup_yellow).override(80, 80).into(viewHolder.image);
+                Glide.with(mContext).load(R.drawable.wakeup_yellow).override(80, 80).into(viewHolder.image);
                 break;
             case "Self-Improvement":
                 //nameTextView.setText(challengeName + " during " + duration + " days");
                 nameTextView.setText(description + ": " + duration + " days");
-                Glide.with(_context).load(R.drawable.self_yellow).override(80, 80).into(viewHolder.image);
+                Glide.with(mContext).load(R.drawable.self_yellow).override(80, 80).into(viewHolder.image);
                 break;
             default:
-                nameTextView.setText("Lost internet connection");
+                nameTextView.setText(R.string.lostInternetConnection);
                 break;
         }
 
         switch (itemRow.getStatus()) {
             case "started":
                 nameTextView = (TextView) viewHolder.itemView.findViewById(R.id.counterWins);
-                nameTextView.setText("In Progress");
+                nameTextView.setText(R.string.inProgress);
                 break;
             case "finished":
                 nameTextView = (TextView) viewHolder.itemView.findViewById(R.id.counterWins);
-                nameTextView.setText("Wins");
+                nameTextView.setText(R.string.wins);
                 break;
             case "failed":
                 nameTextView = (TextView) viewHolder.itemView.findViewById(R.id.counterWins);
-                nameTextView.setText("Failed");
+                nameTextView.setText(R.string.failed);
                 break;
         }
 
-        SessionManager sessionManager = new SessionManager(_context);
+        SessionManager sessionManager = new SessionManager(mContext);
         HashMap<String, String> champy = sessionManager.getChampyOptions();
         String userLevel = champy.get("level");
         level.setText("Level " + userLevel + " Champy");
 
-        Typeface typeFace = Typeface.createFromAsset(_context.getAssets(), "fonts/bebasneue.ttf");
+        Typeface typeFace = Typeface.createFromAsset(mContext.getAssets(), "fonts/bebasneue.ttf");
         nameTextView.setTypeface(typeFace);
 
-        Glide.with(_context).load(R.drawable.challenges).override(40, 40).into(viewHolder.wins);
-        Glide.with(_context).load(R.drawable.challenge) .override(40, 40).into(viewHolder.total);
+        Glide.with(mContext).load(R.drawable.challenges).override(40, 40).into(viewHolder.wins);
+        Glide.with(mContext).load(R.drawable.challenge) .override(40, 40).into(viewHolder.total);
 
     }
 

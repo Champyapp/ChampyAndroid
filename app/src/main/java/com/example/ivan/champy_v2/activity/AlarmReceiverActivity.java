@@ -1,8 +1,11 @@
 package com.example.ivan.champy_v2.activity;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
@@ -24,18 +27,32 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.ivan.champy_v2.AlarmReceiver;
 import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.R;
+import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.data.DBHelper;
+import com.example.ivan.champy_v2.interfaces.SingleInProgress;
+import com.example.ivan.champy_v2.single_inprogress.Data;
 
 import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.GsonConverterFactory;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 public class AlarmReceiverActivity extends Activity {
 
     public static final String ARG_PAGE = "ARG_PAGE";
+    public static final String TAG = "AlarmReceiverActivity";
     private MediaPlayer mMediaPlayer;
     public Context context;
     public Activity activity;
@@ -46,7 +63,12 @@ public class AlarmReceiverActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         final String finalInProgressChallengeId = this.getIntent().getStringExtra("finalInProgressChallengeId");
-        Log.i("onCreate", "Our InProgressId = " + finalInProgressChallengeId);
+        final int finalIntentId = this.getIntent().getIntExtra("finalIntentId", 0);
+        final String stringFinalIntentId = String.valueOf(finalIntentId);
+
+        Log.i(TAG, "finalInProgressChallengeId: " + finalInProgressChallengeId);
+        Log.i(TAG, "finalIntentId: " + finalIntentId);
+        Log.i(TAG, "stringFinalIntentId: " + stringFinalIntentId);
 
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -88,12 +110,13 @@ public class AlarmReceiverActivity extends Activity {
         buttonWakeUpSurrender.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                Toast.makeText(AlarmReceiverActivity.this, "Bla-Bla", Toast.LENGTH_SHORT).show();
+                mMediaPlayer.stop();
                 try {
-                    cc.give_up(finalInProgressChallengeId);
+                    cc.give_up(finalInProgressChallengeId, finalIntentId);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                finish();
                 return false;
             }
         });
@@ -129,5 +152,6 @@ public class AlarmReceiverActivity extends Activity {
         }
         return alert;
     }
+
 
 }

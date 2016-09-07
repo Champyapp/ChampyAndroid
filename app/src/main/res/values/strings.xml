@@ -174,5 +174,8 @@
     <string name="youWannaCancelRequest">You wanna cancel request?</string>
     <string name="youWannaSendDuelRequest">You wanna send duel request?</string>
     <string name="youWantToGiveUp">You want to give up?</string>
+    <string name="inProgress">In Progress</string>
+    <string name="failed">Failed</string>
+    <string name="lostInternetConnection">Lost internet connection</string>
 
 </resources>

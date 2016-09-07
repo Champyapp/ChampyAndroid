@@ -141,7 +141,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
                                 OfflineMode offlineMode = new OfflineMode();
                                 if (offlineMode.isConnectedToRemoteAPI(WakeUpActivity.this)) {
                                     //if (ok) {
-                                        Toast.makeText(WakeUpActivity.this, "Challenge created", Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(WakeUpActivity.this, "Challenge created", Toast.LENGTH_SHORT).show();
                                         ChallengeController cc = new ChallengeController(WakeUpActivity.this, WakeUpActivity.this, hour, minute, 0);
                                         cc.createNewWakeUpChallenge(21, type_id);
 //                                    } else {

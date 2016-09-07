@@ -26,14 +26,11 @@ public class CurrentUserHelper {
     }
 
     public String getFbId() {
-
         return this.currentSession.getFacebookId();
-
     }
 
     public String getGCM() {
         return this.currentSession.getGCM();
-
     }
 
     public String getUserObjectId() {

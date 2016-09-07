@@ -526,7 +526,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public class CustomAdapter extends CustomPagerAdapter {
 
         private ArrayList<SelfImprovement_model> arrayList;
-
         public CustomAdapter(Context context, ArrayList<SelfImprovement_model> marrayList) {
             super(context);
             this.arrayList = marrayList;
@@ -552,6 +551,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             TextView tvSelfImprovement  = (TextView) tempView.findViewById(R.id.textViewSIC);
             tvSelfImprovement.setText(item.getType());
             String itemGoal = item.getGoal();
+            final int intentId = Integer.parseInt(item.getGoal());
             ImageView imageView = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
 
             switch (item.getType()) {
@@ -586,6 +586,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Button buttonGiveUp = (Button) tempView.findViewById(R.id.buttonGiveUp);
             buttonGiveUp.getLayoutParams().width = x*10;
             buttonGiveUp.getLayoutParams().height = x*10;
+
             buttonGiveUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -597,7 +598,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     OfflineMode offlineMode = new OfflineMode();
                                     if (offlineMode.isConnectedToRemoteAPI(MainActivity.this)){
                                         try {
-                                            challengeController.give_up(item.getId());
+                                            challengeController.give_up(item.getId(), intentId);
+                                            challengeController.refreshCardsForPendingDuel();
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }
@@ -638,7 +640,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 @Override
                 public void onClick(View v) {
                     String id = item.getId();
-
                     SQLiteDatabase localSQLiteDatabase = new DBHelper(MainActivity.this).getWritableDatabase();
                     ContentValues localContentValues = new ContentValues();
                     localContentValues.put("updated", "true");

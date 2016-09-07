@@ -107,8 +107,8 @@
             android:layout_marginTop="8dp" />
 
         <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="60sp"
+            android:layout_height="60sp"
             android:id="@+id/imageViewAcceptButton"
             android:visibility="visible"
             android:layout_alignParentBottom="true"

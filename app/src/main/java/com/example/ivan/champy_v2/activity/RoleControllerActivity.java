@@ -59,7 +59,6 @@ public class RoleControllerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_role_controller);
 
         try {
-            //new ProgressTask().execute();
             mSocket = IO.socket("http://46.101.213.24:3007");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
@@ -81,27 +80,5 @@ public class RoleControllerActivity extends AppCompatActivity {
         startActivity(goToActivity);
 
     }
-
-
-//    private class ProgressTask extends AsyncTask<Void,Void,Void> {
-//
-//        ProgressBar bar = (ProgressBar)findViewById(R.id.roleProgressBar);
-//
-//        @Override
-//        protected void onPreExecute(){
-//            bar.setVisibility(View.VISIBLE);
-//        }
-//
-//        @Override
-//        protected Void doInBackground(Void... arg0) {
-//            //my stuff is here
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Void result) {
-//            bar.setVisibility(View.GONE);
-//        }
-//    }
 
 }

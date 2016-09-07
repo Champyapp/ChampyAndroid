@@ -101,7 +101,7 @@ public class AppSync {
                     String challegeEnd = data.getProfileOptions().getChallengeEnd().toString();
 
                     SessionManager sessionManager = new SessionManager(context);
-                    sessionManager.setRefreshPending("true"); // TODO: 26.08.2016 change for true maybe? for auto update pending list?
+                    sessionManager.setRefreshPending("false"); // TODO: 26.08.2016 change for true maybe? for auto update pending list?
                     sessionManager.setRefreshFriends("true");
                     sessionManager.createUserLoginSession(user_name, email, facebookId, path_to_pic,
                             jwtString, userId, pushN, newChallReq, acceptedYour, challegeEnd, "true", gcm);
@@ -286,8 +286,7 @@ public class AppSync {
         int clearCount = db.delete("mytable", null, null);
         final ContentValues cv = new ContentValues();
 
-        final GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(),
-                new GraphRequest.GraphJSONArrayCallback() {
+        final GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONArrayCallback() {
                     @Override
                     public void onCompleted(JSONArray array, GraphResponse response) {
                         for (int i = 0; i < array.length(); i++) {
