@@ -2,10 +2,12 @@ package com.example.ivan.champy_v2.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -44,6 +46,7 @@ import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.adapter.CustomPagerAdapter;
+import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHBuildAnim;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.interfaces.Update_user;
@@ -521,19 +524,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         public View getView(int position, View convertView) {
             View tempView = convertView;
+            final SelfImprovement_model item = arrayList.get(position);
             if(tempView == null) {
                 LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 tempView = inflater.inflate(R.layout.single_card_fragment_self, null, false);
             }
-            final SelfImprovement_model item = arrayList.get(position);
             ImageView cardImage = (ImageView)tempView.findViewById(R.id.cardImage);
             int x = round(getWindowManager().getDefaultDisplay().getWidth() / 100);
             int y = round(getWindowManager().getDefaultDisplay().getHeight() / 100);
             cardImage.getLayoutParams().width  = x*65;
             cardImage.getLayoutParams().height = y*50;
             if (y > 10) y = 10;
-
-            final ChallengeController challengeController = new ChallengeController(MainActivity.this, MainActivity.this, 0 , 0, 0);
 
             TextView tvSelfImprovement  = (TextView) tempView.findViewById(R.id.textViewSIC);
             tvSelfImprovement.setText(item.getType());
@@ -566,13 +567,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             tvDuration.setText(item.getDays() + " DAYS TO GO");
             tvDuration.setTextSize(y*2);
 
+            final TextView tvDoneForToday = (TextView)tempView.findViewById(R.id.tvDoneForToday);
+            tvDoneForToday.setTypeface(typeface);
+            //tvDoneForToday.setTextSize(y*2);
+
             TextView tvLevelAndPoints = (TextView) tempView.findViewById(R.id.textViewLevelAndPoints);
             tvLevelAndPoints.setTextSize(y);
 
-            Button buttonGiveUp = (Button) tempView.findViewById(R.id.buttonGiveUp);
+            final Button buttonGiveUp = (Button) tempView.findViewById(R.id.buttonGiveUp);
             buttonGiveUp.getLayoutParams().width = x*10;
             buttonGiveUp.getLayoutParams().height = x*10;
+            final Button buttonDoneForToday = (Button) tempView.findViewById(R.id.buttonDoneForToday);
+            buttonDoneForToday.getLayoutParams().width = x*10;
+            buttonDoneForToday.getLayoutParams().height = x*10;
 
+            final ChallengeController challengeController = new ChallengeController(MainActivity.this, MainActivity.this, 0 , 0, 0);
             buttonGiveUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -611,27 +620,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             });
 
-            final Button buttonDoneForToday = (Button) tempView.findViewById(R.id.buttonDoneForToday);
-            buttonDoneForToday.getLayoutParams().width = x*10;
-            buttonDoneForToday.getLayoutParams().height = x*10;
+            if (item.getUpdated() != null && !item.getType().equals("Wake Up") && item.getUpdated().equals("false")){
+                buttonDoneForToday.setBackgroundDrawable(MainActivity.this.getResources().getDrawable(R.drawable.icon_done_for_today));
+                tvDoneForToday.setVisibility(View.VISIBLE);
+            }
 
             buttonDoneForToday.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (item.getType().equals("Wake Up") || item.getUpdated().equals("true")) {
-                        buttonDoneForToday.setBackgroundDrawable(MainActivity.this.getResources().getDrawable(R.drawable.icon_share));
-                        String message = "Champy! I'm done for today with my challenge: " + item.getGoal();
-                        Intent share = new Intent(Intent.ACTION_SEND);
-                        share.setType("text/plain");
-                        share.putExtra(Intent.EXTRA_TEXT, message);
-                        startActivity(Intent.createChooser(share, "How would you like to share?"));
-                    } else {
-                        try {
-                            challengeController.doneForToday(item.getId());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                    String id = item.getId();
+                    SQLiteDatabase localSQLiteDatabase = new DBHelper(MainActivity.this).getWritableDatabase();
+                    ContentValues localContentValues = new ContentValues();
+                    localContentValues.put("updated", "true");
+                    localSQLiteDatabase.update("myChallenges", localContentValues, "challenge_id = ?", new String[]{id});
+                    int i = localSQLiteDatabase.update("updated", localContentValues, "challenge_id = ?", new String[]{id});
+                    Log.i(TAG, "SQL SHIT 'i' = " + i);
+                    try {
+                        challengeController.doneForToday(id);
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
+                    buttonDoneForToday.setBackgroundDrawable(MainActivity.this.getResources().getDrawable(R.drawable.icon_share));
+                    tvDoneForToday.setVisibility(View.INVISIBLE);
                 }
             });
 

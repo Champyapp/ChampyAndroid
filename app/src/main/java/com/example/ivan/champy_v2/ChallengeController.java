@@ -391,16 +391,9 @@ public class ChallengeController {
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     Log.i("DoneForToday", "onResponse: VSE OK");
-                    String id = response.body().getData().getChallenge().getId();
-
-                    SQLiteDatabase localSQLiteDatabase = new DBHelper(context).getWritableDatabase();
-                    ContentValues localContentValues = new ContentValues();
-                    localContentValues.put("updated", "true");
-                    localSQLiteDatabase.update("myChallenges", localContentValues, "challengep_id = ?", new String[]{id});
-                    Log.i("DoneForToday", "onResponse: VSE OK");
-                    return;
+                } else {
+                    Log.i("DoneForToday", "onResponse: FAILED ");
                 }
-                Log.i("DoneForToday", "onResponse: FAILED ");
             }
 
             @Override
