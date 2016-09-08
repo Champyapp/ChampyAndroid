@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.example.ivan.champy_v2.activity.MainActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.duel.Duel;
+import com.example.ivan.champy_v2.helper.AppSync;
 import com.example.ivan.champy_v2.helper.CHLoadUserProgressBarInfo;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
 import com.example.ivan.champy_v2.interfaces.CreateChallenge;
@@ -24,6 +25,8 @@ import com.example.ivan.champy_v2.model.active_in_progress.Datum;
 import com.example.ivan.champy_v2.model.active_in_progress.Recipient;
 import com.example.ivan.champy_v2.model.active_in_progress.Sender;
 import com.example.ivan.champy_v2.single_inprogress.Data;
+
+import org.json.JSONException;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -381,6 +384,7 @@ public class ChallengeController {
         user = sessionManager.getUserDetails();
         String token = user.get("token");
         final String API_URL = "http://46.101.213.24:3007";
+        final String userId = user.get("id");
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
@@ -391,6 +395,16 @@ public class ChallengeController {
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     Log.i("DoneForToday", "onResponse: VSE OK");
+                    SessionManager session = new SessionManager(context);
+                    String facebookId = session.getFacebookId();
+                    String gcm = session.getGCM();
+                    String path_to_pic = session.getPathToPic();
+                    try {
+                        AppSync appSync = new AppSync(facebookId, gcm, path_to_pic, context);
+                        appSync.getUserInProgressChallenges(userId);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     Log.i("DoneForToday", "onResponse: FAILED ");
                 }

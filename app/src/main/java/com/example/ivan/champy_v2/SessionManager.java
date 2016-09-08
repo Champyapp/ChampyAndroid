@@ -122,6 +122,7 @@ public class SessionManager {
         String s = pref.getString("id", null);
         return s;
     }
+
     public String getRefreshPending() {
         String s = pref.getString("pendingRefresh", null);
         return s;
@@ -145,6 +146,10 @@ public class SessionManager {
     public String getRefreshFriends() {
         String s = pref.getString("friendsRefresh", null);
         return s;
+    }
+
+    public String getPathToPic() {
+        return pref.getString(KEY_PATH, null);
     }
 
     public String getGCM() {
