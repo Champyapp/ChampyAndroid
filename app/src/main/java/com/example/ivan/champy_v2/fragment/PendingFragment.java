@@ -87,7 +87,7 @@ public class PendingFragment extends Fragment {
                             Datum datum = data.get(i);
                             if ((datum.getFriend() != null) && (datum.getOwner() != null) && datum.getStatus().toString().equals("false")) {
                                 String status;
-//
+
                                 if (datum.getOwner().get_id().equals(id)) {
                                     status = "false";
                                     Friend_ friend = datum.getFriend();
@@ -193,18 +193,18 @@ public class PendingFragment extends Fragment {
         super.onStart();
         Log.i(TAG, "onStart");
 
-//        mSocket.on("connect", onConnect);
-//        mSocket.on("connected", onConnected);
-//
-//        mSocket.on("Relationship:new", modifiedRelationship);   // incoming new request
-//        mSocket.on("Relationship:new:accepted", modifiedRelationship);
-//        mSocket.on("Relationship:new:removed", modifiedRelationship);
-//        mSocket.on("Relationship:accepted", modifiedRelationship);  // incoming request
-//
-//        mSocket.on("Relationship:created", modifiedRelationship); // my request
-//        mSocket.on("Relationship:created:accepted", modifiedRelationship); // my request accepted
-//        mSocket.on("Relationship:created:removed", modifiedRelationship);  // my request removed
-//        mSocket.connect();
+        mSocket.on("connect", onConnect);
+        mSocket.on("connected", onConnected);
+
+        mSocket.on("Relationship:new", modifiedRelationship);   // incoming new request
+        mSocket.on("Relationship:new:accepted", modifiedRelationship);
+        mSocket.on("Relationship:new:removed", modifiedRelationship);
+        mSocket.on("Relationship:accepted", modifiedRelationship);  // incoming request
+
+        mSocket.on("Relationship:created", modifiedRelationship); // my request
+        mSocket.on("Relationship:created:accepted", modifiedRelationship); // my request accepted
+        mSocket.on("Relationship:created:removed", modifiedRelationship);  // my request removed
+        mSocket.connect();
 
     }
 
@@ -349,12 +349,12 @@ public class PendingFragment extends Fragment {
         }
     };
 
-//    public static PendingFragment newInstance(int page) {
-//        Bundle args = new Bundle();
-//        args.putInt(ARG_PAGE, page);
-//        PendingFragment fragment = new PendingFragment();
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
+    public static PendingFragment newInstance(int page) {
+        Bundle args = new Bundle();
+        args.putInt(ARG_PAGE, page);
+        PendingFragment fragment = new PendingFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
 }

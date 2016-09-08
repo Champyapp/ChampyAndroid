@@ -149,9 +149,7 @@ public class FriendsFragment extends Fragment {
                 }
 
                 @Override
-                public void onFailure(Throwable t) {
-
-                }
+                public void onFailure(Throwable t) { }
             });
 
         } else {
@@ -175,15 +173,15 @@ public class FriendsFragment extends Fragment {
         super.onStart();
         Log.i(TAG, "onStart");
 
-//        mSocket.on("connect", onConnect);
-//        mSocket.on("connected", onConnected);
-//
-//        mSocket.on("Relationship:new:accepted", modifiedRelationship);
-//        mSocket.on("Relationship:new:removed", modifiedRelationship);
-//        mSocket.on("Relationship:created:accepted", modifiedRelationship);
-//        mSocket.on("Relationship:created:removed", modifiedRelationship);
-//
-//        mSocket.connect();
+        mSocket.on("connect", onConnect);
+        mSocket.on("connected", onConnected);
+
+        mSocket.on("Relationship:new:accepted", modifiedRelationship);
+        mSocket.on("Relationship:new:removed", modifiedRelationship);
+        mSocket.on("Relationship:created:accepted", modifiedRelationship);
+        mSocket.on("Relationship:created:removed", modifiedRelationship);
+
+        mSocket.connect();
 
     }
 
