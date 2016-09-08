@@ -15,7 +15,6 @@ import com.example.ivan.champy_v2.activity.MainActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.duel.Duel;
 import com.example.ivan.champy_v2.helper.AppSync;
-import com.example.ivan.champy_v2.helper.CHLoadUserProgressBarInfo;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
 import com.example.ivan.champy_v2.interfaces.CreateChallenge;
 import com.example.ivan.champy_v2.interfaces.SingleInProgress;
@@ -40,8 +39,6 @@ import retrofit.Callback;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
-
-import static java.lang.Math.round;
 
 public class ChallengeController {
 
@@ -213,7 +210,7 @@ public class ChallengeController {
                     com.example.ivan.champy_v2.single_inprogress.SingleInProgress data = response.body();
                     String inProgressId = data.getData().get_id();
                     Log.i("sendSingleInProgress", "InProgressId: " + inProgressId);
-                    generateCardsForMainActivity();
+                    initAppSync();
                 } else Log.i("sendSingleInProgress", "Status: FAILED: " + response.code());
             }
 
@@ -308,7 +305,7 @@ public class ChallengeController {
                     AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                     alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, userInputTime, AlarmManager.INTERVAL_DAY, pendingIntent);
 
-                    generateCardsForMainActivity();
+                    initAppSync();
 
                     Log.i("sendSingleInProgress", "IntentId: " + intentId);
                     Log.i("sendSingleInProgress", "InProgressId: " + inProgressId);
@@ -338,7 +335,7 @@ public class ChallengeController {
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     Log.i("JoinToChallenge", "onResponse: VSE OK");
-                    refreshCardsForPendingDuel();
+                    initAppSync();
                 } else Log.i("JoinToChallenge", "onResponse: WTF" + " | ERROR = " + response.code());
             }
 
@@ -363,7 +360,7 @@ public class ChallengeController {
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()){
                     Log.i("RejectInviteForDuel", "onResponse: VSE OK");
-                    refreshCardsForPendingDuel();
+                    initAppSync();
                 } else Log.i("RejectInviteForDuel", "onResponse: FAILED" + " | ERROR: " + response.code() + " " + response.message());
             }
 
@@ -465,182 +462,196 @@ public class ChallengeController {
         });
     }
 
-
-
-
-    public void refreshCardsForPendingDuel() {
-        DBHelper dbHelper = new DBHelper(context);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final int clearCount = db.delete("pending_duel", null, null);
-        final ContentValues cv = new ContentValues();
-        final String API_URL = "http://46.101.213.24:3007";
-        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        final SessionManager sessionManager = new SessionManager(context);
-        final String update = "0"; //1457019726
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        final String userId = user.get("id");
-        String token = user.get("token");
-
-        ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
-
-        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userId, update, token);
-        call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
-            @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    List<Datum> data = response.body().getData();
-                    for (int i = 0; i < data.size(); i++) {
-                        com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
-                        Recipient recipient = datum.getRecipient();
-                        Sender sender = datum.getSender();
-                        Challenge challenge = datum.getChallenge();
-                        String inProgressId = datum.get_id();
-                        String challengeId = challenge.get_id();
-                        String challengeStatus = datum.getStatus();
-                        String challengeDescription = challenge.getDescription();
-                        int challengeDuration = challenge.getDuration();
-
-                        //cv.clear();
-                        if (challenge.getType().equals("567d51c48322f85870fd931b")) {
-                            if (challengeStatus.equals("pending")) {
-                                // TODO: 29.08.2016 maybe change for "rejectedBySender"??? or comment this line voobwe?
-                                if (!challengeStatus.equals("failedBySender") && !challengeStatus.equals("rejectedByRecipient")) {
-
-                                    if (userId.equals(recipient.getId())) {
-                                        cv.put("recipient", "true");
-                                        cv.put("versus", sender.getName());
-                                    } else {
-                                        cv.put("recipient", "false");
-                                        cv.put("versus", recipient.getName());
-                                    }
-                                    cv.put("challenge_id", inProgressId);
-                                    cv.put("description", challengeDescription);
-                                    cv.put("duration", challengeDuration);
-                                    db.insert("pending_duel", null, cv);
-                                }
-                            }
-                        }
-                    }
-
-                    generateCardsForMainActivity();
-                    Log.i("RefreshPendingDuels", "onResponse: VSE OK");
-                } else {
-                    Log.i("RefreshPendingDuels", "onResponse: FAILED: " + response.code());
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable t) { }
-        });
-    }
-
-    public void generateCardsForMainActivity() {
-        DBHelper dbHelper = new DBHelper(context);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int clearCount = db.delete("myChallenges", null, null);
-        final ContentValues cv = new ContentValues();
-        final String API_URL = "http://46.101.213.24:3007";
-        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-
-        final SessionManager sessionManager = new SessionManager(context);
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        String token = user.get("token");
-        final String id = user.get("id");
-        ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
-        final long unixTime = System.currentTimeMillis() / 1000L;
-        final String update = "0"; //1457019726
-        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(id, update, token);
-        call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
-            @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    List<Datum> data = response.body().getData();
-                    for (int i = 0; i < data.size(); i++) {
-                        com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
-                        Challenge challenge = datum.getChallenge();
-                        Recipient recipient = datum.getRecipient();
-                        Sender sender = datum.getSender();
-
-                        String challenge_name = challenge.getName();
-                        String challenge_description = challenge.getDescription(); // bla-bla
-                        String challenge_detail = challenge.getDetails(); // bla-bla + " during this period"
-                        String challenge_status = datum.getStatus();      // active or not
-                        String challenge_id = datum.get_id();
-                        String challenge_type = challenge.getType(); // self, duel or wake up
-                        String duration = "";
-
-                        if (datum.getEnd() != null) {
-                            int end = datum.getEnd();
-                            int days = round((end - unixTime) / 86400);
-                            duration = "" + days;
-                        }
-
-                        if (challenge_description.equals("Wake Up")) {
-                            cv.put("name", "Wake Up");
-                            cv.put("recipient", "false");
-                        } else if (challenge_type.equals("567d51c48322f85870fd931a")) {
-                            cv.put("name", "Self-Improvement");
-                            cv.put("recipient", "false");
-                        } else if (challenge_type.equals("567d51c48322f85870fd931b")) {
-                            cv.put("name", "Duel");
-
-                            if (id.equals(recipient.getId())) {
-                                cv.put("recipient", "true");
-                                cv.put("versus", sender.getName());
-                            } else {
-                                cv.put("recipient", "false");
-                                cv.put("versus", recipient.getName());
-                            }
-                        }
-
-                        cv.put("challengeName", challenge_name);
-                        cv.put("description", challenge_detail);
-                        cv.put("duration", duration);
-                        cv.put("challenge_id", challenge_id);
-                        cv.put("status", challenge_status);
-                        String updated = checkForUpdateChallenge(challenge_id);
-                        cv.put("updated", updated);
-                        db.insert("myChallenges", null, cv);
-                    }
-
-                    Log.i("GenerateMethod", "onResponse: VSE OK");
-                    Intent intent = new Intent(firstActivity, MainActivity.class);
-                    context.startActivity(intent);
-                } else {
-                    Log.i("GenerateMethod", "onResponse: FAILED: " + response.code());
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable t) { }
-        });
-
-        CHLoadUserProgressBarInfo loadData = new CHLoadUserProgressBarInfo(firstActivity);
-        loadData.loadUserProgressBarInfo();
-
-    }
-
-
-
-    private String checkForUpdateChallenge(String challenge_id) {
-        DBHelper dbHelper = new DBHelper(firstActivity);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Cursor c = db.query("updated", null, null, null, null, null, null);
-        String status = "false";
-        if (c.moveToFirst()) {
-            int colchallenge_id = c.getColumnIndex("challenge_id");
-            do {
-                if (c.getString(colchallenge_id).equals(challenge_id)){
-                    status = c.getString(c.getColumnIndex("updated"));
-                    break;
-                }
-            } while (c.moveToNext());
+    public void initAppSync() {
+        SessionManager session = new SessionManager(context);
+        String userId = session.getObjectId();
+        String facebookId = session.getFacebookId();
+        String gcm = session.getGCM();
+        String path_to_pic = session.getPathToPic();
+        try {
+            AppSync appSync = new AppSync(facebookId, gcm, path_to_pic, context);
+            appSync.getUserProfile();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-        c.close();
-        return status;
     }
+
+
+//    public void refreshCardsForPendingDuel() {
+//        DBHelper dbHelper = new DBHelper(context);
+//        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+//        final int clearCount = db.delete("pending_duel", null, null);
+//        final ContentValues cv = new ContentValues();
+//        final String API_URL = "http://46.101.213.24:3007";
+//        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+//        final SessionManager sessionManager = new SessionManager(context);
+//        final String update = "0"; //1457019726
+//        HashMap<String, String> user;
+//        user = sessionManager.getUserDetails();
+//        final String userId = user.get("id");
+//        String token = user.get("token");
+//
+//        ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
+//
+//        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userId, update, token);
+//        call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
+//            @Override
+//            public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
+//                if (response.isSuccess()) {
+//                    List<Datum> data = response.body().getData();
+//                    for (int i = 0; i < data.size(); i++) {
+//                        com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
+//                        Recipient recipient = datum.getRecipient();
+//                        Sender sender = datum.getSender();
+//                        Challenge challenge = datum.getChallenge();
+//                        String inProgressId = datum.get_id();
+//                        String challengeId = challenge.get_id();
+//                        String challengeStatus = datum.getStatus();
+//                        String challengeDescription = challenge.getDescription();
+//                        int challengeDuration = challenge.getDuration();
+//
+//                        //cv.clear();
+//                        if (challenge.getType().equals("567d51c48322f85870fd931b")) {
+//                            if (challengeStatus.equals("pending")) {
+//                                // TODO: 29.08.2016 maybe change for "rejectedBySender"??? or comment this line voobwe?
+//                                if (!challengeStatus.equals("failedBySender") && !challengeStatus.equals("rejectedByRecipient")) {
+//
+//                                    if (userId.equals(recipient.getId())) {
+//                                        cv.put("recipient", "true");
+//                                        cv.put("versus", sender.getName());
+//                                    } else {
+//                                        cv.put("recipient", "false");
+//                                        cv.put("versus", recipient.getName());
+//                                    }
+//                                    cv.put("challenge_id", inProgressId);
+//                                    cv.put("description", challengeDescription);
+//                                    cv.put("duration", challengeDuration);
+//                                    db.insert("pending_duel", null, cv);
+//                                }
+//                            }
+//                        }
+//                    }
+//
+//                    generateCardsForMainActivity();
+//                    Log.i("RefreshPendingDuels", "onResponse: VSE OK");
+//                } else {
+//                    Log.i("RefreshPendingDuels", "onResponse: FAILED: " + response.code());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Throwable t) { }
+//        });
+//    }
+//
+//
+//    public void generateCardsForMainActivity() {
+//        DBHelper dbHelper = new DBHelper(context);
+//        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+//        int clearCount = db.delete("myChallenges", null, null);
+//        final ContentValues cv = new ContentValues();
+//        final String API_URL = "http://46.101.213.24:3007";
+//        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+//
+//        final SessionManager sessionManager = new SessionManager(context);
+//        HashMap<String, String> user;
+//        user = sessionManager.getUserDetails();
+//        String token = user.get("token");
+//        final String id = user.get("id");
+//        ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
+//        final long unixTime = System.currentTimeMillis() / 1000L;
+//        final String update = "0"; //1457019726
+//        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(id, update, token);
+//        call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
+//            @Override
+//            public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
+//                if (response.isSuccess()) {
+//                    List<Datum> data = response.body().getData();
+//                    for (int i = 0; i < data.size(); i++) {
+//                        com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
+//                        Challenge challenge = datum.getChallenge();
+//                        Recipient recipient = datum.getRecipient();
+//                        Sender sender = datum.getSender();
+//
+//                        String challenge_name = challenge.getName();
+//                        String challenge_description = challenge.getDescription(); // bla-bla
+//                        String challenge_detail = challenge.getDetails(); // bla-bla + " during this period"
+//                        String challenge_status = datum.getStatus();      // active or not
+//                        String challenge_id = datum.get_id();
+//                        String challenge_type = challenge.getType(); // self, duel or wake up
+//                        String duration = "";
+//
+//                        if (datum.getEnd() != null) {
+//                            int end = datum.getEnd();
+//                            int days = round((end - unixTime) / 86400);
+//                            duration = "" + days;
+//                        }
+//
+//                        if (challenge_description.equals("Wake Up")) {
+//                            cv.put("name", "Wake Up");
+//                            cv.put("recipient", "false");
+//                        } else if (challenge_type.equals("567d51c48322f85870fd931a")) {
+//                            cv.put("name", "Self-Improvement");
+//                            cv.put("recipient", "false");
+//                        } else if (challenge_type.equals("567d51c48322f85870fd931b")) {
+//                            cv.put("name", "Duel");
+//
+//                            if (id.equals(recipient.getId())) {
+//                                cv.put("recipient", "true");
+//                                cv.put("versus", sender.getName());
+//                            } else {
+//                                cv.put("recipient", "false");
+//                                cv.put("versus", recipient.getName());
+//                            }
+//                        }
+//
+//                        SessionManager session = new SessionManager(context);
+//                        String facebookId = session.getFacebookId();
+//                        String gcm = session.getGCM();
+//                        String path_to_pic = session.getPathToPic();
+//
+//
+//
+//                        cv.put("challengeName", challenge_name);
+//                        cv.put("description", challenge_detail);
+//                        cv.put("duration", duration);
+//                        cv.put("challenge_id", challenge_id);
+//                        cv.put("status", challenge_status);
+//                        String updated = checkForUpdateChallenge(challenge_id);
+//                        cv.put("updated", updated);
+//                        db.insert("myChallenges", null, cv);
+//
+//                        SessionManager session = new SessionManager(context);
+//                        String userId = session.getObjectId();
+//                        String facebookId = session.getFacebookId();
+//                        String gcm = session.getGCM();
+//                        String path_to_pic = session.getPathToPic();
+//                        try {
+//                            AppSync appSync = new AppSync(facebookId, gcm, path_to_pic, context);
+//                            appSync.getUserInProgressChallenges(userId);
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//
+//                    Log.i("GenerateMethod", "onResponse: VSE OK");
+//                    Intent intent = new Intent(firstActivity, MainActivity.class);
+//                    context.startActivity(intent);
+//                } else {
+//                    Log.i("GenerateMethod", "onResponse: FAILED: " + response.code());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Throwable t) { }
+//        });
+//
+//        CHLoadUserProgressBarInfo loadData = new CHLoadUserProgressBarInfo(firstActivity);
+//        loadData.loadUserProgressBarInfo();
+//
+//    }
+
+
 
     private boolean checkTimeForWakeUp(String time) {
         boolean ok = true;

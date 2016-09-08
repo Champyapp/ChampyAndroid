@@ -34,6 +34,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
 
 import io.jsonwebtoken.Jwts;
@@ -73,6 +74,7 @@ public class AppSync {
     }
 
 
+    // when login
     public void getUserProfile() {
         final String facebookId = this.facebookId;
         final String jwtString = this.token;
@@ -122,6 +124,8 @@ public class AppSync {
                     getUserInProgressChallenges(userId);
                     getUserPending(userId);
                     getUserFriendsInfo(gcm);
+                    refreshCardsForPendingDuel();
+                    loadUserProgressBarInfo();
 
                     String api_path;
                     if (data.getPhoto() != null){
@@ -151,7 +155,7 @@ public class AppSync {
 
     }
 
-
+    // get peoples in pending [friend activity]
     public void getUserPending(final String userId) {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -205,7 +209,7 @@ public class AppSync {
         });
     }
 
-
+    // generate method like in CC
     public void getUserInProgressChallenges(final String userId) {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -234,6 +238,7 @@ public class AppSync {
                 String challenge_id = datum.get_id();             // us magic id
                 String challenge_type = challenge.getType();      // self, duel or wake up
                 String challenge_name = challenge.getName();      // name like "wake up"
+                int challenge_update = challenge.getUpdated();
                 String duration = "";
                 if (datum.getEnd() != null) {
                     int end = datum.getEnd();
@@ -259,6 +264,7 @@ public class AppSync {
                     }
                 }
 
+                String mChallenge_update = checkForUpdateChallenge(challenge_id);
                 cv.put("challengeName", challenge_name);
                 cv.put("description", challenge_detail);
                 cv.put("duration", duration);
@@ -269,10 +275,12 @@ public class AppSync {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
         Log.i(TAG, "getUserInProgressChallenges: Success!");
     }
 
-
+    // get information about friends (wins/total/lvl etc.)
     public void getUserFriendsInfo(final String gcm) {
         final String API_URL = "http://46.101.213.24:3007";
         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
@@ -358,7 +366,117 @@ public class AppSync {
     }
 
 
-    public Boolean checkPendingFriends(String id) {
+    // check pending duels
+    public void refreshCardsForPendingDuel() {
+        DBHelper dbHelper = new DBHelper(context);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        final int clearCount = db.delete("pending_duel", null, null);
+        final ContentValues cv = new ContentValues();
+        final String API_URL = "http://46.101.213.24:3007";
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        final SessionManager sessionManager = new SessionManager(context);
+        final String update = "0"; //1457019726
+        HashMap<String, String> user;
+        user = sessionManager.getUserDetails();
+        final String userId = user.get("id");
+        String token = user.get("token");
+
+        ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
+
+        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userId, update, token);
+        call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
+            @Override
+            public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    List<com.example.ivan.champy_v2.model.active_in_progress.Datum> data = response.body().getData();
+                    for (int i = 0; i < data.size(); i++) {
+                        com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
+                        Recipient recipient = datum.getRecipient();
+                        Sender sender = datum.getSender();
+                        Challenge challenge = datum.getChallenge();
+                        String inProgressId = datum.get_id();
+                        String challengeId = challenge.get_id();
+                        String challengeStatus = datum.getStatus();
+                        String challengeDescription = challenge.getDescription();
+                        int challengeDuration = challenge.getDuration();
+
+                        //cv.clear();
+                        if (challenge.getType().equals("567d51c48322f85870fd931b")) {
+                            if (challengeStatus.equals("pending")) {
+                                // TODO: 29.08.2016 maybe change for "rejectedBySender"??? or comment this line voobwe?
+                                if (!challengeStatus.equals("failedBySender") && !challengeStatus.equals("rejectedByRecipient")) {
+
+                                    if (userId.equals(recipient.getId())) {
+                                        cv.put("recipient", "true");
+                                        cv.put("versus", sender.getName());
+                                    } else {
+                                        cv.put("recipient", "false");
+                                        cv.put("versus", recipient.getName());
+                                    }
+                                    cv.put("challenge_id", inProgressId);
+                                    cv.put("description", challengeDescription);
+                                    cv.put("duration", challengeDuration);
+                                    db.insert("pending_duel", null, cv);
+                                }
+                            }
+                        }
+                    }
+                    Log.i("RefreshPendingDuels", "onResponse: VSE OK");
+                } else {
+                    Log.i("RefreshPendingDuels", "onResponse: FAILED: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) { }
+        });
+    }
+
+    // load progress bars in main activity
+    public void loadUserProgressBarInfo() {
+        final SessionManager sessionManager = new SessionManager(context);
+        HashMap<String, String> user;
+        user = sessionManager.getUserDetails();
+        String token = user.get("token");
+        final String API_URL = "http://46.101.213.24:3007";
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+
+        NewUser newUser = retrofit.create(NewUser.class);
+
+        Call<User> userCall = newUser.getUserInfo(token);
+        userCall.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Response<User> response, Retrofit retrofit) {
+                User decodedResponse = response.body();
+                Data data = decodedResponse.getData();
+                SessionManager sessionManager = new SessionManager(context);
+                String size = sessionManager.get_duel_pending();
+                String getInProgressChallengesCount = data.getInProgressChallengesCount().toString();
+                String getSuccessChallengesCount    = data.getSuccessChallenges().toString();
+                String getAllChallengesCount        = data.getAllChallengesCount().toString();
+                sessionManager.set_duel_pending(size);
+                sessionManager.setChampyOptions(
+                        data.getAllChallengesCount().toString(),
+                        data.getSuccessChallenges().toString(),
+                        data.getScore().toString(),
+                        data.getLevel().getNumber().toString());
+
+                Log.i("LoadUserProgressBarInfo", "onResponse: VSE OK");
+                Log.i("onResponse", "USER DATA: \nAllChallengeCount = " + getInProgressChallengesCount
+                        +"\nSuccessChallenges = " + getSuccessChallengesCount
+                        +"\ngetScore          = " + getAllChallengesCount
+                        +"\ngetLevel          = " + data.getLevel()
+                        +"\ngetPendingDuel    = " + sessionManager.get_duel_pending());
+            }
+
+            @Override
+            public void onFailure(Throwable t) { }
+        });
+
+    }
+
+    // helper method for checking "accepted friends". works like if (!friends) -> add in other.
+    private Boolean checkPendingFriends(String id) {
         DBHelper dbHelper = new DBHelper(context);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Boolean ok = false;
@@ -375,6 +493,25 @@ public class AppSync {
         }
         c.close();
         return ok;
+    }
+
+    // done for today? true/false
+    private String checkForUpdateChallenge(String challenge_id) {
+        DBHelper dbHelper = new DBHelper(context);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor c = db.query("updated", null, null, null, null, null, null);
+        String status = "false";
+        if (c.moveToFirst()) {
+            int colchallenge_id = c.getColumnIndex("challenge_id");
+            do {
+                if (c.getString(colchallenge_id).equals(challenge_id)){
+                    status = c.getString(c.getColumnIndex("updated"));
+                    break;
+                }
+            } while (c.moveToNext());
+        }
+        c.close();
+        return status;
     }
 
 }

@@ -595,7 +595,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                             } else {
                                                 challengeController.give_up(item.getId(), 0);
                                             }
-                                            challengeController.refreshCardsForPendingDuel();
+                                            challengeController.initAppSync();
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }

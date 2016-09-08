@@ -1,13 +1,9 @@
 package com.example.ivan.champy_v2;
 
-import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,25 +13,12 @@ import android.util.Log;
 import com.example.ivan.champy_v2.activity.FriendsActivity;
 import com.example.ivan.champy_v2.activity.MainActivity;
 import com.example.ivan.champy_v2.activity.PendingDuelActivity;
-import com.example.ivan.champy_v2.data.DBHelper;
-import com.example.ivan.champy_v2.helper.CHLoadUserProgressBarInfo;
-import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
-import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
-import com.example.ivan.champy_v2.model.active_in_progress.Datum;
-import com.example.ivan.champy_v2.model.active_in_progress.Recipient;
-import com.example.ivan.champy_v2.model.active_in_progress.Sender;
+import com.example.ivan.champy_v2.helper.AppSync;
 import com.google.android.gms.gcm.GcmListenerService;
 
+import org.json.JSONException;
+
 import java.util.HashMap;
-import java.util.List;
-
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.GsonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
-
-import static java.lang.Math.round;
 
 public class MyGcmListenerService extends GcmListenerService {
 
@@ -116,8 +99,18 @@ public class MyGcmListenerService extends GcmListenerService {
             case "Challenge request":
                 // done
                 Intent goToPendingDuels = new Intent(MyGcmListenerService.this, PendingDuelActivity.class);
-                refreshPendingDuels();
                 notifyChallenges(goToPendingDuels, message);
+                SessionManager session = new SessionManager(getApplicationContext());
+                String userId = session.getObjectId();
+                String facebookId = session.getFacebookId();
+                String gcm = session.getGCM();
+                String path_to_pic = session.getPathToPic();
+                try {
+                    AppSync appSync = new AppSync(facebookId, gcm, path_to_pic, getApplicationContext());
+                    appSync.getUserInProgressChallenges(userId);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
             case "Challenge accepted":
                 // done
@@ -136,72 +129,72 @@ public class MyGcmListenerService extends GcmListenerService {
 
     }
 
-    private void refreshPendingDuels() {
-        DBHelper dbHelper = new DBHelper(this);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final int clearCount = db.delete("pending_duel", null, null);
-        final ContentValues cv = new ContentValues();
-        final String API_URL = "http://46.101.213.24:3007";
-        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        final SessionManager sessionManager = new SessionManager(this);
-        final String update = "0"; //1457019726
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        final String userId = user.get("id");
-        String token = user.get("token");
-
-        ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
-
-        //Log.i("stat", "Nam nado: " + id + " " + update + " " + token);
-        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userId, update, token);
-        call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
-            @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    List<Datum> data = response.body().getData();
-                    for (int i = 0; i < data.size(); i++) {
-                        com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
-                        Recipient recipient = datum.getRecipient();
-                        Sender sender = datum.getSender();
-                        Challenge challenge = datum.getChallenge();
-                        String inProgressId = datum.get_id();
-                        String challengeId = challenge.get_id();
-                        String challengeStatus = datum.getStatus();
-                        String challengeDescription = challenge.getDescription();
-                        int challengeDuration = challenge.getDuration();
-
-                        //cv.clear();
-                        if (challenge.getType().equals("567d51c48322f85870fd931b")) {
-                            if (challengeStatus.equals("pending")) { //!challengeStatus.equals("started"))
-                                if (!challengeStatus.equals("failedBySender")) {
-                                    if (!challengeStatus.equals("rejectedByRecipient")) {
-                                        //if (userId.equals(recipient.getId())) {
-                                        if (userId.equals(recipient.getId())) {
-                                            cv.put("recipient", "true");
-                                            cv.put("versus", sender.getName());
-                                        } else {
-                                            cv.put("recipient", "false");
-                                            cv.put("versus", recipient.getName());
-                                        }
-                                        cv.put("challenge_id", inProgressId);
-                                        cv.put("description", challengeDescription);
-                                        cv.put("duration", challengeDuration);
-                                        db.insert("pending_duel", null, cv);
-                                        //}
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    //
-
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable t) { }
-        });
-    }
+//    private void refreshPendingDuels() {
+//        DBHelper dbHelper = new DBHelper(this);
+//        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+//        final int clearCount = db.delete("pending_duel", null, null);
+//        final ContentValues cv = new ContentValues();
+//        final String API_URL = "http://46.101.213.24:3007";
+//        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+//        final SessionManager sessionManager = new SessionManager(this);
+//        final String update = "0"; //1457019726
+//        HashMap<String, String> user;
+//        user = sessionManager.getUserDetails();
+//        final String userId = user.get("id");
+//        String token = user.get("token");
+//
+//        ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
+//
+//        //Log.i("stat", "Nam nado: " + id + " " + update + " " + token);
+//        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userId, update, token);
+//        call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
+//            @Override
+//            public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
+//                if (response.isSuccess()) {
+//                    List<Datum> data = response.body().getData();
+//                    for (int i = 0; i < data.size(); i++) {
+//                        com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
+//                        Recipient recipient = datum.getRecipient();
+//                        Sender sender = datum.getSender();
+//                        Challenge challenge = datum.getChallenge();
+//                        String inProgressId = datum.get_id();
+//                        String challengeId = challenge.get_id();
+//                        String challengeStatus = datum.getStatus();
+//                        String challengeDescription = challenge.getDescription();
+//                        int challengeDuration = challenge.getDuration();
+//
+//                        //cv.clear();
+//                        if (challenge.getType().equals("567d51c48322f85870fd931b")) {
+//                            if (challengeStatus.equals("pending")) { //!challengeStatus.equals("started"))
+//                                if (!challengeStatus.equals("failedBySender")) {
+//                                    if (!challengeStatus.equals("rejectedByRecipient")) {
+//                                        //if (userId.equals(recipient.getId())) {
+//                                        if (userId.equals(recipient.getId())) {
+//                                            cv.put("recipient", "true");
+//                                            cv.put("versus", sender.getName());
+//                                        } else {
+//                                            cv.put("recipient", "false");
+//                                            cv.put("versus", recipient.getName());
+//                                        }
+//                                        cv.put("challenge_id", inProgressId);
+//                                        cv.put("description", challengeDescription);
+//                                        cv.put("duration", challengeDuration);
+//                                        db.insert("pending_duel", null, cv);
+//                                        //}
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                    //
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Throwable t) { }
+//        });
+//    }
 
     private void notifyChallenges(Intent intent, String message) {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
