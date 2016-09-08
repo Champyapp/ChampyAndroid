@@ -648,7 +648,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         e.printStackTrace();
                     }
                     buttonDoneForToday.setBackgroundDrawable(MainActivity.this.getResources().getDrawable(R.drawable.icon_share));
-                    findViewById(R.id.tvDoneForToday).setVisibility(View.INVISIBLE);
                 }
             });
 

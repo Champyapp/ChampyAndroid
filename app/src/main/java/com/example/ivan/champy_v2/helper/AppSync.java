@@ -1,6 +1,5 @@
 package com.example.ivan.champy_v2.helper;
 
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -49,15 +48,16 @@ import static java.lang.Math.round;
 
 public class AppSync {
 
+    private static final String TAG = "AppSync";
     final String API_URL = "http://46.101.213.24:3007";
     Context context;
-    String fbId, gcm, token, path;
+    String facebookId, gcm, token, path;
 
 
     public AppSync(String fb_id, String gcm, String path_to_pic, Context context) throws JSONException {
-        this.fbId = fb_id;
+        this.facebookId = fb_id;
         this.gcm = gcm;
-        this.token = getToken(this.fbId, this.gcm);
+        this.token = getToken(this.facebookId, this.gcm);
         this.path = path_to_pic;
         this.context = context;
     }
@@ -74,13 +74,13 @@ public class AppSync {
 
 
     public void getUserProfile() {
-        final String facebookId = this.fbId;
+        final String facebookId = this.facebookId;
         final String jwtString = this.token;
         final String path_to_pic = this.path;
         final String gcm = this.gcm;
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
-        Log.i("AppSync", "TOKEN: " + jwtString);
+        Log.i(TAG, "TOKEN: " + jwtString);
 
         NewUser newUser = retrofit.create(NewUser.class);
 
@@ -136,9 +136,9 @@ public class AppSync {
                         }
                     }
 
+                    Log.i(TAG, "getUserProfile: Success!");
                     Intent goToRoleActivity = new Intent(context, RoleControllerActivity.class);
                     context.startActivity(goToRoleActivity);
-
                 }
             }
 
@@ -197,13 +197,12 @@ public class AppSync {
                             }
                         }
                     }
+                    Log.i(TAG, "getUserPending: Success!");
                 }
             }
             @Override
             public void onFailure(Throwable t) { }
         });
-
-
     }
 
 
@@ -267,11 +266,10 @@ public class AppSync {
                 cv.put("status", challenge_status);
                 db.insert("myChallenges", null, cv);
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        Log.i(TAG, "getUserInProgressChallenges: Success!");
     }
 
 
@@ -287,74 +285,75 @@ public class AppSync {
         final ContentValues cv = new ContentValues();
 
         final GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONArrayCallback() {
-                    @Override
-                    public void onCompleted(JSONArray array, GraphResponse response) {
-                        for (int i = 0; i < array.length(); i++) {
-                            try {
-                                final String fb_id = array.getJSONObject(i).getString("id");
-                                final String user_name = array.getJSONObject(i).getString("name");
-                                JSONObject jsonObject = new JSONObject();
-                                jsonObject.put("facebookId", fb_id);
-                                jsonObject.put("AndroidOS", gcm);
-                                String string = jsonObject.toString();
-                                final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
-                                Call<User> call = newUser.getUserInfo(jwtString);
-                                call.enqueue(new Callback<User>() {
-                                    @Override
-                                    public void onResponse(Response<User> response, Retrofit retrofit) {
-                                        if (response.isSuccess()) {
-                                            Data data = response.body().getData();
-                                            String photo = null;
+                @Override
+                public void onCompleted(JSONArray array, GraphResponse response) {
+                    for (int i = 0; i < array.length(); i++) {
+                        try {
+                            final String fb_id = array.getJSONObject(i).getString("id");
+                            final String user_name = array.getJSONObject(i).getString("name");
+                            JSONObject jsonObject = new JSONObject();
+                            jsonObject.put("facebookId", fb_id);
+                            jsonObject.put("AndroidOS", gcm);
+                            String string = jsonObject.toString();
+                            final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
+                            Call<User> call = newUser.getUserInfo(jwtString);
+                            call.enqueue(new Callback<User>() {
+                                @Override
+                                public void onResponse(Response<User> response, Retrofit retrofit) {
+                                    if (response.isSuccess()) {
+                                        Data data = response.body().getData();
+                                        String photo = null;
 
-                                            if (data.getPhoto() != null) photo = API_URL + data.getPhoto().getMedium();
-                                            else { try {
-                                                    URL profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
-                                                    photo = profile_pic.toString();
-                                                } catch (MalformedURLException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                            String name = data.getName();
-                                            cv.put("name", name);
-                                            cv.put("photo", photo);
-                                            cv.put("user_id", data.get_id());
-                                            cv.put("challenges", data.getAllChallengesCount());
-                                            cv.put("wins", data.getSuccessChallenges());
-                                            cv.put("total", data.getScore());
-                                            cv.put("level", data.getLevel().getNumber());
-                                            if (!checkPendingFriends(data.get_id())) db.insert("mytable", null, cv); // ?
-                                            else Log.i("AppSync", "GetUserFriendsInfo | DBase: not added");
-                                        } else {
-                                            Log.i("AppSync", "GetUserFriendsInfo | onResponse: " + response.message());
-                                            URL profile_pic;
-                                            String photo = null;
-                                            try {
-                                                profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
+                                        if (data.getPhoto() != null) photo = API_URL + data.getPhoto().getMedium();
+                                        else { try {
+                                                URL profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
                                                 photo = profile_pic.toString();
                                             } catch (MalformedURLException e) {
                                                 e.printStackTrace();
                                             }
-                                            cv.put("name", user_name);
-                                            cv.put("photo", photo);
-                                            cv.put("challenges", "0");
-                                            cv.put("wins", "0");
-                                            cv.put("total", "0");
-                                            cv.put("level", "0");
-                                            db.insert("mytable", null, cv);
                                         }
+                                        String name = data.getName();
+                                        cv.put("name", name);
+                                        cv.put("photo", photo);
+                                        cv.put("user_id", data.get_id());
+                                        cv.put("challenges", data.getAllChallengesCount());
+                                        cv.put("wins", data.getSuccessChallenges());
+                                        cv.put("total", data.getScore());
+                                        cv.put("level", data.getLevel().getNumber());
+                                        if (!checkPendingFriends(data.get_id())) db.insert("mytable", null, cv); // ?
+                                        else Log.i("AppSync", "GetUserFriendsInfo | DBase: not added");
+                                    } else {
+                                        Log.i("AppSync", "GetUserFriendsInfo | onResponse: " + response.message());
+                                        URL profile_pic;
+                                        String photo = null;
+                                        try {
+                                            profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
+                                            photo = profile_pic.toString();
+                                        } catch (MalformedURLException e) {
+                                            e.printStackTrace();
+                                        }
+                                        cv.put("name", user_name);
+                                        cv.put("photo", photo);
+                                        cv.put("challenges", "0");
+                                        cv.put("wins", "0");
+                                        cv.put("total", "0");
+                                        cv.put("level", "0");
+                                        db.insert("mytable", null, cv);
                                     }
+                                    Log.i(TAG, "getUserFriendsInfo: Success!");
+                                }
 
-                                    @Override
-                                    public void onFailure(Throwable t) {}
-                                });
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
+                                @Override
+                                public void onFailure(Throwable t) {}
+                            });
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
 
                     }
-                });
+
+                }
+            });
         request.executeAndWait();
     }
 
@@ -377,62 +376,5 @@ public class AppSync {
         c.close();
         return ok;
     }
-
-
-//    private String saveToInternalStorage(Bitmap bitmapImage){
-//        ContextWrapper cw = new ContextWrapper(context);
-//        // path to /data/data/yourapp/app_data/imageDir
-//        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-//        if (!directory.exists()) {
-//            directory.mkdirs();
-//        }
-//        // Create imageDir
-//        File mypath = new File(directory,"profile.jpg");
-//
-//        Log.d("TAG", "MY_PATH: "+mypath.toString());
-//        FileOutputStream fos = null;
-//        try {
-//            fos = new FileOutputStream(mypath);
-//            // Use the compress method on the BitMap object to write image to the OutputStream
-//            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
-//            fos.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return directory.getAbsolutePath();
-//    }
-//
-//
-//    public void loadImageFromStorage(String path) {
-//        try {
-//            File f=new File(path, "profile.jpg");
-//            File file = new File(path, "blured2.jpg");
-//            if (file.exists()) {
-//                return;
-//            } else {
-//                file.createNewFile();
-//                Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-//
-//                Blur blur = new Blur();
-//
-//                Bitmap blured = blur.blurRenderScript(context, b, 10);
-//
-//                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//                blured.compress(Bitmap.CompressFormat.PNG, 0, bos);
-//                byte[] bitmapdata = bos.toByteArray();
-//
-//                FileOutputStream fos = new FileOutputStream(file);
-//                fos.write(bitmapdata);
-//                fos.flush();
-//                fos.close();
-//                Log.d("TAG", "Image: Blured");
-//            }
-//        }
-//        catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
 }

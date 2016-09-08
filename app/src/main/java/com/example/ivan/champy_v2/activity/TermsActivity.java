@@ -749,4 +749,5 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
         }
     }
 
+
 }

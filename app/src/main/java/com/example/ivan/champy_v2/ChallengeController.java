@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -29,15 +28,12 @@ import com.example.ivan.champy_v2.single_inprogress.Data;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -165,7 +161,7 @@ public class ChallengeController {
         final int intentId = Integer.parseInt(sHour + sMinute);
         final String stringIntentId = String.valueOf(Integer.parseInt(sHour + sMinute));
 
-        boolean ok = check(sHour + sMinute);
+        boolean ok = checkTimeForWakeUp(sHour + sMinute);
         if (!ok) {
             Toast.makeText(context, "Already Exist!", Toast.LENGTH_SHORT).show();
             return;
@@ -394,6 +390,9 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
+
+                    List<Object> senderProgress = response.body().getData().getSenderProgress();
+
                     Log.i("DoneForToday", "onResponse: VSE OK");
                     SessionManager session = new SessionManager(context);
                     String facebookId = session.getFacebookId();
@@ -405,6 +404,7 @@ public class ChallengeController {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+
                 } else {
                     Log.i("DoneForToday", "onResponse: FAILED ");
                 }
@@ -504,7 +504,7 @@ public class ChallengeController {
                         //cv.clear();
                         if (challenge.getType().equals("567d51c48322f85870fd931b")) {
                             if (challengeStatus.equals("pending")) {
-                                // TODO: 29.08.2016 maybe change for "rejectedBySender"???
+                                // TODO: 29.08.2016 maybe change for "rejectedBySender"??? or comment this line voobwe?
                                 if (!challengeStatus.equals("failedBySender") && !challengeStatus.equals("rejectedByRecipient")) {
 
                                     if (userId.equals(recipient.getId())) {
@@ -589,7 +589,7 @@ public class ChallengeController {
                             if (id.equals(recipient.getId())) {
                                 cv.put("recipient", "true");
                                 cv.put("versus", sender.getName());
-                            } else /*if (id.equals(sender.get_id()))*/{
+                            } else {
                                 cv.put("recipient", "false");
                                 cv.put("versus", recipient.getName());
                             }
@@ -600,7 +600,7 @@ public class ChallengeController {
                         cv.put("duration", duration);
                         cv.put("challenge_id", challenge_id);
                         cv.put("status", challenge_status);
-                        String updated = find(challenge_id);
+                        String updated = checkForUpdateChallenge(challenge_id);
                         cv.put("updated", updated);
                         db.insert("myChallenges", null, cv);
                     }
@@ -624,25 +624,25 @@ public class ChallengeController {
 
 
 
-    private String find(String challenge_id) {
+    private String checkForUpdateChallenge(String challenge_id) {
         DBHelper dbHelper = new DBHelper(firstActivity);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("updated", null, null, null, null, null, null);
-        String ok = "false";
+        String status = "false";
         if (c.moveToFirst()) {
             int colchallenge_id = c.getColumnIndex("challenge_id");
             do {
                 if (c.getString(colchallenge_id).equals(challenge_id)){
-                    ok = c.getString(c.getColumnIndex("updated"));
+                    status = c.getString(c.getColumnIndex("updated"));
                     break;
                 }
             } while (c.moveToNext());
         }
         c.close();
-        return ok;
+        return status;
     }
 
-    private boolean check(String time) {
+    private boolean checkTimeForWakeUp(String time) {
         boolean ok = true;
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
