@@ -567,11 +567,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             tvDuration.setText(item.getDays() + " DAYS TO GO");
             tvDuration.setTextSize(y*2);
 
-            final TextView tvDoneForToday = (TextView)tempView.findViewById(R.id.tvDoneForToday);
+            TextView tvDoneForToday = (TextView)tempView.findViewById(R.id.tvDoneForToday);
             tvDoneForToday.setTypeface(typeface);
-            //tvDoneForToday.setTextSize(y*2);
-
-            TextView tvLevelAndPoints = (TextView) tempView.findViewById(R.id.textViewLevelAndPoints);
+            tvDoneForToday.setTextSize(y*2);
+            final TextView tvLevelAndPoints = (TextView) tempView.findViewById(R.id.textViewLevelAndPoints);
             tvLevelAndPoints.setTextSize(y);
 
             final Button buttonGiveUp = (Button) tempView.findViewById(R.id.buttonGiveUp);
@@ -580,11 +579,65 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             final Button buttonDoneForToday = (Button) tempView.findViewById(R.id.buttonDoneForToday);
             buttonDoneForToday.getLayoutParams().width = x*10;
             buttonDoneForToday.getLayoutParams().height = x*10;
+            final Button buttonShare = (Button) tempView.findViewById(R.id.buttonShare);
+            buttonDoneForToday.getLayoutParams().width = x*10;
+            buttonDoneForToday.getLayoutParams().height = x*10;
+
+//            if (item.getUpdated() != null || !item.getType().equals("Wake Up") || item.getUpdated().equals("false")){
+//                buttonDoneForToday.setBackgroundDrawable(MainActivity.this.getResources().getDrawable(R.drawable.icon_done_for_today));
+//                tvDoneForToday.setVisibility(View.VISIBLE);
+//            }
+
+            if (item.getUpdated().equals("true") || item.getType().equals("Wake Up")) {
+//                buttonDoneForToday.setBackgroundDrawable(MainActivity.this.getResources().getDrawable(R.drawable.icon_share));
+                buttonDoneForToday.setVisibility(View.INVISIBLE);
+                tvDoneForToday.setVisibility(View.INVISIBLE);
+                buttonShare.setVisibility(View.VISIBLE);
+            } else {
+//                buttonDoneForToday.setBackgroundDrawable(MainActivity.this.getResources().getDrawable(R.drawable.icon_done_for_today));
+                buttonDoneForToday.setVisibility(View.VISIBLE);
+                tvDoneForToday.setVisibility(View.VISIBLE);
+            }
 
             final ChallengeController challengeController = new ChallengeController(MainActivity.this, MainActivity.this, 0 , 0, 0);
+            buttonDoneForToday.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i(TAG, "onClick: done for today!");
+                    String id = item.getId();
+                    SQLiteDatabase localSQLiteDatabase = new DBHelper(MainActivity.this).getWritableDatabase();
+                    ContentValues localContentValues = new ContentValues();
+                    localContentValues.put("updated", "true");
+                    localSQLiteDatabase.update("myChallenges", localContentValues, "challenge_id = ?", new String[]{id});
+                    //int i = localSQLiteDatabase.update("updated", localContentValues, "challenge_id = ?", new String[]{id});
+                    try {
+                        challengeController.doneForToday(id);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+//                    buttonDoneForToday.setBackgroundDrawable(MainActivity.this.getResources().getDrawable(R.drawable.icon_share));
+                    findViewById(R.id.tvDoneForToday).setVisibility(View.INVISIBLE);
+                    findViewById(R.id.buttonDoneForToday).setVisibility(View.INVISIBLE);
+                    findViewById(R.id.buttonShare).setVisibility(View.VISIBLE);
+                }
+            });
+
+            buttonShare.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i(TAG, "onClick: share!");
+                    String message = "Hello Moto";
+                    Intent share = new Intent(Intent.ACTION_SEND);
+                    share.setType("text/plain");
+                    share.putExtra(Intent.EXTRA_TEXT, message);
+                    startActivity(Intent.createChooser(share, "How would you like to share?"));
+                }
+            });
+
             buttonGiveUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.i(TAG, "onClick: give up!");
                     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -610,38 +663,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     };
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    builder.setTitle(R.string.areYouSure)
-                            .setMessage(R.string.youWantToGiveUp)
+                    builder.setTitle(R.string.areYouSure).setMessage(R.string.youWantToGiveUp)
                             .setIcon(R.drawable.ic_action_warn)
                             .setCancelable(false)
                             .setPositiveButton(R.string.yes, dialogClickListener)
                             .setNegativeButton(R.string.no, dialogClickListener).show();
 
-                }
-            });
-
-            if (item.getUpdated() != null && !item.getType().equals("Wake Up") && item.getUpdated().equals("false")){
-                buttonDoneForToday.setBackgroundDrawable(MainActivity.this.getResources().getDrawable(R.drawable.icon_done_for_today));
-                tvDoneForToday.setVisibility(View.VISIBLE);
-            }
-
-            buttonDoneForToday.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String id = item.getId();
-                    SQLiteDatabase localSQLiteDatabase = new DBHelper(MainActivity.this).getWritableDatabase();
-                    ContentValues localContentValues = new ContentValues();
-                    localContentValues.put("updated", "true");
-                    localSQLiteDatabase.update("myChallenges", localContentValues, "challenge_id = ?", new String[]{id});
-                    int i = localSQLiteDatabase.update("updated", localContentValues, "challenge_id = ?", new String[]{id});
-                    Log.i(TAG, "SQL SHIT 'i' = " + i);
-                    try {
-                        challengeController.doneForToday(id);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    buttonDoneForToday.setBackgroundDrawable(MainActivity.this.getResources().getDrawable(R.drawable.icon_share));
-                    tvDoneForToday.setVisibility(View.INVISIBLE);
                 }
             });
 

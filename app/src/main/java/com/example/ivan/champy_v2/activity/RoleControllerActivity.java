@@ -69,8 +69,8 @@ public class RoleControllerActivity extends AppCompatActivity {
             mSocket.on("connect", onConnect);
             mSocket.on("connected", onConnected);
             mSocket.connect();
-            goToActivity = new Intent(this, MainActivity.class);
-//            goToActivity = new Intent(this, SettingsActivity.class);
+//            goToActivity = new Intent(this, MainActivity.class);
+            goToActivity = new Intent(this, SettingsActivity.class);
             Log.i("RoleController", "Login Status: TRUE, go to MainActivity...");
         } else {
             mSocket.disconnect();
