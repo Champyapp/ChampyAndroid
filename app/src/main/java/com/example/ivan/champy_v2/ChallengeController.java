@@ -395,16 +395,16 @@ public class ChallengeController {
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     Log.i("DoneForToday", "onResponse: VSE OK");
-                    SessionManager session = new SessionManager(context);
-                    String facebookId = session.getFacebookId();
-                    String gcm = session.getGCM();
-                    String path_to_pic = session.getPathToPic();
-                    try {
-                        AppSync appSync = new AppSync(facebookId, gcm, path_to_pic, context);
-                        appSync.getUserInProgressChallenges(userId);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+//                    SessionManager session = new SessionManager(context);
+//                    String facebookId = session.getFacebookId();
+//                    String gcm = session.getGCM();
+//                    String path_to_pic = session.getPathToPic();
+//                    try {
+//                        AppSync appSync = new AppSync(facebookId, gcm, path_to_pic, context);
+//                        appSync.getUserInProgressChallenges(userId);
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
                 } else {
                     Log.i("DoneForToday", "onResponse: FAILED ");
                 }
@@ -453,11 +453,15 @@ public class ChallengeController {
                         PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, intentId, myIntent, 0);
                         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                         alarmManager.cancel(pendingIntent);
+
                         Log.i("GiveUp", "AlarmManager status: " + alarmManager);
                     }
 
                     Log.i("GiveUp", "onResponse: VSE OK");
                 } else Log.i("GiveUp", "onResponse: FAILED: " + response.code());
+
+                refreshCardsForPendingDuel();
+
             }
 
             @Override
