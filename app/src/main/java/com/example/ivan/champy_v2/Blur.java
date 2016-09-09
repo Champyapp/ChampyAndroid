@@ -11,7 +11,7 @@ import android.renderscript.ScriptIntrinsicBlur;
 import android.view.View;
 
 /**
- * Created by ivan on 23.11.15.
+ * This class is responsible for Blur pictures
  */
 public class Blur {
 

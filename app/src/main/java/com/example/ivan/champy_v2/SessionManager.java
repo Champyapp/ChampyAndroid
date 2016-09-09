@@ -113,19 +113,16 @@ public class SessionManager {
     }
 
     public String getFacebookId() {
-        String s = pref.getString("facebook_id", null);
-        return s;
+        return pref.getString("facebook_id", null);
     }
 
-    //id
+    //user id
     public String getObjectId() {
-        String s = pref.getString("id", null);
-        return s;
+        return pref.getString("id", null);
     }
 
     public String getRefreshPending() {
-        String s = pref.getString("pendingRefresh", null);
-        return s;
+        return pref.getString("pendingRefresh", null);
     }
 
     public void set_duel_pending(String count) {
@@ -134,8 +131,7 @@ public class SessionManager {
     }
 
     public String get_duel_pending() {
-        String s = pref.getString("duel_pending", null);
-        return s;
+        return pref.getString("duel_pending", null);
     }
 
     public void setRefreshFriends(String refresh) {
@@ -144,8 +140,7 @@ public class SessionManager {
     }
 
     public String getRefreshFriends() {
-        String s = pref.getString("friendsRefresh", null);
-        return s;
+        return pref.getString("friendsRefresh", null);
     }
 
     public String getPathToPic() {
@@ -153,8 +148,7 @@ public class SessionManager {
     }
 
     public String getGCM() {
-        String s = pref.getString(KEY_GCM, null);
-        return s;
+        return pref.getString(KEY_GCM, null);
     }
 
     public void setSelfSize(int size) {
@@ -163,8 +157,7 @@ public class SessionManager {
     }
 
     public int getSelfSize() {
-        int s = pref.getInt("SelfSize", 0);
-        return s;
+        return pref.getInt("SelfSize", 0);
     }
 
     public void setChampyOptions(String challenges, String wins, String total, String level){

@@ -136,6 +136,7 @@ public class MyGcmListenerService extends GcmListenerService {
 
     }
 
+
     private void refreshPendingDuels() {
         DBHelper dbHelper = new DBHelper(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -203,6 +204,7 @@ public class MyGcmListenerService extends GcmListenerService {
         });
     }
 
+
     private void notifyChallenges(Intent intent, String message) {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
@@ -219,6 +221,7 @@ public class MyGcmListenerService extends GcmListenerService {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
+
 
     private void notifyForFriends(Intent intent, String message) {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
