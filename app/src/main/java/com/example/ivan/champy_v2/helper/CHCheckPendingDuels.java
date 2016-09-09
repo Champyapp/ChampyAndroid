@@ -13,6 +13,10 @@ import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.data.DBHelper;
 
+/**
+ * this class helps us to check pending duels and if count > 0 then we create new menu
+ * "pending duels" in navigation drawer. Else we hide this menu.
+ */
 public class CHCheckPendingDuels {
 
     Context context;

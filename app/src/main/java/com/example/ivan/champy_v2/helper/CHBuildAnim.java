@@ -14,6 +14,10 @@ import com.bumptech.glide.Glide;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 
+/**
+ * this is class helper for create animation, set right size of circles, count, alpha of animation,
+ * numbers animation and other operation with score in main activity
+ */
 public class CHBuildAnim {
 
 

@@ -23,6 +23,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+/**
+ * class for rendering photo and make blur.
+ */
 public class CHImageModule {
 
     private final Context context;

@@ -453,7 +453,6 @@ public class ChallengeController {
                         PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, intentId, myIntent, 0);
                         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                         alarmManager.cancel(pendingIntent);
-
                         Log.i("GiveUp", "AlarmManager status: " + alarmManager);
                     }
 

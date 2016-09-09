@@ -152,28 +152,28 @@ public class LoginActivity extends AppCompatActivity {
                                         } catch (MalformedURLException e) {
                                             e.printStackTrace();
                                         }
-                                        new Thread(new Runnable() {
-                                            public void run() {
-                                                try {
-                                                    String token_android;
-                                                    InstanceID instanceID = InstanceID.getInstance(LoginActivity.this);
-                                                    token_android = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+                                    new Thread(new Runnable() {
+                                        public void run() {
+                                            try {
+                                                String token_android;
+                                                InstanceID instanceID = InstanceID.getInstance(LoginActivity.this);
+                                                token_android = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
 
-                                                    JSONObject jsonObject = new JSONObject();
-                                                    jsonObject.put("token", token_android);
-                                                    jsonObject.put("timeZone", "-2");
-                                                    String json = jsonObject.toString();
-                                                    Log.i("LoginActivity", "JSON: " + json);
-                                                    Log.i("LoginActivity", "GCM: "  + token_android);
+                                                JSONObject jsonObject = new JSONObject();
+                                                jsonObject.put("token", token_android);
+                                                jsonObject.put("timeZone", "-2");
+                                                String json = jsonObject.toString();
+                                                Log.i("LoginActivity", "JSON: " + json);
+                                                Log.i("LoginActivity", "GCM: "  + token_android);
 
-                                                    getUserData(fb_id, path_to_pic, json);
-                                                    registerUser(fb_id, name, user_email, json);
+                                                getUserData(fb_id, path_to_pic, json);
+                                                registerUser(fb_id, name, user_email, json);
 
-                                                } catch (Exception e) {
-                                                    Log.i("LoginActivity", "Failed to complete token refresh", e);
-                                                }
+                                            } catch (Exception e) {
+                                                Log.i("LoginActivity", "Failed to complete token refresh", e);
                                             }
-                                        }).start();
+                                        }
+                                    }).start();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -204,7 +204,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void getUserData(final String fb_id, final String path_to_pic, String gcm) throws JSONException {
-
         AppSync sync = new AppSync(fb_id, gcm, path_to_pic, this);
         sync.getToken(fb_id, gcm);
         sync.getUserProfile();

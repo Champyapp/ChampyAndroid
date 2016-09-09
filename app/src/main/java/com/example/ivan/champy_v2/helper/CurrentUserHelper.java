@@ -7,7 +7,8 @@ import com.example.ivan.champy_v2.SessionManager;
 import java.util.HashMap;
 
 /**
- * Created by azinecdevelopment on 8/25/16.
+ * This class so much help us, when we need to take users data in current session.
+ * So we can call needled method and be happy.
  */
 public class CurrentUserHelper {
 
@@ -31,6 +32,14 @@ public class CurrentUserHelper {
 
     public String getGCM() {
         return this.currentSession.getGCM();
+    }
+
+    public String getPathToPic() {
+        return this.currentSession.getPathToPic();
+    }
+
+    public String sasd() {
+        return this.currentSession.get_duel_pending();
     }
 
     public String getUserObjectId() {

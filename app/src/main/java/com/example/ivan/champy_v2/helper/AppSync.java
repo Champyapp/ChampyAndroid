@@ -1,6 +1,5 @@
 package com.example.ivan.champy_v2.helper;
 
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;

@@ -17,7 +17,8 @@ import com.example.ivan.champy_v2.R;
 import static java.lang.Math.round;
 
 /**
- * Created by ivan on 11.01.16.
+ * this class help us to create view in login activity. We create right size of text on the screen,
+ * right size of button "login" because we 'love' facebook's buttons.
  */
 public class CHInitializeLogin {
 
