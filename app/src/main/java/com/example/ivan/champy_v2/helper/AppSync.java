@@ -62,6 +62,7 @@ public class AppSync {
     }
 
 
+    //
     public String getToken(String fb_id, String gcm)  throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("facebookId", fb_id);

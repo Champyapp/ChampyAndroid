@@ -162,11 +162,11 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        try {
-            mSocket = IO.socket("http://46.101.213.24:3007");
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            mSocket = IO.socket("http://46.101.213.24:3007");
+//        } catch (URISyntaxException e) {
+//            throw new RuntimeException(e);
+//        }
         Log.i(TAG, "onCreate");
     }
 
@@ -177,12 +177,12 @@ public class FriendsFragment extends Fragment {
 
 //        mSocket.on("connect", onConnect);
 //        mSocket.on("connected", onConnected);
-//
+
 //        mSocket.on("Relationship:new:accepted", modifiedRelationship);
 //        mSocket.on("Relationship:new:removed", modifiedRelationship);
 //        mSocket.on("Relationship:created:accepted", modifiedRelationship);
 //        mSocket.on("Relationship:created:removed", modifiedRelationship);
-//
+
 //        mSocket.connect();
 
     }
@@ -290,7 +290,7 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSocket.close();
+//        mSocket.close();
         Log.i(TAG, "onDestroy");
     }
 

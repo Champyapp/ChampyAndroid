@@ -192,20 +192,6 @@ public class PendingFragment extends Fragment {
     public void onStart() {
         super.onStart();
         Log.i(TAG, "onStart");
-
-//        mSocket.on("connect", onConnect);
-//        mSocket.on("connected", onConnected);
-//
-//        mSocket.on("Relationship:new", modifiedRelationship);   // incoming new request
-//        mSocket.on("Relationship:new:accepted", modifiedRelationship);
-//        mSocket.on("Relationship:new:removed", modifiedRelationship);
-//        mSocket.on("Relationship:accepted", modifiedRelationship);  // incoming request
-//
-//        mSocket.on("Relationship:created", modifiedRelationship); // my request
-//        mSocket.on("Relationship:created:accepted", modifiedRelationship); // my request accepted
-//        mSocket.on("Relationship:created:removed", modifiedRelationship);  // my request removed
-//        mSocket.connect();
-
     }
 
     @Override
@@ -281,6 +267,19 @@ public class PendingFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.i(TAG, "onActivityCreated");
+
+        mSocket.on("connect", onConnect);
+        mSocket.on("connected", onConnected);
+
+        mSocket.on("Relationship:new", modifiedRelationship);   // incoming new request
+        mSocket.on("Relationship:new:accepted", modifiedRelationship);
+        mSocket.on("Relationship:new:removed", modifiedRelationship);
+        mSocket.on("Relationship:accepted", modifiedRelationship);  // incoming request
+
+        mSocket.on("Relationship:created", modifiedRelationship); // my request
+        mSocket.on("Relationship:created:accepted", modifiedRelationship); // my request accepted
+        mSocket.on("Relationship:created:removed", modifiedRelationship);  // my request removed
+        mSocket.connect();
     }
 
     @Override
@@ -326,13 +325,13 @@ public class PendingFragment extends Fragment {
         public void call(final Object... args) {
             CurrentUserHelper currentUser = new CurrentUserHelper(getContext());
             mSocket.emit("ready", currentUser.getToken());
-            Log.i(TAG, "Sockets: onConnect");
+            Log.i(TAG, "Sockets: connecting...");
         }
     };
     private Emitter.Listener onConnected = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            Log.i(TAG, "Sockets: connected okay");
+            Log.i(TAG, "Sockets: connected!");
         }
     };
     protected Emitter.Listener modifiedRelationship = new Emitter.Listener() {
