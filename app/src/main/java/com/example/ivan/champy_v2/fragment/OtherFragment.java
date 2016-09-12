@@ -24,14 +24,12 @@ import com.example.ivan.champy_v2.adapter.OtherAdapter;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.interfaces.*;
-import com.example.ivan.champy_v2.interfaces.Friends;
 import com.example.ivan.champy_v2.model.User.Data;
 import com.example.ivan.champy_v2.model.User.User;
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.melnykov.fab.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,7 +57,124 @@ public class OtherFragment extends Fragment {
     public static final String TAG = "OtherFragment";
     private int mPage;
     public View gView;
-    public SwipeRefreshLayout gSwipeRefreshlayout;
+    public SwipeRefreshLayout swipeRefreshLayout;
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.i(TAG, "onAttach");
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.i(TAG, "onCreate");
+        FacebookSdk.sdkInitialize(getContext());
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_first, container, false);
+        final List<Friend> friends = new ArrayList<Friend>();
+        Log.i(TAG, "onCreateView");
+        DBHelper dbHelper = new DBHelper(getContext());
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        SessionManager sessionManager = new SessionManager(getContext());
+        HashMap<String, String> user;
+        user = sessionManager.getUserDetails();
+        final String id = user.get("id");
+
+        Cursor c = db.query("mytable", null, null, null, null, null, null);
+        if (c.moveToFirst()) {
+            int idColIndex = c.getColumnIndex("id");
+            int nameColIndex = c.getColumnIndex("name");
+            int photoColIndex = c.getColumnIndex("photo");
+            int index = c.getColumnIndex("user_id");
+            int challenges = c.getColumnIndex("challenges");
+            int wins = c.getColumnIndex("wins");
+            int total = c.getColumnIndex("total");
+            int level = c.getColumnIndex("level");
+            do {
+                if (!getContact(c.getString(index)))
+                    friends.add(new Friend(
+                            c.getString(nameColIndex),
+                            c.getString(photoColIndex),
+                            c.getString(index),
+                            c.getString(challenges),
+                            c.getString(wins),
+                            c.getString(total),
+                            c.getString(level)));
+            } while (c.moveToNext());
+        }
+        c.close();
+
+        final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
+        final OtherAdapter adapter = new OtherAdapter(friends, getContext(), getActivity());
+
+        rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvContacts.setAdapter(adapter);
+
+        swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshView(swipeRefreshLayout, gView);
+            }
+        });
+        this.gView = view;
+
+        return view;
+
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.i(TAG, "onActivityCreated");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.i(TAG, "onStart");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i(TAG, "onPause");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.i(TAG, "onStop");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.i(TAG, "onDestroyView");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "onDestroy");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.i(TAG, "onDetach");
+    }
 
 
     private void refreshView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
@@ -192,122 +307,6 @@ public class OtherFragment extends Fragment {
             }
         });
         Log.i(TAG, "refreshFriendsView: finished");
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Log.i(TAG, "onAttach");
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate");
-        FacebookSdk.sdkInitialize(getContext());
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_first, container, false);
-        final List<Friend> friends = new ArrayList<Friend>();
-        Log.i(TAG, "onCreateView");
-        DBHelper dbHelper = new DBHelper(getContext());
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        SessionManager sessionManager = new SessionManager(getContext());
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        final String id = user.get("id");
-
-        Cursor c = db.query("mytable", null, null, null, null, null, null);
-        if (c.moveToFirst()) {
-            int idColIndex = c.getColumnIndex("id");
-            int nameColIndex = c.getColumnIndex("name");
-            int photoColIndex = c.getColumnIndex("photo");
-            int index = c.getColumnIndex("user_id");
-            int challenges = c.getColumnIndex("challenges");
-            int wins = c.getColumnIndex("wins");
-            int total = c.getColumnIndex("total");
-            int level = c.getColumnIndex("level");
-            do {
-                if (!getContact(c.getString(index)))
-                    friends.add(new Friend(
-                            c.getString(nameColIndex),
-                            c.getString(photoColIndex),
-                            c.getString(index),
-                            c.getString(challenges),
-                            c.getString(wins),
-                            c.getString(total),
-                            c.getString(level)));
-            } while (c.moveToNext());
-        }
-        c.close();
-
-        final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-        final OtherAdapter adapter = new OtherAdapter(friends, getContext(), getActivity());
-
-        rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
-        rvContacts.setAdapter(adapter);
-
-        gSwipeRefreshlayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
-        gSwipeRefreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshView(gSwipeRefreshlayout, gView);
-            }
-        });
-        this.gView = view;
-
-        return view;
-
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.i(TAG, "onActivityCreated");
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.i(TAG, "onStart");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.i(TAG, "onResume");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.i(TAG, "onPause");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.i(TAG, "onStop");
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.i(TAG, "onDestroyView");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.i(TAG, "onDestroy");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.i(TAG, "onDetach");
     }
 
 

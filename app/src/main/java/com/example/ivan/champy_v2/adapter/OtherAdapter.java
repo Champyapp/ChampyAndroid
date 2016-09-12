@@ -26,6 +26,12 @@ import com.example.ivan.champy_v2.model.Other;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.interfaces.Friends;
+import com.facebook.AccessToken;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.share.model.AppInviteContent;
+import com.facebook.share.widget.AppInviteDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,6 +52,7 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
     final private String API_URL = "http://46.101.213.24:3007";
     final private String TAG = "myLogs";
     private List<Friend> mContacts;
+    private com.facebook.CallbackManager CallbackManager;
     private Context _context;
     int selectedPos = 0;
     Activity activity;
@@ -63,10 +70,10 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
+        FacebookSdk.sdkInitialize(context);
         LayoutInflater inflater = LayoutInflater.from(context);
         // Inflate the custom layout
         View contactView = inflater.inflate(R.layout.item_friends, parent, false);
-
         TextView tvUserName = (TextView)contactView.findViewById(R.id.userName);
         Typeface typeFace = Typeface.createFromAsset(context.getAssets(), "fonts/bebasneue.ttf");
         tvUserName.setTypeface(typeFace);
@@ -150,7 +157,6 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
             TextView counterWinsOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_wins);
             TextView counterTotalOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
 
-            // TODO: 30.08.2016 CHANGE TOTAL FOR TOTAL
             counterInProgressOpen.setText(contact.getmTotal());
             counterWinsOpen.setText(contact.getmWins());
             counterTotalOpen.setText(contact.getmChallenges());
@@ -222,7 +228,60 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
                     
                     String friend = mContacts.get(position).getID();
 
-                    if (friend != null) {
+                    if (friend == null) {
+                        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which) {
+                                    case DialogInterface.BUTTON_POSITIVE:
+                                        String appLinkUrl, previewImageUrl;
+
+                                        appLinkUrl = "https://fb.me/583663125129793";
+                                        previewImageUrl = "http://champyapp.com/images/Icon.png";
+
+                                        if (AccessToken.getCurrentAccessToken() != null) {
+                                            FacebookSdk.sdkInitialize(_context);
+                                            CallbackManager = com.facebook.CallbackManager.Factory.create();
+                                            FacebookCallback<AppInviteDialog.Result> facebookCallback= new FacebookCallback<AppInviteDialog.Result>() {
+                                                @Override
+                                                public void onSuccess(AppInviteDialog.Result result) {
+                                                    Log.i(TAG, "InviteCallback - SUCCESS!" + result.getData());
+                                                }
+
+                                                @Override
+                                                public void onCancel() {
+                                                    Log.i(TAG, "InviteCallback - CANCEL!");
+                                                }
+
+                                                @Override
+                                                public void onError(FacebookException e) {
+                                                    Log.e(TAG, "InviteCallback - ERROR! " + e.getMessage());
+                                                }
+
+                                            };
+                                            AppInviteDialog appInviteDialog = new AppInviteDialog(activity);
+                                            if (AppInviteDialog.canShow()) {
+                                                AppInviteContent.Builder content = new AppInviteContent.Builder();
+                                                content.setApplinkUrl(appLinkUrl);
+                                                content.setPreviewImageUrl(previewImageUrl);
+                                                AppInviteContent appInviteContent = content.build();
+                                                appInviteDialog.registerCallback(CallbackManager, facebookCallback);
+                                                AppInviteDialog.show(activity, appInviteContent);
+                                            }
+                                        }
+                                        break;
+                                    case DialogInterface.BUTTON_NEGATIVE:
+                                        break;
+                                }
+                            }
+                        };
+                        AlertDialog.Builder builder = new AlertDialog.Builder(_context);
+                        builder.setMessage("This user has not installed Champy. Do you want to send invite?")
+                                .setPositiveButton("Yes", dialogClickListener)
+                                .setNegativeButton("No", dialogClickListener)
+                                .show();
+                    }
+                    /*if (friend != null)*/  else {
                         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
                         DBHelper dbHelper = new DBHelper(_context);
                         final SQLiteDatabase db = dbHelper.getWritableDatabase();
