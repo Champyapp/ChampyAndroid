@@ -87,7 +87,7 @@ public class OtherFragment extends Fragment {
                         @Override
                         public void onCompleted(JSONArray  array, GraphResponse response) {
                             if (array.length() == 0) {
-                                Toast.makeText(getContext(), "You have no friends", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "No one of your friends has not installed Champy!", Toast.LENGTH_SHORT).show();
                                 swipeRefreshLayout.setRefreshing(false);
                                 return;
                             }
@@ -127,7 +127,7 @@ public class OtherFragment extends Fragment {
                                                 cv.put("wins", "" + data.getSuccessChallenges());
                                                 cv.put("total", "" + data.getScore());
                                                 cv.put("level", "" + data.getLevel().getNumber());
-                                                Log.i("Users", "user: " + user_name + " photo: " + photo);
+                                                //Log.i("Users", "user: " + user_name + " photo: " + photo);
 
                                                 // отображаем друзей в списке
                                                 if (!getContact(data.get_id())) {
@@ -145,7 +145,6 @@ public class OtherFragment extends Fragment {
                                                     Log.i("stat", "DBase: not added " + user_name);
                                                 }
                                                 swipeRefreshLayout.setRefreshing(false);
-                                                Log.i(TAG, "refreshView: finished");
                                             } else {
                                                 // отображение всего у человека, который не установил champy
                                                 URL profile_pic = null;
@@ -167,7 +166,6 @@ public class OtherFragment extends Fragment {
                                                 db.insert("mytable", null, cv);
 
                                                 RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-                                                Log.i(TAG, "Friends: " + newFriends.toString());
                                                 OtherAdapter adapter1 = new OtherAdapter(newFriends, getContext(), getActivity());
                                                 rvContacts.setAdapter(adapter1);
                                                 swipeRefreshLayout.setRefreshing(false);
@@ -193,6 +191,7 @@ public class OtherFragment extends Fragment {
 
             }
         });
+        Log.i(TAG, "refreshView: finished");
     }
 
     @Override

@@ -67,7 +67,7 @@ public class FriendsFragment extends Fragment {
         int clearCount = db.delete("friends", null, null);
         final ContentValues cv = new ContentValues();
 
-        com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
+        final com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
 
         // Проверка на оффлайн вкладке FriendsActivity
         OfflineMode offlineMode = new OfflineMode();
@@ -81,7 +81,7 @@ public class FriendsFragment extends Fragment {
                         List<Datum> data = response.body().getData();
                         for (int i = 0; i < data.size(); i++) {
                             Datum datum = data.get(i);
-                            if (datum.getFriend() != null) {
+                            if (datum.getFriend() != null /*&& datum.getFriend() != friends*/) {
                                 if (datum.getStatus().toString().equals("true")) {
                                     if (datum.getOwner().get_id().equals(id)) {
                                         Friend_ friend = datum.getFriend();

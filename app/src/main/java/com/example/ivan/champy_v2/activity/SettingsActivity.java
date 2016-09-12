@@ -59,6 +59,7 @@ import retrofit.Callback;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
+import retrofit.http.POST;
 
 public class SettingsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -270,13 +271,29 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                                     String token = user.get("token");
 
                                     Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-
                                     Update_user update_user = retrofit.create(Update_user.class);
+
+                                    Call<User> callSurrenderAllChallenges = update_user.surrenderAllChallenge(token);
+                                    callSurrenderAllChallenges.enqueue(new Callback<User>() {
+                                        @Override
+                                        public void onResponse(Response<User> response, Retrofit retrofit) {
+                                            if (response.isSuccess()) {
+                                                Log.i(TAG, "onResponseSurrenderAllChallenges: vse ok");
+                                            } else Log.i(TAG, "onResponse: failed " + response.message());
+                                        }
+
+                                        @Override
+                                        public void onFailure(Throwable t) {
+                                            Log.i(TAG, "onFailureSurrenderAllChallenges: vse hyinja");
+                                        }
+                                    });
+
                                     Call<Delete> call = update_user.delete_user(id, token);
                                     call.enqueue(new Callback<Delete>() {
                                         @Override
                                         public void onResponse(Response<Delete> response, Retrofit retrofit) {
                                             if (response.isSuccess()) {
+                                                Log.i(TAG, "onResponseDeleteUser: Vse ok");
                                                 String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
                                                 File file = new File(path, "blured2.jpg");
                                                 DBHelper dbHelper = new DBHelper(getApplicationContext());
@@ -287,12 +304,12 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                                                 // TODO: 05.09.2016 alarmManager.cancel(all!);
                                                 db.delete("myChallenges", null, null);
                                                 file.delete();
-                                            }
+                                            } else Log.i(TAG, "onResponse: failed - " + response.message());
                                         }
 
                                         @Override
                                         public void onFailure(Throwable t) {
-
+                                            Log.i(TAG, "onFailureDeleteUser: vse hyinja");
                                         }
                                     });
                                     sessionManager.logoutUser();

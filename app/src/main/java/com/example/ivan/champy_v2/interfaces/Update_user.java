@@ -11,6 +11,7 @@ import retrofit.http.DELETE;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.Multipart;
+import retrofit.http.POST;
 import retrofit.http.PUT;
 import retrofit.http.Part;
 import retrofit.http.Path;
@@ -20,6 +21,7 @@ import retrofit.http.Query;
  * Created by ivan on 02.03.16.
  */
 public interface Update_user {
+
     @FormUrlEncoded
     @PUT("/v1/users/{id}")
     Call<User> update_user_name(
@@ -27,6 +29,7 @@ public interface Update_user {
       @Query("token") String token,
       @Field("name") String name
     );
+
     @Multipart
     @PUT("/v1/users/{id}/photo")
     Call<User> update_photo(
@@ -46,6 +49,12 @@ public interface Update_user {
     @DELETE("/v1/users/{id}")
     Call<Delete> delete_user(
             @Path("id") String id,
+            @Query("token") String token
+    );
+
+    // check this
+    @POST("/v1/users/surrender")
+    Call<User> surrenderAllChallenge(
             @Query("token") String token
     );
 
