@@ -1,8 +1,6 @@
 package com.example.ivan.champy_v2.activity;
 
-import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -59,7 +57,6 @@ import retrofit.Callback;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
-import retrofit.http.POST;
 
 public class SettingsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -278,8 +275,8 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                                         @Override
                                         public void onResponse(Response<User> response, Retrofit retrofit) {
                                             if (response.isSuccess()) {
-                                                Log.i(TAG, "onResponseSurrenderAllChallenges: vse ok");
-                                            } else Log.i(TAG, "onResponse: failed " + response.message());
+                                                   Log.i(TAG, "onResponseSurrenderAllChallenges: vse ok");
+                                            } else Log.i(TAG, "onResponseSurrenderAllChallenges: failed " + response.message());
                                         }
 
                                         @Override
@@ -288,23 +285,23 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                                         }
                                     });
 
-                                    Call<Delete> call = update_user.delete_user(id, token);
-                                    call.enqueue(new Callback<Delete>() {
+                                    Call<Delete> callForDeleteUser = update_user.delete_user(id, token);
+                                    callForDeleteUser.enqueue(new Callback<Delete>() {
                                         @Override
                                         public void onResponse(Response<Delete> response, Retrofit retrofit) {
                                             if (response.isSuccess()) {
-                                                Log.i(TAG, "onResponseDeleteUser: Vse ok");
                                                 String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
                                                 File file = new File(path, "blured2.jpg");
                                                 DBHelper dbHelper = new DBHelper(getApplicationContext());
                                                 final SQLiteDatabase db = dbHelper.getWritableDatabase();
                                                 int clearCount = db.delete("pending", null, null);
                                                 clearCount = db.delete("pending_duel", null, null);
+                                                clearCount = db.delete("duel", null, null);
                                                 clearCount = db.delete("friends", null, null);
-                                                // TODO: 05.09.2016 alarmManager.cancel(all!);
-                                                db.delete("myChallenges", null, null);
+                                                clearCount = db.delete("myChallenges", null, null);
                                                 file.delete();
-                                            } else Log.i(TAG, "onResponse: failed - " + response.message());
+                                                   Log.i(TAG, "onResponseDeleteUser: Vse ok");
+                                            } else Log.i(TAG, "onResponseDeleteUser: failed " + response.message());
                                         }
 
                                         @Override
@@ -312,6 +309,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                                             Log.i(TAG, "onFailureDeleteUser: vse hyinja");
                                         }
                                     });
+
                                     sessionManager.logoutUser();
                                     LoginManager.getInstance().logOut();
                                     Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
@@ -522,7 +520,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
 
         Update_user update_user = retrofit.create(Update_user.class);
         Profile_data profile_data = new Profile_data(map);
-        Call<User> call = update_user.update_profile_oprions(id, token, profile_data);
+        Call<User> call = update_user.update_profile_options(id, token, profile_data);
 
         call.enqueue(new Callback<User>() {
             @Override

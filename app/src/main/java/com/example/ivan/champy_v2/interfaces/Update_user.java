@@ -40,7 +40,7 @@ public interface Update_user {
 
     //@FormUrlEncoded
     @PUT("/v1/users/{id}/profile-options")
-    Call<User> update_profile_oprions(
+    Call<User> update_profile_options(
             @Path("id") String id,
             @Query("token") String token,
             @Body Profile_data profile_data

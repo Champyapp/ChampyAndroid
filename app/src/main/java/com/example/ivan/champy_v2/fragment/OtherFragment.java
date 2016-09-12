@@ -191,7 +191,7 @@ public class OtherFragment extends Fragment {
 
             }
         });
-        Log.i(TAG, "refreshView: finished");
+        Log.i(TAG, "refreshFriendsView: finished");
     }
 
     @Override

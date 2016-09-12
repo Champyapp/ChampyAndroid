@@ -25,12 +25,14 @@ public class CHBuildAnim {
         int width = activity.getWindowManager().getDefaultDisplay().getWidth();
         CHMakeResponsiveScore chMakeResponsiveScore = new CHMakeResponsiveScore(activity);
         chMakeResponsiveScore.makeResponsiveScore(width);
-        ImageView mImageViewFilling0 = (ImageView)activity.findViewById(R.id.imageView_challenges_animation);
-        ImageView mImageViewFilling1 = (ImageView)activity.findViewById(R.id.imageView_wins_animation);
-        ImageView mImageViewFilling2 = (ImageView)activity.findViewById(R.id.imageView_total_animation);
-        ((AnimationDrawable) mImageViewFilling0.getBackground()).start();
-        ((AnimationDrawable) mImageViewFilling1.getBackground()).start();
-        ((AnimationDrawable) mImageViewFilling2.getBackground()).start();
+
+//          //uncomment if need animation in main activity
+//        ImageView mImageViewFilling0 = (ImageView)activity.findViewById(R.id.imageView_challenges_animation);
+//        ImageView mImageViewFilling1 = (ImageView)activity.findViewById(R.id.imageView_wins_animation);
+//        ImageView mImageViewFilling2 = (ImageView)activity.findViewById(R.id.imageView_total_animation);
+//        ((AnimationDrawable) mImageViewFilling0.getBackground()).start();
+//        ((AnimationDrawable) mImageViewFilling1.getBackground()).start();
+//        ((AnimationDrawable) mImageViewFilling2.getBackground()).start();
 
         final TextView tvChallengesCounter = (TextView)activity.findViewById(R.id.textViewChallengesCounter);
         final TextView tvWinsCounter       = (TextView)activity.findViewById(R.id.textViewWinsCounter);
