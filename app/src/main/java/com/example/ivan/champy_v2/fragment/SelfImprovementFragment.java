@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -180,13 +181,16 @@ public class SelfImprovementFragment extends Fragment {
                     }
                 };
 
-                AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
+
+//                DialogFragment builder = new DialogFragment().getDialog();
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle(R.string.areYouSure)
                         .setMessage(R.string.youWannaCreateThisChall)
                         .setIcon(R.drawable.self_blue)
                         .setCancelable(false)
                         .setPositiveButton(R.string.yes, dialogClickListener)
                         .setNegativeButton(R.string.no,  dialogClickListener).show();
+
             }
         });
         return view;

@@ -49,6 +49,7 @@ import com.example.ivan.champy_v2.adapter.CustomPagerAdapter;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHBuildAnim;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
+import com.example.ivan.champy_v2.helper.CHUploadPhoto;
 import com.example.ivan.champy_v2.interfaces.Update_user;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
 import com.example.ivan.champy_v2.model.User.User;
@@ -334,35 +335,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    public void uploadPhoto(String path) {
-        final String API_URL = "http://46.101.213.24:3007";
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        SessionManager sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        String token = user.get("token");
-
-        String id = user.get("id");
-        File file = new File(path);
-        Log.i("MainActivity", "UploadPhotoFile: " + file);
-        RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), file);
-
-        Update_user update_user = retrofit.create(Update_user.class);
-        Call<User> call = update_user.update_photo(id, token, requestBody);
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Response<User> response, Retrofit retrofit) {
-                if (response.isSuccess()) Log.d("UploadPhoto", "Status: VSE OK");
-                else Log.d("UploadPhoto", "Status :" + response.code());
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                Log.d(TAG, "Status: " + t);
-            }
-        });
-    }
-
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
@@ -405,7 +377,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 e.printStackTrace();
             }
 
-            uploadPhoto(Uri.fromFile(file).getPath());
+            CHUploadPhoto uploadPhoto = new CHUploadPhoto(getApplicationContext());
+            uploadPhoto.uploadPhotoForAPI(Uri.fromFile(file).getPath());
 
             File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
             // Create imageDir

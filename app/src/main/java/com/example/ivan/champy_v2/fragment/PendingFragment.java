@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,8 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.ivan.champy_v2.activity.FriendsActivity;
-import com.example.ivan.champy_v2.adapter.FriendsAdapter;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.interfaces.CustomItemClickListener;
 import com.example.ivan.champy_v2.data.DBHelper;
@@ -29,21 +26,13 @@ import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.model.Friend.Datum;
 import com.example.ivan.champy_v2.model.Friend.Friend_;
 import com.example.ivan.champy_v2.model.Friend.Owner;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.RunnableFuture;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -58,7 +47,7 @@ public class PendingFragment extends Fragment {
     final String API_URL = "http://46.101.213.24:3007";
 
     public View gView;
-    public SwipeRefreshLayout gSwipeRefreshlayout;
+    public SwipeRefreshLayout swipeRefreshLayout;
     private int mPage;
     private Socket mSocket;
 
@@ -93,7 +82,7 @@ public class PendingFragment extends Fragment {
                                     Friend_ friend = datum.getFriend();
                                     cv.put("name", friend.getName());
                                     if (friend.getPhoto() != null)
-                                        cv.put("photo", friend.getPhoto().getMedium());
+                                         cv.put("photo", friend.getPhoto().getMedium());
                                     else cv.put("photo", "");
                                     cv.put("user_id", friend.getId());
                                     cv.put("inProgressChallengesCount", friend.getInProgressChallengesCount());
@@ -105,7 +94,7 @@ public class PendingFragment extends Fragment {
                                     Owner friend = datum.getOwner();
                                     cv.put("name", friend.getName());
                                     if (friend.getPhoto() != null)
-                                        cv.put("photo", friend.getPhoto().getMedium());
+                                         cv.put("photo", friend.getPhoto().getMedium());
                                     else cv.put("photo", "");
                                     cv.put("user_id", friend.get_id());
                                     cv.put("inProgressChallengesCount", friend.getInProgressChallengesCount());
@@ -245,17 +234,17 @@ public class PendingFragment extends Fragment {
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         rvContacts.setAdapter(adapter);
 
-        gSwipeRefreshlayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
-        gSwipeRefreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshView(gSwipeRefreshlayout, gView);
+                refreshView(swipeRefreshLayout, gView);
             }
         });
         this.gView = view;
 
         if (refresh.equals("true")) {
-            refreshView(gSwipeRefreshlayout, gView);
+            refreshView(swipeRefreshLayout, gView);
             sessionManager.setRefreshFriends("false");
         }
 
@@ -341,7 +330,7 @@ public class PendingFragment extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    refreshView(gSwipeRefreshlayout, gView);
+                    refreshView(swipeRefreshLayout, gView);
                 }
             });
             Log.i(TAG, "Sockets: modifiedRelationship");
