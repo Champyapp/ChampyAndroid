@@ -335,7 +335,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
         protected Bitmap doInBackground(String... urls) {

@@ -77,7 +77,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         ImageView ivUser2 = (ImageView)findViewById(R.id.user2);
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
 
-        textViewYouVsFriend.setText("Duel with " + name);
+        textViewYouVsFriend.setText(getString(R.string.duel_with) + name);
         textViewYouVsFriend.setTypeface(typeface);
         tvIChallengeMyFriendTo.setTypeface(typeface);
         ivUser2.getLayoutParams().width = x;

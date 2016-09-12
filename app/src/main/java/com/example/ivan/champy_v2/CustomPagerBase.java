@@ -17,7 +17,8 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
 
 /**
- * тут анімації карточок, то-се.
+ * This class is responsible for cards animation [MainActivity]
+ * Their size, alpha, movement, position and other operation
  */
 public class CustomPagerBase {
 

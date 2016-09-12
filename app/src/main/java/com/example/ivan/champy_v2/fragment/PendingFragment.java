@@ -64,7 +64,6 @@ public class PendingFragment extends Fragment {
             mSocket = IO.socket("http://46.101.213.24:3007");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
-            // maybe here: return; ?
         }
     }
 
@@ -190,7 +189,7 @@ public class PendingFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSocket.close();
+        mSocket.off();
         Log.i(TAG, "onDestroy");
     }
 

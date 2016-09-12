@@ -182,5 +182,6 @@
     <string name="duel_challenge_with">Duel Challenge \n with</string>
     <string name="self_improvement_challenge">self-improvement challenge</string>
     <string name="done_for_today">Done for today?</string>
+    <string name="duel_with">"Duel with "</string>
 
 </resources>

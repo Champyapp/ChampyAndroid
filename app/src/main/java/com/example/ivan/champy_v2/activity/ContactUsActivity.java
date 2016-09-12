@@ -152,33 +152,54 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
     }
 
 
+//    private Drawable Init(String path) throws FileNotFoundException {
+//        File file = new File(path, "blured2.jpg");
+//        Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
+//        Drawable dr = new BitmapDrawable(getResources(), bitmap);
+//        dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
+//        return dr;
+//    }
+
     private Drawable Init(String path) throws FileNotFoundException {
         File file = new File(path, "blured2.jpg");
         Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
-        Drawable dr = new BitmapDrawable(getResources(), bitmap);
+        Drawable dr = new BitmapDrawable(this.getResources(), bitmap);
         dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
+        ImageView background = (ImageView) findViewById(R.id.contact_us_background);
+        background.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        background.setImageDrawable(dr);
         return dr;
     }
 
 
     protected void sendEmail() {
         EditText subject = (EditText) findViewById(R.id.editText2);
-        EditText body = (EditText)findViewById(R.id.editText);
+        EditText body    = (EditText) findViewById(R.id.editText);
+
+        // TODO: 12.09.2016 change this email for real;
         String[] recipients = {"skill.bereg@gmail.com"};
         Intent email = new Intent(Intent.ACTION_SEND, Uri.parse("mailto:"));
         email.setType("message/rfc822");
-
         email.putExtra(Intent.EXTRA_EMAIL, recipients);
         email.putExtra(Intent.EXTRA_SUBJECT, subject.getText().toString());
         email.putExtra(Intent.EXTRA_TEXT, body.getText().toString());
 
         try {
-            // the user can choose the email client
-            startActivity(Intent.createChooser(email, "Choose an email client from..."));
+            if (!subject.getText().toString().isEmpty() && !body.getText().toString().isEmpty()) {
+                // the user can choose the email client
+                startActivity(Intent.createChooser(email, "Choose an email client from..."));
+            } else {
+                Toast.makeText(ContactUsActivity.this, "Complete empty fields", Toast.LENGTH_SHORT).show();
+            }
         } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(ContactUsActivity.this, "No email client installed.",
-                    Toast.LENGTH_LONG).show();
+            Toast.makeText(ContactUsActivity.this, "No email client installed.", Toast.LENGTH_SHORT).show();
         }
+
+//        subject.setText("");
+//        body.setText("");
+//        Toast.makeText(ContactUsActivity.this, "Sent!", Toast.LENGTH_SHORT).show();
+
+
     }
 
 
