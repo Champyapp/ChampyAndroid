@@ -46,6 +46,7 @@ import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.adapter.CustomPagerAdapter;
+import com.example.ivan.champy_v2.adapter.MainActivityCardsAdapter;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHBuildAnim;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
@@ -112,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
 
         RelativeLayout cards = (RelativeLayout)findViewById(R.id.cards);
-        CustomAdapter adapter = new CustomAdapter(this, SelfImprovement_model.generate(this));
+        MainActivityCardsAdapter adapter = new MainActivityCardsAdapter(this, SelfImprovement_model.generate(this), activity);
         if (adapter.dataCount() > 0) {
             pager = new CustomPagerBase(this,  cards, adapter);
             pager.preparePager(0);
@@ -485,153 +486,153 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    public class CustomAdapter extends CustomPagerAdapter {
-
-        private ArrayList<SelfImprovement_model> arrayList;
-        public CustomAdapter(Context context, ArrayList<SelfImprovement_model> marrayList) {
-            super(context);
-            this.arrayList = marrayList;
-        }
-
-        @Override
-        public View getView(int position, View convertView) {
-            View tempView = convertView;
-            if(tempView == null) {
-                LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                tempView = inflater.inflate(R.layout.single_card_fragment_self, null, false);
-            }
-            final SelfImprovement_model item = arrayList.get(position);
-            ImageView cardImage = (ImageView)tempView.findViewById(R.id.cardImage);
-            int x = round(getWindowManager().getDefaultDisplay().getWidth() / 100);
-            int y = round(getWindowManager().getDefaultDisplay().getHeight() / 100);
-            cardImage.getLayoutParams().width  = x*65;
-            cardImage.getLayoutParams().height = y*50;
-            if (y > 10) y = 10;
-
-            final ChallengeController challengeController = new ChallengeController(MainActivity.this, MainActivity.this, 0 , 0, 0);
-
-            TextView tvSelfImprovement  = (TextView) tempView.findViewById(R.id.textViewSIC);
-            tvSelfImprovement.setText(item.getType());
-            String itemGoal = item.getGoal();
-            ImageView imageView = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
-
-            switch (item.getType()) {
-                case "Wake Up":
-                    imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeup_white));
-                    itemGoal = item.getChallengeName();
-                    break;
-                case "Duel":
-                    itemGoal = item.getGoal();
-                    imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.duel_white));
-                    break;
-                case "Self-Improvement":
-                    imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.self_white));
-                    break;
-            }
-
-            tvSelfImprovement.setTextSize((float)(y*1.3));
-            Typeface typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
-            tvSelfImprovement.setTypeface(typeface);
-
-            TextView tvChallengeName = (TextView) tempView.findViewById(R.id.textViewChallengeName);
-            tvChallengeName.setText(itemGoal);
-            tvChallengeName.setTextSize(y);
-
-            TextView tvDuration = (TextView) tempView.findViewById(R.id.textViewDuration);
-            tvDuration.setText(item.getDays() + " DAYS TO GO");
-            tvDuration.setTextSize(y*2);
-
-            TextView tvLevelAndPoints = (TextView) tempView.findViewById(R.id.textViewLevelAndPoints);
-            tvLevelAndPoints.setTextSize(y);
-            /*final TextView tvDoneForToday = (TextView) tempView.findViewById(R.id.tvDoneForToday);
-            tvDoneForToday.setTextScaleX(y);*/
-
-            Button buttonGiveUp = (Button) tempView.findViewById(R.id.buttonGiveUp);
-            buttonGiveUp.getLayoutParams().width = x*10;
-            buttonGiveUp.getLayoutParams().height = x*10;
-
-            buttonGiveUp.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            switch (which){
-                                case DialogInterface.BUTTON_POSITIVE:
-                                    OfflineMode offlineMode = new OfflineMode();
-                                    if (offlineMode.isConnectedToRemoteAPI(MainActivity.this)){
-                                        try {
-                                            if (item.getType().equals("Wake Up")) {
-                                                int intentId = Integer.parseInt(item.getGoal());
-                                                challengeController.give_up(item.getId(), intentId);
-                                            } else {
-                                                challengeController.give_up(item.getId(), 0);
-                                            }
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                    break;
-                                case DialogInterface.BUTTON_NEGATIVE:
-                                    break;
-                            }
-                        }
-                    };
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    builder.setTitle(R.string.areYouSure)
-                            .setMessage(R.string.youWantToGiveUp)
-                            .setIcon(R.drawable.ic_action_warn)
-                            .setCancelable(false)
-                            .setPositiveButton(R.string.yes, dialogClickListener)
-                            .setNegativeButton(R.string.no, dialogClickListener).show();
-
-                }
-            });
-
-
-            final Button buttonDoneForToday = (Button) tempView.findViewById(R.id.buttonDoneForToday);
-            buttonDoneForToday.getLayoutParams().width = x*10;
-            buttonDoneForToday.getLayoutParams().height = x*10;
-
-            //final Button finalButton = buttonDoneForToday;
-            if (item.getUpdated() != null){
-                if (!item.getType().equals("Wake Up")) {
-                    if (item.getUpdated().equals("false")) {
-                        buttonDoneForToday.setBackgroundDrawable(MainActivity.this.getResources().getDrawable(R.drawable.icon_done_for_today));
-//                        tvDoneForToday.setVisibility(View.VISIBLE);
-                    }
-                }
-            }
-
-            buttonDoneForToday.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String id = item.getId();
-                    SQLiteDatabase localSQLiteDatabase = new DBHelper(MainActivity.this).getWritableDatabase();
-                    ContentValues localContentValues = new ContentValues();
-                    localContentValues.put("updated", "true");
-                    localSQLiteDatabase.update("myChallenges", localContentValues, "challenge_id = ?", new String[]{id});
-                    int i = localSQLiteDatabase.update("updated", localContentValues, "challenge_id = ?", new String[]{id});
-                    try {
-                        challengeController.doneForToday(id);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    buttonDoneForToday.setBackgroundDrawable(MainActivity.this.getResources().getDrawable(R.drawable.icon_share));
-                    findViewById(R.id.tvDoneForToday).setVisibility(View.INVISIBLE);
-                }
-            });
-
-            return tempView;
-        }
-
-        @Override
-        public int dataCount() {
-            return arrayList.size();
-        }
-
-    }
+//    public class CustomAdapter extends CustomPagerAdapter {
+//
+//        private ArrayList<SelfImprovement_model> arrayList;
+//        public CustomAdapter(Context context, ArrayList<SelfImprovement_model> marrayList) {
+//            super(context);
+//            this.arrayList = marrayList;
+//        }
+//
+//        @Override
+//        public View getView(int position, View convertView) {
+//            View tempView = convertView;
+//            if(tempView == null) {
+//                LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//                tempView = inflater.inflate(R.layout.single_card_fragment_self, null, false);
+//            }
+//            final SelfImprovement_model item = arrayList.get(position);
+//            ImageView cardImage = (ImageView)tempView.findViewById(R.id.cardImage);
+//            int x = round(getWindowManager().getDefaultDisplay().getWidth() / 100);
+//            int y = round(getWindowManager().getDefaultDisplay().getHeight() / 100);
+//            cardImage.getLayoutParams().width  = x*65;
+//            cardImage.getLayoutParams().height = y*50;
+//            if (y > 10) y = 10;
+//
+//            final ChallengeController challengeController = new ChallengeController(MainActivity.this, MainActivity.this, 0 , 0, 0);
+//
+//            TextView tvSelfImprovement  = (TextView) tempView.findViewById(R.id.textViewSIC);
+//            tvSelfImprovement.setText(item.getType());
+//            String itemGoal = item.getGoal();
+//            ImageView imageView = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
+//
+//            switch (item.getType()) {
+//                case "Wake Up":
+//                    imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeup_white));
+//                    itemGoal = item.getChallengeName();
+//                    break;
+//                case "Duel":
+//                    itemGoal = item.getGoal();
+//                    imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.duel_white));
+//                    break;
+//                case "Self-Improvement":
+//                    imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.self_white));
+//                    break;
+//            }
+//
+//            tvSelfImprovement.setTextSize((float)(y*1.3));
+//            Typeface typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
+//            tvSelfImprovement.setTypeface(typeface);
+//
+//            TextView tvChallengeName = (TextView) tempView.findViewById(R.id.textViewChallengeName);
+//            tvChallengeName.setText(itemGoal);
+//            tvChallengeName.setTextSize(y);
+//
+//            TextView tvDuration = (TextView) tempView.findViewById(R.id.textViewDuration);
+//            tvDuration.setText(item.getDays() + " DAYS TO GO");
+//            tvDuration.setTextSize(y*2);
+//
+//            TextView tvLevelAndPoints = (TextView) tempView.findViewById(R.id.textViewLevelAndPoints);
+//            tvLevelAndPoints.setTextSize(y);
+//            /*final TextView tvDoneForToday = (TextView) tempView.findViewById(R.id.tvDoneForToday);
+//            tvDoneForToday.setTextScaleX(y);*/
+//
+//            Button buttonGiveUp = (Button) tempView.findViewById(R.id.buttonGiveUp);
+//            buttonGiveUp.getLayoutParams().width = x*10;
+//            buttonGiveUp.getLayoutParams().height = x*10;
+//
+//            buttonGiveUp.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            switch (which){
+//                                case DialogInterface.BUTTON_POSITIVE:
+//                                    OfflineMode offlineMode = new OfflineMode();
+//                                    if (offlineMode.isConnectedToRemoteAPI(MainActivity.this)){
+//                                        try {
+//                                            if (item.getType().equals("Wake Up")) {
+//                                                int intentId = Integer.parseInt(item.getGoal());
+//                                                challengeController.give_up(item.getId(), intentId);
+//                                            } else {
+//                                                challengeController.give_up(item.getId(), 0);
+//                                            }
+//                                        } catch (IOException e) {
+//                                            e.printStackTrace();
+//                                        }
+//                                    }
+//                                    break;
+//                                case DialogInterface.BUTTON_NEGATIVE:
+//                                    break;
+//                            }
+//                        }
+//                    };
+//
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+//                    builder.setTitle(R.string.areYouSure)
+//                            .setMessage(R.string.youWantToGiveUp)
+//                            .setIcon(R.drawable.ic_action_warn)
+//                            .setCancelable(false)
+//                            .setPositiveButton(R.string.yes, dialogClickListener)
+//                            .setNegativeButton(R.string.no, dialogClickListener).show();
+//
+//                }
+//            });
+//
+//
+//            final Button buttonDoneForToday = (Button) tempView.findViewById(R.id.buttonDoneForToday);
+//            buttonDoneForToday.getLayoutParams().width = x*10;
+//            buttonDoneForToday.getLayoutParams().height = x*10;
+//
+//            //final Button finalButton = buttonDoneForToday;
+//            if (item.getUpdated() != null){
+//                if (!item.getType().equals("Wake Up")) {
+//                    if (item.getUpdated().equals("false")) {
+//                        buttonDoneForToday.setBackgroundDrawable(MainActivity.this.getResources().getDrawable(R.drawable.icon_done_for_today));
+////                        tvDoneForToday.setVisibility(View.VISIBLE);
+//                    }
+//                }
+//            }
+//
+//            buttonDoneForToday.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    String id = item.getId();
+//                    SQLiteDatabase localSQLiteDatabase = new DBHelper(MainActivity.this).getWritableDatabase();
+//                    ContentValues localContentValues = new ContentValues();
+//                    localContentValues.put("updated", "true");
+//                    localSQLiteDatabase.update("myChallenges", localContentValues, "challenge_id = ?", new String[]{id});
+//                    int i = localSQLiteDatabase.update("updated", localContentValues, "challenge_id = ?", new String[]{id});
+//                    try {
+//                        challengeController.doneForToday(id);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                    buttonDoneForToday.setBackgroundDrawable(MainActivity.this.getResources().getDrawable(R.drawable.icon_share));
+//                    findViewById(R.id.tvDoneForToday).setVisibility(View.INVISIBLE);
+//                }
+//            });
+//
+//            return tempView;
+//        }
+//
+//        @Override
+//        public int dataCount() {
+//            return arrayList.size();
+//        }
+//
+//    }
 
 
 }

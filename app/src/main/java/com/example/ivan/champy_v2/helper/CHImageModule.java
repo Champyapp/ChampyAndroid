@@ -78,19 +78,14 @@ public class CHImageModule {
     public Drawable Init(String path, Activity activity) throws FileNotFoundException {
         File file = new File(path, "blured2.jpg");
         Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
-
-        //Log.d("TAG", "x_y" + bitmap.getWidth() + " " + bitmap.getHeight());
         Drawable dr = new BitmapDrawable(context.getResources(), bitmap);
         dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
-
         if (activity != null) {
             ImageView imageView = (ImageView) activity.findViewById(R.id.friends_background);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setImageDrawable(dr);
         }
-
         return dr;
-
     }
 
 
