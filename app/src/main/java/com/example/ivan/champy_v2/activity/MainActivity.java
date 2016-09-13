@@ -50,6 +50,7 @@ import com.example.ivan.champy_v2.adapter.MainActivityCardsAdapter;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHBuildAnim;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
+import com.example.ivan.champy_v2.helper.CHDownloadImageTask;
 import com.example.ivan.champy_v2.helper.CHUploadPhoto;
 import com.example.ivan.champy_v2.interfaces.Update_user;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
@@ -171,7 +172,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String name = user.get("name");
 
         if (path_to_pic == null) {
-            Log.i("GetUserPhoto", "User Photo == NULL");
             Intent fromLogin = getIntent();
             path_to_pic = fromLogin.getExtras().getString("path_to_pic");
             name = fromLogin.getExtras().getString("name");
@@ -192,7 +192,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 e.printStackTrace();
             }
         else {
-            new DownloadImageTask().execute(path_to_pic);
+            CHDownloadImageTask chDownloadImageTask = new CHDownloadImageTask(getApplicationContext(), this);
+            chDownloadImageTask.execute(path_to_pic);
+//            new DownloadImageTask().execute(path_to_pic);
         }
 
         file = new File(path, "profile.jpg");
@@ -336,6 +338,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    public Drawable initBackground(String path) throws FileNotFoundException {
+        File file = new File(path, "blured2.jpg");
+        Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
+
+        Drawable dr = new BitmapDrawable(getResources(), bitmap);
+        dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
+
+        ImageView background = (ImageView)findViewById(R.id.main_background);
+        background.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        background.setImageDrawable(dr);
+
+        return dr;
+
+    }
+
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
         protected Bitmap doInBackground(String... urls) {
@@ -468,24 +485,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
     }
-
-
-    public Drawable initBackground(String path) throws FileNotFoundException {
-        File file = new File(path, "blured2.jpg");
-        Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
-
-        Drawable dr = new BitmapDrawable(getResources(), bitmap);
-        dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
-
-        ImageView background = (ImageView)findViewById(R.id.main_background);
-        background.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        background.setImageDrawable(dr);
-
-        return dr;
-
-    }
-
-
+//
+//
+//
 //    public class CustomAdapter extends CustomPagerAdapter {
 //
 //        private ArrayList<SelfImprovement_model> arrayList;
@@ -633,6 +635,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        }
 //
 //    }
-
-
 }
