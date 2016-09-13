@@ -61,7 +61,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
         cardImage.getLayoutParams().height = y*50;
         if (y > 10) y = 10;
 
-        final ChallengeController challengeController = new ChallengeController(activity, activity, 0 , 0, 0);
+        final ChallengeController challengeController = new ChallengeController(getContext(), (Activity) getContext(), 0 , 0, 0);
 
         TextView tvSelfImprovement  = (TextView) tempView.findViewById(R.id.textViewSIC);
         tvSelfImprovement.setText(item.getType());
@@ -111,8 +111,6 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
-                                OfflineMode offlineMode = new OfflineMode();
-                                if (offlineMode.isConnectedToRemoteAPI(activity)){
                                     try {
                                         if (item.getType().equals("Wake Up")) {
                                             int intentId = Integer.parseInt(item.getGoal());
@@ -123,7 +121,6 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
-                                }
                                 break;
                             case DialogInterface.BUTTON_NEGATIVE:
                                 break;
@@ -131,7 +128,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
                     }
                 };
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle(R.string.areYouSure)
                         .setMessage(R.string.youWantToGiveUp)
                         .setIcon(R.drawable.ic_action_warn)
@@ -161,7 +158,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
             @Override
             public void onClick(View v) {
                 String id = item.getId();
-                SQLiteDatabase localSQLiteDatabase = new DBHelper(activity).getWritableDatabase();
+                SQLiteDatabase localSQLiteDatabase = new DBHelper(getContext()).getWritableDatabase();
                 ContentValues localContentValues = new ContentValues();
                 localContentValues.put("updated", "true");
                 localSQLiteDatabase.update("myChallenges", localContentValues, "challenge_id = ?", new String[]{id});
@@ -172,7 +169,6 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
                     e.printStackTrace();
                 }
                 buttonDoneForToday.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.icon_share));
-                activity.findViewById(R.id.tvDoneForToday).setVisibility(View.INVISIBLE);
             }
         });
 

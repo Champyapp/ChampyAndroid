@@ -434,28 +434,30 @@ public class ChallengeController {
                     String type = data.getChallenge().getType();
                     List<Object> senderProgress = response.body().getData().getSenderProgress();
 
-                    //если это wake up, то отключаем будильник
-                    if (type.equals("567d51c48322f85870fd931c")) {
-                        //String challengeDetails = data.getChallenge().getDetails();
-                        //challengeDetails = challengeDetails.replace("[", "");
-                        //challengeDetails = challengeDetails.replace("]", "");
-                        //String[] array = challengeDetails.split(", ");
+                    OfflineMode offlineMode = new OfflineMode();
+                    if (offlineMode.isConnectedToRemoteAPI(firstActivity)) {
+                        //если это wake up, то отключаем будильник
+                        if (type.equals("567d51c48322f85870fd931c")) {
+                            //String challengeDetails = data.getChallenge().getDetails();
+                            //challengeDetails = challengeDetails.replace("[", "");
+                            //challengeDetails = challengeDetails.replace("]", "");
+                            //String[] array = challengeDetails.split(", ");
 
-                        //Log.i("GiveUp", "OUR ARRAY = " + Arrays.toString(array));
-                        //String i = array[1];
-                        //int intentId = Integer.parseInt(i); // TODO: 19.08.2016 take here intentId from creating
-                        //Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
-                        //PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, intentId, myIntent, 0);
-                        //AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                        //alarmManager.cancel(pendingIntent);
-                        Log.i("GiveUp", "Challenge = Wake Up");
-                        Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, intentId, myIntent, 0);
-                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                        alarmManager.cancel(pendingIntent);
-                        Log.i("GiveUp", "AlarmManager status: " + alarmManager);
+                            //Log.i("GiveUp", "OUR ARRAY = " + Arrays.toString(array));
+                            //String i = array[1];
+                            //int intentId = Integer.parseInt(i); // TODO: 19.08.2016 take here intentId from creating
+                            //Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
+                            //PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, intentId, myIntent, 0);
+                            //AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                            //alarmManager.cancel(pendingIntent);
+                            Log.i("GiveUp", "Challenge = Wake Up");
+                            Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
+                            PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, intentId, myIntent, 0);
+                            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                            alarmManager.cancel(pendingIntent);
+                            Log.i("GiveUp", "AlarmManager status: " + alarmManager);
+                        }
                     }
-
                     Log.i("GiveUp", "onResponse: VSE OK");
                 } else Log.i("GiveUp", "onResponse: FAILED: " + response.code());
 
