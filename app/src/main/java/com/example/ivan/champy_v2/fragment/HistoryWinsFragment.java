@@ -34,8 +34,8 @@ public class HistoryWinsFragment extends Fragment {
             String description = item.getGoal();
             String duration = item.getDays();
             String status = item.getStatus();
-            String goal = item.getGoal();
             String type = item.getType();
+            String goal = item.getGoal();
             String challengeName = item.getChallengeName();
             String versus = item.getVersus();
             String recipient = item.getRecipient();

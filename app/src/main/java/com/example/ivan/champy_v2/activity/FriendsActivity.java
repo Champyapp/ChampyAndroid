@@ -34,7 +34,7 @@ import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.adapter.FriendsAdapter;
 import com.example.ivan.champy_v2.adapter.PendingAdapter;
-import com.example.ivan.champy_v2.adapter.SampleFragmentPagerAdapter;
+import com.example.ivan.champy_v2.adapter.FriendsActivityPagerAdapter;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.interfaces.CustomItemClickListener;
 import com.example.ivan.champy_v2.model.Friend.Datum;
@@ -60,10 +60,9 @@ import static java.lang.Math.round;
 
 public class FriendsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    FragmentPagerAdapter adapterViewPager;
+    FriendsActivityPagerAdapter adapterViewPager;
     private final String TAG = "FriendsActivity";
-    private com.facebook.CallbackManager CallbackManager;
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,7 +101,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         String s;
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        adapterViewPager = new SampleFragmentPagerAdapter(getSupportFragmentManager(), getApplicationContext());
+        adapterViewPager = new FriendsActivityPagerAdapter(getSupportFragmentManager(), getApplicationContext());
         viewPager.setAdapter(adapterViewPager);
 
 //        Bundle bundle = getIntent().getExtras();

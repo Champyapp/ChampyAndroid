@@ -172,7 +172,7 @@ public class SelfImprovementFragment extends Fragment {
                                     Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
                                 } else {
                                     cc.sendSingleInProgressForSelf(challenge_id);
-                                    Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), "Challenge created", Toast.LENGTH_SHORT).show();
                                 }
                                 break;
                             case DialogInterface.BUTTON_NEGATIVE:
@@ -197,7 +197,7 @@ public class SelfImprovementFragment extends Fragment {
     }
 
 
-    // проверяем данные для создания челенджа
+    // check user input data @description @days @isActive
     private boolean checkInputUserData(String description, String duration) {
         int days = 21;
         if (!duration.isEmpty()) {
@@ -216,7 +216,7 @@ public class SelfImprovementFragment extends Fragment {
     }
 
 
-    // проверяем активный ли челендж
+    // check for isActive challenge
     private boolean isActive(String description) {
         DBHelper dbHelper = new DBHelper(getActivity());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();

@@ -19,7 +19,7 @@ public class SessionManager {
     Context _context;
     int PRIVATE_MODE = 0;
 
-    // Sharedpref file name
+    // SharedPreference file name
     private static final String PREFER_NAME = "Champy_pref";
     // All Shared Preferences Keys
     private static final String IS_USER_LOGIN = "IsUserLoggedIn";

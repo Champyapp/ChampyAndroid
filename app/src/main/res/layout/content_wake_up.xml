@@ -73,8 +73,8 @@
                 android:layout_alignParentTop="true" />
 
             <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="60sp"
+                android:layout_height="60sp"
                 android:id="@+id/imageViewAcceptButton"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
@@ -137,6 +137,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="@string/_21_days"
                 android:id="@+id/textView23"
+                android:textSize="20sp"
                 android:layout_above="@+id/imageViewAcceptButton"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"

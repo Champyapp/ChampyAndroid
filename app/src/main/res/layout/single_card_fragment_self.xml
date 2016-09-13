@@ -107,27 +107,13 @@
         android:gravity="center_vertical|center_horizontal"
         android:textStyle="bold"
         android:textColor="#59a7a6"
-        android:layout_above="@+id/textViewLevelAndPoints"
+        android:paddingBottom="40dp"
+        android:layout_above="@+id/buttonGiveUp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/cardImage"
-        android:layout_alignEnd="@+id/cardImage" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/level_1_challenge_reward_10_points"
-        android:id="@+id/textViewLevelAndPoints"
-        android:layout_above="@+id/buttonDoneForToday"
-        android:gravity="center_vertical|center_horizontal"
-        android:layout_marginBottom="35dp"
-        android:layout_alignRight="@+id/cardImage"
         android:layout_alignEnd="@+id/cardImage"
-        android:textSize="10dp"
-        android:textColor="#59a7a6"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentRight="true" />
 
     <ImageView
         android:layout_width="50dp"

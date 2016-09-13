@@ -140,10 +140,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             counterWinsOpen.setText(contact.getmWins());
             counterTotalOpen.setText(contact.getmTotal());
 
-            // отвечает за лвл юзера в свернутом виде
-            TextView tvUserLevelOpen = (TextView)viewHolder.itemView.findViewById(R.id.textViewWinsCounter);
-            tvUserLevelOpen.setText(_context.getString(R.string.level) + contact.getmLevel() + _context.getString(R.string.champy));
-
             // делаем view open видимой, view close невидимой
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.VISIBLE);
             viewHolder.itemView.findViewById(R.id.row_friends_list_close).setVisibility(View.GONE);
@@ -169,9 +165,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             counterWinsClose.setText(contact.getmWins());
             counterTotalClose.setText(contact.getmTotal());
 
-            // отвечает за лвл юзера в свернутом виде
-            TextView tvUserLevelClose = (TextView)viewHolder.itemView.findViewById(R.id.level);
-            tvUserLevelClose.setText(_context.getString(R.string.level) + contact.getmLevel() + _context.getString(R.string.champy));
 
             // делаем view open невидимой, view close видимой
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.GONE);

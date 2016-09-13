@@ -40,6 +40,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/level_0_champy"
         android:id="@+id/level"
+        android:visibility="invisible"
         android:textColor="#ffffff"
         android:layout_above="@+id/view"
         android:layout_alignLeft="@+id/challengeNameInHistory"

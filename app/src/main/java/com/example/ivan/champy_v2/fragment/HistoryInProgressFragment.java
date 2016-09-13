@@ -17,7 +17,6 @@ import java.util.ArrayList;
 
 public class HistoryInProgressFragment extends Fragment{
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +29,7 @@ public class HistoryInProgressFragment extends Fragment{
         ArrayList<SelfImprovement_model> self_improvement = SelfImprovement_model.generate(getContext());
         ArrayList<HistoryChallenge> all = new ArrayList<>();
 
-        for (int i=0; i<self_improvement.size(); i++) {
+        for (int i = 0; i < self_improvement.size(); i++) {
             SelfImprovement_model item = self_improvement.get(i);
             String description = item.getGoal();
             String duration = item.getDays();

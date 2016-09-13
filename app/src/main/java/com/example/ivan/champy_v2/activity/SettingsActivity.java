@@ -179,9 +179,6 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         tvName.setText(name);
         tvName.setTypeface(typeface);
 
-        TextView tvUserLevel = (TextView)findViewById(R.id.textView9);
-        tvUserLevel.setText(getString(R.string.level) + sessionManager.getChampyOptions().get("level") + getString(R.string.champy));
-
         TextView tvNotifications = (TextView)findViewById(R.id.tvNotifications);
         tvNotifications.setTypeface(typeface);
         TextView tvGeneral = (TextView)findViewById(R.id.tvGeneral);

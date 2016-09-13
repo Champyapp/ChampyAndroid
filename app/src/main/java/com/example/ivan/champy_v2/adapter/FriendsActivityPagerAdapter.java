@@ -9,13 +9,13 @@ import com.example.ivan.champy_v2.fragment.PendingFragment;
 import com.example.ivan.champy_v2.fragment.FriendsFragment;
 import com.example.ivan.champy_v2.fragment.OtherFragment;
 
-public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
+public class FriendsActivityPagerAdapter extends FragmentPagerAdapter {
 
     final int PAGE_COUNT = 3;
     private String tabTitles[] = new String[] { "Friends", "Pending", "Other" };
     private Context context;
 
-    public SampleFragmentPagerAdapter(FragmentManager fm, Context context) {
+    public FriendsActivityPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
         this.context = context;
     }

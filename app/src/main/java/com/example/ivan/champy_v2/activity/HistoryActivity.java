@@ -86,7 +86,6 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
 
         ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
         TextView tvUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        TextView tvUserLevel = (TextView) headerLayout.findViewById(R.id.level);
         tvUserName.setText(name);
         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");

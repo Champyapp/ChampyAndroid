@@ -143,10 +143,6 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
             counterWinsOpen.setText(contact.getmWins());
             counterTotalOpen.setText(contact.getmTotal());
 
-            // отвечает за лвл юзера в свернутом виде
-            TextView tvUserLevelOpen = (TextView)viewHolder.itemView.findViewById(R.id.textViewWinsCounter);
-            tvUserLevelOpen.setText(context.getString(R.string.level) + "0" + context.getString(R.string.champy));
-
             // отвечает за кнопки и их видимость (owner = myself);
             if (contact.getOwner().equals("true")) {
                 // если я приглашаю в друзья, то кнопка "add" толжна отсутствовать!
@@ -185,10 +181,6 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
             counterInProgressClose.setText(contact.getmChallenges());
             counterWinsClose.setText(contact.getmWins());
             counterTotalClose.setText(contact.getmTotal());
-
-            // отвечает за лвл юзера в свернутом виде
-            TextView tvUserLevelClose = (TextView)viewHolder.itemView.findViewById(R.id.level);
-            tvUserLevelClose.setText(context.getString(R.string.level) + "0" + context.getString(R.string.champy));
 
             // делаем view open невидимой, view close видимой
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.GONE);

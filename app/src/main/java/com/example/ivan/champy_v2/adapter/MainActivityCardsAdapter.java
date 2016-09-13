@@ -94,11 +94,6 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
         tvDuration.setText(item.getDays() + " DAYS TO GO");
         tvDuration.setTextSize(y*2);
 
-        TextView tvLevelAndPoints = (TextView) tempView.findViewById(R.id.textViewLevelAndPoints);
-        tvLevelAndPoints.setTextSize(y);
-        /*final TextView tvDoneForToday = (TextView) tempView.findViewById(R.id.tvDoneForToday);
-        tvDoneForToday.setTextScaleX(y);*/
-
         Button buttonGiveUp = (Button) tempView.findViewById(R.id.buttonGiveUp);
         buttonGiveUp.getLayoutParams().width = x*10;
         buttonGiveUp.getLayoutParams().height = x*10;

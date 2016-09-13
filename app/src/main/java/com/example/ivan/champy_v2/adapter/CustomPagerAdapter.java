@@ -3,6 +3,9 @@ package com.example.ivan.champy_v2.adapter;
 import android.content.Context;
 import android.view.View;
 
+/**
+ * this class-adapter is helper for our cards in main activity. actually for adapter for main activity.
+ */
 public abstract class CustomPagerAdapter {
 
     private Context context;
