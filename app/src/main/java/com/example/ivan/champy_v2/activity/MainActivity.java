@@ -30,6 +30,7 @@ import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.ivan.champy_v2.Blur;
+import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.CustomPagerBase;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
@@ -39,6 +40,7 @@ import com.example.ivan.champy_v2.helper.AppSync;
 import com.example.ivan.champy_v2.helper.CHBuildAnim;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHDownloadImageTask;
+import com.example.ivan.champy_v2.helper.CHSocket;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
 import com.facebook.FacebookSdk;
@@ -66,38 +68,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SubActionButton buttonWakeUpChallenge, buttonDuelChallenge, buttonSelfImprovement;
     private FloatingActionMenu actionMenu;
     private CustomPagerBase pager;
-    private Socket mSocket;
 
-    private Emitter.Listener onConnect = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-            CurrentUserHelper currentUser = new CurrentUserHelper(getApplicationContext());
-            mSocket.emit("ready", currentUser.getToken());
-            Log.i(TAG, "Sockets: onConnect");
-        }
-    };
-    private Emitter.Listener onConnected = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-            Log.i(TAG, "Sockets: onConnected");
-        }
-    };
-
-    private Emitter.Listener onNewChallenge = new Emitter.Listener()  {
-        @Override
-        public void call(final Object... args) {
-            CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
-            String userId = user.getUserObjectId();
-            Log.i(TAG, "Sockets: new challenge request for duel 1");
-            try {
-                AppSync sync = new AppSync(user.getFbId(),user.getGCM(), user.getPathToPic(), getApplicationContext());
-                sync.getUserInProgressChallenges(userId);
-                Log.i(TAG, "Sockets: new challenge request for duel2");
-            } catch (Exception e) {
-                Log.i(TAG, "Sockets: ERROR: " + e);
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,11 +80,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_gradient));
         setSupportActionBar(toolbar);
 
-        try {
-            mSocket = IO.socket("http://46.101.213.24:3007");
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
+        CHSocket sockets = new CHSocket(this, getApplicationContext());
+        sockets.tryToConnect();
+        sockets.connectAndEmmit();
 //        alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
 //        Intent intent = new Intent(this, AlarmSchedule.class);
 //        intent.putExtra("alarm", "reset");
@@ -125,22 +94,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        calendar.set(Calendar.SECOND, 0);
 //
 //        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-        mSocket.on("connect",                               onConnect);
-        mSocket.on("connected",                             onConnected);
 
-        mSocket.on("InProgressChallenge:new",               onNewChallenge);
-        mSocket.on("InProgressChallenge:failed",            onNewChallenge);
-        mSocket.on("InProgressChallenge:checked",           onNewChallenge);
-        mSocket.on("InProgressChallenge:updated",           onNewChallenge);
-        mSocket.on("InProgressChallenge:won",               onNewChallenge);
-        mSocket.on("InProgress:finish",                     onNewChallenge);
-
-
-        mSocket.on("InProgressChallenge:accepted",          onNewChallenge);
-        mSocket.on("InProgressChallenge:recipient:checked", onNewChallenge);
-        mSocket.on("InProgressChallenge:sender:checked",    onNewChallenge);
-
-        mSocket.connect();
 
         RelativeLayout cards = (RelativeLayout)findViewById(R.id.cards);
         MainActivityCardsAdapter adapter = new MainActivityCardsAdapter(this, SelfImprovement_model.generate(this), activity);

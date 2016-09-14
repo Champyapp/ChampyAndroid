@@ -594,7 +594,7 @@ public class ChallengeController {
                             if (id.equals(recipient.getId())) {
                                 cv.put("recipient", "true");
                                 cv.put("versus", sender.getName());
-                            } else /*if (id.equals(sender.get_id()))*/{
+                            } else {
                                 cv.put("recipient", "false");
                                 cv.put("versus", recipient.getName());
                             }
@@ -611,8 +611,9 @@ public class ChallengeController {
                     }
 
                     Log.i("GenerateMethod", "onResponse: VSE OK");
-                    Intent intent = new Intent(firstActivity, MainActivity.class);
-                    context.startActivity(intent);
+//                    Intent intent = new Intent(firstActivity, MainActivity.class);
+//                    firstActivity.startActivity(intent);
+
                 } else {
                     Log.i("GenerateMethod", "onResponse: FAILED: " + response.code());
                 }

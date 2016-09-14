@@ -44,9 +44,6 @@ public class CHLoadUserProgressBarInfo {
                 Data data = decodedResponse.getData();
                 SessionManager sessionManager = new SessionManager(activity);
                 String size = sessionManager.get_duel_pending();
-                String getInProgressChallengesCount = data.getInProgressChallengesCount().toString();
-                String getSuccessChallengesCount    = data.getSuccessChallenges().toString();
-                String getAllChallengesCount        = data.getAllChallengesCount().toString();
                 sessionManager.set_duel_pending(size);
                 sessionManager.setChampyOptions(
                         data.getAllChallengesCount().toString(),
@@ -55,11 +52,6 @@ public class CHLoadUserProgressBarInfo {
                         data.getLevel().getNumber().toString());
 
                 Log.i("LoadUserProgressBarInfo", "onResponse: VSE OK");
-                /*Log.i("onResponse", "USER DATA: \nAllChallengeCount = " + data.getAllChallengesCount().toString()
-                                              +"\nSuccessChallenges = " + data.getSuccessChallenges().toString()
-                                              +"\ngetScore          = " + data.getScore().toString()
-                                              +"\ngetLevel          = " + data.getLevel()
-                                              +"\ngetPendingDuel    = " + sessionManager.get_duel_pending());*/
             }
 
             @Override
