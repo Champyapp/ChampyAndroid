@@ -4,7 +4,6 @@
     android:layout_height="wrap_content"
     android:visibility="visible"
     android:id="@+id/row_friends_list_open"
-    android:background="@drawable/champy_background"
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="false"
     android:layout_alignParentBottom="true" >
@@ -15,7 +14,6 @@
         android:layout_height="50dp"
         android:id="@+id/imageViewUserAvatar"
         android:visibility="visible"
-        android:src="@drawable/champy_icon2"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"
         android:contentDescription="@string/userAvatar" />
@@ -24,7 +22,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="User Name"
         android:id="@+id/textViewChallengesCounter"
         android:paddingTop="15sp"
         android:textColor="#ffffff"
@@ -36,6 +33,7 @@
     <ImageView
         android:layout_width="80dp"
         android:layout_height="80dp"
+        android:paddingTop="10sp"
         android:id="@+id/imageViewBgForCircleChall"
         android:layout_below="@+id/textViewChallengesCounter"
         android:layout_alignParentLeft="true"
@@ -45,6 +43,7 @@
     <ImageView
         android:layout_width="80dp"
         android:layout_height="80dp"
+        android:paddingTop="10sp"
         android:id="@+id/imageViewBgForCircleWins"
         android:layout_below="@+id/textViewChallengesCounter"
         android:layout_centerHorizontal="true"
@@ -52,6 +51,7 @@
     <ImageView
         android:layout_width="80dp"
         android:layout_height="80dp"
+        android:paddingTop="10sp"
         android:id="@+id/imageViewBgForCircleTotal"
         android:layout_below="@+id/textViewChallengesCounter"
         android:layout_alignParentRight="true"
@@ -66,6 +66,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/wins"
         android:id="@+id/textViewChallenges"
+        android:paddingTop="3dp"
         android:gravity="center_horizontal"
         android:textColor="#ffffff"
         android:layout_alignLeft="@+id/imageViewBgForCircleWins"
@@ -80,6 +81,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/total"
         android:id="@+id/textViewWins"
+        android:paddingTop="3dp"
         android:gravity="center_horizontal"
         android:textColor="#ffffff"
         android:layout_alignTop="@+id/textViewChallenges"
@@ -93,6 +95,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/in_progress"
         android:id="@+id/textViewTotal"
+        android:paddingTop="3dp"
         android:layout_alignTop="@+id/textViewChallenges"
         android:layout_alignLeft="@+id/imageViewBgForCircleChall"
         android:layout_alignStart="@+id/imageViewBgForCircleChall"
@@ -106,7 +109,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageViewBgChallenges"
-        android:src="@mipmap/ic_launcher"
         android:layout_alignLeft="@+id/imageViewBgForCircleChall"
         android:layout_alignStart="@+id/imageViewBgForCircleChall"
         android:layout_alignRight="@+id/imageViewBgForCircleChall"
@@ -117,7 +119,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageViewBgWins"
-        android:src="@mipmap/ic_launcher"
         android:layout_above="@+id/textViewChallenges"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="8dp"
@@ -126,7 +127,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageViewBgTotal"
-        android:src="@mipmap/ic_launcher"
         android:layout_alignTop="@+id/imageViewBgWins"
         android:layout_alignLeft="@+id/imageViewBgForCircleTotal"
         android:layout_alignStart="@+id/imageViewBgForCircleTotal"
@@ -142,8 +142,9 @@
         android:background="@drawable/block"
         android:contentDescription="@string/button_block"
         android:layout_above="@+id/textViewChallengesCounter"
-        android:layout_alignLeft="@+id/imageViewBgForCircleChall"
-        android:layout_alignStart="@+id/imageViewBgForCircleChall" />
+        android:layout_alignRight="@+id/imageViewBgForCircleChall"
+        android:layout_alignParentLeft="false"
+        android:layout_marginRight="20dp" />
 
     <ImageButton
         android:layout_width="40dp"
@@ -151,9 +152,10 @@
         android:id="@+id/imageButtonAddUser"
         android:background="@drawable/centerwithplus"
         android:contentDescription="@string/button_add"
-        android:layout_alignBottom="@+id/imageViewUserAvatar"
         android:layout_alignLeft="@+id/imageViewBgForCircleTotal"
-        android:layout_alignStart="@+id/imageViewBgForCircleTotal" />
+        android:layout_alignStart="@+id/imageViewBgForCircleTotal"
+        android:layout_above="@+id/textViewChallengesCounter"
+        android:layout_marginLeft="20dp" />
 
     <!--    counters-->
     <TextView
@@ -162,42 +164,45 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:text="@string/i"
         android:id="@+id/info_inProgress"
+        android:textSize="20sp"
         android:layout_alignLeft="@+id/imageViewBgForCircleChall"
         android:layout_alignStart="@+id/imageViewBgForCircleChall"
         android:layout_alignRight="@+id/imageViewBgForCircleChall"
         android:layout_alignEnd="@+id/imageViewBgForCircleChall"
+        android:layout_alignTop="@+id/imageViewBgForCircleChall"
         android:gravity="center_vertical|center_horizontal"
-        android:textColor="#ffffff"
         android:layout_above="@+id/textViewChallenges"
-        android:layout_alignTop="@+id/imageViewBgForCircleChall" />
+        android:textColor="#ffffff" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:text="@string/w"
         android:id="@+id/info_wins"
-        android:textColor="#ffffff"
-        android:gravity="center"
+        android:textSize="20sp"
         android:layout_alignLeft="@+id/imageViewBgForCircleWins"
         android:layout_alignStart="@+id/imageViewBgForCircleWins"
         android:layout_alignRight="@+id/imageViewBgForCircleWins"
         android:layout_alignEnd="@+id/imageViewBgForCircleWins"
+        android:layout_alignTop="@+id/imageViewBgForCircleWins"
+        android:gravity="center_vertical|center_horizontal"
         android:layout_above="@+id/textViewChallenges"
-        android:layout_alignTop="@+id/imageViewBgForCircleChall" />
+        android:textColor="#ffffff" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:text="@string/t"
         android:id="@+id/info_total"
+        android:textSize="20sp"
         android:layout_alignLeft="@+id/imageViewBgForCircleTotal"
         android:layout_alignStart="@+id/imageViewBgForCircleTotal"
         android:layout_alignRight="@+id/imageViewBgForCircleTotal"
         android:layout_alignEnd="@+id/imageViewBgForCircleTotal"
+        android:layout_alignTop="@+id/imageViewBgForCircleTotal"
         android:gravity="center_vertical|center_horizontal"
-        android:textColor="#ffffff"
         android:layout_above="@+id/textViewWins"
-        android:layout_alignTop="@+id/imageViewBgForCircleTotal" />
+        android:textColor="#ffffff" />
 
     <!--    line of the end    -->
     <View

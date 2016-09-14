@@ -110,7 +110,8 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
             ImageView imageViewChallengesOpen = viewHolder.mChallenges;
             ImageView imageViewWinsOpen = viewHolder.mWins;
             ImageView imageViewTotalOpen = viewHolder.mTotal;
-            Glide.with(context).load(contact.getPicture()).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).transform(new CropCircleTransformation(context)).placeholder(R.drawable.champy_icon2).override(80, 80).dontAnimate().into(imageViewUserAvatar);
+            Glide.with(context).load(contact.getPicture()).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true).transform(new CropCircleTransformation(context)).placeholder(R.drawable.friend_icon).override(80, 80).dontAnimate().into(imageViewUserAvatar);
             Glide.with(context).load(R.drawable.challenges).override(40, 40).into(imageViewChallengesOpen);
             Glide.with(context).load(R.drawable.wins).override(40, 40).into(imageViewWinsOpen);
             Glide.with(context).load(R.drawable.total).override(40, 40).into(imageViewTotalOpen);
@@ -168,7 +169,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
             ImageView imageViewWins = viewHolder.wins;
             ImageView imageViewTotal = viewHolder.total;
 
-            Glide.with(context).load(contact.getPicture()).asBitmap().transform(new CropCircleTransformation(context)).placeholder(R.drawable.champy_icon2).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).override(80, 80).dontAnimate().into(imageViewFriendPicture);
+            Glide.with(context).load(contact.getPicture()).asBitmap().transform(new CropCircleTransformation(context)).placeholder(R.drawable.friend_icon).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).override(80, 80).dontAnimate().into(imageViewFriendPicture);
             Glide.with(context).load(R.drawable.challenges).override(40, 40).into(imageViewChallenges);
             Glide.with(context).load(R.drawable.wins).override(40, 40).into(imageViewWins);
             Glide.with(context).load(R.drawable.total).override(40, 40).into(imageViewTotal);

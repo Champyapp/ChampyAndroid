@@ -81,7 +81,7 @@ public class FriendsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)  {
         final View view = inflater.inflate(R.layout.fragment_first, container, false);
         final List<com.example.ivan.champy_v2.Friend> friends = new ArrayList<>();
         Log.i(TAG, "onCreateView");

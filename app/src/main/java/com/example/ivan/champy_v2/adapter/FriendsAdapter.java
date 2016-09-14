@@ -108,7 +108,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             ImageView imageViewWinsOpen = viewHolder.mwins;
             Glide.with(_context).load(R.drawable.wins).override(40, 40).into(imageViewWinsOpen);
             Glide.with(_context).load(contact.getPicture()).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true).transform(new CropCircleTransformation(_context)).placeholder(R.drawable.champy_icon2).override(80, 80).dontAnimate().into(imageViewUserAvatar);
+                    .skipMemoryCache(true).transform(new CropCircleTransformation(_context)).placeholder(R.drawable.friend_icon).override(80, 80).dontAnimate().into(imageViewUserAvatar);
             Glide.with(_context).load(R.drawable.challenges).override(40, 40).into(imageViewChallengesOpen);
             Glide.with(_context).load(R.drawable.total).override(40, 40).into(imageViewTotalOpen);
 
@@ -152,7 +152,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             ImageView imageViewWins = viewHolder.wins;
             Glide.with(_context).load(R.drawable.wins).override(40, 40).into(imageViewWins);
             Glide.with(_context).load(contact.getPicture()).asBitmap().transform(new CropCircleTransformation(_context)).
-                    placeholder(R.drawable.champy_icon2).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).override(80, 80).dontAnimate().into(imageViewFriendPicture);
+                    placeholder(R.drawable.friend_icon).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).override(80, 80).dontAnimate().into(imageViewFriendPicture);
             Glide.with(_context).load(R.drawable.challenges).override(40, 40).into(imageViewChallenges);
             Glide.with(_context).load(R.drawable.total).override(40, 40).into(imageViewTotal);
 
