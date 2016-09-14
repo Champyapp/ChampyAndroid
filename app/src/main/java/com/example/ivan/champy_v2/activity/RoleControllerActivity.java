@@ -58,24 +58,24 @@ public class RoleControllerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_role_controller);
 
-//        try {
-//            mSocket = IO.socket("http://46.101.213.24:3007");
-//        } catch (URISyntaxException e) {
-//            throw new RuntimeException(e);
-//        }
+        try {
+            mSocket = IO.socket("http://46.101.213.24:3007");
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
 
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         Intent goToActivity;
         if (sessionManager.isUserLoggedIn()) {
-//            mSocket.on("connect", onConnect);
-//            mSocket.on("connected", onConnected);
-//            mSocket.connect();
+            mSocket.on("connect", onConnect);
+            mSocket.on("connected", onConnected);
+            mSocket.connect();
             goToActivity = new Intent(this, MainActivity.class);
 //            goToActivity = new Intent(this, SettingsActivity.class);
             Log.i("RoleController", "Login Status: TRUE, go to MainActivity...");
         } else {
-//            mSocket.disconnect();
-//            mSocket.off();
+            mSocket.off();
+            mSocket.disconnect();
             goToActivity = new Intent(this, LoginActivity.class);
             Log.i("RoleController", "Login Status: FALSE, go to LoginActivity...");
         }

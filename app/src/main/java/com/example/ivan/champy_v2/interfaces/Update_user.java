@@ -17,9 +17,6 @@ import retrofit.http.Part;
 import retrofit.http.Path;
 import retrofit.http.Query;
 
-/**
- * Created by ivan on 02.03.16.
- */
 public interface Update_user {
 
     @FormUrlEncoded

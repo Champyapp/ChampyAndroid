@@ -1,6 +1,7 @@
 package com.example.ivan.champy_v2.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,6 +18,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -33,17 +35,23 @@ import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.adapter.MainActivityCardsAdapter;
+import com.example.ivan.champy_v2.helper.AppSync;
 import com.example.ivan.champy_v2.helper.CHBuildAnim;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHDownloadImageTask;
+import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
 import com.facebook.FacebookSdk;
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -58,7 +66,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SubActionButton buttonWakeUpChallenge, buttonDuelChallenge, buttonSelfImprovement;
     private FloatingActionMenu actionMenu;
     private CustomPagerBase pager;
-    HashMap<String,String> user;
+    private Socket mSocket;
+
+    private Emitter.Listener onConnect = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            CurrentUserHelper currentUser = new CurrentUserHelper(getApplicationContext());
+            mSocket.emit("ready", currentUser.getToken());
+            Log.i(TAG, "Sockets: onConnect");
+        }
+    };
+    private Emitter.Listener onConnected = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            Log.i(TAG, "Sockets: onConnected");
+        }
+    };
+
+    private Emitter.Listener onNewChallenge = new Emitter.Listener()  {
+        @Override
+        public void call(final Object... args) {
+            CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
+            String userId = user.getUserObjectId();
+            Log.i(TAG, "Sockets: new challenge request for duel 1");
+            try {
+                AppSync sync = new AppSync(user.getFbId(),user.getGCM(), user.getPathToPic(), getApplicationContext());
+                sync.getUserInProgressChallenges(userId);
+                Log.i(TAG, "Sockets: new challenge request for duel2");
+            } catch (Exception e) {
+                Log.i(TAG, "Sockets: ERROR: " + e);
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +109,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_gradient));
         setSupportActionBar(toolbar);
 
+        try {
+            mSocket = IO.socket("http://46.101.213.24:3007");
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
 //        alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
 //        Intent intent = new Intent(this, AlarmSchedule.class);
 //        intent.putExtra("alarm", "reset");
@@ -81,6 +125,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        calendar.set(Calendar.SECOND, 0);
 //
 //        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        mSocket.on("connect",                               onConnect);
+        mSocket.on("connected",                             onConnected);
+
+        mSocket.on("InProgressChallenge:new",               onNewChallenge);
+        mSocket.on("InProgressChallenge:failed",            onNewChallenge);
+        mSocket.on("InProgressChallenge:checked",           onNewChallenge);
+        mSocket.on("InProgressChallenge:updated",           onNewChallenge);
+        mSocket.on("InProgressChallenge:won",               onNewChallenge);
+        mSocket.on("InProgress:finish",                     onNewChallenge);
+
+
+        mSocket.on("InProgressChallenge:accepted",          onNewChallenge);
+        mSocket.on("InProgressChallenge:recipient:checked", onNewChallenge);
+        mSocket.on("InProgressChallenge:sender:checked",    onNewChallenge);
+
+        mSocket.connect();
 
         RelativeLayout cards = (RelativeLayout)findViewById(R.id.cards);
         MainActivityCardsAdapter adapter = new MainActivityCardsAdapter(this, SelfImprovement_model.generate(this), activity);

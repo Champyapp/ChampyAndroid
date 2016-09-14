@@ -39,6 +39,7 @@ import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
+import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.interfaces.Update_user;
 import com.example.ivan.champy_v2.model.User.Delete;
 import com.example.ivan.champy_v2.model.User.Profile_data;
@@ -259,21 +260,19 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                             case DialogInterface.BUTTON_POSITIVE:
                                 if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
                                     SessionManager sessionManager = new SessionManager(getApplicationContext());
-                                    HashMap<String, String> user;
-                                    user = sessionManager.getUserDetails();
-                                    String id = user.get("id");
-                                    String token = user.get("token");
-
+                                    CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
+                                    final String token = user.getToken();
+                                    String id = user.getUserObjectId();
                                     Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-                                    Update_user update_user = retrofit.create(Update_user.class);
+                                    final Update_user update_user = retrofit.create(Update_user.class);
 
                                     Call<User> callSurrenderAllChallenges = update_user.surrenderAllChallenge(token);
                                     callSurrenderAllChallenges.enqueue(new Callback<User>() {
                                         @Override
                                         public void onResponse(Response<User> response, Retrofit retrofit) {
                                             if (response.isSuccess()) {
-                                                   Log.i(TAG, "onResponseSurrenderAllChallenges: vse ok");
-                                            } else Log.i(TAG, "onResponseSurrenderAllChallenges: failed " + response.message());
+                                                Log.i(TAG, "onResponseSurrenderAllChallenges: vse ok");
+                                            } else Log.i(TAG, "onResponseSurrenderAllChallenges: " + response.code() + " " + response.message());
                                         }
 
                                         @Override
@@ -281,6 +280,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                                             Log.i(TAG, "onFailureSurrenderAllChallenges: vse hyinja");
                                         }
                                     });
+
 
                                     Call<Delete> callForDeleteUser = update_user.delete_user(id, token);
                                     callForDeleteUser.enqueue(new Callback<Delete>() {
@@ -297,7 +297,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                                                 clearCount = db.delete("friends", null, null);
                                                 clearCount = db.delete("myChallenges", null, null);
                                                 file.delete();
-                                                   Log.i(TAG, "onResponseDeleteUser: Vse ok");
+                                                Log.i(TAG, "onResponseDeleteUser: Vse ok");
                                             } else Log.i(TAG, "onResponseDeleteUser: failed " + response.message());
                                         }
 
