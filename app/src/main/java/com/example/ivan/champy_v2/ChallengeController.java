@@ -251,8 +251,7 @@ public class ChallengeController {
                     DBHelper dbHelper = new DBHelper(firstActivity);
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
                     db.insert("updated", null, cv);
-                    Intent intent = new Intent(firstActivity, MainActivity.class);
-                    context.startActivity(intent);
+                    firstActivity.finish();
                     Log.i("startDuelInProgress", "Status: VSE OK");
                 } else Log.i("startDuelInProgress", "Status: FAILED" + response.code() + response.message());
             }
@@ -461,7 +460,7 @@ public class ChallengeController {
                     Log.i("GiveUp", "onResponse: VSE OK");
                 } else Log.i("GiveUp", "onResponse: FAILED: " + response.code());
 
-                refreshCardsForPendingDuel();
+                generateCardsForMainActivity();
 
             }
 
@@ -611,8 +610,8 @@ public class ChallengeController {
                     }
 
                     Log.i("GenerateMethod", "onResponse: VSE OK");
-//                    Intent intent = new Intent(firstActivity, MainActivity.class);
-//                    firstActivity.startActivity(intent);
+                    Intent intent = new Intent(firstActivity, MainActivity.class);
+                    firstActivity.startActivity(intent);
 
                 } else {
                     Log.i("GenerateMethod", "onResponse: FAILED: " + response.code());

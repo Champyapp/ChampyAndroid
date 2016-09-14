@@ -38,10 +38,10 @@ public class CHSocket {
 
         mSocket.on("InProgressChallenge:new",               onGenerateNewChallenge);
         mSocket.on("InProgressChallenge:accepted",          onGenerateNewChallenge);
-//        mSocket.on("InProgressChallenge:failed",            onNewChallenge);
+//        mSocket.on("InProgressChallenge:failed",            onGenerateNewChallenge);
 //        mSocket.on("InProgressChallenge:checked",           onNewChallenge);
 //        mSocket.on("InProgressChallenge:updated",           onNewChallenge);
-//        mSocket.on("InProgressChallenge:won",               onNewChallenge);
+        mSocket.on("InProgressChallenge:won",               onGenerateNewChallenge);
 //        mSocket.on("InProgress:finish",                     onNewChallenge);
 //        mSocket.on("InProgressChallenge:recipient:checked", onNewChallenge);
 //        mSocket.on("InProgressChallenge:sender:checked",    onNewChallenge);
@@ -81,17 +81,5 @@ public class CHSocket {
         }
     };
 
-    private Emitter.Listener onGiveUp = new Emitter.Listener()  {
-        @Override
-        public void call(final Object... args) {
-            CurrentUserHelper user = new CurrentUserHelper(context);
-            try {
-                ChallengeController cc = new ChallengeController(context, activity, 0, 0, 0);
-                Log.i(TAG, "Sockets: onNewChallenge");
-            } catch (Exception e) {
-                Log.i(TAG, "Sockets: ERROR: " + e);
-            }
-        }
-    };
 
 }
