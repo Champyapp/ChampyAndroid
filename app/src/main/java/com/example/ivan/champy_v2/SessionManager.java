@@ -178,7 +178,7 @@ public class SessionManager {
     }
 
     public HashMap<String, String> getUserDetails() {
-        //Use hashmap to store user credentials
+        //Use HashMap to store user credentials
         HashMap<String, String> user = new HashMap<String, String>();
         user.put(KEY_NAME,       pref.getString(KEY_NAME,       null));
         user.put(KEY_EMAIL,      pref.getString(KEY_EMAIL,      null));
@@ -213,11 +213,6 @@ public class SessionManager {
         activity.startActivity(intent);
     }
 
-    public void change_token(String token){
-        editor.putString("token", token);
-        editor.commit();
-    }
-
     public boolean checkLogin(){
         // Check login status
         if(!this.isUserLoggedIn()){
@@ -237,6 +232,11 @@ public class SessionManager {
             return true;
         }
         return false;
+    }
+
+    public void change_token(String token){
+        editor.putString("token", token);
+        editor.commit();
     }
 
     public void setUpdateFalse() {

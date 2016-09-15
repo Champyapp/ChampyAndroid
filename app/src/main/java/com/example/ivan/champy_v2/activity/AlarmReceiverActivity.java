@@ -1,13 +1,7 @@
 package com.example.ivan.champy_v2.activity;
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -21,33 +15,14 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.ivan.champy_v2.AlarmReceiver;
 import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
-import com.example.ivan.champy_v2.data.DBHelper;
-import com.example.ivan.champy_v2.interfaces.SingleInProgress;
-import com.example.ivan.champy_v2.single_inprogress.Data;
-
-import org.w3c.dom.Text;
 
 import java.io.IOException;
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.GsonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
 
 public class AlarmReceiverActivity extends Activity {
 
@@ -65,10 +40,21 @@ public class AlarmReceiverActivity extends Activity {
         final String finalInProgressChallengeId = this.getIntent().getStringExtra("finalInProgressChallengeId");
         final int finalIntentId = this.getIntent().getIntExtra("finalIntentId", 0);
         final String stringFinalIntentId = String.valueOf(finalIntentId);
-
+        final ChallengeController cc = new ChallengeController(getApplicationContext(), AlarmReceiverActivity.this, 0, 0, 0);
         Log.i(TAG, "finalInProgressChallengeId: " + finalInProgressChallengeId);
         Log.i(TAG, "finalIntentId: " + finalIntentId);
         Log.i(TAG, "stringFinalIntentId: " + stringFinalIntentId);
+
+//        SessionManager sessionManager = new SessionManager(context);
+//        if (!sessionManager.isUserLoggedIn()) {
+//            try {
+//                cc.give_up(finalInProgressChallengeId, finalIntentId);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            Log.i(TAG, "onReceive: AutoGiveUp. Reason: not logged in");
+//            return;
+//        }
 
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -87,7 +73,7 @@ public class AlarmReceiverActivity extends Activity {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         ImageButton buttonWakeUpDoneForToday = (ImageButton) findViewById(R.id.buttonWakeUpDoneForToday);
-        final ChallengeController cc = new ChallengeController(getApplicationContext(), AlarmReceiverActivity.this, 0, 0, 0);
+
 
         //final String finalChallengeId = challengeId;
         buttonWakeUpDoneForToday.setOnTouchListener(new View.OnTouchListener() {
