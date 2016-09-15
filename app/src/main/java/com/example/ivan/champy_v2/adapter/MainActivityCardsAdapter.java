@@ -65,15 +65,20 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
 
         TextView tvSelfImprovement  = (TextView) tempView.findViewById(R.id.textViewSIC);
         tvSelfImprovement.setText(item.getType());
+        String itemType = item.getType();
         String itemGoal = item.getGoal();
+        String itemVersus = "with " + item.getVersus();
         ImageView imageView = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
+        TextView tvRecipientName = (TextView)tempView.findViewById(R.id.tvRecipientName);
 
-        switch (item.getType()) {
+
+        switch (itemType) {
             case "Wake Up":
                 imageView.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.wakeup_white));
                 itemGoal = item.getChallengeName();
                 break;
             case "Duel":
+                tvRecipientName.setText(itemVersus);
                 itemGoal = item.getGoal();
                 imageView.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.duel_white));
                 break;
@@ -85,7 +90,8 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
         tvSelfImprovement.setTextSize((float)(y*1.3));
         Typeface typeface = android.graphics.Typeface.createFromAsset(getContext().getAssets(), "fonts/bebasneue.ttf");
         tvSelfImprovement.setTypeface(typeface);
-
+        tvRecipientName.setTypeface(typeface);
+        
         TextView tvChallengeName = (TextView) tempView.findViewById(R.id.textViewChallengeName);
         tvChallengeName.setText(itemGoal);
         tvChallengeName.setTextSize(y);

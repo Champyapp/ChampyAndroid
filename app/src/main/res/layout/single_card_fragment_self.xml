@@ -69,7 +69,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/self_improvement_challenge"
+        android:text="Duel"
         android:id="@+id/textViewSIC"
         android:textColor="#ffffff"
         android:gravity="center_vertical|center_horizontal"
@@ -85,7 +85,23 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Do 10 push-ups every day during 21 days"
+        android:text=""
+        android:id="@+id/tvRecipientName"
+        android:textColor="#ffffff"
+        android:gravity="center_vertical|center_horizontal"
+        android:textStyle="bold"
+        android:textSize="13sp"
+        android:textAllCaps="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textViewSIC"
+        android:layout_alignRight="@+id/cardImage"
+        android:layout_alignEnd="@+id/cardImage" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No smoking during this period"
         android:id="@+id/textViewChallengeName"
         android:gravity="center_vertical|center_horizontal"
         android:textSize="10dp"
