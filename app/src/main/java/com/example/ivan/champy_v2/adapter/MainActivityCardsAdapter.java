@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +20,10 @@ import android.widget.TextView;
 import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
+import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.activity.MainActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
+import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
 
 import java.io.IOException;
@@ -65,12 +68,15 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
 
         TextView tvSelfImprovement  = (TextView) tempView.findViewById(R.id.textViewSIC);
         tvSelfImprovement.setText(item.getType());
-        String itemType = item.getType();
-        String itemGoal = item.getGoal();
+        String itemType   = item.getType();
+        String itemGoal   = item.getGoal();
         String itemVersus = "with " + item.getVersus();
-        ImageView imageView = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
-        TextView tvRecipientName = (TextView)tempView.findViewById(R.id.tvRecipientName);
+        TextView tvRecipientName = (TextView) tempView.findViewById(R.id.tvRecipientName);
+        ImageView imageView      = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
+        ImageView imageUser1     = (ImageView)tempView.findViewById(R.id.user1);
+        ImageView imageUser2     = (ImageView)tempView.findViewById(R.id.user2);
 
+        CurrentUserHelper currentUserHelper = new CurrentUserHelper(getContext());
 
         switch (itemType) {
             case "Wake Up":
@@ -80,6 +86,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
             case "Duel":
                 tvRecipientName.setText(itemVersus);
                 itemGoal = item.getGoal();
+                //imageUser1.setBackgroundDrawable();
                 imageView.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.duel_white));
                 break;
             case "Self-Improvement":
@@ -91,7 +98,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
         Typeface typeface = android.graphics.Typeface.createFromAsset(getContext().getAssets(), "fonts/bebasneue.ttf");
         tvSelfImprovement.setTypeface(typeface);
         tvRecipientName.setTypeface(typeface);
-        
+
         TextView tvChallengeName = (TextView) tempView.findViewById(R.id.textViewChallengeName);
         tvChallengeName.setText(itemGoal);
         tvChallengeName.setTextSize(y);

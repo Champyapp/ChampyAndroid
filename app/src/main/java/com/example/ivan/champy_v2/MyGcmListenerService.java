@@ -98,20 +98,19 @@ public class MyGcmListenerService extends GcmListenerService {
 
     /**
      * Create and show a item_friends_open notification containing the received GCM message.
-     *
      * @param message GCM message received.
      */
     private void sendNotification(String message, String title) {
         Log.d(TAG, title);
-        Intent goToMainActivity = new Intent(MyGcmListenerService.this, MainActivity.class);
-        goToMainActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Intent intent = new Intent(MyGcmListenerService.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         switch (title) {
             case "Friend request":
                 // done
-                goToMainActivity = new Intent(this, FriendsActivity.class);
-                goToMainActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                goToMainActivity.putExtra("friend_request", "true");
-                notifyForFriends(goToMainActivity, message);
+                intent = new Intent(this, FriendsActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("friend_request", "true");
+                notifyForFriends(intent, message);
                 break;
             case "Challenge request":
                 // done
@@ -121,15 +120,15 @@ public class MyGcmListenerService extends GcmListenerService {
                 break;
             case "Challenge accepted":
                 // done
-                notifyChallenges(goToMainActivity, message);
+                notifyChallenges(intent, message);
                 break;
             case "Win":
                 // done
-                notifyChallenges(goToMainActivity, message);
+                notifyChallenges(intent, message);
                 break;
             case "Challenges for today":
                 // don't work
-                notifyChallenges(goToMainActivity, message);
+                notifyChallenges(intent, message);
                 break;
 
         }

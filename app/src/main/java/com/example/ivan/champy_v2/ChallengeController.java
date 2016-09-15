@@ -12,11 +12,14 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.ivan.champy_v2.activity.FriendsActivity;
 import com.example.ivan.champy_v2.activity.MainActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.duel.Duel;
 import com.example.ivan.champy_v2.helper.AppSync;
 import com.example.ivan.champy_v2.helper.CHLoadUserProgressBarInfo;
+import com.example.ivan.champy_v2.helper.CurrentUserHelper;
+import com.example.ivan.champy_v2.helper.DateValidator;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
 import com.example.ivan.champy_v2.interfaces.CreateChallenge;
 import com.example.ivan.champy_v2.interfaces.SingleInProgress;
@@ -64,10 +67,8 @@ public class ChallengeController {
 
     public void createNewSelfImprovementChallenge(final String description, int days) {
         final String type_id = "567d51c48322f85870fd931a";
-        final SessionManager sessionManager = new SessionManager(context);
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        String token = user.get("token");
+        CurrentUserHelper user = new CurrentUserHelper(context);
+        String token = user.getToken();
         final String duration = "" + (days * 86400);
         final String details = description + " during this period";
         final String API_URL = "http://46.101.213.24:3007";
@@ -99,10 +100,8 @@ public class ChallengeController {
 
     public void createNewDuelChallenge(String description, int days, final String friend_id) {
         String type_id = "567d51c48322f85870fd931b";
-        final SessionManager sessionManager = new SessionManager(context);
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        String token = user.get("token");
+        CurrentUserHelper user = new CurrentUserHelper(context);
+        String token = user.getToken();
         String duration = "" + (days * 86400);
         String details = description + " during this period";
         final String API_URL = "http://46.101.213.24:3007";
@@ -132,10 +131,8 @@ public class ChallengeController {
     }
 
     public void createNewWakeUpChallenge(int days, final String type_id) {
-        final SessionManager sessionManager = new SessionManager(context);
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        String token = user.get("token");
+        CurrentUserHelper user = new CurrentUserHelper(context);
+        final String token = user.getToken();
 
         final String duration = "" + (days * 86400);
         final String description = "Wake Up";
@@ -200,10 +197,8 @@ public class ChallengeController {
 
 
     public void sendSingleInProgressForSelf(String challenge) {
-        final SessionManager sessionManager = new SessionManager(context);
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        String token = user.get("token");
+        CurrentUserHelper user = new CurrentUserHelper(context);
+        final String token = user.getToken();
         final String API_URL = "http://46.101.213.24:3007";
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
@@ -229,15 +224,12 @@ public class ChallengeController {
     }
 
     public void sendSingleInProgressForDuel(final String challenge, final String friend_id) {
-        final SessionManager sessionManager = new SessionManager(context);
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        String token = user.get("token");
+        CurrentUserHelper user = new CurrentUserHelper(context);
+        final String token = user.getToken();
         final String API_URL = "http://46.101.213.24:3007";
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
-
         Call<com.example.ivan.champy_v2.duel.Duel> call = singleinprogress.Start_duel(friend_id, challenge, token);
         call.enqueue(new Callback<Duel>() {
             @Override
@@ -251,7 +243,9 @@ public class ChallengeController {
                     DBHelper dbHelper = new DBHelper(firstActivity);
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
                     db.insert("updated", null, cv);
-                    firstActivity.finish();
+                    Intent goToFriends = new Intent(firstActivity, FriendsActivity.class);
+                    firstActivity.startActivity(goToFriends);
+                    //firstActivity.finish();
                     Log.i("startDuelInProgress", "Status: VSE OK");
                 } else Log.i("startDuelInProgress", "Status: FAILED" + response.code() + response.message());
             }
@@ -262,10 +256,8 @@ public class ChallengeController {
     }
 
     public void sendSingleInProgressForWakeUp(String challenge, final int intentId, final long currentMidnight) {
-        final SessionManager sessionManager = new SessionManager(context);
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        String token = user.get("token");
+        CurrentUserHelper user = new CurrentUserHelper(context);
+        final String token = user.getToken();
         final String API_URL = "http://46.101.213.24:3007";
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
@@ -378,12 +370,10 @@ public class ChallengeController {
 
 
     public void doneForToday(String inProgressId) throws IOException {
-        final SessionManager sessionManager = new SessionManager(context);
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        String token = user.get("token");
+        CurrentUserHelper user = new CurrentUserHelper(context);
+        String token = user.getToken();
+        //String userId = user.getUserObjectId();
         final String API_URL = "http://46.101.213.24:3007";
-        final String userId = user.get("id");
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
@@ -394,6 +384,14 @@ public class ChallengeController {
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     Log.i("DoneForToday", "onResponse: VSE OK");
+//                    DateValidator dateValidator = new DateValidator();
+//                    Calendar c = Calendar.getInstance();
+//                    int seconds = c.get(Calendar.SECOND);
+//                    SimpleDateFormat sdf6 = new SimpleDateFormat("H:mm:ss:SSS");
+//                    String currentDateAndTime = sdf6.format(new Date());
+//                    String stringSeconds = String.valueOf(seconds);
+//                    dateValidator.isThisDateWithin3MonthsRange(stringSeconds, currentDateAndTime);
+//
 //                    SessionManager session = new SessionManager(context);
 //                    String facebookId = session.getFacebookId();
 //                    String gcm = session.getGCM();
@@ -405,7 +403,7 @@ public class ChallengeController {
 //                        e.printStackTrace();
 //                    }
                 } else {
-                    Log.i("DoneForToday", "onResponse: FAILED ");
+                    Log.i("DoneForToday", "onResponse: FAILED " + response.code() + response.message());
                 }
             }
 

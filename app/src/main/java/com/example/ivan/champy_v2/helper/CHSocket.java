@@ -26,6 +26,7 @@ public class CHSocket {
 
     public void tryToConnect() {
         try {
+            Log.i(TAG, "tryToConnect: trying...");
             mSocket = IO.socket("http://46.101.213.24:3007");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
@@ -36,7 +37,7 @@ public class CHSocket {
         mSocket.on("connect",                               onConnect);
         mSocket.on("connected",                             onConnected);
 
-        mSocket.on("InProgressChallenge:new",               onGenerateNewChallenge);
+//        mSocket.on("InProgressChallenge:new",               onRefreshPending);
         mSocket.on("InProgressChallenge:accepted",          onGenerateNewChallenge);
 //        mSocket.on("InProgressChallenge:failed",            onGenerateNewChallenge);
 //        mSocket.on("InProgressChallenge:checked",           onNewChallenge);
@@ -70,16 +71,28 @@ public class CHSocket {
     private Emitter.Listener onGenerateNewChallenge = new Emitter.Listener()  {
         @Override
         public void call(final Object... args) {
-            CurrentUserHelper user = new CurrentUserHelper(context);
             try {
                 ChallengeController cc = new ChallengeController(context, activity, 0, 0, 0);
-                cc.refreshCardsForPendingDuel();
-                Log.i(TAG, "Sockets: generateNewChallenge");
+                cc.generateCardsForMainActivity();
+                Log.i(TAG, "Sockets: generateNewChallenge success!");
             } catch (Exception e) {
                 Log.i(TAG, "Sockets: ERROR: " + e);
             }
         }
     };
+
+//    private Emitter.Listener onRefreshPending = new Emitter.Listener()  {
+//        @Override
+//        public void call(final Object... args) {
+//            try {
+//                ChallengeController cc = new ChallengeController(context, activity, 0, 0, 0);
+//                cc.refreshCardsForPendingDuel();
+//                Log.i(TAG, "Sockets: generateNewChallenge success!");
+//            } catch (Exception e) {
+//                Log.i(TAG, "Sockets: ERROR: " + e);
+//            }
+//        }
+//    };
 
 
 }
