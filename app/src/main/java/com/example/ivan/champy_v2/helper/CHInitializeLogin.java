@@ -43,9 +43,8 @@ public class CHInitializeLogin {
         int y = round(height / 100);
         //Log.i("XX", "XX: " + x);
 
-
         ImageButton button = (ImageButton)activity.findViewById(R.id.login_button);
-        Bitmap icon  = BitmapFactory.decodeResource(context.getResources(), R.drawable.champy_icon);
+        Bitmap icon  = BitmapFactory.decodeResource(context.getResources(), R.drawable.icon_champy);
         Bitmap login = BitmapFactory.decodeResource(context.getResources(), R.drawable.facebook);
 
         login = CHImageModule.getResizedBitmap(login, x*90, x*20);
@@ -54,7 +53,6 @@ public class CHInitializeLogin {
         TextView loginText = (TextView)activity.findViewById(R.id.login_text);
         //loginText.setTypeface(face);
         loginText.setTextSize((float) ((float) y/x * 15));
-
 
         Bitmap bitmap = CHImageModule.getResizedBitmap(icon, x*35, x*35);
         icon = CHImageModule.getRoundedCornerBitmap(bitmap, 20);

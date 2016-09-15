@@ -24,6 +24,7 @@ public class CHSocket {
         this.context = context;
     }
 
+
     public void tryToConnect() {
         try {
             Log.i(TAG, "tryToConnect: trying...");
@@ -33,16 +34,17 @@ public class CHSocket {
         }
     }
 
+
     public void connectAndEmmit() {
         mSocket.on("connect",                               onConnect);
         mSocket.on("connected",                             onConnected);
 
-//        mSocket.on("InProgressChallenge:new",               onRefreshPending);
         mSocket.on("InProgressChallenge:accepted",          onGenerateNewChallenge);
+        mSocket.on("InProgressChallenge:won",               onGenerateNewChallenge);
 //        mSocket.on("InProgressChallenge:failed",            onGenerateNewChallenge);
+//        mSocket.on("InProgressChallenge:new",               onRefreshPending);
 //        mSocket.on("InProgressChallenge:checked",           onNewChallenge);
 //        mSocket.on("InProgressChallenge:updated",           onNewChallenge);
-        mSocket.on("InProgressChallenge:won",               onGenerateNewChallenge);
 //        mSocket.on("InProgress:finish",                     onNewChallenge);
 //        mSocket.on("InProgressChallenge:recipient:checked", onNewChallenge);
 //        mSocket.on("InProgressChallenge:sender:checked",    onNewChallenge);

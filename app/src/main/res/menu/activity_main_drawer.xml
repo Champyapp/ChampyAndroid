@@ -3,23 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <group>
-        <item android:id="@+id/challenges" android:icon="@drawable/challenge"
-            android:title="Challenges" />
-        <item android:id="@+id/friends" android:icon="@drawable/friends"
-            android:title="Friends" />
-        <item android:id="@+id/history" android:icon="@drawable/clock"
-            android:title="History" />
-        <item android:id="@+id/settings" android:icon="@drawable/settings"
-            android:title="Settings" />
+        <item android:id="@+id/challenges" android:icon="@drawable/total"
+            android:title="@string/challenges" />
+        <item android:id="@+id/friends" android:icon="@drawable/icon_add_opponent"
+            android:title="@string/friends" />
+        <item android:id="@+id/history" android:icon="@drawable/nav_history"
+            android:title="@string/history" />
+        <item android:id="@+id/settings" android:icon="@drawable/nav_settings"
+            android:title="@string/settings" />
     </group>
 
 
-    <item android:id="@+id/pending_duels" android:title="Pending Duels"
+    <item android:id="@+id/pending_duels" android:title="@string/pending_duels"
           android:icon="@drawable/duel_yellow" app:actionLayout="@layout/plus_one" />
 
-    <item android:id="@+id/share" android:icon ="@drawable/share_icon" android:title="Share" />
+    <item android:id="@+id/share" android:icon ="@drawable/nav_share" android:title="Share" />
 
-    <item android:id="@+id/nav_logout" android:icon="@drawable/logout" android:title="Logout" />
+    <item android:id="@+id/nav_logout" android:icon="@drawable/nav_logout" android:title="Logout" />
 
 
 
