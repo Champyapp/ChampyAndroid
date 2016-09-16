@@ -32,11 +32,18 @@ import com.example.ivan.champy_v2.helper.CHSetupUI;
 
 import static java.lang.Math.round;
 
-public class SelfImprovementFragment extends Fragment {
+public class SelfImprovementFragment extends Fragment implements View.OnClickListener {
 
     public static final String ARG_PAGE = "ARG_PAGE";
     public static final String TAG = "SelfImprovementFragment";
-
+    public Typeface typeface;
+    public TextView tvGoal, tvDays;
+    public EditText etGoal, etDays;
+    public ViewPager viewPager;
+    public SessionManager sessionManager;
+    public String duration = "", description = "", challenge_id = "";
+    public DBHelper dbHelper;
+    public SQLiteDatabase db;
 
     public static SelfImprovementFragment newInstance(int page) {
         Bundle args = new Bundle();
@@ -48,20 +55,30 @@ public class SelfImprovementFragment extends Fragment {
 
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.i(TAG, "onAttach");
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
+
+
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.item_row, container, false);
+        Log.i(TAG, "onCreateView");
         String name = "";
-        String duration = "";
-        String description = "";
-        String challenge_id = "";
+        duration = "";
+        description = "";
+        challenge_id = "";
         String status = "";
-        DBHelper dbHelper = new DBHelper(getActivity());
+        dbHelper = new DBHelper(getActivity());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final ContentValues cv = new ContentValues();
         final Bundle args = this.getArguments();
@@ -87,13 +104,15 @@ public class SelfImprovementFragment extends Fragment {
             } while (c.moveToNext());
         }
         c.close();
-        final SessionManager sessionManager = new SessionManager(getContext());
+
+        sessionManager = new SessionManager(getContext());
         int size = sessionManager.getSelfSize();
-        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
-        TextView tvGoal = (TextView)view.findViewById(R.id.goal_text);
-        TextView tvDays = (TextView)view.findViewById(R.id.days_text);
-        EditText etGoal = (EditText)view.findViewById(R.id.et_goal);
-        EditText etDays = (EditText)view.findViewById(R.id.et_days);
+
+        typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
+        tvGoal = (TextView)view.findViewById(R.id.goal_text);
+        tvDays = (TextView)view.findViewById(R.id.days_text);
+        etGoal = (EditText)view.findViewById(R.id.et_goal);
+        etDays = (EditText)view.findViewById(R.id.et_days);
 
         int days = 21;
         if (duration != null && !duration.isEmpty()) {
@@ -108,7 +127,7 @@ public class SelfImprovementFragment extends Fragment {
         Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView)view.findViewById(R.id.imageViewAcceptButton));
         ImageButton buttonAccept = (ImageButton) getActivity().findViewById(R.id.imageButtonAcceptSelfImprovement);
 
-        final ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.pager);
+        viewPager = (ViewPager) getActivity().findViewById(R.id.pager);
         CHSetupUI chSetupUI = new CHSetupUI();
         chSetupUI.setupUI(getActivity().findViewById(R.id.selfimprovement), getActivity());
         chSetupUI.setupUI(view, getActivity());
@@ -125,82 +144,74 @@ public class SelfImprovementFragment extends Fragment {
 
         OfflineMode offlineMode = new OfflineMode();
         offlineMode.isConnectedToRemoteAPI(getActivity());
-        buttonAccept.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String duration = "";
-                        String description = "";
-                        String challenge_id = "";
-                        int days;
+        buttonAccept.setOnClickListener(this);
 
-                        EditText etGoal = (EditText) view.findViewById(R.id.et_goal);
-                        EditText etDays = (EditText) view.findViewById(R.id.et_days);
-                        description = etGoal.getText().toString();
-                        duration = etDays.getText().toString();
-
-                        Cursor c = db.query("selfimprovement", null, null, null, null, null, null);
-                        int position = viewPager.getCurrentItem();
-                        int size = sessionManager.getSelfSize();
-
-                        ChallengeController cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
-                        switch (which){
-                            case DialogInterface.BUTTON_POSITIVE:
-                                if (position == size && checkInputUserData(description, duration)) {
-                                    days = Integer.parseInt(duration);
-                                    cc.createNewSelfImprovementChallenge(description, days);
-                                    return;
-                                }
-
-                                if (c.moveToFirst()) {
-                                    int coldescription = c.getColumnIndex("description");
-                                    int colchallenge_id = c.getColumnIndex("challenge_id");
-                                    int o = 0;
-                                    do {
-                                        o++;
-                                        if (o > position + 1) break;
-                                        if (o == position + 1) {
-                                            description = c.getString(coldescription);
-                                            challenge_id = c.getString(colchallenge_id);
-                                        }
-                                    } while (c.moveToNext());
-                                }
-                                c.close();
-
-                                if (isActive(description)) {
-                                    Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    cc.sendSingleInProgressForSelf(challenge_id);
-                                    Toast.makeText(getContext(), "Challenge created", Toast.LENGTH_SHORT).show();
-                                }
-                                break;
-                            case DialogInterface.BUTTON_NEGATIVE:
-                                break;
-                        }
-                    }
-                };
-
-
-//                DialogFragment builder = new DialogFragment().getDialog();
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle(R.string.areYouSure)
-                        .setMessage(R.string.youWannaCreateThisChall)
-                        .setIcon(R.drawable.self_blue)
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.yes, dialogClickListener)
-                        .setNegativeButton(R.string.no,  dialogClickListener).show();
-
-            }
-        });
         return view;
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Log.i(TAG, "onAttach");
+    public void onClick(View view) {
+        Log.i(TAG, "onClick");
+//                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        Log.i(TAG, "onClickDialog");
+
+        int days;
+        description = etGoal.getText().toString();
+        duration = etDays.getText().toString();
+        dbHelper = new DBHelper(getActivity());
+        db = dbHelper.getWritableDatabase();
+        Cursor c = db.query("selfimprovement", null, null, null, null, null, null);
+        int position = viewPager.getCurrentItem();
+        int size = sessionManager.getSelfSize();
+
+        ChallengeController cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
+//                        switch (which){
+//                            case DialogInterface.BUTTON_POSITIVE:
+        if (position == size && checkInputUserData(description, duration)) {
+            days = Integer.parseInt(duration);
+            cc.createNewSelfImprovementChallenge(description, days);
+        } else {
+            if (c.moveToFirst()) {
+                int coldescription = c.getColumnIndex("description");
+                int colchallenge_id = c.getColumnIndex("challenge_id");
+                int o = 0;
+                do {
+                    o++;
+                    if (o > position + 1) break;
+                    if (o == position + 1) {
+                        description = c.getString(coldescription);
+                        challenge_id = c.getString(colchallenge_id);
+                    }
+                } while (c.moveToNext());
+            }
+            c.close();
+
+            if (isActive(description)) {
+                Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
+            } else {
+                cc.sendSingleInProgressForSelf(challenge_id);
+                Toast.makeText(getContext(), "Challenge created", Toast.LENGTH_SHORT).show();
+            }
+        }
+//                                break;
+//                            case DialogInterface.BUTTON_NEGATIVE:
+//                                break;
+//                        }
+//                    }
+
+
+
+//                DialogFragment builder = new DialogFragment().getDialog();
+//                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//                builder.setTitle(R.string.areYouSure)
+//                        .setMessage(R.string.youWannaCreateThisChall)
+//                        .setIcon(R.drawable.self_blue)
+//                        .setCancelable(false)
+//                        .setPositiveButton(R.string.yes, dialogClickListener)
+//                        .setNegativeButton(R.string.no,  dialogClickListener).show();
+//
     }
 
     @Override
