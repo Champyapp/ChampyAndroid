@@ -36,13 +36,15 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 
     public static final String ARG_PAGE = "ARG_PAGE";
     public static final String TAG = "SelfImprovementFragment";
+    public int position, size, days = 21;
+    public String duration = "", description = "", challenge_id = "", status = "", name = "";
     public Typeface typeface;
     public TextView tvGoal, tvDays;
     public EditText etGoal, etDays;
     public ViewPager viewPager;
     public SessionManager sessionManager;
-    public String duration = "", description = "", challenge_id = "";
     public DBHelper dbHelper;
+    public Cursor c;
     public SQLiteDatabase db;
 
     public static SelfImprovementFragment newInstance(int page) {
@@ -73,18 +75,12 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.item_row, container, false);
         Log.i(TAG, "onCreateView");
-        String name = "";
-        duration = "";
-        description = "";
-        challenge_id = "";
-        String status = "";
         dbHelper = new DBHelper(getActivity());
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final ContentValues cv = new ContentValues();
+        db = dbHelper.getWritableDatabase();
         final Bundle args = this.getArguments();
-        Cursor c = db.query("selfimprovement", null, null, null, null, null, null);
-        int position = args.getInt(ARG_PAGE);
-        Log.i("stat", "Status: " + position);
+        c = db.query("selfimprovement", null, null, null, null, null, null);
+        position = args.getInt(ARG_PAGE);
+        Log.i(TAG, "onCreateView: cards # " + position);
         int o = 0;
         if (c.moveToFirst()) {
             int idColIndex = c.getColumnIndex("id");
@@ -106,7 +102,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         c.close();
 
         sessionManager = new SessionManager(getContext());
-        int size = sessionManager.getSelfSize();
+        size = sessionManager.getSelfSize();
 
         typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
         tvGoal = (TextView)view.findViewById(R.id.goal_text);
@@ -114,7 +110,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         etGoal = (EditText)view.findViewById(R.id.et_goal);
         etDays = (EditText)view.findViewById(R.id.et_days);
 
-        int days = 21;
         if (duration != null && !duration.isEmpty()) {
             days = Integer.parseInt(duration) / 86400;
         }
@@ -156,22 +151,22 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 //                    @Override
 //                    public void onClick(DialogInterface dialog, int which) {
 //                        Log.i(TAG, "onClickDialog");
-
-        int days;
         description = etGoal.getText().toString();
         duration = etDays.getText().toString();
         dbHelper = new DBHelper(getActivity());
         db = dbHelper.getWritableDatabase();
-        Cursor c = db.query("selfimprovement", null, null, null, null, null, null);
-        int position = viewPager.getCurrentItem();
-        int size = sessionManager.getSelfSize();
+        c = db.query("selfimprovement", null, null, null, null, null, null);
+        position = viewPager.getCurrentItem();
+        size = sessionManager.getSelfSize();
 
         ChallengeController cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
 //                        switch (which){
 //                            case DialogInterface.BUTTON_POSITIVE:
-        if (position == size && checkInputUserData(description, duration)) {
-            days = Integer.parseInt(duration);
-            cc.createNewSelfImprovementChallenge(description, days);
+        if (position == size) {
+            if (checkInputUserData(description, duration)) {
+                days = Integer.parseInt(duration);
+                cc.createNewSelfImprovementChallenge(description, days);
+            }
         } else {
             if (c.moveToFirst()) {
                 int coldescription = c.getColumnIndex("description");
@@ -194,6 +189,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                 cc.sendSingleInProgressForSelf(challenge_id);
                 Toast.makeText(getContext(), "Challenge created", Toast.LENGTH_SHORT).show();
             }
+
         }
 //                                break;
 //                            case DialogInterface.BUTTON_NEGATIVE:
@@ -266,7 +262,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 
     // check user input data @description @days @isActive
     private boolean checkInputUserData(String description, String duration) {
-        int days = 21;
         if (!duration.isEmpty()) {
             days = Integer.parseInt(duration);
         }
