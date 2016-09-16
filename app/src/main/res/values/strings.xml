@@ -188,5 +188,7 @@
     <string name="friends">Friends</string>
     <string name="challenges">Challenges</string>
     <string name="pending_duels">Pending Duels</string>
+    <string name="share">Share</string>
+    <string name="logout">Logout</string>
 
 </resources>

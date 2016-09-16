@@ -2,6 +2,7 @@ package com.example.ivan.champy_v2.fragment;
 
 import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -34,6 +35,7 @@ import static java.lang.Math.round;
 public class SelfImprovementFragment extends Fragment {
 
     public static final String ARG_PAGE = "ARG_PAGE";
+    public static final String TAG = "SelfImprovementFragment";
 
 
     public static SelfImprovementFragment newInstance(int page) {
@@ -49,7 +51,6 @@ public class SelfImprovementFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
 
     @Nullable
     @Override
@@ -196,6 +197,61 @@ public class SelfImprovementFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.i(TAG, "onAttach");
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.i(TAG, "onActivityCreated");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.i(TAG, "onStart");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i(TAG, "onPause");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.i(TAG, "onStop");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.i(TAG, "onDestroyView");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "onDestroy");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.i(TAG, "onDetach");
+    }
+
+
 
     // check user input data @description @days @isActive
     private boolean checkInputUserData(String description, String duration) {
@@ -214,7 +270,6 @@ public class SelfImprovementFragment extends Fragment {
             return false;
         }
     }
-
 
     // check for isActive challenge
     private boolean isActive(String description) {
