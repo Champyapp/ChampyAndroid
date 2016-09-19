@@ -250,7 +250,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
     }
 
 
-    public boolean check(String time) {
+    private boolean check(String time) {
         boolean ok = true;
         DBHelper dbHelper = new DBHelper(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -259,12 +259,10 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
             int colDescription = c.getColumnIndex("description");
             int status = c.getColumnIndex("status");
             do {
-                if (c.getString(colDescription).equals("Wake Up")) {
-                    if (c.getString(status).equals("started")) {
-                        if (c.getString(c.getColumnIndex("description")).equals(time)) {
-                            ok = false;
-                            break;
-                        }
+                if (c.getString(status).equals("started")) {
+                    if (c.getString(colDescription).equals(time)) {
+                        ok = false;
+                        break;
                     }
                 }
             } while (c.moveToNext());
