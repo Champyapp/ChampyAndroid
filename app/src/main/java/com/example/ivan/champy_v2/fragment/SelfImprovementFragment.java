@@ -44,6 +44,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
     public EditText etGoal, etDays;
     public ViewPager viewPager;
     public SessionManager sessionManager;
+    public ChallengeController cc;
     public Snackbar snackbar;
     public DBHelper dbHelper;
     public Cursor c;
@@ -80,7 +81,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         final Bundle args = this.getArguments();
         c = db.query("selfimprovement", null, null, null, null, null, null);
         position = args.getInt(ARG_PAGE);
-        Log.i(TAG, "onCreateView: cards # " + position);
         int o = 0;
         if (c.moveToFirst()) {
             int idColIndex = c.getColumnIndex("id");
@@ -141,7 +141,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         offlineMode.isConnectedToRemoteAPI(getActivity());
         buttonAccept.setOnClickListener(this);
 
-
         return view;
     }
 
@@ -160,19 +159,17 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         c = db.query("selfimprovement", null, null, null, null, null, null);
         position = viewPager.getCurrentItem();
         size = sessionManager.getSelfSize();
-
-        final ChallengeController cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
 //                        switch (which){
 //                            case DialogInterface.BUTTON_POSITIVE:
-
-        snackbar = Snackbar.make(view, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes!", new View.OnClickListener() {
+        snackbar = Snackbar.make(view, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.i(TAG, "onClickSnackBar: ");
+                cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
                 if (position == size) {
                     if (checkInputUserData(description, duration, view)) {
                         days = Integer.parseInt(duration);
                         cc.createNewSelfImprovementChallenge(description, days);
-//                        snackbar = Snackbar.make(view, "Challenge Created!", Snackbar.LENGTH_SHORT);
                     }
                 } else {
                     if (c.moveToFirst()) {
@@ -190,20 +187,17 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                     }
                     c.close();
 
-                    if (isActive(description)) {
+                    if (cc.isActive(description)) {
                         snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
                     } else {
                         cc.sendSingleInProgressForSelf(challenge_id);
                         snackbar = Snackbar.make(view, "Challenge Created!", Snackbar.LENGTH_SHORT);
                     }
-
+                    snackbar.show();
                 }
-                snackbar.show();
             }
         });
-
         snackbar.show();
-
 //                                break;
 //                            case DialogInterface.BUTTON_NEGATIVE:
 //                                break;
@@ -221,7 +215,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 //                        .setPositiveButton(R.string.yes, dialogClickListener)
 //                        .setNegativeButton(R.string.no,  dialogClickListener).show();
 //
-
     }
 
     @Override
@@ -276,14 +269,14 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 
     // check user input data @description @days @isActive
     private boolean checkInputUserData(String description, String duration, View view) {
-        if (!duration.isEmpty()) {
-            days = Integer.parseInt(duration);
-        }
-        if (!isActive(description) && !description.isEmpty() && !description.startsWith(" ") && !duration.isEmpty() && days != 0) {
+//        if (!duration.isEmpty()) {
+//            days = Integer.parseInt(duration);
+//        }
+        if (!cc.isActive(description) && !description.isEmpty() && !description.startsWith(" ") && !duration.isEmpty() && days != 0) {
             snackbar = Snackbar.make(view, "Challenge created!", Snackbar.LENGTH_SHORT);
             snackbar.show();
             return true;
-        } else if (isActive(description)) {
+        } else if (cc.isActive(description)) {
             snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
             snackbar.show();
             return false;
@@ -294,26 +287,26 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         }
     }
 
-    // check for isActive challenge
-    private boolean isActive(String description) {
-        DBHelper dbHelper = new DBHelper(getActivity());
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-        description = description + " during this period";
-        boolean ok = false;
-        if (c.moveToFirst()) {
-            int coldescription = c.getColumnIndex("description");
-            do {
-                if (c.getString(c.getColumnIndex("status")).equals("started")) {
-                    if (c.getString(coldescription).equals(description)) {
-                        ok = true;
-                    }
-                }
-            } while (c.moveToNext());
-        }
-        c.close();
-        return ok;
-    }
+//    // check for isActive challenge
+//    private boolean isActive(String description) {
+//        DBHelper dbHelper = new DBHelper(getActivity());
+//        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+//        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
+//        description = description + " during this period";
+//        boolean ok = false;
+//        if (c.moveToFirst()) {
+//            int coldescription = c.getColumnIndex("description");
+//            do {
+//                if (c.getString(c.getColumnIndex("status")).equals("started")) {
+//                    if (c.getString(coldescription).equals(description)) {
+//                        ok = true;
+//                    }
+//                }
+//            } while (c.moveToNext());
+//        }
+//        c.close();
+//        return ok;
+//    }
 
 
 }
