@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -43,6 +44,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
     public EditText etGoal, etDays;
     public ViewPager viewPager;
     public SessionManager sessionManager;
+    public Snackbar snackbar;
     public DBHelper dbHelper;
     public Cursor c;
     public SQLiteDatabase db;
@@ -66,8 +68,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
     public void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Nullable
@@ -141,13 +141,15 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         offlineMode.isConnectedToRemoteAPI(getActivity());
         buttonAccept.setOnClickListener(this);
 
+
         return view;
     }
 
     @Override
     public void onClick(View view) {
         Log.i(TAG, "onClick");
-//                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+
+        //                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
 //                    @Override
 //                    public void onClick(DialogInterface dialog, int which) {
 //                        Log.i(TAG, "onClickDialog");
@@ -159,38 +161,49 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         position = viewPager.getCurrentItem();
         size = sessionManager.getSelfSize();
 
-        ChallengeController cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
+        final ChallengeController cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
 //                        switch (which){
 //                            case DialogInterface.BUTTON_POSITIVE:
-        if (position == size) {
-            if (checkInputUserData(description, duration)) {
-                days = Integer.parseInt(duration);
-                cc.createNewSelfImprovementChallenge(description, days);
-            }
-        } else {
-            if (c.moveToFirst()) {
-                int coldescription = c.getColumnIndex("description");
-                int colchallenge_id = c.getColumnIndex("challenge_id");
-                int o = 0;
-                do {
-                    o++;
-                    if (o > position + 1) break;
-                    if (o == position + 1) {
-                        description = c.getString(coldescription);
-                        challenge_id = c.getString(colchallenge_id);
+
+        snackbar = Snackbar.make(view, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes!", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (position == size) {
+                    if (checkInputUserData(description, duration, view)) {
+                        days = Integer.parseInt(duration);
+                        cc.createNewSelfImprovementChallenge(description, days);
+//                        snackbar = Snackbar.make(view, "Challenge Created!", Snackbar.LENGTH_SHORT);
                     }
-                } while (c.moveToNext());
-            }
-            c.close();
+                } else {
+                    if (c.moveToFirst()) {
+                        int coldescription = c.getColumnIndex("description");
+                        int colchallenge_id = c.getColumnIndex("challenge_id");
+                        int o = 0;
+                        do {
+                            o++;
+                            if (o > position + 1) break;
+                            if (o == position + 1) {
+                                description = c.getString(coldescription);
+                                challenge_id = c.getString(colchallenge_id);
+                            }
+                        } while (c.moveToNext());
+                    }
+                    c.close();
 
-            if (isActive(description)) {
-                Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
-            } else {
-                cc.sendSingleInProgressForSelf(challenge_id);
-                Toast.makeText(getContext(), "Challenge created", Toast.LENGTH_SHORT).show();
-            }
+                    if (isActive(description)) {
+                        snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
+                    } else {
+                        cc.sendSingleInProgressForSelf(challenge_id);
+                        snackbar = Snackbar.make(view, "Challenge Created!", Snackbar.LENGTH_SHORT);
+                    }
 
-        }
+                }
+                snackbar.show();
+            }
+        });
+
+        snackbar.show();
+
 //                                break;
 //                            case DialogInterface.BUTTON_NEGATIVE:
 //                                break;
@@ -208,6 +221,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 //                        .setPositiveButton(R.string.yes, dialogClickListener)
 //                        .setNegativeButton(R.string.no,  dialogClickListener).show();
 //
+
     }
 
     @Override
@@ -261,18 +275,21 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 
 
     // check user input data @description @days @isActive
-    private boolean checkInputUserData(String description, String duration) {
+    private boolean checkInputUserData(String description, String duration, View view) {
         if (!duration.isEmpty()) {
             days = Integer.parseInt(duration);
         }
         if (!isActive(description) && !description.isEmpty() && !description.startsWith(" ") && !duration.isEmpty() && days != 0) {
-            Toast.makeText(getActivity(), "Challenge created", Toast.LENGTH_SHORT).show();
+            snackbar = Snackbar.make(view, "Challenge created!", Snackbar.LENGTH_SHORT);
+            snackbar.show();
             return true;
         } else if (isActive(description)) {
-            Toast.makeText(getContext(), "This challenge is active", Toast.LENGTH_SHORT).show();
+            snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
+            snackbar.show();
             return false;
         } else {
-            Toast.makeText(getContext(), "Complete all fields", Toast.LENGTH_SHORT).show();
+            snackbar = Snackbar.make(view, "Complete all fields", Snackbar.LENGTH_SHORT);
+            snackbar.show();
             return false;
         }
     }

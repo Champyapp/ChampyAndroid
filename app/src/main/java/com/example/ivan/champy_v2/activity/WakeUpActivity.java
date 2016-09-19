@@ -16,6 +16,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -47,11 +48,13 @@ import java.util.HashMap;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
-public class WakeUpActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class WakeUpActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
-    AlarmManager alarmManager;
+    public final static String type_id = "567d51c48322f85870fd931c";
     private PendingIntent pendingIntent;
     private TimePicker alarmTimePicker;
+    public Snackbar snackbar;
+    AlarmManager alarmManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +62,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         setContentView(R.layout.activity_wake_up);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
@@ -79,17 +82,17 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         if (count == 0) checker.hideItem();
 
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
-        TextView tvIChallengeMyselfTo = (TextView)findViewById(R.id.textView20);
+        TextView tvIChallengeMyselfTo = (TextView) findViewById(R.id.textView20);
         tvIChallengeMyselfTo.setTypeface(typeface);
-        TextView tvGoal = (TextView)findViewById(R.id.goal_text);
+        TextView tvGoal = (TextView) findViewById(R.id.goal_text);
         tvGoal.setTypeface(typeface);
-        TextView tvDuration = (TextView)findViewById(R.id.textView23);
+        TextView tvDuration = (TextView) findViewById(R.id.textView23);
         tvDuration.setTypeface(typeface);
 
         Glide.with(this).load(R.drawable.wakeupwhite).override(110, 110).into((ImageView) findViewById(R.id.imageViewLogo));
         Glide.with(this).load(R.drawable.wakeuptext).override(180, 150).into((ImageView) findViewById(R.id.imageView12));
 
-        RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.wake_up);
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.wake_up);
         relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementback));
 
         SessionManager sessionManager = new SessionManager(getApplicationContext());
@@ -104,7 +107,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         tvDuration = (TextView) headerLayout.findViewById(R.id.tvUserName);
         tvDuration.setText(name);
 
-        Glide.with(this).load(R.drawable.points).override(100, 100).into((ImageView)findViewById(R.id.imageViewAcceptButton));
+        Glide.with(this).load(R.drawable.points).override(100, 100).into((ImageView) findViewById(R.id.imageViewAcceptButton));
         Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile);
 
@@ -118,54 +121,62 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
             e.printStackTrace();
         }
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        ImageButton imageButton = (ImageButton)findViewById(R.id.imageButtonAcceptSelfImprovement);
+        alarmTimePicker = (TimePicker) findViewById(R.id.timePicker);
+        ImageButton imageButton = (ImageButton) findViewById(R.id.imageButtonAcceptSelfImprovement);
+        imageButton.setOnClickListener(this);
 
-        imageButton.setOnClickListener(new View.OnClickListener() {
+    }
+
+    @Override
+    public void onClick(final View v) {
+//        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+
+
+//                switch (which) {
+//                    case DialogInterface.BUTTON_POSITIVE:
+        final int hour = alarmTimePicker.getCurrentHour();
+        final int minute = alarmTimePicker.getCurrentMinute();
+        final OfflineMode offlineMode = new OfflineMode();
+        String sHour = "" + hour;
+        String sMinute = "" + minute;
+        if (hour < 10)   sHour   = "0" + sHour;
+        if (minute < 10) sMinute = "0" + sMinute;
+        final boolean ok = check(sHour + sMinute);
+        snackbar = Snackbar.make(v, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes!", new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        final String type_id = "567d51c48322f85870fd931c";
-
-                        switch (which){
-                            case DialogInterface.BUTTON_POSITIVE:
-                                alarmTimePicker = (TimePicker)findViewById(R.id.timePicker);
-                                int hour = alarmTimePicker.getCurrentHour();
-                                int minute = alarmTimePicker.getCurrentMinute();
-                                Log.i("WakeUpActivity", "HOUR   = " + hour);
-                                Log.i("WakeUpActivity", "MINUTE = " + minute);
-
-                                //boolean ok = check(sHour + sMinute);
-                                OfflineMode offlineMode = new OfflineMode();
-                                if (offlineMode.isConnectedToRemoteAPI(WakeUpActivity.this)) {
-                                    //if (ok) {
-//                                        Toast.makeText(WakeUpActivity.this, "Challenge created", Toast.LENGTH_SHORT).show();
-                                        ChallengeController cc = new ChallengeController(WakeUpActivity.this, WakeUpActivity.this, hour, minute, 0);
-                                        cc.createNewWakeUpChallenge(21, type_id);
-//                                    } else {
-//                                        Toast.makeText(WakeUpActivity.this, "Already exist!", Toast.LENGTH_SHORT).show();
-//                                    }
-                                }
-                                break;
-
-                            case DialogInterface.BUTTON_NEGATIVE:
-                                break;
-                        }
+            public void onClick(View view) {
+                if (offlineMode.isConnectedToRemoteAPI(WakeUpActivity.this)) {
+                    if (ok) {
+                        ChallengeController cc = new ChallengeController(WakeUpActivity.this, WakeUpActivity.this, hour, minute, 0);
+                        cc.createNewWakeUpChallenge(21, type_id);
+                        snackbar = Snackbar.make(view, "Challenge Created!", Snackbar.LENGTH_SHORT);
+                    } else {
+                        snackbar = Snackbar.make(view, "Already Exist!", Snackbar.LENGTH_SHORT);
                     }
-                };
-
-                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(WakeUpActivity.this);
-                builder.setTitle(R.string.areYouSure)
-                        .setMessage(R.string.youWannaCreateThisChall)
-                        .setIcon(R.drawable.wakeup_blue)
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.yes, dialogClickListener)
-                        .setNegativeButton(R.string.no,  dialogClickListener).show();
+                    snackbar.show();
+                }
             }
         });
+        snackbar.show();
     }
+//                        break;
+//                    case DialogInterface.BUTTON_NEGATIVE:
+//                        break;
+//                }
+//            }
+//        };
+//
+//        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(WakeUpActivity.this);
+//        builder.setTitle(R.string.areYouSure)
+//                .setMessage(R.string.youWannaCreateThisChall)
+//                .setIcon(R.drawable.wakeup_blue)
+//                .setCancelable(false)
+//                .setPositiveButton(R.string.yes, dialogClickListener)
+//                .setNegativeButton(R.string.no, dialogClickListener).show();
+
+
 
     @Override
     public void onStart() {
@@ -239,27 +250,27 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
     }
 
 
-//    public boolean check(String time) {
-//        boolean ok = true;
-//        DBHelper dbHelper = new DBHelper(this);
-//        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-//        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-//        if (c.moveToFirst()) {
-//            int colDescription = c.getColumnIndex("description");
-//            int status = c.getColumnIndex("status");
-//            do {
-//                if (c.getString(colDescription).equals("Wake Up")) {
-//                    if (c.getString(status).equals("started")) {
-//                        if (c.getString(c.getColumnIndex("description")).equals(time)) {
-//                            ok = false;
-//                            break;
-//                        }
-//                    }
-//                }
-//            } while (c.moveToNext());
-//        }
-//        c.close();
-//        return ok;
-//    }
+    public boolean check(String time) {
+        boolean ok = true;
+        DBHelper dbHelper = new DBHelper(this);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
+        if (c.moveToFirst()) {
+            int colDescription = c.getColumnIndex("description");
+            int status = c.getColumnIndex("status");
+            do {
+                if (c.getString(colDescription).equals("Wake Up")) {
+                    if (c.getString(status).equals("started")) {
+                        if (c.getString(c.getColumnIndex("description")).equals(time)) {
+                            ok = false;
+                            break;
+                        }
+                    }
+                }
+            } while (c.moveToNext());
+        }
+        c.close();
+        return ok;
+    }
 
 }

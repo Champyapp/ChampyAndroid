@@ -9,7 +9,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.ivan.champy_v2.activity.FriendsActivity;
@@ -152,24 +154,25 @@ public class ChallengeController {
         final long currentMidnight = currentTime - (myCalendar.get(Calendar.HOUR_OF_DAY) * 60 * 60) - (myCalendar.get(Calendar.MINUTE) * 60) - (myCalendar.get(Calendar.SECOND));
         Log.i("ChallengeController", "CurrentMidNight: " + currentMidnight);
 
-        final String[] details = new String[21];
-        for (int i = 0; i <= 20; i++) {
-            details[i] = String.valueOf(minute * 60 + hour * 60 * 60 + i*(24*60*60) + currentMidnight);
-        }
-        final String myDetails = Arrays.toString(details);
+//        final String[] details = new String[21];
+//        for (int i = 0; i <= 20; i++) {
+//            details[i] = String.valueOf(minute * 60 + hour * 60 * 60 + i*(24*60*60) + currentMidnight);
+//        }
+
+//        final String myDetails = Arrays.toString(details);
         final String API_URL = "http://46.101.213.24:3007";
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         final int intentId = Integer.parseInt(sHour + sMinute);
         final String stringIntentId = String.valueOf(Integer.parseInt(sHour + sMinute));
 
-        boolean ok = check(sHour + sMinute);
-        if (!ok) {
-            Toast.makeText(context, "Already Exist!", Toast.LENGTH_SHORT).show();
-            return;
-        }
+//        boolean ok = check(sHour + sMinute);
+//        if (!ok) {
+//            Toast.makeText(context, "Already Exist!", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
 
-        CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
         // change stringIntentId for myDetails
+        CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
         Call<com.example.ivan.champy_v2.create_challenge.CreateChallenge> call = createChallenge.createChallenge(wakeUpName, type_id, description, stringIntentId, duration, token);
         call.enqueue(new Callback<com.example.ivan.champy_v2.create_challenge.CreateChallenge>() {
             @Override
@@ -177,8 +180,6 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
                     sendSingleInProgressForWakeUp(challengeId, intentId, currentMidnight);
-                    Toast.makeText(context, "Challenge created", Toast.LENGTH_SHORT).show();
-
                     Log.i("makeNewWakeUpChallenge", "createNewWakeUpChallenge Status: OK"
                             + "\n Intent_ID   = " + intentId
                             + "\n _ID         = " + challengeId
@@ -190,7 +191,8 @@ public class ChallengeController {
             }
 
             @Override
-            public void onFailure(Throwable t) { }
+            public void onFailure(Throwable t) {
+            }
         });
     }
 
