@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
 
     Activity activity;
     private ArrayList<SelfImprovement_model> arrayList;
+    public static final String TAG = "CardsAdapterMain";
 
     public MainActivityCardsAdapter(Context context, ArrayList<SelfImprovement_model> marrayList, Activity activity) {
         super(context);
@@ -71,12 +73,16 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
         String itemType   = item.getType();
         String itemGoal   = item.getGoal();
         String itemVersus = "with " + item.getVersus();
+        String itemSenderProgress = item.getSenderProgress();
+//        String asd[] = itemSenderProgress;
+        Log.i(TAG, "getView: itemSenderProgress = " + toArrayOfStrings(itemSenderProgress)[0]);
         TextView tvRecipientName = (TextView) tempView.findViewById(R.id.tvRecipientName);
         ImageView imageView      = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
-        ImageView imageUser1     = (ImageView)tempView.findViewById(R.id.user1);
-        ImageView imageUser2     = (ImageView)tempView.findViewById(R.id.user2);
+//        ImageView imageUser1     = (ImageView)tempView.findViewById(R.id.user1);
+//        ImageView imageUser2     = (ImageView)tempView.findViewById(R.id.user2);
 
-        CurrentUserHelper currentUserHelper = new CurrentUserHelper(getContext());
+//        CurrentUserHelper currentUserHelper = new CurrentUserHelper(getContext());
+
 
         switch (itemType) {
             case "Wake Up":
@@ -166,6 +172,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
             @Override
             public void onClick(View v) {
                 String id = item.getId();
+                Log.i("ASDASDASD", "onClickINPROGRESSID: " + id);
                 SQLiteDatabase localSQLiteDatabase = new DBHelper(getContext()).getWritableDatabase();
                 ContentValues localContentValues = new ContentValues();
                 localContentValues.put("updated", "true");
@@ -186,6 +193,15 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
     @Override
     public int dataCount() {
         return arrayList.size();
+    }
+
+
+    public String[] toArrayOfStrings(String arg){
+
+        String a = arg.substring(1);
+        String b = a.replaceFirst("]","");
+
+        return b.split(", ");
     }
 
 }

@@ -87,7 +87,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 + "duration text,"
                 + "challenge_id text,"
                 + "status text,"
-                + "updated text"
+                + "updated text,"
+                + "senderProgress text DEFAULT []"
                 + ");");
 
         db.execSQL("create table updated("

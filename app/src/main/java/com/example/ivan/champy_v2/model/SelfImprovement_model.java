@@ -27,6 +27,15 @@ public class SelfImprovement_model {
     String challengeName;
     String versus;
     String recipient;
+    String senderProgress;
+
+    public String getSenderProgress() {
+        return senderProgress;
+    }
+
+    public void setSenderProgress(String senderProgress) {
+        this.senderProgress = senderProgress;
+    }
 
     public String getRecipient() {
         return recipient;
@@ -85,7 +94,7 @@ public class SelfImprovement_model {
     }
 
 
-    public SelfImprovement_model( String mGoal, String mDays, String mType, String mid ,String mStatus, String mUpdated, String mChallengeName, String versus, String recipient) {
+    public SelfImprovement_model( String mGoal, String mDays, String mType, String mid ,String mStatus, String mUpdated, String mChallengeName, String versus, String recipient, String senderProgress) {
         this.goal = mGoal;
         this.days = mDays;
         this.type = mType;
@@ -95,6 +104,7 @@ public class SelfImprovement_model {
         this.challengeName = mChallengeName;
         this.versus = versus;
         this.recipient = recipient;
+        this.senderProgress = senderProgress;
     }
 
 
@@ -106,17 +116,17 @@ public class SelfImprovement_model {
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
 
         if (c.moveToFirst()) {
-            int idColIndex = c.getColumnIndex("id");
-            int nameColIndex = c.getColumnIndex("name");
-            int coldescription = c.getColumnIndex("description");
-            int colduration = c.getColumnIndex("duration");
-            int colchallenge_id = c.getColumnIndex("challenge_id");
-            int status = c.getColumnIndex("status");
-            int updated = c.getColumnIndex("updated");
-            int challengeName = c.getColumnIndex("challengeName");
-            int colversus = c.getColumnIndex("versus");
-            int colrecipient = c.getColumnIndex("recipient");
-
+            int idColIndex        = c.getColumnIndex("id");
+            int nameColIndex      = c.getColumnIndex("name");
+            int coldescription    = c.getColumnIndex("description");
+            int colduration       = c.getColumnIndex("duration");
+            int colchallenge_id   = c.getColumnIndex("challenge_id");
+            int status            = c.getColumnIndex("status");
+            int updated           = c.getColumnIndex("updated");
+            int challengeName     = c.getColumnIndex("challengeName");
+            int colversus         = c.getColumnIndex("versus");
+            int colrecipient      = c.getColumnIndex("recipient");
+            int colsencerprogress = c.getColumnIndex("senderProgress");
             do {
                 if (c.getString(status).equals("started")) arrayList.add (new SelfImprovement_model(
                         c.getString(coldescription),
@@ -127,7 +137,8 @@ public class SelfImprovement_model {
                         c.getString(updated),
                         c.getString(challengeName),
                         c.getString(colversus),
-                        c.getString(colrecipient)));
+                        c.getString(colrecipient),
+                        c.getString(colsencerprogress)));
             } while (c.moveToNext());
         }
         c.close();
@@ -152,7 +163,7 @@ public class SelfImprovement_model {
             int challengeName = c.getColumnIndex("challengeName");
             int colversus = c.getColumnIndex("versus");
             int colrecipient = c.getColumnIndex("recipient");
-
+            int colsencerprogress = c.getColumnIndex("senderProgress");
             do {
                 if (c.getString(colrecipient).equals("true")) {
                     if (c.getString(status).equals("failedBySender")) {
@@ -165,7 +176,8 @@ public class SelfImprovement_model {
                                 c.getString(updated),
                                 c.getString(challengeName),
                                 c.getString(colversus),
-                                c.getString(colrecipient)));
+                                c.getString(colrecipient),
+                                c.getString(colsencerprogress)));
                     }
                 }
                 if (c.getString(colrecipient).equals("false")) {
@@ -179,7 +191,8 @@ public class SelfImprovement_model {
                                 c.getString(updated),
                                 c.getString(challengeName),
                                 c.getString(colversus),
-                                c.getString(colrecipient)));
+                                c.getString(colrecipient),
+                                c.getString(colsencerprogress)));
                     }
                     if (c.getString(status).equals("finished")) {
                         arrayList.add(new SelfImprovement_model(
@@ -191,7 +204,8 @@ public class SelfImprovement_model {
                                 c.getString(updated),
                                 c.getString(challengeName),
                                 c.getString(colversus),
-                                c.getString(colrecipient)));
+                                c.getString(colrecipient),
+                                c.getString(colsencerprogress)));
                     }
                 }
 
@@ -219,7 +233,7 @@ public class SelfImprovement_model {
             int challengeName = c.getColumnIndex("challengeName");
             int colversus = c.getColumnIndex("versus");
             int colrecipient = c.getColumnIndex("recipient"); // check recipient
-
+            int colsencerprogress = c.getColumnIndex("senderProgress");
             do {
                 if (c.getString(colrecipient).equals("true")) {
                     if (c.getString(status).equals("failedByRecipient")) {
@@ -232,7 +246,8 @@ public class SelfImprovement_model {
                                 c.getString(updated),
                                 c.getString(challengeName),
                                 c.getString(colversus),
-                                c.getString(colrecipient)));
+                                c.getString(colrecipient),
+                                c.getString(colsencerprogress)));
                     }
                 }
                 if (c.getString(colrecipient).equals("false")) {
@@ -246,7 +261,8 @@ public class SelfImprovement_model {
                                 c.getString(updated),
                                 c.getString(challengeName),
                                 c.getString(colversus),
-                                c.getString(colrecipient)));
+                                c.getString(colrecipient),
+                                c.getString(colsencerprogress)));
                     }
                 }
             } while (c.moveToNext());

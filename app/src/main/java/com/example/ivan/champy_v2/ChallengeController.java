@@ -8,20 +8,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 import com.example.ivan.champy_v2.activity.FriendsActivity;
 import com.example.ivan.champy_v2.activity.MainActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.duel.Duel;
-import com.example.ivan.champy_v2.helper.AppSync;
 import com.example.ivan.champy_v2.helper.CHLoadUserProgressBarInfo;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
-import com.example.ivan.champy_v2.helper.DateValidator;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
 import com.example.ivan.champy_v2.interfaces.CreateChallenge;
 import com.example.ivan.champy_v2.interfaces.SingleInProgress;
@@ -30,19 +24,18 @@ import com.example.ivan.champy_v2.model.active_in_progress.Datum;
 import com.example.ivan.champy_v2.model.active_in_progress.Recipient;
 import com.example.ivan.champy_v2.model.active_in_progress.Sender;
 import com.example.ivan.champy_v2.single_inprogress.Data;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -86,13 +79,13 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
                     sendSingleInProgressForSelf(challengeId);
-                    Log.i("createNewSIC", "CreateNewChallenge Status: VSE OK"
+                    Log.i(TAG, "createNewSelfImprovementChallenge Status: VSE OK"
                             + "\n CHALL_ID    = " + challengeId
                             + "\n TYPE_ID     = " + type_id
                             + "\n DESCRIPTION = " + description
                             + "\n DETAILS     = " + details
                             + "\n DURATION    = " + duration);
-                } else Log.i("createNewSIC", "CreateNewChallenge Status: Failed");
+                } else Log.i(TAG, "createNewSelfImprovementChallenge Status: Failed " + response.message());
             }
 
             @Override
@@ -119,10 +112,10 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
                     sendSingleInProgressForDuel(challengeId, friend_id);
-                    Log.i("createNewDuelChallenge", "OnResponse: VSE OK" +
+                    Log.i(TAG, "createNewDuelChallenge OnResponse: VSE OK" +
                             "\n ChallengeId = " + challengeId +
                             "\n recipientId = " + friend_id);
-                } else Log.i("createNewDuelChallenge", "OnResponse: Failed");
+                } else Log.i(TAG, "createNewDuelChallenge OnResponse: Failed");
             }
 
             @Override
@@ -153,7 +146,7 @@ public class ChallengeController {
         myCalendar.get(Calendar.MONTH);
 
         final long currentMidnight = currentTime - (myCalendar.get(Calendar.HOUR_OF_DAY) * 60 * 60) - (myCalendar.get(Calendar.MINUTE) * 60) - (myCalendar.get(Calendar.SECOND));
-        Log.i("ChallengeController", "CurrentMidNight: " + currentMidnight);
+        Log.i(TAG, "createNewWakeUpChallenge CurrentMidNight: " + currentMidnight);
 
 //        final String[] details = new String[21];
 //        for (int i = 0; i <= 20; i++) {
@@ -166,7 +159,7 @@ public class ChallengeController {
         final int intentId = Integer.parseInt(sHour + sMinute);
         final String stringIntentId = String.valueOf(Integer.parseInt(sHour + sMinute));
 
-//        boolean ok = check(sHour + sMinute);
+//        boolean ok = checkActive(sHour + sMinute);
 //        if (!ok) {
 //            Toast.makeText(context, "Already Exist!", Toast.LENGTH_SHORT).show();
 //            return;
@@ -181,14 +174,14 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
                     sendSingleInProgressForWakeUp(challengeId, intentId, currentMidnight);
-                    Log.i("makeNewWakeUpChallenge", "createNewWakeUpChallenge Status: OK"
+                    Log.i(TAG, "createNewWakeUpChallenge Status: OK"
                             + "\n Intent_ID   = " + intentId
                             + "\n _ID         = " + challengeId
                             + "\n TYPE_ID     = " + type_id
                             + "\n DESCRIPTION = " + description
                             + "\n DETAILS     = " + stringIntentId // change for myDetails
                             + "\n DURATION    = " + duration + " (21 day in seconds)");
-                } else Log.i("makeNewWakeUpChallenge", "CreateNewChallenge Status: Failed");
+                } else Log.i(TAG, "createNewWakeUpChallenge Status: Failed");
             }
 
             @Override
@@ -196,6 +189,7 @@ public class ChallengeController {
             }
         });
     }
+
 
 
 
@@ -273,8 +267,6 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     com.example.ivan.champy_v2.single_inprogress.SingleInProgress data = response.body();
                     String inProgressId = data.getData().get_id();
-
-                    List<Object> senderProgress = response.body().getData().getSenderProgress();
 
                     long currentTime = System.currentTimeMillis() / 1000;
                     Date date = new Date();
@@ -360,9 +352,9 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()){
-                    Log.i("RejectInviteForDuel", "onResponse: VSE OK");
                     refreshCardsForPendingDuel();
-                } else Log.i("RejectInviteForDuel", "onResponse: FAILED" + " | ERROR: " + response.code() + " " + response.message());
+                       Log.i(TAG, "RejectInviteForDuel onResponse: VSE OK");
+                } else Log.i(TAG, "RejectInviteForDuel onResponse: FAILED" + " | ERROR: " + response.code() + " " + response.message());
             }
 
             @Override
@@ -379,34 +371,18 @@ public class ChallengeController {
         final String API_URL = "http://46.101.213.24:3007";
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
+        Log.i(TAG, "doneForToday: inProgressId = " + inProgressId + "\ntoken = " + token);
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
-
         Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call = activeInProgress.CheckChallenge(inProgressId, token);
         call.enqueue(new Callback<com.example.ivan.champy_v2.single_inprogress.SingleInProgress>() {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    Log.i("DoneForToday", "onResponse: VSE OK");
-//                    DateValidator dateValidator = new DateValidator();
-//                    Calendar c = Calendar.getInstance();
-//                    int seconds = c.get(Calendar.SECOND);
-//                    SimpleDateFormat sdf6 = new SimpleDateFormat("H:mm:ss:SSS");
-//                    String currentDateAndTime = sdf6.format(new Date());
-//                    String stringSeconds = String.valueOf(seconds);
-//                    dateValidator.isThisDateWithin3MonthsRange(stringSeconds, currentDateAndTime);
-//
-//                    SessionManager session = new SessionManager(context);
-//                    String facebookId = session.getFacebookId();
-//                    String gcm = session.getGCM();
-//                    String path_to_pic = session.getPathToPic();
-//                    try {
-//                        AppSync appSync = new AppSync(facebookId, gcm, path_to_pic, context);
-//                        appSync.getUserInProgressChallenges(userId);
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
+                    Log.i(TAG, "doneForToday onResponse: VSE OK");
+
+
                 } else {
-                    Log.i("DoneForToday", "onResponse: FAILED " + response.code() + response.message());
+                    Log.i(TAG, "doneForToday onResponse: FAILED " + response.code() + response.message());
                 }
             }
 
@@ -450,7 +426,7 @@ public class ChallengeController {
                             //PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, intentId, myIntent, 0);
                             //AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                             //alarmManager.cancel(pendingIntent);
-                            Log.i("GiveUp", "Challenge = Wake Up");
+                            Log.i(TAG, "GiveUp Challenge = Wake Up");
                             Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
                             PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, intentId, myIntent, 0);
                             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -458,8 +434,8 @@ public class ChallengeController {
                             Log.i("GiveUp", "AlarmManager status: " + alarmManager);
                         }
                     }
-                    Log.i("GiveUp", "onResponse: VSE OK");
-                } else Log.i("GiveUp", "onResponse: FAILED: " + response.code());
+                       Log.i(TAG, "GiveUp onResponse: VSE OK");
+                } else Log.i(TAG, "GiveUp onResponse: FAILED: " + response.code());
 
 
 
@@ -531,9 +507,9 @@ public class ChallengeController {
                         }
                     }
 
-                    Log.i("RefreshPendingDuels", "onResponse: VSE OK");
+                    Log.i(TAG, "RefreshPendingDuels onResponse: VSE OK");
                 } else {
-                    Log.i("RefreshPendingDuels", "onResponse: FAILED: " + response.code());
+                    Log.i(TAG, "RefreshPendingDuels onResponse: FAILED: " + response.code());
                 }
             }
 
@@ -544,6 +520,7 @@ public class ChallengeController {
         generateCardsForMainActivity();
 
     }
+
 
     public void generateCardsForMainActivity() {
         DBHelper dbHelper = new DBHelper(context);
@@ -587,6 +564,28 @@ public class ChallengeController {
                             duration = "" + days;
                         }
 
+                        List<Object> senderProgress = datum.getSenderProgress();
+                        String stringSenderProgress[] = new String[senderProgress.size()];
+                        for (int j = 0; j < senderProgress.size(); j++) {
+//                            List<Object> senderObject = (List<Object>) senderProgress.get(j);
+                            try {
+                                JSONObject json = new JSONObject(senderProgress.get(j).toString());
+                                long at = json.getLong("at");
+                                Log.i(TAG, "json : " + at);
+
+                                stringSenderProgress[j] = String.valueOf(at);
+
+                            } catch (JSONException e) {
+                                Log.i(TAG, "onCatch: " + e);
+                                e.printStackTrace();
+                            }
+
+                        }
+                        Log.i(TAG, "onResponse AFTER FOR: senderProgressString = " + stringSenderProgress);
+
+
+
+
                         if (challenge_description.equals("Wake Up")) {
                             cv.put("name", "Wake Up");
                             cv.put("recipient", "false");
@@ -605,22 +604,24 @@ public class ChallengeController {
                             }
                         }
 
+                        //final String myDetails = Arrays.toString(stringSenderProgress);
                         cv.put("challengeName", challenge_name);
                         cv.put("description", challenge_detail);
                         cv.put("duration", duration);
                         cv.put("challenge_id", challenge_id);
                         cv.put("status", challenge_status);
-                        String updated = find(challenge_id);
+                        String updated = getChallengeUpdated(challenge_id);
                         cv.put("updated", updated);
+                        cv.put("senderProgress", Arrays.toString(stringSenderProgress));
                         db.insert("myChallenges", null, cv);
                     }
 
-                    Log.i("GenerateMethod", "onResponse: VSE OK");
+                    Log.i(TAG, "Generate onResponse: VSE OK");
                     Intent intent = new Intent(firstActivity, MainActivity.class);
                     firstActivity.startActivity(intent);
 
                 } else {
-                    Log.i("GenerateMethod", "onResponse: FAILED: " + response.code());
+                    Log.i(TAG, "Generate onResponse: FAILED: " + response.code());
                 }
             }
 
@@ -634,8 +635,7 @@ public class ChallengeController {
     }
 
 
-
-    private String find(String challenge_id) {
+    private String getChallengeUpdated(String challenge_id) {
         DBHelper dbHelper = new DBHelper(firstActivity);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("updated", null, null, null, null, null, null);
@@ -653,7 +653,8 @@ public class ChallengeController {
         return ok;
     }
 
-    private boolean check(String time) {
+    // method for check is active challenge for wake up
+    private boolean checkActive(String time) {
         boolean ok = true;
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
