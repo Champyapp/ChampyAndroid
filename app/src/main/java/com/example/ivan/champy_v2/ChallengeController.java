@@ -54,9 +54,10 @@ import static java.lang.Math.round;
 
 public class ChallengeController {
 
+    public static final String TAG = "ChallengeController";
+    int hour, minute, seconds;
     Context context;
     Activity firstActivity;
-    int hour, minute, seconds;
 
     public ChallengeController(Context mContext, Activity activity, int mHour, int mMinute, int mSeconds) {
         context = mContext;
@@ -460,13 +461,16 @@ public class ChallengeController {
                     Log.i("GiveUp", "onResponse: VSE OK");
                 } else Log.i("GiveUp", "onResponse: FAILED: " + response.code());
 
-                generateCardsForMainActivity();
+
 
             }
 
             @Override
             public void onFailure(Throwable t) { }
         });
+
+        generateCardsForMainActivity();
+
     }
 
 
@@ -527,7 +531,6 @@ public class ChallengeController {
                         }
                     }
 
-                    generateCardsForMainActivity();
                     Log.i("RefreshPendingDuels", "onResponse: VSE OK");
                 } else {
                     Log.i("RefreshPendingDuels", "onResponse: FAILED: " + response.code());
@@ -537,6 +540,9 @@ public class ChallengeController {
             @Override
             public void onFailure(Throwable t) { }
         });
+
+        generateCardsForMainActivity();
+
     }
 
     public void generateCardsForMainActivity() {

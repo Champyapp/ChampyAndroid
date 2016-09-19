@@ -26,6 +26,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
@@ -323,8 +324,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_settings) {
-            ChallengeController cc = new ChallengeController(getApplicationContext(), activity, 0, 0, 0);
-            cc.generateCardsForMainActivity();
+            CHSocket socket = new CHSocket(this, getApplicationContext());
+            socket.refreshCards();
+            Toast.makeText(MainActivity.this, "Sync Complete", Toast.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
     }
