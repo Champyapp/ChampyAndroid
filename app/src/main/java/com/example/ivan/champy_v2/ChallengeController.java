@@ -66,7 +66,7 @@ public class ChallengeController {
         CurrentUserHelper user = new CurrentUserHelper(context);
         String token = user.getToken();
         final String duration = "" + (days * 86400);
-        final String details = description + " during this period";
+        final String details = description + "";
         final String API_URL = "http://46.101.213.24:3007";
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
@@ -94,12 +94,12 @@ public class ChallengeController {
 
     }
 
-    public void createNewDuelChallenge(String description, int days, final String friend_id) {
-        String type_id = "567d51c48322f85870fd931b";
+    public void createNewDuelChallenge(final String description, int days, final String friend_id) {
+        final String type_id = "567d51c48322f85870fd931b";
         CurrentUserHelper user = new CurrentUserHelper(context);
         String token = user.getToken();
-        String duration = "" + (days * 86400);
-        String details = description + " during this period";
+        final String duration = "" + (days * 86400);
+        final String details = description + "";
         final String API_URL = "http://46.101.213.24:3007";
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
@@ -112,9 +112,13 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
                     sendSingleInProgressForDuel(challengeId, friend_id);
-                    Log.i(TAG, "createNewDuelChallenge OnResponse: VSE OK" +
-                            "\n ChallengeId = " + challengeId +
-                            "\n recipientId = " + friend_id);
+                    Log.i(TAG, "createNewDuelChallenge OnResponse: VSE OK"
+                            + "\n CHALL_ID    = " + challengeId
+                            + "\n TYPE_ID     = " + type_id
+                            + "\n DESCRIPTION = " + description
+                            + "\n DETAILS     = " + details
+                            + "\n DURATION    = " + duration
+                            + "\n recipientId = " + friend_id);
                 } else Log.i(TAG, "createNewDuelChallenge OnResponse: Failed");
             }
 
@@ -242,7 +246,6 @@ public class ChallengeController {
                     db.insert("updated", null, cv);
                     Intent goToFriends = new Intent(firstActivity, FriendsActivity.class);
                     firstActivity.startActivity(goToFriends);
-                    //firstActivity.finish();
                     Log.i("startDuelInProgress", "Status: VSE OK");
                 } else Log.i("startDuelInProgress", "Status: FAILED" + response.code() + response.message());
             }
@@ -597,7 +600,7 @@ public class ChallengeController {
 
                         //final String myDetails = Arrays.toString(stringSenderProgress);
                         cv.put("challengeName", challenge_name);
-                        cv.put("description", challenge_detail);
+                        cv.put("description", challenge_detail); // details потому что там wakeup id, надо создать отдельно колонку details
                         cv.put("duration", duration);
                         cv.put("challenge_id", challenge_id);
                         cv.put("status", challenge_status);
@@ -606,9 +609,9 @@ public class ChallengeController {
                         cv.put("senderProgress", Arrays.toString(stringSenderProgress));
                         db.insert("myChallenges", null, cv);
 
-                        Log.i(TAG, "Challenge | Description: " + challenge_detail);
-                        Log.i(TAG, "Challenge | Challenge_updated: " + challenge_updated);
-                        Log.i(TAG, "Challenge | SenderProgress: " + Arrays.toString(stringSenderProgress));
+                        //Log.i(TAG, "Challenge | Description: " + challenge_detail);
+                        //Log.i(TAG, "Challenge | Challenge_updated: " + challenge_updated);
+                        //Log.i(TAG, "Challenge | SenderProgress: " + Arrays.toString(stringSenderProgress));
                     }
 
                     Log.i(TAG, "Generate onResponse: VSE OK");
@@ -653,7 +656,6 @@ public class ChallengeController {
         DBHelper dbHelper = new DBHelper(firstActivity);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-        description = description + " during this period";
         boolean ok = false;
         if (c.moveToFirst()) {
             int coldescription = c.getColumnIndex("description");

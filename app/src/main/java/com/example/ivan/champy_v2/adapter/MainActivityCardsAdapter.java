@@ -77,7 +77,6 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
         ImageView imageView      = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
 
 
-
         switch (itemType) {
             case "Wake Up":
                 imageView.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.wakeup_white));
@@ -92,14 +91,16 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
                 break;
         }
 
-        tvChallengeType.setTextSize((float)(y*1.3));
         Typeface typeface = android.graphics.Typeface.createFromAsset(getContext().getAssets(), "fonts/bebasneue.ttf");
-        tvChallengeType.setTypeface(typeface);
         tvRecipientName.setTypeface(typeface);
 
+        tvChallengeType.setTextSize((float)(y*1.3));
+        tvChallengeType.setTypeface(typeface);
+
         TextView tvChallengeDescription = (TextView) tempView.findViewById(R.id.tvChallengeDescription);
-        tvChallengeDescription.setText(itemGoal);
         tvChallengeDescription.setTextSize((float) (y*1.5));
+        tvChallengeDescription.setText(itemGoal);
+        tvChallengeDescription.setTypeface(typeface);
 
         TextView tvDuration = (TextView) tempView.findViewById(R.id.textViewDuration);
         tvDuration.setText(item.getDays() + " Days");
