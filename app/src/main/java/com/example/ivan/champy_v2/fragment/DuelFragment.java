@@ -38,6 +38,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
     public SessionManager sessionManager;
     public TextView tvGoal, tvDays;
     public EditText etGoal, etDays;
+    public ChallengeController cc;
     public ViewPager viewPager;
     public Typeface typeface;
     public SQLiteDatabase db;
@@ -158,7 +159,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(View view) {
                 Log.i(TAG, "onClickSnackBar: ");
-                ChallengeController cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
+                cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
                 if (position == size) {
                     if (checkInputUserData(description, duration, view)) {
                         days = Integer.parseInt(duration);
@@ -220,11 +221,11 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         if (!duration.isEmpty()) {
             days = Integer.parseInt(duration);
         }
-        if (!isActive(description) && !description.isEmpty() && !description.startsWith(" ") && !duration.isEmpty() && days != 0) {
+        if (!cc.isActive(description) && !description.isEmpty() && !description.startsWith(" ") && !duration.isEmpty() && days != 0) {
             snackbar = Snackbar.make(view, "Sent duel request!", Snackbar.LENGTH_SHORT);
             snackbar.show();
             return true;
-        } else if (isActive(description)) {
+        } else if (cc.isActive(description)) {
             snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
             snackbar.show();
             return false;
@@ -235,25 +236,5 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    // check for isActive challenge
-    private boolean isActive(String description) {
-        DBHelper dbHelper = new DBHelper(getActivity());
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-        description = description + " during this period";
-        boolean ok = false;
-        if (c.moveToFirst()) {
-            int coldescription = c.getColumnIndex("description");
-            do {
-                if (c.getString(c.getColumnIndex("status")).equals("started")){
-                    if (c.getString(coldescription).equals(description)){
-                        ok = true;
-                    }
-                }
-            } while (c.moveToNext());
-        }
-        c.close();
-        return ok;
-    }
 
 }

@@ -116,7 +116,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 
         tvDays.setText("" + days);
         tvDays.setTypeface(typeface);
-        tvGoal.setText(description);
+        tvGoal.setText(name);
         tvGoal.setTypeface(typeface);
 
         Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView)view.findViewById(R.id.imageViewAcceptButton));
@@ -130,7 +130,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         if (position == size) {
             etGoal.setTypeface(typeface);
             etDays.setTypeface(typeface);
-            etGoal.setText(description);
+            etGoal.setText(name);
             etDays.setHint("21");
             etDays.setVisibility(View.VISIBLE);
             etGoal.setVisibility(View.VISIBLE);
@@ -173,14 +173,14 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                     }
                 } else {
                     if (c.moveToFirst()) {
-                        int coldescription = c.getColumnIndex("description");
+                        int colname = c.getColumnIndex("name");
                         int colchallenge_id = c.getColumnIndex("challenge_id");
                         int o = 0;
                         do {
                             o++;
                             if (o > position + 1) break;
                             if (o == position + 1) {
-                                description = c.getString(coldescription);
+                                description = c.getString(colname);
                                 challenge_id = c.getString(colchallenge_id);
                             }
                         } while (c.moveToNext());
@@ -268,9 +268,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 
     // check user input data @description @days @isActive
     private boolean checkInputUserData(String description, String duration, View view) {
-//        if (!duration.isEmpty()) {
-//            days = Integer.parseInt(duration);
-//        }
         if (!cc.isActive(description) && !description.isEmpty() && !description.startsWith(" ") && !duration.isEmpty() && days != 0) {
             snackbar = Snackbar.make(view, "Challenge created!", Snackbar.LENGTH_SHORT);
             snackbar.show();
@@ -286,26 +283,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         }
     }
 
-//    // check for isActive challenge
-//    private boolean isActive(String description) {
-//        DBHelper dbHelper = new DBHelper(getActivity());
-//        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-//        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-//        description = description + " during this period";
-//        boolean ok = false;
-//        if (c.moveToFirst()) {
-//            int coldescription = c.getColumnIndex("description");
-//            do {
-//                if (c.getString(c.getColumnIndex("status")).equals("started")) {
-//                    if (c.getString(coldescription).equals(description)) {
-//                        ok = true;
-//                    }
-//                }
-//            } while (c.moveToNext());
-//        }
-//        c.close();
-//        return ok;
-//    }
 
 
 }
