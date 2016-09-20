@@ -75,7 +75,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
         String itemVersus = "with " + item.getVersus();
         String itemSenderProgress = item.getSenderProgress();
 //        String asd[] = itemSenderProgress;
-        Log.i(TAG, "getView: itemSenderProgress = " + toArrayOfStrings(itemSenderProgress)[0]);
+//        Log.i(TAG, "getView: itemGoal = " + toArrayOfStrings(itemSenderProgress)[0]);
         TextView tvRecipientName = (TextView) tempView.findViewById(R.id.tvRecipientName);
         ImageView imageView      = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
 //        ImageView imageUser1     = (ImageView)tempView.findViewById(R.id.user1);
@@ -91,8 +91,6 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
                 break;
             case "Duel":
                 tvRecipientName.setText(itemVersus);
-                itemGoal = item.getGoal();
-                //imageUser1.setBackgroundDrawable();
                 imageView.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.duel_white));
                 break;
             case "Self-Improvement":

@@ -97,7 +97,7 @@ public class CHSocket {
         public void call(final Object... args) {
             try {
                 ChallengeController cc = new ChallengeController(context, activity, 0, 0, 0);
-                cc.generateCardsForMainActivity();
+                cc.refreshCardsForPendingDuel();
                 Log.i(TAG, "Sockets: onAcceptedChallenge success!");
             } catch (Exception e) {
                 Log.i(TAG, "Sockets: ERROR: " + e);
