@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -19,12 +18,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.ivan.champy_v2.ChallengeController;
-import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
-import com.example.ivan.champy_v2.SessionManager;
-import com.example.ivan.champy_v2.activity.MainActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
-import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
 
 import java.io.IOException;
@@ -61,6 +56,9 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
                     TextView tvRecipientName = (TextView) tempView.findViewById(R.id.tvRecipientName);
                     tvRecipientName.setTypeface(typeface);
                     tvRecipientName.setText(itemVersus);
+
+                    //ImageView imageUser1     = (ImageView)tempView.findViewById(R.id.user1);
+                    //ImageView imageUser2     = (ImageView)tempView.findViewById(R.id.user2);
                     break;
                 case "Self-Improvement":
                     tempView = inflater.inflate(R.layout.single_card_fragment_self, null, false);
@@ -89,26 +87,17 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
 
 
 
-        TextView tvSelfImprovement  = (TextView) tempView.findViewById(R.id.textViewSIC);
-        //tvSelfImprovement.setText(item.getType());
-        tvSelfImprovement.setTextSize((float)(y*1.3));
-        tvSelfImprovement.setTypeface(typeface);
+        TextView challengeType  = (TextView) tempView.findViewById(R.id.tvChallengeType);
+        challengeType.setTextSize((float)(y*1.3));
+        challengeType.setTypeface(typeface);
 
-
-//        String asd[] = itemSenderProgress;
         Log.i(TAG, "getView: " + itemGoal + " itemSenderProgress = " + toArrayOfStrings(itemSenderProgress)[0]);
 
-//        ImageView imageView      = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
-//        ImageView imageUser1     = (ImageView)tempView.findViewById(R.id.user1);
-//        ImageView imageUser2     = (ImageView)tempView.findViewById(R.id.user2);
 
-//        CurrentUserHelper currentUserHelper = new CurrentUserHelper(getContext());
-
-
-
-        TextView tvChallengeName = (TextView) tempView.findViewById(R.id.textViewChallengeName);
+        TextView tvChallengeName = (TextView) tempView.findViewById(R.id.tvChallengeDescription);
         tvChallengeName.setText(itemGoal);
-        tvChallengeName.setTextSize(y);
+        tvChallengeName.setTextSize((float) (y*1.5));
+        tvChallengeName.setTypeface(typeface);
 
         TextView tvDuration = (TextView) tempView.findViewById(R.id.textViewDuration);
         tvDuration.setText(item.getDays() + " DAYS TO GO");

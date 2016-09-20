@@ -12,26 +12,6 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <ImageView
-        android:background="@mipmap/ic_launcher"
-        android:id="@+id/user1"
-        android:visibility="invisible"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <ImageView
-        android:background="@mipmap/ic_launcher"
-        android:id="@+id/user2"
-        android:visibility="invisible"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/cardImage"
-        android:layout_alignEnd="@+id/cardImage" />
-
     <Button
         android:layout_width="35dp"
         android:layout_height="35dp"
@@ -59,8 +39,18 @@
     <Button
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:background="@drawable/icon_share"
+        android:background="@drawable/icon_done_for_today"
         android:id="@+id/buttonDoneForToday"
+        android:layout_alignRight="@+id/cardImage"
+        android:layout_alignEnd="@+id/cardImage"
+        android:layout_alignTop="@+id/buttonGiveUp"
+        android:layout_marginRight="8dp" />
+    <Button
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:background="@drawable/icon_share"
+        android:visibility="invisible"
+        android:id="@+id/buttonShare"
         android:layout_alignRight="@+id/cardImage"
         android:layout_alignEnd="@+id/cardImage"
         android:layout_alignTop="@+id/buttonGiveUp"
@@ -69,12 +59,12 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Self-Imrpovement"
-        android:id="@+id/textViewSIC"
+        android:text="Self-Improvement \n Challenge"
+        android:id="@+id/tvChallengeType"
         android:textColor="#ffffff"
         android:gravity="center_vertical|center_horizontal"
-        android:textStyle="bold"
         android:textSize="13sp"
+        android:paddingTop="5dp"
         android:textAllCaps="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -85,45 +75,47 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
-        android:id="@+id/tvRecipientName"
-        android:textColor="#ffffff"
+        android:text="No smoking"
+        android:id="@+id/tvChallengeDescription"
         android:gravity="center_vertical|center_horizontal"
-        android:textStyle="bold"
-        android:textSize="13sp"
-        android:textAllCaps="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/textViewSIC"
-        android:layout_alignRight="@+id/cardImage"
-        android:layout_alignEnd="@+id/cardImage" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="No smoking during this period"
-        android:id="@+id/textViewChallengeName"
-        android:gravity="center_vertical|center_horizontal"
-        android:textSize="10dp"
+        android:textSize="15sp"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/cardImage"
         android:layout_alignEnd="@+id/cardImage"
         android:textStyle="bold"
-        android:textColor="#000000" />
+        android:textColor="#59a7a6" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="19 DAYS TO GO"
+        android:text="every day for the next"
+        android:id="@+id/tvEverydayForTheNext"
+        android:textSize="12sp"
+        android:gravity="center_vertical|center_horizontal"
+        android:textStyle="bold"
+        android:textColor="#FFFF"
+        android:paddingBottom="10dp"
+        android:textAllCaps="true"
+        android:layout_above="@+id/textViewDuration"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/cardImage"
+        android:layout_alignEnd="@+id/cardImage" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="19 DAYS"
         android:id="@+id/textViewDuration"
-        android:textSize="24dp"
+        android:textSize="24sp"
         android:gravity="center_vertical|center_horizontal"
         android:textStyle="bold"
         android:textColor="#59a7a6"
-        android:paddingBottom="40dp"
+        android:paddingBottom="10dp"
         android:layout_above="@+id/buttonGiveUp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
