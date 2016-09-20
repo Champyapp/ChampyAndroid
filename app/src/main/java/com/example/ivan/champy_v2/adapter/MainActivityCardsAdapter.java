@@ -46,7 +46,6 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
         Typeface typeface = android.graphics.Typeface.createFromAsset(getContext().getAssets(), "fonts/bebasneue.ttf");
         String itemType = item.getType();
         String itemGoal = item.getGoal();
-        String itemName = item.getName();
         String itemVersus = "with " + item.getVersus();
         String itemSenderProgress = item.getSenderProgress();
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -67,13 +66,12 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
                     break;
                 case "Wake Up":
                     tempView = inflater.inflate(R.layout.single_card_fragment_wake, null, false);
-
                     break;
             }
 
         }
 
-        Log.i(TAG, "getView: " + itemName + " itemSenderProgress = " + toArrayOfStrings(itemSenderProgress)[0]);
+        Log.i(TAG, "getView: " + itemGoal + " itemSenderProgress = " + toArrayOfStrings(itemSenderProgress)[0]);
         ImageView cardImage = (ImageView)tempView.findViewById(R.id.cardImage);
 
         WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
@@ -96,7 +94,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
 
 
         TextView tvChallengeName = (TextView) tempView.findViewById(R.id.tvChallengeDescription);
-        tvChallengeName.setText(itemName);
+        tvChallengeName.setText(itemGoal);
         tvChallengeName.setTextSize((float) (y*1.5));
         tvChallengeName.setTypeface(typeface);
 
