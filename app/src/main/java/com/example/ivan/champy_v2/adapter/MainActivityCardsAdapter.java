@@ -60,28 +60,22 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
         display.getSize(size);
         int x = size.x / 100;
         int y = size.y / 100;
-        //int x = round(activity.getWindow().getWindowManager().getDefaultDisplay().getWidth() / 100);
-        //int y = round(activity.getWindow().getWindowManager().getDefaultDisplay().getHeight() / 100);
         cardImage.getLayoutParams().width  = x*65;
         cardImage.getLayoutParams().height = y*50;
         if (y > 10) y = 10;
 
         final ChallengeController challengeController = new ChallengeController(getContext(), (Activity) getContext(), 0 , 0, 0);
 
-        TextView tvSelfImprovement  = (TextView) tempView.findViewById(R.id.textViewSIC);
-        tvSelfImprovement.setText(item.getType());
+        TextView tvChallengeType  = (TextView) tempView.findViewById(R.id.tvChallengeType);
+        tvChallengeType.setText(item.getType());
         String itemType   = item.getType();
         String itemGoal   = item.getGoal();
         String itemVersus = "with " + item.getVersus();
         String itemSenderProgress = item.getSenderProgress();
-//        String asd[] = itemSenderProgress;
-//        Log.i(TAG, "getView: itemGoal = " + toArrayOfStrings(itemSenderProgress)[0]);
+        //Log.i(TAG, "getView: " + itemGoal + " = " + toArrayOfStrings(itemSenderProgress)[0]);
         TextView tvRecipientName = (TextView) tempView.findViewById(R.id.tvRecipientName);
         ImageView imageView      = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
-//        ImageView imageUser1     = (ImageView)tempView.findViewById(R.id.user1);
-//        ImageView imageUser2     = (ImageView)tempView.findViewById(R.id.user2);
 
-//        CurrentUserHelper currentUserHelper = new CurrentUserHelper(getContext());
 
 
         switch (itemType) {
@@ -98,18 +92,19 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
                 break;
         }
 
-        tvSelfImprovement.setTextSize((float)(y*1.3));
+        tvChallengeType.setTextSize((float)(y*1.3));
         Typeface typeface = android.graphics.Typeface.createFromAsset(getContext().getAssets(), "fonts/bebasneue.ttf");
-        tvSelfImprovement.setTypeface(typeface);
+        tvChallengeType.setTypeface(typeface);
         tvRecipientName.setTypeface(typeface);
 
-        TextView tvChallengeName = (TextView) tempView.findViewById(R.id.textViewChallengeName);
-        tvChallengeName.setText(itemGoal);
-        tvChallengeName.setTextSize(y);
+        TextView tvChallengeDescription = (TextView) tempView.findViewById(R.id.tvChallengeDescription);
+        tvChallengeDescription.setText(itemGoal);
+        tvChallengeDescription.setTextSize((float) (y*1.5));
 
         TextView tvDuration = (TextView) tempView.findViewById(R.id.textViewDuration);
-        tvDuration.setText(item.getDays() + " DAYS TO GO");
+        tvDuration.setText(item.getDays() + " Days");
         tvDuration.setTextSize(y*2);
+        tvDuration.setTypeface(typeface);
 
         Button buttonGiveUp = (Button) tempView.findViewById(R.id.buttonGiveUp);
         buttonGiveUp.getLayoutParams().width = x*10;
@@ -170,7 +165,6 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
             @Override
             public void onClick(View v) {
                 String id = item.getId();
-                Log.i("ASDASDASD", "onClickINPROGRESSID: " + id);
                 SQLiteDatabase localSQLiteDatabase = new DBHelper(getContext()).getWritableDatabase();
                 ContentValues localContentValues = new ContentValues();
                 localContentValues.put("updated", "true");
@@ -195,10 +189,8 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
 
 
     public String[] toArrayOfStrings(String arg){
-
         String a = arg.substring(1);
         String b = a.replaceFirst("]","");
-
         return b.split(", ");
     }
 

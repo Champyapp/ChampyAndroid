@@ -137,7 +137,7 @@ public class ChallengeController {
         if (hour < 10) sHour = "0" + sHour;
         if (minute < 10) sMinute = "0" + sMinute;
         long currentTime = System.currentTimeMillis() / 1000;
-        String wakeUpName = "Wake up at "+ sHour +":"+ sMinute +" during this period";
+        String wakeUpName = "Wake up at "+ sHour +":"+ sMinute;
         Date date = new Date();
         Calendar myCalendar = GregorianCalendar.getInstance();
         myCalendar.setTime(date);
