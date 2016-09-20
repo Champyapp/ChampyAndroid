@@ -34,6 +34,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 
 import io.jsonwebtoken.Jwts;
@@ -48,7 +49,8 @@ import static java.lang.Math.round;
 
 public class AppSync {
 
-    final String API_URL = "http://46.101.213.24:3007";
+    public static final String API_URL = "http://46.101.213.24:3007";
+    public static final String TAG = "AppSync";
     Context context;
     String fbId, gcm, token, path;
 
@@ -147,7 +149,6 @@ public class AppSync {
             }
         });
 
-
     }
 
 
@@ -228,18 +229,39 @@ public class AppSync {
                 Recipient recipient = datum.getRecipient();
                 Sender sender = datum.getSender();
 
-                String challenge_description = challenge.getDescription(); // no smoking
-                String challenge_detail = challenge.getDetails(); // no smoking + " during this period"
-                String challenge_status = datum.getStatus();      // active or not
-                String challenge_id = datum.get_id();             // us magic id
-                String challenge_type = challenge.getType();      // self, duel or wake up
-                String challenge_name = challenge.getName();      // name like "wake up"
+                String challenge_name = challenge.getName();
+                String challenge_description = challenge.getDescription();
+                String challenge_detail = challenge.getDetails();
+                String challenge_status = datum.getStatus();
+                String challenge_id = datum.get_id();
+                String challenge_type = challenge.getType();
+                int challenge_updated = challenge.getUpdated();
                 String duration = "";
+
                 if (datum.getEnd() != null) {
                     int end = datum.getEnd();
                     int days = round((end - unixTime) / 86400);
                     duration = "" + days;
                 }
+
+                List<Object> senderProgress = datum.getSenderProgress();
+                String stringSenderProgress[] = new String[senderProgress.size()];
+                for (int j = 0; j < senderProgress.size(); j++) {
+                    //List<Object> senderObject = (List<Object>) senderProgress.get(j);
+                    try {
+                        JSONObject json = new JSONObject(senderProgress.get(j).toString());
+                        long at = json.getLong("at");
+                        Log.i(TAG, "json : " + at);
+
+                        stringSenderProgress[j] = String.valueOf(at);
+
+                    } catch (JSONException e) {
+                        Log.i(TAG, "onCatch: " + e);
+                        e.printStackTrace();
+                    }
+
+                }
+                Log.i(TAG, "onResponse AFTER FOR: senderProgressString = " + stringSenderProgress);
 
                 if (challenge_description.equals("Wake Up")) {
                     cv.put("name", "Wake Up");
@@ -259,11 +281,15 @@ public class AppSync {
                     }
                 }
 
+                //final String myDetails = Arrays.toString(stringSenderProgress);
                 cv.put("challengeName", challenge_name);
                 cv.put("description", challenge_detail);
                 cv.put("duration", duration);
                 cv.put("challenge_id", challenge_id);
                 cv.put("status", challenge_status);
+                //String updated = getChallengeUpdated(challenge_id);
+                cv.put("updated", challenge_updated);
+                cv.put("senderProgress", Arrays.toString(stringSenderProgress));
                 db.insert("myChallenges", null, cv);
             }
 

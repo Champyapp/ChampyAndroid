@@ -47,11 +47,32 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
     @Override
     public View getView(int position, View convertView) {
         View tempView = convertView;
-        if(tempView == null) {
-            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            tempView = inflater.inflate(R.layout.single_card_fragment_self, null, false);
-        }
         final SelfImprovement_model item = arrayList.get(position);
+        Typeface typeface = android.graphics.Typeface.createFromAsset(getContext().getAssets(), "fonts/bebasneue.ttf");
+        String itemType   = item.getType();
+        String itemGoal   = item.getGoal();
+        String itemVersus = "with " + item.getVersus();
+        String itemSenderProgress = item.getSenderProgress();
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        if(tempView == null) {
+            switch (itemType) {
+                case "Duel":
+                    tempView = inflater.inflate(R.layout.single_card_fragment_duel, null, false);
+                    TextView tvRecipientName = (TextView) tempView.findViewById(R.id.tvRecipientName);
+                    tvRecipientName.setTypeface(typeface);
+                    tvRecipientName.setText(itemVersus);
+                    break;
+                case "Self-Improvement":
+                    tempView = inflater.inflate(R.layout.single_card_fragment_self, null, false);
+                    break;
+                case "Wake Up":
+                    tempView = inflater.inflate(R.layout.single_card_fragment_wake, null, false);
+                    itemGoal = item.getChallengeName();
+                    break;
+            }
+
+        }
+
         ImageView cardImage = (ImageView)tempView.findViewById(R.id.cardImage);
 
         WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
@@ -66,44 +87,24 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
         cardImage.getLayoutParams().height = y*50;
         if (y > 10) y = 10;
 
-        final ChallengeController challengeController = new ChallengeController(getContext(), (Activity) getContext(), 0 , 0, 0);
+
 
         TextView tvSelfImprovement  = (TextView) tempView.findViewById(R.id.textViewSIC);
-        tvSelfImprovement.setText(item.getType());
-        String itemType   = item.getType();
-        String itemGoal   = item.getGoal();
-        String itemVersus = "with " + item.getVersus();
-        String itemSenderProgress = item.getSenderProgress();
+        //tvSelfImprovement.setText(item.getType());
+        tvSelfImprovement.setTextSize((float)(y*1.3));
+        tvSelfImprovement.setTypeface(typeface);
+
+
 //        String asd[] = itemSenderProgress;
-        Log.i(TAG, "getView: itemSenderProgress = " + toArrayOfStrings(itemSenderProgress)[0]);
-        TextView tvRecipientName = (TextView) tempView.findViewById(R.id.tvRecipientName);
-        ImageView imageView      = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
+        Log.i(TAG, "getView: " + itemGoal + " itemSenderProgress = " + toArrayOfStrings(itemSenderProgress)[0]);
+
+//        ImageView imageView      = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
 //        ImageView imageUser1     = (ImageView)tempView.findViewById(R.id.user1);
 //        ImageView imageUser2     = (ImageView)tempView.findViewById(R.id.user2);
 
 //        CurrentUserHelper currentUserHelper = new CurrentUserHelper(getContext());
 
 
-        switch (itemType) {
-            case "Wake Up":
-                imageView.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.wakeup_white));
-                itemGoal = item.getChallengeName();
-                break;
-            case "Duel":
-                tvRecipientName.setText(itemVersus);
-                itemGoal = item.getGoal();
-                //imageUser1.setBackgroundDrawable();
-                imageView.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.duel_white));
-                break;
-            case "Self-Improvement":
-                imageView.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.self_white));
-                break;
-        }
-
-        tvSelfImprovement.setTextSize((float)(y*1.3));
-        Typeface typeface = android.graphics.Typeface.createFromAsset(getContext().getAssets(), "fonts/bebasneue.ttf");
-        tvSelfImprovement.setTypeface(typeface);
-        tvRecipientName.setTypeface(typeface);
 
         TextView tvChallengeName = (TextView) tempView.findViewById(R.id.textViewChallengeName);
         tvChallengeName.setText(itemGoal);
@@ -116,6 +117,12 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
         Button buttonGiveUp = (Button) tempView.findViewById(R.id.buttonGiveUp);
         buttonGiveUp.getLayoutParams().width = x*10;
         buttonGiveUp.getLayoutParams().height = x*10;
+
+        Button buttonDoneForToday = (Button) tempView.findViewById(R.id.buttonDoneForToday);
+        buttonDoneForToday.getLayoutParams().width = x*10;
+        buttonDoneForToday.getLayoutParams().height = x*10;
+
+        final ChallengeController challengeController = new ChallengeController(getContext(), (Activity) getContext(), 0 , 0, 0);
 
         buttonGiveUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,25 +161,25 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
         });
 
 
-        final Button buttonDoneForToday = (Button) tempView.findViewById(R.id.buttonDoneForToday);
-        buttonDoneForToday.getLayoutParams().width = x*10;
-        buttonDoneForToday.getLayoutParams().height = x*10;
+
 
         //final Button finalButton = buttonDoneForToday;
-        if (item.getUpdated() != null){
-            if (!item.getType().equals("Wake Up")) {
-                if (item.getUpdated().equals("false")) {
-                    buttonDoneForToday.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.icon_done_for_today));
+//        if (item.getUpdated() != null){
+//            if (!item.getType().equals("Wake Up")) {
+//                if (item.getUpdated().equals("false")) {
+//                    buttonDoneForToday.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.icon_done_for_today));
 //                        tvDoneForToday.setVisibility(View.VISIBLE);
-                }
-            }
-        }
+//                }
+//            }
+//        }
 
         buttonDoneForToday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String id = item.getId();
-                Log.i("ASDASDASD", "onClickINPROGRESSID: " + id);
+
+                long currentDayInMillis = System.currentTimeMillis() / 1000;
+
                 SQLiteDatabase localSQLiteDatabase = new DBHelper(getContext()).getWritableDatabase();
                 ContentValues localContentValues = new ContentValues();
                 localContentValues.put("updated", "true");
@@ -183,7 +190,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                buttonDoneForToday.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.icon_share));
+//                buttonDoneForToday.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.icon_share));
             }
         });
 

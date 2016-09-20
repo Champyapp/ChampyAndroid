@@ -131,9 +131,6 @@ public class LoginActivity extends AppCompatActivity {
                 LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
                    @Override
                     public void onSuccess(LoginResult loginResult) {
-                        final AccessToken accessToken = loginResult.getAccessToken();
-                        Profile profile = Profile.getCurrentProfile();
-                        //final String[] URL = {""};
                         GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                             @Override
                             public void onCompleted(JSONObject object, GraphResponse response) {
@@ -161,7 +158,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                                 JSONObject jsonObject = new JSONObject();
                                                 jsonObject.put("token", token_android);
-                                                jsonObject.put("timeZone", "-2");
+//                                                jsonObject.put("timeZone", "-2");
                                                 String json = jsonObject.toString();
                                                 Log.i("LoginActivity", "JSON: " + json);
                                                 Log.i("LoginActivity", "GCM: "  + token_android);
@@ -250,10 +247,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void registerUser(String facebookId, String name, String email, final String gcm) throws JSONException {
         final String API_URL = "http://46.101.213.24:3007";
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("facebookId", fb_id);
         jsonObject.put("AndroidOS", gcm);
@@ -271,10 +265,6 @@ public class LoginActivity extends AppCompatActivity {
                 User decodedResponse = response.body();
                 if (response.isSuccess()) {
                     if (response.isSuccess()) {
-                    /* Log.d("TAG", "Status: " + decodedResponse.getDescription());
-                    Log.d("TAG", "Status: "+jwtString);*/
-                        String token_android;
-
                         Data data = decodedResponse.getData(); // data == user
                         String email = data.getEmail();
                         String user_name = data.getName();
@@ -283,8 +273,6 @@ public class LoginActivity extends AppCompatActivity {
                         String newChallReq = data.getProfileOptions().getNewChallengeRequests().toString();
                         String acceptedYour = data.getProfileOptions().getAcceptedYourChallenge().toString();
                         String challegeEnd = data.getProfileOptions().getChallengeEnd().toString();
-                        //Log.d("LoginActivity", "ID: " + id);
-                        //Log.d("LoginActivity", "FB: " + fb_id);
 
                         // "http://graph.facebook.com/" + fb_id + "/picture?type=large&redirect=true&width=500&height=500"
                         SessionManager sessionManager = new SessionManager(getApplicationContext());

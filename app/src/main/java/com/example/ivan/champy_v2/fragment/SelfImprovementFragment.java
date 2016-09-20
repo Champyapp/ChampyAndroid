@@ -39,16 +39,16 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
     public static final String TAG = "SelfImprovementFragment";
     public int position, size, days = 21;
     public String duration = "", description = "", challenge_id = "", status = "", name = "";
-    public Typeface typeface;
+    public SessionManager sessionManager;
     public TextView tvGoal, tvDays;
     public EditText etGoal, etDays;
-    public ViewPager viewPager;
-    public SessionManager sessionManager;
     public ChallengeController cc;
+    public ViewPager viewPager;
+    public Typeface typeface;
+    public SQLiteDatabase db;
     public Snackbar snackbar;
     public DBHelper dbHelper;
     public Cursor c;
-    public SQLiteDatabase db;
 
     public static SelfImprovementFragment newInstance(int page) {
         Bundle args = new Bundle();
@@ -264,7 +264,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         super.onDetach();
         Log.i(TAG, "onDetach");
     }
-
 
 
     // check user input data @description @days @isActive
