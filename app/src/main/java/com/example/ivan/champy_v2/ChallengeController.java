@@ -563,6 +563,7 @@ public class ChallengeController {
                         String challenge_id = datum.get_id(); // im progress id
                         String challenge_type = challenge.getType(); // 567d51c48322f85870fd931a / b / c
                         String challenge_name = challenge.getName(); // wake up / self / duel
+                        String challenge_wakeUpTime = challenge.getWakeUpTime();
                         int challenge_updated = challenge.getUpdated();
                         String duration = "";
 
@@ -589,6 +590,7 @@ public class ChallengeController {
 
                         if (challenge_description.equals("Wake Up")) {
                             cv.put("name", "Wake Up"); // just name of Challenge (this need for history & main cards)
+                            cv.put("wakeUpTime", challenge_wakeUpTime); // our specific name for wakeUp: Wake Up at 14:48
                         } else if (challenge_type.equals("567d51c48322f85870fd931a")) {
                             cv.put("name", "Self-Improvement"); // just name of Challenge (this need for history & main cards)
                         } else if (challenge_type.equals("567d51c48322f85870fd931b")) {
@@ -605,7 +607,7 @@ public class ChallengeController {
 
                         //final String myDetails = Arrays.toString(stringSenderProgress);
                         cv.put("challengeName", challenge_name); // default 'challenge'. this column only for wake up time
-                        cv.put("description", challenge_detail); // here description and "wake up" in (example: 1448)
+                        cv.put("description", challenge_description); // here description and "wake up" in (example: 1448)
                         cv.put("duration", duration); // duration of challenge
                         cv.put("challenge_id", challenge_id); // in progress id
                         cv.put("status", challenge_status); // active or not

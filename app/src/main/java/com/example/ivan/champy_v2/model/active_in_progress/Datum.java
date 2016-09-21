@@ -21,11 +21,19 @@ public class Datum {
     private List<Object> recipientProgress = new ArrayList<Object>();
     private List<Object> senderProgress = new ArrayList<Object>();
     private String status;
+    private String wakeUpTime;
     private Integer begin;
     private Integer end;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
 
+    public String getWakeUpTime() {
+        return wakeUpTime;
+    }
+
+    public void setWakeUpTime(String wakeUpTime) {
+        this.wakeUpTime = wakeUpTime;
+    }
 
     public Recipient getRecipient() {
         return recipient;

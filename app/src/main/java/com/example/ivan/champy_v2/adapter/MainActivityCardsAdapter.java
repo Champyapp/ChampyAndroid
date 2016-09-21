@@ -65,42 +65,45 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
         if (y > 10) y = 10;
 
         final ChallengeController challengeController = new ChallengeController(getContext(), (Activity) getContext(), 0 , 0, 0);
+        Typeface typeface = android.graphics.Typeface.createFromAsset(getContext().getAssets(), "fonts/bebasneue.ttf");
 
-        TextView tvChallengeType  = (TextView) tempView.findViewById(R.id.tvChallengeType);
+        TextView tvChallengeType = (TextView) tempView.findViewById(R.id.tvChallengeType);
+        tvChallengeType.setTextSize((float)(y*1.3));
+        tvChallengeType.setTypeface(typeface);
         tvChallengeType.setText(item.getType());
+
         String itemType   = item.getType();
         String itemGoal   = item.getGoal();
+        String itemChallengeName   = item.getChallengeName();
+        String itemWakeUpTime = item.getWakeUpTime();
         String itemVersus = "with " + item.getVersus();
         String itemSenderProgress = item.getSenderProgress();
         //Log.i(TAG, "getView: " + itemGoal + " = " + toArrayOfStrings(itemSenderProgress)[0]);
         TextView tvRecipientName = (TextView) tempView.findViewById(R.id.tvRecipientName);
         ImageView imageView      = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
-
+        TextView tvChallengeDescription = (TextView) tempView.findViewById(R.id.tvChallengeDescription);
 
         switch (itemType) {
             case "Wake Up":
                 imageView.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.wakeup_white));
-                itemGoal = item.getChallengeName();
+                tvChallengeDescription.setText(itemChallengeName);
                 break;
             case "Duel":
                 tvRecipientName.setText(itemVersus);
+                tvRecipientName.setTypeface(typeface);
+                tvChallengeDescription.setText(itemGoal);
                 imageView.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.duel_white));
                 break;
             case "Self-Improvement":
+                tvChallengeDescription.setText(itemGoal);
                 imageView.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.self_white));
                 break;
         }
 
-        Typeface typeface = android.graphics.Typeface.createFromAsset(getContext().getAssets(), "fonts/bebasneue.ttf");
-        tvRecipientName.setTypeface(typeface);
 
-        tvChallengeType.setTextSize((float)(y*1.3));
-        tvChallengeType.setTypeface(typeface);
-
-        TextView tvChallengeDescription = (TextView) tempView.findViewById(R.id.tvChallengeDescription);
         tvChallengeDescription.setTextSize((float) (y*1.5));
-        tvChallengeDescription.setText(itemGoal);
         tvChallengeDescription.setTypeface(typeface);
+
 
         TextView tvDuration = (TextView) tempView.findViewById(R.id.textViewDuration);
         tvDuration.setText(item.getDays() + " Days");
@@ -121,7 +124,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
                             case DialogInterface.BUTTON_POSITIVE:
                                     try {
                                         if (item.getType().equals("Wake Up")) {
-                                            int intentId = Integer.parseInt(item.getGoal());
+                                            int intentId = Integer.parseInt(item.getChallengeName());
                                             challengeController.give_up(item.getId(), intentId);
                                         } else {
                                             challengeController.give_up(item.getId(), 0);

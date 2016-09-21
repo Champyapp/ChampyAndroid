@@ -22,6 +22,7 @@ public class Challenge {
     private String description;
     private String details;
     private String versus;
+    private String wakeUpTime;
     private Integer created;
     private Integer updated;
     private Boolean approved;
@@ -30,6 +31,14 @@ public class Challenge {
     private Integer points;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
+
+    public String getWakeUpTime() {
+        return wakeUpTime;
+    }
+
+    public void setWakeUpTime(String wakeUpTime) {
+        this.wakeUpTime = wakeUpTime;
+    }
 
     public String getVersus() {
         return versus;

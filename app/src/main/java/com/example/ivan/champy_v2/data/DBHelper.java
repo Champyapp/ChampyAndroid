@@ -82,6 +82,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 + "name text,"
                 + "challengeName text DEFAULT 'challenge',"
                 + "recipient text DEFAULT 'false',"
+                + "wakeUpTime text DEFAULT '',"
                 + "versus text,"
                 + "description text,"
                 + "duration text,"

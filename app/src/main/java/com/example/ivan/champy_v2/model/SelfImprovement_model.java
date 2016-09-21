@@ -17,56 +17,97 @@ import retrofit.Retrofit;
 
 public class SelfImprovement_model {
 
-    String goal;
-    String days;
-    String id;
-    String updated;
-    String status;
-    String type;
-    String name;
-    String challengeName;
-    String versus;
-    String recipient;
-    String senderProgress;
-
-    public String getSenderProgress() {
-        return senderProgress;
-    }
+    private String goal;
+    private String days;
+    private String id;
+    private String updated;
+    private String status;
+    private String type;
+    private String name;
+    private String challengeName;
+    private String versus;
+    private String recipient;
+    private String senderProgress;
+    private String wakeUpTime;
 
     public void setSenderProgress(String senderProgress) {
         this.senderProgress = senderProgress;
     }
 
-    public String getRecipient() {
-        return recipient;
+    public void setChallengeName(String challengeName) {
+        this.challengeName = challengeName;
+    }
+
+    public void setWakeUpTime(String wakeUpTime) {
+        this.wakeUpTime = wakeUpTime;
     }
 
     public void setRecipient(String recipient) {
         this.recipient = recipient;
     }
 
-    public String getVersus() {
-        return versus;
+    public void setUpdated(String updated) {
+        this.updated = updated;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setVersus(String versus) {
+        this.versus = versus;
+    }
+
+    public String getSenderProgress() {
+        return senderProgress;
     }
 
     public String getChallengeName() {
         return challengeName;
     }
 
-    public String getName() {
-        return name;
+    public void setGoal(String goal) {
+        this.goal = goal;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
+    public void setDays(String days) {
+        this.days = days;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getWakeUpTime() {
+        return wakeUpTime;
+    }
+
+    public String getRecipient() {
+        return recipient;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getUpdated() {
         return updated;
     }
 
+    public String getVersus() {
+        return versus;
+    }
+
     public String getStatus() {
         return status;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public String getGoal() {
@@ -77,24 +118,17 @@ public class SelfImprovement_model {
         return days;
     }
 
-    public void setDays(String days) {
-        this.days = days;
-    }
-
     public String getType() {
         return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getId() {
         return id;
     }
 
-
-    public SelfImprovement_model( String mGoal, String mDays, String mType, String mid ,String mStatus, String mUpdated, String mChallengeName, String versus, String recipient, String senderProgress) {
+    // constructor :P
+    private SelfImprovement_model(String mGoal, String mDays, String mType, String mid, String mStatus, String mUpdated,
+                                  String mChallengeName, String versus, String recipient, String senderProgress, String wakeUpTime) {
         this.goal = mGoal;
         this.days = mDays;
         this.type = mType;
@@ -105,10 +139,11 @@ public class SelfImprovement_model {
         this.versus = versus;
         this.recipient = recipient;
         this.senderProgress = senderProgress;
+        this.wakeUpTime = wakeUpTime;
     }
 
 
-    //генерирует InProgress в History и с этими же данными генерирует карточки для MainActivity
+    //this method generates InProgress for History and for cards in MainActivity
     public static ArrayList<SelfImprovement_model> generate(Context context) {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -127,6 +162,7 @@ public class SelfImprovement_model {
             int colversus         = c.getColumnIndex("versus");
             int colrecipient      = c.getColumnIndex("recipient");
             int colsencerprogress = c.getColumnIndex("senderProgress");
+            int wakeUpTimeCol     = c.getColumnIndex("wakeUpTime");
             do {
                 if (c.getString(status).equals("started")) arrayList.add (new SelfImprovement_model(
                         c.getString(coldescription),
@@ -138,7 +174,8 @@ public class SelfImprovement_model {
                         c.getString(challengeName),
                         c.getString(colversus),
                         c.getString(colrecipient),
-                        c.getString(colsencerprogress)));
+                        c.getString(colsencerprogress),
+                        c.getString(wakeUpTimeCol)));
             } while (c.moveToNext());
         }
         c.close();
@@ -164,6 +201,7 @@ public class SelfImprovement_model {
             int colversus = c.getColumnIndex("versus");
             int colrecipient = c.getColumnIndex("recipient");
             int colsencerprogress = c.getColumnIndex("senderProgress");
+            int wakeUpTimeCol     = c.getColumnIndex("wakeUpTime");
             do {
                 if (c.getString(colrecipient).equals("true")) {
                     if (c.getString(status).equals("failedBySender")) {
@@ -177,7 +215,8 @@ public class SelfImprovement_model {
                                 c.getString(challengeName),
                                 c.getString(colversus),
                                 c.getString(colrecipient),
-                                c.getString(colsencerprogress)));
+                                c.getString(colsencerprogress),
+                                c.getString(wakeUpTimeCol)));
                     }
                 }
                 if (c.getString(colrecipient).equals("false")) {
@@ -192,7 +231,8 @@ public class SelfImprovement_model {
                                 c.getString(challengeName),
                                 c.getString(colversus),
                                 c.getString(colrecipient),
-                                c.getString(colsencerprogress)));
+                                c.getString(colsencerprogress),
+                                c.getString(wakeUpTimeCol)));
                     }
                     if (c.getString(status).equals("finished")) {
                         arrayList.add(new SelfImprovement_model(
@@ -205,7 +245,8 @@ public class SelfImprovement_model {
                                 c.getString(challengeName),
                                 c.getString(colversus),
                                 c.getString(colrecipient),
-                                c.getString(colsencerprogress)));
+                                c.getString(colsencerprogress),
+                                c.getString(wakeUpTimeCol)));
                     }
                 }
 
@@ -234,6 +275,7 @@ public class SelfImprovement_model {
             int colversus = c.getColumnIndex("versus");
             int colrecipient = c.getColumnIndex("recipient"); // check recipient
             int colsencerprogress = c.getColumnIndex("senderProgress");
+            int wakeUpTimeCol     = c.getColumnIndex("wakeUpTime");
             do {
                 if (c.getString(colrecipient).equals("true")) {
                     if (c.getString(status).equals("failedByRecipient")) {
@@ -247,7 +289,8 @@ public class SelfImprovement_model {
                                 c.getString(challengeName),
                                 c.getString(colversus),
                                 c.getString(colrecipient),
-                                c.getString(colsencerprogress)));
+                                c.getString(colsencerprogress),
+                                c.getString(wakeUpTimeCol)));
                     }
                 }
                 if (c.getString(colrecipient).equals("false")) {
@@ -262,7 +305,8 @@ public class SelfImprovement_model {
                                 c.getString(challengeName),
                                 c.getString(colversus),
                                 c.getString(colrecipient),
-                                c.getString(colsencerprogress)));
+                                c.getString(colsencerprogress),
+                                c.getString(wakeUpTimeCol)));
                     }
                 }
             } while (c.moveToNext());
