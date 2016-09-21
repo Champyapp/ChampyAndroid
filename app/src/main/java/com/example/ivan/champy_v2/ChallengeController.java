@@ -48,9 +48,9 @@ import static java.lang.Math.round;
 public class ChallengeController {
 
     public static final String TAG = "ChallengeController";
-    int hour, minute, seconds;
-    Context context;
-    Activity firstActivity;
+    private int hour, minute, seconds;
+    private Context context;
+    private Activity firstActivity;
 
     public ChallengeController(Context mContext, Activity activity, int mHour, int mMinute, int mSeconds) {
         context = mContext;
@@ -212,6 +212,14 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     com.example.ivan.champy_v2.single_inprogress.SingleInProgress data = response.body();
                     String inProgressId = data.getData().get_id();
+
+                    ContentValues cv = new ContentValues();
+                    cv.put("challenge_id", inProgressId);
+                    cv.put("updated", "false");
+                    DBHelper dbHelper = new DBHelper(firstActivity);
+                    SQLiteDatabase db = dbHelper.getWritableDatabase();
+                    db.insert("updated", null, cv);
+
                     Log.i("sendSingleInProgress", "InProgressId: " + inProgressId);
                     generateCardsForMainActivity();
                 } else Log.i("sendSingleInProgress", "Status: FAILED: " + response.code());
@@ -521,7 +529,6 @@ public class ChallengeController {
 
     }
 
-
     public void generateCardsForMainActivity() {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -550,12 +557,12 @@ public class ChallengeController {
                         Recipient recipient = datum.getRecipient();
                         Sender sender = datum.getSender();
 
-                        String challenge_name = challenge.getName();
-                        String challenge_description = challenge.getDescription();
-                        String challenge_detail = challenge.getDetails();
-                        String challenge_status = datum.getStatus();
-                        String challenge_id = datum.get_id();
-                        String challenge_type = challenge.getType();
+                        String challenge_description = challenge.getDescription(); // no smoking
+                        String challenge_detail = challenge.getDetails(); // no smoking + " during this period"
+                        String challenge_status = datum.getStatus(); // active or not
+                        String challenge_id = datum.get_id(); // im progress id
+                        String challenge_type = challenge.getType(); // 567d51c48322f85870fd931a / b / c
+                        String challenge_name = challenge.getName(); // wake up / self / duel
                         int challenge_updated = challenge.getUpdated();
                         String duration = "";
 
@@ -578,16 +585,14 @@ public class ChallengeController {
                                 e.printStackTrace();
                             }
                         }
-                        Log.i(TAG, "onResponse AFTER FOR: senderProgressString = " + stringSenderProgress);
+                        Log.i(TAG, "senderProgressString = " + stringSenderProgress);
 
                         if (challenge_description.equals("Wake Up")) {
-                            cv.put("name", "Wake Up");
-                            cv.put("recipient", "false");
+                            cv.put("name", "Wake Up"); // just name of Challenge (this need for history & main cards)
                         } else if (challenge_type.equals("567d51c48322f85870fd931a")) {
-                            cv.put("name", "Self-Improvement");
-                            cv.put("recipient", "false");
+                            cv.put("name", "Self-Improvement"); // just name of Challenge (this need for history & main cards)
                         } else if (challenge_type.equals("567d51c48322f85870fd931b")) {
-                            cv.put("name", "Duel");
+                            cv.put("name", "Duel"); // just name of Challenge (this need for history & main cards)
 
                             if (id.equals(recipient.getId())) {
                                 cv.put("recipient", "true");
@@ -599,14 +604,14 @@ public class ChallengeController {
                         }
 
                         //final String myDetails = Arrays.toString(stringSenderProgress);
-                        cv.put("challengeName", challenge_name);
-                        cv.put("description", challenge_detail); // details потому что там wakeup id, надо создать отдельно колонку details
-                        cv.put("duration", duration);
-                        cv.put("challenge_id", challenge_id);
-                        cv.put("status", challenge_status);
-                        //String updated = getChallengeUpdated(challenge_id);
-                        cv.put("updated", update);
-                        cv.put("senderProgress", Arrays.toString(stringSenderProgress));
+                        cv.put("challengeName", challenge_name); // default 'challenge'. this column only for wake up time
+                        cv.put("description", challenge_detail); // here description and "wake up" in (example: 1448)
+                        cv.put("duration", duration); // duration of challenge
+                        cv.put("challenge_id", challenge_id); // in progress id
+                        cv.put("status", challenge_status); // active or not
+                        String updated = getChallengeUpdated(challenge_id); // bool check method;
+                        cv.put("updated", updated); // true / false
+                        cv.put("senderProgress", Arrays.toString(stringSenderProgress)); // last update time in millis
                         db.insert("myChallenges", null, cv);
 
                         //Log.i(TAG, "Challenge | Description: " + challenge_detail);
@@ -631,6 +636,8 @@ public class ChallengeController {
         loadData.loadUserProgressBarInfo();
 
     }
+
+
 
 
     private String getChallengeUpdated(String challenge_id) {

@@ -1,5 +1,6 @@
 package com.example.ivan.champy_v2.helper;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +9,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.StrictMode;
 import android.util.Log;
 
+import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.activity.LoginActivity;
 import com.example.ivan.champy_v2.activity.RoleControllerActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
@@ -34,6 +37,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 
 import io.jsonwebtoken.Jwts;
@@ -48,9 +52,11 @@ import static java.lang.Math.round;
 
 public class AppSync {
 
-    final String API_URL = "http://46.101.213.24:3007";
-    Context context;
-    String fbId, gcm, token, path;
+    private final String API_URL = "http://46.101.213.24:3007";
+    private final String TAG = "AppSync";
+    private Context context;
+    private Activity activity;
+    private String fbId, gcm, token, path;
 
 
     public AppSync(String fb_id, String gcm, String path_to_pic, Context context) throws JSONException {
@@ -118,6 +124,8 @@ public class AppSync {
                      * поэтому здесь надо вызывать эти 2 метода. После вызывался отдельный метод
                      * который брал инфу про друзей. Сейчас мы вызываем его здесь.
                      */
+//                    ChallengeController cc = new ChallengeController(context, activity, 0, 0, 0);
+//                    cc.generateCardsForMainActivity();
                     getUserInProgressChallenges(userId);
                     getUserPending(userId);
                     getUserFriendsInfo(gcm);
@@ -151,7 +159,7 @@ public class AppSync {
     }
 
 
-    public void getUserPending(final String userId) {
+    private void getUserPending(final String userId) {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("pending", null, null);
@@ -206,7 +214,7 @@ public class AppSync {
     }
 
 
-    public void getUserInProgressChallenges(final String userId) {
+    private void getUserInProgressChallenges(final String id) {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("myChallenges", null, null);
@@ -217,7 +225,7 @@ public class AppSync {
 
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
 
-        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> callActiveInProgress = activeInProgress.getActiveInProgress(userId, update, this.token);
+        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> callActiveInProgress = activeInProgress.getActiveInProgress(id, update, this.token);
         try {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
@@ -230,27 +238,42 @@ public class AppSync {
 
                 String challenge_description = challenge.getDescription(); // no smoking
                 String challenge_detail = challenge.getDetails(); // no smoking + " during this period"
-                String challenge_status = datum.getStatus();      // active or not
-                String challenge_id = datum.get_id();             // us magic id
-                String challenge_type = challenge.getType();      // self, duel or wake up
-                String challenge_name = challenge.getName();      // name like "wake up"
+                String challenge_status = datum.getStatus(); // active or not
+                String challenge_id = datum.get_id(); // us magic id
+                String challenge_type = challenge.getType(); // self, duel or wake up
+                String challenge_name = challenge.getName(); // name like "wake up"
+                int challenge_updated = challenge.getUpdated();
                 String duration = "";
+
                 if (datum.getEnd() != null) {
                     int end = datum.getEnd();
                     int days = round((end - unixTime) / 86400);
                     duration = "" + days;
                 }
 
-                if (challenge_description.equals("Wake Up")) {
-                    cv.put("name", "Wake Up");
-                    cv.put("recipient", "false");
-                } else if (challenge_type.equals("567d51c48322f85870fd931a")) {
-                    cv.put("name", "Self-Improvement");
-                    cv.put("recipient", "false");
-                } else if (challenge_type.equals("567d51c48322f85870fd931b")) {
-                    cv.put("name", "Duel");
+                List<Object> senderProgress = datum.getSenderProgress();
+                String stringSenderProgress[] = new String[senderProgress.size()];
+                for (int j = 0; j < senderProgress.size(); j++) {
+                    try {
+                        JSONObject json = new JSONObject(senderProgress.get(j).toString());
+                        long at = json.getLong("at");
+                        Log.i(TAG, "json : " + at);
+                        stringSenderProgress[j] = String.valueOf(at);
+                    } catch (JSONException e) {
+                        Log.i(TAG, "onCatch: " + e);
+                        e.printStackTrace();
+                    }
+                }
+                Log.i(TAG, "onResponse AFTER FOR: senderProgressString = " + stringSenderProgress);
 
-                    if (userId.equals(recipient.getId())) {
+                if (challenge_description.equals("Wake Up")) {
+                    cv.put("name", "Wake Up"); // just name of Challenge (this need for history & main cards)
+                } else if (challenge_type.equals("567d51c48322f85870fd931a")) {
+                    cv.put("name", "Self-Improvement"); // just name of Challenge (this need for history & main cards)
+                } else if (challenge_type.equals("567d51c48322f85870fd931b")) {
+                    cv.put("name", "Duel"); // just name of Challenge (this need for history & main cards)
+
+                    if (id.equals(recipient.getId())) {
                         cv.put("recipient", "true");
                         cv.put("versus", sender.getName());
                     } else {
@@ -259,12 +282,20 @@ public class AppSync {
                     }
                 }
 
-                cv.put("challengeName", challenge_name);
-                cv.put("description", challenge_detail);
-                cv.put("duration", duration);
-                cv.put("challenge_id", challenge_id);
-                cv.put("status", challenge_status);
+                //final String myDetails = Arrays.toString(stringSenderProgress);
+                cv.put("challengeName", challenge_name); // default 'challenge'. this column only for wake up time
+                cv.put("description", challenge_detail); // here description and "wake up" in (example: 1448)
+                cv.put("duration", duration); // duration of challenge
+                cv.put("challenge_id", challenge_id); // in progress id
+                cv.put("status", challenge_status); // active or not
+                String updated = getChallengeUpdated(challenge_id); // bool check method;
+                cv.put("updated", updated); // true / false
+                cv.put("senderProgress", Arrays.toString(stringSenderProgress)); // last update time in millis
                 db.insert("myChallenges", null, cv);
+
+                //Log.i(TAG, "Challenge | Description: " + challenge_detail);
+                //Log.i(TAG, "Challenge | Challenge_updated: " + challenge_updated);
+                //Log.i(TAG, "Challenge | SenderProgress: " + Arrays.toString(stringSenderProgress));
             }
 
         } catch (IOException e) {
@@ -274,7 +305,7 @@ public class AppSync {
     }
 
 
-    public void getUserFriendsInfo(final String gcm) {
+    private void getUserFriendsInfo(final String gcm) {
         final String API_URL = "http://46.101.213.24:3007";
         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         final NewUser newUser = retrofit.create(NewUser.class);
@@ -357,8 +388,25 @@ public class AppSync {
         request.executeAndWait();
     }
 
+    private String getChallengeUpdated(String challenge_id) {
+        DBHelper dbHelper = new DBHelper(context);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor c = db.query("updated", null, null, null, null, null, null);
+        String ok = "false";
+        if (c.moveToFirst()) {
+            int colchallenge_id = c.getColumnIndex("challenge_id");
+            do {
+                if (c.getString(colchallenge_id).equals(challenge_id)){
+                    ok = c.getString(c.getColumnIndex("updated"));
+                    break;
+                }
+            } while (c.moveToNext());
+        }
+        c.close();
+        return ok;
+    }
 
-    public Boolean checkPendingFriends(String id) {
+    private Boolean checkPendingFriends(String id) {
         DBHelper dbHelper = new DBHelper(context);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Boolean ok = false;

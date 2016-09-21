@@ -81,7 +81,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 + "id integer primary key autoincrement,"
                 + "name text,"
                 + "challengeName text DEFAULT 'challenge',"
-                + "recipient text,"
+                + "recipient text DEFAULT 'false',"
                 + "versus text,"
                 + "description text,"
                 + "duration text,"
