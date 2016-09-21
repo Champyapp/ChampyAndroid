@@ -75,7 +75,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
         String itemType   = item.getType();
         String itemGoal   = item.getGoal();
         String itemChallengeName   = item.getChallengeName();
-        String itemWakeUpTime = item.getWakeUpTime();
+        final String itemWakeUpTime = item.getWakeUpTime();
         String itemVersus = "with " + item.getVersus();
         String itemSenderProgress = item.getSenderProgress();
         //Log.i(TAG, "getView: " + itemGoal + " = " + toArrayOfStrings(itemSenderProgress)[0]);
@@ -124,7 +124,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
                             case DialogInterface.BUTTON_POSITIVE:
                                     try {
                                         if (item.getType().equals("Wake Up")) {
-                                            int intentId = Integer.parseInt(item.getChallengeName());
+                                            int intentId = Integer.parseInt(itemWakeUpTime);
                                             challengeController.give_up(item.getId(), intentId);
                                         } else {
                                             challengeController.give_up(item.getId(), 0);

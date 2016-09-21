@@ -589,12 +589,12 @@ public class ChallengeController {
                         Log.i(TAG, "senderProgressString = " + stringSenderProgress);
 
                         if (challenge_description.equals("Wake Up")) {
-                            cv.put("name", "Wake Up"); // just name of Challenge (this need for history & main cards)
-                            cv.put("wakeUpTime", challenge_wakeUpTime); // our specific name for wakeUp: Wake Up at 14:48
+                            cv.put("name", "Wake Up"); // just name of Challenge
+                            cv.put("wakeUpTime", challenge_detail); // our specific field for delete wakeUp (example: 1448);
                         } else if (challenge_type.equals("567d51c48322f85870fd931a")) {
-                            cv.put("name", "Self-Improvement"); // just name of Challenge (this need for history & main cards)
+                            cv.put("name", "Self-Improvement"); // just name of Challenge
                         } else if (challenge_type.equals("567d51c48322f85870fd931b")) {
-                            cv.put("name", "Duel"); // just name of Challenge (this need for history & main cards)
+                            cv.put("name", "Duel"); // just name of Challenge
 
                             if (id.equals(recipient.getId())) {
                                 cv.put("recipient", "true");
@@ -607,7 +607,7 @@ public class ChallengeController {
 
                         //final String myDetails = Arrays.toString(stringSenderProgress);
                         cv.put("challengeName", challenge_name); // default 'challenge'. this column only for wake up time
-                        cv.put("description", challenge_description); // here description and "wake up" in (example: 1448)
+                        cv.put("description", challenge_description); // smoking free life / wake up at 14:48
                         cv.put("duration", duration); // duration of challenge
                         cv.put("challenge_id", challenge_id); // in progress id
                         cv.put("status", challenge_status); // active or not
