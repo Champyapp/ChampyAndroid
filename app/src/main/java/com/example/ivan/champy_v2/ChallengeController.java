@@ -255,7 +255,7 @@ public class ChallengeController {
         });
     }
 
-    public void sendSingleInProgressForWakeUp(String challenge, final int intentId, final long currentMidnight) {
+    private void sendSingleInProgressForWakeUp(String challenge, final int intentId, final long currentMidnight) {
         CurrentUserHelper user = new CurrentUserHelper(context);
         final String token = user.getToken();
         final String API_URL = "http://46.101.213.24:3007";

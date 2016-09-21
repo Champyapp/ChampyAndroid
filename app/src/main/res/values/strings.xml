@@ -111,7 +111,6 @@
     </string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="loginText">\'\'it\'s your thinking that \n decides whether you\'re \n going to succeed or fail\'\' - \n henry ford</string>
     <string name="foreveralonetext">You don\'t seem to be that guy</string>
     <string name="foreveralonetext2">get extra motivation and have fun challenging your \n friends. improve together and compete to become the \n ultimate champy!</string>
@@ -136,6 +135,7 @@
     <string name="contact_us">Contact Us</string>
     <string name="level_1_challenge">Level 1 Challenge</string>
     <string name="reward_10_points">Reward +10 points</string>
+    <string name="reward_10__n_points">Reward +10 \npoints</string>
     <string name="everyday_for_next">everyday for next</string>
     <string name="_21_days">21 DAYS</string>
     <string name="wake_up_at">WAKE UP AT</string>
@@ -194,5 +194,8 @@
     <string name="subject">Subject</string>
     <string name="your_message">Your message</string>
     <string name="contact_us_background">contact us background</string>
+    <string name="waiting_for_your_recipient">waiting for your recipient</string>
+    <string name="level_1_n_challenge"> Level 1 \n Challenge</string>
+    <string name="reward_10_npoints">Reward +10 \npoints</string>
 
 </resources>

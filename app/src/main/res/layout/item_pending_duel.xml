@@ -20,7 +20,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Challenge with "
             android:id="@+id/tvYouVsSomebody"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
@@ -29,13 +28,12 @@
             android:layout_alignParentStart="true"
             android:textColor="#808080"
             android:gravity="center"
-            android:textSize="24dp" />
+            android:textSize="24sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Alcohol free life"
             android:id="@+id/tv_goal"
             android:layout_below="@+id/tvYouVsSomebody"
             android:layout_marginTop="48dp"
@@ -51,7 +49,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="21"
             android:textColor="#339997"
             android:id="@+id/textViewDuring"
             android:layout_below="@+id/textView"
@@ -61,18 +58,19 @@
 
         <!-- id = AcceptButton, but this is Points View. I Can't rename, because this will change name in -->
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:id="@+id/imageViewAcceptButton"
-            android:src="@mipmap/ic_launcher"
+            android:src="@drawable/points"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@string/points" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Level 1 \nChallenge"
+            android:text="@string/level_1_n_challenge"
             android:id="@+id/tvLevelChallenge"
             android:layout_alignBottom="@+id/imageViewAcceptButton"
             android:layout_alignParentLeft="true"
@@ -81,13 +79,14 @@
             android:layout_toStartOf="@+id/imageViewAcceptButton"
             android:layout_alignTop="@+id/imageViewAcceptButton"
             android:gravity="center_vertical|center_horizontal"
-            android:textColor="#339997" />
+            android:textColor="#339997"
+            android:textAlignment="center" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:text="Reward \n+10 points"
+            android:text="@string/reward_10__n_points"
             android:id="@+id/tvRewardPlus10Points"
             android:layout_alignTop="@+id/imageViewAcceptButton"
             android:layout_toRightOf="@+id/imageViewAcceptButton"
@@ -101,7 +100,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="everyday for the next"
+            android:text="@string/everyday_for_the_next"
             android:id="@+id/textView"
             android:layout_below="@+id/tv_goal"
             android:gravity="center"
@@ -115,7 +114,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Days"
+            android:text="@string/days"
             android:textColor="#339997"
             android:id="@+id/textView2"
             android:layout_alignBottom="@+id/textViewDuring"
