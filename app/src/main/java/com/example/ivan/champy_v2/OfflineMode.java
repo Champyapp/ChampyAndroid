@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 public class OfflineMode {
 
-    public boolean isInternetAvailable(Activity activity) {
+    private boolean isInternetAvailable(Activity activity) {
         ConnectivityManager cm = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = cm.getActiveNetworkInfo();
 

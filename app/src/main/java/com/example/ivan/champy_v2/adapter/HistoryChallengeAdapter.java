@@ -21,8 +21,6 @@ import java.util.List;
 
 public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallengeAdapter.ViewHolder> {
 
-    final private String API_URL = "http://46.101.213.24:3007";
-    final private String TAG = "myLogs";
     private List<HistoryChallenge> mContacts;
     private Context mContext;
 
@@ -48,32 +46,24 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
     public void onBindViewHolder(final HistoryChallengeAdapter.ViewHolder viewHolder, int position) {
         HistoryChallenge itemRow = mContacts.get(position);
         TextView nameTextView = viewHolder.nameTextView;
-        TextView level = viewHolder.level;
-
-        String type = itemRow.getType();
+        String itemRowType = itemRow.getType();
         String challengeName = itemRow.getChallengeName();
-        String goal = itemRow.getGoal();
-        String description = itemRow.getDescription();
         String duration = itemRow.getDuration();
         String versus = itemRow.getVersus();
 
-
         // Here "type" in stupid string format. its works.
-        switch (type) {
+        switch (itemRowType) {
             // TODO: 29.08.2016 make auto size for text because '\n' is not good solution
             case "Duel":
-                nameTextView.setText(description + ": " + duration + " days\nwith " + versus);
+                nameTextView.setText(challengeName + ": " + duration + " days\nwith " + versus);
                 Glide.with(mContext).load(R.drawable.duel_yellow).override(80, 80).into(viewHolder.image);
                 break;
             case "Wake Up":
-                // challengeName because when we created "wake up challenge" we've set name
-                // "Wake up at $hour : $minute during this period (in ChallengeController);
-                nameTextView.setText(challengeName + ": " + duration + " days");
+                nameTextView.setText(challengeName + " During this period:" + duration + " days");
                 Glide.with(mContext).load(R.drawable.wakeup_yellow).override(80, 80).into(viewHolder.image);
                 break;
             case "Self-Improvement":
-                //nameTextView.setText(challengeName + " during " + duration + " days");
-                nameTextView.setText(description + ": " + duration + " days");
+                nameTextView.setText(challengeName + " during this period: " + duration + " days");
                 Glide.with(mContext).load(R.drawable.self_yellow).override(80, 80).into(viewHolder.image);
                 break;
             default:
@@ -96,11 +86,6 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
                 break;
         }
 
-        SessionManager sessionManager = new SessionManager(mContext);
-        HashMap<String, String> champy = sessionManager.getChampyOptions();
-        String userLevel = champy.get("level");
-        level.setText("Level " + userLevel + " Champy");
-
         Typeface typeFace = Typeface.createFromAsset(mContext.getAssets(), "fonts/bebasneue.ttf");
         nameTextView.setTypeface(typeFace);
 
@@ -115,23 +100,17 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
     }
 
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView nameTextView;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView nameTextView;
         public TextView level;
         public ImageView image;
         public ImageView challenges;
         public ImageView wins;
         public ImageView total;
-        public ImageView mwins;
-        public ImageView dop;
-        public ImageView mchallenges;
-        public ImageView mtotal;
-        public ImageButton block;
         public ImageButton add;
-        public RelativeLayout simple;
         public RelativeLayout info;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
 
             nameTextView = (TextView) itemView.findViewById(R.id.challengeNameInHistory);

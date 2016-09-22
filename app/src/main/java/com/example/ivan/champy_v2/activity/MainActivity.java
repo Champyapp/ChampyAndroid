@@ -62,7 +62,7 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 import static java.lang.Math.round;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     public static final String TAG = "MainActivity";
     private long mLastClickTime = 0;
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .addSubActionView(buttonDuelChallenge).addSubActionView(buttonSelfImprovement)
                 .setRadius(350).attachTo(actionButton).build();
 
-        actionButton.setOnClickListener(initStupidClick());
+        actionButton.setOnClickListener(this);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
@@ -188,66 +188,59 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ViewServer.get(this).addWindow(this);
     }
 
+    @Override
+    public void onClick(View v) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+            return;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
 
-    private View.OnClickListener initStupidClick() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                    return;
+        //Here we make our background is blurred
+        ImageView blurScreen;
+        RelativeLayout contentMain = (RelativeLayout) findViewById(R.id.content_main);
+        contentMain.destroyDrawingCache();
+        contentMain.buildDrawingCache();
+        Bitmap bm = contentMain.getDrawingCache();
+        Bitmap blured = Blur.blurRenderScript(getApplicationContext(), bm, 25);
+        blurScreen = (ImageView) findViewById(R.id.blurScreen);
+        Drawable ob = new BitmapDrawable(getResources(), blured);
+        blurScreen.setImageDrawable(ob);
+        RelativeLayout cardsLayout = (RelativeLayout) findViewById(R.id.cards);
+
+
+        // first we check action menu and if "is open" then we setup our inside click for FAB
+        actionMenu.toggle(true);
+        if (!actionMenu.isOpen()) {
+            blurScreen.setVisibility(View.INVISIBLE);
+            cardsLayout.setVisibility(View.VISIBLE);
+        } else {
+            blurScreen.setVisibility(View.VISIBLE);
+            cardsLayout.setVisibility(View.INVISIBLE);
+            buttonSelfImprovement.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MainActivity.this, SelfImprovementActivity.class);
+                    startActivity(intent);
                 }
-                mLastClickTime = SystemClock.elapsedRealtime();
-
-                /**
-                 * Here we make our background is blurred
-                 */
-                ImageView blurScreen;
-                RelativeLayout contentMain = (RelativeLayout) findViewById(R.id.content_main);
-                contentMain.destroyDrawingCache();
-                contentMain.buildDrawingCache();
-                Bitmap bm = contentMain.getDrawingCache();
-                Bitmap blured = Blur.blurRenderScript(getApplicationContext(), bm, 25);
-                blurScreen = (ImageView) findViewById(R.id.blurScreen);
-                Drawable ob = new BitmapDrawable(getResources(), blured);
-                blurScreen.setImageDrawable(ob);
-                RelativeLayout cardsLayout = (RelativeLayout) findViewById(R.id.cards);
-
-                /**
-                 * first we check action menu and if "is open" then we setup our inside click for FAB
-                 */
-                actionMenu.toggle(true);
-                if (!actionMenu.isOpen()) {
-                    blurScreen.setVisibility(View.INVISIBLE);
-                    cardsLayout.setVisibility(View.VISIBLE);
-                } else {
-                    blurScreen.setVisibility(View.VISIBLE);
-                    cardsLayout.setVisibility(View.INVISIBLE);
-                    buttonSelfImprovement.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(MainActivity.this, SelfImprovementActivity.class);
-                            startActivity(intent);
-                        }
-                    });
-                    buttonDuelChallenge.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
-                            startActivity(intent);
-                        }
-                    });
-                    buttonWakeUpChallenge.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(MainActivity.this, WakeUpActivity.class);
-                            startActivity(intent);
-                        }
-                    });
+            });
+            buttonDuelChallenge.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
+                    startActivity(intent);
                 }
+            });
+            buttonWakeUpChallenge.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MainActivity.this, WakeUpActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
 
-            }
-        };
     }
+
 
     @Override
     protected void onStart() {
