@@ -47,8 +47,8 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
     private List<Pending_friend> mContacts;
     private Context context;
     private Activity activity;
-    CustomItemClickListener listener;
-    ArrayList<Integer> selected = new ArrayList<>();
+    private CustomItemClickListener listener;
+    private ArrayList<Integer> selected = new ArrayList<>();
 
     private Other other = new Other(new ArrayList<Friend>());
 
@@ -103,50 +103,78 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
     public void onBindViewHolder(final PendingAdapter.ViewHolder viewHolder, final int position) {
         // Get the data model based on position
         final Pending_friend contact = mContacts.get(position);
+        // Set item views based on the data model
         Typeface typeFace = Typeface.createFromAsset(context.getAssets(), "fonts/bebasneue.ttf");
-        if (selected.contains(position)) {
-            // отвечает за значки в развернутом виде
-            ImageView imageViewUserAvatar = (ImageView)viewHolder.itemView.findViewById(R.id.imageViewUserAvatar);
-            ImageView imageViewChallengesOpen = viewHolder.mChallenges;
-            ImageView imageViewWinsOpen = viewHolder.mWins;
-            ImageView imageViewTotalOpen = viewHolder.mTotal;
-            Glide.with(context).load(contact.getPicture()).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true).transform(new CropCircleTransformation(context)).placeholder(R.drawable.icon_champy).override(80, 80).dontAnimate().into(imageViewUserAvatar);
-            Glide.with(context).load(R.drawable.challenges).override(40, 40).into(imageViewChallengesOpen);
-            Glide.with(context).load(R.drawable.wins).override(40, 40).into(imageViewWinsOpen);
-            Glide.with(context).load(R.drawable.total).override(40, 40).into(imageViewTotalOpen);
+        TextView tvUserName = viewHolder.nameTextView;
+        tvUserName.setText(contact.getName());
 
-            // отвечает за круги в развернутом виде
+        /**
+         * below close view
+         */
+        // response for icons in close view
+        ImageView imageViewFriendPicture = viewHolder.friendImage;
+        ImageView imageViewChallenges = viewHolder.challenges;
+        ImageView imageViewTotal = viewHolder.total;
+        ImageView imageViewWins = viewHolder.wins;
+        // response for counters in close view
+        TextView counterInProgressClose = (TextView)viewHolder.itemView.findViewById(R.id.counterInProgress);
+        TextView counterTotalClose = (TextView)viewHolder.itemView.findViewById(R.id.counterTotal);
+        TextView counterWinsClose = (TextView)viewHolder.itemView.findViewById(R.id.counterWins);
+        // response for info by counters in close view
+        counterInProgressClose.setText(contact.getmChallenges());
+        counterWinsClose.setText(contact.getmWins());
+        counterTotalClose.setText(contact.getmTotal());
+        // response for typeface for counters in close view
+        counterInProgressClose.setTypeface(typeFace);
+        counterWinsClose.setTypeface(typeFace);
+        counterTotalClose.setTypeface(typeFace);
+
+        /**
+         * below open view
+         */
+
+        // response for user info and icons in open view
+        ImageView imageViewUserAvatar = (ImageView) viewHolder.itemView.findViewById(R.id.imageViewUserAvatar);
+        ImageView imageViewChallengesOpen = viewHolder.mChallenges;
+        ImageView imageViewTotalOpen = viewHolder.mTotal;
+        ImageView imageViewWinsOpen = viewHolder.mWins;
+        TextView tvUserName2 = (TextView) viewHolder.itemView.findViewById(R.id.textViewChallengesCounter);
+        tvUserName2.setText(contact.getName());
+        tvUserName2.setTypeface(typeFace);
+        // response for icons in open view
+        TextView tvChallenges = (TextView) viewHolder.itemView.findViewById(R.id.textViewChallenges);
+        TextView tvTotal = (TextView) viewHolder.itemView.findViewById(R.id.textViewTotal);
+        TextView tvWins = (TextView) viewHolder.itemView.findViewById(R.id.textViewWins);
+        tvChallenges.setTypeface(typeFace);
+        tvTotal.setTypeface(typeFace);
+        tvWins.setTypeface(typeFace);
+        // response for counters in open view
+        TextView counterInProgressOpen = (TextView) viewHolder.itemView.findViewById(R.id.info_inProgress);
+        TextView counterTotalOpen = (TextView) viewHolder.itemView.findViewById(R.id.info_total);
+        TextView counterWinsOpen = (TextView) viewHolder.itemView.findViewById(R.id.info_wins);
+        // response for info by counters in close view
+        counterInProgressOpen.setText(contact.getmChallenges());
+        counterTotalOpen.setText(contact.getmTotal());
+        counterWinsOpen.setText(contact.getmWins());
+        // response for typeface for counters in close view
+        counterInProgressOpen.setTypeface(typeFace);
+        counterTotalOpen.setTypeface(typeFace);
+        counterWinsOpen.setTypeface(typeFace);
+
+
+        // при нажатии нужно переобъявлять view, поэтому делаем это.
+        // отвечает за вид в развернутом состоянии
+        if (selected.contains(position)) {
+
+            Glide.with(context).load(R.drawable.wins).override(40, 40).into(imageViewWinsOpen);
+            Glide.with(context).load(contact.getPicture()).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).transform(new CropCircleTransformation(context)).placeholder(R.drawable.icon_champy).override(80, 80).dontAnimate().into(imageViewUserAvatar);
+            Glide.with(context).load(R.drawable.challenges).override(40, 40).into(imageViewChallengesOpen);
+            Glide.with(context).load(R.drawable.total).override(40, 40).into(imageViewTotalOpen);
             Glide.with(context).load(R.drawable.start_circle_00026).placeholder(R.drawable.icon_champy).into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleChall));
             Glide.with(context).load(R.drawable.start_circle_00026).placeholder(R.drawable.icon_champy).into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleWins));
             Glide.with(context).load(R.drawable.start_circle_00026).placeholder(R.drawable.icon_champy).into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleTotal));
 
-            // отвечает за имя юзера в развернутом виде
-            TextView tvUserName = (TextView)viewHolder.itemView.findViewById(R.id.textViewChallengesCounter);
-            tvUserName.setText(contact.getName());
-            tvUserName.setTypeface(typeFace);
-
-            // создаем вид счетчиком в развернутом виде
-            TextView textViewChallenges = (TextView)viewHolder.itemView.findViewById(R.id.textViewChallenges);
-            TextView textViewWins = (TextView)viewHolder.itemView.findViewById(R.id.textViewWins);
-            TextView textViewTotal = (TextView)viewHolder.itemView.findViewById(R.id.textViewTotal);
-            textViewChallenges.setTypeface(typeFace);
-            textViewWins.setTypeface(typeFace);
-            textViewTotal.setTypeface(typeFace);
-
-            // отвечает за счетчики в развернутом виде
-            TextView counterInProgressOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_inProgress);
-            TextView counterWinsOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_wins);
-            TextView counterTotalOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
-
-            counterInProgressOpen.setText(contact.getmChallenges());
-            counterWinsOpen.setText(contact.getmWins());
-            counterTotalOpen.setText(contact.getmTotal());
-            counterInProgressOpen.setTypeface(typeFace);
-            counterWinsOpen.setTypeface(typeFace);
-            counterTotalOpen.setTypeface(typeFace);
-
-            // отвечает за кнопки и их видимость (owner = myself);
+            // response for visible of button 'add' (owner = myself);
             if (contact.getOwner().equals("true")) {
                 // если я приглашаю в друзья, то кнопка "add" толжна отсутствовать!
                 Log.d(TAG, "Owner: true");
@@ -157,44 +185,19 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                 viewHolder.add.setVisibility(View.VISIBLE);
                 viewHolder.block.setVisibility(View.VISIBLE);
             }
-
-            // делаем view open видимой, view close невидимой
+            // made our "open-view" is visible and 'close-view' invisible
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.VISIBLE);
             viewHolder.itemView.findViewById(R.id.row_friends_list_close).setVisibility(View.GONE);
-
         }
         else {
-            // отвечает за значки в свернутом виде
-            Log.i("Selected: ", position + " close");
-            ImageView imageViewFriendPicture = viewHolder.friendImage;
-            ImageView imageViewChallenges = viewHolder.challenges;
-            ImageView imageViewWins = viewHolder.wins;
-            ImageView imageViewTotal = viewHolder.total;
-
+            Glide.with(context).load(R.drawable.wins).override(40, 40).into(imageViewWins);
             Glide.with(context).load(contact.getPicture()).asBitmap().transform(new CropCircleTransformation(context)).placeholder(R.drawable.icon_champy).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).override(80, 80).dontAnimate().into(imageViewFriendPicture);
             Glide.with(context).load(R.drawable.challenges).override(40, 40).into(imageViewChallenges);
-            Glide.with(context).load(R.drawable.wins).override(40, 40).into(imageViewWins);
             Glide.with(context).load(R.drawable.total).override(40, 40).into(imageViewTotal);
-
-            // отвечает за счетчики в свернутом виде
-            TextView counterInProgressClose = (TextView)viewHolder.itemView.findViewById(R.id.counterInProgress);
-            TextView counterWinsClose = (TextView)viewHolder.itemView.findViewById(R.id.counterWins);
-            TextView counterTotalClose = (TextView)viewHolder.itemView.findViewById(R.id.counterTotal);
-
-            counterInProgressClose.setText(contact.getmChallenges());
-            counterWinsClose.setText(contact.getmWins());
-            counterTotalClose.setText(contact.getmTotal());
-            counterInProgressClose.setTypeface(typeFace);
-            counterWinsClose.setTypeface(typeFace);
-            counterTotalClose.setTypeface(typeFace);
-
-            // делаем view open невидимой, view close видимой
+            // made our "close-view" is visible and 'open-view' invisible
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.GONE);
             viewHolder.itemView.findViewById(R.id.row_friends_list_close).setVisibility(View.VISIBLE);
         }
-        // Set item views based on the data model
-        TextView textView = viewHolder.nameTextView;
-        textView.setText(contact.getName());
 
         viewHolder.block.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -286,22 +289,22 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
     }
 
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView nameTextView;
-        public ImageView friendImage;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView nameTextView;
+        ImageView friendImage;
         public ImageView challenges;
         public ImageView wins;
         public ImageView total;
-        public ImageButton block;
+        ImageButton block;
         public ImageButton add;
-        public ImageView mChallenges;
-        public ImageView mWins;
-        public ImageView mTotal;
-        public RelativeLayout simple;
+        ImageView mChallenges;
+        ImageView mWins;
+        ImageView mTotal;
+        RelativeLayout simple;
         public RelativeLayout info;
-        public ImageView dop;
+        ImageView dop;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
 
             nameTextView = (TextView) itemView.findViewById(R.id.userName);

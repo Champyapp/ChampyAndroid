@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.interfaces.CustomItemClickListener;
 import com.example.ivan.champy_v2.activity.DuelActivity;
 import com.example.ivan.champy_v2.Friend;
@@ -24,7 +25,6 @@ import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -41,14 +41,13 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     private List<Friend> mContacts;
     private Context context;
     private Activity activity;
-    private CustomItemClickListener listener;
     private ArrayList<Integer> selected = new ArrayList<>();
 
 
     public FriendsAdapter(List<Friend> contacts, Context context, Activity activity, CustomItemClickListener itemOnClick) {
         mContacts = contacts;
         this.context = context;
-        this.listener = itemOnClick;
+        CustomItemClickListener listener = itemOnClick;
         this.activity = activity;
     }
 
@@ -92,17 +91,68 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         // Get the data model based on position
         final Friend contact = mContacts.get(position);
         // Set item views based on the data model
-        TextView textView = viewHolder.nameTextView;
-        textView.setText(contact.getName());
+        TextView tvUserName = viewHolder.nameTextView;
+        tvUserName.setText(contact.getName());
         Typeface typeFace = Typeface.createFromAsset(context.getAssets(), "fonts/bebasneue.ttf");
+
+
+        /**
+         * below close view
+         */
+        // response for icons in close view
+        ImageView imageViewFriendPicture = viewHolder.friendImage;
+        ImageView imageViewChallenges = viewHolder.challenges;
+        ImageView imageViewTotal = viewHolder.total;
+        ImageView imageViewWins = viewHolder.wins;
+        // response for counters in close view
+        TextView counterInProgressClose = (TextView)viewHolder.itemView.findViewById(R.id.counterInProgress);
+        TextView counterTotalClose = (TextView)viewHolder.itemView.findViewById(R.id.counterTotal);
+        TextView counterWinsClose = (TextView)viewHolder.itemView.findViewById(R.id.counterWins);
+        // response for info by counters in close view
+        counterInProgressClose.setText(contact.getmChallenges());
+        counterWinsClose.setText(contact.getmWins());
+        counterTotalClose.setText(contact.getmTotal());
+        // response for typeface for counters in close view
+        counterInProgressClose.setTypeface(typeFace);
+        counterWinsClose.setTypeface(typeFace);
+        counterTotalClose.setTypeface(typeFace);
+
+        /**
+         * below open view
+         */
+
+        // response for user info and icons in open view
+        ImageView imageViewUserAvatar = (ImageView) viewHolder.itemView.findViewById(R.id.imageViewUserAvatar);
+        ImageView imageViewChallengesOpen = viewHolder.mchallenges;
+        ImageView imageViewTotalOpen = viewHolder.mtotal;
+        ImageView imageViewWinsOpen = viewHolder.mwins;
+        TextView tvUserName2 = (TextView) viewHolder.itemView.findViewById(R.id.textViewChallengesCounter);
+        tvUserName2.setText(contact.getName());
+        tvUserName2.setTypeface(typeFace);
+        // response for icons in open view
+        TextView tvChallenges = (TextView) viewHolder.itemView.findViewById(R.id.textViewChallenges);
+        TextView tvTotal = (TextView) viewHolder.itemView.findViewById(R.id.textViewTotal);
+        TextView tvWins = (TextView) viewHolder.itemView.findViewById(R.id.textViewWins);
+        tvChallenges.setTypeface(typeFace);
+        tvTotal.setTypeface(typeFace);
+        tvWins.setTypeface(typeFace);
+        // response for counters in open view
+        TextView counterInProgressOpen = (TextView) viewHolder.itemView.findViewById(R.id.info_inProgress);
+        TextView counterTotalOpen = (TextView) viewHolder.itemView.findViewById(R.id.info_total);
+        TextView counterWinsOpen = (TextView) viewHolder.itemView.findViewById(R.id.info_wins);
+        // response for info by counters in close view
+        counterInProgressOpen.setText(contact.getmChallenges());
+        counterTotalOpen.setText(contact.getmTotal());
+        counterWinsOpen.setText(contact.getmWins());
+        // response for typeface for counters in close view
+        counterInProgressOpen.setTypeface(typeFace);
+        counterTotalOpen.setTypeface(typeFace);
+        counterWinsOpen.setTypeface(typeFace);
+
+
         // при нажатии нужно переобъявлять view, поэтому делаем это.
         // отвечает за вид в развернутом состоянии
         if (selected.contains(position)) {
-            // отвечает за значки в развернутом виде
-            ImageView imageViewUserAvatar = (ImageView) viewHolder.itemView.findViewById(R.id.imageViewUserAvatar);
-            ImageView imageViewChallengesOpen = viewHolder.mchallenges;
-            ImageView imageViewTotalOpen = viewHolder.mtotal;
-            ImageView imageViewWinsOpen = viewHolder.mwins;
 
             Glide.with(context).load(R.drawable.wins).override(40, 40).into(imageViewWinsOpen);
             Glide.with(context).load(contact.getPicture()).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).transform(new CropCircleTransformation(context)).placeholder(R.drawable.icon_champy).override(80, 80).dontAnimate().into(imageViewUserAvatar);
@@ -111,61 +161,16 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             Glide.with(context).load(R.drawable.start_circle_00026).placeholder(R.drawable.icon_champy).into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleChall));
             Glide.with(context).load(R.drawable.start_circle_00026).placeholder(R.drawable.icon_champy).into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleWins));
             Glide.with(context).load(R.drawable.start_circle_00026).placeholder(R.drawable.icon_champy).into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleTotal));
-
-            // отвечает за имя юзера в развернутом виде
-            TextView tvUserName = (TextView) viewHolder.itemView.findViewById(R.id.textViewChallengesCounter);
-            tvUserName.setText(contact.getName());
-            tvUserName.setTypeface(typeFace);
-
-            // создаем вид счетчиком в развернутом виде
-            TextView tvChallenges = (TextView) viewHolder.itemView.findViewById(R.id.textViewChallenges);
-            TextView tvWins = (TextView) viewHolder.itemView.findViewById(R.id.textViewWins);
-            TextView tvTotal = (TextView) viewHolder.itemView.findViewById(R.id.textViewTotal);
-            tvChallenges.setTypeface(typeFace);
-            tvTotal.setTypeface(typeFace);
-            tvWins.setTypeface(typeFace);
-
-            // отвечает за счетчики в развернутом виде
-            TextView counterInProgressOpen = (TextView) viewHolder.itemView.findViewById(R.id.info_inProgress);
-            TextView counterWinsOpen = (TextView) viewHolder.itemView.findViewById(R.id.info_wins);
-            TextView counterTotalOpen = (TextView) viewHolder.itemView.findViewById(R.id.info_total);
-            counterInProgressOpen.setTypeface(typeFace);
-            counterWinsOpen.setTypeface(typeFace);
-            counterTotalOpen.setTypeface(typeFace);
-
-            counterInProgressOpen.setText(contact.getmChallenges());
-            counterWinsOpen.setText(contact.getmWins());
-            counterTotalOpen.setText(contact.getmTotal());
-
-            // делаем view open видимой, view close невидимой
+            // made our "open-view" is visible and 'close-view' invisible
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.VISIBLE);
             viewHolder.itemView.findViewById(R.id.row_friends_list_close).setVisibility(View.GONE);
         }
         else {
-            // отвечает за значки в свернутом виде
-            ImageView imageViewFriendPicture = viewHolder.friendImage;
-            ImageView imageViewChallenges = viewHolder.challenges;
-            ImageView imageViewTotal = viewHolder.total;
-            ImageView imageViewWins = viewHolder.wins;
             Glide.with(context).load(R.drawable.wins).override(40, 40).into(imageViewWins);
             Glide.with(context).load(contact.getPicture()).asBitmap().transform(new CropCircleTransformation(context)).placeholder(R.drawable.icon_champy).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).override(80, 80).dontAnimate().into(imageViewFriendPicture);
             Glide.with(context).load(R.drawable.challenges).override(40, 40).into(imageViewChallenges);
             Glide.with(context).load(R.drawable.total).override(40, 40).into(imageViewTotal);
-
-            // отвечает за счетчики в свернутом виде
-            TextView counterInProgressClose = (TextView)viewHolder.itemView.findViewById(R.id.counterInProgress);
-            TextView counterTotalClose = (TextView)viewHolder.itemView.findViewById(R.id.counterTotal);
-            TextView counterWinsClose = (TextView)viewHolder.itemView.findViewById(R.id.counterWins);
-
-            counterInProgressClose.setText(contact.getmChallenges());
-            counterWinsClose.setText(contact.getmWins());
-            counterTotalClose.setText(contact.getmTotal());
-            counterInProgressClose.setTypeface(typeFace);
-            counterWinsClose.setTypeface(typeFace);
-            counterTotalClose.setTypeface(typeFace);
-
-
-            // делаем view open невидимой, view close видимой
+            // made our "close-view" is visible and 'open-view' invisible
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.GONE);
             viewHolder.itemView.findViewById(R.id.row_friends_list_close).setVisibility(View.VISIBLE);
         }
@@ -178,15 +183,14 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                 if (offlineMode.isConnectedToRemoteAPI(activity)) {
 
                     final SessionManager sessionManager = new SessionManager(context);
-                    HashMap<String, String> user;
-                    user = sessionManager.getUserDetails();
-                    final String token = user.get("token");
-                    final String id = user.get("id");
+                    CurrentUserHelper user = new CurrentUserHelper(context);
+                    final String token = user.getToken();
+                    final String userId = user.getUserObjectId();
                     String friend = mContacts.get(position).getID();
                     Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
                     com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
-                    Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.removeFriend(id, friend, token);
+                    Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.removeFriend(userId, friend, token);
                     call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
                         @Override
                         public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
