@@ -410,6 +410,7 @@ public class ChallengeController {
 
 
     public void refreshCardsForPendingDuel(final String token, final String userId) {
+        cv = new ContentValues();
         dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
         final int clearCount = db.delete("pending_duel", null, null);
@@ -462,8 +463,6 @@ public class ChallengeController {
             @Override
             public void onFailure(Throwable t) { }
         });
-
-
 
     }
 

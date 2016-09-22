@@ -113,10 +113,8 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
         // Set item views based on the data model
         TextView nameTextView = viewHolder.nameTextView;
         nameTextView.setText(contact.getName());
+        Typeface typeFace = Typeface.createFromAsset(_context.getAssets(), "fonts/bebasneue.ttf");
 
-        /**
-         *   при нажатии нужно переобъявлять view, поэтому делаем это.
-         */
 
         // отвечает за вид в развернутом состоянии
         if (selected.contains(position)) {
@@ -140,7 +138,6 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
             // отвечает за имя юзера в развернутом виде
             TextView tvUserName = (TextView)viewHolder.itemView.findViewById(R.id.textViewChallengesCounter);
             tvUserName.setText(contact.getName());
-            Typeface typeFace = Typeface.createFromAsset(_context.getAssets(), "fonts/bebasneue.ttf");
             tvUserName.setTypeface(typeFace);
 
             // создаем вид счетчиком в развернутом виде
@@ -156,9 +153,13 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
             TextView counterWinsOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_wins);
             TextView counterTotalOpen = (TextView)viewHolder.itemView.findViewById(R.id.info_total);
 
+
             counterInProgressOpen.setText(contact.getmTotal());
             counterWinsOpen.setText(contact.getmWins());
             counterTotalOpen.setText(contact.getmChallenges());
+            counterInProgressOpen.setTypeface(typeFace);
+            counterWinsOpen.setTypeface(typeFace);
+            counterTotalOpen.setTypeface(typeFace);
 
             // делаем view open видимой, view close невидимой
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.VISIBLE);
@@ -185,6 +186,9 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
             counterInProgressClose.setText(contact.getmTotal());
             counterWinsClose.setText(contact.getmWins());
             counterTotalClose.setText(contact.getmChallenges());
+            counterInProgressClose.setTypeface(typeFace);
+            counterWinsClose.setTypeface(typeFace);
+            counterTotalClose.setTypeface(typeFace);
 
             // делаем view open невидимой, view close видимой
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.GONE);

@@ -52,11 +52,11 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         switch (itemRowType) {
             // TODO: 29.08.2016 make auto size for text because '\n' is not good solution
             case "Duel":
-                nameTextView.setText(goal + ": " + duration + " days\nwith " + versus);
+                nameTextView.setText(goal + " during this period:" + duration + " days\nwith " + versus);
                 Glide.with(mContext).load(R.drawable.duel_yellow).override(80, 80).into(viewHolder.image);
                 break;
             case "Wake Up":
-                nameTextView.setText(wakeUpTime + " During this period:" + duration + " days");
+                nameTextView.setText(wakeUpTime + " during this period:" + duration + " days");
                 Glide.with(mContext).load(R.drawable.wakeup_yellow).override(80, 80).into(viewHolder.image);
                 break;
             case "Self-Improvement":
