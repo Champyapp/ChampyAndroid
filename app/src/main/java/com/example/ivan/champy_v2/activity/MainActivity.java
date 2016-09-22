@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         RelativeLayout cards = (RelativeLayout)findViewById(R.id.cards);
-        MainActivityCardsAdapter adapter = new MainActivityCardsAdapter(this, SelfImprovement_model.generate(this), activity);
+        MainActivityCardsAdapter adapter = new MainActivityCardsAdapter(this, SelfImprovement_model.generate(this));
         if (adapter.dataCount() > 0) {
             pager = new CustomPagerBase(this,  cards, adapter);
             pager.preparePager(0);

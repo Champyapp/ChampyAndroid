@@ -10,13 +10,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
-import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.model.HistoryChallenge;
 import com.example.ivan.champy_v2.R;
-
-import java.util.HashMap;
 import java.util.List;
 
 public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallengeAdapter.ViewHolder> {
@@ -47,7 +43,8 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         HistoryChallenge itemRow = mContacts.get(position);
         TextView nameTextView = viewHolder.nameTextView;
         String itemRowType = itemRow.getType();
-        String challengeName = itemRow.getChallengeName();
+        String wakeUpTime = itemRow.getChallengeName();
+        String goal = itemRow.getGoal();
         String duration = itemRow.getDuration();
         String versus = itemRow.getVersus();
 
@@ -55,15 +52,15 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         switch (itemRowType) {
             // TODO: 29.08.2016 make auto size for text because '\n' is not good solution
             case "Duel":
-                nameTextView.setText(challengeName + ": " + duration + " days\nwith " + versus);
+                nameTextView.setText(goal + ": " + duration + " days\nwith " + versus);
                 Glide.with(mContext).load(R.drawable.duel_yellow).override(80, 80).into(viewHolder.image);
                 break;
             case "Wake Up":
-                nameTextView.setText(challengeName + " During this period:" + duration + " days");
+                nameTextView.setText(wakeUpTime + " During this period:" + duration + " days");
                 Glide.with(mContext).load(R.drawable.wakeup_yellow).override(80, 80).into(viewHolder.image);
                 break;
             case "Self-Improvement":
-                nameTextView.setText(challengeName + " during this period: " + duration + " days");
+                nameTextView.setText(goal + " during this period: " + duration + " days");
                 Glide.with(mContext).load(R.drawable.self_yellow).override(80, 80).into(viewHolder.image);
                 break;
             default:

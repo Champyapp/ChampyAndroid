@@ -37,6 +37,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
     public int position, size, days = 21;
     public String name, duration, description, challenge_id, status, friend_id, token, userId;
     public SessionManager sessionManager;
+    public ChallengeController cc;
     public TextView tvGoal, tvDays;
     public EditText etGoal, etDays;
     public ViewPager viewPager;
@@ -112,7 +113,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
 
         tvDays.setText("" + days);
         tvDays.setTypeface(typeface);
-        tvGoal.setText(description);
+        tvGoal.setText(name);
         tvGoal.setTypeface(typeface);
 
         Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
@@ -126,7 +127,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         if (position == size) {
             etGoal.setTypeface(typeface);
             etDays.setTypeface(typeface);
-            etGoal.setText(description);
+            etGoal.setText(name);
             etDays.setHint("21");
             etDays.setVisibility(View.VISIBLE);
             etGoal.setVisibility(View.VISIBLE);
@@ -143,7 +144,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         Log.i(TAG, "onClick: ");
-        description = etGoal.getText().toString();
+        name = etGoal.getText().toString();
         duration = etDays.getText().toString();
         dbHelper = new DBHelper(getActivity());
         db = dbHelper.getWritableDatabase();
@@ -157,11 +158,11 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(View view) {
                 Log.i(TAG, "onClickSnackBar: ");
-                ChallengeController cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
+                cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
                 if (position == size) {
-                    if (checkInputUserData(description, duration, view)) {
+                    if (checkInputUserData(name, duration, view)) {
                         days = Integer.parseInt(duration);
-                        cc.createNewDuelChallenge(description, days, friend_id, token);
+                        cc.createNewDuelChallenge(name, days, friend_id, token);
                     }
                 } else {
                     if (c.moveToFirst()) {
@@ -185,7 +186,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
                     }
                     c.close();
 
-                    if (cc.isActive(description)) {
+                    if (cc.isActive(name)) {
                         snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
                     } else {
                         cc.sendSingleInProgressForDuel(challenge_id, friend_id, token);
@@ -198,32 +199,17 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         snackbar.show();
     }
 
-//                    case DialogInterface.BUTTON_NEGATIVE:
-//                        break;
-//                }
-//            }
-//        };
-//
-//        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
-//        builder.setTitle(R.string.areYouSure)
-//                .setMessage(R.string.youWannaSendDuelRequest)
-//                .setIcon(R.drawable.duel_blue)
-//                .setCancelable(false)
-//                .setPositiveButton(R.string.yes, dialogClickListener)
-//                .setNegativeButton(R.string.no, dialogClickListener).show();
-
-
 
     // check user input data @description @days @isActive
-    private boolean checkInputUserData(String description, String duration, View view) {
-        if (!duration.isEmpty()) {
-            days = Integer.parseInt(duration);
-        }
-        if (!isActive(description) && !description.isEmpty() && !description.startsWith(" ") && !duration.isEmpty() && days != 0) {
+    private boolean checkInputUserData(String name, String duration, View view) {
+//        if (!duration.isEmpty()) {
+//            days = Integer.parseInt(duration);
+//        }
+        if (!cc.isActive(name) && !name.isEmpty() && !name.startsWith(" ") && !duration.isEmpty() && days != 0) {
             snackbar = Snackbar.make(view, "Sent duel request!", Snackbar.LENGTH_SHORT);
             snackbar.show();
             return true;
-        } else if (isActive(description)) {
+        } else if (cc.isActive(name)) {
             snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
             snackbar.show();
             return false;
@@ -234,25 +220,5 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    // check for isActive challenge
-    private boolean isActive(String description) {
-        DBHelper dbHelper = new DBHelper(getActivity());
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-        description = description + " during this period";
-        boolean ok = false;
-        if (c.moveToFirst()) {
-            int coldescription = c.getColumnIndex("description");
-            do {
-                if (c.getString(c.getColumnIndex("status")).equals("started")){
-                    if (c.getString(coldescription).equals(description)){
-                        ok = true;
-                    }
-                }
-            } while (c.moveToNext());
-        }
-        c.close();
-        return ok;
-    }
 
 }

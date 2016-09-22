@@ -596,7 +596,7 @@ public class ChallengeController {
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
         boolean ok = false;
         if (c.moveToFirst()) {
-            int coldescription = c.getColumnIndex("description");
+            int coldescription = c.getColumnIndex("name"); // change for 'description' if this will not working
             do {
                 if (c.getString(c.getColumnIndex("status")).equals("started")) {
                     if (c.getString(coldescription).equals(description)) {

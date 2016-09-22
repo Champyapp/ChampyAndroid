@@ -260,24 +260,4 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
     }
 
 
-    public boolean check(String id) {
-        boolean ok = true;
-        DBHelper dbHelper = new DBHelper(this);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-        if (c.moveToFirst()) {
-            int colchallenge_id = c.getColumnIndex("challenge_id");
-            do {
-                String checked = c.getString(colchallenge_id);
-                if (checked.equals(id)) {
-                    ok = false;
-                    break;
-                }
-            } while (c.moveToNext());
-        }
-        c.close();
-        return ok;
-    }
-
-
 }

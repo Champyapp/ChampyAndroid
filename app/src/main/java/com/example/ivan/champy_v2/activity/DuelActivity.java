@@ -166,21 +166,21 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
                         com.example.ivan.champy_v2.model.Self.Datum datum = data.get(i);
                         if (datum.getType().getName().equals("duel")) {
                             if (!datum.getName().equals("User_Challenge")) {
-                                if (check(datum.get_id())) {
+                                //if (check(datum.get_id())) {
                                     cv.put("name", datum.getName());
                                     cv.put("description", datum.getDescription());
                                     cv.put("duration", datum.getDuration());
                                     cv.put("challenge_id", datum.get_id());
                                     db.insert("duel", null, cv);
                                     data_size++;
-                                } else {
-                                    cv.put("name", "active");
-                                    cv.put("description", datum.getDescription());
-                                    cv.put("duration", datum.getDuration());
-                                    cv.put("challenge_id", datum.get_id());
-                                    db.insert("duel", null, cv);
-                                    data_size++;
-                                }
+//                                } else {
+//                                    cv.put("name", "active");
+//                                    cv.put("description", datum.getDescription());
+//                                    cv.put("duration", datum.getDuration());
+//                                    cv.put("challenge_id", datum.get_id());
+//                                    db.insert("duel", null, cv);
+//                                    data_size++;
+//                                }
                             }
                         }
                     }
@@ -206,41 +206,37 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
     }
 
     // проверяем равен ли challengeId(id) и index("duel")
-    private boolean check(String id) {
-        boolean ok = true;
-        DBHelper dbHelper = new DBHelper(this);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-        if (c.moveToFirst()) {
-            int idColIndex = c.getColumnIndex("id");
-            int nameColIndex = c.getColumnIndex("name");
-            int coldescription = c.getColumnIndex("description");
-            int colduration = c.getColumnIndex("duration");
-            int colchallenge_id = c.getColumnIndex("challenge_id");
-            do {
-                String checkedChallengeId = c.getString(colchallenge_id);
-                String checkedIndex = c.getString(idColIndex);
-                if (checkedChallengeId.equals(id) && (checkedIndex.equals("duel"))) {
-                    ok = false;
-                    break;
-                }
-            } while (c.moveToNext());
-        }
-        c.close();
-        return ok;
-    }
+//    private boolean check(String id) {
+//        boolean ok = true;
+//        DBHelper dbHelper = new DBHelper(this);
+//        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+//        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
+//        if (c.moveToFirst()) {
+//            int idColIndex = c.getColumnIndex("id");
+//            int nameColIndex = c.getColumnIndex("name");
+//            int coldescription = c.getColumnIndex("description");
+//            int colduration = c.getColumnIndex("duration");
+//            int colchallenge_id = c.getColumnIndex("challenge_id");
+//            do {
+//                String checkedChallengeId = c.getString(colchallenge_id);
+//                String checkedIndex = c.getString(idColIndex);
+//                if (checkedChallengeId.equals(id) && (checkedIndex.equals("duel"))) {
+//                    ok = false;
+//                    break;
+//                }
+//            } while (c.moveToNext());
+//        }
+//        c.close();
+//        return ok;
+//    }
 
 
     private Drawable Init(String path) throws FileNotFoundException {
         File file = new File(path, "blured2.jpg");
         Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
-
-        //Log.d("TAG", "x_y" + bitmap.getWidth() + " " + bitmap.getHeight());
         Drawable dr = new BitmapDrawable(getResources(), bitmap);
         dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
-
         return dr;
-
     }
 
     @Override

@@ -148,11 +148,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
     @Override
     public void onClick(View view) {
         Log.i(TAG, "onClick");
-
-        //DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-        //@Override
-        //public void onClick(DialogInterface dialog, int which) {
-        //Log.i(TAG, "onClickDialog");
         name = etGoal.getText().toString();
         duration = etDays.getText().toString();
         dbHelper = new DBHelper(getActivity());
@@ -163,8 +158,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         CurrentUserHelper user = new CurrentUserHelper(getContext());
         token = user.getToken();
         userId = user.getUserObjectId();
-        //switch (which){
-        //  case DialogInterface.BUTTON_POSITIVE:
+
         snackbar = Snackbar.make(view, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -202,23 +196,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
             }
         });
         snackbar.show();
-//                                break;
-//                            case DialogInterface.BUTTON_NEGATIVE:
-//                                break;
-//                        }
-//                    }
 
-
-
-//                DialogFragment builder = new DialogFragment().getDialog();
-//                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//                builder.setTitle(R.string.areYouSure)
-//                        .setMessage(R.string.youWannaCreateThisChall)
-//                        .setIcon(R.drawable.self_blue)
-//                        .setCancelable(false)
-//                        .setPositiveButton(R.string.yes, dialogClickListener)
-//                        .setNegativeButton(R.string.no,  dialogClickListener).show();
-//
     }
 
     @Override
