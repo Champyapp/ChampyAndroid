@@ -30,6 +30,7 @@ import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
+import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 
 import static java.lang.Math.round;
 
@@ -38,7 +39,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
     public static final String ARG_PAGE = "ARG_PAGE";
     public static final String TAG = "SelfImprovementFragment";
     public int position, size, days = 21;
-    public String duration = "", description = "", challenge_id = "", status = "", name = "";
+    public String duration, description, challenge_id, status, name, token, userId;
     public Typeface typeface;
     public TextView tvGoal, tvDays;
     public EditText etGoal, etDays;
@@ -159,6 +160,9 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         c = db.query("selfimprovement", null, null, null, null, null, null);
         position = viewPager.getCurrentItem();
         size = sessionManager.getSelfSize();
+        CurrentUserHelper user = new CurrentUserHelper(getContext());
+        token = user.getToken();
+        userId = user.getUserObjectId();
         //switch (which){
         //  case DialogInterface.BUTTON_POSITIVE:
         snackbar = Snackbar.make(view, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes", new View.OnClickListener() {
@@ -169,7 +173,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                 if (position == size) {
                     if (checkInputUserData(name, duration, view)) {
                         days = Integer.parseInt(duration);
-                        cc.createNewSelfImprovementChallenge(description, days);
+                        cc.createNewSelfImprovementChallenge(name, days, token, userId);
                     }
                 } else {
                     if (c.moveToFirst()) {
@@ -190,7 +194,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                     if (cc.isActive(name)) {
                         snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
                     } else {
-                        cc.sendSingleInProgressForSelf(challenge_id);
+                        cc.sendSingleInProgressForSelf(challenge_id, token, userId);
                         snackbar = Snackbar.make(view, "Challenge Created!", Snackbar.LENGTH_SHORT);
                     }
                     snackbar.show();

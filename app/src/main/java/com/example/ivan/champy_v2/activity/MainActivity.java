@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final String TAG = "MainActivity";
     private long mLastClickTime = 0;
     public Activity activity;
+    private String token, userId;
     private SubActionButton buttonWakeUpChallenge, buttonDuelChallenge, buttonSelfImprovement;
     private FloatingActionMenu actionMenu;
     private CustomPagerBase pager;
@@ -318,7 +319,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_settings) {
             ChallengeController cc = new ChallengeController(getApplicationContext(), MainActivity.this, 0, 0, 0);
-            cc.generateCardsForMainActivity();
+            CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
+            token = user.getToken();
+            userId = user.getUserObjectId();
+            cc.generateCardsForMainActivity(token, userId);
         }
         return super.onOptionsItemSelected(item);
     }

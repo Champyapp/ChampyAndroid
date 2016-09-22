@@ -27,6 +27,7 @@ import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
+import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 
 import java.io.IOException;
 
@@ -188,6 +189,10 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View view) {
         if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
+            CurrentUserHelper user = new CurrentUserHelper(getContext());
+            final String token = user.getToken();
+            final String userId = user.getUserObjectId();
+
             cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
             position = viewPager.getCurrentItem();
             c = db.query("pending_duel", null, null, null, null, null, null);
@@ -216,7 +221,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
                         public void onClick(View view) {
                             Log.i(TAG, "onClickSnackBar: ");
                             if (checkRecipientAndActive(description, recipient, view)) {
-                                cc.joinToChallenge(challenge_id);
+                                cc.joinToChallenge(challenge_id, token, userId);
                                 snackbar = Snackbar.make(view, "Challenge Accepted!", Snackbar.LENGTH_SHORT);
                                 snackbar.show();
                                 Log.i("OnClickButtonAccept", "onResponse: VSE OK");
@@ -247,7 +252,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
                             Log.i(TAG, "onClickSnackBar: ");
                             try {
                                 //cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
-                                cc.rejectInviteForPendingDuel(challenge_id);
+                                cc.rejectInviteForPendingDuel(challenge_id, token, userId);
                                 snackbar = Snackbar.make(view, "Challenge Canceled!", Snackbar.LENGTH_SHORT);
                                 snackbar.show();
                                 Log.i("OnClickButtonCancel", "onResponse: VSE OK");

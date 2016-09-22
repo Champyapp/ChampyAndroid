@@ -34,9 +34,10 @@ import static java.lang.Math.round;
 
 public class MainActivityCardsAdapter extends CustomPagerAdapter {
 
-    Activity activity;
+    private Activity activity;
     private ArrayList<SelfImprovement_model> arrayList;
     public static final String TAG = "CardsAdapterMain";
+    private String token, userId;
 
     public MainActivityCardsAdapter(Context context, ArrayList<SelfImprovement_model> marrayList, Activity activity) {
         super(context);
@@ -114,6 +115,10 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
         buttonGiveUp.getLayoutParams().width = x*10;
         buttonGiveUp.getLayoutParams().height = x*10;
 
+        CurrentUserHelper user = new CurrentUserHelper(getContext());
+        token = user.getToken();
+        userId = user.getUserObjectId();
+
         buttonGiveUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,9 +130,9 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
                                     try {
                                         if (item.getType().equals("Wake Up")) {
                                             int intentId = Integer.parseInt(itemWakeUpTime);
-                                            challengeController.give_up(item.getId(), intentId);
+                                            challengeController.give_up(item.getId(), intentId, token, userId);
                                         } else {
-                                            challengeController.give_up(item.getId(), 0);
+                                            challengeController.give_up(item.getId(), 0, token, userId);
                                         }
                                     } catch (IOException e) {
                                         e.printStackTrace();
@@ -175,7 +180,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
                 localSQLiteDatabase.update("myChallenges", localContentValues, "challenge_id = ?", new String[]{id});
                 int i = localSQLiteDatabase.update("updated", localContentValues, "challenge_id = ?", new String[]{id});
                 try {
-                    challengeController.doneForToday(id);
+                    challengeController.doneForToday(id, token, userId);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

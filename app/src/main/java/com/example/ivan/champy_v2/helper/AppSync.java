@@ -214,7 +214,7 @@ public class AppSync {
     }
 
 
-    private void getUserInProgressChallenges(final String id) {
+    private void getUserInProgressChallenges(final String userId) {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("myChallenges", null, null);
@@ -225,7 +225,7 @@ public class AppSync {
 
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
 
-        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> callActiveInProgress = activeInProgress.getActiveInProgress(id, update, this.token);
+        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> callActiveInProgress = activeInProgress.getActiveInProgress(userId, update, this.token);
         try {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
@@ -239,9 +239,10 @@ public class AppSync {
                 String challenge_description = challenge.getDescription(); // no smoking
                 String challenge_detail = challenge.getDetails(); // no smoking + " during this period"
                 String challenge_status = datum.getStatus(); // active or not
-                String challenge_id = datum.get_id(); // us magic id
-                String challenge_type = challenge.getType(); // self, duel or wake up
-                String challenge_name = challenge.getName(); // name like "wake up"
+                String challenge_id = datum.get_id(); // im progress id
+                String challenge_type = challenge.getType(); // 567d51c48322f85870fd931a / b / c
+                String challenge_name = challenge.getName(); // wake up / self / duel
+                String challenge_wakeUpTime = challenge.getWakeUpTime();
                 int challenge_updated = challenge.getUpdated();
                 String duration = "";
 
@@ -264,16 +265,17 @@ public class AppSync {
                         e.printStackTrace();
                     }
                 }
-                Log.i(TAG, "onResponse AFTER FOR: senderProgressString = " + stringSenderProgress);
+                Log.i(TAG, "senderProgressString = " + stringSenderProgress);
 
                 if (challenge_description.equals("Wake Up")) {
-                    cv.put("name", "Wake Up"); // just name of Challenge (this need for history & main cards)
+                    cv.put("name", "Wake Up"); // just name of Challenge
+                    cv.put("wakeUpTime", challenge_detail); // our specific field for delete wakeUp (example: 1448);
                 } else if (challenge_type.equals("567d51c48322f85870fd931a")) {
-                    cv.put("name", "Self-Improvement"); // just name of Challenge (this need for history & main cards)
+                    cv.put("name", "Self-Improvement"); // just name of Challenge
                 } else if (challenge_type.equals("567d51c48322f85870fd931b")) {
-                    cv.put("name", "Duel"); // just name of Challenge (this need for history & main cards)
+                    cv.put("name", "Duel"); // just name of Challenge
 
-                    if (id.equals(recipient.getId())) {
+                    if (userId.equals(recipient.getId())) {
                         cv.put("recipient", "true");
                         cv.put("versus", sender.getName());
                     } else {
@@ -284,7 +286,7 @@ public class AppSync {
 
                 //final String myDetails = Arrays.toString(stringSenderProgress);
                 cv.put("challengeName", challenge_name); // default 'challenge'. this column only for wake up time
-                cv.put("description", challenge_detail); // here description and "wake up" in (example: 1448)
+                cv.put("description", challenge_description); // smoking free life / wake up at 14:48
                 cv.put("duration", duration); // duration of challenge
                 cv.put("challenge_id", challenge_id); // in progress id
                 cv.put("status", challenge_status); // active or not

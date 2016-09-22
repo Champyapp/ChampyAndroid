@@ -37,8 +37,9 @@ public class CHSocket {
 
     public static final String TAG = "CHSockets";
     private Socket mSocket;
-    Activity activity;
-    Context context;
+    private String token, userId;
+    private Activity activity;
+    private Context context;
 
 
     public CHSocket(Activity activity, Context context) {
@@ -97,7 +98,10 @@ public class CHSocket {
         public void call(final Object... args) {
             try {
                 ChallengeController cc = new ChallengeController(context, activity, 0, 0, 0);
-                cc.refreshCardsForPendingDuel();
+                CurrentUserHelper user = new CurrentUserHelper(context);
+                token = user.getToken();
+                userId = user.getUserObjectId();
+                cc.refreshCardsForPendingDuel(token, userId);
                 Log.i(TAG, "Sockets: onAcceptedChallenge success!");
             } catch (Exception e) {
                 Log.i(TAG, "Sockets: ERROR: " + e);

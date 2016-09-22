@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 
 import java.io.IOException;
 
@@ -29,6 +30,7 @@ public class AlarmReceiverActivity extends Activity {
     public static final String ARG_PAGE = "ARG_PAGE";
     public static final String TAG = "AlarmReceiverActivity";
     private MediaPlayer mMediaPlayer;
+    private String token, userId;
     public Context context;
     public Activity activity;
 
@@ -74,13 +76,15 @@ public class AlarmReceiverActivity extends Activity {
 
         ImageButton buttonWakeUpDoneForToday = (ImageButton) findViewById(R.id.buttonWakeUpDoneForToday);
 
-
+        CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
+        token = user.getToken();
+        userId = user.getUserObjectId();
         //final String finalChallengeId = challengeId;
         buttonWakeUpDoneForToday.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View arg0, MotionEvent arg1) {
                 mMediaPlayer.stop();
                 try {
-                    cc.doneForToday(finalInProgressChallengeId);
+                    cc.doneForToday(finalInProgressChallengeId, token, userId);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -98,7 +102,7 @@ public class AlarmReceiverActivity extends Activity {
             public boolean onTouch(View v, MotionEvent event) {
                 mMediaPlayer.stop();
                 try {
-                    cc.give_up(finalInProgressChallengeId, finalIntentId);
+                    cc.give_up(finalInProgressChallengeId, finalIntentId, token, userId);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
