@@ -3,6 +3,7 @@ package com.example.ivan.champy_v2.adapter;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.graphics.Typeface;
@@ -32,10 +33,10 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter implements View
     public static final String TAG = "CardsAdapterMain";
     private String token, userId;
     private Snackbar snackbar;
-    private Button buttonDoneForToday, buttonGiveUp;
+    private Button buttonDoneForToday, buttonGiveUp, buttonShare;
     private ChallengeController cc;
     private SelfImprovement_model currentCard;
-    private String itemWakeUpTime, itemChallengeName, itemGoal, itemType, itemVersus, itemSenderProgress;
+    private String itemWakeUpTime;
 
     public MainActivityCardsAdapter(Context context, ArrayList<SelfImprovement_model> marrayList) {
         super(context);
@@ -70,21 +71,38 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter implements View
         tvChallengeType.setTypeface(typeface);
         tvChallengeType.setText(currentCard.getType());
 
-        itemType   = currentCard.getType();
-        itemGoal   = currentCard.getGoal();
-        itemChallengeName   = currentCard.getChallengeName();
+        String itemType = currentCard.getType();
+        String itemGoal = currentCard.getGoal();
+        String itemChallengeName = currentCard.getChallengeName();
         itemWakeUpTime = currentCard.getWakeUpTime();
-        itemVersus = "with " + currentCard.getVersus();
-        itemSenderProgress = currentCard.getSenderProgress();
+        String itemVersus = "with " + currentCard.getVersus();
+        String itemSenderProgress = currentCard.getSenderProgress();
+        String itemGetUpdated = currentCard.getUpdated();
+        String itemGetProgress = currentCard.getSenderProgress();
         //Log.i(TAG, "getView: " + itemGoal + " = " + toArrayOfStrings(itemSenderProgress)[0]);
         TextView tvRecipientName = (TextView) tempView.findViewById(R.id.tvRecipientName);
         ImageView challengeLogo      = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
         TextView tvChallengeDescription = (TextView) tempView.findViewById(R.id.tvChallengeDescription);
 
+        buttonDoneForToday = (Button) tempView.findViewById(R.id.buttonDoneForToday);
+        buttonDoneForToday.getLayoutParams().width = x*10;
+        buttonDoneForToday.getLayoutParams().height = x*10;
+        buttonShare = (Button) tempView.findViewById(R.id.buttonShare);
+        buttonShare.getLayoutParams().width = x*10;
+        buttonShare.getLayoutParams().height = x*10;
+
+//        if (currentCard.getUpdated() != null || currentCard.getUpdated().equals("true") || currentCard.getType().equals("Wake Up")){
+//            buttonDoneForToday.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.icon_share));
+//            buttonDoneForToday.setVisibility(View.INVISIBLE);
+//            buttonShare.setVisibility(View.VISIBLE);
+//        }
+
+
         switch (itemType) {
             case "Wake Up":
                 challengeLogo.setImageResource(R.drawable.wakeup_white);
                 tvChallengeDescription.setText(itemChallengeName);
+                //buttonDoneForToday.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.icon_share));
                 break;
             case "Duel":
                 tvRecipientName.setText(itemVersus);
@@ -115,20 +133,6 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter implements View
         CurrentUserHelper user = new CurrentUserHelper(getContext());
         token = user.getToken();
         userId = user.getUserObjectId();
-
-        buttonDoneForToday = (Button) tempView.findViewById(R.id.buttonDoneForToday);
-        buttonDoneForToday.getLayoutParams().width = x*10;
-        buttonDoneForToday.getLayoutParams().height = x*10;
-
-        //final Button finalButton = buttonDoneForToday;
-        if (currentCard.getUpdated() != null){
-            if (!currentCard.getType().equals("Wake Up")) {
-                if (currentCard.getUpdated().equals("false")) {
-                    buttonDoneForToday.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.icon_done_for_today));
-//                        tvDoneForToday.setVisibility(View.VISIBLE);
-                }
-            }
-        }
 
 
         buttonGiveUp.setOnClickListener(this);
@@ -164,12 +168,8 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter implements View
             break;
 
             case R.id.buttonDoneForToday:
+                if (currentCard.getType().equals("Wake Up")) break;
                 String id = currentCard.getId();
-                SQLiteDatabase localSQLiteDatabase = new DBHelper(getContext()).getWritableDatabase();
-                ContentValues localContentValues = new ContentValues();
-                localContentValues.put("updated", "true");
-                localSQLiteDatabase.update("myChallenges", localContentValues, "challenge_id = ?", new String[]{id});
-                int i = localSQLiteDatabase.update("updated", localContentValues, "challenge_id = ?", new String[]{id});
                 try {
                     cc.doneForToday(id, token, userId);
                     snackbar = Snackbar.make(view, "Well done!", Snackbar.LENGTH_SHORT);
@@ -177,7 +177,14 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter implements View
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                buttonDoneForToday.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.icon_share));
+                break;
+
+            case R.id.buttonShare:
+                String message = "I'm improving myself and compete my challenge for today!\nTry and you: www.champyapp.com";
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("text/plain");
+                share.putExtra(Intent.EXTRA_TEXT, message);
+                getContext().startActivity(Intent.createChooser(share, "How would you like to share?"));
                 break;
         }
 

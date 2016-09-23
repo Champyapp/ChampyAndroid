@@ -190,16 +190,16 @@ public class SelfImprovement_model {
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
 
         if (c.moveToFirst()) {
-            int idColIndex = c.getColumnIndex("id");
-            int nameColIndex = c.getColumnIndex("name");
-            int coldescription = c.getColumnIndex("description");
-            int colduration = c.getColumnIndex("duration");
-            int colchallenge_id = c.getColumnIndex("challenge_id");
-            int status = c.getColumnIndex("status");
-            int updated = c.getColumnIndex("updated");
-            int challengeName = c.getColumnIndex("challengeName");
-            int colversus = c.getColumnIndex("versus");
-            int colrecipient = c.getColumnIndex("recipient");
+            int idColIndex        = c.getColumnIndex("id");
+            int nameColIndex      = c.getColumnIndex("name");
+            int coldescription    = c.getColumnIndex("description");
+            int colduration       = c.getColumnIndex("duration");
+            int colchallenge_id   = c.getColumnIndex("challenge_id");
+            int status            = c.getColumnIndex("status");
+            int updated           = c.getColumnIndex("updated");
+            int challengeName     = c.getColumnIndex("challengeName");
+            int colversus         = c.getColumnIndex("versus");
+            int colrecipient      = c.getColumnIndex("recipient");
             int colsencerprogress = c.getColumnIndex("senderProgress");
             int wakeUpTimeCol     = c.getColumnIndex("wakeUpTime");
             do {
@@ -264,16 +264,16 @@ public class SelfImprovement_model {
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
 
         if (c.moveToFirst()) {
-            int idColIndex = c.getColumnIndex("id");
-            int nameColIndex = c.getColumnIndex("name");
-            int coldescription = c.getColumnIndex("description");
-            int colduration = c.getColumnIndex("duration");
-            int colchallenge_id = c.getColumnIndex("challenge_id");
-            int status = c.getColumnIndex("status");
-            int updated = c.getColumnIndex("updated");
-            int challengeName = c.getColumnIndex("challengeName");
-            int colversus = c.getColumnIndex("versus");
-            int colrecipient = c.getColumnIndex("recipient"); // check recipient
+            int idColIndex        = c.getColumnIndex("id");
+            int nameColIndex      = c.getColumnIndex("name");
+            int coldescription    = c.getColumnIndex("description");
+            int colduration       = c.getColumnIndex("duration");
+            int colchallenge_id   = c.getColumnIndex("challenge_id");
+            int status            = c.getColumnIndex("status");
+            int updated           = c.getColumnIndex("updated");
+            int challengeName     = c.getColumnIndex("challengeName");
+            int colversus         = c.getColumnIndex("versus");
+            int colrecipient      = c.getColumnIndex("recipient"); // check recipient
             int colsencerprogress = c.getColumnIndex("senderProgress");
             int wakeUpTimeCol     = c.getColumnIndex("wakeUpTime");
             do {

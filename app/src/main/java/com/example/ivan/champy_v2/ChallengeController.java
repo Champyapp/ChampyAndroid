@@ -208,9 +208,7 @@ public class ChallengeController {
                     String inProgressId = data.getData().get_id();
                     cv.put("challenge_id", inProgressId);
                     cv.put("updated", "false");
-                    dbHelper = new DBHelper(firstActivity);
-                    db = dbHelper.getWritableDatabase();
-                    db.insert("updated", null, cv);
+                    db.insert("myChallenges", null, cv);
                     Log.i("sendSingleInProgress", "InProgressId: " + inProgressId);
                     generateCardsForMainActivity(token, userId);
                 } else Log.i("sendSingleInProgress", "Status: FAILED: " + response.code());
@@ -239,9 +237,7 @@ public class ChallengeController {
                     String inProgressId = duel.getData().getId();
                     cv.put("challenge_id", inProgressId);
                     cv.put("updated", "false");
-                    dbHelper = new DBHelper(firstActivity);
-                    db = dbHelper.getWritableDatabase();
-                    db.insert("updated", null, cv);
+                    db.insert("myChallenges", null, cv);
                     firstActivity.startActivity(goToFriends);
                     Log.i("startDuelInProgress", "Status: VSE OK");
                 } else Log.i("startDuelInProgress", "Status: FAILED" + response.code() + response.message());
@@ -281,7 +277,7 @@ public class ChallengeController {
                     cv.put("updated", "false");
                     dbHelper = new DBHelper(firstActivity);
                     db = dbHelper.getWritableDatabase();
-                    db.insert("updated", null, cv);
+                    db.insert("myChallenges", null, cv);
 
 //                    Log.i("WakeUpActivity", "CurrentTime     = " + unixTime);
 //                    Log.i("WakeUpActivity", "CurrentMidnight = " + currentMidnight);
@@ -348,7 +344,7 @@ public class ChallengeController {
 
 
 
-    public void doneForToday(String inProgressId, final String token, final String userId) throws IOException {
+    public void doneForToday(final String inProgressId, final String token, final String userId) throws IOException {
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
         Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call = activeInProgress.CheckChallenge(inProgressId, token);
@@ -356,6 +352,14 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
+                    dbHelper = new DBHelper(context);
+                    db = dbHelper.getWritableDatabase();
+                    cv = new ContentValues();
+                    cv.put("updated", "true");
+                    db.update("myChallenges", cv, "challenge_id = ?", new String[]{inProgressId});
+                    //int i = db.update("updated", cv, "challenge_id = ?", new String[]{inProgressId});
+
+                    generateCardsForMainActivity(token, userId);
                     Log.i(TAG, "doneForToday onResponse: VSE OK");
                 } else {
                     Log.i(TAG, "doneForToday onResponse: FAILED " + response.code() + response.message());
@@ -501,8 +505,8 @@ public class ChallengeController {
                         String challenge_id = datum.get_id(); // im progress id
                         String challenge_type = challenge.getType(); // 567d51c48322f85870fd931a / b / c
                         String challenge_name = challenge.getName(); // wake up / self / duel
-                        String challenge_wakeUpTime = challenge.getWakeUpTime();
-                        int challenge_updated = challenge.getUpdated();
+//                        String challenge_wakeUpTime = challenge.getWakeUpTime();
+//                        int challenge_updated = challenge.getUpdated();
                         String duration = "";
 
                         if (datum.getEnd() != null) {
@@ -517,14 +521,14 @@ public class ChallengeController {
                             try {
                                 JSONObject json = new JSONObject(senderProgress.get(j).toString());
                                 long at = json.getLong("at");
-                                Log.i(TAG, "json : " + at);
+                                Log.i(TAG, "json : " + at + " <-- update time in millis");
                                 stringSenderProgress[j] = String.valueOf(at);
                             } catch (JSONException e) {
                                 Log.i(TAG, "onCatch: " + e);
                                 e.printStackTrace();
                             }
                         }
-                        Log.i(TAG, "senderProgressString = " + stringSenderProgress);
+                        //Log.i(TAG, "senderProgressString = " + stringSenderProgress);
 
                         if (challenge_description.equals("Wake Up")) {
                             cv.put("name", "Wake Up"); // just name of Challenge
@@ -549,8 +553,8 @@ public class ChallengeController {
                         cv.put("duration", duration); // duration of challenge
                         cv.put("challenge_id", challenge_id); // in progress id
                         cv.put("status", challenge_status); // active or not
-                        String updated = getChallengeUpdated(challenge_id); // bool check method;
-                        cv.put("updated", updated); // true / false
+                        String challenge_updated = getChallengeUpdated(challenge_id); // bool check method;
+                        cv.put("updated", challenge_updated); // true / false
                         cv.put("senderProgress", Arrays.toString(stringSenderProgress)); // last update time in millis
                         db.insert("myChallenges", null, cv);
 
@@ -581,15 +585,18 @@ public class ChallengeController {
 
 
     private String getChallengeUpdated(String challenge_id) {
-        DBHelper dbHelper = new DBHelper(firstActivity);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Cursor c = db.query("updated", null, null, null, null, null, null);
-        String ok = "false";
+        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
+        String ok = "vse hynja";
         if (c.moveToFirst()) {
             int colchallenge_id = c.getColumnIndex("challenge_id");
+            int colupdated = c.getColumnIndex("updated");
             do {
-                if (c.getString(colchallenge_id).equals(challenge_id)){
-                    ok = c.getString(c.getColumnIndex("updated"));
+                if (c.getString(colchallenge_id).equals(challenge_id)) {
+                    if (c.getString(colupdated).equals("true")) {
+                        ok = "true";
+                    } else {
+                        ok = "false";
+                    }
                     break;
                 }
             } while (c.moveToNext());

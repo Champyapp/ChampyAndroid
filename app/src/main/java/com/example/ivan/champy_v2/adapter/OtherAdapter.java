@@ -123,9 +123,9 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
         TextView counterTotalClose = (TextView)viewHolder.itemView.findViewById(R.id.counterTotal);
         TextView counterWinsClose = (TextView)viewHolder.itemView.findViewById(R.id.counterWins);
         // response for info by counters in close view
-        counterInProgressClose.setText(contact.getmChallenges());
+        counterInProgressClose.setText(contact.getmTotal());
+        counterTotalClose.setText(contact.getmChallenges());
         counterWinsClose.setText(contact.getmWins());
-        counterTotalClose.setText(contact.getmTotal());
         // response for typeface for counters in close view
         counterInProgressClose.setTypeface(typeFace);
         counterWinsClose.setTypeface(typeFace);
@@ -155,8 +155,8 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
         TextView counterTotalOpen = (TextView) viewHolder.itemView.findViewById(R.id.info_total);
         TextView counterWinsOpen = (TextView) viewHolder.itemView.findViewById(R.id.info_wins);
         // response for info by counters in close view
-        counterInProgressOpen.setText(contact.getmChallenges());
-        counterTotalOpen.setText(contact.getmTotal());
+        counterInProgressOpen.setText(contact.getmTotal());
+        counterTotalOpen.setText(contact.getmChallenges());
         counterWinsOpen.setText(contact.getmWins());
         // response for typeface for counters in close view
         counterInProgressOpen.setTypeface(typeFace);
