@@ -78,7 +78,6 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter implements View
         String itemVersus = "with " + currentCard.getVersus();
         String itemSenderProgress = currentCard.getSenderProgress();
         String itemGetUpdated = currentCard.getUpdated();
-        String itemGetProgress = currentCard.getSenderProgress();
         //Log.i(TAG, "getView: " + itemGoal + " = " + toArrayOfStrings(itemSenderProgress)[0]);
         TextView tvRecipientName = (TextView) tempView.findViewById(R.id.tvRecipientName);
         ImageView challengeLogo      = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
@@ -91,13 +90,13 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter implements View
         buttonShare.getLayoutParams().width = x*10;
         buttonShare.getLayoutParams().height = x*10;
 
-        if (currentCard.getUpdated() != null && currentCard.getUpdated().equals("true") || currentCard.getType().equals("Wake Up")){
-            buttonDoneForToday.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.icon_share));
-            buttonDoneForToday.setVisibility(View.INVISIBLE);
-            buttonShare.setVisibility(View.VISIBLE);
+        if (currentCard.getUpdated() != null){
+            if (!currentCard.getType().equals("Wake Up")) { //?
+                if (currentCard.getUpdated().equals("false")) {
+                    buttonDoneForToday.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.icon_done_for_today));
+                }
+            }
         }
-
-
         switch (itemType) {
             case "Wake Up":
                 challengeLogo.setImageResource(R.drawable.wakeup_white);
@@ -137,6 +136,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter implements View
 
         buttonGiveUp.setOnClickListener(this);
         buttonDoneForToday.setOnClickListener(this);
+        buttonShare.setOnClickListener(this);
 
         return tempView;
     }
@@ -169,18 +169,21 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter implements View
 
             case R.id.buttonDoneForToday:
                 if (currentCard.getType().equals("Wake Up")) break;
-                String id = currentCard.getId();
+                String inProgressId = currentCard.getId();
                 try {
-                    cc.doneForToday(id, token, userId);
+                    cc.doneForToday(inProgressId, token, userId);
+                    //buttonDoneForToday.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.icon_share));
                     snackbar = Snackbar.make(view, "Well done!", Snackbar.LENGTH_SHORT);
                     snackbar.show();
+                    buttonDoneForToday.setVisibility(View.INVISIBLE);
+                    buttonShare.setVisibility(View.VISIBLE);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 break;
 
             case R.id.buttonShare:
-                String message = "I'm improving myself and compete my challenge for today!\nTry and you: www.champyapp.com";
+                String message = "I'm done for today with my challenge: " + currentCard.getGoal();
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 share.putExtra(Intent.EXTRA_TEXT, message);

@@ -194,9 +194,6 @@ public class ChallengeController {
 
 
     public void sendSingleInProgressForSelf(String challenge, final String token, final String userId) {
-        dbHelper = new DBHelper(context);
-        db = dbHelper.getWritableDatabase();
-        cv = new ContentValues();
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
         Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call = singleinprogress.start_single_in_progress(challenge, token);
@@ -206,9 +203,6 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     com.example.ivan.champy_v2.single_inprogress.SingleInProgress data = response.body();
                     String inProgressId = data.getData().get_id();
-                    cv.put("challenge_id", inProgressId);
-                    cv.put("updated", "false");
-                    db.insert("myChallenges", null, cv);
                     Log.i("sendSingleInProgress", "InProgressId: " + inProgressId);
                     generateCardsForMainActivity(token, userId);
                 } else Log.i("sendSingleInProgress", "Status: FAILED: " + response.code());
@@ -237,7 +231,7 @@ public class ChallengeController {
                     String inProgressId = duel.getData().getId();
                     cv.put("challenge_id", inProgressId);
                     cv.put("updated", "false");
-                    db.insert("myChallenges", null, cv);
+                    db.insert("updated", null, cv);
                     firstActivity.startActivity(goToFriends);
                     Log.i("startDuelInProgress", "Status: VSE OK");
                 } else Log.i("startDuelInProgress", "Status: FAILED" + response.code() + response.message());
@@ -273,11 +267,6 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     com.example.ivan.champy_v2.single_inprogress.SingleInProgress data = response.body();
                     String inProgressId = data.getData().get_id();
-                    cv.put("challenge_id", inProgressId);
-                    cv.put("updated", "false");
-                    dbHelper = new DBHelper(firstActivity);
-                    db = dbHelper.getWritableDatabase();
-                    db.insert("myChallenges", null, cv);
 
 //                    Log.i("WakeUpActivity", "CurrentTime     = " + unixTime);
 //                    Log.i("WakeUpActivity", "CurrentMidnight = " + currentMidnight);
@@ -357,8 +346,7 @@ public class ChallengeController {
                     cv = new ContentValues();
                     cv.put("updated", "true");
                     db.update("myChallenges", cv, "challenge_id = ?", new String[]{inProgressId});
-                    //int i = db.update("updated", cv, "challenge_id = ?", new String[]{inProgressId});
-
+                    int i = db.update("updated", cv, "challenge_id = ?", new String[]{inProgressId});
                     generateCardsForMainActivity(token, userId);
                     Log.i(TAG, "doneForToday onResponse: VSE OK");
                 } else {
@@ -505,14 +493,14 @@ public class ChallengeController {
                         String challenge_id = datum.get_id(); // im progress id
                         String challenge_type = challenge.getType(); // 567d51c48322f85870fd931a / b / c
                         String challenge_name = challenge.getName(); // wake up / self / duel
-//                        String challenge_wakeUpTime = challenge.getWakeUpTime();
-                        int challenge_updated = challenge.getUpdated();
-                        String duration = "";
+                        String challenge_wakeUpTime = challenge.getWakeUpTime();
+                        String challenge_duration = "";
+//                        int challenge_updated = challenge.getUpdated();
 
                         if (datum.getEnd() != null) {
                             int end = datum.getEnd();
                             int days = round((end - unixTime) / 86400);
-                            duration = "" + days;
+                            challenge_duration = "" + days;
                         }
 
                         List<Object> senderProgress = datum.getSenderProgress();
@@ -537,7 +525,6 @@ public class ChallengeController {
                             cv.put("name", "Self-Improvement"); // just name of Challenge
                         } else if (challenge_type.equals("567d51c48322f85870fd931b")) {
                             cv.put("name", "Duel"); // just name of Challenge
-
                             if (userId.equals(recipient.getId())) {
                                 cv.put("recipient", "true");
                                 cv.put("versus", sender.getName());
@@ -550,10 +537,10 @@ public class ChallengeController {
                         //final String myDetails = Arrays.toString(stringSenderProgress);
                         cv.put("challengeName", challenge_name); // default 'challenge'. this column only for wake up time
                         cv.put("description", challenge_description); // smoking free life / wake up at 14:48
-                        cv.put("duration", duration); // duration of challenge
+                        cv.put("duration", challenge_duration); // duration of challenge
                         cv.put("challenge_id", challenge_id); // in progress id
                         cv.put("status", challenge_status); // active or not
-                        //String challenge_updated = getChallengeUpdated(challenge_id); // bool check method;
+                        String challenge_updated = getChallengeUpdated(challenge_id); // bool check method;
                         cv.put("updated", challenge_updated); // true / false
                         cv.put("senderProgress", Arrays.toString(stringSenderProgress)); // last update time in millis
                         db.insert("myChallenges", null, cv);
@@ -584,27 +571,29 @@ public class ChallengeController {
 
 
 
-//    private String getChallengeUpdated(String challenge_id) {
-//        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-//        String ok = "vse hynja";
-//        if (c.moveToFirst()) {
-//            int colchallenge_id = c.getColumnIndex("challenge_id");
-//            int colupdated = c.getColumnIndex("updated");
-//            do {
-//                if (c.getString(colchallenge_id).equals(challenge_id)) {
-//                    ok = c.getString(colupdated);
-////                    if (c.getString(colupdated).equals("true")) {
-////                        ok = "true";
-////                    } else {
-////                        ok = "false";
-////                    }
-//                    break;
-//                }
-//            } while (c.moveToNext());
-//        }
-//        c.close();
-//        return ok; // if 'if-statement' will be ignored then return 'false', else 'true'
-//    }
+    private String getChallengeUpdated(String challenge_id) {
+        DBHelper dbHelper = new DBHelper(firstActivity);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor c = db.query("updated", null, null, null, null, null, null);
+        String ok = "false";
+        if (c.moveToFirst()) {
+            int colchallenge_id = c.getColumnIndex("challenge_id");
+            do {
+                // в методе "sendSingleForDuel мы засовываем challenge_id в колонку "challenge_id" в
+                // таблице "updated", а тут мы ее проверяем. если она есть, то вернуть время когда
+                // мы нажимали "дан" для дуелей, если её здесь нету, то возвращаем "false" - это для
+                // wake-up и self-improvement челенджей.
+                // Соответственно данные про update time для дуелей находятся в таблице "updated",
+                // а для отсального в таблице "myChallenges".
+                if (c.getString(colchallenge_id).equals(challenge_id)) {
+                    ok = c.getString(c.getColumnIndex("updated"));
+                    break;
+                }
+            } while (c.moveToNext());
+        }
+        c.close();
+        return ok;
+    }
 
     // method for check is active challenge for wake up
     public boolean isActive(String description) {

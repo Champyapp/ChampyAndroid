@@ -32,19 +32,6 @@
         android:layout_alignRight="@+id/cardImage"
         android:layout_alignEnd="@+id/cardImage" />-->
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/done_for_today"
-        android:id="@+id/tvDoneForToday"
-        android:visibility="invisible"
-        android:textColor="#59a7a6"
-        android:textSize="12sp"
-        android:textAllCaps="true"
-        android:paddingBottom="10dp"
-        android:layout_alignBottom="@+id/buttonDoneForToday"
-        android:layout_centerHorizontal="true" />
-
     <Button
         android:layout_width="35dp"
         android:layout_height="35dp"
@@ -61,10 +48,13 @@
         android:layout_height="35dp"
         android:background="@drawable/icon_done_for_today"
         android:id="@+id/buttonDoneForToday"
+        android:visibility="visible"
         android:layout_alignRight="@+id/cardImage"
         android:layout_alignEnd="@+id/cardImage"
         android:layout_alignTop="@+id/buttonGiveUp"
         android:layout_marginRight="8dp" />
+
+
     <Button
         android:layout_width="35dp"
         android:layout_height="35dp"
@@ -165,5 +155,6 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp" />
+
 
 </RelativeLayout>
