@@ -506,7 +506,7 @@ public class ChallengeController {
                         String challenge_type = challenge.getType(); // 567d51c48322f85870fd931a / b / c
                         String challenge_name = challenge.getName(); // wake up / self / duel
 //                        String challenge_wakeUpTime = challenge.getWakeUpTime();
-//                        int challenge_updated = challenge.getUpdated();
+                        int challenge_updated = challenge.getUpdated();
                         String duration = "";
 
                         if (datum.getEnd() != null) {
@@ -553,7 +553,7 @@ public class ChallengeController {
                         cv.put("duration", duration); // duration of challenge
                         cv.put("challenge_id", challenge_id); // in progress id
                         cv.put("status", challenge_status); // active or not
-                        String challenge_updated = getChallengeUpdated(challenge_id); // bool check method;
+                        //String challenge_updated = getChallengeUpdated(challenge_id); // bool check method;
                         cv.put("updated", challenge_updated); // true / false
                         cv.put("senderProgress", Arrays.toString(stringSenderProgress)); // last update time in millis
                         db.insert("myChallenges", null, cv);
@@ -584,26 +584,27 @@ public class ChallengeController {
 
 
 
-    private String getChallengeUpdated(String challenge_id) {
-        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-        String ok = "vse hynja";
-        if (c.moveToFirst()) {
-            int colchallenge_id = c.getColumnIndex("challenge_id");
-            int colupdated = c.getColumnIndex("updated");
-            do {
-                if (c.getString(colchallenge_id).equals(challenge_id)) {
-                    if (c.getString(colupdated).equals("true")) {
-                        ok = "true";
-                    } else {
-                        ok = "false";
-                    }
-                    break;
-                }
-            } while (c.moveToNext());
-        }
-        c.close();
-        return ok; // if 'if-statement' will be ignored then return 'false', else 'true'
-    }
+//    private String getChallengeUpdated(String challenge_id) {
+//        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
+//        String ok = "vse hynja";
+//        if (c.moveToFirst()) {
+//            int colchallenge_id = c.getColumnIndex("challenge_id");
+//            int colupdated = c.getColumnIndex("updated");
+//            do {
+//                if (c.getString(colchallenge_id).equals(challenge_id)) {
+//                    ok = c.getString(colupdated);
+////                    if (c.getString(colupdated).equals("true")) {
+////                        ok = "true";
+////                    } else {
+////                        ok = "false";
+////                    }
+//                    break;
+//                }
+//            } while (c.moveToNext());
+//        }
+//        c.close();
+//        return ok; // if 'if-statement' will be ignored then return 'false', else 'true'
+//    }
 
     // method for check is active challenge for wake up
     public boolean isActive(String description) {

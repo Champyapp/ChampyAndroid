@@ -91,11 +91,11 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter implements View
         buttonShare.getLayoutParams().width = x*10;
         buttonShare.getLayoutParams().height = x*10;
 
-//        if (currentCard.getUpdated() != null || currentCard.getUpdated().equals("true") || currentCard.getType().equals("Wake Up")){
-//            buttonDoneForToday.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.icon_share));
-//            buttonDoneForToday.setVisibility(View.INVISIBLE);
-//            buttonShare.setVisibility(View.VISIBLE);
-//        }
+        if (currentCard.getUpdated() != null && currentCard.getUpdated().equals("true") || currentCard.getType().equals("Wake Up")){
+            buttonDoneForToday.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.icon_share));
+            buttonDoneForToday.setVisibility(View.INVISIBLE);
+            buttonShare.setVisibility(View.VISIBLE);
+        }
 
 
         switch (itemType) {
