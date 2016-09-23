@@ -295,6 +295,7 @@ public class ChallengeController {
 
 
 
+
     public void joinToChallenge(final String inProgressId, final String token, final String userId) {
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         SingleInProgress singleInProgress = retrofit.create(SingleInProgress.class);
@@ -330,6 +331,7 @@ public class ChallengeController {
             public void onFailure(Throwable t) { }
         });
     }
+
 
 
 
@@ -488,12 +490,12 @@ public class ChallengeController {
                         Sender sender = datum.getSender();
 
                         String challenge_description = challenge.getDescription(); // no smoking
-                        String challenge_detail = challenge.getDetails(); // no smoking + " during this period"
-                        String challenge_status = datum.getStatus(); // active or not
-                        String challenge_id = datum.get_id(); // im progress id
-                        String challenge_type = challenge.getType(); // 567d51c48322f85870fd931a / b / c
-                        String challenge_name = challenge.getName(); // wake up / self / duel
-                        String challenge_wakeUpTime = challenge.getWakeUpTime();
+                        String challenge_detail      = challenge.getDetails(); // no smoking + " during this period"
+                        String challenge_status      = datum.getStatus(); // active or not
+                        String challenge_id          = datum.get_id(); // im progress id
+                        String challenge_type        = challenge.getType(); // 567d51c48322f85870fd931a / b / c
+                        String challenge_name        = challenge.getName(); // wake up / self / duel
+                        String challenge_wakeUpTime  = challenge.getWakeUpTime();
                         String challenge_duration = "";
 //                        int challenge_updated = challenge.getUpdated();
 
