@@ -259,6 +259,10 @@ public class ChallengeController {
         myCalendar.setTime(date);
         myCalendar.set(Calendar.SECOND, 0);
 
+        dbHelper = new DBHelper(context);
+        db = dbHelper.getWritableDatabase();
+        cv = new ContentValues();
+
         final long current = Calendar.getInstance().getTimeInMillis();
         final long userInputTime = myCalendar.getTimeInMillis();
         final Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
@@ -273,6 +277,12 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     com.example.ivan.champy_v2.single_inprogress.SingleInProgress data = response.body();
                     String inProgressId = data.getData().get_id();
+                    cv.put("challenge_id", inProgressId);
+                    cv.put("updated", "false");
+                    dbHelper = new DBHelper(firstActivity);
+                    db = dbHelper.getWritableDatabase();
+                    db.insert("updated", null, cv);
+
 //                    Log.i("WakeUpActivity", "CurrentTime     = " + unixTime);
 //                    Log.i("WakeUpActivity", "CurrentMidnight = " + currentMidnight);
 //                    Log.i("WakeUpActivity", "UserInputTime   = " + userInputTime);
@@ -585,7 +595,7 @@ public class ChallengeController {
             } while (c.moveToNext());
         }
         c.close();
-        return ok;
+        return ok; // if 'if-statement' will be ignored then return 'false', else 'true'
     }
 
     // method for check is active challenge for wake up
