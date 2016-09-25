@@ -130,13 +130,7 @@ public class MyGcmListenerService extends GcmListenerService {
                 // don't work
                 notifyChallenges(intent, message);
                 break;
-            case "Champy Reminder":
-                // i d k
-                notifyReminder(intent, "bla-bla");
-                break;
-
         }
-
     }
 
 

@@ -1,11 +1,8 @@
 package com.example.ivan.champy_v2.activity;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlarmManager;
-import android.app.Notification;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,7 +11,6 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.design.widget.NavigationView;
@@ -37,7 +33,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.ivan.champy_v2.Blur;
 import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.CustomPagerBase;
-import com.example.ivan.champy_v2.NotificationPublisher;
+import com.example.ivan.champy_v2.NotifyReceiver;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
@@ -55,6 +51,7 @@ import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Calendar;
 import java.util.HashMap;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -83,13 +80,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sockets.tryToConnect();
         sockets.connectAndEmmit();
 
-
         RelativeLayout cards = (RelativeLayout)findViewById(R.id.cards);
         MainActivityCardsAdapter adapter = new MainActivityCardsAdapter(this, SelfImprovement_model.generate(this));
         if (adapter.dataCount() > 0) {
             CustomPagerBase pager = new CustomPagerBase(this, cards, adapter);
             pager.preparePager(0);
         }
+
+        initNotificationReminder();
 
         final ImageButton actionButton = (ImageButton)findViewById(R.id.fabPlus);
         final SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
@@ -302,12 +300,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_settings) {
-//            ChallengeController cc = new ChallengeController(getApplicationContext(), MainActivity.this, 0, 0, 0);
-//            CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
-//            String token = user.getToken();
-//            String userId = user.getUserObjectId();
-//            cc.generateCardsForMainActivity(token, userId);
-            scheduleNotification(getNotification("5 second delay"), 5000);
+            ChallengeController cc = new ChallengeController(getApplicationContext(), MainActivity.this, 0, 0, 0);
+            CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
+            String token = user.getToken();
+            String userId = user.getUserObjectId();
+            cc.generateCardsForMainActivity(token, userId);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -318,26 +315,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    private void scheduleNotification(Notification notification, int delay) {
 
-        Intent notificationIntent = new Intent(this, NotificationPublisher.class);
-        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
-        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+    public void initNotificationReminder(){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Intent alarmIntent = new Intent(MainActivity.this, NotifyReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, alarmIntent, 0);
 
-        long futureInMillis = SystemClock.elapsedRealtime() + delay;
-        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+        Calendar alarmStartTime = Calendar.getInstance();
+        alarmStartTime.set(Calendar.HOUR_OF_DAY, 12);
+        alarmStartTime.set(Calendar.MINUTE, 0);
+        alarmStartTime.set(Calendar.SECOND, 0);
+        alarmManager.setRepeating(AlarmManager.RTC, alarmStartTime.getTimeInMillis(), 24*60*60*1000, pendingIntent);
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private Notification getNotification(String content) {
-        Notification.Builder builder = new Notification.Builder(this);
-        builder.setContentTitle("Scheduled Notification");
-        builder.setContentText(content);
-        builder.setSmallIcon(R.drawable.ic_launcher);
-        return builder.build();
-    }
 
     public Drawable initBackground(String path) throws FileNotFoundException {
         File file = new File(path, "blured2.jpg");
@@ -354,7 +344,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-//    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+    //    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 //
 //        protected Bitmap doInBackground(String... urls) {
 //            String urldisplay = urls[0];
