@@ -267,7 +267,6 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     com.example.ivan.champy_v2.single_inprogress.SingleInProgress data = response.body();
                     String inProgressId = data.getData().get_id();
-
 //                    Log.i("WakeUpActivity", "CurrentTime     = " + unixTime);
 //                    Log.i("WakeUpActivity", "CurrentMidnight = " + currentMidnight);
 //                    Log.i("WakeUpActivity", "UserInputTime   = " + userInputTime);

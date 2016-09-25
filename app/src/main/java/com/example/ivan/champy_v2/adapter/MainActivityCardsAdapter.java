@@ -128,7 +128,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
             public void onClick(View v) {
                 try {
                     if (currentCard.getType().equals("Wake Up")) {
-                           int intentId = Integer.parseInt(currentCard.getGoal());
+                           int intentId = Integer.parseInt(currentCard.getWakeUpTime());
                            challengeController.give_up(currentCard.getId(), intentId, token, userId);
                     } else challengeController.give_up(currentCard.getId(), 0, token, userId);
                 } catch (IOException e) {
@@ -156,7 +156,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
             }
         });
 
-        buttonDone.setOnClickListener(new View.OnClickListener() {
+        buttonShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String message = "I'm done for today with my challenge: " + currentCard.getGoal() + "\nTry and you - www.champyapp.com/download";

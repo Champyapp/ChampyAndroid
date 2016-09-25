@@ -1,6 +1,10 @@
 package com.example.ivan.champy_v2.activity;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,6 +14,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.design.widget.NavigationView;
@@ -18,7 +23,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +30,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
@@ -34,11 +37,11 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.ivan.champy_v2.Blur;
 import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.CustomPagerBase;
+import com.example.ivan.champy_v2.NotificationPublisher;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.adapter.MainActivityCardsAdapter;
-import com.example.ivan.champy_v2.helper.AppSync;
 import com.example.ivan.champy_v2.helper.CHBuildAnim;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHDownloadImageTask;
@@ -46,16 +49,12 @@ import com.example.ivan.champy_v2.helper.CHSocket;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
 import com.facebook.FacebookSdk;
-import com.github.nkzawa.emitter.Emitter;
-import com.github.nkzawa.socketio.client.IO;
-import com.github.nkzawa.socketio.client.Socket;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -67,11 +66,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final String TAG = "MainActivity";
     private long mLastClickTime = 0;
     public Activity activity;
-    private String token, userId;
     private SubActionButton buttonWakeUpChallenge, buttonDuelChallenge, buttonSelfImprovement;
     private FloatingActionMenu actionMenu;
-    private CustomPagerBase pager;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,23 +82,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         CHSocket sockets = new CHSocket(this, getApplicationContext());
         sockets.tryToConnect();
         sockets.connectAndEmmit();
-//        alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
-//        Intent intent = new Intent(this, AlarmSchedule.class);
-//        intent.putExtra("alarm", "reset");
-//
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.set(Calendar.HOUR_OF_DAY, Calendar.getInstance().get(Calendar.HOUR_OF_DAY));  // було 18
-//        calendar.set(Calendar.MINUTE, Calendar.getInstance().get(Calendar.MINUTE));        //  було 6
-//        calendar.set(Calendar.SECOND, 0);
-//
-//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
 
 
         RelativeLayout cards = (RelativeLayout)findViewById(R.id.cards);
         MainActivityCardsAdapter adapter = new MainActivityCardsAdapter(this, SelfImprovement_model.generate(this));
         if (adapter.dataCount() > 0) {
-            pager = new CustomPagerBase(this,  cards, adapter);
+            CustomPagerBase pager = new CustomPagerBase(this, cards, adapter);
             pager.preparePager(0);
         }
 
@@ -242,7 +227,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -318,11 +302,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_settings) {
-            ChallengeController cc = new ChallengeController(getApplicationContext(), MainActivity.this, 0, 0, 0);
-            CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
-            token = user.getToken();
-            userId = user.getUserObjectId();
-            cc.generateCardsForMainActivity(token, userId);
+//            ChallengeController cc = new ChallengeController(getApplicationContext(), MainActivity.this, 0, 0, 0);
+//            CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
+//            String token = user.getToken();
+//            String userId = user.getUserObjectId();
+//            cc.generateCardsForMainActivity(token, userId);
+            scheduleNotification(getNotification("5 second delay"), 5000);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -333,6 +318,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    private void scheduleNotification(Notification notification, int delay) {
+
+        Intent notificationIntent = new Intent(this, NotificationPublisher.class);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        long futureInMillis = SystemClock.elapsedRealtime() + delay;
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private Notification getNotification(String content) {
+        Notification.Builder builder = new Notification.Builder(this);
+        builder.setContentTitle("Scheduled Notification");
+        builder.setContentText(content);
+        builder.setSmallIcon(R.drawable.ic_launcher);
+        return builder.build();
+    }
 
     public Drawable initBackground(String path) throws FileNotFoundException {
         File file = new File(path, "blured2.jpg");

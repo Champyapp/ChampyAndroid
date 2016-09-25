@@ -14,7 +14,6 @@ import java.io.IOException;
 public class AlarmReceiver extends WakefulBroadcastReceiver {
 
     public static final String TAG = "AlarmReceiver";
-    Activity activity;
 
     @Override
     public void onReceive(final Context context, Intent intent) {
