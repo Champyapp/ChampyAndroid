@@ -67,6 +67,8 @@ public class ChallengeController {
     }
 
 
+
+
     public void createNewSelfImprovementChallenge(final String description, int days, final String token, final String userId) {
         final String type_id = "567d51c48322f85870fd931a";
         duration = "" + (days * 86400);
@@ -115,13 +117,11 @@ public class ChallengeController {
 //                            + "\n DETAILS     = " + details
 //                            + "\n DURATION    = " + duration
 //                            + "\n recipientId = " + friend_id);
-                } else Log.i(TAG, "createNewDuelChallenge OnResponse: Failed");
+                } else Log.i(TAG, "createNewDuelChallenge OnResponse: Failed " + response.message());
             }
 
             @Override
-            public void onFailure(Throwable t) {
-
-            }
+            public void onFailure(Throwable t) { }
         });
 
     }
@@ -209,13 +209,11 @@ public class ChallengeController {
                     db.insert("updated", null, cv);
                     Log.i("sendSingleInProgress", "InProgressId: " + inProgressId);
                     generateCardsForMainActivity(token, userId);
-                } else Log.i("sendSingleInProgress", "Status: FAILED: " + response.code());
+                } else Log.i("sendSingleInProgress", "Status: FAILED: " + response.code() + response.message());
             }
 
             @Override
-            public void onFailure(Throwable t) {
-
-            }
+            public void onFailure(Throwable t) { }
         });
     }
 
@@ -223,7 +221,6 @@ public class ChallengeController {
         dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
         cv = new ContentValues();
-        final Intent goToFriends = new Intent(firstActivity, FriendsActivity.class);
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
         Call<com.example.ivan.champy_v2.duel.Duel> call = singleinprogress.Start_duel(friend_id, challenge, token);
@@ -236,9 +233,10 @@ public class ChallengeController {
                     cv.put("challenge_id", inProgressId);
                     cv.put("updated", "false");
                     db.insert("updated", null, cv);
+                    Intent goToFriends = new Intent(firstActivity, FriendsActivity.class);
                     firstActivity.startActivity(goToFriends);
                     Log.i("startDuelInProgress", "Status: VSE OK");
-                } else Log.i("startDuelInProgress", "Status: FAILED" + response.code() + response.message());
+                } else Log.i("startDuelInProgress", "Status: FAILED " + response.code() + response.message());
             }
 
             @Override
@@ -520,10 +518,7 @@ public class ChallengeController {
                                 long at = json.getLong("at");
                                 Log.i(TAG, "json : " + at + " <-- update time in millis");
                                 stringSenderProgress[j] = String.valueOf(at);
-                            } catch (JSONException e) {
-                                Log.i(TAG, "onCatch: " + e);
-                                e.printStackTrace();
-                            }
+                            } catch (JSONException e) { e.printStackTrace(); }
                         }
 
                         if (challenge_description.equals("Wake Up")) {
@@ -551,7 +546,6 @@ public class ChallengeController {
                         cv.put("updated", challenge_updated); // true / false
                         cv.put("senderProgress", Arrays.toString(stringSenderProgress)); // last update time in millis
                         db.insert("myChallenges", null, cv);
-
                         //Log.i(TAG, "Challenge | Description: " + challenge_detail);
                         //Log.i(TAG, "Challenge | Challenge_updated: " + challenge_updated);
                         //Log.i(TAG, "Challenge | SenderProgress: " + Arrays.toString(stringSenderProgress));
@@ -560,7 +554,6 @@ public class ChallengeController {
                     Log.i(TAG, "Generate onResponse: VSE OK");
                     Intent intent = new Intent(firstActivity, MainActivity.class);
                     firstActivity.startActivity(intent);
-
                 } else {
                     Log.i(TAG, "Generate onResponse: FAILED: " + response.code());
                 }
@@ -578,29 +571,6 @@ public class ChallengeController {
 
 
 
-//    private String getDuelLastUpdate(String challenge_id) {
-//        DBHelper dbHelper = new DBHelper(firstActivity);
-//        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-//        Cursor c = db.query("updated", null, null, null, null, null, null);
-//        String ok = "waitingForStart";
-//        if (c.moveToFirst()) {
-//            int colchallenge_id = c.getColumnIndex("challenge_id");
-//            do {
-//                // в методе "sendSingleForDuel мы засовываем challenge_id в колонку "challenge_id" в
-//                // таблице "updated", а тут мы ее проверяем. если она есть, то вернуть время когда
-//                // мы нажимали "дан" для дуелей, если её здесь нету, то возвращаем "false" - это для
-//                // wake-up и self-improvement челенджей.
-//                // Соответственно данные про update time для дуелей находятся в таблице "updated",
-//                // а для отсального в таблице "myChallenges".
-//                if (c.getString(colchallenge_id).equals(challenge_id)) {
-//                    ok = c.getString(c.getColumnIndex("updated"));
-//                    break;
-//                }
-//            } while (c.moveToNext());
-//        }
-//        c.close();
-//        return ok;
-//    }
 
     // method which returns our last update (true or false);
     private String getLastUpdated(String challenge_id) {

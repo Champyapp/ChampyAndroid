@@ -316,4 +316,9 @@ public class SelfImprovement_model {
     }
 
 
+    private void checkIfDoneForToday() {
+
+    }
+
+
 }

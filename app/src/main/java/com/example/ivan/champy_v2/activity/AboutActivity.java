@@ -1,69 +1,58 @@
 package com.example.ivan.champy_v2.activity;
 
-import android.content.ContentValues;
+import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.OfflineMode;
-import com.example.ivan.champy_v2.adapter.PagerAdapter;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
-import com.example.ivan.champy_v2.model.Self.*;
-import com.facebook.FacebookSdk;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.GsonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
 
-public class SelfImprovementActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class AboutActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    public static final String TAG = "SelfImprovementActivity";
+    private WebView webView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        setContentView(R.layout.activity_self_improvement);
+        setContentView(R.layout.activity_about);
+
+        webView = (WebView)findViewById(R.id.webView);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.loadUrl("http://www.azinec.com");
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -87,12 +76,6 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         view.setText("+" + (count > 0 ? String.valueOf(count) : null));
         if (count == 0) checker.hideItem();
 
-        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
-        TextView tvIChallengeMySelfTo = (TextView)findViewById(R.id.textView20);
-        tvIChallengeMySelfTo.setTypeface(typeface);
-
-        Glide.with(this).load(R.drawable.self_white).override(130, 130).into((ImageView) findViewById(R.id.imageViewLogo));
-        Glide.with(this).load(R.drawable.selfimprtext).override(280, 250).into((ImageView) findViewById(R.id.imageView12));
 
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user;
@@ -118,15 +101,17 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
             e.printStackTrace();
         }
 
-        //getChallenges();
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                getChallenges();
-            }
-        });
+        ViewServer.get(this).addWindow(this);
+    }
 
-
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -141,13 +126,13 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
                 Intent goToFriends = new Intent(this, FriendsActivity.class);
                 startActivity(goToFriends);
                 break;
-            case R.id.history:
-                Intent goToHistory = new Intent(this, HistoryActivity.class);
-                startActivity(goToHistory);
-                break;
             case R.id.pending_duels:
                 Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
                 startActivity(goToPendingDuel);
+                break;
+            case R.id.history:
+                Intent goToHistory = new Intent(this, HistoryActivity.class);
+                startActivity(goToHistory);
                 break;
             case R.id.settings:
                 Intent goToSettings = new Intent(this, SettingsActivity.class);
@@ -173,25 +158,6 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         return true;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        OfflineMode offlineMode = new OfflineMode();
-        offlineMode.isConnectedToRemoteAPI(this);
-    }
-
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            Intent intent = new Intent(SelfImprovementActivity.this, MainActivity.class);
-            startActivity(intent);
-            super.onBackPressed();
-        }
-    }
-
     // background
     private Drawable Init(String path) throws FileNotFoundException {
         File file = new File(path, "blured2.jpg");
@@ -199,64 +165,6 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         Drawable dr = new BitmapDrawable(getResources(), bitmap);
         dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
         return dr;
-    }
-
-
-    // отображаем наши челенджи
-    public void getChallenges() {
-        DBHelper dbHelper = new DBHelper(this);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int clearCount = db.delete("selfimprovement", null, null);
-        final ContentValues cv = new ContentValues();
-        final String API_URL = "http://46.101.213.24:3007";
-        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        final SessionManager sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        String token = user.get("token");
-
-        com.example.ivan.champy_v2.interfaces.SelfImprovement selfImprovement = retrofit.create(com.example.ivan.champy_v2.interfaces.SelfImprovement.class);
-        Call<com.example.ivan.champy_v2.model.Self.SelfImprovement> call = selfImprovement.getChallenges(token);
-        call.enqueue(new Callback<com.example.ivan.champy_v2.model.Self.SelfImprovement>() {
-            @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.Self.SelfImprovement> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    List<Datum> data = response.body().getData();
-                    int data_size = 0;
-                    for (int i = 0; i < data.size(); i++) {
-                        com.example.ivan.champy_v2.model.Self.Datum datum = data.get(i);
-                        String datumType = datum.getType().getName();
-                        if (datumType.equals("self improvement")) {
-                            if (!datum.getName().equals("User_Challenge")) {
-                                cv.put("name", datum.getName());
-                                cv.put("description", datum.getDescription());
-                                cv.put("duration", datum.getDuration());
-                                cv.put("challenge_id", datum.get_id());
-                                db.insert("selfimprovement", null, cv);
-                                data_size++;
-                            }
-                        }
-                    }
-                    sessionManager.setSelfSize(data_size);
-                    SessionManager sessionManager = new SessionManager(getApplicationContext());
-                    int size = sessionManager.getSelfSize();
-                    PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager());
-                    final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-                    pagerAdapter.setCount(size);
-                    viewPager.setAdapter(pagerAdapter);
-                    viewPager.setOffscreenPageLimit(1);
-                    viewPager.setPageMargin(20);
-                    viewPager.setClipToPadding(false);
-                    viewPager.setPadding(90, 0, 90, 0);
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable t) { }
-        });
-
-
-
     }
 
 

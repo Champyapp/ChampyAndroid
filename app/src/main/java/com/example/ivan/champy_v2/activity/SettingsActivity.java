@@ -333,7 +333,8 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         about.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Coming soon", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(SettingsActivity.this, AboutActivity.class);
+                startActivity(intent);
             }
         });
 
