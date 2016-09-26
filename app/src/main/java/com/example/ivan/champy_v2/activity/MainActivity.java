@@ -325,7 +325,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         alarmStartTime.set(Calendar.HOUR_OF_DAY, 12);
         alarmStartTime.set(Calendar.MINUTE, 0);
         alarmStartTime.set(Calendar.SECOND, 0);
-        alarmManager.setRepeating(AlarmManager.RTC, alarmStartTime.getTimeInMillis(), 24*60*60*1000, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC, alarmStartTime.getTimeInMillis(), alarmManager.INTERVAL_DAY, pendingIntent);
     }
 
 

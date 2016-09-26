@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,6 +70,9 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
         tvChallengeType.setTypeface(typeface);
 
         String itemGoal = currentCard.getGoal();
+        String itemUpdate = currentCard.getUpdated();
+
+        Log.i(TAG, "getView: goal = " + itemGoal + ", update = " + itemUpdate);
         ImageView imageChallengeLogo = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
 
         switch (currentCard.getType()) {
@@ -106,31 +110,36 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
         buttonShare.getLayoutParams() .width  = x*10;
         buttonShare.getLayoutParams() .height = x*10;
 
-
-        if (currentCard.getUpdated() != null){
-            if (!currentCard.getType().equals("Wake Up")) { //?
-                if (currentCard.getUpdated().equals("false")) {
-                    buttonShare.setVisibility(View.INVISIBLE);
-                    buttonDone.setVisibility(View.VISIBLE);
-                }
-            }
-        }
-
-
         CurrentUserHelper user = new CurrentUserHelper(getContext());
         token = user.getToken();
         userId = user.getUserObjectId();
 
-        final ChallengeController challengeController = new ChallengeController(getContext(), (Activity) getContext(), 0 , 0, 0);
+//        if (currentCard.getUpdated() != null){
+//            if (!currentCard.getType().equals("Wake Up")) { //?
+//                if (currentCard.getUpdated().equals("false")) {
+//                    buttonShare.setVisibility(View.INVISIBLE);
+//                    buttonDone.setVisibility(View.VISIBLE);
+//                }
+//            }
+//        }
 
+        if (currentCard.getUpdated().equals("true")) { //?
+            buttonShare.setVisibility(View.VISIBLE);
+            buttonDone.setVisibility(View.INVISIBLE);
+        } else {
+            buttonShare.setVisibility(View.INVISIBLE);
+            buttonDone.setVisibility(View.VISIBLE);
+        }
+
+        final ChallengeController cc = new ChallengeController(getContext(), (Activity) getContext(), 0 , 0, 0);
         buttonGiveUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
                     if (currentCard.getType().equals("Wake Up")) {
                            int intentId = Integer.parseInt(currentCard.getWakeUpTime());
-                           challengeController.give_up(currentCard.getId(), intentId, token, userId);
-                    } else challengeController.give_up(currentCard.getId(), 0, token, userId);
+                           cc.give_up(currentCard.getId(), intentId, token, userId);
+                    } else cc.give_up(currentCard.getId(), 0, token, userId);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -140,14 +149,21 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
         buttonDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String id = currentCard.getId();
-                SQLiteDatabase localSQLiteDatabase = new DBHelper(getContext()).getWritableDatabase();
-                ContentValues localContentValues = new ContentValues();
-                localContentValues.put("updated", "true");
-                localSQLiteDatabase.update("myChallenges", localContentValues, "challenge_id = ?", new String[]{id});
-                int i = localSQLiteDatabase.update("updated", localContentValues, "challenge_id = ?", new String[]{id});
+                String inProgressId = currentCard.getId();
+//                SQLiteDatabase localSQLiteDatabase = new DBHelper(getContext()).getWritableDatabase();
+//                ContentValues localContentValues = new ContentValues();
+//                localContentValues.put("updated", "true");
+//                localSQLiteDatabase.update("myChallenges", localContentValues, "challenge_id = ?", new String[]{id});
+//                int i = localSQLiteDatabase.update("updated", localContentValues, "challenge_id = ?", new String[]{id});
+                DBHelper dbHelper = new DBHelper(getContext());
+                SQLiteDatabase db = dbHelper.getWritableDatabase();
+                ContentValues cv = new ContentValues();
+                cv.put("updated", "true");
+                db.update("myChallenges", cv, "challenge_id = ?", new String[]{inProgressId});
+                db.update("updated", cv, "challenge_id = ?", new String[]{inProgressId});
+
                 try {
-                    challengeController.doneForToday(id, token, userId);
+                    cc.doneForToday(inProgressId, token, userId);
                     buttonDone.setVisibility(View.INVISIBLE);
                     buttonShare.setVisibility(View.VISIBLE);
                 } catch (IOException e) {

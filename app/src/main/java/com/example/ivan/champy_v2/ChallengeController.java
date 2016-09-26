@@ -24,7 +24,6 @@ import com.example.ivan.champy_v2.model.active_in_progress.Datum;
 import com.example.ivan.champy_v2.model.active_in_progress.Recipient;
 import com.example.ivan.champy_v2.model.active_in_progress.Sender;
 import com.example.ivan.champy_v2.single_inprogress.Data;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,7 +33,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
 
 import retrofit.Call;
@@ -347,7 +345,7 @@ public class ChallengeController {
                     cv = new ContentValues();
                     cv.put("updated", "true");
                     db.update("myChallenges", cv, "challenge_id = ?", new String[]{inProgressId});
-                    int i = db.update("updated", cv, "challenge_id = ?", new String[]{inProgressId});
+                    db.update("updated", cv, "challenge_id = ?", new String[]{inProgressId});
                     generateCardsForMainActivity(token, userId);
                     Log.i(TAG, "doneForToday onResponse: VSE OK");
                 } else {
@@ -522,9 +520,15 @@ public class ChallengeController {
                         if (challenge_description.equals("Wake Up")) {
                             cv.put("name", "Wake Up"); // just name of Challenge
                             cv.put("wakeUpTime", challenge_detail); // our specific field for delete wakeUp (example: 1448);
+                            String challenge_updated = getSelfWakeUpLastUpdate(challenge_id); // bool check method;
+                            cv.put("updated", challenge_updated); // true / false
                         } else if (challenge_type.equals("567d51c48322f85870fd931a")) {
                             cv.put("name", "Self-Improvement"); // just name of Challenge
+                            String challenge_updated = getSelfWakeUpLastUpdate(challenge_id); // bool check method;
+                            cv.put("updated", challenge_updated); // true / false
                         } else if (challenge_type.equals("567d51c48322f85870fd931b")) {
+                            String challenge_updated = getDuelLastUpdate(challenge_id); // bool check method;
+                            cv.put("updated", challenge_updated); // true / false
                             cv.put("name", "Duel"); // just name of Challenge
                             if (userId.equals(recipient.getId())) {
                                 cv.put("recipient", "true");
@@ -541,8 +545,7 @@ public class ChallengeController {
                         cv.put("duration", challenge_duration); // duration of challenge
                         cv.put("challenge_id", challenge_id); // in progress id
                         cv.put("status", challenge_status); // active or not
-                        String challenge_updated = getChallengeUpdated(challenge_id); // bool check method;
-                        cv.put("updated", challenge_updated); // true / false
+
                         cv.put("senderProgress", Arrays.toString(stringSenderProgress)); // last update time in millis
                         db.insert("myChallenges", null, cv);
 
@@ -572,11 +575,11 @@ public class ChallengeController {
 
 
 
-    private String getChallengeUpdated(String challenge_id) {
+    private String getDuelLastUpdate(String challenge_id) {
         DBHelper dbHelper = new DBHelper(firstActivity);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("updated", null, null, null, null, null, null);
-        String ok = "false";
+        String ok = "fail";
         if (c.moveToFirst()) {
             int colchallenge_id = c.getColumnIndex("challenge_id");
             do {
@@ -594,6 +597,31 @@ public class ChallengeController {
         }
         c.close();
         return ok;
+    }
+
+
+    private String getSelfWakeUpLastUpdate(String challenge_id) {
+        DBHelper dbHelper = new DBHelper(firstActivity);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
+        String lastUpdate = "false";
+        if (c.moveToFirst()) {
+            int colchallenge_id = c.getColumnIndex("challenge_id");
+            do {
+                // в методе "sendSingleForDuel мы засовываем challenge_id в колонку "challenge_id" в
+                // таблице "updated", а тут мы ее проверяем. если она есть, то вернуть время когда
+                // мы нажимали "дан" для дуелей, если её здесь нету, то возвращаем "false" - это для
+                // wake-up и self-improvement челенджей.
+                // Соответственно данные про update time для дуелей находятся в таблице "updated",
+                // а для отсального в таблице "myChallenges".
+                if (c.getString(colchallenge_id).equals(challenge_id)) {
+                    lastUpdate= c.getString(c.getColumnIndex("updated"));
+                    break;
+                }
+            } while (c.moveToNext());
+        }
+        c.close();
+        return lastUpdate;
     }
 
     // method for check is active challenge for wake up

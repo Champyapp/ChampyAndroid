@@ -38,7 +38,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 
     public static final String ARG_PAGE = "ARG_PAGE";
     public static final String TAG = "SelfImprovementFragment";
-    public int position, size, days = 21;
+    public int position, size, days = 21, o = 0;
     public String duration, description, challenge_id, status, name, token, userId;
     public Typeface typeface;
     public TextView tvGoal, tvDays;
@@ -82,7 +82,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         final Bundle args = this.getArguments();
         c = db.query("selfimprovement", null, null, null, null, null, null);
         position = args.getInt(ARG_PAGE);
-        int o = 0;
         if (c.moveToFirst()) {
             int idColIndex = c.getColumnIndex("id");
             int nameColIndex = c.getColumnIndex("name");
@@ -173,7 +172,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                     if (c.moveToFirst()) {
                         int colname = c.getColumnIndex("name");
                         int colchallenge_id = c.getColumnIndex("challenge_id");
-                        int o = 0;
+                        o = 0;
                         do {
                             o++;
                             if (o > position + 1) break;

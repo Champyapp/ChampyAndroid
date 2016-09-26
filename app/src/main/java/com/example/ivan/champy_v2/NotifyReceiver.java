@@ -9,7 +9,6 @@ import android.util.Log;
 public class NotifyReceiver extends BroadcastReceiver {
 
     public static final String TAG = "NotifyReceiver";
-    NotificationManager notificationManager;
 
     @Override
     public void onReceive(Context context, Intent intent) {
