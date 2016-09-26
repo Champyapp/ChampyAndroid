@@ -160,8 +160,8 @@ public class LoginActivity extends AppCompatActivity {
                                                 token_android = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
 
                                                 JSONObject jsonObject = new JSONObject();
-                                                //jsonObject.put("token", token_android);
-                                                //jsonObject.put("timeZone", "-2");
+                                                jsonObject.put("token", token_android);
+                                                jsonObject.put("timeZone", "-2");
                                                 String json = jsonObject.toString();
                                                 Log.i("LoginActivity", "JSON: " + json);
                                                 Log.i("LoginActivity", "GCM: "  + token_android);

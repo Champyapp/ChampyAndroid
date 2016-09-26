@@ -119,7 +119,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="every day for the next"
         android:id="@+id/tvEverydayForTheNext"
-        android:textSize="13sp"
+        android:textSize="10sp"
         android:textAllCaps="true"
         android:textColor="#000000"
         android:gravity="center"

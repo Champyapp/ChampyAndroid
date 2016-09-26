@@ -73,7 +73,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
         String itemGoal   = currentCard.getGoal();
         String itemUpdate = currentCard.getUpdated();
 
-        Log.i(TAG, "getView: goal = " + itemGoal + ", update = " + itemUpdate);
+        Log.i(TAG, "getView: goal = " + itemGoal + ", update = " + itemUpdate + ", SenderProgress" + currentCard.getSenderProgress());
         ImageView imageChallengeLogo = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
 
         switch (currentCard.getType()) {
@@ -82,7 +82,6 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
                 itemGoal = currentCard.getChallengeName();
                 break;
             case "Duel":
-//                itemGoal = item.getGoal();
                 imageChallengeLogo.setImageResource(R.drawable.duel_white);
                 break;
             case "Self-Improvement":
@@ -94,10 +93,6 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
         tvChallengeDescription.setText(itemGoal);
         tvChallengeDescription.setTextSize(y*2);
         tvChallengeDescription.setTypeface(typeface);
-        final TextView tvDuration = (TextView) tempView.findViewById(R.id.textViewDuration);
-        tvDuration.setText(currentCard.getDays() + " DAYS TO GO");
-        tvDuration.setTextSize(y*2);
-        tvDuration.setTypeface(typeface);
 
         final Button buttonGiveUp = (Button) tempView.findViewById(R.id.buttonGiveUp);
         buttonGiveUp.getLayoutParams().width  = x*10;
@@ -108,28 +103,24 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
         final Button buttonShare = (Button) tempView.findViewById(R.id.buttonShare);
         buttonShare.getLayoutParams() .width  = x*10;
         buttonShare.getLayoutParams() .height = x*10;
+        final TextView tvDuration = (TextView) tempView.findViewById(R.id.textViewDuration);
+
+
+        if (currentCard.getType().equals("Wake Up") || currentCard.getUpdated().equals("true")) { //?
+            tvDuration.setText(currentCard.getDays() + " DAYS TO GO");
+            buttonShare.setVisibility(View.VISIBLE);
+            buttonDone.setVisibility(View.INVISIBLE);
+        } else {
+            tvDuration.setText("Done for today?");
+            buttonShare.setVisibility(View.INVISIBLE);
+            buttonDone.setVisibility(View.VISIBLE);
+        }
+        tvDuration.setTextSize(y*2);
+        tvDuration.setTypeface(typeface);
 
         CurrentUserHelper user = new CurrentUserHelper(getContext());
         token  = user.getToken();
         userId = user.getUserObjectId();
-
-//        if (currentCard.getUpdated() != null){
-//            if (!currentCard.getType().equals("Wake Up")) { //?
-//                if (currentCard.getUpdated().equals("false")) {
-//                    buttonShare.setVisibility(View.INVISIBLE);
-//                    buttonDone.setVisibility(View.VISIBLE);
-//                }
-//            }
-//        }
-
-        if (currentCard.getType().equals("Wake Up") || currentCard.getUpdated().equals("true")) { //?
-            buttonShare.setVisibility(View.VISIBLE);
-            buttonDone.setVisibility(View.INVISIBLE);
-        } else {
-            buttonShare.setVisibility(View.INVISIBLE);
-            buttonDone.setVisibility(View.VISIBLE);
-        }
-
 
 
         buttonGiveUp.setOnClickListener(new View.OnClickListener() {
