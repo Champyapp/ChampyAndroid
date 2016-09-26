@@ -160,8 +160,8 @@ public class LoginActivity extends AppCompatActivity {
                                                 token_android = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
 
                                                 JSONObject jsonObject = new JSONObject();
-                                                jsonObject.put("token", token_android);
-                                                jsonObject.put("timeZone", "-2");
+                                                //jsonObject.put("token", token_android);
+                                                //jsonObject.put("timeZone", "-2");
                                                 String json = jsonObject.toString();
                                                 Log.i("LoginActivity", "JSON: " + json);
                                                 Log.i("LoginActivity", "GCM: "  + token_android);
@@ -250,10 +250,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void registerUser(String facebookId, String name, String email, final String gcm) throws JSONException {
         final String API_URL = "http://46.101.213.24:3007";
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("facebookId", fb_id);
         jsonObject.put("AndroidOS", gcm);
@@ -298,7 +295,7 @@ public class LoginActivity extends AppCompatActivity {
                                 data.getLevel().getNumber().toString());
                         String api_path = null;
                         if (data.getPhoto() != null) {
-                            String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+                            String path =  "/data/data/com.example.ivan.champy_v2/app_imageDir/";
                             File f = new File(path, "profile.jpg");
                             if (!f.exists()) {
                                 com.example.ivan.champy_v2.model.User.Photo photo = data.getPhoto();

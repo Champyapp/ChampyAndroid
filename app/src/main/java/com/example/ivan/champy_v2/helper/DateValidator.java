@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class DateValidator {
 
-    public boolean isThisDateWithin3MonthsRange(String dateToValidate, String dateFormat) {
+    public boolean isThisDateWithin3DaysRange(String dateToValidate, String dateFormat) {
 
         SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
         sdf.setLenient(false);
@@ -17,21 +17,21 @@ public class DateValidator {
             Date date = sdf.parse(dateToValidate);
 
             // current date after 3 months
-            Calendar currentDateAfter3Months = Calendar.getInstance();
-            currentDateAfter3Months.add(Calendar.MONTH, 3);
+            Calendar currentDateAfterOneDays = Calendar.getInstance();
+            currentDateAfterOneDays.add(Calendar.DAY_OF_MONTH, 1);
 
             // current date before 3 months
-            Calendar currentDateBefore3Months = Calendar.getInstance();
-            currentDateBefore3Months.add(Calendar.MONTH, -3);
+            Calendar currentDateBeforeOneDays = Calendar.getInstance();
+            currentDateBeforeOneDays.add(Calendar.DAY_OF_MONTH, -1);
 
-            /*************** verbose ***********************/
-            System.out.println("\n\ncurrentDate : "          + Calendar.getInstance().getTime());
-            System.out.println("currentDateAfter3Months : "  + currentDateAfter3Months.getTime());
-            System.out.println("currentDateBefore3Months : " + currentDateBefore3Months.getTime());
-            System.out.println("dateToValidate : " + dateToValidate);
-            /************************************************/
+            /**************************************************************************************/
+            System.out.println("\n\ncurrentDate : "       + Calendar.getInstance().getTime());
+            System.out.println("currentDateAfter1Day : "  + currentDateAfterOneDays.getTime());
+            System.out.println("currentDateBefore1Day : " + currentDateBeforeOneDays.getTime());
+            System.out.println("dateToValidate : "        + dateToValidate);
+            /**************************************************************************************/
 
-            if (date.before(currentDateAfter3Months.getTime()) && date.after(currentDateBefore3Months.getTime())) {
+            if (date.before(currentDateAfterOneDays.getTime()) && date.after(currentDateBeforeOneDays.getTime())) {
                 //ok everything is fine, date in range
                 return true;
             } else {

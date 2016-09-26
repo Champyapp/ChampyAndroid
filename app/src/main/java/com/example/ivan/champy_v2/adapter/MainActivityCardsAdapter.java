@@ -48,6 +48,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             tempView = inflater.inflate(R.layout.single_card_fragment_self, null, false);
         }
+        final ChallengeController cc = new ChallengeController(getContext(), (Activity) getContext(), 0 , 0, 0);
         final SelfImprovement_model currentCard = arrayList.get(position);
         ImageView cardImage = (ImageView)tempView.findViewById(R.id.cardImage);
         Typeface typeface = android.graphics.Typeface.createFromAsset(getContext().getAssets(), "fonts/bebasneue.ttf");
@@ -69,7 +70,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
         tvChallengeType.setTextSize((float)(y*1.3));
         tvChallengeType.setTypeface(typeface);
 
-        String itemGoal = currentCard.getGoal();
+        String itemGoal   = currentCard.getGoal();
         String itemUpdate = currentCard.getUpdated();
 
         Log.i(TAG, "getView: goal = " + itemGoal + ", update = " + itemUpdate);
@@ -89,16 +90,14 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
                 break;
         }
 
-
-
-        TextView tvChallengeDescription = (TextView) tempView.findViewById(R.id.tvChallengeDescription);
+        final TextView tvChallengeDescription = (TextView) tempView.findViewById(R.id.tvChallengeDescription);
         tvChallengeDescription.setText(itemGoal);
         tvChallengeDescription.setTextSize(y*2);
         tvChallengeDescription.setTypeface(typeface);
-
-        TextView tvDuration = (TextView) tempView.findViewById(R.id.textViewDuration);
+        final TextView tvDuration = (TextView) tempView.findViewById(R.id.textViewDuration);
         tvDuration.setText(currentCard.getDays() + " DAYS TO GO");
         tvDuration.setTextSize(y*2);
+        tvDuration.setTypeface(typeface);
 
         final Button buttonGiveUp = (Button) tempView.findViewById(R.id.buttonGiveUp);
         buttonGiveUp.getLayoutParams().width  = x*10;
@@ -111,7 +110,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
         buttonShare.getLayoutParams() .height = x*10;
 
         CurrentUserHelper user = new CurrentUserHelper(getContext());
-        token = user.getToken();
+        token  = user.getToken();
         userId = user.getUserObjectId();
 
 //        if (currentCard.getUpdated() != null){
@@ -123,7 +122,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
 //            }
 //        }
 
-        if (currentCard.getUpdated().equals("true")) { //?
+        if (currentCard.getType().equals("Wake Up") || currentCard.getUpdated().equals("true")) { //?
             buttonShare.setVisibility(View.VISIBLE);
             buttonDone.setVisibility(View.INVISIBLE);
         } else {
@@ -131,18 +130,17 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
             buttonDone.setVisibility(View.VISIBLE);
         }
 
-        final ChallengeController cc = new ChallengeController(getContext(), (Activity) getContext(), 0 , 0, 0);
+
+
         buttonGiveUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
                     if (currentCard.getType().equals("Wake Up")) {
-                           int intentId = Integer.parseInt(currentCard.getWakeUpTime());
-                           cc.give_up(currentCard.getId(), intentId, token, userId);
+                        int i = Integer.parseInt(currentCard.getWakeUpTime());
+                           cc.give_up(currentCard.getId(), i, token, userId);
                     } else cc.give_up(currentCard.getId(), 0, token, userId);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                } catch (IOException e) { e.printStackTrace(); }
             }
         });
 
@@ -150,36 +148,28 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
             @Override
             public void onClick(View v) {
                 String inProgressId = currentCard.getId();
-//                SQLiteDatabase localSQLiteDatabase = new DBHelper(getContext()).getWritableDatabase();
-//                ContentValues localContentValues = new ContentValues();
-//                localContentValues.put("updated", "true");
-//                localSQLiteDatabase.update("myChallenges", localContentValues, "challenge_id = ?", new String[]{id});
-//                int i = localSQLiteDatabase.update("updated", localContentValues, "challenge_id = ?", new String[]{id});
-                DBHelper dbHelper = new DBHelper(getContext());
-                SQLiteDatabase db = dbHelper.getWritableDatabase();
-                ContentValues cv = new ContentValues();
-                cv.put("updated", "true");
-                db.update("myChallenges", cv, "challenge_id = ?", new String[]{inProgressId});
-                db.update("updated", cv, "challenge_id = ?", new String[]{inProgressId});
-
                 try {
+                    DBHelper dbHelper = new DBHelper(getContext());
+                    SQLiteDatabase db = dbHelper.getWritableDatabase();
+                    ContentValues cv = new ContentValues();
+                    cv.put("updated", "true");
+                    db.update("updated", cv, "challenge_id = ?", new String[]{inProgressId});
+                    db.update("myChallenges", cv, "challenge_id = ?", new String[]{inProgressId});
                     cc.doneForToday(inProgressId, token, userId);
                     buttonDone.setVisibility(View.INVISIBLE);
                     buttonShare.setVisibility(View.VISIBLE);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                } catch (IOException e) { e.printStackTrace(); }
             }
         });
 
         buttonShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String message = "I'm done for today with my challenge: " + currentCard.getGoal() + "\nTry and you - www.champyapp.com/download";
+                String message = getContext().getString(R.string.share_text1) + currentCard.getGoal() + getContext().getString(R.string.share_text2);
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 share.putExtra(Intent.EXTRA_TEXT, message);
-                getContext().startActivity(Intent.createChooser(share, "How would you like to share?"));
+                getContext().startActivity(Intent.createChooser(share, getContext().getString(R.string.how_would_you_like_to_share)));
             }
         });
 
