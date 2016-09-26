@@ -2,7 +2,6 @@ package com.example.ivan.champy_v2.activity;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -22,7 +21,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -30,7 +28,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -40,17 +37,18 @@ import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
+import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class WakeUpActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     public final static String type_id = "567d51c48322f85870fd931c";
+    public final static String API_URL = "http://46.101.213.24:3007";
     private PendingIntent pendingIntent;
     private TimePicker alarmTimePicker;
     public Snackbar snackbar;
@@ -95,17 +93,15 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.wake_up);
         relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementback));
 
-        SessionManager sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
+        CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
+        String userName = user.getName();
         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
-        String name = user.get("name");
 
         ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
         tvDuration = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        tvDuration.setText(name);
+        tvDuration.setText(userName);
 
         Glide.with(this).load(R.drawable.points).override(100, 100).into((ImageView) findViewById(R.id.imageViewAcceptButton));
         Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
@@ -116,7 +112,6 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
             ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setImageDrawable(dr);
-            final String API_URL = "http://46.101.213.24:3007";
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -129,13 +124,6 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
 
     @Override
     public void onClick(final View v) {
-//        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-
-
-//                switch (which) {
-//                    case DialogInterface.BUTTON_POSITIVE:
         final int hour = alarmTimePicker.getCurrentHour();
         final int minute = alarmTimePicker.getCurrentMinute();
         final OfflineMode offlineMode = new OfflineMode();
@@ -143,13 +131,13 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         String sMinute = "" + minute;
         if (hour < 10)   sHour   = "0" + sHour;
         if (minute < 10) sMinute = "0" + sMinute;
-        final boolean ok = check(sHour + sMinute);
+        final ChallengeController cc = new ChallengeController(WakeUpActivity.this, WakeUpActivity.this, hour, minute, 0);
+        final boolean ok = cc.isActiveWakeUp(sHour + sMinute);
         snackbar = Snackbar.make(v, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes!", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (offlineMode.isConnectedToRemoteAPI(WakeUpActivity.this)) {
                     if (ok) {
-                        ChallengeController cc = new ChallengeController(WakeUpActivity.this, WakeUpActivity.this, hour, minute, 0);
                         cc.createNewWakeUpChallenge(21, type_id);
                         snackbar = Snackbar.make(view, "Challenge Created!", Snackbar.LENGTH_SHORT);
                     } else {
@@ -161,22 +149,6 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         });
         snackbar.show();
     }
-//                        break;
-//                    case DialogInterface.BUTTON_NEGATIVE:
-//                        break;
-//                }
-//            }
-//        };
-//
-//        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(WakeUpActivity.this);
-//        builder.setTitle(R.string.areYouSure)
-//                .setMessage(R.string.youWannaCreateThisChall)
-//                .setIcon(R.drawable.wakeup_blue)
-//                .setCancelable(false)
-//                .setPositiveButton(R.string.yes, dialogClickListener)
-//                .setNegativeButton(R.string.no, dialogClickListener).show();
-
-
 
     @Override
     public void onStart() {
@@ -249,26 +221,5 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         return dr;
     }
 
-
-    private boolean check(String time) {
-        boolean ok = true;
-        DBHelper dbHelper = new DBHelper(this);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-        if (c.moveToFirst()) {
-            int colDescription = c.getColumnIndex("description");
-            int status = c.getColumnIndex("status");
-            do {
-                if (c.getString(status).equals("started")) {
-                    if (c.getString(colDescription).equals(time)) {
-                        ok = false;
-                        break;
-                    }
-                }
-            } while (c.moveToNext());
-        }
-        c.close();
-        return ok;
-    }
 
 }

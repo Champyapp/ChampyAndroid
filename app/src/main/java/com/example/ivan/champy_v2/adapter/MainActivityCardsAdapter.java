@@ -51,6 +51,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
         final ChallengeController cc = new ChallengeController(getContext(), (Activity) getContext(), 0 , 0, 0);
         final SelfImprovement_model currentCard = arrayList.get(position);
         ImageView cardImage = (ImageView)tempView.findViewById(R.id.cardImage);
+        ImageView imageChallengeLogo = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
         Typeface typeface = android.graphics.Typeface.createFromAsset(getContext().getAssets(), "fonts/bebasneue.ttf");
         WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -58,25 +59,22 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
         display.getSize(size);
         int x = size.x / 100;
         int y = size.y / 100;
-        //int x = round(activity.getWindow().getWindowManager().getDefaultDisplay().getWidth() / 100);
-        //int y = round(activity.getWindow().getWindowManager().getDefaultDisplay().getHeight() / 100);
         cardImage.getLayoutParams().width  = x*65;
         cardImage.getLayoutParams().height = y*50;
         if (y > 10) y = 10;
 
-
-        TextView tvChallengeType = (TextView) tempView.findViewById(R.id.tvChallengeType);
+        final TextView tvChallengeType = (TextView) tempView.findViewById(R.id.tvChallengeType);
         tvChallengeType.setText(currentCard.getType());
         tvChallengeType.setTextSize((float)(y*1.3));
         tvChallengeType.setTypeface(typeface);
 
-        String itemGoal   = currentCard.getGoal();
+        String itemSenderProgress = currentCard.getSenderProgress();
         String itemUpdate = currentCard.getUpdated();
+        String itemGoal   = currentCard.getGoal();
+        String itemType   = currentCard.getType();
+        Log.i(TAG, "getView: goal = " + itemGoal + ", update = " + itemUpdate + ", SenderProgress" + itemSenderProgress);
 
-        Log.i(TAG, "getView: goal = " + itemGoal + ", update = " + itemUpdate + ", SenderProgress" + currentCard.getSenderProgress());
-        ImageView imageChallengeLogo = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
-
-        switch (currentCard.getType()) {
+        switch (itemType /**maybe change this for 'currentCard.getType()' ? **/) {
             case "Wake Up":
                 imageChallengeLogo.setImageResource(R.drawable.wakeup_white);
                 itemGoal = currentCard.getChallengeName();
@@ -93,7 +91,6 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
         tvChallengeDescription.setText(itemGoal);
         tvChallengeDescription.setTextSize(y*2);
         tvChallengeDescription.setTypeface(typeface);
-
         final Button buttonGiveUp = (Button) tempView.findViewById(R.id.buttonGiveUp);
         buttonGiveUp.getLayoutParams().width  = x*10;
         buttonGiveUp.getLayoutParams().height = x*10;
@@ -122,16 +119,21 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
         token  = user.getToken();
         userId = user.getUserObjectId();
 
-
         buttonGiveUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    if (currentCard.getType().equals("Wake Up")) {
-                        int i = Integer.parseInt(currentCard.getWakeUpTime());
-                           cc.give_up(currentCard.getId(), i, token, userId);
-                    } else cc.give_up(currentCard.getId(), 0, token, userId);
-                } catch (IOException e) { e.printStackTrace(); }
+                snackbar = Snackbar.make(v, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            if (currentCard.getType().equals("Wake Up")) {
+                                   int i = Integer.parseInt(currentCard.getWakeUpTime());
+                                   cc.give_up(currentCard.getId(), i, token, userId);
+                            } else cc.give_up(currentCard.getId(), 0, token, userId);
+                        } catch (IOException e) { e.printStackTrace(); }
+                    }
+                });
+                snackbar.show();
             }
         });
 
@@ -140,15 +142,20 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
             public void onClick(View v) {
                 String inProgressId = currentCard.getId();
                 try {
+                    // TODO: 26.09.2016 replace this piece of code in DoneForToday method in cc.
+                    ////////////////////////////////////////////////////////////////////////
                     DBHelper dbHelper = new DBHelper(getContext());
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
                     ContentValues cv = new ContentValues();
                     cv.put("updated", "true");
-                    db.update("updated", cv, "challenge_id = ?", new String[]{inProgressId});
                     db.update("myChallenges", cv, "challenge_id = ?", new String[]{inProgressId});
+                    db.update("updated", cv, "challenge_id = ?", new String[]{inProgressId});
+                    ////////////////////////////////////////////////////////////////////////
                     cc.doneForToday(inProgressId, token, userId);
                     buttonDone.setVisibility(View.INVISIBLE);
                     buttonShare.setVisibility(View.VISIBLE);
+                    snackbar = Snackbar.make(v, "Well done!", Snackbar.LENGTH_SHORT);
+                    snackbar.show();
                 } catch (IOException e) { e.printStackTrace(); }
             }
         });

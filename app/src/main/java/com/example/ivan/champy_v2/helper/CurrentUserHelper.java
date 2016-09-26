@@ -12,8 +12,8 @@ import java.util.HashMap;
  */
 public class CurrentUserHelper {
 
-    Context generalContext;
-    SessionManager currentSession;
+    private Context generalContext;
+    private SessionManager currentSession;
 
     public CurrentUserHelper(Context context) {
         this.generalContext = context;
@@ -24,6 +24,10 @@ public class CurrentUserHelper {
         HashMap<String, String> user;
         user = this.currentSession.getUserDetails();
         return user.get("token");
+    }
+
+    public String getName() {
+        return currentSession.getUserDetails().get("name");
     }
 
     public String getFbId() {

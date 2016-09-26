@@ -25,6 +25,9 @@ import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 
 import java.io.IOException;
 
+/**
+ * This is Wake-Up activity when our alarm manager starts ring
+ */
 public class AlarmReceiverActivity extends Activity {
 
     public static final String ARG_PAGE = "ARG_PAGE";
@@ -46,17 +49,6 @@ public class AlarmReceiverActivity extends Activity {
         Log.i(TAG, "finalInProgressChallengeId: " + finalInProgressChallengeId);
         Log.i(TAG, "finalIntentId: " + finalIntentId);
         Log.i(TAG, "stringFinalIntentId: " + stringFinalIntentId);
-
-//        SessionManager sessionManager = new SessionManager(context);
-//        if (!sessionManager.isUserLoggedIn()) {
-//            try {
-//                cc.give_up(finalInProgressChallengeId, finalIntentId);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            Log.i(TAG, "onReceive: AutoGiveUp. Reason: not logged in");
-//            return;
-//        }
 
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);

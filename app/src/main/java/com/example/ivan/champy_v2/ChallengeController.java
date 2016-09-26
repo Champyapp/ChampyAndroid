@@ -602,6 +602,7 @@ public class ChallengeController {
 //        return ok;
 //    }
 
+    // method which returns our last update (true or false);
     private String getLastUpdated(String challenge_id) {
         DBHelper dbHelper = new DBHelper(firstActivity);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -626,18 +627,40 @@ public class ChallengeController {
         return lastUpdate;
     }
 
-    // method for check is active challenge for wake up
+    // method for check is active challenge self / duel
     public boolean isActive(String description) {
         DBHelper dbHelper = new DBHelper(firstActivity);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
         boolean ok = false;
         if (c.moveToFirst()) {
-            int coldescription = c.getColumnIndex("name"); // change for 'description' if this will not working
+            int coldescription = c.getColumnIndex("description");
             do {
                 if (c.getString(c.getColumnIndex("status")).equals("started")) {
                     if (c.getString(coldescription).equals(description)) {
                         ok = true;
+                    }
+                }
+            } while (c.moveToNext());
+        }
+        c.close();
+        return ok;
+    }
+
+    // method for check is active challenge for wake up
+    public boolean isActiveWakeUp(String time) {
+        boolean ok = true;
+        DBHelper dbHelper = new DBHelper(context);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
+        if (c.moveToFirst()) {
+            int colDescription = c.getColumnIndex("wakeUpTime");
+            int status = c.getColumnIndex("status");
+            do {
+                if (c.getString(status).equals("started")) {
+                    if (c.getString(colDescription).equals(time)) {
+                        ok = false;
+                        break;
                     }
                 }
             } while (c.moveToNext());
