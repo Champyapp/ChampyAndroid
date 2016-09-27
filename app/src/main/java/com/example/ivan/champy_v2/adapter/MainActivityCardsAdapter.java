@@ -74,6 +74,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
         String itemUpdate = currentCard.getUpdated();
         String itemGoal = currentCard.getGoal();
         String itemType = currentCard.getType();
+        final String itemInProgressId = currentCard.getId();
         String[] senderProgress = toArrayOfStrings(itemSenderProgress);
 
         //Log.i(TAG, "getView: long[] senderProgress = " + senderProgress[0]);
@@ -115,17 +116,17 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
             buttonShare.setVisibility(View.INVISIBLE);
             buttonDone.setVisibility(View.VISIBLE);
         }
-        tvDuration.setTextSize(y*2);
         tvDuration.setTypeface(typeface);
+        tvDuration.setTextSize(y*2);
 
         CurrentUserHelper user = new CurrentUserHelper(getContext());
-        token  = user.getToken();
         userId = user.getUserObjectId();
+        token  = user.getToken();
 
-        long longSenderProgress = 0L; //Calendar.getInstance().getTimeInMillis() / 1000 + 1;
-        long longCurrentTime =    Calendar.getInstance().getTimeInMillis() / 1000;
-        long oneDay = 86400L;
+        long longCurrentTime = Calendar.getInstance().getTimeInMillis() / 1000;
         long senderProgressPlusOneDay = 0;
+        long longSenderProgress = 0L;
+        long oneDay = 86400L;
         Log.i(TAG, "getView: longSenderProgress when create: " + longSenderProgress);
         Log.i(TAG, "getView: long currentTime   when create: " + longCurrentTime);
         try {
@@ -134,16 +135,15 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
-        Log.i(TAG, "getView: senderProgress +1 day after 'try': " + senderProgressPlusOneDay);
+        Log.i(TAG, "getView: senderProgress+1day after 'try': " + senderProgressPlusOneDay);
         //Log.i(TAG, "getView: longSenderProgress    after 'try': " + longSenderProgress);
         //Log.i(TAG, "getView: longCurrentTime       after 'try': " + longCurrentTime);
-        if (senderProgressPlusOneDay != 0) {
+
+        if (senderProgressPlusOneDay != 0 && !currentCard.getType().equals("Wake Up")) {
             if (longCurrentTime > senderProgressPlusOneDay) {
                 try {
-                    if (currentCard.getType().equals("Wake Up")) {
-                        int i = Integer.parseInt(currentCard.getWakeUpTime());
-                           cc.give_up(currentCard.getId(), i, token, userId);
-                    } else cc.give_up(currentCard.getId(), 0, token, userId);
+                    int i = Integer.parseInt(currentCard.getWakeUpTime());
+                    cc.give_up(currentCard.getId(), i, token, userId);
                 } catch (IOException e) { e.printStackTrace(); }
             }
         }
@@ -158,8 +158,8 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
                         try {
                             if (currentCard.getType().equals("Wake Up")) {
                                    int i = Integer.parseInt(currentCard.getWakeUpTime());
-                                   cc.give_up(currentCard.getId(), i, token, userId);
-                            } else cc.give_up(currentCard.getId(), 0, token, userId);
+                                   cc.give_up(itemInProgressId, i, token, userId);
+                            } else cc.give_up(itemInProgressId, 0, token, userId);
                         } catch (IOException e) { e.printStackTrace(); }
                     }
                 });
@@ -170,7 +170,6 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
         buttonDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String inProgressId = currentCard.getId();
                 try {
                     // TODO: 26.09.2016 replace this piece of code in DoneForToday method in cc.
                     ////////////////////////////////////////////////////////////////////////
@@ -178,10 +177,10 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
                     ContentValues cv = new ContentValues();
                     cv.put("updated", "true");
-                    db.update("myChallenges", cv, "challenge_id = ?", new String[]{inProgressId});
-                    db.update("updated", cv, "challenge_id = ?", new String[]{inProgressId});
+                    db.update("myChallenges", cv, "challenge_id = ?", new String[]{itemInProgressId});
+                    db.update("updated", cv, "challenge_id = ?", new String[]{itemInProgressId});
                     ////////////////////////////////////////////////////////////////////////
-                    cc.doneForToday(inProgressId, token, userId);
+                    cc.doneForToday(itemInProgressId, token, userId);
                     buttonDone.setVisibility(View.INVISIBLE);
                     buttonShare.setVisibility(View.VISIBLE);
                     snackbar = Snackbar.make(v, "Well done!", Snackbar.LENGTH_SHORT);

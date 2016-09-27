@@ -353,7 +353,7 @@ public class ChallengeController {
                     cv = new ContentValues();
                     cv.put("updated", "true");
                     db.update("updated", cv, "challenge_id = ?", new String[]{inProgressId});
-                    //db.update("myChallenges", cv, "challenge_id = ?", new String[]{inProgressId});
+                    db.update("myChallenges", cv, "challenge_id = ?", new String[]{inProgressId});
                     generateCardsForMainActivity(token, userId);
                     Log.i(TAG, "doneForToday onResponse: VSE OK");
                 } else {
@@ -376,36 +376,19 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     Data data = response.body().getData();
                     String type = data.getChallenge().getType();
-                    List<Object> senderProgress = response.body().getData().getSenderProgress();
-
-                    // TODO: 20.09.2016 Set 'senderProgress: 0' or clean up db;
-
                     OfflineMode offlineMode = new OfflineMode();
                     if (offlineMode.isConnectedToRemoteAPI(firstActivity)) {
-                        //если это wake up, то отключаем будильник
+                        //if this is "wake up" challenge then stop alarm manager;
                         if (type.equals("567d51c48322f85870fd931c")) {
-                            //String challengeDetails = data.getChallenge().getDetails();
-                            //challengeDetails = challengeDetails.replace("[", "");
-                            //challengeDetails = challengeDetails.replace("]", "");
-                            //String[] array = challengeDetails.split(", ");
-
-                            //Log.i("GiveUp", "OUR ARRAY = " + Arrays.toString(array));
-                            //String i = array[1];
-                            //int intentId = Integer.parseInt(i); // TODO: 19.08.2016 take here intentId from creating
-                            //Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
-                            //PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, intentId, myIntent, 0);
-                            //AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                            //alarmManager.cancel(pendingIntent);
-                            Log.i(TAG, "GiveUp Challenge = Wake Up");
                             Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
                             PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, intentId, myIntent, 0);
                             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                             alarmManager.cancel(pendingIntent);
-                            Log.i("GiveUp", "AlarmManager status: " + alarmManager);
+                            Log.i("GiveUp", "AlarmManager status: stopped " + alarmManager);
                         }
                     }
-                    generateCardsForMainActivity(token, userId);
                     Log.i(TAG, "GiveUp onResponse: VSE OK");
+                    generateCardsForMainActivity(token, userId);
                 } else Log.i(TAG, "GiveUp onResponse: FAILED: " + response.code());
             }
 
@@ -443,7 +426,6 @@ public class ChallengeController {
                         String challengeDescription = challenge.getDescription();
                         int challengeDuration = challenge.getDuration();
 
-                        //cv.clear();
                         if (challenge.getType().equals("567d51c48322f85870fd931b")) {
                             if (challengeStatus.equals("pending")) {
                                 // TODO: 29.08.2016 maybe change for "rejectedBySender"???
@@ -474,7 +456,6 @@ public class ChallengeController {
             @Override
             public void onFailure(Throwable t) { }
         });
-
     }
 
     public void generateCardsForMainActivity(final String token, final String userId) {

@@ -1,7 +1,9 @@
 package com.example.ivan.champy_v2.activity;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -21,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 
 import java.io.IOException;
@@ -76,6 +79,13 @@ public class AlarmReceiverActivity extends Activity {
             public boolean onTouch(View arg0, MotionEvent arg1) {
                 mMediaPlayer.stop();
                 try {
+                    // TODO: 27.09.2016 replace this piece of code in CC, in doneForToday response
+                    DBHelper dbHelper = new DBHelper(getApplicationContext());
+                    SQLiteDatabase db = dbHelper.getWritableDatabase();
+                    ContentValues cv = new ContentValues();
+                    cv.put("updated", "true");
+                    db.update("myChallenges", cv, "challenge_id = ?", new String[]{finalInProgressChallengeId});
+                    db.update("updated", cv, "challenge_id = ?", new String[]{finalInProgressChallengeId});
                     cc.doneForToday(finalInProgressChallengeId, token, userId);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -93,12 +103,9 @@ public class AlarmReceiverActivity extends Activity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 mMediaPlayer.stop();
-                try {
-                    cc.give_up(finalInProgressChallengeId, finalIntentId, token, userId);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                // so, we take 0 updates and then this challenge will auto surrender.
                 finish();
+
                 return false;
             }
         });

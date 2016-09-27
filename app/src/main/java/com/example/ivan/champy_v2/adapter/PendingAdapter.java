@@ -1,10 +1,8 @@
 package com.example.ivan.champy_v2.adapter;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
@@ -19,15 +17,15 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.ivan.champy_v2.interfaces.CustomItemClickListener;
-import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.Friend;
 import com.example.ivan.champy_v2.OfflineMode;
-import com.example.ivan.champy_v2.model.Other;
-import com.example.ivan.champy_v2.model.Pending_friend;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.data.DBHelper;
+import com.example.ivan.champy_v2.interfaces.CustomItemClickListener;
 import com.example.ivan.champy_v2.interfaces.Friends;
+import com.example.ivan.champy_v2.model.Other;
+import com.example.ivan.champy_v2.model.Pending_friend;
 
 import java.util.ArrayList;
 import java.util.HashMap;

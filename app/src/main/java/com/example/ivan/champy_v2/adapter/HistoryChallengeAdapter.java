@@ -10,9 +10,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
-import com.example.ivan.champy_v2.model.HistoryChallenge;
 import com.example.ivan.champy_v2.R;
+import com.example.ivan.champy_v2.model.HistoryChallenge;
+
 import java.util.List;
 
 public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallengeAdapter.ViewHolder> {

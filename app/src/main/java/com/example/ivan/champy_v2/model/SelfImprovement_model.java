@@ -1,19 +1,12 @@
 package com.example.ivan.champy_v2.model;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.example.ivan.champy_v2.data.DBHelper;
-import com.example.ivan.champy_v2.SessionManager;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
-import retrofit.GsonConverterFactory;
-import retrofit.Retrofit;
 
 public class SelfImprovement_model {
 
@@ -316,9 +309,9 @@ public class SelfImprovement_model {
     }
 
 
-    private void checkIfDoneForToday() {
-
-    }
+//    private String isCheckedToday() {
+//
+//    }
 
 
 }

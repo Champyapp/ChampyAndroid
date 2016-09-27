@@ -24,6 +24,16 @@ public class NotifyService extends Service {
 
     @Override
     public IBinder onBind(Intent arg0) {
+        return null;
+    }
+
+
+
+    @SuppressWarnings("static-access")
+    @Override
+    public void onStart(Intent intent, int startId) {
+        super.onStart(intent, startId);
+        Log.i(TAG, "onStart: Notification ");
         Context context = this.getApplicationContext();
         notificationManager = (NotificationManager)context.getSystemService(NOTIFICATION_SERVICE);
         Intent mIntent = new Intent(this, MainActivity.class);
@@ -37,16 +47,5 @@ public class NotifyService extends Service {
 
         notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         notificationManager.notify(NOTIFICATION_ID, builder.build());
-        return null;
-    }
-
-
-
-    @SuppressWarnings("static-access")
-    @Override
-    public void onStart(Intent intent, int startId) {
-        super.onStart(intent, startId);
-        Log.i(TAG, "onStart: Notification ");
-
     }
 }

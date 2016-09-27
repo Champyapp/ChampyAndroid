@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +25,6 @@ import com.example.ivan.champy_v2.model.User.User;
 import com.soundcloud.android.crop.Crop;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.internal.framed.Settings;
 
 import java.io.File;
 import java.io.FileOutputStream;

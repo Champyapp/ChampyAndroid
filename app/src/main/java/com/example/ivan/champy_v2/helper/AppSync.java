@@ -236,16 +236,15 @@ public class AppSync {
                 Recipient recipient = datum.getRecipient();
                 Sender sender = datum.getSender();
 
-                String challenge_description = challenge.getDescription(); // no smoking
-                String challenge_detail      = challenge.getDetails(); // no smoking + " during this period"
-                String challenge_status      = datum.getStatus(); // active or not
-                String challenge_id          = datum.get_id(); // im progress id
-                String challenge_type        = challenge.getType(); // 567d51c48322f85870fd931a / b / c
-                String challenge_name        = challenge.getName(); // wake up / self / duel
-                String challenge_wakeUpTime  = challenge.getWakeUpTime();
-                String challenge_updated = "";
-                String challenge_duration = "";
-//                        int challenge_updated = challenge.getUpdated();
+                String challenge_description = challenge.getDescription();   // no smoking
+                String challenge_detail      = challenge.getDetails();       // no smoking + " during this period"
+                String challenge_status      = datum.getStatus();            // active or not
+                String challenge_id          = datum.get_id();               // im progress id
+                String challenge_type        = challenge.getType();          // 567d51c48322f85870fd931a / b / c
+                String challenge_name        = challenge.getName();          // wake up / self / duel
+                String challenge_wakeUpTime  = challenge.getWakeUpTime();    // our specific time (intentId)
+                String challenge_updated     = getLastUpdated(challenge_id); // bool check method;
+                String challenge_duration    = "";
 
                 if (datum.getEnd() != null) {
                     int end = datum.getEnd();
@@ -259,27 +258,17 @@ public class AppSync {
                     try {
                         JSONObject json = new JSONObject(senderProgress.get(j).toString());
                         long at = json.getLong("at");
-                        Log.i(TAG, "json : " + at + " <-- update time in millis");
+                        Log.i(TAG, "json : " + at + " <-- lastUpdate time in millis");
                         stringSenderProgress[j] = String.valueOf(at);
-                    } catch (JSONException e) {
-                        Log.i(TAG, "onCatch: " + e);
-                        e.printStackTrace();
-                    }
+                    } catch (JSONException e) { e.printStackTrace(); }
                 }
-                //Log.i(TAG, "senderProgressString = " + stringSenderProgress);
 
                 if (challenge_description.equals("Wake Up")) {
                     cv.put("name", "Wake Up"); // just name of Challenge
                     cv.put("wakeUpTime", challenge_detail); // our specific field for delete wakeUp (example: 1448);
-                    challenge_updated = getSelfWakeUpLastUpdate(challenge_id); // bool check method;
-                    cv.put("updated", challenge_updated); // true / false
                 } else if (challenge_type.equals("567d51c48322f85870fd931a")) {
                     cv.put("name", "Self-Improvement"); // just name of Challenge
-                    challenge_updated = getSelfWakeUpLastUpdate(challenge_id); // bool check method;
-                    cv.put("updated", challenge_updated); // true / false
                 } else if (challenge_type.equals("567d51c48322f85870fd931b")) {
-                    challenge_updated = getDuelLastUpdate(challenge_id); // bool check method;
-                    cv.put("updated", challenge_updated); // true / false
                     cv.put("name", "Duel"); // just name of Challenge
                     if (userId.equals(recipient.getId())) {
                         cv.put("recipient", "true");
@@ -296,23 +285,23 @@ public class AppSync {
                 cv.put("duration", challenge_duration); // duration of challenge
                 cv.put("challenge_id", challenge_id); // in progress id
                 cv.put("status", challenge_status); // active or not
-
+                cv.put("updated", challenge_updated); // true / false
                 cv.put("senderProgress", Arrays.toString(stringSenderProgress)); // last update time in millis
                 db.insert("myChallenges", null, cv);
-
                 //Log.i(TAG, "Challenge | Description: " + challenge_detail);
                 //Log.i(TAG, "Challenge | Challenge_updated: " + challenge_updated);
                 //Log.i(TAG, "Challenge | SenderProgress: " + Arrays.toString(stringSenderProgress));
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException e) { e.printStackTrace(); }
 
     }
 
 
-    private String getSelfWakeUpLastUpdate(String challenge_id) {
+
+
+    // method which returns our last update (true or false);
+    private String getLastUpdated(String challenge_id) {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("updated", null, null, null, null, null, null);
@@ -334,30 +323,6 @@ public class AppSync {
         }
         c.close();
         return lastUpdate;
-    }
-
-    private String getDuelLastUpdate(String challenge_id) {
-        DBHelper dbHelper = new DBHelper(context);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Cursor c = db.query("updated", null, null, null, null, null, null);
-        String ok = "waitingForStart";
-        if (c.moveToFirst()) {
-            int colchallenge_id = c.getColumnIndex("challenge_id");
-            do {
-                // в методе "sendSingleForDuel мы засовываем challenge_id в колонку "challenge_id" в
-                // таблице "updated", а тут мы ее проверяем. если она есть, то вернуть время когда
-                // мы нажимали "дан" для дуелей, если её здесь нету, то возвращаем "false" - это для
-                // wake-up и self-improvement челенджей.
-                // Соответственно данные про update time для дуелей находятся в таблице "updated",
-                // а для отсального в таблице "myChallenges".
-                if (c.getString(colchallenge_id).equals(challenge_id)) {
-                    ok = c.getString(c.getColumnIndex("updated"));
-                    break;
-                }
-            } while (c.moveToNext());
-        }
-        c.close();
-        return ok;
     }
 
     private void getUserFriendsInfo(final String gcm) {

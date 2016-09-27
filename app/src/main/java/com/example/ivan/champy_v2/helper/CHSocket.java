@@ -1,37 +1,15 @@
 package com.example.ivan.champy_v2.helper;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.example.ivan.champy_v2.ChallengeController;
-import com.example.ivan.champy_v2.SessionManager;
-import com.example.ivan.champy_v2.activity.MainActivity;
-import com.example.ivan.champy_v2.data.DBHelper;
-import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
-import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
-import com.example.ivan.champy_v2.model.active_in_progress.Datum;
-import com.example.ivan.champy_v2.model.active_in_progress.Recipient;
-import com.example.ivan.champy_v2.model.active_in_progress.Sender;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.List;
-
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.GsonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
-
-import static java.lang.Math.round;
 
 public class CHSocket {
 
@@ -59,11 +37,10 @@ public class CHSocket {
 
 
     public void connectAndEmmit() {
-        mSocket.on("connect",                               onConnect);
-        mSocket.on("connected",                             onConnected);
-
+        mSocket.on("connect",   onConnect);
+        mSocket.on("connected", onConnected);
         mSocket.on("InProgressChallenge:accepted", onAcceptedChallenge);
-//        mSocket.on("InProgressChallenge:won",      onWonChallenge);
+//        mSocket.on("InProgressChallenge:won", onWonChallenge);
 //        mSocket.on("InProgressChallenge:failed",            onAcceptedChallenge);
 //        mSocket.on("InProgressChallenge:new",               onRefreshPending);
 //        mSocket.on("InProgressChallenge:checked",           onNewChallenge);

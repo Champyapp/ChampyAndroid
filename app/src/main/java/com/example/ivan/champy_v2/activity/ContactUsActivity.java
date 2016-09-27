@@ -152,14 +152,6 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
     }
 
 
-//    private Drawable Init(String path) throws FileNotFoundException {
-//        File file = new File(path, "blured2.jpg");
-//        Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
-//        Drawable dr = new BitmapDrawable(getResources(), bitmap);
-//        dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
-//        return dr;
-//    }
-
     private Drawable Init(String path) throws FileNotFoundException {
         File file = new File(path, "blured2.jpg");
         Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
@@ -186,20 +178,11 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
 
         try {
             if (!subject.getText().toString().isEmpty() && !body.getText().toString().isEmpty()) {
-                // the user can choose the email client
                 startActivity(Intent.createChooser(email, "Choose an email client from..."));
-            } else {
-                Toast.makeText(ContactUsActivity.this, "Complete empty fields", Toast.LENGTH_SHORT).show();
-            }
+            } else Toast.makeText(ContactUsActivity.this, "Complete empty fields", Toast.LENGTH_SHORT).show();
         } catch (android.content.ActivityNotFoundException ex) {
             Toast.makeText(ContactUsActivity.this, "No email client installed.", Toast.LENGTH_SHORT).show();
         }
-
-//        subject.setText("");
-//        body.setText("");
-//        Toast.makeText(ContactUsActivity.this, "Sent!", Toast.LENGTH_SHORT).show();
-
-
     }
 
 

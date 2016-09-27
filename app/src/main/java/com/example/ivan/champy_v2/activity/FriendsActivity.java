@@ -1,21 +1,16 @@
 package com.example.ivan.champy_v2.activity;
 
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -26,37 +21,20 @@ import android.widget.TextView;
 import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
-import com.example.ivan.champy_v2.helper.CHImageModule;
 import com.example.ivan.champy_v2.OfflineMode;
-import com.example.ivan.champy_v2.model.Pending_friend;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
-import com.example.ivan.champy_v2.adapter.FriendsAdapter;
-import com.example.ivan.champy_v2.adapter.PendingAdapter;
 import com.example.ivan.champy_v2.adapter.FriendsActivityPagerAdapter;
-import com.example.ivan.champy_v2.data.DBHelper;
-import com.example.ivan.champy_v2.interfaces.CustomItemClickListener;
-import com.example.ivan.champy_v2.model.Friend.Datum;
-import com.example.ivan.champy_v2.model.Friend.Friend_;
-import com.example.ivan.champy_v2.model.Friend.Owner;
+import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
+import com.example.ivan.champy_v2.helper.CHImageModule;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.GsonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
-
-import static java.lang.Math.round;
 
 public class FriendsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 

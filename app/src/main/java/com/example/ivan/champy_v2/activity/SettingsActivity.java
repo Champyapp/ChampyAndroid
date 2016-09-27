@@ -28,7 +28,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
