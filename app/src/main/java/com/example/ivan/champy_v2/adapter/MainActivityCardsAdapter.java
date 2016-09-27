@@ -76,8 +76,8 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
         String itemType = currentCard.getType();
         String[] senderProgress = toArrayOfStrings(itemSenderProgress);
 
-        Log.i(TAG, "getView: long[] senderProgress = " + senderProgress[0]);
-        Log.i(TAG, "getView: goal = " + itemGoal + ", update = " + itemUpdate + ", SenderProgress" + itemSenderProgress);
+        //Log.i(TAG, "getView: long[] senderProgress = " + senderProgress[0]);
+        //Log.i(TAG, "getView: goal = " + itemGoal + ", update = " + itemUpdate + ", SenderProgress" + itemSenderProgress);
 
         switch (itemType /**maybe change this for 'currentCard.getType()' ? **/) {
             case "Wake Up":
@@ -111,7 +111,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
             buttonShare.setVisibility(View.VISIBLE);
             buttonDone.setVisibility(View.INVISIBLE);
         } else {
-            tvDuration.setText("Done for today?");
+            tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
             buttonShare.setVisibility(View.INVISIBLE);
             buttonDone.setVisibility(View.VISIBLE);
         }
@@ -122,26 +122,30 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
         token  = user.getToken();
         userId = user.getUserObjectId();
 
-        long longSenderProgress = 0L;
-        long longCurrentTime = Calendar.getInstance().getTimeInMillis() / 1000;
+        long longSenderProgress = 0L; //Calendar.getInstance().getTimeInMillis() / 1000 + 1;
+        long longCurrentTime =    Calendar.getInstance().getTimeInMillis() / 1000;
+        long oneDay = 86400L;
+        long senderProgressPlusOneDay = 0;
         Log.i(TAG, "getView: longSenderProgress when create: " + longSenderProgress);
-        Log.i(TAG, "getView: long currentTime when create  : " + longCurrentTime);
+        Log.i(TAG, "getView: long currentTime   when create: " + longCurrentTime);
         try {
-            longSenderProgress = Long.parseLong(senderProgress[0] + 24*60*60);
+            longSenderProgress = Long.parseLong(senderProgress[0]);
+            senderProgressPlusOneDay = (longSenderProgress + oneDay);
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
-        Log.i(TAG, "getView: longSenderProgress after 'try': " + longSenderProgress);
-        Log.i(TAG, "getView: longCurrentTime after 'try'   : " + longCurrentTime);
-        if ((longCurrentTime > longSenderProgress + 24*60*60) && longCurrentTime != 0 ) {
-//            try {
-//                if (currentCard.getType().equals("Wake Up")) {
-//                    int i = Integer.parseInt(currentCard.getWakeUpTime());
-//                    cc.give_up(currentCard.getId(), i, token, userId);
-//                } else cc.give_up(currentCard.getId(), 0, token, userId);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
+        Log.i(TAG, "getView: senderProgress +1 day after 'try': " + senderProgressPlusOneDay);
+        //Log.i(TAG, "getView: longSenderProgress    after 'try': " + longSenderProgress);
+        //Log.i(TAG, "getView: longCurrentTime       after 'try': " + longCurrentTime);
+        if (senderProgressPlusOneDay != 0) {
+            if (longCurrentTime > senderProgressPlusOneDay) {
+                try {
+                    if (currentCard.getType().equals("Wake Up")) {
+                        int i = Integer.parseInt(currentCard.getWakeUpTime());
+                           cc.give_up(currentCard.getId(), i, token, userId);
+                    } else cc.give_up(currentCard.getId(), 0, token, userId);
+                } catch (IOException e) { e.printStackTrace(); }
+            }
         }
 
 
