@@ -1,9 +1,7 @@
 package com.example.ivan.champy_v2.fragment;
 
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;

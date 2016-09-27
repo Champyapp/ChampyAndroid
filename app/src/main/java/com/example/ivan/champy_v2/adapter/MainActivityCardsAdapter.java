@@ -140,6 +140,17 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
         //Log.i(TAG, "getView: longCurrentTime       after 'try': " + longCurrentTime);
 
         if (senderProgressPlusOneDay != 0 && !currentCard.getType().equals("Wake Up")) {
+
+            /**
+             * if (longSenderProgress > currentDay in millis) {
+             *     currentCard.setUpdated("false");
+             *     buttonDone.setVisibility(View.VISIBLE);
+             *     buttonShare.setVisibility(View.INVISIBLE);
+             * }
+             *
+             * replace below check for view
+             */
+
             if (longCurrentTime > senderProgressPlusOneDay) {
                 try {
                     int i = Integer.parseInt(currentCard.getWakeUpTime());

@@ -1,7 +1,6 @@
 package com.example.ivan.champy_v2.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.UiThread;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,9 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.ivan.champy_v2.model.HistoryChallenge;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.adapter.HistoryChallengeAdapter;
+import com.example.ivan.champy_v2.model.HistoryChallenge;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
 
 import java.util.ArrayList;

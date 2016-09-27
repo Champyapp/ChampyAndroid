@@ -8,9 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.ivan.champy_v2.model.HistoryChallenge;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.adapter.HistoryChallengeAdapter;
+import com.example.ivan.champy_v2.model.HistoryChallenge;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
 
 import java.util.ArrayList;
