@@ -418,6 +418,8 @@ public class ChallengeController {
 
 
 
+
+
     public void refreshCardsForPendingDuel(final String token, final String userId) {
         cv = new ContentValues();
         dbHelper = new DBHelper(context);
@@ -516,7 +518,7 @@ public class ChallengeController {
                             try {
                                 JSONObject json = new JSONObject(senderProgress.get(j).toString());
                                 long at = json.getLong("at");
-                                Log.i(TAG, "json : " + at + " <-- update time in millis");
+                                Log.i(TAG, "json : " + at + " <-- lastUpdate time in millis");
                                 stringSenderProgress[j] = String.valueOf(at);
                             } catch (JSONException e) { e.printStackTrace(); }
                         }

@@ -27,6 +27,8 @@ import com.example.ivan.champy_v2.model.SelfImprovement_model;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 
 
 public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements View.OnClickListener*/ {
@@ -70,8 +72,11 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
 
         String itemSenderProgress = currentCard.getSenderProgress();
         String itemUpdate = currentCard.getUpdated();
-        String itemGoal   = currentCard.getGoal();
-        String itemType   = currentCard.getType();
+        String itemGoal = currentCard.getGoal();
+        String itemType = currentCard.getType();
+        String[] senderProgress = toArrayOfStrings(itemSenderProgress);
+
+        Log.i(TAG, "getView: long[] senderProgress = " + senderProgress[0]);
         Log.i(TAG, "getView: goal = " + itemGoal + ", update = " + itemUpdate + ", SenderProgress" + itemSenderProgress);
 
         switch (itemType /**maybe change this for 'currentCard.getType()' ? **/) {
@@ -101,8 +106,6 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
         buttonShare.getLayoutParams() .width  = x*10;
         buttonShare.getLayoutParams() .height = x*10;
         final TextView tvDuration = (TextView) tempView.findViewById(R.id.textViewDuration);
-
-
         if (currentCard.getType().equals("Wake Up") || currentCard.getUpdated().equals("true")) { //?
             tvDuration.setText(currentCard.getDays() + " DAYS TO GO");
             buttonShare.setVisibility(View.VISIBLE);
@@ -118,6 +121,29 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
         CurrentUserHelper user = new CurrentUserHelper(getContext());
         token  = user.getToken();
         userId = user.getUserObjectId();
+
+        long longSenderProgress = 0L;
+        long longCurrentTime = Calendar.getInstance().getTimeInMillis() / 1000;
+        Log.i(TAG, "getView: longSenderProgress when create: " + longSenderProgress);
+        Log.i(TAG, "getView: long currentTime when create  : " + longCurrentTime);
+        try {
+            longSenderProgress = Long.parseLong(senderProgress[0] + 24*60*60);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        Log.i(TAG, "getView: longSenderProgress after 'try': " + longSenderProgress);
+        Log.i(TAG, "getView: longCurrentTime after 'try'   : " + longCurrentTime);
+        if ((longCurrentTime > longSenderProgress + 24*60*60) && longCurrentTime != 0 ) {
+//            try {
+//                if (currentCard.getType().equals("Wake Up")) {
+//                    int i = Integer.parseInt(currentCard.getWakeUpTime());
+//                    cc.give_up(currentCard.getId(), i, token, userId);
+//                } else cc.give_up(currentCard.getId(), 0, token, userId);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+        }
+
 
         buttonGiveUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,70 +201,18 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
     }
 
 
-//    @Override
-//    public void onClick(View view) {
-//
-//        switch (view.getId()) {
-//            case R.id.buttonGiveUp:
-//                snackbar = Snackbar.make(view, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes", new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        try {
-//                            if (currentCard.getType().equals("Wake Up")) {
-//                                int intentId = Integer.parseInt(itemWakeUpTime);
-//                                cc.give_up(currentCard.getId(), intentId, token, userId);
-//                            } else {
-//                                cc.give_up(currentCard.getId(), 0, token, userId);
-//                            }
-//                            snackbar = Snackbar.make(view, "Looser!", Snackbar.LENGTH_SHORT);
-//                            snackbar.show();
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                });
-//                snackbar.show();
-//            break;
-//
-//            case R.id.buttonDoneForToday:
-//                if (currentCard.getType().equals("Wake Up")) break;
-//                String inProgressId = currentCard.getId();
-//                try {
-//                    cc.doneForToday(inProgressId, token, userId);
-//                    //buttonDoneForToday.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.icon_share));
-//                    snackbar = Snackbar.make(view, "Well done!", Snackbar.LENGTH_SHORT);
-//                    snackbar.show();
-//                    buttonDoneForToday.setVisibility(View.INVISIBLE);
-//                    buttonShare.setVisibility(View.VISIBLE);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                break;
-//
-//            case R.id.buttonShare:
-//                String message = "I'm done for today with my challenge: " + currentCard.getGoal();
-//                Intent share = new Intent(Intent.ACTION_SEND);
-//                share.setType("text/plain");
-//                share.putExtra(Intent.EXTRA_TEXT, message);
-//                getContext().startActivity(Intent.createChooser(share, "How would you like to share?"));
-//                break;
-//        }
-//
-//
-//
-//    }
-
     @Override
     public int dataCount() {
         return arrayList.size();
     }
 
 
-    public String[] toArrayOfStrings(String arg){
-        String a = arg.substring(1);
-        String b = a.replaceFirst("]","");
+    private String[] toArrayOfStrings(String arg) {
+        String a = arg.replace("[", "");
+        String b = a.replace("]","");
         return b.split(", ");
     }
+
 
 }
 
