@@ -1,5 +1,6 @@
 package com.example.ivan.champy_v2.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.graphics.Typeface;
+import android.nfc.FormatException;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.Display;
@@ -18,6 +20,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.R;
@@ -29,6 +32,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 
 public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements View.OnClickListener*/ {
@@ -43,6 +48,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
         this.arrayList = marrayList;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View getView(int position, View convertView) {
         View tempView = convertView;
@@ -107,8 +113,48 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
         buttonShare.getLayoutParams() .width  = x*10;
         buttonShare.getLayoutParams() .height = x*10;
         final TextView tvDuration = (TextView) tempView.findViewById(R.id.textViewDuration);
-        if (currentCard.getType().equals("Wake Up") || currentCard.getUpdated().equals("true")) { //?
-            tvDuration.setText(currentCard.getDays() + " DAYS TO GO");
+
+        CurrentUserHelper user = new CurrentUserHelper(getContext());
+        userId = user.getUserObjectId();
+        token  = user.getToken();
+
+        long now = Calendar.getInstance().getTimeInMillis() / 1000;
+        long checkInPlusOneDay = 0;
+        long longSenderProgress = 0;
+        long checkInPlusOneDayAndHour = 0;
+        final long oneDay = 86400L;
+//        Log.i(TAG, "getView: longSenderProgress when create: " + longSenderProgress);
+//        Log.i(TAG, "getView: long currentTime   when create: " + longCurrentTime);
+        try {
+            longSenderProgress = Long.parseLong(senderProgress[0]);
+            checkInPlusOneDay = (longSenderProgress + oneDay);
+            checkInPlusOneDayAndHour = (longSenderProgress + oneDay + 3600);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), "Time to improve yourself", Toast.LENGTH_SHORT).show();
+        }
+
+
+
+        if (checkInPlusOneDayAndHour != 0) {
+            if (now > checkInPlusOneDay) {
+                tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
+                buttonShare.setVisibility(View.INVISIBLE);
+                buttonDone.setVisibility(View.VISIBLE);
+            }
+            if (now > checkInPlusOneDayAndHour) {
+                try {
+                    if (itemType.equals("Wake Up")) {
+                        int i = Integer.parseInt(currentCard.getWakeUpTime());
+                        cc.give_up(itemInProgressId, i, token, userId);
+                    } else cc.give_up(itemInProgressId, 0, token, userId);
+                } catch (IOException | NumberFormatException e) { e.printStackTrace(); }
+            }
+        }
+
+
+        if (itemType.equals("Wake Up") || itemUpdate.equals("true")) { //?
+            tvDuration.setText(currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
             buttonShare.setVisibility(View.VISIBLE);
             buttonDone.setVisibility(View.INVISIBLE);
         } else {
@@ -116,50 +162,9 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
             buttonShare.setVisibility(View.INVISIBLE);
             buttonDone.setVisibility(View.VISIBLE);
         }
+
         tvDuration.setTypeface(typeface);
         tvDuration.setTextSize(y*2);
-
-        CurrentUserHelper user = new CurrentUserHelper(getContext());
-        userId = user.getUserObjectId();
-        token  = user.getToken();
-
-        long longCurrentTime = Calendar.getInstance().getTimeInMillis() / 1000;
-        long senderProgressPlusOneDay = 0;
-        long longSenderProgress = 0L;
-        long oneDay = 86400L;
-        Log.i(TAG, "getView: longSenderProgress when create: " + longSenderProgress);
-        Log.i(TAG, "getView: long currentTime   when create: " + longCurrentTime);
-        try {
-            longSenderProgress = Long.parseLong(senderProgress[0]);
-            senderProgressPlusOneDay = (longSenderProgress + oneDay);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
-        Log.i(TAG, "getView: senderProgress+1day after 'try': " + senderProgressPlusOneDay);
-        //Log.i(TAG, "getView: longSenderProgress    after 'try': " + longSenderProgress);
-        //Log.i(TAG, "getView: longCurrentTime       after 'try': " + longCurrentTime);
-
-        if (senderProgressPlusOneDay != 0 /*&& !currentCard.getType().equals("Wake Up")*/) {
-
-            /**
-             * if (longSenderProgress > currentDay in millis) {
-             *     currentCard.setUpdated("false");
-             *     buttonDone.setVisibility(View.VISIBLE);
-             *     buttonShare.setVisibility(View.INVISIBLE);
-             * }
-             *
-             * replace below check for view
-             */
-
-            if (longCurrentTime > senderProgressPlusOneDay) {
-                try {
-                    if (currentCard.getType().equals("Wake Up")) {
-                        int i = Integer.parseInt(currentCard.getWakeUpTime());
-                        cc.give_up(itemInProgressId, i, token, userId);
-                    } else cc.give_up(itemInProgressId, 0, token, userId);
-                } catch (IOException e) { e.printStackTrace(); }
-            }
-        }
 
 
         buttonGiveUp.setOnClickListener(new View.OnClickListener() {
@@ -170,10 +175,10 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
                     public void onClick(View view) {
                         try {
                             if (currentCard.getType().equals("Wake Up")) {
-                                   int i = Integer.parseInt(currentCard.getWakeUpTime());
+                                int i = Integer.parseInt(currentCard.getWakeUpTime());
                                    cc.give_up(itemInProgressId, i, token, userId);
                             } else cc.give_up(itemInProgressId, 0, token, userId);
-                        } catch (IOException e) { e.printStackTrace(); }
+                        } catch (IOException | NumberFormatException e) { e.printStackTrace(); }
                     }
                 });
                 snackbar.show();
@@ -228,6 +233,18 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
         String b = a.replace("]","");
         return b.split(", ");
     }
+
+
+//    private String isCheckedToday(long now, long longLastUpdatePlusOneDay) {
+//        Date date = new Date();
+//        Calendar myCalendar = GregorianCalendar.getInstance();
+//        myCalendar.setTime(date);
+//        myCalendar.get(Calendar.HOUR_OF_DAY);
+//        myCalendar.get(Calendar.HOUR);
+//        myCalendar.get(Calendar.MONTH);
+//        final long currentMidnight = now - (myCalendar.get(Calendar.HOUR_OF_DAY) * 60 * 60) - (myCalendar.get(Calendar.MINUTE) * 60) - (myCalendar.get(Calendar.SECOND));
+//        return (longLastUpdatePlusOneDay > currentMidnight) ? "false" : "true";
+//    }
 
 
 }
