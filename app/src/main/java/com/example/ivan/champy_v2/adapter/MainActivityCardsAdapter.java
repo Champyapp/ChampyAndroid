@@ -139,7 +139,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
         //Log.i(TAG, "getView: longSenderProgress    after 'try': " + longSenderProgress);
         //Log.i(TAG, "getView: longCurrentTime       after 'try': " + longCurrentTime);
 
-        if (senderProgressPlusOneDay != 0 && !currentCard.getType().equals("Wake Up")) {
+        if (senderProgressPlusOneDay != 0 /*&& !currentCard.getType().equals("Wake Up")*/) {
 
             /**
              * if (longSenderProgress > currentDay in millis) {
@@ -153,8 +153,10 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
 
             if (longCurrentTime > senderProgressPlusOneDay) {
                 try {
-                    int i = Integer.parseInt(currentCard.getWakeUpTime());
-                    cc.give_up(currentCard.getId(), i, token, userId);
+                    if (currentCard.getType().equals("Wake Up")) {
+                        int i = Integer.parseInt(currentCard.getWakeUpTime());
+                        cc.give_up(itemInProgressId, i, token, userId);
+                    } else cc.give_up(itemInProgressId, 0, token, userId);
                 } catch (IOException e) { e.printStackTrace(); }
             }
         }
