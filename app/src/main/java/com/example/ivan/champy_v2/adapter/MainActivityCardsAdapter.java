@@ -86,7 +86,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
         //Log.i(TAG, "getView: long[] senderProgress = " + senderProgress[0]);
         //Log.i(TAG, "getView: goal = " + itemGoal + ", update = " + itemUpdate + ", SenderProgress" + itemSenderProgress);
 
-        switch (itemType /**maybe change this for 'currentCard.getType()' ? **/) {
+        switch (itemType) {
             case "Wake Up":
                 imageChallengeLogo.setImageResource(R.drawable.wakeup_white);
                 itemGoal = currentCard.getChallengeName();
@@ -113,7 +113,17 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
         buttonShare.getLayoutParams() .width  = x*10;
         buttonShare.getLayoutParams() .height = x*10;
         final TextView tvDuration = (TextView) tempView.findViewById(R.id.textViewDuration);
-
+        if (itemType.equals("Wake Up") || itemUpdate.equals("true")) { //?
+            tvDuration.setText(currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
+            buttonShare.setVisibility(View.VISIBLE);
+            buttonDone.setVisibility(View.INVISIBLE);
+        } else {
+            tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
+            buttonShare.setVisibility(View.INVISIBLE);
+            buttonDone.setVisibility(View.VISIBLE);
+        }
+        tvDuration.setTypeface(typeface);
+        tvDuration.setTextSize(y*2);
         CurrentUserHelper user = new CurrentUserHelper(getContext());
         userId = user.getUserObjectId();
         token  = user.getToken();
@@ -134,37 +144,32 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
             Toast.makeText(getContext(), "Time to improve yourself", Toast.LENGTH_SHORT).show();
         }
 
+//        Log.i(TAG, "getView: "
+//                        + "\nlongSenderProgress      : " + longSenderProgress
+//                        + "\ncheckInPlusOneDay       : " + checkInPlusOneDay
+//                        + "\ncheckInPlusOneDayAndHour: " + checkInPlusOneDayAndHour);
 
 
         if (checkInPlusOneDayAndHour != 0) {
+            Log.i(TAG, "getView: checkInPlusOneDayAndHour != 0");
             if (now > checkInPlusOneDay) {
+                Log.i(TAG, "getView: now > checkInPlusOneDay (" + now + " > " + checkInPlusOneDay + ")");
                 tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
                 buttonShare.setVisibility(View.INVISIBLE);
                 buttonDone.setVisibility(View.VISIBLE);
-            }
-            if (now > checkInPlusOneDayAndHour) {
-                try {
-                    if (itemType.equals("Wake Up")) {
-                        int i = Integer.parseInt(currentCard.getWakeUpTime());
-                        cc.give_up(itemInProgressId, i, token, userId);
-                    } else cc.give_up(itemInProgressId, 0, token, userId);
-                } catch (IOException | NumberFormatException e) { e.printStackTrace(); }
-            }
+                if (now > checkInPlusOneDayAndHour) {
+                    Log.i(TAG, "getView: now > checkInPlusOneDayAndHour");
+                    try {
+                        if (itemType.equals("Wake Up")) {
+                            int i = Integer.parseInt(currentCard.getWakeUpTime());
+                            cc.give_up(itemInProgressId, i, token, userId);
+                        } else cc.give_up(itemInProgressId, 0, token, userId);
+                    } catch (IOException | NumberFormatException e) { e.printStackTrace(); }
+                } else Log.i(TAG, "getView: now > checkInPlusOneDay, but < checkInPlusOneDayAndHour");
+            } else  Log.i(TAG, "getView: now < checkInPlusOneDay");
         }
 
 
-        if (itemType.equals("Wake Up") || itemUpdate.equals("true")) { //?
-            tvDuration.setText(currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
-            buttonShare.setVisibility(View.VISIBLE);
-            buttonDone.setVisibility(View.INVISIBLE);
-        } else {
-            tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
-            buttonShare.setVisibility(View.INVISIBLE);
-            buttonDone.setVisibility(View.VISIBLE);
-        }
-
-        tvDuration.setTypeface(typeface);
-        tvDuration.setTextSize(y*2);
 
 
         buttonGiveUp.setOnClickListener(new View.OnClickListener() {
@@ -199,6 +204,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
                     db.update("updated", cv, "challenge_id = ?", new String[]{itemInProgressId});
                     ////////////////////////////////////////////////////////////////////////
                     cc.doneForToday(itemInProgressId, token, userId);
+                    //cc.generate(); potomy 4to nam nado obnovit' bazy, a voobwe doljen prihodit' respoonse
                     buttonDone.setVisibility(View.INVISIBLE);
                     buttonShare.setVisibility(View.VISIBLE);
                     snackbar = Snackbar.make(v, "Well done!", Snackbar.LENGTH_SHORT);
