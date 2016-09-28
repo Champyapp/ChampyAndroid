@@ -144,29 +144,35 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
             Toast.makeText(getContext(), "Time to improve yourself", Toast.LENGTH_SHORT).show();
         }
 
-//        Log.i(TAG, "getView: "
-//                        + "\nlongSenderProgress      : " + longSenderProgress
-//                        + "\ncheckInPlusOneDay       : " + checkInPlusOneDay
-//                        + "\ncheckInPlusOneDayAndHour: " + checkInPlusOneDayAndHour);
-
-
-        if (checkInPlusOneDayAndHour != 0) {
-            Log.i(TAG, "getView: checkInPlusOneDayAndHour != 0");
-            if (now > checkInPlusOneDay) {
-                Log.i(TAG, "getView: now > checkInPlusOneDay (" + now + " > " + checkInPlusOneDay + ")");
+        /**
+         * My algorithm for displaying buttons inside cards view and opportunity for check challenge
+         * @param longSenderProgress it's last element of "Sender Progress" (api: 'at"). We are can
+         *                           take in from ChallengeController -> GenerateCardsForMainActivity()
+         *                           method. We use it for compare.
+         * @param checkInPlusOneDay it's parsed long of 'longSenderProgress' plus one day in seconds.
+         *                          We use it to give the user time for relaxing. If current time
+         *                          more than checkInPlusOneDay then we make button "doneForToday"
+         *                          isActive and now we are ready to rewrite our 'senderProgress'
+         * @param checkInPlusOneDayAndHour it's parsed long of 'longSenderProgress' plus one day and
+         *                                 one hour in seconds. We use it to give user time for press
+         *                                 the button "done for today". If user did it then we are
+         *                                 rewrite senderProgress and make the button "doneForToday"
+         *                                 not active, else - autoSurrender
+         */
+        if (checkInPlusOneDayAndHour != 0 && now > checkInPlusOneDay) {
+            if (!itemType.equals("Wake Up")) {
                 tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
                 buttonShare.setVisibility(View.INVISIBLE);
                 buttonDone.setVisibility(View.VISIBLE);
-                if (now > checkInPlusOneDayAndHour) {
-                    Log.i(TAG, "getView: now > checkInPlusOneDayAndHour");
-                    try {
-                        if (itemType.equals("Wake Up")) {
-                            int i = Integer.parseInt(currentCard.getWakeUpTime());
-                            cc.give_up(itemInProgressId, i, token, userId);
-                        } else cc.give_up(itemInProgressId, 0, token, userId);
-                    } catch (IOException | NumberFormatException e) { e.printStackTrace(); }
-                } else Log.i(TAG, "getView: now > checkInPlusOneDay, but < checkInPlusOneDayAndHour");
-            } else  Log.i(TAG, "getView: now < checkInPlusOneDay");
+            }
+            if (now > checkInPlusOneDayAndHour) {
+                try {
+                    if (itemType.equals("Wake Up")) {
+                        int i = Integer.parseInt(currentCard.getWakeUpTime());
+                        cc.give_up(itemInProgressId, i, token, userId);
+                    } else cc.give_up(itemInProgressId, 0, token, userId);
+                } catch (IOException | NumberFormatException e) { e.printStackTrace(); }
+            }
         }
 
 
