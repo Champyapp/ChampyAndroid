@@ -59,8 +59,9 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
+    public static final String TAG = "LoginActivity";
     private AccessTokenTracker mTokenTracker;
     private ProfileTracker mProfileTracker;
     private CallbackManager mCallbackManager;
@@ -69,38 +70,27 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        final SessionManager sessionManager = new SessionManager(getApplicationContext());
-//        if (sessionManager.isUserLoggedIn()) {
-//            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//            startActivity(intent);
-//        }
         FacebookSdk.sdkInitialize(getApplicationContext());
         try {
             PackageInfo info = getPackageManager().getPackageInfo("com.facebook.samples.hellofacebook", PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
-                Log.d("LoginActivity", "KeyHash: " + Base64.encodeToString(md.digest(), Base64.DEFAULT));
+                Log.d(TAG, "KeyHash: " + Base64.encodeToString(md.digest(), Base64.DEFAULT));
             }
         } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
-            Log.d("LoginActivity", "KeyHash: not working" );
+            Log.d(TAG, "KeyHash: not working" );
         }
         setContentView(R.layout.activity_login);
 
-        try {
-            initLayout();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        try { initLayout();} catch (IOException e) { e.printStackTrace(); }
 
         mCallbackManager = CallbackManager.Factory.create();
         mTokenTracker  = new AccessTokenTracker() {
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldToken, AccessToken newToken) {
-                if (newToken == null) {
-                }
-                else {
-                }
+                String log = (newToken == null) ? "newToken = null" : "newToken != null";
+                Log.i(TAG, log);
             }
         };
         mProfileTracker = new ProfileTracker() {
@@ -114,92 +104,82 @@ public class LoginActivity extends AppCompatActivity {
         };
         mTokenTracker.startTracking();
         mProfileTracker.startTracking();
-
         TextView textView = (TextView)findViewById(R.id.login_text);
         Typeface typeface = Typeface.createFromAsset(LoginActivity.this.getAssets(), "fonts/bebasneue.ttf");
         textView.setTypeface(typeface);
-
-        //Log.i("KeyHash", "trying");
         ImageButton button = (ImageButton)findViewById(R.id.login_button);
-        View.OnClickListener onClickListener = new View.OnClickListener() {
+        button.setOnClickListener(this);
+        ViewServer.get(this).addWindow(this);
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        OfflineMode offlineMode = new OfflineMode();
+        Activity activity = LoginActivity.this;
+        offlineMode.isConnectedToRemoteAPI(activity);
+        LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile, email, user_friends"));
+        LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
-            public void onClick(View v) {
-                Activity activity = LoginActivity.this;
-                OfflineMode offlineMode = new OfflineMode();
-                offlineMode.isConnectedToRemoteAPI(activity);
-                LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile, email, user_friends"));
-                LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
-                   @Override
-                    public void onSuccess(LoginResult loginResult) {
-                        final AccessToken accessToken = loginResult.getAccessToken();
-                        Profile profile = Profile.getCurrentProfile();
-                        //final String[] URL = {""};
-                        GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
-                            @Override
-                            public void onCompleted(JSONObject object, GraphResponse response) {
+            public void onSuccess(LoginResult loginResult) {
+                GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject jsonObject, GraphResponse response) {
+                        try {
+                            user_email = jsonObject.getString("email");
+                            fb_id = jsonObject.getString("id");
+                            name = jsonObject.getString("first_name") + " " + jsonObject.getString("last_name");
+                            Log.i(TAG, "UserEmail: " + user_email);
+                            Log.i(TAG, "UserName: " + name);
+                            Log.i(TAG, "Facebook: " + fb_id);
+                            try {
+                                URL profile_pic = new URL("https://g...content-available-to-author-only...k.com/" + fb_id + "/picture?type=large");
+                                path_to_pic = profile_pic.toString();
+                                Log.i(TAG, "PathToPic: " + path_to_pic);
+                            } catch (MalformedURLException e) { e.printStackTrace(); }
 
-                                try {
-                                    user_email = object.getString("email");
-                                    fb_id = object.getString("id");
-                                    name = object.getString("first_name") + " " + object.getString("last_name");
-                                    Log.i("LoginActivity", "UserEmail: " + user_email);
-                                    Log.i("LoginActivity", "UserName: " + name);
-                                    Log.i("LoginActivity", "Facebook: " + fb_id);
+                            Runnable runnable = new Runnable() {
+                                @Override
+                                public void run() {
                                     try {
-                                        URL profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
-                                        path_to_pic = profile_pic.toString();
-                                        Log.i("LoginActivity", "PathToPic: " + path_to_pic);
-                                        } catch (MalformedURLException e) {
-                                            e.printStackTrace();
-                                        }
-                                    new Thread(new Runnable() {
-                                        public void run() {
-                                            try {
-                                                String token_android;
-                                                InstanceID instanceID = InstanceID.getInstance(LoginActivity.this);
-                                                token_android = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+                                        String token_android;
+                                        InstanceID instanceID = InstanceID.getInstance(LoginActivity.this);
+                                        token_android = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
 
-                                                JSONObject jsonObject = new JSONObject();
-                                                jsonObject.put("token", token_android);
-                                                jsonObject.put("timeZone", "-2");
-                                                String json = jsonObject.toString();
-                                                Log.i("LoginActivity", "JSON: " + json);
-                                                Log.i("LoginActivity", "GCM: "  + token_android);
+                                        JSONObject jsonObject = new JSONObject();
+                                        jsonObject.put("token", token_android);
+                                        jsonObject.put("timeZone", "-2");
+                                        String json = jsonObject.toString();
 
-                                                getUserData(fb_id, path_to_pic, json);
-                                                registerUser(fb_id, name, user_email, json);
+                                        Log.i(TAG, "JSON: " + json);
+                                        Log.i(TAG, "GCM: "  + token_android);
 
-                                            } catch (Exception e) {
-                                                Log.i("LoginActivity", "Failed to complete token refresh", e);
-                                            }
-                                        }
-                                    }).start();
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                                        getUserData(fb_id, path_to_pic, json);
+                                        registerUser(fb_id, name, user_email, json);
+
+                                    } catch (Exception e) { Log.i(TAG, "Failed to complete token refresh", e); }
                                 }
-                            }
-                        });
-                        Bundle parameters = new Bundle();
-                        parameters.putString("fields", "id, first_name, last_name, email,gender, birthday, location");
-                        request.setParameters(parameters);
-                        request.executeAsync();
+                            };
+                            new Thread(runnable).start();
 
-                    }
-
-                    @Override
-                    public void onCancel() {
-                        // App code
-                    }
-
-                    @Override
-                    public void onError(FacebookException exception) {
-                        // App code
+                        } catch (JSONException e) { e.printStackTrace(); }
                     }
                 });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id, first_name, last_name, email,gender, birthday, location");
+                request.setParameters(parameters);
+                request.executeAsync();
+
             }
-        };
-        button.setOnClickListener(onClickListener);
-        ViewServer.get(this).addWindow(this);
+
+            @Override
+            public void onCancel() {
+                Log.i(TAG, "onCancel: canceled login");
+            }
+
+            @Override
+            public void onError(FacebookException exception) { Log.i(TAG, "onError: " + exception); }
+        });
     }
 
 
@@ -242,9 +222,15 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    public void initLayout() throws IOException {
-        CHInitializeLogin CHInitializeLogin = new CHInitializeLogin(this, getApplicationContext(), new CHImageModule(getApplicationContext()));
-        CHInitializeLogin.Init();
+    private void initLayout() throws IOException {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Activity activity = LoginActivity.this;
+                CHInitializeLogin CHInitializeLogin = new CHInitializeLogin(activity, getApplicationContext(), new CHImageModule(getApplicationContext()));
+                CHInitializeLogin.Init();
+            }
+        });
     }
 
 
@@ -264,59 +250,53 @@ public class LoginActivity extends AppCompatActivity {
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
-                Log.d("LoginActivity", "Response Status: register " + response.code());
+                Log.d(TAG, "Response Status: register " + response.code());
                 User decodedResponse = response.body();
                 if (response.isSuccess()) {
-                    if (response.isSuccess()) {
-                    /* Log.d("TAG", "Status: " + decodedResponse.getDescription());
-                    Log.d("TAG", "Status: "+jwtString);*/
-                        String token_android;
+                    String token_android;
 
-                        Data data = decodedResponse.getData(); // data == user
-                        String email = data.getEmail();
-                        String user_name = data.getName();
-                        String id = data.get_id();
-                        String pushN = data.getProfileOptions().getPushNotifications().toString();
-                        String newChallReq = data.getProfileOptions().getNewChallengeRequests().toString();
-                        String acceptedYour = data.getProfileOptions().getAcceptedYourChallenge().toString();
-                        String challegeEnd = data.getProfileOptions().getChallengeEnd().toString();
-                        //Log.d("LoginActivity", "ID: " + id);
-                        //Log.d("LoginActivity", "FB: " + fb_id);
+                    Data data = decodedResponse.getData(); // data == user
+                    String email = data.getEmail();
+                    String user_name = data.getName();
+                    String id = data.get_id();
+                    String pushN = data.getProfileOptions().getPushNotifications().toString();
+                    String newChallReq = data.getProfileOptions().getNewChallengeRequests().toString();
+                    String acceptedYour = data.getProfileOptions().getAcceptedYourChallenge().toString();
+                    String challegeEnd = data.getProfileOptions().getChallengeEnd().toString();
 
-                        // "http://graph.facebook.com/" + fb_id + "/picture?type=large&redirect=true&width=500&height=500"
-                        SessionManager sessionManager = new SessionManager(getApplicationContext());
-                        sessionManager.setRefreshPending("false");
-                        sessionManager.setRefreshFriends("false");
-                        sessionManager.createUserLoginSession(user_name, email, fb_id, path_to_pic, jwtString, id, pushN, newChallReq, acceptedYour, challegeEnd, "true", gcm);
-                        sessionManager.setChampyOptions(
-                                data.getAllChallengesCount().toString(),
-                                data.getSuccessChallenges().toString(),
-                                data.getInProgressChallengesCount().toString(),
-                                data.getLevel().getNumber().toString());
-                        String api_path = null;
-                        if (data.getPhoto() != null) {
-                            String path =  "/data/data/com.example.ivan.champy_v2/app_imageDir/";
-                            File f = new File(path, "profile.jpg");
-                            if (!f.exists()) {
-                                com.example.ivan.champy_v2.model.User.Photo photo = data.getPhoto();
-                                api_path = API_URL + photo.getLarge();
-                            }
+                    SessionManager sessionManager = new SessionManager(getApplicationContext());
+                    sessionManager.setRefreshPending("false");
+                    sessionManager.setRefreshFriends("false");
+                    sessionManager.createUserLoginSession(user_name, email, fb_id, path_to_pic, jwtString, id, pushN, newChallReq, acceptedYour, challegeEnd, "true", gcm);
+                    sessionManager.setChampyOptions(
+                            data.getAllChallengesCount().toString(),
+                            data.getSuccessChallenges().toString(),
+                            data.getInProgressChallengesCount().toString(),
+                            data.getLevel().getNumber().toString());
+                    String api_path = null;
+                    if (data.getPhoto() != null) {
+                        // Context.getFilesDir().getPath()
+                        String path =  "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+                        File f = new File(path, "profile.jpg");
+                        if (!f.exists()) {
+                            com.example.ivan.champy_v2.model.User.Photo photo = data.getPhoto();
+                            api_path = API_URL + photo.getLarge();
                         }
-                        Intent intent = new Intent(LoginActivity.this, RoleControllerActivity.class);
-                        if (api_path == null) intent.putExtra("path_to_pic", path_to_pic);
-                        else {
-                            intent.putExtra("path_to_pic", api_path);
-                            sessionManager.change_avatar(api_path);
-                        }
-                        intent.putExtra("name", user_name);
-                        startActivity(intent);
                     }
+                    Intent intent = new Intent(LoginActivity.this, RoleControllerActivity.class);
+                    if (api_path == null) intent.putExtra("path_to_pic", path_to_pic);
+                    else {
+                        intent.putExtra("path_to_pic", api_path);
+                        sessionManager.change_avatar(api_path);
+                    }
+                    intent.putExtra("name", user_name);
+                    startActivity(intent);
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Log.d("LoginActivity", "VSE huynya");
+                Log.d(TAG, "VSE huynya: " + t);
             }
         });
 
