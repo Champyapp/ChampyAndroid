@@ -48,6 +48,7 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
+import static java.lang.Math.log;
 import static java.lang.Math.round;
 
 public class AppSync {
@@ -85,7 +86,7 @@ public class AppSync {
         final String gcm = this.gcm;
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
-        Log.i("AppSync", "TOKEN: " + jwtString);
+        //Log.i(TAG, "TOKEN: " + jwtString);
 
         NewUser newUser = retrofit.create(NewUser.class);
 
@@ -95,6 +96,7 @@ public class AppSync {
             public void onResponse(Response<User> response, Retrofit retrofit) {
                 User decodedResponse = response.body();
                 if (response.isSuccess()) {
+                    Log.i(TAG, "onResponse: Success" + response.isSuccess());
                     Data data = decodedResponse.getData();
                     String email = data.getEmail();
                     final String user_name = data.getName();
@@ -131,27 +133,37 @@ public class AppSync {
                     getUserFriendsInfo(gcm);
 
                     String api_path;
-                    if (data.getPhoto() != null){
+                    Log.i(TAG, "log before our if");
+                    if (data.getPhoto() != null) {
+                        Log.i(TAG, "GetUserPhoto: data.getPhoto() != null");
                         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
                         File file = new File(path, "profile.jpg");
                         if (!file.exists()){
+                            Log.i(TAG, "GetUserPhoto: User photo not exist");
                             com.example.ivan.champy_v2.model.User.Photo photo = data.getPhoto();
                             api_path = API_URL + photo.getLarge();
-                            Log.i("AppSync", "GetUserPhoto: " + api_path);
+                            Log.i(TAG, "GetUserPhoto: " + api_path);
                         } else {
-                            Log.i("AppSync", "GetUserPhoto: User photo already exist");
+                            Log.i(TAG, "GetUserPhoto: User photo already exist");
                         }
+                    } else {
+                        Log.i(TAG, "GetUserPhoto: data.getPhoto() == null");
                     }
+
+                    CHUploadPhoto chUploadPhoto = new CHUploadPhoto(context);
+                    chUploadPhoto.uploadPhotoForAPI(path_to_pic);
 
                     Intent goToRoleActivity = new Intent(context, RoleControllerActivity.class);
                     context.startActivity(goToRoleActivity);
 
+                } else {
+                    Log.i(TAG, "onResponse: failed " + response.message());
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Log.d("TAG", "VSE huynya");
+                Log.d(TAG, "VSE huynya");
             }
         });
 

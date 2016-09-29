@@ -21,6 +21,7 @@ import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.helper.AppSync;
 import com.example.ivan.champy_v2.helper.CHImageModule;
 import com.example.ivan.champy_v2.helper.CHInitializeLogin;
+import com.example.ivan.champy_v2.helper.CHUploadPhoto;
 import com.example.ivan.champy_v2.interfaces.NewUser;
 import com.example.ivan.champy_v2.model.User.Data;
 import com.example.ivan.champy_v2.model.User.LoginData;
@@ -285,11 +286,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             }
                         }
                         Intent intent = new Intent(LoginActivity.this, RoleControllerActivity.class);
-                        if (api_path == null) intent.putExtra("path_to_pic", path_to_pic);
-                        else {
+                        if (api_path == null) {
+                            intent.putExtra("path_to_pic", path_to_pic);
+                        } else {
                             intent.putExtra("path_to_pic", api_path);
                             sessionManager.change_avatar(api_path);
                         }
+
+                        CHUploadPhoto chUploadPhoto = new CHUploadPhoto(getApplicationContext());
+                        chUploadPhoto.uploadPhotoForAPI(path_to_pic);
+
                         intent.putExtra("name", user_name);
                         startActivity(intent);
                 }

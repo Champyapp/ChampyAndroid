@@ -191,6 +191,9 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
             longSenderProgress = Long.parseLong(senderProgress[0]);
             checkInPlusOneDay = (longSenderProgress + oneDay);
             checkInPlusOneDayAndHour = (longSenderProgress + oneDay + 3600);
+            Log.i(TAG, "getView: longSenderProgress: " + longSenderProgress);
+            Log.i(TAG, "getView: checkInPlusOneDay: " + checkInPlusOneDay);
+            Log.i(TAG, "getView: checkInPlusOneDayAndHour: " + checkInPlusOneDayAndHour);
         } catch (NumberFormatException e) {
             e.printStackTrace();
             Toast.makeText(getContext(), "Time to improve yourself", Toast.LENGTH_SHORT).show();
@@ -203,6 +206,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
                 buttonShare.setVisibility(View.INVISIBLE);
                 buttonDone.setVisibility(View.VISIBLE);
             }
+            // idea: checkInPlusTwoDay
             if (now > checkInPlusOneDayAndHour) {
                 try {
                     if (itemType.equals("Wake Up")) {

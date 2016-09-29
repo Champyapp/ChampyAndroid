@@ -280,8 +280,7 @@ public class PhotoActivity extends AppCompatActivity {
 
         File f = new File(path);
 
-        RequestBody requestBody =
-                RequestBody.create(MediaType.parse("image/jpeg"), f);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), f);
 
         Update_user update_user = retrofit.create(Update_user.class);
         Call<User> call = update_user.update_photo(id, token, requestBody);
