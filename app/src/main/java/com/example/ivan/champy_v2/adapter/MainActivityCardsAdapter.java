@@ -129,51 +129,60 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
         token  = user.getToken();
 
         long now = Calendar.getInstance().getTimeInMillis() / 1000;
-        long checkInPlusOneDay = 0;
         long longSenderProgress = 0;
-        long checkInPlusOneDayAndHour = 0;
+        long lastCheckInPlusOdds = 0;
         final long oneDay = 86400L;
 //        Log.i(TAG, "getView: longSenderProgress when create: " + longSenderProgress);
 //        Log.i(TAG, "getView: long currentTime   when create: " + longCurrentTime);
         try {
             longSenderProgress = Long.parseLong(senderProgress[0]);
-            checkInPlusOneDay = (longSenderProgress + oneDay);
-            checkInPlusOneDayAndHour = (longSenderProgress + oneDay + 3600);
+
+            long odds = now - Long.parseLong(senderProgress[0]); // 24h - 9h = 15h to endOfTheDay
+            lastCheckInPlusOdds = (longSenderProgress + odds); // check at 16h + odds 8h = endOfDay;
+
+            Log.i(TAG, "getView TRY: longSenderProgress: " + longSenderProgress);
+            Log.i(TAG, "getView TRY: odds: " + odds);
+            Log.i(TAG, "getView TRY: lastCheckInPlusOdds: " + lastCheckInPlusOdds);
         } catch (NumberFormatException e) {
             e.printStackTrace();
             Toast.makeText(getContext(), "Time to improve yourself", Toast.LENGTH_SHORT).show();
         }
 
-        /**
-         * My algorithm for displaying buttons inside cards view and opportunity for check challenge
-         * @param longSenderProgress it's last element of "Sender Progress" (api: 'at"). We are can
-         *                           take in from ChallengeController -> GenerateCardsForMainActivity()
-         *                           method. We use it for compare.
-         * @param checkInPlusOneDay it's parsed long of 'longSenderProgress' plus one day in seconds.
-         *                          We use it to give the user time for relaxing. If current time
-         *                          more than checkInPlusOneDay then we make button "doneForToday"
-         *                          isActive and now we are ready to rewrite our 'senderProgress'
-         * @param checkInPlusOneDayAndHour it's parsed long of 'longSenderProgress' plus one day and
-         *                                 one hour in seconds. We use it to give user time for press
-         *                                 the button "done for today". If user did it then we are
-         *                                 rewrite senderProgress and make the button "doneForToday"
-         *                                 not active, else - autoSurrender
-         */
-        if (checkInPlusOneDayAndHour != 0 && now > checkInPlusOneDay) {
+//        /**
+//         * My algorithm for displaying buttons inside cards view and opportunity for check challenge
+//         * @param longSenderProgress it's last element of "Sender Progress" (api: 'at"). We are can
+//         *                           take in from ChallengeController -> GenerateCardsForMainActivity()
+//         *                           method. We use it for compare.
+//         * @param checkInPlusOneDay it's parsed long of 'longSenderProgress' plus one day in seconds.
+//         *                          We use it to give the user time for relaxing. If current time
+//         *                          more than checkInPlusOneDay then we make button "doneForToday"
+//         *                          isActive and now we are ready to rewrite our 'senderProgress'
+//         * @param checkInPlusOneDayAndHour it's parsed long of 'longSenderProgress' plus one day and
+//         *                                 one hour in seconds. We use it to give user time for press
+//         *                                 the button "done for today". If user did it then we are
+//         *                                 rewrite senderProgress and make the button "doneForToday"
+//         *                                 not active, else - autoSurrender
+//         */
+
+        //                          now > end of the day
+        if (longSenderProgress != 0 && now > lastCheckInPlusOdds) {
+            Log.i(TAG, "getView: now > lastCheckInPlusOdds (" + now + " > " + lastCheckInPlusOdds + ")");
             if (!itemType.equals("Wake Up")) {
                 tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
                 buttonShare.setVisibility(View.INVISIBLE);
                 buttonDone.setVisibility(View.VISIBLE);
             }
-            if (now > checkInPlusOneDayAndHour) {
+            //  now > endOfTheDay + 24 hours
+            if (now > lastCheckInPlusOdds + oneDay) {
+                Log.i(TAG, "getView: now > lastCheckInPlusOdds (" + now + " > " + lastCheckInPlusOdds + ")\n" + "AND now > lastCheckInPlusOdds + oneDay (" + now + " > " + lastCheckInPlusOdds + " + " + oneDay + ")");
                 try {
                     if (itemType.equals("Wake Up")) {
                         int i = Integer.parseInt(currentCard.getWakeUpTime());
                         cc.give_up(itemInProgressId, i, token, userId);
                     } else cc.give_up(itemInProgressId, 0, token, userId);
                 } catch (IOException | NumberFormatException e) { e.printStackTrace(); }
-            }
-        }
+            } else Log.i(TAG, "getView: now > lastCheckInPlusOdds (" + now + " > " + lastCheckInPlusOdds + ")\n"+ "BUT now < lastCheckInPlusOdds + oneDay (" + now + " < " + lastCheckInPlusOdds + " + " + oneDay + ")");
+        } else Log.i(TAG, "getView: senderProgress = 0 OR now < lastCheckInPlusOdds (" + now + " < " + lastCheckInPlusOdds + ")");
 
 
 

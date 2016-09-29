@@ -22,9 +22,7 @@ public class Blur {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Bitmap bitmap = Bitmap.createBitmap(
-                smallBitmap.getWidth(), smallBitmap.getHeight(),
-                Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(smallBitmap.getWidth(), smallBitmap.getHeight(), Bitmap.Config.ARGB_8888);
 
         RenderScript renderScript = RenderScript.create(context);
 
