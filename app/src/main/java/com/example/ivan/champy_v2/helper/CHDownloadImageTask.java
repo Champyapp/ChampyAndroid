@@ -77,7 +77,6 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
             bitmapImage.compress(Bitmap.CompressFormat.JPEG, 90, out);
             out.flush();
             out.close();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -155,9 +154,7 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
                 screen.setImageDrawable(ob);
             }
         }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        catch (IOException e) {
             e.printStackTrace();
         }
 

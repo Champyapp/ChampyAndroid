@@ -46,15 +46,18 @@ public class CHUploadPhoto {
 
         Update_user update_user = retrofit.create(Update_user.class);
         Call<User> call = update_user.update_photo(id, token, requestBody);
-        Log.d(TAG, "Status: RUN");
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
-                if (response.isSuccess()) { Log.d(TAG, "Status: photo_uploaded");}
-                else Log.d(TAG, "Status :" + response.code()); }
+
+                if (response.isSuccess()) { Log.d(TAG, "Status: Success photo_uploaded");}
+                else Log.d(TAG, "Status failed:" + response.code()); }
 
             @Override
-            public void onFailure(Throwable t) {Log.d(TAG, "Status: "+t); }
+            public void onFailure(Throwable t) {Log.d(TAG, "Status: vse hyunya: " + t ); }
         });
+
+        Log.i(TAG, "uploadPhotoForAPI: ID: " + id);
+        Log.i(TAG, "uploadPhotoForAPI: requestBody: " + requestBody);
     }
 }

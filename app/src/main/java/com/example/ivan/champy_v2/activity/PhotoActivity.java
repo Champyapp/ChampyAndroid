@@ -20,6 +20,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.ivan.champy_v2.Blur;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.helper.CHUploadPhoto;
 import com.example.ivan.champy_v2.interfaces.Update_user;
 import com.example.ivan.champy_v2.model.User.User;
 import com.soundcloud.android.crop.Crop;
@@ -47,6 +48,7 @@ public class PhotoActivity extends AppCompatActivity {
     private ImageView imageView;
     private Uri picUri;
     public final String TAG = "myLogs";
+    CHUploadPhoto uploadPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +60,7 @@ public class PhotoActivity extends AppCompatActivity {
         Uri url = Uri.fromFile(file);
 
         Glide.with(this).load(url).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).centerCrop().into((ImageView) findViewById(R.id.photo));
-
+        uploadPhoto = new CHUploadPhoto(getApplicationContext());
         this.imageView = (ImageView)this.findViewById(R.id.photo);
         TextView camera = (TextView)findViewById(R.id.camera);
         camera.setOnClickListener(new View.OnClickListener() {
@@ -87,7 +89,7 @@ public class PhotoActivity extends AppCompatActivity {
                 // get the cropped bitmap
                 Bitmap thePic = extras.getParcelable("data");
                 savePhoto(thePic);
-                Upload_photo(SaveFromCamera(thePic));
+                uploadPhoto.uploadPhotoForAPI(SaveFromCamera(thePic));
                 Intent intent = new Intent(PhotoActivity.this, SettingsActivity.class);
                 startActivity(intent);
                 Toast.makeText(getApplicationContext(), "Changed", Toast.LENGTH_SHORT).show();
@@ -157,7 +159,7 @@ public class PhotoActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            Upload_photo(path);
+            uploadPhoto.uploadPhotoForAPI(path);
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),uri);
             savePhoto(bitmap);
             Intent intent = new Intent(PhotoActivity.this, SettingsActivity.class);
@@ -169,7 +171,6 @@ public class PhotoActivity extends AppCompatActivity {
 
 
     private String SaveFromCamera(Bitmap finalBitmap) {
-
         String root = Environment.getExternalStorageDirectory().toString();
         File myDir = new File(root + "/saved_images");
         myDir.mkdirs();
@@ -184,7 +185,6 @@ public class PhotoActivity extends AppCompatActivity {
             finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
             out.flush();
             out.close();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -197,14 +197,10 @@ public class PhotoActivity extends AppCompatActivity {
         File file = new File(path, "profile.jpg");
         File file1 = new File(path, "blured2.jpg");
         Uri uri = Uri.fromFile(file);
-
         Blur blur = new Blur();
-
         Bitmap blured = blur.blurRenderScript(getApplicationContext(), photo, 10);
-
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         sessionManager.change_avatar(uri.toString());
-
         FileOutputStream out = null;
         try {
             out = new FileOutputStream(file1);
@@ -221,7 +217,7 @@ public class PhotoActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-      out = null;
+        out = null;
         try {
             out = new FileOutputStream(file);
             photo.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
@@ -269,32 +265,31 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
 
-    public void Upload_photo(String path) {
-        final String API_URL = "http://46.101.213.24:3007";
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        SessionManager sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user = new HashMap<>();
-        user = sessionManager.getUserDetails();
-        String token = user.get("token");
-        String id = user.get("id");
-
-        File f = new File(path);
-
-        RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), f);
-
-        Update_user update_user = retrofit.create(Update_user.class);
-        Call<User> call = update_user.update_photo(id, token, requestBody);
-        Log.d(TAG, "Status: RUN");
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Response<User> response, Retrofit retrofit) {
-                if (response.isSuccess()) { Log.d(TAG, "Status: photo_uploaded");}
-                else Log.d(TAG, "Status :" + response.code()); }
-
-            @Override
-            public void onFailure(Throwable t) {Log.d(TAG, "Status: "+t); }
-        });
-    }
+//    public void Upload_photo(String path) {
+//        final String API_URL = "http://46.101.213.24:3007";
+//        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+//        SessionManager sessionManager = new SessionManager(getApplicationContext());
+//        HashMap<String, String> user;
+//        user = sessionManager.getUserDetails();
+//        String token = user.get("token");
+//        String id = user.get("id");
+//
+//        File f = new File(path);
+//
+//        RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), f);
+//
+//        Update_user update_user = retrofit.create(Update_user.class);
+//        Call<User> call = update_user.update_photo(id, token, requestBody);
+//        call.enqueue(new Callback<User>() {
+//            @Override
+//            public void onResponse(Response<User> response, Retrofit retrofit) {
+//                if (response.isSuccess()) { Log.d(TAG, "Status: Success photo_uploaded");}
+//                else Log.d(TAG, "Status failed:" + response.code()); }
+//
+//            @Override
+//            public void onFailure(Throwable t) {Log.d(TAG, "Status: vse hyunya: " + t ); }
+//        });
+//    }
 
 
 }

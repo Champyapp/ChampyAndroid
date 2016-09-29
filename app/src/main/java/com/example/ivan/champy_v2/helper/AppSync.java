@@ -145,13 +145,11 @@ public class AppSync {
                             Log.i(TAG, "GetUserPhoto: " + api_path);
                         } else {
                             Log.i(TAG, "GetUserPhoto: User photo already exist");
+                            // фото є і її треба брати?
                         }
                     } else {
                         Log.i(TAG, "GetUserPhoto: data.getPhoto() == null");
                     }
-
-                    CHUploadPhoto chUploadPhoto = new CHUploadPhoto(context);
-                    chUploadPhoto.uploadPhotoForAPI(path_to_pic);
 
                     Intent goToRoleActivity = new Intent(context, RoleControllerActivity.class);
                     context.startActivity(goToRoleActivity);
