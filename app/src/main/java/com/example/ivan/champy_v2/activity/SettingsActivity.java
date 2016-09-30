@@ -107,7 +107,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         map.put("friendRequests", "true");
         map.put("challengeConfirmation", "true");
         map.put("challengeEnd", challengeEnd);
-        map.put("reminderTime", "17");
+        map.put("reminderTime", "17"); // mb 10?
         map.put("challengesForToday", "true");
         map.put("acceptedYourChallenge", acceptedYour);
         map.put("newChallengeRequests", newChallReq);

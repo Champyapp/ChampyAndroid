@@ -73,7 +73,6 @@ public class AppSync {
         jsonObject.put("facebookId", fb_id);
         jsonObject.put("AndroidOS", gcm);
         String string = jsonObject.toString();
-        //Log.i("AppSync", "getToken: " + jwtString);
         return Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
     }
 
@@ -84,8 +83,6 @@ public class AppSync {
         final String path_to_pic = this.path;
         final String gcm = this.gcm;
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-
-        //Log.i(TAG, "TOKEN: " + jwtString);
 
         NewUser newUser = retrofit.create(NewUser.class);
 
@@ -129,20 +126,22 @@ public class AppSync {
                     getUserPending(userId);
                     getUserFriendsInfo(gcm);
 
-                    String api_path;
+                    // i changed this
+                    String api_path = "";
+                    if (data.getPhoto() == null) {
+                        String path =  "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+                        File file = new File(path, "profile.jpg");
+                        if (!file.exists()) {
+                            com.example.ivan.champy_v2.model.User.Photo photo = data.getPhoto();
+                            api_path = API_URL + photo.getLarge();
+                            CHUploadPhoto chUploadPhoto = new CHUploadPhoto(context);
+                            chUploadPhoto.uploadPhotoForAPI(api_path);
+                        }
+                    }
 
-//                    if (data.getPhoto() != null) {
-//                        Log.i(TAG, "GetUserPhoto: data.getPhoto() != null");
-//                        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
-//                        File file = new File(path, "profile.jpg");
-//                        if (!file.exists()){
-//                            Log.i(TAG, "GetUserPhoto: User photo not exist");
-//                            com.example.ivan.champy_v2.model.User.Photo photo = data.getPhoto();
-//                            api_path = API_URL + photo.getLarge();
-//                            Log.i(TAG, "GetUserPhoto: " + api_path);
-//                        } else Log.i(TAG, "GetUserPhoto: User photo already exist");
-//                    } else Log.i(TAG, "GetUserPhoto: data.getPhoto() == null");
 
+                    NotificationController controller = new NotificationController(context);
+                    controller.activateDailyNotificationReminder();
 
                     Intent goToRoleActivity = new Intent(context, RoleControllerActivity.class);
                     context.startActivity(goToRoleActivity);

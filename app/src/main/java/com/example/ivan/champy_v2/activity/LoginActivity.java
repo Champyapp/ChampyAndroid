@@ -22,6 +22,7 @@ import com.example.ivan.champy_v2.helper.AppSync;
 import com.example.ivan.champy_v2.helper.CHImageModule;
 import com.example.ivan.champy_v2.helper.CHInitializeLogin;
 import com.example.ivan.champy_v2.helper.CHUploadPhoto;
+import com.example.ivan.champy_v2.helper.NotificationController;
 import com.example.ivan.champy_v2.interfaces.NewUser;
 import com.example.ivan.champy_v2.model.User.Data;
 import com.example.ivan.champy_v2.model.User.LoginData;
@@ -258,54 +259,51 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Log.d(TAG, "Response Status: register " + response.code());
                 User decodedResponse = response.body();
                 if (response.isSuccess()) {
-                        String token_android;
+                    Data user = decodedResponse.getData(); // data == user
+                    String email = user.getEmail();
+                    String user_name = user.getName();
+                    String id = user.get_id();
+                    String pushN = user.getProfileOptions().getPushNotifications().toString();
+                    String newChallReq = user.getProfileOptions().getNewChallengeRequests().toString();
+                    String acceptedYour = user.getProfileOptions().getAcceptedYourChallenge().toString();
+                    String challegeEnd = user.getProfileOptions().getChallengeEnd().toString();
 
-                        Data data = decodedResponse.getData(); // data == user
-                        String email = data.getEmail();
-                        String user_name = data.getName();
-                        String id = data.get_id();
-                        String pushN = data.getProfileOptions().getPushNotifications().toString();
-                        String newChallReq = data.getProfileOptions().getNewChallengeRequests().toString();
-                        String acceptedYour = data.getProfileOptions().getAcceptedYourChallenge().toString();
-                        String challegeEnd = data.getProfileOptions().getChallengeEnd().toString();
-
-                        // "http://graph.facebook.com/" + fb_id + "/picture?type=large&redirect=true&width=500&height=500"
-                        SessionManager sessionManager = new SessionManager(getApplicationContext());
-                        sessionManager.setRefreshPending("false");
-                        sessionManager.setRefreshFriends("false");
-                        sessionManager.createUserLoginSession(user_name, email, fb_id, path_to_pic, jwtString, id, pushN, newChallReq, acceptedYour, challegeEnd, "true", gcm);
-                        sessionManager.setChampyOptions(
-                                data.getAllChallengesCount().toString(),
-                                data.getSuccessChallenges().toString(),
-                                data.getInProgressChallengesCount().toString(),
-                                data.getLevel().getNumber().toString());
+                    // "http://graph.facebook.com/" + fb_id + "/picture?type=large&redirect=true&width=500&height=500"
+                    SessionManager sessionManager = new SessionManager(getApplicationContext());
+                    sessionManager.setRefreshPending("false");
+                    sessionManager.setRefreshFriends("false");
+                    sessionManager.createUserLoginSession(user_name, email, fb_id, path_to_pic, jwtString, id, pushN, newChallReq, acceptedYour, challegeEnd, "true", gcm);
+                    sessionManager.setChampyOptions(
+                            user.getAllChallengesCount().toString(),
+                            user.getSuccessChallenges().toString(),
+                            user.getInProgressChallengesCount().toString(),
+                            user.getLevel().getNumber().toString());
 
 
-                        String api_path = null;
-                        if (data.getPhoto() == null) {
-                            Log.i(TAG, "data.getPhoto() != null");
-                            String path =  "/data/data/com.example.ivan.champy_v2/app_imageDir/";
-                            File file = new File(path, "profile.jpg");
-                            if (!file.exists()) {
-                                Log.i(TAG, "file not exist!");
-                                com.example.ivan.champy_v2.model.User.Photo photo = data.getPhoto();
-                                api_path = API_URL + photo.getLarge();
-
-                                CHUploadPhoto chUploadPhoto = new CHUploadPhoto(getApplicationContext());
-                                chUploadPhoto.uploadPhotoForAPI(api_path);
-                            } else Log.i(TAG, "File already exist!");
-                        } else Log.i(TAG, "data.getPhoto() = null");
-
-
-                        Intent intent = new Intent(LoginActivity.this, RoleControllerActivity.class);
-                        if (api_path == null) {
-                            intent.putExtra("path_to_pic", path_to_pic);
-                        } else {
-                            intent.putExtra("path_to_pic", api_path);
-                            sessionManager.change_avatar(api_path);
+                    String api_path = null;
+                    if (user.getPhoto() == null) {
+                        String path =  "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+                        File file = new File(path, "profile.jpg");
+                        if (!file.exists()) {
+                            com.example.ivan.champy_v2.model.User.Photo photo = user.getPhoto();
+                            api_path = API_URL + photo.getLarge();
+                            CHUploadPhoto chUploadPhoto = new CHUploadPhoto(getApplicationContext());
+                            chUploadPhoto.uploadPhotoForAPI(api_path);
                         }
-                        intent.putExtra("name", user_name);
-                        startActivity(intent);
+                    }
+
+                    NotificationController controller = new NotificationController(getApplicationContext());
+                    controller.activateDailyNotificationReminder();
+
+                    Intent intent = new Intent(LoginActivity.this, RoleControllerActivity.class);
+                    if (api_path == null) {
+                        intent.putExtra("path_to_pic", path_to_pic);
+                    } else {
+                        intent.putExtra("path_to_pic", api_path);
+                        sessionManager.change_avatar(api_path);
+                    }
+                    intent.putExtra("name", user_name);
+                    startActivity(intent);
                 }
             }
 

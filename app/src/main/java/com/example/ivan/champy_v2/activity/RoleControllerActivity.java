@@ -8,6 +8,7 @@ import android.util.Log;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
+import com.example.ivan.champy_v2.helper.NotificationController;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
@@ -35,20 +36,6 @@ public class RoleControllerActivity extends AppCompatActivity {
     };
 
 
-//    private Emitter.Listener onNewChallenge = new Emitter.Listener()  {
-//        @Override
-//        public void call(final Object... args) {
-//            String userId = user.get("id");
-//            Log.i("call", "call: new challenge request for duel 1");
-//            try {
-//                sync.getUserInProgressChallenges(userId);
-//                Log.i("call", "call: new challenge request for duel2");
-//            } catch (Exception e) {
-//                Log.i("call", "call: ERROR: " + e);
-//            }
-//        }
-//    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,11 +59,14 @@ public class RoleControllerActivity extends AppCompatActivity {
         } else {
             mSocket.off();
             mSocket.disconnect();
+            NotificationController controller = new NotificationController(getApplicationContext());
+            controller.deactivateDailyNotificationReminder();
             goToActivity = new Intent(this, LoginActivity.class);
             Log.i("RoleController", "Login Status: FALSE, go to LoginActivity...");
         }
         startActivity(goToActivity);
 
     }
+
 
 }

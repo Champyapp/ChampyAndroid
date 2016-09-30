@@ -87,8 +87,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             pager.preparePager(0);
         }
 
-        initNotificationReminder();
-
         final ImageButton actionButton = (ImageButton)findViewById(R.id.fabPlus);
         final SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
         buttonWakeUpChallenge = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeupcolor)).build();
@@ -157,9 +155,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             try {
                 background.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 background.setImageDrawable(initBackground(path));
-            }   catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            }   catch (FileNotFoundException e) { e.printStackTrace(); }
         else {
             CHDownloadImageTask chDownloadImageTask = new CHDownloadImageTask(getApplicationContext(), this);
             chDownloadImageTask.execute(path_to_pic);
@@ -313,19 +309,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.duel, menu);
         return true;
-    }
-
-
-    public void initNotificationReminder(){
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        Intent alarmIntent = new Intent(MainActivity.this, NotifyReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, alarmIntent, 0);
-
-        Calendar alarmStartTime = Calendar.getInstance();
-        alarmStartTime.set(Calendar.HOUR_OF_DAY, 12);
-        alarmStartTime.set(Calendar.MINUTE, 0);
-        alarmStartTime.set(Calendar.SECOND, 0);
-        alarmManager.setRepeating(AlarmManager.RTC, alarmStartTime.getTimeInMillis(), alarmManager.INTERVAL_DAY, pendingIntent);
     }
 
 
