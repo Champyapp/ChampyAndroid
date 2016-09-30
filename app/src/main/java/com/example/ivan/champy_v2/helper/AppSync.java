@@ -126,14 +126,13 @@ public class AppSync {
                      * поэтому здесь надо вызывать эти 2 метода. После вызывался отдельный метод
                      * который брал инфу про друзей. Сейчас мы вызываем его здесь.
                      */
-//                    ChallengeController cc = new ChallengeController(context, activity, 0, 0, 0);
-//                    cc.generateCardsForMainActivity();
+
                     getUserInProgressChallenges(userId);
                     getUserPending(userId);
                     getUserFriendsInfo(gcm);
 
                     String api_path;
-                    Log.i(TAG, "log before our if");
+
                     if (data.getPhoto() != null) {
                         Log.i(TAG, "GetUserPhoto: data.getPhoto() != null");
                         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
@@ -142,11 +141,12 @@ public class AppSync {
                             Log.i(TAG, "GetUserPhoto: User photo not exist");
                             com.example.ivan.champy_v2.model.User.Photo photo = data.getPhoto();
                             api_path = API_URL + photo.getLarge();
-                            Log.i(TAG, "GetUserPhoto: " + api_path);
                         } else {
                             Log.i(TAG, "GetUserPhoto: User photo already exist");
-                            // фото є і її треба брати?
+                            com.example.ivan.champy_v2.model.User.Photo photo = data.getPhoto();
+                            api_path = API_URL + photo.getLarge();
                         }
+                        Log.i(TAG, "GetUserPhoto: " + api_path);
                     } else {
                         Log.i(TAG, "GetUserPhoto: data.getPhoto() == null");
                     }

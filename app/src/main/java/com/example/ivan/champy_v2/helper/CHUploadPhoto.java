@@ -49,7 +49,6 @@ public class CHUploadPhoto {
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
-
                 if (response.isSuccess()) { Log.d(TAG, "Status: Success photo_uploaded");}
                 else Log.d(TAG, "Status failed:" + response.code()); }
 
@@ -57,7 +56,5 @@ public class CHUploadPhoto {
             public void onFailure(Throwable t) {Log.d(TAG, "Status: vse hyunya: " + t ); }
         });
 
-        Log.i(TAG, "uploadPhotoForAPI: ID: " + id);
-        Log.i(TAG, "uploadPhotoForAPI: requestBody: " + requestBody);
     }
 }

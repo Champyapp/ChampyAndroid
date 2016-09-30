@@ -45,7 +45,7 @@ public class PhotoActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST = 1888;
     private static final int SELECT_FILE = 1999;
     private static final int CROP_PIC = 1777;
-    private ImageView imageView;
+    private static final String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
     private Uri picUri;
     public final String TAG = "myLogs";
     CHUploadPhoto uploadPhoto;
@@ -55,13 +55,11 @@ public class PhotoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
 
-        final String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
 
         Glide.with(this).load(url).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).centerCrop().into((ImageView) findViewById(R.id.photo));
         uploadPhoto = new CHUploadPhoto(getApplicationContext());
-        this.imageView = (ImageView)this.findViewById(R.id.photo);
         TextView camera = (TextView)findViewById(R.id.camera);
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,36 +172,33 @@ public class PhotoActivity extends AppCompatActivity {
         String root = Environment.getExternalStorageDirectory().toString();
         File myDir = new File(root + "/saved_images");
         myDir.mkdirs();
-        Random generator = new Random();
+        Random random = new Random();
         int n = 10000;
-        n = generator.nextInt(n);
-        String fname = "Image-"+ n +".jpg";
-        File file = new File (myDir, fname);
+        n = random.nextInt(n);
+        String fileName = "Image-"+ n +".jpg";
+        File file = new File (myDir, fileName);
         if (file.exists ()) file.delete ();
         try {
             FileOutputStream out = new FileOutputStream(file);
             finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
             out.flush();
             out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { e.printStackTrace(); }
+
         return (Uri.fromFile(file).getPath());
     }
 
 
     public void savePhoto (Bitmap photo) {
-        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
-        File file = new File(path, "profile.jpg");
-        File file1 = new File(path, "blured2.jpg");
-        Uri uri = Uri.fromFile(file);
-        Blur blur = new Blur();
-        Bitmap blured = blur.blurRenderScript(getApplicationContext(), photo, 10);
+        File profile = new File(path, "profile.jpg");
+        File blured2 = new File(path, "blured2.jpg");
+        Uri uri = Uri.fromFile(profile);
+        Bitmap blured = Blur.blurRenderScript(getApplicationContext(), photo, 10);
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         sessionManager.change_avatar(uri.toString());
         FileOutputStream out = null;
         try {
-            out = new FileOutputStream(file1);
+            out = new FileOutputStream(blured2);
             blured.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
             // PNG is a lossless format, the compression factor (100) is ignored
         } catch (Exception e) {
@@ -219,7 +214,7 @@ public class PhotoActivity extends AppCompatActivity {
         }
         out = null;
         try {
-            out = new FileOutputStream(file);
+            out = new FileOutputStream(profile);
             photo.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
             // PNG is a lossless format, the compression factor (100) is ignored
         } catch (Exception e) {

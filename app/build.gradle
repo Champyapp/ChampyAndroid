@@ -98,6 +98,8 @@ dependencies {
     compile ('com.google.android.gms:play-services-gcm:8.3.0')  {
         exclude group: 'com.android.support', module: 'support-v4'
     }
+    // Download images
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     //gsm
     apply plugin: 'com.google.gms.google-services'
 }

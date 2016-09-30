@@ -35,7 +35,7 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
-    Context context;
+    private Context context;
     MainActivity activity;
 
     public CHDownloadImageTask(Context context, MainActivity activity) {
@@ -68,7 +68,7 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         int n = 10000;
         n = generator.nextInt(n);
         String fname = "Image-"+ n +".jpg";
-        File file = new File (myDir, fname);
+        File file = new File(myDir, fname);
         if (file.exists()) {
             file.delete();
         }
@@ -87,8 +87,8 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
 
         // Create imageDir
-        File myPath = new File(directory,"profile.jpg");
-        Log.i("DownloadImageTask", "saveToInternalStorage | PhotoPath: " + myPath.toString());
+        File myPath = new File(directory, "profile.jpg");
+        Log.i("DownloadImageTask", "PhotoPath: " + myPath.toString());
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(myPath);
@@ -144,9 +144,7 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
                 relativeLayout.setDrawingCacheEnabled(true);
                 relativeLayout.buildDrawingCache();
                 Bitmap bm = relativeLayout.getDrawingCache();
-
-                blur = new Blur();
-                blured = blur.blurRenderScript(context, bm, 25);
+                blured = Blur.blurRenderScript(context, bm, 25);
 
                 ImageView screen = (ImageView)activity.findViewById(R.id.blurScreen);
 

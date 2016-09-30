@@ -21,6 +21,7 @@ import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.helper.AppSync;
 import com.example.ivan.champy_v2.helper.CHImageModule;
 import com.example.ivan.champy_v2.helper.CHInitializeLogin;
+import com.example.ivan.champy_v2.helper.CHUploadPhoto;
 import com.example.ivan.champy_v2.interfaces.NewUser;
 import com.example.ivan.champy_v2.model.User.Data;
 import com.example.ivan.champy_v2.model.User.LoginData;
@@ -44,7 +45,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
@@ -278,10 +282,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         String api_path = null;
                         if (data.getPhoto() != null) {
                             String path =  "/data/data/com.example.ivan.champy_v2/app_imageDir/";
-                            File f = new File(path, "profile.jpg");
-                            if (!f.exists()) {
+                            File file = new File(path, "profile.jpg");
+                            if (!file.exists()) {
                                 com.example.ivan.champy_v2.model.User.Photo photo = data.getPhoto();
                                 api_path = API_URL + photo.getLarge();
+
+                                CHUploadPhoto chUploadPhoto = new CHUploadPhoto(getApplicationContext());
+                                chUploadPhoto.uploadPhotoForAPI(api_path);
                             }
                         }
                         Intent intent = new Intent(LoginActivity.this, RoleControllerActivity.class);
