@@ -14,22 +14,22 @@ import java.util.HashMap;
 
 public class SessionManager {
 
-    SharedPreferences pref;
-    SharedPreferences.Editor editor;
-    Context _context;
-    int PRIVATE_MODE = 0;
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
+    private Context _context;
+    private int PRIVATE_MODE = 0;
 
     // SharedPreference file name
     private static final String PREFER_NAME = "Champy_pref";
     // All Shared Preferences Keys
     private static final String IS_USER_LOGIN = "IsUserLoggedIn";
     // Friend_json name (make variable public to access from outside)
-    public static final String KEY_NAME  = "name";
+    private static final String KEY_NAME  = "name";
     // Email address (make variable public to access from outside)
-    public static final String KEY_EMAIL = "email";
-    public static final String KEY_ID    = "facebook_id";
-    public static final String KEY_PATH  = "path_to_pic";
-    public static final String KEY_GCM  = "gcm";
+    private static final String KEY_EMAIL = "email";
+    private static final String KEY_ID    = "facebook_id";
+    private static final String KEY_PATH  = "path_to_pic";
+    private static final String KEY_GCM  = "gcm";
 
     // Constructor
     public SessionManager(Context context){

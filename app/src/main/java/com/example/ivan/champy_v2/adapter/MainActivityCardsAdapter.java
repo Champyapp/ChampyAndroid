@@ -186,35 +186,32 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
 //        } else Log.i(TAG, "getView: senderProgress = 0 OR now < endOfDay (" + now + " < " + endOfDay + ")");
 
         long now = Calendar.getInstance().getTimeInMillis() / 1000;
-        long checkInPlusOneDay = 0;
         long longSenderProgress = 0;
-        long checkInPlusOneDayAndHour = 0;
+        long senderProgressMidNight = 0;
         final long oneDay = 86400L;
         try {
-            longSenderProgress = Long.parseLong(senderProgress[0]);
-            checkInPlusOneDay = (longSenderProgress + oneDay);
-            checkInPlusOneDayAndHour = (longSenderProgress + oneDay + 3600);
-            Log.i(TAG, "getView: longSenderProgress: " + longSenderProgress);
-            Log.i(TAG, "getView: checkInPlusOneDay: " + checkInPlusOneDay);
-            Log.i(TAG, "getView: checkInPlusOneDayAndHour: " + checkInPlusOneDayAndHour);
+            // TODO: 30.09.2016 i think need to change [0] for .lastElement
+            longSenderProgress = Long.parseLong(senderProgress[0]); // our last checkIn in seconds
+            Date date = new Date(longSenderProgress * 1000); // convert last checkIn in date format
+            senderProgressMidNight = longSenderProgress - (date.getHours() * 60 * 60) - (date.getMinutes() * 60) - (date.getSeconds()); // checkIn midNight
         } catch (NumberFormatException e) {
             e.printStackTrace();
             Toast.makeText(getContext(), "Time to improve yourself", Toast.LENGTH_SHORT).show();
         }
 
 
-        if (longSenderProgress != 0 && now > checkInPlusOneDay) {
+        if (longSenderProgress != 0 && now > senderProgressMidNight + oneDay) {
             if (!itemType.equals("Wake Up")) {
                 tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
                 buttonShare.setVisibility(View.INVISIBLE);
                 buttonDone.setVisibility(View.VISIBLE);
             }
-            // idea: checkInPlusTwoDay
-            if (now > checkInPlusOneDayAndHour) {
+
+            if (now > senderProgressMidNight + oneDay + oneDay ) {
                 try {
                     if (itemType.equals("Wake Up")) {
                         int i = Integer.parseInt(currentCard.getWakeUpTime());
-                        cc.give_up(itemInProgressId, i, token, userId);
+                           cc.give_up(itemInProgressId, i, token, userId);
                     } else cc.give_up(itemInProgressId, 0, token, userId);
                 } catch (IOException | NumberFormatException e) { e.printStackTrace(); }
             }
@@ -254,7 +251,6 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
                     db.update("updated", cv, "challenge_id = ?", new String[]{itemInProgressId});
                     ////////////////////////////////////////////////////////////////////////
                     cc.doneForToday(itemInProgressId, token, userId);
-                    //cc.generate(); potomy 4to nam nado obnovit' bazy, a voobwe doljen prihodit' respoonse
                     buttonDone.setVisibility(View.INVISIBLE);
                     buttonShare.setVisibility(View.VISIBLE);
                     snackbar = Snackbar.make(v, "Well done!", Snackbar.LENGTH_SHORT);
@@ -289,18 +285,6 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
         String b = a.replace("]","");
         return b.split(", ");
     }
-
-
-    private long getMidNight() {
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-
-        return (cal.getTimeInMillis() / 1000) + 86400L ;
-    }
-
 
 }
 
