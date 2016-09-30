@@ -48,7 +48,6 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-import static java.lang.Math.log;
 import static java.lang.Math.round;
 
 public class AppSync {
@@ -94,10 +93,9 @@ public class AppSync {
         callGetUserInfo.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
-                User decodedResponse = response.body();
                 if (response.isSuccess()) {
                     Log.i(TAG, "onResponse: Success" + response.isSuccess());
-                    Data data = decodedResponse.getData();
+                    Data data = response.body().getData();
                     String email = data.getEmail();
                     final String user_name = data.getName();
                     final String userId = data.get_id();
@@ -133,23 +131,18 @@ public class AppSync {
 
                     String api_path;
 
-                    if (data.getPhoto() != null) {
-                        Log.i(TAG, "GetUserPhoto: data.getPhoto() != null");
-                        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
-                        File file = new File(path, "profile.jpg");
-                        if (!file.exists()){
-                            Log.i(TAG, "GetUserPhoto: User photo not exist");
-                            com.example.ivan.champy_v2.model.User.Photo photo = data.getPhoto();
-                            api_path = API_URL + photo.getLarge();
-                        } else {
-                            Log.i(TAG, "GetUserPhoto: User photo already exist");
-                            com.example.ivan.champy_v2.model.User.Photo photo = data.getPhoto();
-                            api_path = API_URL + photo.getLarge();
-                        }
-                        Log.i(TAG, "GetUserPhoto: " + api_path);
-                    } else {
-                        Log.i(TAG, "GetUserPhoto: data.getPhoto() == null");
-                    }
+//                    if (data.getPhoto() != null) {
+//                        Log.i(TAG, "GetUserPhoto: data.getPhoto() != null");
+//                        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+//                        File file = new File(path, "profile.jpg");
+//                        if (!file.exists()){
+//                            Log.i(TAG, "GetUserPhoto: User photo not exist");
+//                            com.example.ivan.champy_v2.model.User.Photo photo = data.getPhoto();
+//                            api_path = API_URL + photo.getLarge();
+//                            Log.i(TAG, "GetUserPhoto: " + api_path);
+//                        } else Log.i(TAG, "GetUserPhoto: User photo already exist");
+//                    } else Log.i(TAG, "GetUserPhoto: data.getPhoto() == null");
+
 
                     Intent goToRoleActivity = new Intent(context, RoleControllerActivity.class);
                     context.startActivity(goToRoleActivity);

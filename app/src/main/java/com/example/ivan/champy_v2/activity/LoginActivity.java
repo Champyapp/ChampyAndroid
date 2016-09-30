@@ -279,18 +279,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 data.getSuccessChallenges().toString(),
                                 data.getInProgressChallengesCount().toString(),
                                 data.getLevel().getNumber().toString());
+
+
                         String api_path = null;
-                        if (data.getPhoto() != null) {
+                        if (data.getPhoto() == null) {
+                            Log.i(TAG, "data.getPhoto() != null");
                             String path =  "/data/data/com.example.ivan.champy_v2/app_imageDir/";
                             File file = new File(path, "profile.jpg");
                             if (!file.exists()) {
+                                Log.i(TAG, "file not exist!");
                                 com.example.ivan.champy_v2.model.User.Photo photo = data.getPhoto();
                                 api_path = API_URL + photo.getLarge();
 
                                 CHUploadPhoto chUploadPhoto = new CHUploadPhoto(getApplicationContext());
                                 chUploadPhoto.uploadPhotoForAPI(api_path);
-                            }
-                        }
+                            } else Log.i(TAG, "File already exist!");
+                        } else Log.i(TAG, "data.getPhoto() = null");
+
+
                         Intent intent = new Intent(LoginActivity.this, RoleControllerActivity.class);
                         if (api_path == null) {
                             intent.putExtra("path_to_pic", path_to_pic);

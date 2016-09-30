@@ -1,9 +1,11 @@
 package com.example.ivan.champy_v2.activity;
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -27,12 +29,16 @@ import com.soundcloud.android.crop.Crop;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.RequestBody;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.UUID;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -47,7 +53,7 @@ public class PhotoActivity extends AppCompatActivity {
     private static final int CROP_PIC = 1777;
     private static final String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
     private Uri picUri;
-    public final String TAG = "myLogs";
+    public final String TAG = "PhotoActivity";
     CHUploadPhoto uploadPhoto;
 
     @Override
@@ -87,6 +93,8 @@ public class PhotoActivity extends AppCompatActivity {
                 // get the cropped bitmap
                 Bitmap thePic = extras.getParcelable("data");
                 savePhoto(thePic);
+
+                //Upload_photo(SaveFromCamera(thePic));
                 uploadPhoto.uploadPhotoForAPI(SaveFromCamera(thePic));
                 Intent intent = new Intent(PhotoActivity.this, SettingsActivity.class);
                 startActivity(intent);
@@ -99,9 +107,8 @@ public class PhotoActivity extends AppCompatActivity {
                 Intent intent = new Intent(PhotoActivity.this, SettingsActivity.class);
                 startActivity(intent);
                 Toast.makeText(getApplicationContext(), "Changed", Toast.LENGTH_SHORT).show();
-            } if (requestCode == Crop.REQUEST_PICK && resultCode == RESULT_OK) {
+            } if (requestCode == Crop.REQUEST_PICK) {
                     Uri uri = data.getData();
-
                     beginCrop(data.getData());
                 } else if (requestCode == Crop.REQUEST_CROP) {
                     try {
@@ -110,7 +117,7 @@ public class PhotoActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-            if (requestCode == SELECT_FILE ){
+            if (requestCode == SELECT_FILE ) {
                 Uri selectedImageUri = data.getData();
                 performCrop(selectedImageUri);
 
@@ -157,6 +164,7 @@ public class PhotoActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
+            //Upload_photo(path);
             uploadPhoto.uploadPhotoForAPI(path);
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),uri);
             savePhoto(bitmap);
@@ -189,7 +197,7 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
 
-    public void savePhoto (Bitmap photo) {
+    public void savePhoto(Bitmap photo) {
         File profile = new File(path, "profile.jpg");
         File blured2 = new File(path, "blured2.jpg");
         Uri uri = Uri.fromFile(profile);
@@ -228,6 +236,7 @@ public class PhotoActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+
     }
 
 

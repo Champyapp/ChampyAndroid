@@ -93,6 +93,9 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
                 break;
             case "Duel":
                 imageChallengeLogo.setImageResource(R.drawable.duel_white);
+                TextView tvRecipientName = (TextView)tempView.findViewById(R.id.tvRecipientName);
+                tvRecipientName.setText(currentCard.getVersus());
+                tvRecipientName.setTypeface(typeface);
                 break;
             case "Self-Improvement":
                 imageChallengeLogo.setImageResource(R.drawable.self_white);
