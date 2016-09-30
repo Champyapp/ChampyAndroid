@@ -15,11 +15,11 @@ public class CHMakeResponsiveScore {
     Activity activity;
 
 
-    public CHMakeResponsiveScore(Activity activity) {
+    CHMakeResponsiveScore(Activity activity) {
         this.activity = activity;
     }
 
-    public void makeResponsiveScore(int width) {
+    void makeResponsiveScore(int width) {
         int x = round(width/100);
 
         //-------------------------- Animation ---------------------------//
@@ -77,8 +77,6 @@ public class CHMakeResponsiveScore {
         textViewChallenges.setTextSize(y);
         textViewWins.setTextSize(y);
         textViewTotal.setTextSize(y);
-
-
 
     }
 

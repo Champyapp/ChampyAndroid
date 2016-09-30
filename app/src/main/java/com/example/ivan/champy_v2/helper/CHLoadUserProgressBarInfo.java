@@ -18,9 +18,7 @@ import retrofit.Retrofit;
 
 public class CHLoadUserProgressBarInfo {
 
-
     Activity activity;
-
 
     public CHLoadUserProgressBarInfo(Activity activity) {
         this.activity = activity;
@@ -43,8 +41,8 @@ public class CHLoadUserProgressBarInfo {
                 User decodedResponse = response.body();
                 Data data = decodedResponse.getData();
                 SessionManager sessionManager = new SessionManager(activity);
-                String size = sessionManager.get_duel_pending();
-                sessionManager.set_duel_pending(size);
+//                String size = sessionManager.get_duel_pending();
+//                sessionManager.set_duel_pending(size);
                 sessionManager.setChampyOptions(
                         data.getAllChallengesCount().toString(),
                         data.getSuccessChallenges().toString(),
