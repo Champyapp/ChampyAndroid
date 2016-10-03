@@ -95,7 +95,6 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         sessionManager = new SessionManager(getApplicationContext());
         int size = Integer.parseInt(sessionManager.get_duel_pending());
         PendingDuelsAdapter pagerAdapter = new PendingDuelsAdapter(getSupportFragmentManager());
-
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager_pending_duel);
         pagerAdapter.setCount(size);
         viewPager.setAdapter(pagerAdapter);

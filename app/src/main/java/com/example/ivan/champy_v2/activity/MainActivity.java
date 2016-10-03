@@ -300,7 +300,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
             String token = user.getToken();
             String userId = user.getUserObjectId();
-            cc.generateCardsForMainActivity(token, userId);
+            cc.refreshCardsForPendingDuel(token, userId);
         }
         return super.onOptionsItemSelected(item);
     }

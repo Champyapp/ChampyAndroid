@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -76,7 +77,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         final Bundle args = this.getArguments();
         c = db.query("pending_duel", null, null, null, null, null, null);
         position = args.getInt(ARG_PAGE);
-        //Log.i("stat", "Status: " + position);
+
         if (c.moveToFirst()) {
             int idColIndex = c.getColumnIndex("id");
             int versusColIndex = c.getColumnIndex("versus");
@@ -123,12 +124,8 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         super.onActivityCreated(savedInstanceState);
         Log.i(TAG, "onActivityCreated");
 
-        if (recipient.equals("true")) {
-            tvUserVsUser.setText("from " + versus);
-        } else {
-            tvUserVsUser.setText(R.string.waiting_for_your_recipient);
-        }
-
+        if (recipient.equals("true")) tvUserVsUser.setText("from " + versus);
+        else tvUserVsUser.setText(R.string.waiting_for_your_recipient);
         tvUserVsUser.setTypeface(typeface);
 
         if (duration != null && !duration.isEmpty()) {
@@ -286,37 +283,6 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
             return false;
         }
 
-    }
-
-
-    public boolean isActive(String description) {
-        DBHelper dbHelper = new DBHelper(getActivity());
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final ContentValues cv = new ContentValues();
-        final Bundle args = this.getArguments();
-        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-        int position = args.getInt(ARG_PAGE);
-        Log.i("stat", "Status: " + position);
-        description = description + " during this period";
-        boolean ok = false;
-        int o = 0;
-        if (c.moveToFirst()) {
-            int idColIndex = c.getColumnIndex("id");
-            int nameColIndex = c.getColumnIndex("name");
-            int coldescription = c.getColumnIndex("description");
-            int colduration = c.getColumnIndex("duration");
-            int colchallenge_id = c.getColumnIndex("challenge_id");
-            do {
-                if (c.getString(c.getColumnIndex("status")).equals("started")){
-                    if (c.getString(coldescription).equals(description)){
-                        ok = true;
-                    }
-                }
-            } while (c.moveToNext());
-        }
-        c.close();
-
-        return ok;
     }
 
 

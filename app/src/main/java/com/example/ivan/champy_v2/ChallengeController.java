@@ -408,6 +408,7 @@ public class ChallengeController {
         dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
         final int clearCount = db.delete("pending_duel", null, null);
+        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
         Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userId, update, token);
         call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
@@ -458,7 +459,7 @@ public class ChallengeController {
         });
     }
 
-    public void generateCardsForMainActivity(final String token, final String userId) {
+    private void generateCardsForMainActivity(final String token, final String userId) {
         dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
         cv = new ContentValues();

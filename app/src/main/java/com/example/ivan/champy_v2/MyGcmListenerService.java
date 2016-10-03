@@ -163,7 +163,6 @@ public class MyGcmListenerService extends GcmListenerService {
                         String challengeDescription = challenge.getDescription();
                         int challengeDuration = challenge.getDuration();
 
-                        //cv.clear();
                         if (challenge.getType().equals("567d51c48322f85870fd931b")) {
                             if (challengeStatus.equals("pending")) { //!challengeStatus.equals("started"))
                                 if (!challengeStatus.equals("failedBySender")) {
@@ -230,24 +229,5 @@ public class MyGcmListenerService extends GcmListenerService {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
-
-
-    private void notifyReminder(Intent intent, String message) {
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent, PendingIntent.FLAG_ONE_SHOT);
-        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.icon_champy)
-                .setContentTitle("Champy")
-                .setContentText(message)
-                .setAutoCancel(true)
-                .setSound(defaultSoundUri)
-                .setContentIntent(pendingIntent);
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
-    }
-
-
 
 }
