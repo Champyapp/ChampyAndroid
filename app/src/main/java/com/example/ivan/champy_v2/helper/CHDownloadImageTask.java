@@ -43,6 +43,7 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         this.activity = activity;
     }
 
+
     protected Bitmap doInBackground(String... urls) {
         String urldisplay = urls[0];
         Log.d("DownLoadImageTask", "doInBackground: " + urldisplay);

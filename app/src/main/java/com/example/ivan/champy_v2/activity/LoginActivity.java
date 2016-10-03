@@ -2,12 +2,14 @@ package com.example.ivan.champy_v2.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
@@ -46,11 +48,16 @@ import com.google.android.gms.iid.InstanceID;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
@@ -279,15 +286,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             user.getInProgressChallengesCount().toString(),
                             user.getLevel().getNumber().toString());
 
-                    Log.i(TAG, "Register path_to_pick: " + path_to_pic);
-                    Intent goToRoleControllerActivity = new Intent(LoginActivity.this, RoleControllerActivity.class);
+
                     String api_path = null;
-                    // если у юзера есть фоно на facebook-e
+                    // если у юзера есть фото на facebook-e
                     if (user.getPhoto() != null) {
                         // создаем путь к файлу
-                        @SuppressLint("SdCardPath") String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+                        @SuppressLint("SdCardPath") String sdCardPath = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+                        //String internalPath = "/android/data/com.azinecllc.champy/Images";
                         // создаем файл по нашему пути
-                        File profilePhoto = new File(path, "profile.jpg");
+                        File profilePhoto = new File(sdCardPath, "profile.jpg");
                         // если такой фотки не существует (так и должно быть)
                         if (!profilePhoto.exists()) {
                             // то мы заливаем нашу фотку на API
@@ -296,15 +303,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         }
                     }
 
+                    Intent goToRoleControllerActivity = new Intent(LoginActivity.this, RoleControllerActivity.class);
                     // если у нас не получилось сделать выше написаное и api_path = null
                     if (api_path == null) {
-                        // то
+                        // то... мы стягиваем стандартную фотку facebook-а и заливаем её
                         goToRoleControllerActivity.putExtra("path_to_pic", path_to_pic);
-                        Log.i(TAG, "Api_path = null path_to_pick: " + path_to_pic);
+                        sessionManager.change_avatar(path_to_pic); // не уверен что это надо
                     } else {
+                        // ну... а если получилось стянуть норм фотку, то заливаем её
                         goToRoleControllerActivity.putExtra("path_to_pic", api_path);
+                        sessionManager.change_avatar(api_path);
                     }
-                    sessionManager.change_avatar(api_path);
                     goToRoleControllerActivity.putExtra("name", user_name);
                     startActivity(goToRoleControllerActivity);
                 }
