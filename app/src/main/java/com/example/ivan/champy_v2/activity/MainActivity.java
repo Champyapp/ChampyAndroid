@@ -170,9 +170,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onClick(View v) {
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-            return;
-        }
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
         mLastClickTime = SystemClock.elapsedRealtime();
 
         //Here we make our background is blurred
@@ -186,7 +184,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Drawable ob = new BitmapDrawable(getResources(), blured);
         blurScreen.setImageDrawable(ob);
         RelativeLayout cardsLayout = (RelativeLayout) findViewById(R.id.cards);
-
 
         // first we check action menu and if "is open" then we setup our inside click for FAB
         actionMenu.toggle(true);
@@ -315,16 +312,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public Drawable initBackground(String path) throws FileNotFoundException {
         File file = new File(path, "blured2.jpg");
         Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
-
         Drawable dr = new BitmapDrawable(getResources(), bitmap);
         dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
-
         ImageView background = (ImageView)findViewById(R.id.main_background);
         background.setScaleType(ImageView.ScaleType.CENTER_CROP);
         background.setImageDrawable(dr);
-
         return dr;
-
     }
 
     //    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {

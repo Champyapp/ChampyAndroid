@@ -67,6 +67,7 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
                 break;
             default:
                 nameTextView.setText(R.string.lostInternetConnection);
+                Glide.with(mContext).load(R.drawable.icon_champy).override(80, 80).into(viewHolder.image);
                 break;
         }
 

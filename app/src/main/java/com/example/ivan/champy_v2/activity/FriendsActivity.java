@@ -60,7 +60,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
-                //actionMenu.close(true);
             }
         };
         drawer.setDrawerListener(toggle);
@@ -76,48 +75,17 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         view.setText("+" + (count > 0 ? String.valueOf(count) : null));
         if (count == 0) checker.hideItem();
 
-        String s;
-
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         adapterViewPager = new FriendsActivityPagerAdapter(getSupportFragmentManager(), getApplicationContext());
         viewPager.setAdapter(adapterViewPager);
 
-//        Bundle bundle = getIntent().getExtras();
-//        if (bundle != null) {
-//            s = bundle.getString("friend_request");
-//            loadUserPending();
-//            if (s != null) {
-//                viewPager.setCurrentItem(1);
-//            }
-//        }
-
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-//                SessionManager sessionManager = new SessionManager(getApplicationContext());
-//                String refreshFriends = sessionManager.getRefreshFriends();
-//                Log.d(TAG, "RefreshFriends: " + refreshFriends);
-//                if (refreshFriends.equals("true")) {
-//                    loadUserFriends();
-//                    sessionManager.setRefreshFriends("false");
-//                }
-//
-//                String refreshPending = sessionManager.getRefreshPending();
-//                Log.d(TAG, "RefreshPending: " + refreshPending);
-//                if (refreshPending.equals("true")) {
-//                    loadUserPending();
-//                    sessionManager.setRefreshPending("false");
-//                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
+        // this out method for open "pending" when you click on notification about friends request
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            String s = bundle.getString("friend_request");
+            //loadUserPending();
+            if (s != null) viewPager.setCurrentItem(1);
+        }
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);

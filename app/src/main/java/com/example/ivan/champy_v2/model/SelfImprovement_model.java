@@ -308,10 +308,4 @@ public class SelfImprovement_model {
         return  arrayList;
     }
 
-
-//    private String isCheckedToday() {
-//
-//    }
-
-
 }

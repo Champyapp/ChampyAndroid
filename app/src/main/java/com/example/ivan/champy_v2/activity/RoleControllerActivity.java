@@ -43,9 +43,7 @@ public class RoleControllerActivity extends AppCompatActivity {
 
         try {
             mSocket = IO.socket("http://46.101.213.24:3007");
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
+        } catch (URISyntaxException e) { throw new RuntimeException(e); }
 
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         Intent goToActivity;

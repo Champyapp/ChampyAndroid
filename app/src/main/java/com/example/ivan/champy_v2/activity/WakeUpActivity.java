@@ -46,7 +46,6 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
 
     public final static String type_id = "567d51c48322f85870fd931c";
     public final static String API_URL = "http://46.101.213.24:3007";
-    private PendingIntent pendingIntent;
     private TimePicker alarmTimePicker;
     public Snackbar snackbar;
     AlarmManager alarmManager;
@@ -124,6 +123,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         final int hour = alarmTimePicker.getCurrentHour();
         final int minute = alarmTimePicker.getCurrentMinute();
         final OfflineMode offlineMode = new OfflineMode();
+        offlineMode.isConnectedToRemoteAPI(WakeUpActivity.this);
         String sHour = "" + hour;
         String sMinute = "" + minute;
         if (hour < 10)   sHour   = "0" + sHour;
@@ -133,15 +133,13 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         snackbar = Snackbar.make(v, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes!", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (offlineMode.isConnectedToRemoteAPI(WakeUpActivity.this)) {
-                    if (ok) {
-                        cc.createNewWakeUpChallenge(21, type_id);
-                        snackbar = Snackbar.make(view, "Challenge Created!", Snackbar.LENGTH_SHORT);
-                    } else {
-                        snackbar = Snackbar.make(view, "Already Exist!", Snackbar.LENGTH_SHORT);
-                    }
-                    snackbar.show();
+                if (ok) {
+                    cc.createNewWakeUpChallenge(21, type_id);
+                    snackbar = Snackbar.make(view, "Challenge Created!", Snackbar.LENGTH_SHORT);
+                } else {
+                    snackbar = Snackbar.make(view, "Already Exist!", Snackbar.LENGTH_SHORT);
                 }
+                snackbar.show();
             }
         });
         snackbar.show();

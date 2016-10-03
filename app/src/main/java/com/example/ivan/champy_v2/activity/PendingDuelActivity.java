@@ -172,6 +172,6 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
+    
 
 }

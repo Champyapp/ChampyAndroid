@@ -280,7 +280,6 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                                         }
                                     });
 
-
                                     Call<Delete> callForDeleteUser = update_user.delete_user(id, token);
                                     callForDeleteUser.enqueue(new Callback<Delete>() {
                                         @Override
@@ -311,7 +310,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                                     Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
                                     startActivity(intent);
                                 }
-                                    break;
+                                break;
                             case DialogInterface.BUTTON_NEGATIVE:
                                 break;
                         }
@@ -380,6 +379,9 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
 
         ViewServer.get(this).addWindow(this);
     }
+
+
+
 
     @Override
     public void onStart() {

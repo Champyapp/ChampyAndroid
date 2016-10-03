@@ -52,7 +52,7 @@ public class PhotoActivity extends AppCompatActivity {
     private static final int SELECT_FILE = 1999;
     private static final int CROP_PIC = 1777;
     private static final String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
-    private Uri picUri;
+    public Uri picUri;
     public final String TAG = "PhotoActivity";
     CHUploadPhoto uploadPhoto;
 
@@ -137,7 +137,7 @@ public class PhotoActivity extends AppCompatActivity {
                     return cursor.getString(column_index);
                 }
             } catch (Exception e) {
-                // Eat it
+                e.printStackTrace();
             }
         }
         else if ("file".equalsIgnoreCase(uri.getScheme())) {
@@ -236,7 +236,6 @@ public class PhotoActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-
     }
 
 
@@ -267,33 +266,6 @@ public class PhotoActivity extends AppCompatActivity {
             toast.show();
         }
     }
-
-
-//    public void Upload_photo(String path) {
-//        final String API_URL = "http://46.101.213.24:3007";
-//        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-//        SessionManager sessionManager = new SessionManager(getApplicationContext());
-//        HashMap<String, String> user;
-//        user = sessionManager.getUserDetails();
-//        String token = user.get("token");
-//        String id = user.get("id");
-//
-//        File f = new File(path);
-//
-//        RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), f);
-//
-//        Update_user update_user = retrofit.create(Update_user.class);
-//        Call<User> call = update_user.update_photo(id, token, requestBody);
-//        call.enqueue(new Callback<User>() {
-//            @Override
-//            public void onResponse(Response<User> response, Retrofit retrofit) {
-//                if (response.isSuccess()) { Log.d(TAG, "Status: Success photo_uploaded");}
-//                else Log.d(TAG, "Status failed:" + response.code()); }
-//
-//            @Override
-//            public void onFailure(Throwable t) {Log.d(TAG, "Status: vse hyunya: " + t ); }
-//        });
-//    }
 
 
 }
