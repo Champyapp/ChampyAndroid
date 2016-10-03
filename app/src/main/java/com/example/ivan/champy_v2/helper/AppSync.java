@@ -126,26 +126,23 @@ public class AppSync {
                     getUserPending(userId);
                     getUserFriendsInfo(gcm);
 
-                    // i changed this
-                    String api_path = "";
-                    if (data.getPhoto() == null) {
-                        String path =  "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+
+                    String api_path;
+                    if (data.getPhoto() != null){
+                        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
                         File file = new File(path, "profile.jpg");
-                        if (!file.exists()) {
+                        if (!file.exists()){
                             com.example.ivan.champy_v2.model.User.Photo photo = data.getPhoto();
                             api_path = API_URL + photo.getLarge();
-                            CHUploadPhoto chUploadPhoto = new CHUploadPhoto(context);
-                            chUploadPhoto.uploadPhotoForAPI(api_path);
+                            Log.i("AppSync", "GetUserPhoto: " + api_path);
                         }
                     }
-
 
                     NotificationController controller = new NotificationController(context);
                     controller.activateDailyNotificationReminder();
 
                     Intent goToRoleActivity = new Intent(context, RoleControllerActivity.class);
                     context.startActivity(goToRoleActivity);
-
                 } else {
                     Log.i(TAG, "onResponse: failed " + response.message());
                 }

@@ -281,24 +281,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
                     String api_path = null;
-                    if (user.getPhoto() == null) {
-                        String path =  "/data/data/com.example.ivan.champy_v2/app_imageDir/";
-                        File file = new File(path, "profile.jpg");
-                        if (!file.exists()) {
+                    if (user.getPhoto() != null) {
+                        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+                        File f = new File(path, "profile.jpg");
+                        if (!f.exists()) {
                             com.example.ivan.champy_v2.model.User.Photo photo = user.getPhoto();
                             api_path = API_URL + photo.getLarge();
-                            CHUploadPhoto chUploadPhoto = new CHUploadPhoto(getApplicationContext());
-                            chUploadPhoto.uploadPhotoForAPI(api_path);
                         }
                     }
-
-                    NotificationController controller = new NotificationController(getApplicationContext());
-                    controller.activateDailyNotificationReminder();
-
                     Intent intent = new Intent(LoginActivity.this, RoleControllerActivity.class);
-                    if (api_path == null) {
-                        intent.putExtra("path_to_pic", path_to_pic);
-                    } else {
+                    if (api_path == null) intent.putExtra("path_to_pic", path_to_pic);
+                    else {
                         intent.putExtra("path_to_pic", api_path);
                         sessionManager.change_avatar(api_path);
                     }
