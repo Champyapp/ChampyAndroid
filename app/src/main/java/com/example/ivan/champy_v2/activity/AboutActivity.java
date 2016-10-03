@@ -208,9 +208,7 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
 
         @Override
         protected void onPostExecute(Void result) {
-
         }
-
 
     }
 

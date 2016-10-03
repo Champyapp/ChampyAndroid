@@ -12,6 +12,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -55,10 +56,13 @@ import static java.lang.Math.round;
 
 public class DuelActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    public View spinner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_duel);
+        new ProgressTask().execute();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         String newString, name = "", friend_id = "";
         Bundle extras = getIntent().getExtras();
@@ -81,7 +85,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         textViewYouVsFriend.setTypeface(typeface);
         tvIChallengeMyFriendTo.setTypeface(typeface);
         ivUser2.getLayoutParams().width = x;
-        ivUser2.getLayoutParams().height = x; // щоб була квадратна
+        ivUser2.getLayoutParams().height = x; // because we need a square
         SessionManager sessionManager = new SessionManager(getApplicationContext());
 
         RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.duel_back);
@@ -139,106 +143,6 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-
-    // отображаем стандартные карточки в активити
-    private void getChallenges() {
-        DBHelper dbHelper = new DBHelper(this);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int clearCount = db.delete("duel", null, null);
-        final ContentValues cv = new ContentValues();
-        final String API_URL = "http://46.101.213.24:3007";
-        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        final SessionManager sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        String token = user.get("token");
-
-        com.example.ivan.champy_v2.interfaces.SelfImprovement selfImprovement = retrofit.create(com.example.ivan.champy_v2.interfaces.SelfImprovement.class);
-
-        Call<com.example.ivan.champy_v2.model.Self.SelfImprovement> call = selfImprovement.getChallenges(token);
-        call.enqueue(new Callback<SelfImprovement>() {
-            @Override
-            public void onResponse(Response<SelfImprovement> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    List<Datum> data = response.body().getData();
-                    int data_size = 0;
-                    for (int i = 0; i < data.size(); i++) {
-                        com.example.ivan.champy_v2.model.Self.Datum datum = data.get(i);
-                        if (datum.getType().getName().equals("duel")) {
-                            if (!datum.getName().equals("User_Challenge")) {
-                                //if (check(datum.get_id())) {
-                                    cv.put("name", datum.getName());
-                                    cv.put("description", datum.getDescription());
-                                    cv.put("duration", datum.getDuration());
-                                    cv.put("challenge_id", datum.get_id());
-                                    db.insert("duel", null, cv);
-                                    data_size++;
-//                                } else {
-//                                    cv.put("name", "active");
-//                                    cv.put("description", datum.getDescription());
-//                                    cv.put("duration", datum.getDuration());
-//                                    cv.put("challenge_id", datum.get_id());
-//                                    db.insert("duel", null, cv);
-//                                    data_size++;
-//                                }
-                            }
-                        }
-                    }
-                    sessionManager.setSelfSize(data_size);
-                    SessionManager sessionManager = new SessionManager(getApplicationContext());
-                    int size = sessionManager.getSelfSize();
-                    PagerAdapterDuel pagerAdapter = new PagerAdapterDuel(getSupportFragmentManager());
-                    final ViewPager viewPager = (ViewPager) findViewById(R.id.pager_duel);
-                    pagerAdapter.setCount(size);
-                    viewPager.setAdapter(pagerAdapter);
-                    viewPager.setOffscreenPageLimit(1);
-                    viewPager.setPageMargin(20);
-                    viewPager.setClipToPadding(false);
-                    viewPager.setPadding(90, 0, 90, 0);
-
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-            }
-        });
-    }
-
-    // проверяем равен ли challengeId(id) и index("duel")
-//    private boolean check(String id) {
-//        boolean ok = true;
-//        DBHelper dbHelper = new DBHelper(this);
-//        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-//        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-//        if (c.moveToFirst()) {
-//            int idColIndex = c.getColumnIndex("id");
-//            int nameColIndex = c.getColumnIndex("name");
-//            int coldescription = c.getColumnIndex("description");
-//            int colduration = c.getColumnIndex("duration");
-//            int colchallenge_id = c.getColumnIndex("challenge_id");
-//            do {
-//                String checkedChallengeId = c.getString(colchallenge_id);
-//                String checkedIndex = c.getString(idColIndex);
-//                if (checkedChallengeId.equals(id) && (checkedIndex.equals("duel"))) {
-//                    ok = false;
-//                    break;
-//                }
-//            } while (c.moveToNext());
-//        }
-//        c.close();
-//        return ok;
-//    }
-
-
-    private Drawable Init(String path) throws FileNotFoundException {
-        File file = new File(path, "blured2.jpg");
-        Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
-        Drawable dr = new BitmapDrawable(getResources(), bitmap);
-        dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
-        return dr;
-    }
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -291,6 +195,105 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    // отображаем стандартные карточки в активити
+    private void getChallenges() {
+        DBHelper dbHelper = new DBHelper(this);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        int clearCount = db.delete("duel", null, null);
+        final ContentValues cv = new ContentValues();
+        final String API_URL = "http://46.101.213.24:3007";
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        final SessionManager sessionManager = new SessionManager(getApplicationContext());
+        HashMap<String, String> user;
+        user = sessionManager.getUserDetails();
+        String token = user.get("token");
+
+        com.example.ivan.champy_v2.interfaces.SelfImprovement selfImprovement = retrofit.create(com.example.ivan.champy_v2.interfaces.SelfImprovement.class);
+
+        Call<com.example.ivan.champy_v2.model.Self.SelfImprovement> call = selfImprovement.getChallenges(token);
+        call.enqueue(new Callback<SelfImprovement>() {
+            @Override
+            public void onResponse(Response<SelfImprovement> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    List<Datum> data = response.body().getData();
+                    int data_size = 0;
+                    for (int i = 0; i < data.size(); i++) {
+                        com.example.ivan.champy_v2.model.Self.Datum datum = data.get(i);
+                        if (datum.getType().getName().equals("duel")) {
+                            if (!datum.getName().equals("User_Challenge")) {
+                                //if (check(datum.get_id())) {
+                                cv.put("name", datum.getName());
+                                cv.put("description", datum.getDescription());
+                                cv.put("duration", datum.getDuration());
+                                cv.put("challenge_id", datum.get_id());
+                                db.insert("duel", null, cv);
+                                data_size++;
+//                                } else {
+//                                    cv.put("name", "active");
+//                                    cv.put("description", datum.getDescription());
+//                                    cv.put("duration", datum.getDuration());
+//                                    cv.put("challenge_id", datum.get_id());
+//                                    db.insert("duel", null, cv);
+//                                    data_size++;
+//                                }
+                            }
+                        }
+                    }
+                    sessionManager.setSelfSize(data_size);
+                    SessionManager sessionManager = new SessionManager(getApplicationContext());
+                    int size = sessionManager.getSelfSize();
+                    PagerAdapterDuel pagerAdapter = new PagerAdapterDuel(getSupportFragmentManager());
+                    final ViewPager viewPager = (ViewPager) findViewById(R.id.pager_duel);
+                    pagerAdapter.setCount(size);
+                    viewPager.setAdapter(pagerAdapter);
+                    viewPager.setOffscreenPageLimit(1);
+                    viewPager.setPageMargin(20);
+                    viewPager.setClipToPadding(false);
+                    viewPager.setPadding(90, 0, 90, 0);
+                    spinner.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+            }
+        });
+    }
+
+
+    private Drawable Init(String path) throws FileNotFoundException {
+        File file = new File(path, "blured2.jpg");
+        Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
+        Drawable dr = new BitmapDrawable(getResources(), bitmap);
+        dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
+        return dr;
+    }
+
+
+    private class ProgressTask extends AsyncTask<Void,Void,Void> {
+        @Override
+        protected void onPreExecute() {
+            spinner = findViewById(R.id.loadingPanel);
+            spinner.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    getChallenges();
+                }
+            });
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+        }
+
     }
 
 }

@@ -25,6 +25,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -53,26 +54,18 @@ import retrofit.Retrofit;
 public class SelfImprovementActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final String TAG = "SelfImprovementActivity";
-    //private ProgressBar bar;
+    public View spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_self_improvement);
+
+        new ProgressTask().execute();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        //getChallenges();
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                getChallenges();
-            }
-        });
-//        bar = (ProgressBar) this.findViewById(R.id.progressBar);
-//        new ProgressTask().execute();
-
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -243,6 +236,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
                     viewPager.setPageMargin(20);
                     viewPager.setClipToPadding(false);
                     viewPager.setPadding(90, 0, 90, 0);
+                    spinner.setVisibility(View.INVISIBLE);
                 }
             }
 
@@ -250,36 +244,32 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
             public void onFailure(Throwable t) { }
         });
 
-
-
     }
 
 
-//    private class ProgressTask extends AsyncTask<Void,Void,Void> {
-//        @Override
-//        protected void onPreExecute(){
-//            bar.setVisibility(View.VISIBLE);
-//        }
-//
-//        @Override
-//        protected Void doInBackground(Void... arg0) {
-//
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Void result) {
-//            //getChallenges();
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    getChallenges();
-//                }
-//            });
-//
-//            bar.setVisibility(View.GONE);
-//        }
-//    }
+    private class ProgressTask extends AsyncTask<Void,Void,Void> {
+        @Override
+        protected void onPreExecute() {
+            spinner = findViewById(R.id.loadingPanel);
+            spinner.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    getChallenges();
+                }
+            });
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+        }
+
+    }
 
 
 }
