@@ -1,5 +1,6 @@
 package com.example.ivan.champy_v2.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -147,7 +148,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             try {
                                 URL profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
                                 path_to_pic = profile_pic.toString();
-                                Log.i(TAG, "PathToPic: " + path_to_pic);
+                                Log.i(TAG, "OnClick path_to_pick: " + path_to_pic);
                             } catch (MalformedURLException e) { e.printStackTrace(); }
                             new Thread(new Runnable() {
                                 public void run() {
@@ -175,7 +176,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }
                 });
                 Bundle parameters = new Bundle();
-                parameters.putString("fields", "id, first_name, last_name, email,gender, birthday, location");
+                parameters.putString("fields", "id, first_name, last_name, email, gender, birthday, location");
                 request.setParameters(parameters);
                 request.executeAsync();
 
@@ -251,7 +252,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
 
         NewUser newUser = retrofit.create(NewUser.class);
-
         Call<User> call = newUser.register(new LoginData(facebookId, name, email));
         call.enqueue(new Callback<User>() {
             @Override
@@ -279,24 +279,34 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             user.getInProgressChallengesCount().toString(),
                             user.getLevel().getNumber().toString());
 
-
+                    Log.i(TAG, "Register path_to_pick: " + path_to_pic);
+                    Intent goToRoleControllerActivity = new Intent(LoginActivity.this, RoleControllerActivity.class);
                     String api_path = null;
+                    // если у юзера есть фоно на facebook-e
                     if (user.getPhoto() != null) {
-                        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
-                        File f = new File(path, "profile.jpg");
-                        if (!f.exists()) {
+                        // создаем путь к файлу
+                        @SuppressLint("SdCardPath") String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+                        // создаем файл по нашему пути
+                        File profilePhoto = new File(path, "profile.jpg");
+                        // если такой фотки не существует (так и должно быть)
+                        if (!profilePhoto.exists()) {
+                            // то мы заливаем нашу фотку на API
                             com.example.ivan.champy_v2.model.User.Photo photo = user.getPhoto();
                             api_path = API_URL + photo.getLarge();
                         }
                     }
-                    Intent intent = new Intent(LoginActivity.this, RoleControllerActivity.class);
-                    if (api_path == null) intent.putExtra("path_to_pic", path_to_pic);
-                    else {
-                        intent.putExtra("path_to_pic", api_path);
-                        sessionManager.change_avatar(api_path);
+
+                    // если у нас не получилось сделать выше написаное и api_path = null
+                    if (api_path == null) {
+                        // то
+                        goToRoleControllerActivity.putExtra("path_to_pic", path_to_pic);
+                        Log.i(TAG, "Api_path = null path_to_pick: " + path_to_pic);
+                    } else {
+                        goToRoleControllerActivity.putExtra("path_to_pic", api_path);
                     }
-                    intent.putExtra("name", user_name);
-                    startActivity(intent);
+                    sessionManager.change_avatar(api_path);
+                    goToRoleControllerActivity.putExtra("name", user_name);
+                    startActivity(goToRoleControllerActivity);
                 }
             }
 

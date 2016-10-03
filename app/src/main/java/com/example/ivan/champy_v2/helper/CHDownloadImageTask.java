@@ -67,7 +67,7 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         Random generator = new Random();
         int n = 10000;
         n = generator.nextInt(n);
-        String fname = "Image-"+ n +".jpg";
+        String fname = "Image-" + n + ".jpg";
         File file = new File(myDir, fname);
         if (file.exists()) {
             file.delete();
@@ -89,7 +89,7 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         // Create imageDir
         File myPath = new File(directory, "profile.jpg");
         Log.i("DownloadImageTask", "PhotoPath: " + myPath.toString());
-        FileOutputStream fos = null;
+        FileOutputStream fos;
         try {
             fos = new FileOutputStream(myPath);
             // Use the compress method on the BitMap object to write image to the OutputStream
@@ -101,7 +101,7 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         return directory.getAbsolutePath();
     }
 
-    public void loadImageFromStorage(String path) {
+    private void loadImageFromStorage(String path) {
         try {
             File f = new File(path, "profile.jpg");
             Uri uri = Uri.fromFile(f);

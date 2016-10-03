@@ -166,7 +166,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+        public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.challenges:
                 Intent goToChallenges = new Intent(this, MainActivity.class);
