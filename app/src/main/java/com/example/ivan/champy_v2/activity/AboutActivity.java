@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -22,9 +23,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
@@ -43,6 +46,7 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class AboutActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static final String azinecUrl = "http://www.azinec.com";
     private WebView webView;
     public View spinner;
 
@@ -104,12 +108,9 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
         }
 
         ViewServer.get(this).addWindow(this);
-    }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        spinner.setVisibility(View.GONE);
+
+
     }
 
     @Override
@@ -183,14 +184,23 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
 
         @Override
         protected Void doInBackground(Void... arg0) {
-
             //getChallenges();
             runOnUiThread(new Runnable() {
+                @SuppressLint("SetJavaScriptEnabled")
                 @Override
                 public void run() {
                     webView = (WebView) findViewById(R.id.webView);
                     webView.getSettings().setJavaScriptEnabled(true);
-                    webView.loadUrl("http://www.azinec.com");
+                    webView.setWebViewClient(new WebViewClient() {
+                        @Override
+                        public void onPageStarted(WebView view, String url, Bitmap favicon){
+                        }
+                        @Override
+                        public void onPageFinished(WebView view, String url){
+                            spinner.setVisibility(View.GONE);
+                        }
+                    });
+                    webView.loadUrl(azinecUrl);
                 }
             });
             return null;
@@ -198,9 +208,10 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
 
         @Override
         protected void onPostExecute(Void result) {
-            spinner.setVisibility(View.VISIBLE);
-            //setProgressBarIndeterminateVisibility(false);
+
         }
+
+
     }
 
 
