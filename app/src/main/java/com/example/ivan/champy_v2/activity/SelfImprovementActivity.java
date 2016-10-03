@@ -11,6 +11,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,6 +23,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -51,6 +53,7 @@ import retrofit.Retrofit;
 public class SelfImprovementActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final String TAG = "SelfImprovementActivity";
+    //private ProgressBar bar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,16 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         setContentView(R.layout.activity_self_improvement);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        //getChallenges();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                getChallenges();
+            }
+        });
+//        bar = (ProgressBar) this.findViewById(R.id.progressBar);
+//        new ProgressTask().execute();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
@@ -107,18 +120,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
             ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setImageDrawable(dr);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        //getChallenges();
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                getChallenges();
-            }
-        });
-
+        } catch (FileNotFoundException e) { e.printStackTrace(); }
 
     }
 
@@ -196,7 +198,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
 
 
     // отображаем наши челенджи
-    public void getChallenges() {
+    private void getChallenges() {
         DBHelper dbHelper = new DBHelper(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("selfimprovement", null, null);
@@ -251,6 +253,33 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
 
 
     }
+
+
+//    private class ProgressTask extends AsyncTask<Void,Void,Void> {
+//        @Override
+//        protected void onPreExecute(){
+//            bar.setVisibility(View.VISIBLE);
+//        }
+//
+//        @Override
+//        protected Void doInBackground(Void... arg0) {
+//
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Void result) {
+//            //getChallenges();
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    getChallenges();
+//                }
+//            });
+//
+//            bar.setVisibility(View.GONE);
+//        }
+//    }
 
 
 }

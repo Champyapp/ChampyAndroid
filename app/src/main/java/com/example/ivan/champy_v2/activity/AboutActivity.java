@@ -9,8 +9,10 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,8 +20,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.debug.hv.ViewServer;
@@ -39,15 +43,17 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class AboutActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private WebView webView;
+    public View spinner;
+
     @SuppressLint({"SetJavaScriptEnabled", "SetTextI18n"})
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+//        setProgressBarIndeterminateVisibility(true);
         setContentView(R.layout.activity_about);
-
-        WebView webView = (WebView) findViewById(R.id.webView);
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl("http://www.azinec.com");
+        new ProgressTask().execute();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -98,6 +104,12 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
         }
 
         ViewServer.get(this).addWindow(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        spinner.setVisibility(View.GONE);
     }
 
     @Override
@@ -159,6 +171,36 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
         Drawable dr = new BitmapDrawable(getResources(), bitmap);
         dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
         return dr;
+    }
+
+
+    private class ProgressTask extends AsyncTask<Void,Void,Void> {
+        @Override
+        protected void onPreExecute(){
+            spinner = findViewById(R.id.loadingPanel);
+            spinner.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+
+            //getChallenges();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    webView = (WebView) findViewById(R.id.webView);
+                    webView.getSettings().setJavaScriptEnabled(true);
+                    webView.loadUrl("http://www.azinec.com");
+                }
+            });
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            spinner.setVisibility(View.VISIBLE);
+            //setProgressBarIndeterminateVisibility(false);
+        }
     }
 
 

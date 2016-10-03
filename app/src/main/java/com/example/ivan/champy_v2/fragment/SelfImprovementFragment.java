@@ -261,26 +261,5 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         }
     }
 
-//    // check for isActive challenge
-//    private boolean isActive(String description) {
-//        DBHelper dbHelper = new DBHelper(getActivity());
-//        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-//        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-//        description = description + " during this period";
-//        boolean ok = false;
-//        if (c.moveToFirst()) {
-//            int coldescription = c.getColumnIndex("description");
-//            do {
-//                if (c.getString(c.getColumnIndex("status")).equals("started")) {
-//                    if (c.getString(coldescription).equals(description)) {
-//                        ok = true;
-//                    }
-//                }
-//            } while (c.moveToNext());
-//        }
-//        c.close();
-//        return ok;
-//    }
-
 
 }

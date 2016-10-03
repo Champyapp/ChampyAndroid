@@ -744,7 +744,7 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
             TextView tvTerms = (TextView) findViewById(R.id.textView_terms);
             tvTerms.setText(result, TextView.BufferType.SPANNABLE);
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
-            progressBar.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.GONE);
             tvTerms.setVisibility(View.VISIBLE);
         }
     }
