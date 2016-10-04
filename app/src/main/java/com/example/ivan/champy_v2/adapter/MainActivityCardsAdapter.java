@@ -194,7 +194,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
             longSenderProgress = Long.parseLong(senderProgress[0]); // our last checkIn in seconds
             Date date = new Date(longSenderProgress * 1000); // convert last checkIn in date format
             senderProgressMidNight = longSenderProgress - (date.getHours() * 60 * 60) - (date.getMinutes() * 60) - (date.getSeconds()); // checkIn midNight
-        } catch (NumberFormatException e) {
+        } catch (RuntimeException e) { // deleted NumberFormatException
             e.printStackTrace();
             Toast.makeText(getContext(), "Time to improve yourself", Toast.LENGTH_SHORT).show();
         }
