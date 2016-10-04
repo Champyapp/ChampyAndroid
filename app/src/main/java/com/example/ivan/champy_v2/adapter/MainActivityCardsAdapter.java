@@ -2,17 +2,13 @@ package com.example.ivan.champy_v2.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.graphics.Typeface;
-import android.nfc.FormatException;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,13 +26,10 @@ import com.example.ivan.champy_v2.model.SelfImprovement_model;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
-
-public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements View.OnClickListener*/ {
+public class MainActivityCardsAdapter extends CustomPagerAdapter {
 
     private ArrayList<SelfImprovement_model> arrayList;
     public static final String TAG = "CardsAdapterMain";
@@ -82,9 +75,6 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter /*implements Vi
         String itemType = currentCard.getType();
         final String itemInProgressId = currentCard.getId();
         String[] senderProgress = toArrayOfStrings(itemSenderProgress);
-
-        //Log.i(TAG, "getView: long[] senderProgress = " + senderProgress[0]);
-        //Log.i(TAG, "getView: goal = " + itemGoal + ", update = " + itemUpdate + ", SenderProgress" + itemSenderProgress);
 
         switch (itemType) {
             case "Wake Up":

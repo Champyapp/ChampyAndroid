@@ -49,10 +49,6 @@ public class AlarmReceiverActivity extends Activity {
         final int finalIntentId = this.getIntent().getIntExtra("finalIntentId", 0);
         final String stringFinalIntentId = String.valueOf(finalIntentId);
         final ChallengeController cc = new ChallengeController(getApplicationContext(), AlarmReceiverActivity.this, 0, 0, 0);
-        Log.i(TAG, "finalInProgressChallengeId: " + finalInProgressChallengeId);
-        Log.i(TAG, "finalIntentId: " + finalIntentId);
-        Log.i(TAG, "stringFinalIntentId: " + stringFinalIntentId);
-
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.alarm);
@@ -74,7 +70,6 @@ public class AlarmReceiverActivity extends Activity {
         CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
         token = user.getToken();
         userId = user.getUserObjectId();
-        //final String finalChallengeId = challengeId;
         buttonWakeUpDoneForToday.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View arg0, MotionEvent arg1) {
                 mMediaPlayer.stop();
@@ -94,9 +89,6 @@ public class AlarmReceiverActivity extends Activity {
                 return false;
             }
         });
-
-        //playSound(this, getAlarmUri());
-
 
         ImageButton buttonWakeUpSurrender = (ImageButton) findViewById(R.id.buttonWakeUpSurrender);
         buttonWakeUpSurrender.setOnTouchListener(new View.OnTouchListener() {
@@ -129,8 +121,6 @@ public class AlarmReceiverActivity extends Activity {
         }
     }
 
-
-    // берем звук для будильника
     private Uri getAlarmUri() {
         Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         if (alert == null) {

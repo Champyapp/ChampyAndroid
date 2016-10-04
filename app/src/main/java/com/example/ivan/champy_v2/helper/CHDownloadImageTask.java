@@ -45,31 +45,29 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
 
     protected Bitmap doInBackground(String... urls) {
-        String urldisplay = urls[0];
-        Log.d("DownLoadImageTask", "doInBackground: " + urldisplay);
+        String path_to_pic = urls[0];
 
-        Bitmap mIcon11 = null;
+        Bitmap bitmapImage = null;
         try {
-            InputStream in = new java.net.URL(urldisplay).openStream();
-            mIcon11 = BitmapFactory.decodeStream(in);
+            InputStream in = new java.net.URL(path_to_pic).openStream();
+            bitmapImage = BitmapFactory.decodeStream(in);
         } catch (Exception e) {
             Log.e("DownLoadImageTask", "Error: " + e.getMessage());
             e.printStackTrace();
         }
-        return mIcon11;
+        return bitmapImage;
     }
 
     private String saveToInternalStorage(Bitmap bitmapImage){
         ContextWrapper cw = new ContextWrapper(context);
-        // path to /data/data/yourapp/app_data/imageDir
         String root = Environment.getExternalStorageDirectory().toString();
-        File myDir = new File(root + "/saved_images");
+        File myDir = new File(root + "/android/data/com.azinecllc.champy/images");
         myDir.mkdirs();
         Random generator = new Random();
-        int n = 10000;
+        int n = 100000000;
         n = generator.nextInt(n);
-        String fname = "Image-" + n + ".jpg";
-        File file = new File(myDir, fname);
+        String fileName = "Image-" + n + ".jpg";
+        File file = new File(myDir, fileName);
         if (file.exists()) {
             file.delete();
         }
@@ -78,9 +76,7 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
             bitmapImage.compress(Bitmap.CompressFormat.JPEG, 90, out);
             out.flush();
             out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) {e.printStackTrace();}
 
         CHUploadPhoto uploadPhoto = new CHUploadPhoto(context);
         uploadPhoto.uploadPhotoForAPI(Uri.fromFile(file).getPath());
@@ -89,7 +85,6 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
         // Create imageDir
         File myPath = new File(directory, "profile.jpg");
-        Log.i("DownloadImageTask", "PhotoPath: " + myPath.toString());
         FileOutputStream fos;
         try {
             fos = new FileOutputStream(myPath);
@@ -106,9 +101,10 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         try {
             File f = new File(path, "profile.jpg");
             Uri uri = Uri.fromFile(f);
-            Log.i("DownloadImageTask", "LoadImageFromStorage: URI = " + uri);
             Glide.with(context).load(uri).bitmapTransform(new CropCircleTransformation(context))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into((ImageView)activity.findViewById(R.id.profile_image));
+                    .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
+                    .into((ImageView)activity.findViewById(R.id.profile_image));
+
             File file = new File(path, "blured2.jpg");
             if (file.exists()) {
                 return;

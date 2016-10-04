@@ -165,53 +165,45 @@ public class PhotoActivity extends AppCompatActivity {
             String path = null;
             try {
                 path = getPath(uri);
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            }
-            Log.d(TAG, "File Path: " + path);
+            } catch (URISyntaxException e) {e.printStackTrace();}
             Upload_photo(path);
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),uri);
-            Log.i("CROP", "CROP: "+bitmap);
             savePhoto(bitmap);
             Intent intent = new Intent(PhotoActivity.this, MainActivity.class);
             startActivity(intent);
-            Toast.makeText(getApplicationContext(), "Changed", Toast.LENGTH_SHORT).show();
+
         } else if (resultCode == Crop.RESULT_ERROR) {
             Toast.makeText(this, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
     private String SaveFromCamera(Bitmap finalBitmap) {
-
         String root = Environment.getExternalStorageDirectory().toString();
-        File myDir = new File(root + "/saved_images");
+        File myDir = new File(root + "/android/data/com.azinecllc.champy/images");
         myDir.mkdirs();
         Random generator = new Random();
-        int n = 10000;
+        int n = 100000000;
         n = generator.nextInt(n);
-        String fname = "Image-"+ n +".jpg";
-        File file = new File (myDir, fname);
+        String fileName = "Image-"+ n +".jpg";
+        File file = new File (myDir, fileName);
         if (file.exists ()) file.delete ();
         try {
             FileOutputStream out = new FileOutputStream(file);
             finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
             out.flush();
             out.close();
+        } catch (Exception e) {e.printStackTrace();}
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return (Uri.fromFile(file).getPath());
     }
 
     public void savePhoto (Bitmap photo)
     {
         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
-        File file = new File(path, "profile.jpg");
-        File file1 = new File(path, "blured2.jpg");
-        Uri uri = Uri.fromFile(file);
+        File profileImage = new File(path, "profile.jpg");
+        File profileBlured = new File(path, "blured2.jpg");
+        Uri uri = Uri.fromFile(profileImage);
 
         Blur blur = new Blur();
-
         Bitmap blured = blur.blurRenderScript(getApplicationContext(), photo, 10);
 
         SessionManager sessionManager = new SessionManager(getApplicationContext());
@@ -219,7 +211,7 @@ public class PhotoActivity extends AppCompatActivity {
 
         FileOutputStream out = null;
         try {
-            out = new FileOutputStream(file1);
+            out = new FileOutputStream(profileBlured);
             blured.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
             // PNG is a lossless format, the compression factor (100) is ignored
         } catch (Exception e) {
@@ -235,7 +227,7 @@ public class PhotoActivity extends AppCompatActivity {
         }
         out = null;
         try {
-            out = new FileOutputStream(file);
+            out = new FileOutputStream(profileImage);
             photo.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
             // PNG is a lossless format, the compression factor (100) is ignored
         } catch (Exception e) {
@@ -294,13 +286,9 @@ public class PhotoActivity extends AppCompatActivity {
         String token = user.get("token");
 
         String id = user.get("id");
-
         File f=new File(path);
-
         Log.d(TAG, "Status: " + f);
-
-        RequestBody requestBody =
-                RequestBody.create(MediaType.parse("image/jpeg"), f);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), f);
 
         Update_user update_user = retrofit.create(Update_user.class);
         Call<User> call = update_user.update_photo(id, token, requestBody);
