@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -47,7 +48,6 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
     private EditText inputSubject, inputMessage;
     private TextInputLayout inputLayoutSubject, inputLayoutMessage;
     String[] recipients = {"azinecllc@gmail.com"};
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,6 +169,7 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         return true;
     }
 
+
     private Drawable Init(String path) throws FileNotFoundException {
         File file = new File(path, "blured2.jpg");
         Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
@@ -177,22 +178,6 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         return dr;
     }
 
-    private void sendEmail() {
-
-        Intent email = new Intent(Intent.ACTION_SEND, Uri.parse("mailto:"));
-        email.setType("message/rfc822");
-        email.putExtra(Intent.EXTRA_EMAIL, recipients);
-        email.putExtra(Intent.EXTRA_SUBJECT, inputSubject.getText().toString());
-        email.putExtra(Intent.EXTRA_TEXT, inputMessage.getText().toString());
-
-        try {
-            if (!inputSubject.getText().toString().isEmpty() && !inputMessage.getText().toString().isEmpty()) {
-                startActivity(Intent.createChooser(email, "Choose an email client from..."));
-            } else Toast.makeText(ContactUsActivity.this, "Complete empty fields", Toast.LENGTH_SHORT).show();
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(ContactUsActivity.this, "No email client installed.", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     private void submitForm() {
         if (!validateSubject()) {
@@ -204,6 +189,24 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         sendEmail();
     }
 
+
+    private void sendEmail() {
+        Intent email = new Intent(Intent.ACTION_SEND_MULTIPLE, Uri.parse("mailto:"));
+        email.setType("message/rfc822");
+        email.putExtra(Intent.EXTRA_EMAIL, recipients);
+        email.putExtra(Intent.EXTRA_SUBJECT, inputSubject.getText().toString());
+        email.putExtra(Intent.EXTRA_TEXT, inputMessage.getText().toString());
+
+        try {
+            if (!inputSubject.getText().toString().isEmpty() && !inputMessage.getText().toString().isEmpty()) {
+                startActivity(Intent.createChooser(email, "Choose an email client from..."));
+            }
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(ContactUsActivity.this, "No email client installed.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
     private boolean validateSubject() {
         if (inputSubject.getText().toString().trim().isEmpty()) {
             inputLayoutSubject.setError("Complete your subject");
@@ -214,6 +217,7 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         }
         return true;
     }
+
 
     private boolean validateMessage() {
         String email = inputMessage.getText().toString().trim();
@@ -228,11 +232,13 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         return true;
     }
 
+
     private void requestFocus(View view) {
         if (view.requestFocus()) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
+
 
     private class MyTextWatcher implements TextWatcher {
 
