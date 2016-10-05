@@ -32,7 +32,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
 
     public static final String ARG_PAGE = "ARG_PAGE";
     public static final String TAG = "DuelFragment";
-    public int position, size, days = 21;
+    public int position, size, days = 21, o = 0;
     public String name, duration, description, challenge_id, status, friend_id, token, userId;
     public SessionManager sessionManager;
     public ChallengeController cc;
@@ -65,19 +65,14 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.item_row, container, false);
-        Log.i(TAG, "onCreateView: ");
+        Log.i(TAG, "onCreateView");
         Bundle extras = getActivity().getIntent().getExtras();
         friend_id = (extras == null) ? null : extras.getString("id");
-//        if(extras == null) {
-//        } else {
-//            friend_id = extras.getString("id");
-//        }
         dbHelper = new DBHelper(getActivity());
         db = dbHelper.getWritableDatabase();
         final Bundle args = this.getArguments();
         c = db.query("duel", null, null, null, null, null, null);
         position = args.getInt(ARG_PAGE);
-        int o = 0;
         if (c.moveToFirst()) {
             int idColIndex = c.getColumnIndex("id");
             int nameColIndex = c.getColumnIndex("name");
@@ -104,10 +99,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         etGoal = (EditText)view.findViewById(R.id.et_goal);
         etDays = (EditText)view.findViewById(R.id.et_days);
 
-//        days = (duration != null && !duration.isEmpty()) ? days = Integer.parseInt(duration) / 86400 : 0;
-        if (duration != null && !duration.isEmpty()) {
-            days = Integer.parseInt(duration) / 86400;
-        }
+        if (duration != null && !duration.isEmpty()) days = Integer.parseInt(duration) / 86400;
 
         tvDays.setText("" + days);
         tvDays.setTypeface(typeface);
@@ -125,11 +117,12 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         if (position == size) {
             etGoal.setTypeface(typeface);
             etDays.setTypeface(typeface);
-            etGoal.setText(name);
+            //etGoal.setText(name);
             etDays.setHint("21");
             etDays.setVisibility(View.VISIBLE);
             etGoal.setVisibility(View.VISIBLE);
             tvDays.setVisibility(View.INVISIBLE);
+            tvGoal.setVisibility(View.INVISIBLE);
         }
 
         OfflineMode offlineMode = new OfflineMode();

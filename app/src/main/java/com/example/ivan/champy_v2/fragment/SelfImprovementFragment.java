@@ -93,19 +93,15 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
             } while (c.moveToNext());
         }
         c.close();
-
         sessionManager = new SessionManager(getContext());
         size = sessionManager.getSelfSize();
-
         typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
         tvGoal = (TextView)view.findViewById(R.id.goal_text);
         tvDays = (TextView)view.findViewById(R.id.days_text);
         etGoal = (EditText)view.findViewById(R.id.et_goal);
         etDays = (EditText)view.findViewById(R.id.et_days);
 
-        if (duration != null && !duration.isEmpty()) {
-            days = Integer.parseInt(duration) / 86400;
-        }
+        if (duration != null && !duration.isEmpty()) days = Integer.parseInt(duration) / 86400;
 
         tvDays.setText("" + days);
         tvDays.setTypeface(typeface);
@@ -154,7 +150,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         snackbar = Snackbar.make(view, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i(TAG, "onClickSnackBar: ");
                 cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
                 if (position == size) {
                     if (checkInputUserData(name, duration, view)) {

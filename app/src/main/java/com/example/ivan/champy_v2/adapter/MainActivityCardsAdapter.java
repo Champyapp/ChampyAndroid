@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +42,6 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
         this.arrayList = marrayList;
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     public View getView(int position, View convertView) {
         View tempView = convertView;
@@ -107,7 +107,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
         buttonShare.getLayoutParams() .height = x*10;
         final TextView tvDuration = (TextView) tempView.findViewById(R.id.textViewDuration);
         if (itemType.equals("Wake Up") || itemUpdate.equals("true")) { //?
-            tvDuration.setText(currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
+            tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
             buttonShare.setVisibility(View.VISIBLE);
             buttonDone.setVisibility(View.INVISIBLE);
         } else {
@@ -180,8 +180,9 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
         long senderProgressMidNight = 0;
         final long oneDay = 86400L;
         try {
-            // TODO: 30.09.2016 i think need to change [0] for .lastElement
+            //TODO: 30.09.2016 i think need to change [0] for .size()-1 or .length-1;
             longSenderProgress = Long.parseLong(senderProgress[0]); // our last checkIn in seconds
+            Log.i(TAG, "getView: TRY longSenderProgress: " + longSenderProgress);
             Date date = new Date(longSenderProgress * 1000); // convert last checkIn in date format
             senderProgressMidNight = longSenderProgress - (date.getHours() * 60 * 60) - (date.getMinutes() * 60) - (date.getSeconds()); // checkIn midNight
         } catch (RuntimeException e) { // deleted NumberFormatException
@@ -230,7 +231,7 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
             @Override
             public void onClick(View v) {
                 try {
-                    // TODO: 26.09.2016 replace this piece of code in DoneForToday method in cc.
+                    // TODO: 26.09.2016 replace this piece of code inside DoneForToday method in cc.
                     ////////////////////////////////////////////////////////////////////////
                     DBHelper dbHelper = new DBHelper(getContext());
                     SQLiteDatabase db = dbHelper.getWritableDatabase();

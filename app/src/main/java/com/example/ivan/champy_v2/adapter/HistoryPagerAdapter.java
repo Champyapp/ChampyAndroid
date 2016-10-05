@@ -31,7 +31,7 @@ public class HistoryPagerAdapter extends FragmentPagerAdapter {
             case 0: return new HistoryInProgressFragment();
             case 1: return new HistoryWinsFragment();
             case 2: return new HistoryFailedFragment();
-            default: return new Fragment();
+           default: return new Fragment();
         }
     }
 

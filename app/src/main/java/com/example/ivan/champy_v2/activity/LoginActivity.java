@@ -67,6 +67,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private ProfileTracker mProfileTracker;
     private CallbackManager mCallbackManager;
     private String user_email, path_to_pic, name, fb_id;
+    public View spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,7 +155,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 parameters.putString("fields", "id, first_name, last_name, email, gender, birthday, location");
                 request.setParameters(parameters);
                 request.executeAsync();
-
+                spinner = findViewById(R.id.loadingPanel);
+                spinner.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -202,6 +204,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        spinner.setVisibility(View.INVISIBLE);
         ViewServer.get(this).removeWindow(this);
     }
 
