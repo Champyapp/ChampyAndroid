@@ -11,9 +11,6 @@ import retrofit.http.POST;
 import retrofit.http.Path;
 import retrofit.http.Query;
 
-/**
- * Created by ivan on 01.03.16.
- */
 public interface NewUser {
     @POST("/v1/users")
     Call<User> register(

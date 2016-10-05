@@ -4,9 +4,6 @@ import com.example.ivan.champy_v2.Friend;
 
 import java.util.List;
 
-/**
- * Created by ivan on 23.02.16.
- */
 public class Other {
 
     private List<Friend> other;

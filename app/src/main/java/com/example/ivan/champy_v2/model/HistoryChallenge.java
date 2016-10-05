@@ -2,17 +2,15 @@ package com.example.ivan.champy_v2.model;
 
 public class HistoryChallenge {
 
-    boolean active;
-
-    String level;
-    String goal;
-    String challengeName;
-    String type;
-    String description;
-    String duration;
-    String status;
-    String versus;
-    String recipient;
+    private boolean active;
+    private String goal;
+    private String challengeName;
+    private String type;
+    private String description;
+    private String duration;
+    private String status;
+    private String versus;
+    private String recipient;
 
     public String getRecipient() {
         return recipient;

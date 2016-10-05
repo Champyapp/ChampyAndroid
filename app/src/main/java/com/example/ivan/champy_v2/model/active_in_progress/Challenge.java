@@ -1,4 +1,3 @@
-
 package com.example.ivan.champy_v2.model.active_in_progress;
 
 import java.util.HashMap;
@@ -8,15 +7,8 @@ import javax.annotation.Generated;
 @Generated("org.jsonschema2pojo")
 public class Challenge {
 
-    public String get_id() {
-        return _id;
-    }
-
-    public void set_id(String _id) {
-        this._id = _id;
-    }
-
     private String _id;
+
     private String name;
     private String type;
     private String description;
@@ -31,6 +23,13 @@ public class Challenge {
     private Integer points;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
+    }
 
     public String getWakeUpTime() {
         return wakeUpTime;
