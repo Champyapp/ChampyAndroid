@@ -10,13 +10,19 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -38,7 +44,13 @@ import java.util.HashMap;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
-public class ContactUsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class ContactUsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+
+    private Toolbar toolbar;
+    private EditText inputName, inputEmail;
+    private TextInputLayout inputLayoutName, inputLayoutEmail;
+    private Button btnSingUp;
+    String[] recipients = {"azinecllc@gmail.com"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,27 +86,30 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         TextView textView = (TextView) headerLayout.findViewById(R.id.tvUserName);
         textView.setText(name);
 
-        Button button = (Button)findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendEmail();
-            }
-        });
-
         Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile);
 
-        try {
-            Drawable dr = Init("/data/data/com.example.ivan.champy_v2/app_imageDir/");
-            ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setImageDrawable(dr);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
 
         ViewServer.get(this).addWindow(this);
+
+        inputLayoutName = (TextInputLayout)findViewById(R.id.input_layout_name);
+        inputLayoutEmail = (TextInputLayout)findViewById(R.id.input_layout_email);
+
+        inputName = (EditText)findViewById(R.id.input_name);
+        inputEmail = (EditText)findViewById(R.id.input_email);
+
+        btnSingUp = (Button)findViewById(R.id.btn_signup);
+
+        inputName.addTextChangedListener(new MyTextWatcher(inputName));
+        inputEmail.addTextChangedListener(new MyTextWatcher(inputEmail));
+
+        btnSingUp.setOnClickListener(this);
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        submitForm();
     }
 
     @Override
@@ -152,32 +167,16 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
     }
 
 
-    private Drawable Init(String path) throws FileNotFoundException {
-        File file = new File(path, "blured2.jpg");
-        Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
-        Drawable dr = new BitmapDrawable(this.getResources(), bitmap);
-        dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
-        ImageView background = (ImageView) findViewById(R.id.contact_us_background);
-        background.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        background.setImageDrawable(dr);
-        return dr;
-    }
+    private void sendEmail() {
 
-
-    protected void sendEmail() {
-        EditText subject = (EditText) findViewById(R.id.editText2);
-        EditText body    = (EditText) findViewById(R.id.editText);
-
-        // TODO: 12.09.2016 change this email for real;
-        String[] recipients = {"skill.bereg@gmail.com"};
         Intent email = new Intent(Intent.ACTION_SEND, Uri.parse("mailto:"));
         email.setType("message/rfc822");
         email.putExtra(Intent.EXTRA_EMAIL, recipients);
-        email.putExtra(Intent.EXTRA_SUBJECT, subject.getText().toString());
-        email.putExtra(Intent.EXTRA_TEXT, body.getText().toString());
+        email.putExtra(Intent.EXTRA_SUBJECT, inputName.getText().toString());
+        email.putExtra(Intent.EXTRA_TEXT, inputEmail.getText().toString());
 
         try {
-            if (!subject.getText().toString().isEmpty() && !body.getText().toString().isEmpty()) {
+            if (!inputName.getText().toString().isEmpty() && !inputEmail.getText().toString().isEmpty()) {
                 startActivity(Intent.createChooser(email, "Choose an email client from..."));
             } else Toast.makeText(ContactUsActivity.this, "Complete empty fields", Toast.LENGTH_SHORT).show();
         } catch (android.content.ActivityNotFoundException ex) {
@@ -185,5 +184,73 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         }
     }
 
+    private void submitForm() {
+        if (!validateName()) {
+            return;
+        }
+        if (!validateEmail()) {
+            return;
+        }
+        sendEmail();
+        Toast.makeText(getApplicationContext(), "Thank You!", Toast.LENGTH_LONG).show();
+    }
+
+    private boolean validateName() {
+        if (inputName.getText().toString().trim().isEmpty()) {
+            inputLayoutName.setError("Complete this edit text!");
+            requestFocus(inputName);
+            return false;
+        } else {
+            inputLayoutName.setErrorEnabled(false);
+        }
+        return true;
+    }
+
+    private boolean validateEmail() {
+        String email = inputEmail.getText().toString().trim();
+
+        if (email.isEmpty()) {
+            inputLayoutEmail.setError("Complete this edit text! [2]");
+            requestFocus(inputEmail);
+            return false;
+        } else {
+            inputLayoutEmail.setErrorEnabled(false);
+        }
+        return true;
+    }
+
+    private void requestFocus(View view) {
+        if (view.requestFocus()) {
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+    }
+
+
+
+    private class MyTextWatcher implements TextWatcher {
+
+        private View view;
+
+        private MyTextWatcher(View view) {
+            this.view = view;
+        }
+
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        public void afterTextChanged(Editable editable) {
+            switch (view.getId()) {
+                case R.id.input_name:
+                    validateName();
+                    break;
+                case R.id.input_email:
+                    validateEmail();
+                    break;
+            }
+        }
+    }
 
 }
