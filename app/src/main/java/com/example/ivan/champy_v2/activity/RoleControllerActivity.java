@@ -40,7 +40,6 @@ public class RoleControllerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_role_controller);
-
         try {
             mSocket = IO.socket("http://46.101.213.24:3007");
         } catch (URISyntaxException e) { throw new RuntimeException(e); }

@@ -2,14 +2,12 @@ package com.example.ivan.champy_v2.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
@@ -24,8 +22,6 @@ import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.helper.AppSync;
 import com.example.ivan.champy_v2.helper.CHImageModule;
 import com.example.ivan.champy_v2.helper.CHInitializeLogin;
-import com.example.ivan.champy_v2.helper.CHUploadPhoto;
-import com.example.ivan.champy_v2.helper.NotificationController;
 import com.example.ivan.champy_v2.interfaces.NewUser;
 import com.example.ivan.champy_v2.model.User.Data;
 import com.example.ivan.champy_v2.model.User.LoginData;
@@ -48,16 +44,8 @@ import com.google.android.gms.iid.InstanceID;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
@@ -105,18 +93,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mCallbackManager = CallbackManager.Factory.create();
         mTokenTracker  = new AccessTokenTracker() {
             @Override
-            protected void onCurrentAccessTokenChanged(AccessToken oldToken, AccessToken newToken) {
-                String log = (newToken == null) ? "newToken == null" : "newToken != null";
-                Log.i(TAG, "onCurrentAccessTokenChanged: " + log);
-            }
+            protected void onCurrentAccessTokenChanged(AccessToken oldToken, AccessToken newToken) {}
         };
         mProfileTracker = new ProfileTracker() {
             @Override
             protected void onCurrentProfileChanged(Profile oldprofile, Profile newprofile) {
-                if (newprofile != null) {
-                    name = newprofile.getName();
-                    fb_id = newprofile.getId();
-                }
+                if (newprofile != null) { name = newprofile.getName(); fb_id = newprofile.getId(); }
             }
         };
         mTokenTracker.startTracking();
@@ -139,9 +121,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                final AccessToken accessToken = loginResult.getAccessToken();
-                Profile profile = Profile.getCurrentProfile();
-                //final String[] URL = {""};
                 GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
@@ -149,13 +128,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             user_email = object.getString("email");
                             fb_id = object.getString("id");
                             name = object.getString("first_name") + " " + object.getString("last_name");
-                            Log.i(TAG, "UserEmail: " + user_email);
-                            Log.i(TAG, "UserName: " + name);
-                            Log.i(TAG, "Facebook: " + fb_id);
                             try {
                                 URL profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
                                 path_to_pic = profile_pic.toString();
-                                Log.i(TAG, "OnClick path_to_pick: " + path_to_pic);
                             } catch (MalformedURLException e) { e.printStackTrace(); }
                             new Thread(new Runnable() {
                                 public void run() {
@@ -163,20 +138,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         String token_android;
                                         InstanceID instanceID = InstanceID.getInstance(LoginActivity.this);
                                         token_android = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-
                                         JSONObject jsonObject = new JSONObject();
                                         jsonObject.put("token", token_android);
                                         jsonObject.put("timeZone", "-2");
                                         String json = jsonObject.toString();
-                                        Log.i(TAG, "JSON: " + json);
-                                        Log.i(TAG, "GCM: "  + token_android);
-
                                         getUserData(fb_id, path_to_pic, json);
                                         registerUser(fb_id, name, user_email, json);
-
-                                    } catch (Exception e) {
-                                        Log.i(TAG, "Failed to complete token refresh", e);
-                                    }
+                                    } catch (Exception e) {Log.e(TAG, "error: ", e);}
                                 }
                             }).start();
                         } catch (JSONException e) { e.printStackTrace(); }
@@ -190,14 +158,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
 
             @Override
-            public void onCancel() {
-                Log.i(TAG, "onCancel: canceled");
-            }
+            public void onCancel() {}
 
             @Override
-            public void onError(FacebookException exception) {
-                Log.i(TAG, "onError: " + exception);
-            }
+            public void onError(FacebookException exception) {}
         });
 
     }
@@ -254,7 +218,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("facebookId", fb_id);
         jsonObject.put("AndroidOS", gcm);
-        String string2 = "{facebookId:'"+fb_id+"', AndroidOS:{token:'"+gcm+"', timeZone:2}";
         String string = jsonObject.toString();
         final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
 
@@ -275,7 +238,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     String acceptedYour = user.getProfileOptions().getAcceptedYourChallenge().toString();
                     String challegeEnd = user.getProfileOptions().getChallengeEnd().toString();
 
-                    // "http://graph.facebook.com/" + fb_id + "/picture?type=large&redirect=true&width=500&height=500"
                     SessionManager sessionManager = new SessionManager(getApplicationContext());
                     sessionManager.setRefreshPending("false");
                     sessionManager.setRefreshFriends("false");
