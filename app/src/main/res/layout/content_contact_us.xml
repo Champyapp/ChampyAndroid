@@ -6,35 +6,40 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/app_bar_contact_us"
+    android:background="@drawable/champy_background"
     tools:context="com.example.ivan.champy_v2.activity.ContactUsActivity">
 
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
         android:orientation="vertical"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:paddingTop="60dp">
+        android:paddingTop="60dp"
+        android:layout_alignParentTop="true">
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_layout_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:textColorHint="@android:color/white">
 
             <EditText
                 android:id="@+id/input_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:hint="Subject" />
+                android:maxLines="1"
+                android:hint="@string/subject"
+                android:textColor="@android:color/white"
+                android:textColorLink="@android:color/white" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_layout_email"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:textColorHint="@android:color/white">
 
             <EditText
                 android:id="@+id/input_email"
@@ -42,17 +47,22 @@
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
                 android:maxLength="250"
-                android:hint="Your Message" />
+                android:maxLines="1"
+                android:hint="@string/your_message"
+                android:textColor="@android:color/white"
+                android:shadowColor="@android:color/white"
+                android:textColorHint="@android:color/white"
+                android:textColorLink="@android:color/white" />
         </android.support.design.widget.TextInputLayout>
 
 
-        <Button android:id="@+id/btn_signup"
+        <Button android:id="@+id/buttonSend"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/send"
             android:background="#339997"
             android:layout_marginTop="40dp"
-            android:textColor="@android:color/white"/>
+            android:textColor="@android:color/white" />
 
     </LinearLayout>
 </RelativeLayout>

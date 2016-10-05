@@ -17,9 +17,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -46,11 +44,10 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class ContactUsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
-    private Toolbar toolbar;
-    private EditText inputName, inputEmail;
-    private TextInputLayout inputLayoutName, inputLayoutEmail;
-    private Button btnSingUp;
+    private EditText inputSubject, inputMessage;
+    private TextInputLayout inputLayoutSubject, inputLayoutMessage;
     String[] recipients = {"azinecllc@gmail.com"};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +79,13 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         Uri url = Uri.fromFile(file);
         String name = user.get("name");
 
+        try {
+            Drawable dr = Init(path);
+            ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setImageDrawable(dr);
+        } catch (FileNotFoundException e) { e.printStackTrace(); }
+
         ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
         TextView textView = (TextView) headerLayout.findViewById(R.id.tvUserName);
         textView.setText(name);
@@ -92,20 +96,19 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
 
         ViewServer.get(this).addWindow(this);
 
-        inputLayoutName = (TextInputLayout)findViewById(R.id.input_layout_name);
-        inputLayoutEmail = (TextInputLayout)findViewById(R.id.input_layout_email);
+        inputLayoutSubject = (TextInputLayout)findViewById(R.id.input_layout_name);
+        inputLayoutMessage = (TextInputLayout)findViewById(R.id.input_layout_email);
 
-        inputName = (EditText)findViewById(R.id.input_name);
-        inputEmail = (EditText)findViewById(R.id.input_email);
+        inputSubject = (EditText)findViewById(R.id.input_name);
+        inputMessage = (EditText)findViewById(R.id.input_email);
 
-        btnSingUp = (Button)findViewById(R.id.btn_signup);
+        Button buttonSend = (Button) findViewById(R.id.buttonSend);
 
-        inputName.addTextChangedListener(new MyTextWatcher(inputName));
-        inputEmail.addTextChangedListener(new MyTextWatcher(inputEmail));
+        inputSubject.addTextChangedListener(new MyTextWatcher(inputSubject));
+        inputMessage.addTextChangedListener(new MyTextWatcher(inputMessage));
 
-        btnSingUp.setOnClickListener(this);
+        buttonSend.setOnClickListener(this);
     }
-
 
     @Override
     public void onClick(View v) {
@@ -166,17 +169,24 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         return true;
     }
 
+    private Drawable Init(String path) throws FileNotFoundException {
+        File file = new File(path, "blured2.jpg");
+        Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
+        Drawable dr = new BitmapDrawable(getResources(), bitmap);
+        dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
+        return dr;
+    }
 
     private void sendEmail() {
 
         Intent email = new Intent(Intent.ACTION_SEND, Uri.parse("mailto:"));
         email.setType("message/rfc822");
         email.putExtra(Intent.EXTRA_EMAIL, recipients);
-        email.putExtra(Intent.EXTRA_SUBJECT, inputName.getText().toString());
-        email.putExtra(Intent.EXTRA_TEXT, inputEmail.getText().toString());
+        email.putExtra(Intent.EXTRA_SUBJECT, inputSubject.getText().toString());
+        email.putExtra(Intent.EXTRA_TEXT, inputMessage.getText().toString());
 
         try {
-            if (!inputName.getText().toString().isEmpty() && !inputEmail.getText().toString().isEmpty()) {
+            if (!inputSubject.getText().toString().isEmpty() && !inputMessage.getText().toString().isEmpty()) {
                 startActivity(Intent.createChooser(email, "Choose an email client from..."));
             } else Toast.makeText(ContactUsActivity.this, "Complete empty fields", Toast.LENGTH_SHORT).show();
         } catch (android.content.ActivityNotFoundException ex) {
@@ -185,36 +195,35 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
     }
 
     private void submitForm() {
-        if (!validateName()) {
+        if (!validateSubject()) {
             return;
         }
-        if (!validateEmail()) {
+        if (!validateMessage()) {
             return;
         }
         sendEmail();
-        Toast.makeText(getApplicationContext(), "Thank You!", Toast.LENGTH_LONG).show();
     }
 
-    private boolean validateName() {
-        if (inputName.getText().toString().trim().isEmpty()) {
-            inputLayoutName.setError("Complete this edit text!");
-            requestFocus(inputName);
+    private boolean validateSubject() {
+        if (inputSubject.getText().toString().trim().isEmpty()) {
+            inputLayoutSubject.setError("Complete your subject");
+            requestFocus(inputSubject);
             return false;
         } else {
-            inputLayoutName.setErrorEnabled(false);
+            inputLayoutSubject.setErrorEnabled(false);
         }
         return true;
     }
 
-    private boolean validateEmail() {
-        String email = inputEmail.getText().toString().trim();
+    private boolean validateMessage() {
+        String email = inputMessage.getText().toString().trim();
 
         if (email.isEmpty()) {
-            inputLayoutEmail.setError("Complete this edit text! [2]");
-            requestFocus(inputEmail);
+            inputLayoutMessage.setError("Complete your message");
+            requestFocus(inputMessage);
             return false;
         } else {
-            inputLayoutEmail.setErrorEnabled(false);
+            inputLayoutMessage.setErrorEnabled(false);
         }
         return true;
     }
@@ -224,8 +233,6 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
-
-
 
     private class MyTextWatcher implements TextWatcher {
 
@@ -244,10 +251,10 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         public void afterTextChanged(Editable editable) {
             switch (view.getId()) {
                 case R.id.input_name:
-                    validateName();
+                    validateSubject();
                     break;
                 case R.id.input_email:
-                    validateEmail();
+                    validateMessage();
                     break;
             }
         }

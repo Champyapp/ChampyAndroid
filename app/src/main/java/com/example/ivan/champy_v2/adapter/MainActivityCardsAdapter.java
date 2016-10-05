@@ -186,7 +186,6 @@ public class MainActivityCardsAdapter extends CustomPagerAdapter {
             senderProgressMidNight = longSenderProgress - (date.getHours() * 60 * 60) - (date.getMinutes() * 60) - (date.getSeconds()); // checkIn midNight
         } catch (RuntimeException e) { // deleted NumberFormatException
             e.printStackTrace();
-            Toast.makeText(getContext(), "Time to improve yourself", Toast.LENGTH_SHORT).show();
         }
 
 
