@@ -9,7 +9,7 @@ import com.example.ivan.champy_v2.R;
 
 import static java.lang.Math.round;
 
-public class CHMakeResponsiveScore {
+class CHMakeResponsiveScore {
 
 
     Activity activity;

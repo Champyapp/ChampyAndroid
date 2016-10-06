@@ -9,18 +9,20 @@ import java.util.Map;
 public class Data {
 
     private String _id;
-    private Sender sender;
-    private Challenge challenge;
-    private Integer begin;
     private Integer end;
+    private String status;
+    private Sender sender;
+    private Integer begin;
     private Integer created;
     private Integer updated;
+    private Challenge challenge;
     private Boolean senderSuccess;
     private Boolean recipientSuccess;
     private List<Object> recipientProgress = new ArrayList<Object>();
     private List<Object> senderProgress = new ArrayList<Object>();
-    private String status;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
+    // TODO: 06.10.2016 Delete trash
 
     /**
      * 

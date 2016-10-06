@@ -47,6 +47,7 @@ public class ProfileOptions {
     }
 
 
+    // TODO: 06.10.2016 Delete later
     public Boolean getJoinedChampy() {
         return joinedChampy;
     }

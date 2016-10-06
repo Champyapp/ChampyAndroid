@@ -20,6 +20,9 @@ public class Sender {
     private ProfileOptions profileOptions;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
+
+    // TODO: 06.10.2016 Delete trash
+
     /**
      * 
      * @return

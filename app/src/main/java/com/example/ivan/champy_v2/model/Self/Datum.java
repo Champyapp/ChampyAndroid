@@ -21,6 +21,7 @@ public class Datum {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
 
+    // TODO: 06.10.2016 Delete later
     public String get_id() {
         return _id;
     }

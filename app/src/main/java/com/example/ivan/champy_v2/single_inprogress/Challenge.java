@@ -23,6 +23,7 @@ public class Challenge {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
 
+    // TODO: 06.10.2016 Delete trash
     public Integer getSenderProgress() {
         return senderProgress;
     }

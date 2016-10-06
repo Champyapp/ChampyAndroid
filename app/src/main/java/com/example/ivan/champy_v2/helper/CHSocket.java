@@ -80,9 +80,7 @@ public class CHSocket {
                 userId = user.getUserObjectId();
                 cc.refreshCardsForPendingDuel(token, userId);
                 Log.i(TAG, "Sockets: onAcceptedChallenge success!");
-            } catch (Exception e) {
-                Log.i(TAG, "Sockets: ERROR: " + e);
-            }
+            } catch (Exception e) {Log.i(TAG, "Sockets: ERROR: " + e);}
         }
     };
 

@@ -5,9 +5,7 @@ import android.graphics.Point;
 import android.view.Display;
 import android.view.WindowManager;
 
-/**
- * Created by ivan on 09.12.15.
- */
+
 public class CHWindowView {
 
     private static Point screenSize;
@@ -25,6 +23,7 @@ public class CHWindowView {
             return 0;
     }
 
+    // TODO: 06.10.2016 Delete trash
     public static int getWindowHeight(Context context){
         if(screenSize == null){
             WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);

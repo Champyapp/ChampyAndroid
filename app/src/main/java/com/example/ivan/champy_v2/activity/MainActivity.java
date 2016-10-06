@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_gradient));
         setSupportActionBar(toolbar);
 
-        CHSocket sockets = new CHSocket(this, getApplicationContext());
+        CHSocket sockets = new CHSocket(MainActivity.this, getApplicationContext());
         sockets.tryToConnect();
         sockets.connectAndEmmit();
 

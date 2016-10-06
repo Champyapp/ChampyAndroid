@@ -24,6 +24,18 @@ public class Data {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
 
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+    }
+
+    public Integer getInProgressChallengesCount() {
+        return inProgressChallengesCount;
+    }
+
+    public ProfileOptions getProfileOptions() {
+        return profileOptions;
+    }
+
     public Integer getSuccessChallenges() {
         return successChallenges;
     }
@@ -32,36 +44,24 @@ public class Data {
         return failedChallenges;
     }
 
-    public Integer getAllChallengesCount() {
-        return this.inProgressChallengesCount + allChallengesCount;
-    }
-
-    public Integer getInProgressChallengesCount() {
-        return inProgressChallengesCount;
-    }
-
     public Integer getScore() {
         return inProgressChallengesCount;
-    }
-
-    public Integer getCreated() {
-        return created;
     }
 
     public Integer getUpdated() {
         return updated;
     }
 
+    public Integer getCreated() {
+        return created;
+    }
+
+    public Integer getAllChallengesCount() {
+        return this.inProgressChallengesCount + allChallengesCount;
+    }
+
     public String getEmail() {
         return email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String get_id() {
-        return _id;
     }
 
     public Photo getPhoto() {
@@ -72,15 +72,38 @@ public class Data {
         return level;
     }
 
-
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
+    public String getName() {
+        return name;
     }
 
-    public ProfileOptions getProfileOptions() {
-        return profileOptions;
+    public String get_id() {
+        return _id;
     }
 
+
+    public void setInProgressChallengesCount(Integer inProgressChallengesCount) {
+        this.inProgressChallengesCount = inProgressChallengesCount;
+    }
+
+    public void setAllChallengesCount(Integer allChallengesCount) {
+        this.allChallengesCount = allChallengesCount;
+    }
+
+    public void setUpdated(Integer updated) {
+        this.updated = updated;
+    }
+
+    public void setCreated(Integer created) {
+        this.created = created;
+    }
+
+    public void setProfileOptions(ProfileOptions profileOptions) {
+        this.profileOptions = profileOptions;
+    }
+
+    public void setAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
+    }
 
     public void setSuccessChallenges(Integer successChallenges) {
         this.successChallenges = successChallenges;
@@ -90,36 +113,12 @@ public class Data {
         this.failedChallenges = failedChallenges;
     }
 
-    public void setAllChallengesCount(Integer allChallengesCount) {
-        this.allChallengesCount = allChallengesCount;
-    }
-
-    public void setInProgressChallengesCount(Integer inProgressChallengesCount) {
-        this.inProgressChallengesCount = inProgressChallengesCount;
-    }
-
     public void setScore(Integer score) {
         this.score = score;
     }
 
-    public void setCreated(Integer created) {
-        this.created = created;
-    }
-
-    public void setUpdated(Integer updated) {
-        this.updated = updated;
-    }
-
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void set_id(String _id) {
-        this._id = _id;
     }
 
     public void setPhoto(Photo photo) {
@@ -130,12 +129,12 @@ public class Data {
         this.level = level;
     }
 
-    public void setProfileOptions(ProfileOptions profileOptions) {
-        this.profileOptions = profileOptions;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
 }

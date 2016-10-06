@@ -24,16 +24,16 @@ public class CustomPagerBase {
 
     private static final int NEXT_PAGE = 1;
     private static final int PREVIOUS_PAGE = 2;
-    private Activity context;
-    private RelativeLayout rootView;
-    private LayoutInflater inflater;
-    private View currentItem, nextItem, previousItem, removedItem;
-    private View[] viewList;
+    private boolean isTouchEnabled = true;
     private int currentPosition = 0;
     private int nextItemXPosition;
     private int previousItemXPosition;
-    private boolean isTouchEnabled = true;
+    private View currentItem, nextItem, previousItem, removedItem;
+    private View[] viewList;
+    private Activity context;
     private CustomPagerAdapter pagerAdapter;
+    private RelativeLayout rootView;
+    private LayoutInflater inflater;
 
     private static CustomPagerBase customPagerBase;
 
@@ -88,11 +88,12 @@ public class CustomPagerBase {
         View itemView;
         try{
             View convertView = viewList[position];
-            if(convertView == null)
+            if(convertView == null) {
                 itemView = pagerAdapter.getView(position, null);
-            else
+            } else {
                 itemView = pagerAdapter.getView(position, viewList[position]);
-        }catch(NullPointerException e){
+            }
+        } catch(NullPointerException e) {
             itemView = pagerAdapter.getView(position, null);
         }
         viewList[position] = itemView;
@@ -104,7 +105,7 @@ public class CustomPagerBase {
         if (state) {
             itemView.setOnTouchListener(touchListener(itemView));
         } else {
-            itemView.setOnTouchListener(null); // mb itemView?
+            itemView.setOnTouchListener(null);
         }
     }
 
@@ -153,8 +154,7 @@ public class CustomPagerBase {
                             if (firstTouchX - lastX > 10 && nextItem != null)  {
                                 if (ViewHelper.getAlpha(nextItem) < 0.93f) {
                                     ViewHelper.setAlpha(itemView, ViewHelper.getScaleX(itemView));
-                                }
-                                else {
+                                } else {
                                     ViewHelper.setAlpha(itemView, 1f);
                                 }
                                 ViewHelper.setAlpha (nextItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
@@ -193,6 +193,7 @@ public class CustomPagerBase {
                             isTouchEnabled = false;
                             if (Math.abs(lastX - firstTouchX) < 5) {
                                 // Click state
+                                // TODO: 05.10.2016 if 1 cards and X<5, need do something, ALLO
                                 // поворот карточок справа вліво
                             } else if (lastX - firstTouchX > 100) {
                                 if (previousItem != null)

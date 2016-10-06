@@ -17,6 +17,8 @@ public class ProfileOptions {
     private Boolean pushNotifications;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
+    // TODO: 06.10.2016 Delete trash
+
     /**
      * 
      * @return

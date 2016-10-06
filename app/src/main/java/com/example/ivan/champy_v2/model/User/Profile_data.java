@@ -2,11 +2,6 @@ package com.example.ivan.champy_v2.model.User;
 
 import java.util.HashMap;
 
-/**
- * Created by ivan on 03.03.16.
- */ 
-
-
 public class Profile_data {
     private String joinedChampy;
     private String friendRequests;
@@ -18,9 +13,7 @@ public class Profile_data {
     private String newChallengeRequests;
     private String pushNotifications;
 
-
-    public Profile_data(HashMap<String, String> options)
-    {
+    public Profile_data(HashMap<String, String> options) {
        this.joinedChampy = options.get("joinedChampy");
        this.friendRequests = options.get("friendRequests");
        this.challengeConfirmation = options.get("challengeConfirmation");

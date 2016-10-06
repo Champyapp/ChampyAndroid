@@ -1,8 +1,5 @@
 package com.example.ivan.champy_v2.model.User;
 
-/**
- * Created by ivan on 01.03.16.
- */
 public class LoginData {
     String facebookId;
     String name;

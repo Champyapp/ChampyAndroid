@@ -23,6 +23,14 @@ public class Challenge {
     private Integer points;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+    }
+
+    public void setWakeUpTime(String wakeUpTime) {
+        this.wakeUpTime = wakeUpTime;
+    }
+
     public String get_id() {
         return _id;
     }
@@ -33,10 +41,6 @@ public class Challenge {
 
     public String getWakeUpTime() {
         return wakeUpTime;
-    }
-
-    public void setWakeUpTime(String wakeUpTime) {
-        this.wakeUpTime = wakeUpTime;
     }
 
     public String getVersus() {
@@ -85,10 +89,6 @@ public class Challenge {
 
     public Integer getPoints() {
         return points;
-    }
-
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
     }
 
     public void setName(String name) {
