@@ -497,7 +497,7 @@ public class ChallengeController {
 
                         List<Object> senderProgress = datum.getSenderProgress();
                         String stringSenderProgress[] = new String[senderProgress.size()];
-                        Log.i(TAG, "json prepare!");
+
                         for (int j = 0; j < senderProgress.size(); j++) {
                             try {
                                 JSONObject json = new JSONObject(senderProgress.get(j).toString());
@@ -506,7 +506,6 @@ public class ChallengeController {
                                 stringSenderProgress[j] = String.valueOf(at);
                             } catch (JSONException e) { e.printStackTrace(); }
                         }
-                        Log.i(TAG, "json the end!");
 
                         if (challenge_description.equals("Wake Up")) {
                             cv.put("name", "Wake Up"); // just name of Challenge
@@ -533,7 +532,6 @@ public class ChallengeController {
                         cv.put("senderProgress", Arrays.toString(stringSenderProgress)); // last update time in millis
                         db.insert("myChallenges", null, cv);
                     }
-
                     Log.d(TAG, "Generate onResponse: VSE OK");
                     Intent intent = new Intent(firstActivity, MainActivity.class);
                     firstActivity.startActivity(intent);

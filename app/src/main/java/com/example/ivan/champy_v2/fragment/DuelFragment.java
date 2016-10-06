@@ -111,7 +111,6 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
 
         viewPager = (ViewPager) getActivity().findViewById(R.id.pager_duel);
         CHSetupUI chSetupUI = new CHSetupUI();
-        chSetupUI.setupUI(getActivity().findViewById(R.id.duel_back), getActivity());
         chSetupUI.setupUI(view, getActivity());
 
         if (position == size) {

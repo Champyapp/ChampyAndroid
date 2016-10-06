@@ -194,7 +194,7 @@
     <string name="subject">Subject</string>
     <string name="your_message">Your message</string>
     <string name="contact_us_background">contact us background</string>
-    <string name="waiting_for_your_recipient">waiting for your recipient</string>
+    <string name="waiting_for_your_recipient">waiting for recipient</string>
     <string name="level_1_n_challenge"> Level 1 \n Challenge</string>
     <string name="reward_10_npoints">Reward +10 \npoints</string>
     <string name="share_text1">"I'm done for today with my challenge: "</string>

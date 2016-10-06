@@ -113,7 +113,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 
         viewPager = (ViewPager) getActivity().findViewById(R.id.pager);
         CHSetupUI chSetupUI = new CHSetupUI();
-        chSetupUI.setupUI(getActivity().findViewById(R.id.selfimprovement), getActivity());
         chSetupUI.setupUI(view, getActivity());
 
         if (position == size) {

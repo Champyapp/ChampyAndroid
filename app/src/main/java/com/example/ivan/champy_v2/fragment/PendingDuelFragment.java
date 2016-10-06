@@ -98,6 +98,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
                     recipient = c.getString(colrecipient);
                 }
             } while (c.moveToNext());
+            Log.i(TAG, "onCreateView: fucking O = " + o + "     this: " + description);
         }
 
         c.close();
@@ -110,8 +111,14 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         tvDays = (TextView)view.findViewById(R.id.textViewDuring);
         tvGoal = (TextView)view.findViewById(R.id.tv_goal);
 
-        if (recipient.equals("true")) tvUserVsUser.setText("from " + versus);
-        else tvUserVsUser.setText(getContext().getResources().getString(R.string.waiting_for_your_recipient));
+        if (recipient.equals("true")) {
+            tvUserVsUser.setText("from " + versus);
+            buttonAcceptBattle.setVisibility(View.VISIBLE);
+            buttonCancelBattle.setVisibility(View.VISIBLE);
+        } else {
+            tvUserVsUser.setText(getContext().getResources().getString(R.string.waiting_for_your_recipient));
+            buttonAcceptBattle.setVisibility(View.INVISIBLE);
+        }
         tvUserVsUser.setTypeface(typeface);
 
         if (duration != null && !duration.isEmpty()) {
@@ -125,7 +132,6 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
 
 
         CHSetupUI chSetupUI= new CHSetupUI();
-        chSetupUI.setupUI(getActivity().findViewById(R.id.pending_duel), getActivity());
         chSetupUI.setupUI(view, getActivity());
         Glide.with(getContext()).load(R.drawable.points).override(200, 200).into((ImageView)view.findViewById(R.id.imageViewAcceptButton));
         offlineMode = new OfflineMode();
@@ -248,8 +254,6 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
     private boolean checkRecipientAndActive(String description, String recipient, View view) {
 
         if (!cc.isActive(description) && recipient.equals("true")) {
-            snackbar = Snackbar.make(view, "Challenge accepted!", Snackbar.LENGTH_SHORT);
-            snackbar.show();
             return true;
         }
 
