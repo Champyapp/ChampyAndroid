@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.ivan.champy_v2.ChallengeController;
@@ -85,6 +86,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
             int colduration = c.getColumnIndex("duration");
             int colchallenge_id = c.getColumnIndex("challenge_id");
             int colrecipient = c.getColumnIndex("recipient");
+            o = 0;
             do {
                 o++;
                 if (o > position + 1) break;
@@ -107,6 +109,21 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         tvUserVsUser  = (TextView)view.findViewById(R.id.tvYouVsSomebody);
         tvDays = (TextView)view.findViewById(R.id.textViewDuring);
         tvGoal = (TextView)view.findViewById(R.id.tv_goal);
+
+        if (recipient.equals("true")) tvUserVsUser.setText("from " + versus);
+        else tvUserVsUser.setText(getContext().getResources().getString(R.string.waiting_for_your_recipient));
+        tvUserVsUser.setTypeface(typeface);
+
+        if (duration != null && !duration.isEmpty()) {
+            days = Integer.parseInt(duration) / 86400;
+        }
+
+        tvDays.setText(days + "");
+        tvGoal.setText(description);
+        tvDays.setTypeface(typeface);
+        tvGoal.setTypeface(typeface);
+
+
         CHSetupUI chSetupUI= new CHSetupUI();
         chSetupUI.setupUI(getActivity().findViewById(R.id.pending_duel), getActivity());
         chSetupUI.setupUI(view, getActivity());
@@ -123,19 +140,6 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.i(TAG, "onActivityCreated");
-
-        if (recipient.equals("true")) tvUserVsUser.setText("from " + versus);
-        else tvUserVsUser.setText(R.string.waiting_for_your_recipient);
-        tvUserVsUser.setTypeface(typeface);
-
-        if (duration != null && !duration.isEmpty()) {
-            days = Integer.parseInt(duration) / 86400;
-        }
-
-        tvDays.setText(days + "");
-        tvGoal.setText(description);
-        tvDays.setTypeface(typeface);
-        tvGoal.setTypeface(typeface);
 
     }
 
@@ -195,6 +199,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
                 int coldescription = c.getColumnIndex("description");
                 int colchallenge_id = c.getColumnIndex("challenge_id");
                 int colrecipient = c.getColumnIndex("recipient");
+                o=0;
                 do {
                     o++;
                     if (o > position + 1) break;
@@ -269,17 +274,17 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         if (!cc.isActive(description) && recipient.equals("true")) {
             snackbar = Snackbar.make(view, "Challenge accepted!", Snackbar.LENGTH_SHORT);
             snackbar.show();
-            Log.i("OnClickAccept", "onResponse: VSE OK");
             return true;
         } else if (cc.isActive(description)) {
             snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
             snackbar.show();
-            Log.i("OnClickAccept", "onResponse: IS ACTIVE");
             return false;
-        } else {
+        } else if (!recipient.equals("true")) {
             snackbar = Snackbar.make(view, "You can't accept your challenge!", Snackbar.LENGTH_SHORT);
             snackbar.show();
-            Log.i("OnClickAccept", "onResponse: YOU ARE SENDER");
+            return false;
+        } else {
+            Toast.makeText(getContext(), "VSE XYiNJA", Toast.LENGTH_SHORT).show();
             return false;
         }
 
