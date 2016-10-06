@@ -68,7 +68,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         Log.i(TAG, "onCreateView");
         Bundle extras = getActivity().getIntent().getExtras();
         friend_id = (extras == null) ? null : extras.getString("id");
-        dbHelper = new DBHelper(getActivity());
+        dbHelper = new DBHelper(getContext());
         db = dbHelper.getWritableDatabase();
         final Bundle args = this.getArguments();
         c = db.query("duel", null, null, null, null, null, null);
@@ -117,7 +117,6 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         if (position == size) {
             etGoal.setTypeface(typeface);
             etDays.setTypeface(typeface);
-            //etGoal.setText(name);
             etDays.setHint("21");
             etDays.setVisibility(View.VISIBLE);
             etGoal.setVisibility(View.VISIBLE);
@@ -137,7 +136,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         Log.i(TAG, "onClick: ");
         name = etGoal.getText().toString();
         duration = etDays.getText().toString();
-        dbHelper = new DBHelper(getActivity());
+        dbHelper = new DBHelper(getContext());
         db = dbHelper.getWritableDatabase();
         c = db.query("duel", null, null, null, null, null, null);
         position = viewPager.getCurrentItem();
@@ -193,9 +192,6 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
 
     // check user input data @description @days @isActive
     private boolean checkInputUserData(String name, String duration, View view) {
-//        if (!duration.isEmpty()) {
-//            days = Integer.parseInt(duration);
-//        }
         if (!cc.isActive(name) && !name.isEmpty() && !name.startsWith(" ") && !duration.isEmpty() && days != 0) {
             snackbar = Snackbar.make(view, "Sent duel request!", Snackbar.LENGTH_SHORT);
             snackbar.show();

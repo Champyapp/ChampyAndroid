@@ -70,7 +70,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.item_row, container, false);
         Log.i(TAG, "onCreateView");
-        dbHelper = new DBHelper(getActivity());
+        dbHelper = new DBHelper(getContext());
         db = dbHelper.getWritableDatabase();
         final Bundle args = this.getArguments();
         c = db.query("selfimprovement", null, null, null, null, null, null);

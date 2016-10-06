@@ -73,7 +73,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.item_pending_duel, container, false);
-        dbHelper = new DBHelper(getActivity());
+        dbHelper = new DBHelper(getContext());
         db = dbHelper.getWritableDatabase();
         final Bundle args = this.getArguments();
         c = db.query("pending_duel", null, null, null, null, null, null);
@@ -187,84 +187,60 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onClick(View view) {
-        if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
-            CurrentUserHelper user = new CurrentUserHelper(getContext());
-            final String token = user.getToken();
-            final String userId = user.getUserObjectId();
+        CurrentUserHelper user = new CurrentUserHelper(getContext());
+        final String token = user.getToken();
+        final String userId = user.getUserObjectId();
 
-            cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
-            position = viewPager.getCurrentItem();
-            c = db.query("pending_duel", null, null, null, null, null, null);
-            if (c.moveToFirst()) {
-                int coldescription = c.getColumnIndex("description");
-                int colchallenge_id = c.getColumnIndex("challenge_id");
-                int colrecipient = c.getColumnIndex("recipient");
-                o=0;
-                do {
-                    o++;
-                    if (o > position + 1) break;
-                    if (o == position + 1) {
-                        description = c.getString(coldescription);
-                        challenge_id = c.getString(colchallenge_id);
-                        recipient = c.getString(colrecipient);
-                    }
-                } while (c.moveToNext());
-            }
-            c.close();
-
-            switch (view.getId()) {
-                case R.id.imageButtonAcceptBattle:
-                    Log.i(TAG, "onClick: buttonAccept");
-
-                    snackbar = Snackbar.make(view, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Log.i(TAG, "onClickSnackBar: ");
-                            if (checkRecipientAndActive(description, recipient, view)) {
-                                cc.joinToChallenge(challenge_id, token, userId);
-                                snackbar = Snackbar.make(view, "Challenge Accepted!", Snackbar.LENGTH_SHORT);
-                                snackbar.show();
-                                Log.i("OnClickButtonAccept", "onResponse: VSE OK");
-                            }
-                        }
-                    });
-                    snackbar.show();
-                    break;
-
-                case R.id.imageButtonCancelBattle:
-//                    c = db.query("pending_duel", null, null, null, null, null, null);
-//                    position = viewPager.getCurrentItem();
-//                    if (c.moveToFirst()) {
-//                        int colchallenge_id = c.getColumnIndex("challenge_id");
-//                        do {
-//                            o++;
-//                            if (o > position + 1) break;
-//                            if (o == position + 1) {
-//                                challenge_id = c.getString(colchallenge_id);
-//                            }
-//                        } while (c.moveToNext());
-//                    }
-//                    c.close();
-//
-                    snackbar = Snackbar.make(view, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Log.i(TAG, "onClickSnackBar: ");
-                            try {
-                                //cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
-                                cc.rejectInviteForPendingDuel(challenge_id, token, userId);
-                                snackbar = Snackbar.make(view, "Challenge Canceled!", Snackbar.LENGTH_SHORT);
-                                snackbar.show();
-                                Log.i("OnClickButtonCancel", "onResponse: VSE OK");
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                    snackbar.show();
-                    break;
-            }
+        cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
+        position = viewPager.getCurrentItem();
+        c = db.query("pending_duel", null, null, null, null, null, null);
+        if (c.moveToFirst()) {
+            int coldescription = c.getColumnIndex("description");
+            int colchallenge_id = c.getColumnIndex("challenge_id");
+            int colrecipient = c.getColumnIndex("recipient");
+            o = 0;
+            do {
+                o++;
+                if (o > position + 1) break;
+                if (o == position + 1) {
+                    description = c.getString(coldescription);
+                    challenge_id = c.getString(colchallenge_id);
+                    recipient = c.getString(colrecipient);
+                }
+            } while (c.moveToNext());
         }
+        c.close();
+
+        switch (view.getId()) {
+            case R.id.imageButtonAcceptBattle:
+                snackbar = Snackbar.make(view, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (checkRecipientAndActive(description, recipient, view)) {
+                            cc.joinToChallenge(challenge_id, token, userId);
+                            snackbar = Snackbar.make(view, "Challenge Accepted!", Snackbar.LENGTH_SHORT);
+                            snackbar.show();
+                        }
+                    }
+                });
+                snackbar.show();
+                break;
+
+            case R.id.imageButtonCancelBattle:
+                snackbar = Snackbar.make(view, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            cc.rejectInviteForPendingDuel(challenge_id, token, userId);
+                            snackbar = Snackbar.make(view, "Challenge Canceled!", Snackbar.LENGTH_SHORT);
+                            snackbar.show();
+                        } catch (IOException e) { e.printStackTrace(); }
+                    }
+                });
+                snackbar.show();
+                break;
+        }
+
     }
 
 
@@ -275,18 +251,18 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
             snackbar = Snackbar.make(view, "Challenge accepted!", Snackbar.LENGTH_SHORT);
             snackbar.show();
             return true;
+        }
+
+        if (!recipient.equals("true")) {
+            snackbar = Snackbar.make(view, "You can't accept your challenge!", Snackbar.LENGTH_SHORT);
+            snackbar.show();
+            return false;
         } else if (cc.isActive(description)) {
             snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
             snackbar.show();
             return false;
-        } else if (!recipient.equals("true")) {
-            snackbar = Snackbar.make(view, "You can't accept your challenge!", Snackbar.LENGTH_SHORT);
-            snackbar.show();
-            return false;
-        } else {
-            Toast.makeText(getContext(), "VSE XYiNJA", Toast.LENGTH_SHORT).show();
-            return false;
-        }
+        } else Log.e(TAG, "checkRecipientAndActive: vse xyinja"); return false;
+
 
     }
 
