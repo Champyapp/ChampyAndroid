@@ -69,36 +69,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/level_1_n_challenge"
-            android:id="@+id/tvLevelChallenge"
-            android:layout_alignBottom="@+id/imageViewAcceptButton"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="false"
-            android:layout_toLeftOf="@+id/imageViewAcceptButton"
-            android:layout_toStartOf="@+id/imageViewAcceptButton"
-            android:layout_alignTop="@+id/imageViewAcceptButton"
-            android:gravity="center_vertical|center_horizontal"
-            android:textColor="#339997"
-            android:textAlignment="center" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:text="@string/reward_10__n_points"
-            android:id="@+id/tvRewardPlus10Points"
-            android:layout_alignTop="@+id/imageViewAcceptButton"
-            android:layout_toRightOf="@+id/imageViewAcceptButton"
-            android:layout_alignBottom="@+id/imageViewAcceptButton"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:gravity="center_vertical|center_horizontal"
-            android:textColor="#339997" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/everyday_for_the_next"
             android:id="@+id/textView"
@@ -121,6 +91,28 @@
             android:layout_toRightOf="@+id/imageViewAcceptButton"
             android:layout_toEndOf="@+id/imageViewAcceptButton"
             android:layout_marginTop="5dp" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_accept"
+            android:background="@drawable/icon_done_for_today"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/textView2"
+            android:layout_toEndOf="@+id/textView2"
+            android:layout_marginLeft="14dp"
+            android:layout_marginStart="14dp" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_cancel"
+            android:background="@drawable/icon_give_up"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@+id/imageViewAcceptButton"
+            android:layout_toStartOf="@+id/imageViewAcceptButton"
+            android:layout_marginRight="47dp"
+            android:layout_marginEnd="47dp" />
 
     </RelativeLayout>
 

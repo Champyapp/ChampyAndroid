@@ -38,7 +38,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
     public int position, size, days = 21, o = 0;
     public String versus, duration, description, challenge_id, status, recipient;
     public TextView tvGoal, tvDays, tvUserVsUser;
-    public ImageButton buttonAcceptBattle, buttonCancelBattle;
+    public ImageButton buttonAcceptBattle, buttonCancelBattle, btnAccept, btnCancel;
     public OfflineMode offlineMode;
     public ViewPager viewPager;
     public Typeface typeface;
@@ -103,21 +103,45 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
 
         c.close();
 
-        buttonAcceptBattle = (ImageButton)getActivity().findViewById(R.id.imageButtonAcceptBattle);
-        buttonCancelBattle = (ImageButton)getActivity().findViewById(R.id.imageButtonCancelBattle);
+        //buttonAcceptBattle = (ImageButton)getActivity().findViewById(R.id.imageButtonAcceptBattle);
+        //buttonCancelBattle = (ImageButton)getActivity().findViewById(R.id.imageButtonCancelBattle);
+        btnAccept = (ImageButton)view.findViewById(R.id.btn_accept);
+        btnCancel = (ImageButton)view.findViewById(R.id.btn_cancel);
+
         typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
         viewPager = (ViewPager)getActivity().findViewById(R.id.pager_pending_duel);
         tvUserVsUser  = (TextView)view.findViewById(R.id.tvYouVsSomebody);
         tvDays = (TextView)view.findViewById(R.id.textViewDuring);
         tvGoal = (TextView)view.findViewById(R.id.tv_goal);
 
+        CHSetupUI chSetupUI= new CHSetupUI();
+        chSetupUI.setupUI(view, getActivity());
+        Glide.with(getContext()).load(R.drawable.points).override(200, 200).into((ImageView)view.findViewById(R.id.imageViewAcceptButton));
+        offlineMode = new OfflineMode();
+        offlineMode.isConnectedToRemoteAPI(getActivity());
+        //buttonAcceptBattle.setOnClickListener(this);
+        //buttonCancelBattle.setOnClickListener(this);
+        btnAccept.setOnClickListener(this);
+        btnCancel.setOnClickListener(this);
+
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.i(TAG, "onActivityCreated");
+
         if (recipient.equals("true")) {
             tvUserVsUser.setText("from " + versus);
-            buttonAcceptBattle.setVisibility(View.VISIBLE);
-            buttonCancelBattle.setVisibility(View.VISIBLE);
+            //buttonAcceptBattle.setVisibility(View.VISIBLE);
+            //buttonCancelBattle.setVisibility(View.VISIBLE);
+            btnAccept.setVisibility(View.VISIBLE);
+            btnCancel.setVisibility(View.VISIBLE);
         } else {
             tvUserVsUser.setText(getContext().getResources().getString(R.string.waiting_for_your_recipient));
-            buttonAcceptBattle.setVisibility(View.INVISIBLE);
+            //buttonAcceptBattle.setVisibility(View.INVISIBLE);
+            btnAccept.setVisibility(View.INVISIBLE);
         }
         tvUserVsUser.setTypeface(typeface);
 
@@ -130,22 +154,6 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         tvDays.setTypeface(typeface);
         tvGoal.setTypeface(typeface);
 
-
-        CHSetupUI chSetupUI= new CHSetupUI();
-        chSetupUI.setupUI(view, getActivity());
-        Glide.with(getContext()).load(R.drawable.points).override(200, 200).into((ImageView)view.findViewById(R.id.imageViewAcceptButton));
-        offlineMode = new OfflineMode();
-        offlineMode.isConnectedToRemoteAPI(getActivity());
-        buttonAcceptBattle.setOnClickListener(this);
-        buttonCancelBattle.setOnClickListener(this);
-
-        return view;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.i(TAG, "onActivityCreated");
 
     }
 
@@ -218,21 +226,23 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         c.close();
 
         switch (view.getId()) {
-            case R.id.imageButtonAcceptBattle:
+            case R.id.btn_accept:
                 snackbar = Snackbar.make(view, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (checkRecipientAndActive(description, recipient, view)) {
+                        if (!cc.isActive(description) && recipient.equals("true")) {
                             cc.joinToChallenge(challenge_id, token, userId);
                             snackbar = Snackbar.make(view, "Challenge Accepted!", Snackbar.LENGTH_SHORT);
-                            snackbar.show();
+                        } else {
+                            snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
                         }
+                        snackbar.show();
                     }
                 });
                 snackbar.show();
                 break;
 
-            case R.id.imageButtonCancelBattle:
+            case R.id.btn_cancel:
                 snackbar = Snackbar.make(view, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -249,26 +259,6 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
 
     }
 
-
-
-    private boolean checkRecipientAndActive(String description, String recipient, View view) {
-
-        if (!cc.isActive(description) && recipient.equals("true")) {
-            return true;
-        }
-
-        if (!recipient.equals("true")) {
-            snackbar = Snackbar.make(view, "You can't accept your challenge!", Snackbar.LENGTH_SHORT);
-            snackbar.show();
-            return false;
-        } else if (cc.isActive(description)) {
-            snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
-            snackbar.show();
-            return false;
-        } else Log.e(TAG, "checkRecipientAndActive: vse xyinja"); return false;
-
-
-    }
 
 
 }
