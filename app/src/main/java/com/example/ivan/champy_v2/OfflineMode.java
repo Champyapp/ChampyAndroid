@@ -17,9 +17,7 @@ public class OfflineMode {
     }
 
     public boolean isConnectedToRemoteAPI(Activity activity) {
-        if (isInternetAvailable(activity)) {
-            return true;
-        }
+        if (isInternetAvailable(activity)) { return true; }
         Toast.makeText(activity, "Lost internet connection!", Toast.LENGTH_LONG).show();
         return false;
     }

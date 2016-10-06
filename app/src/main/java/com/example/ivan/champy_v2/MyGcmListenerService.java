@@ -1,11 +1,13 @@
 package com.example.ivan.champy_v2;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -119,10 +121,6 @@ public class MyGcmListenerService extends GcmListenerService {
                 // done
                 notifyChallenges(intent, message);
                 break;
-            case "Challenges for today":
-                // don't work
-                notifyChallenges(intent, message);
-                break;
         }
     }
 
@@ -197,13 +195,13 @@ public class MyGcmListenerService extends GcmListenerService {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(MyGcmListenerService.this, 0 /* Request code */, intent, PendingIntent.FLAG_ONE_SHOT);
-        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.duel_white)
                 .setContentTitle("Champy")
                 .setContentText(message)
                 .setAutoCancel(true)
-                .setSound(defaultSoundUri)
+                .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
+                .setLights(Color.GREEN, 1000, 1500)
                 .setContentIntent(pendingIntent);
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -214,13 +212,13 @@ public class MyGcmListenerService extends GcmListenerService {
     private void notifyForFriends(Intent intent, String message) {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent, PendingIntent.FLAG_ONE_SHOT);
-        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.friends)
                 .setContentTitle("Champy")
                 .setContentText(message)
                 .setAutoCancel(true)
-                .setSound(defaultSoundUri)
+                .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
+                .setLights(Color.GREEN, 1000, 1500)
                 .setContentIntent(pendingIntent);
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

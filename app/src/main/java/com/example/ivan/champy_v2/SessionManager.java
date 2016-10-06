@@ -213,6 +213,7 @@ public class SessionManager {
         activity.startActivity(intent);
     }
 
+    // TODO: 06.10.2016 Delete Trash
     public boolean checkLogin(){
         // Check login status
         if(!this.isUserLoggedIn()){

@@ -50,6 +50,7 @@ public class Friend {
 
     public String getID() { return  mID; }
 
+    // TODO: 06.10.2016 Delete Trash
     public void setmLevel(String mLevel) {
         this.mLevel = mLevel;
     }

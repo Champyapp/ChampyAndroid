@@ -1,6 +1,5 @@
 package com.example.ivan.champy_v2.helper;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -22,8 +21,8 @@ public class NotificationController {
 
 
     public void activateDailyNotificationReminder() {
-        Intent alarmIntent = new Intent(context, NotifyReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 100, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent notifyIntent = new Intent(context, NotifyReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 100, notifyIntent, PendingIntent.FLAG_ONE_SHOT);
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 12);
@@ -31,13 +30,13 @@ public class NotificationController {
         calendar.set(Calendar.SECOND, 0);
 
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 60*60*24, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
 
     public void deactivateDailyNotificationReminder() {
         Intent alarmIntent = new Intent(context, NotifyReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 100, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 100, alarmIntent, PendingIntent.FLAG_ONE_SHOT);
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
     }
