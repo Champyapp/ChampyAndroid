@@ -15,9 +15,6 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         String inProgressId = intent.getStringExtra("inProgressId");
         int intentId = intent.getIntExtra("intentId", 0);
 
-        Log.i(TAG, "onReceive | inProgressId: " + inProgressId);
-        Log.i(TAG, "onReceive | intentId: " + intentId);
-
         Intent newIntent = new Intent();
         newIntent.setClassName("com.example.ivan.champy_v2", "com.example.ivan.champy_v2.activity.AlarmReceiverActivity");
         newIntent.putExtra("finalInProgressChallengeId", inProgressId);
@@ -30,26 +27,13 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
          *                            надо убрать "reload" с "give up" или сделать отдельный метод
          * FLAG_ACTIVITY_SINGLE_TOP - не сможет открыть wake up активити, когда срабатывает будильник
          * FLAG_ACTIVITY_CLEAR_TOP  - не сможет открыть wake up активити, когда срабатывает будильник
-         *
          */
 
         newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         SessionManager sessionManager = new SessionManager(context);
-        if (sessionManager.isUserLoggedIn()) {
+        if (sessionManager.isUserLoggedIn()) context.startActivity(newIntent);
+        else Log.i(TAG, "onReceive: AutoGiveUp. Reason: not logged in");
 
-            Log.i(TAG, "onReceiveNewIntent | inProgressId: " + inProgressId);
-            Log.i(TAG, "onReceiveNewIntent | intentId: " + intentId);
-
-            context.startActivity(newIntent);
-        } else {
-            Log.i(TAG, "onReceive: AutoGiveUp. Reason: not logged in"); // sender progress must do it.
-//            ChallengeController cc = new ChallengeController(context, activity, 0, 0, 0);
-//            try {
-//                cc.give_up(inProgressId, intentId);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-        }
     }
 }

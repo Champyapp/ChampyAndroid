@@ -32,7 +32,7 @@ public class GCM_Service extends IntentService {
         Log.d(TAG, "GCM Registration Token: " + token);
     }
 
-
+    // TODO: 06.10.2016 Delete trash
     private void subscribeTopics(String token) throws IOException {
         GcmPubSub pubSub = GcmPubSub.getInstance(this);
         for (String topic : TOPICS) {

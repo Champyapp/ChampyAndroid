@@ -350,13 +350,13 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    dbHelper = new DBHelper(context);
-                    db = dbHelper.getWritableDatabase();
-                    cv = new ContentValues();
-                    cv.put("updated", "true");
-                    db.update("updated", cv, "challenge_id = ?", new String[]{inProgressId});
-                    db.update("myChallenges", cv, "challenge_id = ?", new String[]{inProgressId});
-                    generateCardsForMainActivity(token, userId);
+//                    dbHelper = new DBHelper(context);
+//                    db = dbHelper.getWritableDatabase();
+//                    cv = new ContentValues();
+//                    cv.put("updated", "true");
+//                    db.update("updated", cv, "challenge_id = ?", new String[]{inProgressId});
+//                    db.update("myChallenges", cv, "challenge_id = ?", new String[]{inProgressId});
+                    refreshCardsForPendingDuel(token, userId);
                     Log.d(TAG, "doneForToday onResponse: VSE OK");
                 } else {
                     Log.d(TAG, "doneForToday onResponse: FAILED " + response.code() + response.message() + response.body());
@@ -431,7 +431,6 @@ public class ChallengeController {
 
                         if (challenge.getType().equals("567d51c48322f85870fd931b")) {
                             if (challengeStatus.equals("pending")) {
-                                // TODO: 29.08.2016 maybe change for "rejectedBySender"???
                                 if (!challengeStatus.equals("failedBySender") && !challengeStatus.equals("rejectedByRecipient")) {
 
                                     if (userId.equals(recipient.getId())) {
@@ -538,8 +537,6 @@ public class ChallengeController {
                     Log.d(TAG, "Generate onResponse: VSE OK");
                     Intent intent = new Intent(firstActivity, MainActivity.class);
                     firstActivity.startActivity(intent);
-                } else {
-                    Log.d(TAG, "Generate onResponse: FAILED: " + response.code());
                 }
             }
 

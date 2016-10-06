@@ -31,7 +31,7 @@ public class NotificationController {
         calendar.set(Calendar.SECOND, 0);
 
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 60*60*24, pendingIntent);
     }
 
 

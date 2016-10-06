@@ -42,7 +42,7 @@ public class CurrentUserHelper {
         return this.currentSession.getPathToPic();
     }
 
-    public String sasd() {
+    public String getpendingDuelCount() {
         return this.currentSession.get_duel_pending();
     }
 

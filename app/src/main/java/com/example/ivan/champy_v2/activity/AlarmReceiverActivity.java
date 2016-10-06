@@ -46,8 +46,8 @@ public class AlarmReceiverActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         final String finalInProgressChallengeId = this.getIntent().getStringExtra("finalInProgressChallengeId");
-        final int finalIntentId = this.getIntent().getIntExtra("finalIntentId", 0);
-        final String stringFinalIntentId = String.valueOf(finalIntentId);
+        //final int finalIntentId = this.getIntent().getIntExtra("finalIntentId", 0);
+        //final String stringFinalIntentId = String.valueOf(finalIntentId);
         final ChallengeController cc = new ChallengeController(getApplicationContext(), AlarmReceiverActivity.this, 0, 0, 0);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -58,7 +58,7 @@ public class AlarmReceiverActivity extends Activity {
 
         TextView textView = (TextView)findViewById(R.id.wakeup_text);
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
-        textView.setTypeface(typeface); // закоментити
+        textView.setTypeface(typeface);
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);

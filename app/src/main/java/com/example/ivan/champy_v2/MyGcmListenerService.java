@@ -87,9 +87,7 @@ public class MyGcmListenerService extends GcmListenerService {
             if (message != null && !message.toLowerCase().contains(name.toLowerCase()))
                 sendNotification(message, title);
         }
-        // [END_EXCLUDE]
     }
-    // [END receive_message]
 
     /**
      * Create and show a item_friends_open notification containing the received GCM message.
@@ -145,7 +143,6 @@ public class MyGcmListenerService extends GcmListenerService {
 
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
 
-        //Log.i("stat", "Nam nado: " + id + " " + update + " " + token);
         Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userId, update, token);
         call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
             @Override
