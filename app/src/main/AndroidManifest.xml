@@ -128,8 +128,7 @@
                 <category android:name="com.example.ivan.champy_v2" />
             </intent-filter>
         </receiver>
-
-        <service android:name=".AlarmService"  android:enabled="true" />\
+        <service android:name=".AlarmService"  android:enabled="true" />
         <service android:name="com.example.ivan.champy_v2.MyGcmListenerService"
             android:exported="false" >
             <intent-filter>

@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/Theme.AppCompat.Light"
     android:background="@drawable/champy_background"
     android:id="@+id/login"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".activity.LoginActivity"
-    tools:showIn="@layout/activity_login">
+    tools:context=".activity.LoginActivity">
 
     <ImageView
         android:layout_width="100dp"
@@ -40,8 +40,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/login_button"
-        android:background="@drawable/button_login_with_facebook"
-        android:layout_marginBottom="27dp"
+        android:scaleX="0.8"
+        android:scaleY="0.5"
+        android:background="@drawable/facebook"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:contentDescription="@string/com_facebook_loginview_logged_in_as" />
