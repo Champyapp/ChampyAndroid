@@ -1,8 +1,8 @@
 package com.example.ivan.champy_v2.activity;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,7 +21,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -91,7 +90,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.duel_back);
         relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementback));
         Glide.with(this).load(newString).centerCrop().into((ImageView)findViewById(R.id.user1));
-        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+        @SuppressLint("SdCardPath") String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
         Glide.with(this).load(url).centerCrop().into((ImageView)findViewById(R.id.user2));
@@ -113,7 +112,6 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
 
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
-        path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         file = new File(path, "profile.jpg");
         url = Uri.fromFile(file);
         name = user.get("name");
@@ -126,7 +124,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile);
 
         try {
-            Drawable dr = Init("/data/data/com.example.ivan.champy_v2/app_imageDir/");
+            Drawable dr = Init(path);
             ImageView slideBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
             slideBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
             slideBackground.setImageDrawable(dr);

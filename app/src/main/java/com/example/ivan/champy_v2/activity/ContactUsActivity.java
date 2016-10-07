@@ -1,5 +1,6 @@
 package com.example.ivan.champy_v2.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,7 +19,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -74,7 +74,7 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
-        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+        @SuppressLint("SdCardPath") String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
         String name = user.get("name");
@@ -98,15 +98,12 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
 
         inputLayoutSubject = (TextInputLayout)findViewById(R.id.input_layout_name);
         inputLayoutMessage = (TextInputLayout)findViewById(R.id.input_layout_email);
-
         inputSubject = (EditText)findViewById(R.id.input_name);
         inputMessage = (EditText)findViewById(R.id.input_email);
 
         Button buttonSend = (Button) findViewById(R.id.buttonSend);
-
         inputSubject.addTextChangedListener(new MyTextWatcher(inputSubject));
         inputMessage.addTextChangedListener(new MyTextWatcher(inputMessage));
-
         buttonSend.setOnClickListener(this);
     }
 

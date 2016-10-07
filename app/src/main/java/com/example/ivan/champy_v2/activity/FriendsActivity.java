@@ -1,5 +1,6 @@
 package com.example.ivan.champy_v2.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -80,12 +81,12 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         viewPager.setAdapter(adapterViewPager);
 
         // this out method for open "pending" when you click on notification about friends request
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            String s = bundle.getString("friend_request");
-            //loadUserPending();
-            if (s != null) viewPager.setCurrentItem(1);
-        }
+//        Bundle bundle = getIntent().getExtras();
+//        if (bundle != null) {
+//            String s = bundle.getString("friend_request");
+//            //loadUserPending();
+//            if (s != null) viewPager.setCurrentItem(1);
+//        }
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
@@ -95,7 +96,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
         TextView tvUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
         tvUserName.setText(name);
-        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+        @SuppressLint("SdCardPath") String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
 
@@ -104,7 +105,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 
         try {
             CHImageModule CHImageModule = new CHImageModule(this);
-            Drawable dr = CHImageModule.Init("/data/data/com.example.ivan.champy_v2/app_imageDir/", FriendsActivity.this);
+            Drawable dr = CHImageModule.Init(path, FriendsActivity.this);
             imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setImageDrawable(dr);
@@ -204,6 +205,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         AppEventsLogger.deactivateApp(this);
     }
 
+    // TODO: 07.10.2016 delete this code if ill don't use "open pending when click on natification
 //    // load friends from bd
 //    public void loadUserFriends() {
 //        // TODO: 31.08.2016 use AppSync.loadUserFriends method;
