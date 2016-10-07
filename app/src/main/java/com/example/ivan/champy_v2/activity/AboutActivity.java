@@ -101,9 +101,6 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
         }
 
         ViewServer.get(this).addWindow(this);
-
-
-
     }
 
     @Override

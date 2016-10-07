@@ -1,5 +1,6 @@
 package com.example.ivan.champy_v2.activity;
 
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.database.Cursor;
@@ -21,6 +22,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.ivan.champy_v2.Blur;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.interfaces.Update_user;
 import com.example.ivan.champy_v2.model.User.User;
 import com.soundcloud.android.crop.Crop;
@@ -45,8 +47,10 @@ public class PhotoActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST = 1888;
     private static final int SELECT_FILE = 1999;
     private static final int CROP_PIC = 1777;
-    private ImageView imageView;
-    private Uri picUri;
+    @SuppressLint("SdCardPath")
+    private static final String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+    public ImageView imageView;
+    public Uri picUri;
     public final String TAG = "myLogs";
 
     @Override
@@ -56,7 +60,6 @@ public class PhotoActivity extends AppCompatActivity {
 
         RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.change_photo);
         relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.champy_background));
-        final String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
 
@@ -81,13 +84,6 @@ public class PhotoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Crop.pickImage(PhotoActivity.this);
-
-                /*Intent intent = new Intent(
-                        Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                intent.setType("image*//*");
-                startActivityForResult(
-                        Intent.createChooser(intent, "Select File"), SELECT_FILE);*/
             }
         });
     }
@@ -102,15 +98,14 @@ public class PhotoActivity extends AppCompatActivity {
                 Upload_photo(SaveFromCamera(thePic));
                 Intent intent = new Intent(PhotoActivity.this, MainActivity.class);
                 startActivity(intent);
-            } else if (requestCode == CROP_PIC){
+            } else if (requestCode == CROP_PIC) {
                 Bundle extras = data.getExtras();
                 // get the cropped bitmap
                 Bitmap thePic = extras.getParcelable("data");
                 savePhoto(thePic);
                 Intent intent = new Intent(PhotoActivity.this, MainActivity.class);
                 startActivity(intent);
-            }
-            if (requestCode == Crop.REQUEST_PICK) {
+            } else if (requestCode == Crop.REQUEST_PICK) {
                 beginCrop(data.getData());
             } else if (requestCode == Crop.REQUEST_CROP) {
                 try {
@@ -118,13 +113,13 @@ public class PhotoActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }
-            if (requestCode == SELECT_FILE ){
+            } else if (requestCode == SELECT_FILE ){
                 Uri selectedImageUri = data.getData();
                 performCrop(selectedImageUri);
             }
         }
     }
+
     public String getPath(Uri uri) throws URISyntaxException {
         if ("content".equalsIgnoreCase(uri.getScheme())) {
             String[] projection = { "_data" };
@@ -189,15 +184,12 @@ public class PhotoActivity extends AppCompatActivity {
         return (Uri.fromFile(file).getPath());
     }
 
-    public void savePhoto (Bitmap photo)
-    {
-        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+    public void savePhoto (Bitmap photo) {
         File profileImage = new File(path, "profile.jpg");
         File profileBlured = new File(path, "blured2.jpg");
         Uri uri = Uri.fromFile(profileImage);
 
-        Blur blur = new Blur();
-        Bitmap blured = blur.blurRenderScript(getApplicationContext(), photo, 10);
+        Bitmap blured = Blur.blurRenderScript(getApplicationContext(), photo, 10);
 
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         sessionManager.change_avatar(uri.toString());
@@ -239,7 +231,6 @@ public class PhotoActivity extends AppCompatActivity {
     private void performCrop(Uri picUri) {
         // take care of exceptions
         try {
-
             // call the standard crop action intent (the user device may not
             // support it)
             Intent cropIntent = new Intent("com.android.camera.action.CROP");
@@ -259,39 +250,29 @@ public class PhotoActivity extends AppCompatActivity {
             startActivityForResult(cropIntent, CROP_PIC);
         }
         // respond to users whose devices do not support the crop action
-        catch (ActivityNotFoundException anfe) {
-            Toast toast = Toast
-                    .makeText(this, "This device doesn't support the crop action!", Toast.LENGTH_SHORT);
+        catch (ActivityNotFoundException e) {
+            Toast toast = Toast.makeText(this, "This device doesn't support the crop action!", Toast.LENGTH_SHORT);
             toast.show();
         }
     }
 
-    public void Upload_photo(String path)
-    {
+    public void Upload_photo(String path) {
         final String API_URL = "http://46.101.213.24:3007";
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        SessionManager sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user = new HashMap<>();
-        user = sessionManager.getUserDetails();
-        String token = user.get("token");
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
+        String token = user.getToken();
+        String id = user.getUserObjectId();
 
-        String id = user.get("id");
-        File f=new File(path);
-        Log.d(TAG, "Status: " + f);
-        RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), f);
+        File photoFile = new File(path);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), photoFile);
 
         Update_user update_user = retrofit.create(Update_user.class);
         Call<User> call = update_user.update_photo(id, token, requestBody);
-        Log.d(TAG, "Status: RUN");
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    Log.d(TAG, "Status: photo_uploaded");
-                } else Log.d(TAG, "Status :" + response.code());
+                String myLog = (response.isSuccess()) ? "Status: photo uploaded!" : "Status: " + response.code();
+                Log.i(TAG, "onResponse: " + myLog);
             }
 
             @Override

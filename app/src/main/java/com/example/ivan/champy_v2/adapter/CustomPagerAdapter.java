@@ -10,7 +10,7 @@ public abstract class CustomPagerAdapter {
 
     private Context context;
 
-    public CustomPagerAdapter(Context context) {
+    CustomPagerAdapter(Context context) {
         this.context = context;
     }
 

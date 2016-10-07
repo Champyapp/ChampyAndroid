@@ -1,5 +1,6 @@
 package com.example.ivan.champy_v2.activity;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -91,7 +92,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
 
         CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
         String userName = user.getName();
-        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+        @SuppressLint("SdCardPath") String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
 
@@ -104,7 +105,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile);
 
         try {
-            Drawable dr = Init("/data/data/com.example.ivan.champy_v2/app_imageDir/");
+            Drawable dr = Init(path);
             ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setImageDrawable(dr);

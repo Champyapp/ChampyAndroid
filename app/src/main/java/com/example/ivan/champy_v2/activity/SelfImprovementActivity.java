@@ -181,7 +181,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         }
     }
 
-    // background
+    // background for drawer
     private Drawable Init(String path) throws FileNotFoundException {
         File file = new File(path, "blured2.jpg");
         Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));

@@ -50,9 +50,7 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         String duration = itemRow.getDuration();
         String versus = itemRow.getVersus();
 
-        // Here "type" in stupid string format. its works.
         switch (itemRowType) {
-            // TODO: 29.08.2016 make auto size for text because '\n' is not good solution
             case "Duel":
                 nameTextView.setText(goal + " during this period:" + duration + " days\nwith " + versus);
                 Glide.with(mContext).load(R.drawable.duel_yellow).override(80, 80).into(viewHolder.image);

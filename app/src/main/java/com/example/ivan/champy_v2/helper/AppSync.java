@@ -220,10 +220,9 @@ public class AppSync {
         final ContentValues cv = new ContentValues();
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         final long unixTime = System.currentTimeMillis() / 1000L;
-        String update = "0"; //1457019726
+        String update = "0";
 
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
-
         Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> callActiveInProgress = activeInProgress.getActiveInProgress(userId, update, this.token);
         try {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -257,7 +256,6 @@ public class AppSync {
                     try {
                         JSONObject json = new JSONObject(senderProgress.get(j).toString());
                         long at = json.getLong("at");
-                        Log.i(TAG, "json : " + at + " <-- lastUpdate time in millis");
                         stringSenderProgress[j] = String.valueOf(at);
                     } catch (JSONException e) { e.printStackTrace(); }
                 }
@@ -278,7 +276,6 @@ public class AppSync {
                     }
                 }
 
-                //final String myDetails = Arrays.toString(stringSenderProgress);
                 cv.put("challengeName", challenge_name); // default 'challenge'. this column only for wake up time
                 cv.put("description", challenge_description); // smoking free life / wake up at 14:48
                 cv.put("duration", challenge_duration); // duration of challenge
@@ -287,15 +284,11 @@ public class AppSync {
                 cv.put("updated", challenge_updated); // true / false
                 cv.put("senderProgress", Arrays.toString(stringSenderProgress)); // last update time in millis
                 db.insert("myChallenges", null, cv);
-                //Log.i(TAG, "Challenge | Description: " + challenge_detail);
-                //Log.i(TAG, "Challenge | Challenge_updated: " + challenge_updated);
-                //Log.i(TAG, "Challenge | SenderProgress: " + Arrays.toString(stringSenderProgress));
             }
 
         } catch (IOException e) { e.printStackTrace(); }
 
     }
-
 
 
 
@@ -425,62 +418,5 @@ public class AppSync {
         c.close();
         return ok;
     }
-
-
-//    private String saveToInternalStorage(Bitmap bitmapImage){
-//        ContextWrapper cw = new ContextWrapper(context);
-//        // path to /data/data/yourapp/app_data/imageDir
-//        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-//        if (!directory.exists()) {
-//            directory.mkdirs();
-//        }
-//        // Create imageDir
-//        File mypath = new File(directory,"profile.jpg");
-//
-//        Log.d("TAG", "MY_PATH: "+mypath.toString());
-//        FileOutputStream fos = null;
-//        try {
-//            fos = new FileOutputStream(mypath);
-//            // Use the compress method on the BitMap object to write image to the OutputStream
-//            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
-//            fos.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return directory.getAbsolutePath();
-//    }
-//
-//
-//    public void loadImageFromStorage(String path) {
-//        try {
-//            File f=new File(path, "profile.jpg");
-//            File file = new File(path, "blured2.jpg");
-//            if (file.exists()) {
-//                return;
-//            } else {
-//                file.createNewFile();
-//                Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-//
-//                Blur blur = new Blur();
-//
-//                Bitmap blured = blur.blurRenderScript(context, b, 10);
-//
-//                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//                blured.compress(Bitmap.CompressFormat.PNG, 0, bos);
-//                byte[] bitmapdata = bos.toByteArray();
-//
-//                FileOutputStream fos = new FileOutputStream(file);
-//                fos.write(bitmapdata);
-//                fos.flush();
-//                fos.close();
-//                Log.d("TAG", "Image: Blured");
-//            }
-//        }
-//        catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
 }

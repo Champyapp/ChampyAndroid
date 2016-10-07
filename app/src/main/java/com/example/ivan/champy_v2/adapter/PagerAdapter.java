@@ -10,9 +10,9 @@ import com.example.ivan.champy_v2.fragment.SelfImprovementFragment;
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
 
-    SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
+    private SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
 
-    int size = 0;
+    private int size = 0;
 
     public PagerAdapter(FragmentManager fm) {
         super(fm);

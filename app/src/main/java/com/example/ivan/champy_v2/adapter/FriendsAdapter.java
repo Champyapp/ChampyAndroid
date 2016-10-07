@@ -43,7 +43,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     private Activity activity;
     private ArrayList<Integer> selected = new ArrayList<>();
 
-
     public FriendsAdapter(List<Friend> contacts, Context context, Activity activity, CustomItemClickListener itemOnClick) {
         mContacts = contacts;
         this.context = context;
@@ -194,8 +193,8 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                     call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
                         @Override
                         public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
-                            if (response.isSuccess()) Log.d(TAG, "Status: Removed ");
-                            else Log.d(TAG, "Status: " + response.toString());
+                            String myLog = (response.isSuccess()) ? "Status: Removed" : "Status: " + response.toString();
+                            Log.i(TAG, "onResponse: " + myLog);
                         }
 
                         @Override

@@ -39,7 +39,7 @@ public class RoleControllerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_role_controller);
+        //setContentView(R.layout.activity_role_controller);
         try {
             mSocket = IO.socket("http://46.101.213.24:3007");
         } catch (URISyntaxException e) { throw new RuntimeException(e); }
@@ -52,14 +52,12 @@ public class RoleControllerActivity extends AppCompatActivity {
             mSocket.connect();
             goToActivity = new Intent(this, MainActivity.class);
 //            goToActivity = new Intent(this, SettingsActivity.class);
-            Log.i("RoleController", "Login Status: TRUE, go to MainActivity...");
         } else {
             mSocket.off();
             mSocket.disconnect();
             NotificationController controller = new NotificationController(getApplicationContext());
             controller.deactivateDailyNotificationReminder();
             goToActivity = new Intent(this, LoginActivity.class);
-            Log.i("RoleController", "Login Status: FALSE, go to LoginActivity...");
         }
         startActivity(goToActivity);
 

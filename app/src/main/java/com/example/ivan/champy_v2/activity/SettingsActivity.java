@@ -1,5 +1,6 @@
 package com.example.ivan.champy_v2.activity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -60,6 +61,8 @@ import retrofit.Retrofit;
 
 public class SettingsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    @SuppressLint("SdCardPath")
+    final private String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
     final private String API_URL = "http://46.101.213.24:3007";
     final private String TAG = "SettingsActivity";
     HashMap<String, String> map = new HashMap<>();
@@ -165,8 +168,6 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
             }
         });
 
-
-        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
 
@@ -203,13 +204,11 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).override(130, 130).into(profile);
 
         try {
-            Drawable dr = Init("/data/data/com.example.ivan.champy_v2/app_imageDir/");
+            Drawable dr = Init(path);
             ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setImageDrawable(dr);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        } catch (FileNotFoundException e) { e.printStackTrace(); }
 
         final TextView tvChangeName = (TextView)findViewById(R.id.tvName);
         tvChangeName.setOnClickListener(new View.OnClickListener() {
@@ -269,9 +268,8 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                                     callSurrenderAllChallenges.enqueue(new Callback<User>() {
                                         @Override
                                         public void onResponse(Response<User> response, Retrofit retrofit) {
-                                            if (response.isSuccess()) {
-                                                Log.i(TAG, "onResponseSurrenderAllChallenges: vse ok");
-                                            } else Log.i(TAG, "onResponseSurrenderAllChallenges: " + response.code() + " " + response.message());
+                                            String myLog = (response.isSuccess()) ? "SurrenderAllChallenge: vse ok" : "SurrenderAllChallenge: " + response.code();
+                                            Log.i(TAG, "onResponse: " + myLog);
                                         }
 
                                         @Override
@@ -285,7 +283,6 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                                         @Override
                                         public void onResponse(Response<Delete> response, Retrofit retrofit) {
                                             if (response.isSuccess()) {
-                                                String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
                                                 File file = new File(path, "blured2.jpg");
                                                 DBHelper dbHelper = new DBHelper(getApplicationContext());
                                                 final SQLiteDatabase db = dbHelper.getWritableDatabase();

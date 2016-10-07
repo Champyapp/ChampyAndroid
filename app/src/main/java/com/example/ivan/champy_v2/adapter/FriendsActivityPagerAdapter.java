@@ -11,9 +11,8 @@ import com.example.ivan.champy_v2.fragment.PendingFragment;
 
 public class FriendsActivityPagerAdapter extends FragmentPagerAdapter {
 
-    final int PAGE_COUNT = 3;
     private String tabTitles[] = new String[] { "Friends", "Pending", "Other" };
-    private Context context;
+    public Context context;
 
     public FriendsActivityPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
@@ -22,7 +21,7 @@ public class FriendsActivityPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return PAGE_COUNT;
+        return 3;
     }
 
     @Override
@@ -37,7 +36,6 @@ public class FriendsActivityPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        // Generate title based on item position
         return tabTitles[position];
     }
 
