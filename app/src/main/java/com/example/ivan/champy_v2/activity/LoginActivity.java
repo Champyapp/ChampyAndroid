@@ -73,23 +73,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo("com.facebook.samples.hellofacebook", PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.d(TAG, "KeyHash: " + Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            }
-        } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
-            Log.d(TAG, "KeyHash: not working" );
-        }
+        getFacebookHashKey(); // mast be above "setContentView"
         setContentView(R.layout.activity_login);
 
-        try {
-            initLayout();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
+        TextView loginText = (TextView)findViewById(R.id.login_text);
+        loginText.setTypeface(typeface);
 
         mCallbackManager = CallbackManager.Factory.create();
         mTokenTracker  = new AccessTokenTracker() {
@@ -105,19 +94,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mTokenTracker.startTracking();
         mProfileTracker.startTracking();
 
-        TextView textView = (TextView)findViewById(R.id.login_text);
-        Typeface typeface = Typeface.createFromAsset(LoginActivity.this.getAssets(), "fonts/bebasneue.ttf");
-        textView.setTypeface(typeface);
-        ImageButton button = (ImageButton)findViewById(R.id.login_button);
-        button.setOnClickListener(this);
+        ImageButton buttonLogin = (ImageButton)findViewById(R.id.login_button);
+        buttonLogin.setOnClickListener(this);
         ViewServer.get(this).addWindow(this);
     }
 
     @Override
     public void onClick(View v) {
-        Activity activity = LoginActivity.this;
         OfflineMode offlineMode = new OfflineMode();
-        offlineMode.isConnectedToRemoteAPI(activity);
+        offlineMode.isConnectedToRemoteAPI(this);
         LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile, email, user_friends"));
         LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -209,9 +194,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    public void initLayout() throws IOException {
-        CHInitializeLogin CHInitializeLogin = new CHInitializeLogin(this, getApplicationContext(), new CHImageModule(getApplicationContext()));
-        CHInitializeLogin.Init();
+    private void getFacebookHashKey() {
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo("com.facebook.samples.hellofacebook", PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d(TAG, "KeyHash: " + Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
+            Log.d(TAG, "KeyHash: not working" );
+        }
     }
 
 

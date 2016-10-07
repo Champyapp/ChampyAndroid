@@ -1,5 +1,6 @@
 package com.example.ivan.champy_v2.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -145,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView  tvUserName    = (TextView) headerLayout.findViewById(R.id.tvUserName);
         tvUserName.setText(name);
 
-        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+        @SuppressLint("SdCardPath") String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "blured2.jpg");
         if (file.exists())
             try {

@@ -1,26 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context=".activity.LoginActivity">
+    android:background="@drawable/champy_background" >
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
-
-        <!--<android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />-->
-
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_login" />
 
-</android.support.design.widget.CoordinatorLayout>
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/Champy_image"
+        android:src="@drawable/icon_champy"
+        android:layout_marginBottom="61dp"
+        android:contentDescription="@string/champy"
+        android:layout_above="@+id/login_text"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:text="@string/loginText"
+        android:gravity="center"
+        android:id="@+id/login_text"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold"
+        android:textColor="#ffffff" />
+
+    <include layout="@layout/progress_bar_fragment"
+        android:visibility="invisible" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/login_button"
+        android:background="@drawable/button_login_with_facebook"
+        android:layout_marginBottom="27dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/com_facebook_loginview_logged_in_as" />
+
+</RelativeLayout>
+
