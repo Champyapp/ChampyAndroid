@@ -35,6 +35,8 @@
         android:layout_marginTop="32dp"
         android:layout_below="@+id/imageViewLogo" />
 
+    <include layout="@layout/progress_bar_fragment" />
+
     <android.support.v4.view.ViewPager
         android:id="@+id/pager_pending_duel"
         android:layout_width="wrap_content"

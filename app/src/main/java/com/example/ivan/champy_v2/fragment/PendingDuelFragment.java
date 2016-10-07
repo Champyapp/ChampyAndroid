@@ -1,11 +1,9 @@
 package com.example.ivan.champy_v2.fragment;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -18,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.ivan.champy_v2.ChallengeController;
@@ -204,7 +201,6 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         CurrentUserHelper user = new CurrentUserHelper(getContext());
         final String token = user.getToken();
         final String userId = user.getUserObjectId();
-
         cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
         position = viewPager.getCurrentItem();
         c = db.query("pending_duel", null, null, null, null, null, null);
@@ -231,11 +227,9 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
                     @Override
                     public void onClick(View view) {
                         if (!cc.isActive(description) && recipient.equals("true")) {
-                            cc.joinToChallenge(challenge_id, token, userId);
-                            snackbar = Snackbar.make(view, "Challenge Accepted!", Snackbar.LENGTH_SHORT);
-                        } else {
-                            snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
-                        }
+                               cc.joinToChallenge(challenge_id, token, userId);
+                               snackbar = Snackbar.make(view, "Challenge Accepted!", Snackbar.LENGTH_SHORT);
+                        } else snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
                         snackbar.show();
                     }
                 });
