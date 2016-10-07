@@ -20,8 +20,6 @@ import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.helper.AppSync;
-import com.example.ivan.champy_v2.helper.CHImageModule;
-import com.example.ivan.champy_v2.helper.CHInitializeLogin;
 import com.example.ivan.champy_v2.interfaces.NewUser;
 import com.example.ivan.champy_v2.model.User.Data;
 import com.example.ivan.champy_v2.model.User.LoginData;
@@ -45,7 +43,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
@@ -60,7 +57,7 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends Activity implements View.OnClickListener {
 
     public static final String TAG = "LoginActivity";
     private AccessTokenTracker mTokenTracker;
@@ -80,19 +77,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         TextView loginText = (TextView)findViewById(R.id.login_text);
         loginText.setTypeface(typeface);
 
-        mCallbackManager = CallbackManager.Factory.create();
-        mTokenTracker  = new AccessTokenTracker() {
-            @Override
-            protected void onCurrentAccessTokenChanged(AccessToken oldToken, AccessToken newToken) {}
-        };
-        mProfileTracker = new ProfileTracker() {
-            @Override
-            protected void onCurrentProfileChanged(Profile oldprofile, Profile newprofile) {
-                if (newprofile != null) { name = newprofile.getName(); fb_id = newprofile.getId(); }
-            }
-        };
-        mTokenTracker.startTracking();
-        mProfileTracker.startTracking();
+        initFacebookTokenTracker();
 
         ImageButton buttonLogin = (ImageButton)findViewById(R.id.login_button);
         buttonLogin.setOnClickListener(this);
@@ -140,8 +125,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 parameters.putString("fields", "id, first_name, last_name, email, gender, birthday, location");
                 request.setParameters(parameters);
                 request.executeAsync();
-                spinner = findViewById(R.id.loadingPanel);
-                spinner.setVisibility(View.VISIBLE);
+//                spinner = findViewById(R.id.loadingPanel);
+//                spinner.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -153,12 +138,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-
-    public void getUserData(final String fb_id, final String path_to_pic, String gcm) throws JSONException {
-        AppSync sync = new AppSync(fb_id, gcm, path_to_pic, this);
-        sync.getToken(fb_id, gcm);
-        sync.getUserProfile();
-    }
 
     @Override
     protected void onResume() {
@@ -189,7 +168,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        spinner.setVisibility(View.INVISIBLE);
+//        spinner.setVisibility(View.INVISIBLE);
         ViewServer.get(this).removeWindow(this);
     }
 
@@ -205,6 +184,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
             Log.d(TAG, "KeyHash: not working" );
         }
+    }
+
+
+    private void initFacebookTokenTracker() {
+        mCallbackManager = CallbackManager.Factory.create();
+        mTokenTracker  = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken oldToken, AccessToken newToken) {}
+        };
+        mProfileTracker = new ProfileTracker() {
+            @Override
+            protected void onCurrentProfileChanged(Profile oldprofile, Profile newprofile) {
+                if (newprofile != null) { name = newprofile.getName(); fb_id = newprofile.getId(); }
+            }
+        };
+        mTokenTracker.startTracking();
+        mProfileTracker.startTracking();
+    }
+
+
+    private void getUserData(final String fb_id, final String path_to_pic, String gcm) throws JSONException {
+        AppSync sync = new AppSync(fb_id, gcm, path_to_pic, this);
+        sync.getToken(fb_id, gcm);
+        sync.getUserProfile();
     }
 
 
