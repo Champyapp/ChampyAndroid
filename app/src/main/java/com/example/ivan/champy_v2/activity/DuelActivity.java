@@ -35,6 +35,7 @@ import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.adapter.PagerAdapterDuel;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
+import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.model.Self.Datum;
 import com.example.ivan.champy_v2.model.Self.SelfImprovement;
 
@@ -63,13 +64,13 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_duel);
         new ProgressTask().execute();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        String newString, name = "", friend_id = "";
+        String newString = "", name = "", friend_id = "";
         Bundle extras = getIntent().getExtras();
         if(extras == null) {
             newString = null;
         } else {
             newString = extras.getString("friend");
-            name = extras.getString("name");
+            name      = extras.getString("name");
             friend_id = extras.getString("id");
         }
 
@@ -87,13 +88,21 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         ivUser2.getLayoutParams().height = x; // because we need a square
         SessionManager sessionManager = new SessionManager(getApplicationContext());
 
-        RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.duel_back);
-        relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementback));
+        ////////////////////////////////////////////////////////////////////////////////////////////
+
         Glide.with(this).load(newString).centerCrop().into((ImageView)findViewById(R.id.user1));
+
         @SuppressLint("SdCardPath") String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+
         File file = new File(path, "profile.jpg");
+
         Uri url = Uri.fromFile(file);
-        Glide.with(this).load(url).centerCrop().into((ImageView)findViewById(R.id.user2));
+
+        // i changed this for 'uri' for 'file';
+        Glide.with(this).load(file).centerCrop().into((ImageView)findViewById(R.id.user2));
+
+        ////////////////////////////////////////////////////////////////////////////////////////////
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -112,8 +121,6 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
 
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
-        file = new File(path, "profile.jpg");
-        url = Uri.fromFile(file);
         name = user.get("name");
 
         ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
@@ -128,9 +135,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
             ImageView slideBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
             slideBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
             slideBackground.setImageDrawable(dr);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        } catch (FileNotFoundException e) { e.printStackTrace(); }
 
         this.runOnUiThread(new Runnable() {
             @Override

@@ -47,7 +47,6 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         String itemRowType = itemRow.getType();
         String wakeUpTime = itemRow.getChallengeName();
         String goal = itemRow.getGoal();
-        String duration = itemRow.getDuration();
         String versus = itemRow.getVersus();
         String constDuration = itemRow.getConstDuration();
 
