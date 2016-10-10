@@ -96,9 +96,7 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
             ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setImageDrawable(dr);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        } catch (FileNotFoundException e) { e.printStackTrace(); }
 
         ViewServer.get(this).addWindow(this);
     }

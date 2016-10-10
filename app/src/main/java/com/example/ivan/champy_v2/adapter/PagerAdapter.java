@@ -47,8 +47,8 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     }
 
 
-    public Fragment getRegisteredFragment(int position) {
-        return registeredFragments.get(position);
-    }
+//    public Fragment getRegisteredFragment(int position) {
+//        return registeredFragments.get(position);
+//    }
 
 }

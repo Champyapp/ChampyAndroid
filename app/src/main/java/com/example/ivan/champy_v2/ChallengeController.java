@@ -72,7 +72,7 @@ public class ChallengeController {
     public void createNewSelfImprovementChallenge(final String description, int days, final String token, final String userId) {
         final String type_id = "567d51c48322f85870fd931a";
         duration = "" + (days * 86400);
-        details = description + "";
+        details = description + " during this period: " + days + " days";
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
         Call<com.example.ivan.champy_v2.create_challenge.CreateChallenge> call = createChallenge.createChallenge("User_Challenge", type_id, description, details, duration, token);
@@ -82,12 +82,14 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
                     sendSingleInProgressForSelf(challengeId, token, userId);
-//                    Log.d(TAG, "createNewSelfImprovementChallenge Status: VSE OK"
-//                            + "\n CHALL_ID    = " + challengeId
-//                            + "\n TYPE_ID     = " + type_id
-//                            + "\n DESCRIPTION = " + description
-//                            + "\n DETAILS     = " + details
-//                            + "\n DURATION    = " + duration);
+                    Log.d(TAG, "createNewSelfImprovementChallenge Status: VSE OK"
+                            + "\n CHALL_ID    = " + challengeId
+                            + "\n TYPE_ID     = " + type_id
+                            + "\n DESCRIPTION = " + description
+                            + "\n DETAILS     = " + details
+                            + "\n DURATION    = " + duration);
+                    // TODO: 10.10.2016 в detail записати всьо і просто так виводити
+
                 } else Log.d(TAG, "createNewSelfImprovementChallenge Status: Failed " + response.message());
             }
 
@@ -100,7 +102,7 @@ public class ChallengeController {
     public void createNewDuelChallenge(final String description, int days, final String friend_id, final String token) {
         final String type_id = "567d51c48322f85870fd931b";
         duration = "" + (days * 86400);
-        details = description + "";
+        details = description + " during this period: " + days + " days";
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
         Call<com.example.ivan.champy_v2.create_challenge.CreateChallenge> call = createChallenge.createChallenge("User_Challenge", type_id, description, details, duration, token);

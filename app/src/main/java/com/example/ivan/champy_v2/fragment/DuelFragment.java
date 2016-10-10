@@ -132,7 +132,6 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        Log.i(TAG, "onClick: ");
         name = etGoal.getText().toString();
         duration = etDays.getText().toString();
         dbHelper = new DBHelper(getContext());
@@ -146,7 +145,6 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         snackbar = Snackbar.make(view, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i(TAG, "onClickSnackBar: ");
                 cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
                 if (position == size) {
                     if (checkInputUserData(name, duration, view)) {

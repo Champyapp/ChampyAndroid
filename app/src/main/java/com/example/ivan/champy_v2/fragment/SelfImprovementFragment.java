@@ -76,11 +76,12 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         c = db.query("selfimprovement", null, null, null, null, null, null);
         position = args.getInt(ARG_PAGE);
         if (c.moveToFirst()) {
-            int idColIndex = c.getColumnIndex("id");
-            int nameColIndex = c.getColumnIndex("name");
+            int colchallenge_id = c.getColumnIndex("challenge_id");
             int coldescription = c.getColumnIndex("description");
             int colduration = c.getColumnIndex("duration");
-            int colchallenge_id = c.getColumnIndex("challenge_id");
+            int nameColIndex = c.getColumnIndex("name");
+            int colstatus = c.getColumnIndex("status");
+            int idColIndex = c.getColumnIndex("id");
             do {
                 o++;
                 if (o > position + 1) break;
@@ -89,6 +90,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                     description = c.getString(coldescription);
                     duration = c.getString(colduration);
                     challenge_id = c.getString(colchallenge_id);
+                    status = c.getString(colstatus);
                 }
             } while (c.moveToNext());
         }
@@ -157,15 +159,22 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                     }
                 } else {
                     if (c.moveToFirst()) {
-                        int colname = c.getColumnIndex("name");
                         int colchallenge_id = c.getColumnIndex("challenge_id");
+                        int coldescription = c.getColumnIndex("description");
+                        int colduration = c.getColumnIndex("duration");
+                        int colstatus = c.getColumnIndex("status");
+                        int colname = c.getColumnIndex("name");
                         o = 0;
                         do {
                             o++;
                             if (o > position + 1) break;
                             if (o == position + 1) {
-                                name = c.getString(colname);
                                 challenge_id = c.getString(colchallenge_id);
+                                description = c.getString(coldescription);
+                                duration = c.getString(colduration);
+                                status = c.getString(colstatus);
+                                name = c.getString(colname);
+
                             }
                         } while (c.moveToNext());
                     }
@@ -237,9 +246,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 
     // check user input data @description @days @isActive
     private boolean checkInputUserData(String name, String duration, View view) {
-//        if (!duration.isEmpty()) {
-//            days = Integer.parseInt(duration);
-//        }
+
         if (!cc.isActive(name) && !name.isEmpty() && !name.startsWith(" ") && !duration.isEmpty() && days != 0) {
             snackbar = Snackbar.make(view, "Challenge created!", Snackbar.LENGTH_SHORT);
             snackbar.show();

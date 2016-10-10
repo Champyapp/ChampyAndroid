@@ -78,17 +78,17 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
 
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         TextView tvIChallengeMyselfTo = (TextView) findViewById(R.id.textView20);
-        tvIChallengeMyselfTo.setTypeface(typeface);
-        TextView tvGoal = (TextView) findViewById(R.id.goal_text);
-        tvGoal.setTypeface(typeface);
         TextView tvDuration = (TextView) findViewById(R.id.textView23);
+        TextView tvGoal = (TextView) findViewById(R.id.goal_text);
+        tvIChallengeMyselfTo.setTypeface(typeface);
         tvDuration.setTypeface(typeface);
+        tvGoal.setTypeface(typeface);
 
         Glide.with(this).load(R.drawable.wakeupwhite).override(110, 110).into((ImageView) findViewById(R.id.imageViewLogo));
         Glide.with(this).load(R.drawable.wakeuptext).override(180, 150).into((ImageView) findViewById(R.id.imageView12));
 
-        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.wake_up);
-        relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementback));
+//        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.wake_up);
+//        relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementback));
 
         CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
         String userName = user.getName();
@@ -109,9 +109,8 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
             ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setImageDrawable(dr);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        } catch (FileNotFoundException e) { e.printStackTrace(); }
+
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarmTimePicker = (TimePicker) findViewById(R.id.timePicker);
         ImageButton imageButton = (ImageButton) findViewById(R.id.imageButtonAcceptSelfImprovement);
