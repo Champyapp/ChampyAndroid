@@ -55,17 +55,11 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         return fragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate: ");
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.item_row, container, false);
-        Log.i(TAG, "onCreateView");
+        Log.d(TAG, "onCreateView");
         Bundle extras = getActivity().getIntent().getExtras();
         friend_id = (extras == null) ? null : extras.getString("id");
         dbHelper = new DBHelper(getContext());

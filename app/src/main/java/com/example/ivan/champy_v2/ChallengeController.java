@@ -273,11 +273,7 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     com.example.ivan.champy_v2.single_inprogress.SingleInProgress data = response.body();
                     String inProgressId = data.getData().get_id();
-//                    Log.d("WakeUpActivity", "CurrentTime     = " + unixTime);
-//                    Log.d("WakeUpActivity", "CurrentMidnight = " + currentMidnight);
-//                    Log.d("WakeUpActivity", "UserInputTime   = " + userInputTime);
-//                    Log.d("WakeUpActivity", "Current         = " + current);
-//                    Log.d("WakeUpActivity", "Cur - InputTime = " + (current - userInputTime));
+
                     myIntent.putExtra("inProgressId", inProgressId);
                     myIntent.putExtra("intentId", intentId);
 
@@ -290,8 +286,6 @@ public class ChallengeController {
                     alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, userInputTime, AlarmManager.INTERVAL_DAY, pendingIntent);
 
                     generateCardsForMainActivity(token, userId);
-//                    Log.i("sendSingleInProgress", "IntentId: " + intentId);
-//                    Log.i("sendSingleInProgress", "InProgressId: " + inProgressId);
                 } else Log.d("sendSingleInProgress", "Status: FAILED: " + response.code());
             }
 

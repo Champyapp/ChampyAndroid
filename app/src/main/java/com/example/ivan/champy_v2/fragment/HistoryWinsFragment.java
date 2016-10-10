@@ -40,7 +40,7 @@ public class HistoryWinsFragment extends Fragment {
             String versus = item.getVersus();
             String recipient = item.getRecipient();
 
-            winsArray.add(new HistoryChallenge(type, false /*was true*/, description, duration, status, goal, challengeName, versus, recipient));
+            winsArray.add(new HistoryChallenge(type, false, description, duration, status, goal, challengeName, versus, recipient));
         }
 
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);

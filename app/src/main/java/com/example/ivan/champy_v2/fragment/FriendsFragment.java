@@ -59,9 +59,7 @@ public class FriendsFragment extends Fragment {
 
         try {
             mSocket = IO.socket("http://46.101.213.24:3007");
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
+        } catch (URISyntaxException e) { throw new RuntimeException(e); }
 
         mSocket.on("connect", onConnect);
         mSocket.on("connected", onConnected);
@@ -72,12 +70,6 @@ public class FriendsFragment extends Fragment {
         mSocket.on("Relationship:created:removed", modifiedRelationship);
 
         mSocket.connect();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.i(TAG, "onStart");
     }
 
     @Override
@@ -144,52 +136,9 @@ public class FriendsFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Log.i(TAG, "onAttach");
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.i(TAG, "onActivityCreated");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.i(TAG, "onResume");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.i(TAG, "onPause");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.i(TAG, "onStop");
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.i(TAG, "onDestroyView");
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         mSocket.off();
-        Log.i(TAG, "onDestroy");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.i(TAG, "onDetach");
     }
 
 
@@ -261,7 +210,6 @@ public class FriendsFragment extends Fragment {
                             int allChallengesCount = c.getColumnIndex("allChallengesCount");
                             int level = c.getColumnIndex("level");
                             do {
-                                //Log.i(TAG, "NewUser: " + c.getString(nameColIndex) + " Photo: " + c.getString(photoColIndex));
                                 newfriends.add(new Friend(
                                         c.getString(nameColIndex),
                                         API_URL + c.getString(photoColIndex),
@@ -285,7 +233,7 @@ public class FriendsFragment extends Fragment {
                         rvContacts.setAdapter(adapter);
                         swipeRefreshLayout.setRefreshing(false);
                     }
-                    Log.i(TAG, "refreshFriendsView: finish refreshing");
+                    Log.d(TAG, "refreshFriendsView: finish refreshing");
                 }
 
                 @Override
