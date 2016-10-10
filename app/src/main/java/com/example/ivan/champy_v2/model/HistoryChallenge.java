@@ -11,6 +11,15 @@ public class HistoryChallenge {
     private String status;
     private String versus;
     private String recipient;
+    private String constDuration;
+
+    public String getConstDuration() {
+        return constDuration;
+    }
+
+    public void setConstDuration(String constDuration) {
+        this.constDuration = constDuration;
+    }
 
     public String getRecipient() {
         return recipient;
@@ -76,7 +85,8 @@ public class HistoryChallenge {
         this.description = description;
     }
 
-    public HistoryChallenge(String mtype, boolean mactive, String mdescription, String mduration, String mstatus, String goal, String challengeName, String versus, String recipient) {
+    public HistoryChallenge(String mtype, boolean mactive, String mdescription, String mduration, String mstatus,
+                            String goal, String challengeName, String versus, String recipient, String constDuration) {
         this.type = mtype;
         this.active = mactive;
         this.description = mdescription;
@@ -86,6 +96,7 @@ public class HistoryChallenge {
         this.challengeName = challengeName;
         this.versus = versus;
         this.recipient = recipient;
+        this.constDuration = constDuration;
     }
 
 }

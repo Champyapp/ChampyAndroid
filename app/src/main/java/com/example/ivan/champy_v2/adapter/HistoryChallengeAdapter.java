@@ -49,18 +49,19 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         String goal = itemRow.getGoal();
         String duration = itemRow.getDuration();
         String versus = itemRow.getVersus();
+        String constDuration = itemRow.getConstDuration();
 
         switch (itemRowType) {
             case "Duel":
-                nameTextView.setText(goal + " during this period:" + duration + " days\nwith " + versus);
+                nameTextView.setText(goal + " during this period: " + constDuration + " days\nwith " + versus);
                 Glide.with(mContext).load(R.drawable.duel_yellow).override(80, 80).into(viewHolder.image);
                 break;
             case "Wake Up":
-                nameTextView.setText(wakeUpTime + " during this period:" + duration + " days");
+                nameTextView.setText(wakeUpTime + " during this period: " + constDuration + " days");
                 Glide.with(mContext).load(R.drawable.wakeup_yellow).override(80, 80).into(viewHolder.image);
                 break;
             case "Self-Improvement":
-                nameTextView.setText(goal + " during this period: " + duration + " days");
+                nameTextView.setText(goal + " during this period: " + constDuration + " days");
                 Glide.with(mContext).load(R.drawable.self_yellow).override(80, 80).into(viewHolder.image);
                 break;
             default:

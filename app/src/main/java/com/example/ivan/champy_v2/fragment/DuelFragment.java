@@ -27,7 +27,6 @@ import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 
-//12.07.2016 тут логика окна дуелей с другом: friends -> make challenge -> here.
 public class DuelFragment extends Fragment implements View.OnClickListener {
 
     public static final String ARG_PAGE = "ARG_PAGE";
@@ -54,6 +53,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         fragment.setArguments(args);
         return fragment;
     }
+
 
     @Nullable
     @Override

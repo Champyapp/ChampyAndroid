@@ -243,11 +243,15 @@ public class AppSync {
                 String challenge_wakeUpTime  = challenge.getWakeUpTime();    // our specific time (intentId)
                 String challenge_updated     = getLastUpdated(challenge_id); // bool check method;
                 String challenge_duration    = "";
+                String constDuration         = "";
 
                 if (datum.getEnd() != null) {
                     int end = datum.getEnd();
+                    int begin = datum.getBegin();
                     int days = round((end - unixTime) / 86400);
+                    int constDays = round((end - begin) / 86400);
                     challenge_duration = "" + days;
+                    constDuration = "" + constDays;
                 }
 
                 List<Object> senderProgress = datum.getSenderProgress();
@@ -283,6 +287,7 @@ public class AppSync {
                 cv.put("status", challenge_status); // active or not
                 cv.put("updated", challenge_updated); // true / false
                 cv.put("senderProgress", Arrays.toString(stringSenderProgress)); // last update time in millis
+                cv.put("constDuration", constDuration);
                 db.insert("myChallenges", null, cv);
             }
 
