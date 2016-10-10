@@ -20,15 +20,6 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         newIntent.putExtra("finalInProgressChallengeId", inProgressId);
         newIntent.putExtra("finalIntentId", intentId);
 
-        /**
-         * FLAG_ACTIVITY_NEW_TASK   - откроет wake up, но упадет, когда мы захочем зайти в мейн активити
-         *                            можно по-сути этого избежать, просто "проиграв" челендж, а потом
-         *                            загрузить карточки,когда юзер зайдет в приложение. для этого
-         *                            надо убрать "reload" с "give up" или сделать отдельный метод
-         * FLAG_ACTIVITY_SINGLE_TOP - не сможет открыть wake up активити, когда срабатывает будильник
-         * FLAG_ACTIVITY_CLEAR_TOP  - не сможет открыть wake up активити, когда срабатывает будильник
-         */
-
         newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         SessionManager sessionManager = new SessionManager(context);

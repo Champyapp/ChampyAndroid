@@ -23,12 +23,8 @@ public class AlarmService extends IntentService {
     }
 
     private void sendNotification(String msg) {
-        Log.d("AlarmService", "Preparing to send notification...: " + msg);
-
         NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-
         Intent goToWakeUp = new Intent(this, WakeUpActivity.class);
-
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, goToWakeUp, 0);
 
         NotificationCompat.Builder alarmNotificationBuilder = new NotificationCompat.Builder(this)
@@ -40,7 +36,6 @@ public class AlarmService extends IntentService {
 
         alarmNotificationBuilder.setContentIntent(contentIntent);
         notificationManager.notify(1, alarmNotificationBuilder.build());
-        Log.d("AlarmService", "Notification sent.");
     }
 
 }

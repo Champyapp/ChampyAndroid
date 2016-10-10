@@ -18,10 +18,7 @@ public class NotifyReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i("NotifyReceiver", "onReceive: new notification");
-
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-
         Intent notifyService = new Intent(context, MainActivity.class);
         notifyService.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 

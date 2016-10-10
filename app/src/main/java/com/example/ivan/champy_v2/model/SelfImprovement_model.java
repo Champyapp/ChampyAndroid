@@ -175,6 +175,44 @@ public class SelfImprovement_model {
         return  arrayList;
     }
 
+//    public static ArrayList<SelfImprovement_model> generateInProgress(Context context) {
+//        DBHelper dbHelper = new DBHelper(context);
+//        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+//        ArrayList<SelfImprovement_model> arrayList = new ArrayList<>();
+//        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
+//
+//        if (c.moveToFirst()) {
+//            int idColIndex        = c.getColumnIndex("id");
+//            int nameColIndex      = c.getColumnIndex("name");
+//            int coldescription    = c.getColumnIndex("description");
+//            int colduration       = c.getColumnIndex("duration");
+//            int colchallenge_id   = c.getColumnIndex("challenge_id");
+//            int status            = c.getColumnIndex("status");
+//            int updated           = c.getColumnIndex("updated");
+//            int challengeName     = c.getColumnIndex("challengeName");
+//            int colversus         = c.getColumnIndex("versus");
+//            int colrecipient      = c.getColumnIndex("recipient");
+//            int colsencerprogress = c.getColumnIndex("senderProgress");
+//            int wakeUpTimeCol     = c.getColumnIndex("wakeUpTime");
+//            do {
+//                if (c.getString(status).equals("started")) arrayList.add (new SelfImprovement_model(
+//                        c.getString(coldescription),
+//                        c.getString(colduration),
+//                        c.getString(nameColIndex),
+//                        c.getString(colchallenge_id),
+//                        "started",
+//                        c.getString(updated),
+//                        c.getString(challengeName),
+//                        c.getString(colversus),
+//                        c.getString(colrecipient),
+//                        c.getString(colsencerprogress),
+//                        c.getString(wakeUpTimeCol)));
+//            } while (c.moveToNext());
+//        }
+//        c.close();
+//        return  arrayList;
+//    }
+
     //генерирует Wins в History
     public static ArrayList<SelfImprovement_model> generateWins(Context context) {
         DBHelper dbHelper = new DBHelper(context);

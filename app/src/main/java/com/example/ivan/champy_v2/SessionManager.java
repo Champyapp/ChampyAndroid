@@ -213,37 +213,4 @@ public class SessionManager {
         activity.startActivity(intent);
     }
 
-    // TODO: 06.10.2016 Delete Trash
-    public boolean checkLogin(){
-        // Check login status
-        if(!this.isUserLoggedIn()){
-
-            // user is not logged in redirect him to Login Activity
-            Intent i = new Intent(_context, LoginActivity.class);
-
-            // Closing all the Activities from stack
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-            // Add new Flag to start new Activity
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            // Staring Login Activity
-            _context.startActivity(i);
-
-            return true;
-        }
-        return false;
-    }
-
-    public void change_token(String token){
-        editor.putString("token", token);
-        editor.commit();
-    }
-
-    public void setUpdateFalse() {
-        editor.putString("updateDB", "false");
-        editor.commit();
-    }
-
-
 }

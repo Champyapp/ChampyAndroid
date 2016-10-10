@@ -62,30 +62,6 @@ public class MyGcmListenerService extends GcmListenerService {
             Log.d(TAG, "From: " + from + " " + name);
             Log.d(TAG, "Message: " + message);
 
-//            /*if (from.startsWith("/topics/")) {
-//                // message received from some topic.
-//            } else {
-//                // normal downstream message.
-//            }*/
-//
-//            // [START_EXCLUDE]
-//            /**
-//             * Production applications would usually process the message here.
-//             * Eg: - Syncing with server.
-//             *     - Store message in local database.
-//             *     - Update UI.
-//             */
-//
-//            /**
-//             * In some cases it may be useful to show a notification indicating to the user
-//             * that a message was received.
-//             *
-//
-//               if (!message.toLowerCase().contains(name.toLowerCase()))
-//               sendNotification(message, title);
-//
-//             */
-
             if (message != null && !message.toLowerCase().contains(name.toLowerCase()))
                 sendNotification(message, title);
         }
