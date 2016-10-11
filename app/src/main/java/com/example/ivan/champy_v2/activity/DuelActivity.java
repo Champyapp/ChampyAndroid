@@ -24,7 +24,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -64,42 +63,42 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_duel);
         new ProgressTask().execute();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        String newString = "", name = "", friend_id = "";
+        String friendsPhoto, name;
         Bundle extras = getIntent().getExtras();
         if(extras == null) {
-            newString = null;
+            Uri uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/icon_champy");
+            friendsPhoto = uri.toString();
+            name = "";
         } else {
-            newString = extras.getString("friend");
-            name      = extras.getString("name");
-            friend_id = extras.getString("id");
+            friendsPhoto = extras.getString("photo");
+            name = extras.getString("name");
         }
 
         int x = round(getWindowManager().getDefaultDisplay().getWidth() / 2);
 
         TextView tvIChallengeMyFriendTo = (TextView)findViewById(R.id.tvIChallengeMyFriendTo);
         TextView textViewYouVsFriend = (TextView)findViewById(R.id.tvYouVsFriend);
-        ImageView ivUser2 = (ImageView)findViewById(R.id.user2);
+        ImageView imageMyPhoto = (ImageView)findViewById(R.id.imageMyPhoto);
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
 
         textViewYouVsFriend.setText(getString(R.string.duel_with) + name);
         textViewYouVsFriend.setTypeface(typeface);
         tvIChallengeMyFriendTo.setTypeface(typeface);
-        ivUser2.getLayoutParams().width = x;
-        ivUser2.getLayoutParams().height = x; // because we need a square
+
+        imageMyPhoto.getLayoutParams().width = x;
+        imageMyPhoto.getLayoutParams().height = x; // because we need a square
         SessionManager sessionManager = new SessionManager(getApplicationContext());
 
         ////////////////////////////////////////////////////////////////////////////////////////////
 
-        Glide.with(this).load(newString).centerCrop().into((ImageView)findViewById(R.id.user1));
 
         @SuppressLint("SdCardPath") String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
 
         File file = new File(path, "profile.jpg");
 
         Uri url = Uri.fromFile(file);
+        // i changed this for 'url' for 'file';
 
-        // i changed this for 'uri' for 'file';
-        Glide.with(this).load(file).centerCrop().into((ImageView)findViewById(R.id.user2));
 
         ////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -119,16 +118,17 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         view.setText("+" + (count > 0 ? String.valueOf(count) : null));
         if (count == 0) checker.hideItem();
 
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        name = user.get("name");
+        CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
+        name = user.getName();
 
-        ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        textViewYouVsFriend = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        textViewYouVsFriend.setText(name);
+        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        drawerUserName.setText(name);
 
+        Glide.with(this).load(friendsPhoto).centerCrop().into((ImageView)findViewById(R.id.imageFriendsPhoto));
+        Glide.with(this).load(url).centerCrop().into((ImageView)findViewById(R.id.imageMyPhoto));
         Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile);
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
 
         try {
             Drawable dr = Init(path);

@@ -12,7 +12,7 @@ import static java.lang.Math.round;
 class CHMakeResponsiveScore {
 
 
-    Activity activity;
+    private Activity activity;
 
 
     CHMakeResponsiveScore(Activity activity) {

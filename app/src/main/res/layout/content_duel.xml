@@ -12,7 +12,7 @@
     <ImageView
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:id="@+id/user2"
+        android:id="@+id/imageMyPhoto"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -20,13 +20,13 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/user1"
+        android:id="@+id/imageFriendsPhoto"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/user2"
-        android:layout_toRightOf="@+id/user2"
-        android:layout_alignBottom="@+id/user2" />
+        android:layout_toEndOf="@+id/imageMyPhoto"
+        android:layout_toRightOf="@+id/imageMyPhoto"
+        android:layout_alignBottom="@+id/imageMyPhoto" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -53,7 +53,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="I challenge my friend to"
         android:id="@+id/tvIChallengeMyFriendTo"
-        android:layout_below="@+id/user2"
+        android:layout_below="@+id/imageMyPhoto"
         android:layout_centerHorizontal="true"
         android:textColor="#ffffff"
         android:layout_marginTop="8dp" />

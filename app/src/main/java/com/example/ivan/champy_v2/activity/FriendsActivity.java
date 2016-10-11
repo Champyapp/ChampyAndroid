@@ -183,12 +183,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
     }
 
     @Override
-    public void onStop() {
-        Log.i(TAG, "onStop");
-        super.onStop();
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         Log.i(TAG, "onDestroy");

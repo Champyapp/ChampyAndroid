@@ -216,7 +216,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                 OfflineMode offlineMode = new OfflineMode();
                 if (offlineMode.isConnectedToRemoteAPI(activity)) {
                     Intent intent = new Intent(context, DuelActivity.class);
-                    intent.putExtra("friend", contact.getPicture());
+                    intent.putExtra("photo", contact.getPicture());
                     intent.putExtra("name", contact.getName());
                     intent.putExtra("id", contact.getID());
                     context.startActivity(intent);
