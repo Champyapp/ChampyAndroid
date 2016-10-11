@@ -33,6 +33,7 @@ import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
+import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 
 import java.io.File;
@@ -76,8 +77,9 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         if (count == 0) checker.hideItem();
 
         final Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
-        final ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        final TextView tvUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        final ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        final ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
+        final TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
         final TextView tvIChallengeMyselfTo = (TextView) findViewById(R.id.tvChallengeToMySelf);
         final TextView tvDuration = (TextView) findViewById(R.id.tvDays);
         final TextView tvGoal = (TextView) findViewById(R.id.goal_text);
@@ -96,17 +98,15 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         String userName = user.getName();
         userId = user.getUserObjectId();
         token  = user.getToken();
-        tvUserName.setText(userName);
+        drawerUserName.setText(userName);
 
         Glide.with(this).load(R.drawable.points).override(100, 100).into((ImageView) findViewById(R.id.imageViewPoints));
         Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile);
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
 
         try {
-            Drawable dr = Init(path);
-            ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setImageDrawable(dr);
+            drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            drawerBackground.setImageDrawable(CHLoadBlurredPhoto.Init(path));
         } catch (FileNotFoundException e) { e.printStackTrace(); }
 
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -203,15 +203,6 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-
-    private Drawable Init(String path) throws FileNotFoundException {
-        File file = new File(path, "blured2.jpg");
-        Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
-        Drawable dr = new BitmapDrawable(getResources(), bitmap);
-        dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
-        return dr;
     }
 
 

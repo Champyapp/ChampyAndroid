@@ -31,6 +31,7 @@ import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
+import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -72,13 +73,12 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
         view.setText("+" + (count > 0 ? String.valueOf(count) : null));
         if (count == 0) checker.hideItem();
 
-        SessionManager sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
+
         @SuppressLint("SdCardPath") String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
-        String name = user.get("name");
+        CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
+        String name = user.getName();
 
         ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
         textView = (TextView) headerLayout.findViewById(R.id.tvUserName);

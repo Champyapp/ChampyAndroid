@@ -34,6 +34,8 @@ import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.adapter.PagerAdapter;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
+import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
+import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.model.Self.Datum;
 import com.facebook.FacebookSdk;
 
@@ -92,26 +94,23 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         Glide.with(this).load(R.drawable.self_white).override(130, 130).into((ImageView) findViewById(R.id.imageViewLogo));
         Glide.with(this).load(R.drawable.selfimprtext).override(280, 250).into((ImageView) findViewById(R.id.imageWakeUpChall));
 
-        SessionManager sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
         @SuppressLint("SdCardPath") String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
-        String name = user.get("name");
+        CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
+        String name = user.getName();
 
-        ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        TextView textView = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        textView.setText(name);
+        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
+        TextView drawerUsername = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        drawerUsername.setText(name);
 
         Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile);
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
 
         try {
-            Drawable dr = Init(path);
-            ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setImageDrawable(dr);
+            drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            drawerBackground.setImageDrawable(CHLoadBlurredPhoto.Init(path));
         } catch (FileNotFoundException e) { e.printStackTrace(); }
 
     }

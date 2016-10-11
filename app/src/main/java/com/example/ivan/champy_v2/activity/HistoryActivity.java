@@ -2,11 +2,6 @@ package com.example.ivan.champy_v2.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,12 +27,12 @@ import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.adapter.HistoryPagerAdapter;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
+import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
+import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.facebook.FacebookSdk;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
@@ -52,9 +47,6 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         setContentView(R.layout.activity_history);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        final SessionManager sessionManager = new SessionManager(this);
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
@@ -83,22 +75,27 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs_history);
         tabLayout.setupWithViewPager(viewPager);
 
-        String name = user.get("name");
+        CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
+        String name = user.getName();
 
-        ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        TextView tvUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        tvUserName.setText(name);
+        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
+        ImageView background = (ImageView) findViewById(R.id.history_background);
+        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        drawerUserName.setText(name);
+
         @SuppressLint("SdCardPath") String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
         Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile);
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
 
         try {
-            Drawable dr = Init(path);
-            ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setImageDrawable(dr);
+            Drawable dr = CHLoadBlurredPhoto.Init(path);
+            background.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            background.setImageDrawable(dr);
+            drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            drawerBackground.setImageDrawable(dr);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -162,18 +159,6 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-
-    private Drawable Init(String path) throws FileNotFoundException {
-        File file = new File(path, "blured2.jpg");
-        Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
-        Drawable dr = new BitmapDrawable(this.getResources(), bitmap);
-        dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
-        ImageView background = (ImageView) findViewById(R.id.history_background);
-        background.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        background.setImageDrawable(dr);
-        return dr;
     }
 
 }

@@ -31,6 +31,8 @@ import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.adapter.PendingDuelsAdapter;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
+import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
+import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,7 +43,6 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class PendingDuelActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private SessionManager sessionManager;
     private int size;
     public View spinner;
 
@@ -49,7 +50,6 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pending__duel);
-        sessionManager = new SessionManager(getApplicationContext());
         new ProgressTask().execute();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -74,28 +74,24 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
 
         Glide.with(this).load(R.drawable.duel_blue).override(130, 130).into((ImageView) findViewById(R.id.imageViewLogo));
 
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
         @SuppressLint("SdCardPath") String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
-        String name = user.get("name");
+        CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
+        String name = user.getName();
 
-        ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        TextView tvUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        tvUserName.setText(name);
+        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
+        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        drawerUserName.setText(name);
 
         Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile);
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
 
         try {
-            Drawable dr = Init(path);
-            ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setImageDrawable(dr);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+            drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            drawerBackground.setImageDrawable(CHLoadBlurredPhoto.Init(path));
+        } catch (FileNotFoundException e) { e.printStackTrace(); }
 
         spinner.setVisibility(View.INVISIBLE);
     }
@@ -105,15 +101,6 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         super.onStart();
         OfflineMode offlineMode = new OfflineMode();
         offlineMode.isConnectedToRemoteAPI(this);
-    }
-
-
-    private Drawable Init(String path) throws FileNotFoundException {
-        File file = new File(path, "blured2.jpg");
-        Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
-        Drawable dr = new BitmapDrawable(getResources(), bitmap);
-        dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
-        return dr;
     }
 
     @Override
@@ -181,6 +168,7 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    SessionManager sessionManager = new SessionManager(getApplicationContext());
                     size = Integer.parseInt(sessionManager.get_duel_pending());
                     PendingDuelsAdapter pagerAdapter = new PendingDuelsAdapter(getSupportFragmentManager());
                     ViewPager viewPager = (ViewPager) findViewById(R.id.pager_pending_duel);

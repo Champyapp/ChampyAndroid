@@ -17,10 +17,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/settings_layout">
+        android:id="@+id/settings_layout" >
 
 <ImageView
     android:layout_width="wrap_content"
@@ -28,15 +25,14 @@
     android:id="@+id/img_profile"
     android:layout_alignParentTop="true"
     android:layout_centerHorizontal="true"
-    android:src="@android:mipmap/sym_def_app_icon"
     android:layout_marginTop="8dp"
+    android:contentDescription="@string/userPhoto"
     android:clickable="true" />
 
 <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textAppearance="?android:attr/textAppearanceLarge"
-    android:text="User Name"
     android:id="@+id/userNameInSettings"
     android:layout_below="@+id/img_profile"
     android:layout_centerHorizontal="true"
@@ -90,7 +86,8 @@
         android:maxLength="25"
         android:singleLine="true"
         android:visibility="gone"
-        android:textColor="#ffffff" />
+        android:textColor="#ffffff"
+        android:inputType="text" />
 
     <ImageButton
         android:layout_width="60dp"
@@ -143,7 +140,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Avatar"
+        android:text="@string/avatar"
         android:id="@+id/avatar"
         android:layout_below="@+id/view"
         android:layout_alignParentLeft="true"

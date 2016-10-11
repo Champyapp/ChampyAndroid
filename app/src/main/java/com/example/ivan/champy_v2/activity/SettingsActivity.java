@@ -38,6 +38,7 @@ import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
+import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.interfaces.Update_user;
@@ -65,7 +66,9 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
     final private String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
     final private String API_URL = "http://46.101.213.24:3007";
     final private String TAG = "SettingsActivity";
+    SessionManager sessionManager;
     HashMap<String, String> map = new HashMap<>();
+    HashMap<String, String> user = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,86 +97,23 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         navigationView.setNavigationItemSelectedListener(this);
         CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
         int count = checker.getPendingCount();
-        TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-        view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+        TextView pendingCount = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+        pendingCount.setText("+" + (count > 0 ? String.valueOf(count) : null));
         if (count == 0) checker.hideItem();
 
-        SessionManager sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user;
+        sessionManager = new SessionManager(getApplicationContext());
         user = sessionManager.getUserDetails();
         final String name = user.get("name");
-        String pushN = user.get("pushN");
-        String newChallReq = user.get("newChallReq");
-        String acceptedYour = user.get("acceptedYour");
-        String challengeEnd = user.get("challengeEnd");
-        map.put("joinedChampy", "true");
-        map.put("friendRequests", "true");
-        map.put("challengeConfirmation", "true");
-        map.put("challengeEnd", challengeEnd);
-        map.put("reminderTime", "12"); // mb 10?
-        map.put("challengesForToday", "true");
-        map.put("acceptedYourChallenge", acceptedYour);
-        map.put("newChallengeRequests", newChallReq);
-        map.put("pushNotifications", pushN);
-
-        Switch switchForPushNotif = (Switch) findViewById(R.id.switch1);
-                if (pushN.equals("true")) switchForPushNotif.setChecked(true);
-                else switchForPushNotif.setChecked(false);
-
-        switchForPushNotif.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.d(TAG, "Push Notifications: " + isChecked);
-                if (isChecked) map.put("pushNotifications", "true");
-                else map.put("pushNotifications", "false");
-            }
-        });
-
-        Switch switchorNewChallRequests = (Switch) findViewById(R.id.switch2);
-                if (newChallReq.equals("true")) switchorNewChallRequests.setChecked(true);
-                else switchorNewChallRequests.setChecked(false);
-
-        switchorNewChallRequests.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.d(TAG, "New Challenge Request: " + isChecked);
-                if (isChecked) map.put("newChallengeRequests", "true");
-                else map.put("newChallengeRequests", "false");
-            }
-        });
-
-        Switch switchForAcceptedYourChall = (Switch) findViewById(R.id.switch3);
-                if (acceptedYour.equals("true")) switchForAcceptedYourChall.setChecked(true);
-                else switchForAcceptedYourChall.setChecked(false);
-
-        switchForAcceptedYourChall.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.d(TAG, "Accepted Your Challenge: " + isChecked);
-                if (isChecked) map.put("acceptedYourChallenge", "true");
-                else map.put("acceptedYourChallenge", "false");
-            }
-        });
-
-        Switch switchForChallengesEnd = (Switch) findViewById(R.id.switch4);
-                if (challengeEnd.equals("true")) switchForChallengesEnd.setChecked(true);
-                else switchForChallengesEnd.setChecked(false);
-
-        switchForChallengesEnd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.d(TAG, "Challenge End: " + isChecked);
-                if (isChecked) map.put("challengeEnd", "true");
-                else map.put("challengeEnd", "false");
-            }
-        });
+        initSwitches();
 
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
 
-        ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        TextView tvUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        tvUserName.setText(name);
+        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
+        ImageView background = (ImageView) findViewById(R.id.back_settings);
+        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        drawerUserName.setText(name);
         Typeface typeface = Typeface.createFromAsset(SettingsActivity.this.getAssets(), "fonts/bebasneue.ttf");
 
         final TextView tvName = (TextView)findViewById(R.id.userNameInSettings);
@@ -188,26 +128,26 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         tvLegal.setTypeface(typeface);
 
         Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile);
-        profile = (ImageView) findViewById(R.id.img_profile);
-        profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
-                    updateProfile(map);
-                    Intent intent = new Intent(SettingsActivity.this, PhotoActivity.class);
-                    startActivity(intent);
-                }
-            }
-        });
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
+        drawerImageProfile = (ImageView) findViewById(R.id.img_profile);
+//        drawerImageProfile.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
+//                    updateProfile(map);
+//                    Intent intent = new Intent(SettingsActivity.this, PhotoActivity.class);
+//                    startActivity(intent);
+//                }
+//            }
+//        });
         Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).override(130, 130).into(profile);
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).override(130, 130).into(drawerImageProfile);
 
         try {
-            Drawable dr = Init(path);
-            ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setImageDrawable(dr);
+            background.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            background.setImageDrawable(CHLoadBlurredPhoto.Init(path));
+            drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            drawerBackground.setImageDrawable(CHLoadBlurredPhoto.Init(path));
         } catch (FileNotFoundException e) { e.printStackTrace(); }
 
         final TextView tvChangeName = (TextView)findViewById(R.id.tvName);
@@ -460,6 +400,75 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
     }
 
 
+    private void initSwitches() {
+        String pushN = user.get("pushN");
+        String newChallReq = user.get("newChallReq");
+        String acceptedYour = user.get("acceptedYour");
+        String challengeEnd = user.get("challengeEnd");
+        map.put("joinedChampy", "true");
+        map.put("friendRequests", "true");
+        map.put("challengeConfirmation", "true");
+        map.put("challengeEnd", challengeEnd);
+        map.put("reminderTime", "12"); // was 17
+        map.put("challengesForToday", "true");
+        map.put("acceptedYourChallenge", acceptedYour);
+        map.put("newChallengeRequests", newChallReq);
+        map.put("pushNotifications", pushN);
+
+        Switch switchForPushNotif = (Switch) findViewById(R.id.switch1);
+        if (pushN.equals("true")) switchForPushNotif.setChecked(true);
+        else switchForPushNotif.setChecked(false);
+
+        switchForPushNotif.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.d(TAG, "Push Notifications: " + isChecked);
+                if (isChecked) map.put("pushNotifications", "true");
+                else map.put("pushNotifications", "false");
+            }
+        });
+
+        Switch switchorNewChallRequests = (Switch) findViewById(R.id.switch2);
+        if (newChallReq.equals("true")) switchorNewChallRequests.setChecked(true);
+        else switchorNewChallRequests.setChecked(false);
+
+        switchorNewChallRequests.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.d(TAG, "New Challenge Request: " + isChecked);
+                if (isChecked) map.put("newChallengeRequests", "true");
+                else map.put("newChallengeRequests", "false");
+            }
+        });
+
+        Switch switchForAcceptedYourChall = (Switch) findViewById(R.id.switch3);
+        if (acceptedYour.equals("true")) switchForAcceptedYourChall.setChecked(true);
+        else switchForAcceptedYourChall.setChecked(false);
+
+        switchForAcceptedYourChall.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.d(TAG, "Accepted Your Challenge: " + isChecked);
+                if (isChecked) map.put("acceptedYourChallenge", "true");
+                else map.put("acceptedYourChallenge", "false");
+            }
+        });
+
+        Switch switchForChallengesEnd = (Switch) findViewById(R.id.switch4);
+        if (challengeEnd.equals("true")) switchForChallengesEnd.setChecked(true);
+        else switchForChallengesEnd.setChecked(false);
+
+        switchForChallengesEnd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.d(TAG, "Challenge End: " + isChecked);
+                if (isChecked) map.put("challengeEnd", "true");
+                else map.put("challengeEnd", "false");
+            }
+        });
+    }
+
+
     private void setNewName(String newName) {
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user;
@@ -482,18 +491,6 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                 Log.i(TAG , "SetNewName: " + t);
             }
         });
-    }
-
-
-    private Drawable Init(String path) throws FileNotFoundException {
-        File file = new File(path, "blured2.jpg");
-        Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
-        Drawable dr = new BitmapDrawable(getResources(), bitmap);
-        dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
-        ImageView imageView = (ImageView) findViewById(R.id.back_settings);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imageView.setImageDrawable(dr);
-        return dr;
     }
 
 

@@ -28,6 +28,8 @@ import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.adapter.FriendsActivityPagerAdapter;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHImageModule;
+import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
+import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 
@@ -46,16 +48,10 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
-        Log.i(TAG, "onCreate");
         setContentView(R.layout.activity_friends);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final SessionManager sessionManager = new SessionManager(this);
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-
-        ImageView imageView;
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
             @Override
@@ -91,28 +87,39 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        String name = user.get("name");
+        CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
+        String name = user.getName();
 
-        ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        TextView tvUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        tvUserName.setText(name);
-        @SuppressLint("SdCardPath") String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
+        ImageView background = (ImageView) findViewById(R.id.friends_background);
+        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        drawerUserName.setText(name);
+
+        @SuppressLint("SdCardPath")
+        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
 
         Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile);
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
 
         try {
-            CHImageModule CHImageModule = new CHImageModule(this);
-            Drawable dr = CHImageModule.Init(path, FriendsActivity.this);
-            imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setImageDrawable(dr);
+            background.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            background.setImageDrawable(CHLoadBlurredPhoto.Init(path));
+            drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            drawerBackground.setImageDrawable(CHLoadBlurredPhoto.Init(path));
         } catch (FileNotFoundException e) { e.printStackTrace(); }
 
         ViewServer.get(this).addWindow(this);
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        OfflineMode offlineMode = new OfflineMode();
+        offlineMode.isConnectedToRemoteAPI(this);
     }
 
     @Override
@@ -168,24 +175,14 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        Log.i(TAG, "onStart");
-        OfflineMode offlineMode = new OfflineMode();
-        offlineMode.isConnectedToRemoteAPI(this);
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.i(TAG, "onDestroy");
         ViewServer.get(this).removeWindow(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i(TAG, "onResume");
         ViewServer.get(this).setFocusedWindow(this);
         AppEventsLogger.activateApp(this);
     }
@@ -193,7 +190,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
     @Override
     protected void onPause() {
         super.onPause();
-        Log.i(TAG, "onPause");
         AppEventsLogger.deactivateApp(this);
     }
 

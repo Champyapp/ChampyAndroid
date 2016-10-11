@@ -39,6 +39,7 @@ import com.example.ivan.champy_v2.adapter.MainActivityCardsAdapter;
 import com.example.ivan.champy_v2.helper.CHBuildAnim;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHDownloadImageTask;
+import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
 import com.example.ivan.champy_v2.helper.CHSocket;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
@@ -145,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         ImageView drawerBackground = (ImageView)headerLayout.findViewById(R.id.slide_background);
         ImageView drawerUserPhoto = (ImageView)headerLayout.findViewById(R.id.profile_image);
+        ImageView background = (ImageView)findViewById(R.id.main_background);
         TextView  drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
         drawerUserName.setText(name);
 
@@ -153,8 +155,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         File file = new File(path, "blured2.jpg");
         if (file.exists())
             try {
+                background.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                background.setImageDrawable(CHLoadBlurredPhoto.Init(path));
                 drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                drawerBackground.setImageDrawable(initBackground(path));
+                drawerBackground.setImageDrawable(CHLoadBlurredPhoto.Init(path));
             } catch (FileNotFoundException e) { e.printStackTrace(); }
         else {
             CHDownloadImageTask chDownloadImageTask = new CHDownloadImageTask(getApplicationContext(), this);
@@ -303,16 +307,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-
-    public Drawable initBackground(String path) throws FileNotFoundException {
-        File file = new File(path, "blured2.jpg");
-        Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
-        Drawable dr = new BitmapDrawable(getResources(), bitmap);
-        dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
-        ImageView background = (ImageView)findViewById(R.id.main_background);
-        background.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        background.setImageDrawable(dr);
-        return dr;
-    }
 
 }

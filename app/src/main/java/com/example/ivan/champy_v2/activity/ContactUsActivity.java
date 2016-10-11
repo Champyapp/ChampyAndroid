@@ -35,6 +35,7 @@ import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
+import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -80,10 +81,9 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         String name = user.get("name");
 
         try {
-            Drawable dr = Init(path);
             ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setImageDrawable(dr);
+            imageView.setImageDrawable(CHLoadBlurredPhoto.Init(path));
         } catch (FileNotFoundException e) { e.printStackTrace(); }
 
         ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);

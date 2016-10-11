@@ -105,7 +105,9 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
 
         CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
         name = user.getName();
-        String pathToUserPhoto = user.getPathToPic();
+        @SuppressLint("SdCardPath") String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+        File file = new File(path, "profile.jpg");
+        Uri url = Uri.fromFile(file);
 
         ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
         ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
@@ -113,8 +115,8 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         drawerUserName.setText(name);
 
         Glide.with(this).load(friendsPhoto).centerCrop().into((ImageView)findViewById(R.id.imageFriendsPhoto));
-        Glide.with(this).load(pathToUserPhoto).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(imageMyPhoto);
-        Glide.with(this).load(pathToUserPhoto).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+        Glide.with(this).load(url).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(imageMyPhoto);
+        Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
 
         try {

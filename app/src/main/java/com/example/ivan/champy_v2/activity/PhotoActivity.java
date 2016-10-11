@@ -131,6 +131,8 @@ public class PhotoActivity extends AppCompatActivity {
                 if (cursor.moveToFirst()) {
                     return cursor.getString(column_index);
                 }
+                cursor.close(); // added this line, if something went wrong than just delete this line;
+
             } catch (Exception e) {
                 // Eat it
             }
@@ -164,6 +166,7 @@ public class PhotoActivity extends AppCompatActivity {
             Toast.makeText(this, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
+
     private String SaveFromCamera(Bitmap finalBitmap) {
         String root = Environment.getExternalStorageDirectory().toString();
         File myDir = new File(root + "/android/data/com.azinecllc.champy/images");
