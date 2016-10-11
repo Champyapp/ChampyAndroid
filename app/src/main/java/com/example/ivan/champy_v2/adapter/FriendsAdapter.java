@@ -150,7 +150,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
 
         // при нажатии нужно переобъявлять view, поэтому делаем это.
-        // отвечает за вид в развернутом состоянии
+        // response for view in open state
         if (selected.contains(position)) {
 
             Glide.with(context).load(R.drawable.wins).override(40, 40).into(imageViewWinsOpen);
@@ -194,7 +194,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                         @Override
                         public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
                             String myLog = (response.isSuccess()) ? "Status: Removed" : "Status: " + response.toString();
-                            Log.i(TAG, "onResponse: " + myLog);
+                            Log.d(TAG, "onResponse: " + myLog);
                         }
 
                         @Override

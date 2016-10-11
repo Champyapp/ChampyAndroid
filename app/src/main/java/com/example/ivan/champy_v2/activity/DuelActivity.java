@@ -55,7 +55,8 @@ import static java.lang.Math.round;
 
 public class DuelActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    public View spinner;
+    private View spinner;
+    private String friendsPhoto, name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +64,6 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_duel);
         new ProgressTask().execute();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        String friendsPhoto, name;
         Bundle extras = getIntent().getExtras();
         if(extras == null) {
             Uri uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/icon_champy");
@@ -87,21 +87,6 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
 
         imageMyPhoto.getLayoutParams().width = x;
         imageMyPhoto.getLayoutParams().height = x; // because we need a square
-        SessionManager sessionManager = new SessionManager(getApplicationContext());
-
-        ////////////////////////////////////////////////////////////////////////////////////////////
-
-
-        @SuppressLint("SdCardPath") String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
-
-        File file = new File(path, "profile.jpg");
-
-        Uri url = Uri.fromFile(file);
-        // i changed this for 'url' for 'file';
-
-
-        ////////////////////////////////////////////////////////////////////////////////////////////
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -113,28 +98,28 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
-        int count = checker.checkPending();
+        int count = checker.getPendingCount();
         TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
         view.setText("+" + (count > 0 ? String.valueOf(count) : null));
         if (count == 0) checker.hideItem();
 
         CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
         name = user.getName();
+        String pathToUserPhoto = user.getPathToPic();
 
         ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
         TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
         drawerUserName.setText(name);
 
         Glide.with(this).load(friendsPhoto).centerCrop().into((ImageView)findViewById(R.id.imageFriendsPhoto));
-        Glide.with(this).load(url).centerCrop().into((ImageView)findViewById(R.id.imageMyPhoto));
-        Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+        Glide.with(this).load(pathToUserPhoto).centerCrop().into((ImageView)findViewById(R.id.imageMyPhoto));
+        Glide.with(this).load(pathToUserPhoto).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
 
         try {
-            Drawable dr = Init(path);
             ImageView slideBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
             slideBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            slideBackground.setImageDrawable(dr);
+            slideBackground.setImageDrawable(getPhotoForDrawerBackground());
         } catch (FileNotFoundException e) { e.printStackTrace(); }
 
         this.runOnUiThread(new Runnable() {
@@ -266,8 +251,10 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    private Drawable Init(String path) throws FileNotFoundException {
-        File file = new File(path, "blured2.jpg");
+    private Drawable getPhotoForDrawerBackground() throws FileNotFoundException {
+        @SuppressLint("SdCardPath")
+        String pathToPic = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+        File file = new File(pathToPic, "blured2.jpg");
         Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
         Drawable dr = new BitmapDrawable(getResources(), bitmap);
         dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);

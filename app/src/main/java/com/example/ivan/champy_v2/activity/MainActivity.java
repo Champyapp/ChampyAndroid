@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
-        int count = checker.checkPending();
+        int count = checker.getPendingCount();
         TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
         view.setText("+" + (count > 0 ? String.valueOf(count) : null));
         if (count == 0) checker.hideItem();

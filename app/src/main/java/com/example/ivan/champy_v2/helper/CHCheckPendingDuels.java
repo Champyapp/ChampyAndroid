@@ -1,11 +1,9 @@
 package com.example.ivan.champy_v2.helper;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.NavigationView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
@@ -19,18 +17,17 @@ import com.example.ivan.champy_v2.data.DBHelper;
  */
 public class CHCheckPendingDuels {
 
-    Context context;
-    View view;
+    private Context context;
+    private View view;
 
     public CHCheckPendingDuels(Context context, View view) {
         this.context = context;
         this.view = view;
     }
 
-    public int checkPending() {
+    public int getPendingCount() {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final ContentValues cv = new ContentValues();
         Cursor c = db.query("pending_duel", null, null, null, null, null, null);
         int countOfPendingDuel = 0;
         if (c.moveToFirst()) {
@@ -41,8 +38,6 @@ public class CHCheckPendingDuels {
         c.close();
         SessionManager sessionManager = new SessionManager(context);
         sessionManager.set_duel_pending("" + countOfPendingDuel);
-        Log.i("CheckPending", "PendingCount: " + countOfPendingDuel);
-        //Log.i("RefreshPendingDuels", "    onResponse: VSE OK");
         return countOfPendingDuel;
     }
 

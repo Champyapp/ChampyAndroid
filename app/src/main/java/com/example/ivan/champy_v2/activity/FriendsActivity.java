@@ -1,13 +1,7 @@
 package com.example.ivan.champy_v2.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -38,7 +32,6 @@ import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 
@@ -78,7 +71,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         navigationView.setNavigationItemSelectedListener(this);
 
         CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
-        int count = checker.checkPending();
+        int count = checker.getPendingCount();
         TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
         view.setText("+" + (count > 0 ? String.valueOf(count) : null));
         if (count == 0) checker.hideItem();
