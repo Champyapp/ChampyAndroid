@@ -128,10 +128,7 @@ public class ChallengeController {
 
     }
 
-    public void createNewWakeUpChallenge(int days, final String type_id) {
-        CurrentUserHelper user = new CurrentUserHelper(context);
-        final String token = user.getToken();
-        final String userId = user.getUserObjectId();
+    public void createNewWakeUpChallenge(int days, final String type_id, final String token, final String userId) {
         duration = "" + (days * 86400);
         description = "Wake Up";
         String sHour = "" + hour;

@@ -24,9 +24,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -88,11 +86,11 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         if (count == 0) checker.hideItem();
 
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
-        TextView tvIChallengeMySelfTo = (TextView)findViewById(R.id.textView20);
+        TextView tvIChallengeMySelfTo = (TextView)findViewById(R.id.tvChallengeToMySelf);
         tvIChallengeMySelfTo.setTypeface(typeface);
 
         Glide.with(this).load(R.drawable.self_white).override(130, 130).into((ImageView) findViewById(R.id.imageViewLogo));
-        Glide.with(this).load(R.drawable.selfimprtext).override(280, 250).into((ImageView) findViewById(R.id.imageView12));
+        Glide.with(this).load(R.drawable.selfimprtext).override(280, 250).into((ImageView) findViewById(R.id.imageWakeUpChall));
 
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user;

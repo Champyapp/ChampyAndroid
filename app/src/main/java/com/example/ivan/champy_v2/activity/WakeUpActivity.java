@@ -2,7 +2,6 @@ package com.example.ivan.champy_v2.activity;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -24,7 +23,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -47,6 +45,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
 
     public final static String type_id = "567d51c48322f85870fd931c";
     public final static String API_URL = "http://46.101.213.24:3007";
+    private String userId, token;
     private TimePicker alarmTimePicker;
     public Snackbar snackbar;
     AlarmManager alarmManager;
@@ -76,31 +75,30 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         view.setText("+" + (count > 0 ? String.valueOf(count) : null));
         if (count == 0) checker.hideItem();
 
-        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
-        TextView tvIChallengeMyselfTo = (TextView) findViewById(R.id.textView20);
-        TextView tvDuration = (TextView) findViewById(R.id.textView23);
-        TextView tvGoal = (TextView) findViewById(R.id.goal_text);
+        final Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
+        final ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        final TextView tvUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        final TextView tvIChallengeMyselfTo = (TextView) findViewById(R.id.tvChallengeToMySelf);
+        final TextView tvDuration = (TextView) findViewById(R.id.tvDays);
+        final TextView tvGoal = (TextView) findViewById(R.id.goal_text);
+
         tvIChallengeMyselfTo.setTypeface(typeface);
         tvDuration.setTypeface(typeface);
         tvGoal.setTypeface(typeface);
 
         Glide.with(this).load(R.drawable.wakeupwhite).override(110, 110).into((ImageView) findViewById(R.id.imageViewLogo));
-        Glide.with(this).load(R.drawable.wakeuptext).override(180, 150).into((ImageView) findViewById(R.id.imageView12));
+        Glide.with(this).load(R.drawable.wakeuptext).override(180, 150).into((ImageView) findViewById(R.id.imageWakeUpChall));
 
-//        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.wake_up);
-//        relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.selfimprovementback));
-
-        CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
-        String userName = user.getName();
         @SuppressLint("SdCardPath") String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
+        CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
+        String userName = user.getName();
+        userId = user.getUserObjectId();
+        token  = user.getToken();
+        tvUserName.setText(userName);
 
-        ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        tvDuration = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        tvDuration.setText(userName);
-
-        Glide.with(this).load(R.drawable.points).override(100, 100).into((ImageView) findViewById(R.id.imageViewAcceptButton));
+        Glide.with(this).load(R.drawable.points).override(100, 100).into((ImageView) findViewById(R.id.imageViewPoints));
         Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile);
 
@@ -113,7 +111,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
 
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarmTimePicker = (TimePicker) findViewById(R.id.timePicker);
-        ImageButton imageButton = (ImageButton) findViewById(R.id.imageButtonAcceptSelfImprovement);
+        ImageButton imageButton = (ImageButton) findViewById(R.id.imageButtonAccept);
         imageButton.setOnClickListener(this);
 
     }
@@ -134,7 +132,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
             @Override
             public void onClick(View view) {
                 if (ok) {
-                    cc.createNewWakeUpChallenge(21, type_id);
+                    cc.createNewWakeUpChallenge(21, type_id, token, userId);
                     snackbar = Snackbar.make(view, "Challenge Created!", Snackbar.LENGTH_SHORT);
                 } else {
                     snackbar = Snackbar.make(view, "Already Exist!", Snackbar.LENGTH_SHORT);
@@ -166,7 +164,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-        public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.challenges:
                 Intent goToChallenges = new Intent(this, MainActivity.class);

@@ -69,15 +69,14 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         if (count == 0) checker.hideItem();
 
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
-        TextView tvPendingDuels = (TextView) findViewById(R.id.textView20);
+        TextView tvPendingDuels = (TextView) findViewById(R.id.tvChallengeToMySelf);
         tvPendingDuels.setTypeface(typeface);
 
         Glide.with(this).load(R.drawable.duel_blue).override(130, 130).into((ImageView) findViewById(R.id.imageViewLogo));
 
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
-        @SuppressLint("SdCardPath")
-        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+        @SuppressLint("SdCardPath") String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
         String name = user.get("name");

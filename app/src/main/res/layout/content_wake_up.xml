@@ -23,10 +23,10 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/i_challenge_myself_to"
-        android:id="@+id/textView20"
+        android:id="@+id/tvChallengeToMySelf"
         android:textColor="#ffffff"
         android:gravity="center_vertical|center_horizontal"
-        android:layout_below="@+id/imageView12"
+        android:layout_below="@+id/imageWakeUpChall"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
@@ -36,7 +36,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView12"
+        android:id="@+id/imageWakeUpChall"
         android:layout_below="@+id/imageViewLogo"
         android:layout_centerHorizontal="true"
         android:src="@drawable/wakeuptext"
@@ -46,8 +46,8 @@
         android:layout_width="wrap_content"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView20"
-        android:layout_above="@+id/imageButtonAcceptSelfImprovement"
+        android:layout_below="@+id/tvChallengeToMySelf"
+        android:layout_above="@+id/imageButtonAccept"
         card_view:cardUseCompatPadding="true"
         card_view:cardCornerRadius="8dp">
         <RelativeLayout
@@ -75,7 +75,7 @@
             <ImageView
                 android:layout_width="60sp"
                 android:layout_height="60sp"
-                android:id="@+id/imageViewAcceptButton"
+                android:id="@+id/imageViewPoints"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:src="@drawable/points"
@@ -89,12 +89,12 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/level_1_challenge"
                 android:id="@+id/tvLevel1Chall"
-                android:layout_alignBottom="@+id/imageViewAcceptButton"
+                android:layout_alignBottom="@+id/imageViewPoints"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_toLeftOf="@+id/imageViewAcceptButton"
-                android:layout_toStartOf="@+id/imageViewAcceptButton"
-                android:layout_alignTop="@+id/imageViewAcceptButton"
+                android:layout_toLeftOf="@+id/imageViewPoints"
+                android:layout_toStartOf="@+id/imageViewPoints"
+                android:layout_alignTop="@+id/imageViewPoints"
                 android:gravity="center_vertical|center_horizontal"
                 android:textColor="#339997" />
 
@@ -104,9 +104,9 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:text="@string/reward_10_points"
                 android:id="@+id/tvRewardPlus10Points"
-                android:layout_alignTop="@+id/imageViewAcceptButton"
-                android:layout_toRightOf="@+id/imageViewAcceptButton"
-                android:layout_alignBottom="@+id/imageViewAcceptButton"
+                android:layout_alignTop="@+id/imageViewPoints"
+                android:layout_toRightOf="@+id/imageViewPoints"
+                android:layout_alignBottom="@+id/imageViewPoints"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:gravity="center_vertical|center_horizontal"
@@ -119,7 +119,7 @@
                 android:timePickerMode="spinner"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/goal_text"
-                android:layout_above="@+id/textView22"
+                android:layout_above="@+id/tvEveryDayForNext"
                 tools:targetApi="lollipop" />
 
             <TextView
@@ -127,8 +127,8 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="@string/everyday_for_next"
-                android:id="@+id/textView22"
-                android:layout_above="@+id/textView23"
+                android:id="@+id/tvEveryDayForNext"
+                android:layout_above="@+id/tvDays"
                 android:layout_centerHorizontal="true" />
 
             <TextView
@@ -136,9 +136,9 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="@string/_21_days"
-                android:id="@+id/textView23"
+                android:id="@+id/tvDays"
                 android:textSize="20sp"
-                android:layout_above="@+id/imageViewAcceptButton"
+                android:layout_above="@+id/imageViewPoints"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
                 android:textColor="#339997" />
@@ -149,7 +149,7 @@
     <ImageButton
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:id="@+id/imageButtonAcceptSelfImprovement"
+        android:id="@+id/imageButtonAccept"
         android:background="@drawable/accept"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"

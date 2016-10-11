@@ -1,6 +1,5 @@
 package com.example.ivan.champy_v2.fragment;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
@@ -102,7 +101,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
 
         CHSetupUI chSetupUI= new CHSetupUI();
         chSetupUI.setupUI(view, getActivity());
-        Glide.with(getContext()).load(R.drawable.points).override(200, 200).into((ImageView)view.findViewById(R.id.imageViewAcceptButton));
+        Glide.with(getContext()).load(R.drawable.points).override(200, 200).into((ImageView)view.findViewById(R.id.imageViewPoints));
         offlineMode = new OfflineMode();
         offlineMode.isConnectedToRemoteAPI(getActivity());
         //buttonAcceptBattle.setOnClickListener(this);

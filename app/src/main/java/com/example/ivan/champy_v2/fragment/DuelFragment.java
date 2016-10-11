@@ -100,7 +100,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         tvGoal.setText(name);
         tvGoal.setTypeface(typeface);
 
-        Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView) view.findViewById(R.id.imageViewAcceptButton));
+        Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView) view.findViewById(R.id.imageViewPoints));
         ImageButton imageButtonAccept = (ImageButton) getActivity().findViewById(R.id.ok);
 
         viewPager = (ViewPager) getActivity().findViewById(R.id.pager_duel);

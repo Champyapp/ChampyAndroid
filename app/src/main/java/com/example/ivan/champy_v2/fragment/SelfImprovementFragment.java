@@ -1,6 +1,5 @@
 package com.example.ivan.champy_v2.fragment;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
@@ -97,8 +96,8 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         tvGoal.setText(name);
         tvGoal.setTypeface(typeface);
 
-        Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView)view.findViewById(R.id.imageViewAcceptButton));
-        ImageButton buttonAccept = (ImageButton) getActivity().findViewById(R.id.imageButtonAcceptSelfImprovement);
+        Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView)view.findViewById(R.id.imageViewPoints));
+        ImageButton buttonAccept = (ImageButton) getActivity().findViewById(R.id.imageButtonAccept);
 
         viewPager = (ViewPager) getActivity().findViewById(R.id.pager);
         CHSetupUI chSetupUI = new CHSetupUI();
