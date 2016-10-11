@@ -56,7 +56,6 @@ import static java.lang.Math.round;
 public class DuelActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private View spinner;
-    private String friendsPhoto, name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +64,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         new ProgressTask().execute();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         Bundle extras = getIntent().getExtras();
+        String friendsPhoto, name;
         if(extras == null) {
             Uri uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/icon_champy");
             friendsPhoto = uri.toString();
@@ -108,6 +108,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         String pathToUserPhoto = user.getPathToPic();
 
         ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
         TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
         drawerUserName.setText(name);
 
@@ -117,9 +118,8 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
 
         try {
-            ImageView slideBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
-            slideBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            slideBackground.setImageDrawable(getPhotoForDrawerBackground());
+            drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            drawerBackground.setImageDrawable(getPhotoForDrawerBackground());
         } catch (FileNotFoundException e) { e.printStackTrace(); }
 
         this.runOnUiThread(new Runnable() {
