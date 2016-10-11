@@ -27,6 +27,8 @@ import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 
+import java.util.HashMap;
+
 public class DuelFragment extends Fragment implements View.OnClickListener {
 
     public static final String ARG_PAGE = "ARG_PAGE";
@@ -77,14 +79,15 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
                 o++;
                 if (o > position + 1) break;
                 if (o == position + 1) {
-                    name = c.getString(nameColIndex);
+                    challenge_id = c.getString(colchallenge_id);
                     description = c.getString(coldescription);
                     duration = c.getString(colduration);
-                    challenge_id = c.getString(colchallenge_id);
+                    name = c.getString(nameColIndex);
                 }
             } while (c.moveToNext());
         }
         c.close();
+
         sessionManager = new SessionManager(getContext());
         size = sessionManager.getSelfSize();
         typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
@@ -128,14 +131,15 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         name = etGoal.getText().toString();
         duration = etDays.getText().toString();
-        dbHelper = new DBHelper(getContext());
-        db = dbHelper.getWritableDatabase();
         c = db.query("duel", null, null, null, null, null, null);
         position = viewPager.getCurrentItem();
         size = sessionManager.getSelfSize();
-        CurrentUserHelper user = new CurrentUserHelper(getContext());
-        token = user.getToken();
-        userId = user.getUserObjectId();
+
+        HashMap<String, String> user;
+        user = sessionManager.getUserDetails();
+        final String token  = user.get("token");
+        final String userId = user.get("id");
+
         snackbar = Snackbar.make(view, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -143,7 +147,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
                 if (position == size) {
                     if (checkInputUserData(name, duration, view)) {
                         days = Integer.parseInt(duration);
-                        cc.createNewDuelChallenge(name, days, friend_id, token);
+                        cc.createNewDuelChallenge(name, days, friend_id, token, userId);
                     }
                 } else {
                     if (c.moveToFirst()) {
@@ -152,7 +156,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
                         int coldescription = c.getColumnIndex("description");
                         int colduration = c.getColumnIndex("duration");
                         int colchallenge_id = c.getColumnIndex("challenge_id");
-                        int o = 0;
+                        o = 0;
                         do {
                             o++;
                             if (o > position + 1) break;
@@ -170,7 +174,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
                     if (cc.isActive(name)) {
                         snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
                     } else {
-                        cc.sendSingleInProgressForDuel(challenge_id, friend_id, token);
+                        cc.sendSingleInProgressForDuel(challenge_id, friend_id, token, userId);
                         snackbar = Snackbar.make(view, "Sent duel request", Snackbar.LENGTH_SHORT);
                     }
                     snackbar.show();

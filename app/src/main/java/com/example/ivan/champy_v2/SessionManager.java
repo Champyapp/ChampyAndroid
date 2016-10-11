@@ -179,7 +179,7 @@ public class SessionManager {
 
     public HashMap<String, String> getUserDetails() {
         //Use HashMap to store user credentials
-        HashMap<String, String> user = new HashMap<String, String>();
+        HashMap<String, String> user = new HashMap<>();
         user.put(KEY_NAME,       pref.getString(KEY_NAME,       null));
         user.put(KEY_EMAIL,      pref.getString(KEY_EMAIL,      null));
         user.put(KEY_ID,         pref.getString(KEY_EMAIL,      null));

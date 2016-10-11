@@ -26,12 +26,14 @@ import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 
+import java.util.HashMap;
+
 public class SelfImprovementFragment extends Fragment implements View.OnClickListener {
 
     public static final String ARG_PAGE = "ARG_PAGE";
     public static final String TAG = "SelfImprovementFragment";
     public int position, size, days = 21, o = 0;
-    public String duration, description, challenge_id, status, name, token, userId;
+    public String duration, description, challenge_id, status, name;
     public Typeface typeface;
     public TextView tvGoal, tvDays;
     public EditText etGoal, etDays;
@@ -55,7 +57,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.item_row, container, false);
-        Log.i(TAG, "onCreateView");
         dbHelper = new DBHelper(getContext());
         db = dbHelper.getWritableDatabase();
         final Bundle args = this.getArguments();
@@ -72,15 +73,16 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                 o++;
                 if (o > position + 1) break;
                 if (o == position + 1) {
-                    name = c.getString(nameColIndex);
+                    challenge_id = c.getString(colchallenge_id);
                     description = c.getString(coldescription);
                     duration = c.getString(colduration);
-                    challenge_id = c.getString(colchallenge_id);
+                    name = c.getString(nameColIndex);
                     status = c.getString(colstatus);
                 }
             } while (c.moveToNext());
         }
         c.close();
+
         sessionManager = new SessionManager(getContext());
         size = sessionManager.getSelfSize();
         typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
@@ -122,17 +124,17 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
-        Log.i(TAG, "onClick");
         name = etGoal.getText().toString();
         duration = etDays.getText().toString();
-        dbHelper = new DBHelper(getActivity());
-        db = dbHelper.getWritableDatabase();
         c = db.query("selfimprovement", null, null, null, null, null, null);
         position = viewPager.getCurrentItem();
         size = sessionManager.getSelfSize();
-        CurrentUserHelper user = new CurrentUserHelper(getContext());
-        token = user.getToken();
-        userId = user.getUserObjectId();
+
+
+        HashMap<String, String> user;
+        user = sessionManager.getUserDetails();
+        final String token  = user.get("token");
+        final String userId = user.get("id");
 
         snackbar = Snackbar.make(view, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes", new View.OnClickListener() {
             @Override

@@ -83,7 +83,6 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
                     recipient = c.getString(colrecipient);
                 }
             } while (c.moveToNext());
-            Log.i(TAG, "onCreateView: fucking O = " + o + "     this: " + description);
         }
 
         c.close();
@@ -115,24 +114,17 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.i(TAG, "onActivityCreated");
-
         if (recipient.equals("true")) {
             tvUserVsUser.setText("from " + versus);
-            //buttonAcceptBattle.setVisibility(View.VISIBLE);
-            //buttonCancelBattle.setVisibility(View.VISIBLE);
             btnAccept.setVisibility(View.VISIBLE);
             btnCancel.setVisibility(View.VISIBLE);
         } else {
             tvUserVsUser.setText(getContext().getResources().getString(R.string.waiting_for_your_recipient));
-            //buttonAcceptBattle.setVisibility(View.INVISIBLE);
             btnAccept.setVisibility(View.INVISIBLE);
         }
         tvUserVsUser.setTypeface(typeface);
 
-        if (duration != null && !duration.isEmpty()) {
-            days = Integer.parseInt(duration) / 86400;
-        }
+        if (duration != null && !duration.isEmpty()) days = Integer.parseInt(duration) / 86400;
 
         tvDays.setText(days + "");
         tvGoal.setText(description);
@@ -142,47 +134,6 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.i(TAG, "onStart");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.i(TAG, "onResume");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.i(TAG, "onPause");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.i(TAG, "onStop");
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.i(TAG, "onDestroyView");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.i(TAG, "onDestroy");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.i(TAG, "onDetach");
-    }
 
     @Override
     public void onClick(View view) {

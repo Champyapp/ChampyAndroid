@@ -99,7 +99,7 @@ public class ChallengeController {
 
     }
 
-    public void createNewDuelChallenge(final String description, int days, final String friend_id, final String token) {
+    public void createNewDuelChallenge(final String description, int days, final String friend_id, final String token, final String userId) {
         final String type_id = "567d51c48322f85870fd931b";
         duration = "" + (days * 86400);
         details = description + " during this period: " + days + " days";
@@ -111,7 +111,7 @@ public class ChallengeController {
             public void onResponse(Response<com.example.ivan.champy_v2.create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
-                    sendSingleInProgressForDuel(challengeId, friend_id, token);
+                    sendSingleInProgressForDuel(challengeId, friend_id, token, userId);
 //                    Log.d(TAG, "createNewDuelChallenge OnResponse: VSE OK"
 //                            + "\n CHALL_ID    = " + challengeId
 //                            + "\n TYPE_ID     = " + type_id
@@ -218,7 +218,7 @@ public class ChallengeController {
         });
     }
 
-    public void sendSingleInProgressForDuel(final String challenge, final String friend_id, final String token) {
+    public void sendSingleInProgressForDuel(final String challenge, final String friend_id, final String token, final String userId) {
         dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
         cv = new ContentValues();
@@ -234,8 +234,7 @@ public class ChallengeController {
                     cv.put("challenge_id", inProgressId);
                     cv.put("updated", "false");
                     db.insert("updated", null, cv);
-                    Intent goToFriends = new Intent(firstActivity, FriendsActivity.class);
-                    firstActivity.startActivity(goToFriends);
+                    refreshCardsForPendingDuel(token, userId);
                     Log.d("startDuelInProgress", "Status: VSE OK");
                 } else Log.d("startDuelInProgress", "Status: FAILED " + response.code() + response.message());
             }
