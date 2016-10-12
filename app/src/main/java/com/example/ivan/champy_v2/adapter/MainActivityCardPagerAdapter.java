@@ -6,11 +6,11 @@ import android.view.View;
 /**
  * this class-adapter is helper for our cards in main activity. actually for adapter for main activity.
  */
-public abstract class CustomPagerAdapter {
+public abstract class MainActivityCardPagerAdapter {
 
     private Context context;
 
-    CustomPagerAdapter(Context context) {
+    MainActivityCardPagerAdapter(Context context) {
         this.context = context;
     }
 

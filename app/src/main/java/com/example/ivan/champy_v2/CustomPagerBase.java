@@ -8,7 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-import com.example.ivan.champy_v2.adapter.CustomPagerAdapter;
+import com.example.ivan.champy_v2.adapter.MainActivityCardPagerAdapter;
 import com.example.ivan.champy_v2.helper.CHWindowView;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.Animator.AnimatorListener;
@@ -24,6 +24,7 @@ public class CustomPagerBase {
 
     private static final int NEXT_PAGE = 1;
     private static final int PREVIOUS_PAGE = 2;
+    private static final String TAG = "Carousel";
     private boolean isTouchEnabled = true;
     private int currentPosition = 0;
     private int nextItemXPosition;
@@ -31,7 +32,7 @@ public class CustomPagerBase {
     private View currentItem, nextItem, previousItem, removedItem;
     private View[] viewList;
     private Activity context;
-    private CustomPagerAdapter pagerAdapter;
+    private MainActivityCardPagerAdapter pagerAdapter;
     private RelativeLayout rootView;
     private LayoutInflater inflater;
 
@@ -41,14 +42,14 @@ public class CustomPagerBase {
         return customPagerBase;
     }
 
-    public CustomPagerBase(Activity context, RelativeLayout rootView, CustomPagerAdapter pagerAdapter) {
-        this.context      = context;
+    public CustomPagerBase(Activity activity, RelativeLayout rootView, MainActivityCardPagerAdapter pagerAdapter) {
+        this.context      = activity;
         this.rootView     = rootView;
         this.pagerAdapter = pagerAdapter;
         viewList          = new View[pagerAdapter.dataCount()];
 
-        if (inflater == null){
-            inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        if (inflater == null) {
+            inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
         customPagerBase = this;
     }
@@ -57,6 +58,7 @@ public class CustomPagerBase {
         int width = CHWindowView.getWindowWidth(context);
         nextItemXPosition     = CHWindowView.getCurrentCardPositionX(context) + Math.round(width/8);
         previousItemXPosition = CHWindowView.getCurrentCardPositionX(context) - Math.round(width/8);
+
         if (pagerAdapter != null && pagerAdapter.dataCount() > 0) {
             if (position != 0 && pagerAdapter.dataCount() > 1) {
                 // Create previous view
@@ -65,7 +67,7 @@ public class CustomPagerBase {
                 ViewHelper.setScaleX(previousItem, 0.8f);
                 ViewHelper.setScaleY(previousItem, 0.8f);
                 ObjectAnimator.ofFloat(previousItem, "translationX", 0, previousItemXPosition).setDuration(1).start();
-            }
+            } else Log.d(TAG, "preparePager: cards > 1");
             if (pagerAdapter.dataCount() - 2 >= position) {
                 // Create next view
                 nextItem = createCardLayout(position + 1);
@@ -73,20 +75,25 @@ public class CustomPagerBase {
                 ViewHelper.setScaleX(nextItem, 0.8f);
                 ViewHelper.setScaleY(nextItem, 0.8f);
                 ObjectAnimator.ofFloat(nextItem, "translationX", 0, nextItemXPosition).setDuration(1).start();
-            }
-            if (pagerAdapter.dataCount() >= 1) {
+            } else Log.d(TAG, "preparePager: cards-2 >= position");
+            if (pagerAdapter.dataCount() > 1) {
                 // Create the view for the selected position
                 currentItem = createCardLayout(position);
                 setTouchListenerToView(currentItem, true);
                 ObjectAnimator.ofFloat(currentItem, "translationX", 0, CHWindowView.getCurrentCardPositionX(context)).setDuration(1).start();
+            } else Log.d(TAG, "preparePager: cards >= 1");
+            if (pagerAdapter.dataCount() == 1) {
+                currentItem = createCardLayout(position);
+                setTouchListenerToView(currentItem, false);
+                ObjectAnimator.ofFloat(currentItem, "translationX", 0, CHWindowView.getCurrentCardPositionX(context)).setDuration(1).start();
             }
-        }
+        } else Log.d(TAG, "preparePager: 0 cards");
         currentPosition = position;
     }
 
     private View createCardLayout(int position) {
         View itemView;
-        try{
+        try {
             View convertView = viewList[position];
             if(convertView == null) {
                 itemView = pagerAdapter.getView(position, null);
@@ -109,10 +116,11 @@ public class CustomPagerBase {
         }
     }
 
-    public void setIsTouchEnabled(boolean isEnabled)
-    {
+    public void setIsTouchEnabled(boolean isEnabled) {
         isTouchEnabled = isEnabled;
     }
+
+
 
     private View.OnTouchListener touchListener(final View itemView) {
         return new View.OnTouchListener() {
@@ -120,11 +128,11 @@ public class CustomPagerBase {
             int firstTouchX;
 
             public boolean onTouch(View v, MotionEvent event) {
-                //Log.d("TAG", "Touch :" + isTouchEnabled);
+                Log.d(TAG, "touchListener Touch :" + isTouchEnabled);
 
                 if(isTouchEnabled){
                     int width = Math.round(CHWindowView.getWindowWidth(context) / 100);
-                    //Log.d("TAG", "Width: ="+width);
+                    Log.d(TAG, "touchListener Width: ="+width);
 
                     final int X = (int) event.getRawX();
 
@@ -145,8 +153,10 @@ public class CustomPagerBase {
                             }*/
 
                             lastX = X;
-                            //   Log.d("TAG", "Move "+ViewHelper.getAlpha(nextItem));
-                            //Log.d("TAG", "Move " + ViewHelper.getScaleX(itemView));
+                            try {
+                                Log.d(TAG, "touchListener Move " + ViewHelper.getAlpha(nextItem));
+                                Log.d(TAG, "touchListener Move " + ViewHelper.getScaleX(itemView));
+                            } catch (NullPointerException e) { e.printStackTrace(); };
                             ViewHelper.setScaleY(itemView, getScaleValue(viewXPosition));
                             ViewHelper.setScaleX(itemView, getScaleValue(viewXPosition));
 
@@ -165,7 +175,7 @@ public class CustomPagerBase {
                                 }
                                 else if (currentItem != null) {
                                     currentItem.bringToFront();
-                                    //Log.d("TAG", "Bring to Front");
+                                    Log.d(TAG, "Bring to Front");
                                 }
                             } else if (lastX - firstTouchX > 10 && previousItem != null) {
                                 if (ViewHelper.getAlpha(previousItem) < 0.93f) {
@@ -182,10 +192,10 @@ public class CustomPagerBase {
                                 }
                                 else if (currentItem != null) {
                                     currentItem.bringToFront();
-                                    //Log.d("TAG", "Bring to Front");
+                                    Log.d(TAG, "Bring to Front");
                                 }
                             } else if  (currentItem != null) {
-                                //Log.d("TAG", "Bring to Front");
+                                Log.d(TAG, "Bring to Front");
                                 currentItem.bringToFront();
                             }
                             break;
@@ -194,7 +204,8 @@ public class CustomPagerBase {
                             if (Math.abs(lastX - firstTouchX) < 5) {
                                 // Click state
                                 // TODO: 05.10.2016 if 1 cards and X<5, need do something, ALLO
-                                // поворот карточок справа вліво
+
+                              // поворот карточок справа вліво
                             } else if (lastX - firstTouchX > 100) {
                                 if (previousItem != null)
                                     changePageTo(PREVIOUS_PAGE);
@@ -212,7 +223,7 @@ public class CustomPagerBase {
                                 // поворот карточок зліва на право
                             } else if (firstTouchX - lastX > 100) {
                                 if (nextItem != null) {
-                                    //Log.d("TAG", "Ready to next:"+(firstTouchX - lastX));
+                                    Log.d(TAG, "Ready to next:"+(firstTouchX - lastX));
                                     changePageTo(NEXT_PAGE);}
                                 else {
                                     AnimatorSet set = new AnimatorSet();
@@ -244,7 +255,7 @@ public class CustomPagerBase {
                                     );
                                     set.setDuration(90);
                                     currentItem.bringToFront();
-                                    //Log.d("TAG", "Bring to Front");
+                                    Log.d(TAG, "Bring to Front");
                                     set.start();
                                 }
                                 // збільшує праву, якщо вибрана сама ліва
@@ -262,7 +273,7 @@ public class CustomPagerBase {
                                     );
                                     set.setDuration(90);
                                     currentItem.bringToFront();
-                                    Log.d("TAG", "Bring to Front");
+                                    Log.d(TAG, "Bring to Front");
                                     set.start();
                                 }
                                 // збільшує ліву, якшо вибрана сама права
@@ -322,8 +333,7 @@ public class CustomPagerBase {
                 }
 
                 @Override
-                public void onAnimationRepeat(Animator arg0) {
-                }
+                public void onAnimationRepeat(Animator arg0) { }
 
                 @Override
                 public void onAnimationEnd(Animator arg0) {
@@ -340,7 +350,7 @@ public class CustomPagerBase {
                         ViewHelper.setScaleY(nextNext, 0.8f);
                         ViewHelper.setAlpha(nextNext, 0.8f);
                         currentItem.bringToFront();
-                        //Log.d("TAG", "Bring to Front");
+                        Log.d(TAG, "Bring to Front");
                         rootView.invalidate();
                         ObjectAnimator anim = ObjectAnimator.ofFloat(nextNext, "translationX", ViewHelper.getX(nextNext), ViewHelper.getX(nextNext));
                         anim.setDuration(90);
@@ -420,7 +430,7 @@ public class CustomPagerBase {
                         anim.setDuration(90);
                         anim.start();
                         currentItem.bringToFront();
-                        //Log.d("TAG", "Bring to Front");
+                        Log.d(TAG, "Bring to Front");
                         rootView.invalidate();
                         previousItem = prevPrev;
                     }

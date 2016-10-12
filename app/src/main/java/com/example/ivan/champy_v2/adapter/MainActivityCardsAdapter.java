@@ -1,6 +1,5 @@
 package com.example.ivan.champy_v2.adapter;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
@@ -17,7 +16,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.R;
@@ -30,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class MainActivityCardsAdapter extends CustomPagerAdapter {
+public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 
     private ArrayList<SelfImprovement_model> arrayList;
     public static final String TAG = "CardsAdapterMain";
