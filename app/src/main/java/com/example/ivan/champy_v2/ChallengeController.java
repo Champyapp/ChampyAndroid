@@ -548,7 +548,7 @@ public class ChallengeController {
 
     // method which returns our last update (true or false);
     private String getLastUpdated(String challenge_id) {
-        DBHelper dbHelper = new DBHelper(firstActivity);
+        DBHelper dbHelper = new DBHelper(context); // was firstactivity
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("updated", null, null, null, null, null, null);
         String lastUpdate = "false";
@@ -573,7 +573,7 @@ public class ChallengeController {
 
     // method for check is active challenge self / duel
     public boolean isActive(String description) {
-        DBHelper dbHelper = new DBHelper(firstActivity);
+        DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
         boolean ok = false;
