@@ -56,8 +56,8 @@ public class CustomPagerBase {
 
     public void preparePager(int position) {
         int width = CHWindowView.getWindowWidth(context);
-        nextItemXPosition     = CHWindowView.getCurrentCardPositionX(context) + Math.round(width/8);
-        previousItemXPosition = CHWindowView.getCurrentCardPositionX(context) - Math.round(width/8);
+        nextItemXPosition     = CHWindowView.getCurrentCardPositionX(context) + Math.round(width/2); // was (width/8) both
+        previousItemXPosition = CHWindowView.getCurrentCardPositionX(context) - Math.round(width/2);
 
         if (pagerAdapter != null && pagerAdapter.dataCount() > 0) {
             if (position != 0 && pagerAdapter.dataCount() > 1) {
@@ -67,7 +67,7 @@ public class CustomPagerBase {
                 ViewHelper.setScaleX(previousItem, 0.8f);
                 ViewHelper.setScaleY(previousItem, 0.8f);
                 ObjectAnimator.ofFloat(previousItem, "translationX", 0, previousItemXPosition).setDuration(1).start();
-            } else Log.d(TAG, "preparePager: cards > 1");
+            }
             if (pagerAdapter.dataCount() - 2 >= position) {
                 // Create next view
                 nextItem = createCardLayout(position + 1);
@@ -75,51 +75,21 @@ public class CustomPagerBase {
                 ViewHelper.setScaleX(nextItem, 0.8f);
                 ViewHelper.setScaleY(nextItem, 0.8f);
                 ObjectAnimator.ofFloat(nextItem, "translationX", 0, nextItemXPosition).setDuration(1).start();
-            } else Log.d(TAG, "preparePager: cards-2 >= position");
+            }
             if (pagerAdapter.dataCount() > 1) {
                 // Create the view for the selected position
                 currentItem = createCardLayout(position);
                 setTouchListenerToView(currentItem, true);
                 ObjectAnimator.ofFloat(currentItem, "translationX", 0, CHWindowView.getCurrentCardPositionX(context)).setDuration(1).start();
-            } else Log.d(TAG, "preparePager: cards >= 1");
+            }
             if (pagerAdapter.dataCount() == 1) {
                 currentItem = createCardLayout(position);
                 setTouchListenerToView(currentItem, false);
                 ObjectAnimator.ofFloat(currentItem, "translationX", 0, CHWindowView.getCurrentCardPositionX(context)).setDuration(1).start();
             }
-        } else Log.d(TAG, "preparePager: 0 cards");
+        }
         currentPosition = position;
     }
-
-    private View createCardLayout(int position) {
-        View itemView;
-        try {
-            View convertView = viewList[position];
-            if(convertView == null) {
-                itemView = pagerAdapter.getView(position, null);
-            } else {
-                itemView = pagerAdapter.getView(position, viewList[position]);
-            }
-        } catch(NullPointerException e) {
-            itemView = pagerAdapter.getView(position, null);
-        }
-        viewList[position] = itemView;
-        rootView.addView(itemView);
-        return itemView;
-    }
-
-    private void setTouchListenerToView(final View itemView, boolean state) {
-        if (state) {
-            itemView.setOnTouchListener(touchListener(itemView));
-        } else {
-            itemView.setOnTouchListener(null);
-        }
-    }
-
-    public void setIsTouchEnabled(boolean isEnabled) {
-        isTouchEnabled = isEnabled;
-    }
-
 
 
     private View.OnTouchListener touchListener(final View itemView) {
@@ -153,10 +123,6 @@ public class CustomPagerBase {
                             }*/
 
                             lastX = X;
-                            try {
-                                Log.d(TAG, "touchListener Move " + ViewHelper.getAlpha(nextItem));
-                                Log.d(TAG, "touchListener Move " + ViewHelper.getScaleX(itemView));
-                            } catch (NullPointerException e) { e.printStackTrace(); };
                             ViewHelper.setScaleY(itemView, getScaleValue(viewXPosition));
                             ViewHelper.setScaleX(itemView, getScaleValue(viewXPosition));
 
@@ -465,6 +431,38 @@ public class CustomPagerBase {
         return 1 - value * value;
     }
 
+
+    private View createCardLayout(int position) {
+        View itemView;
+        try {
+            View convertView = viewList[position];
+            if(convertView == null) {
+                itemView = pagerAdapter.getView(position, null);
+            } else {
+                itemView = pagerAdapter.getView(position, viewList[position]);
+            }
+        } catch(NullPointerException e) {
+            itemView = pagerAdapter.getView(position, null);
+        }
+        viewList[position] = itemView;
+        rootView.addView(itemView);
+        return itemView;
+    }
+
+
+    private void setTouchListenerToView(final View itemView, boolean state) {
+        if (state) {
+            itemView.setOnTouchListener(touchListener(itemView));
+        } else {
+            itemView.setOnTouchListener(null);
+        }
+    }
+
+
+
+    private void setIsTouchEnabled(boolean isEnabled) {
+        isTouchEnabled = isEnabled;
+    }
 
     public void performNextPage() {
         if (nextItem != null)
