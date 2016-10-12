@@ -56,8 +56,8 @@ public class CustomPagerBase {
 
     public void preparePager(int position) {
         int width = CHWindowView.getWindowWidth(context);
-        nextItemXPosition     = CHWindowView.getCurrentCardPositionX(context) + Math.round(width/2); // was (width/8) both
-        previousItemXPosition = CHWindowView.getCurrentCardPositionX(context) - Math.round(width/2);
+        nextItemXPosition     = CHWindowView.getCurrentCardPositionX(context) + Math.round(width/1.5f); // was (width/8) both
+        previousItemXPosition = CHWindowView.getCurrentCardPositionX(context) - Math.round(width/1.5f); // but i wanna 2
 
         if (pagerAdapter != null && pagerAdapter.dataCount() > 0) {
             if (position != 0 && pagerAdapter.dataCount() > 1) {
@@ -113,14 +113,13 @@ public class CustomPagerBase {
                             lastX = X;
                             firstTouchX = X;
                             break;
+
                         case MotionEvent.ACTION_MOVE:
-                            if (X > width*25 && X < width*80) {
+                            // Прокрутка карточок
+                            // if (X > width*25 && X < width*80) {
+                            if (X > width*40 && X < width*60) {
                                 ViewHelper.setX(itemView, viewXPosition + (X - lastX));
                             }
-                            // Прокрутка карточкоч
-                            /*if (X > width*50 & X < width*50) {
-                                ViewHelper.setX(itemView, viewXPosition + (X - lastX));
-                            }*/
 
                             lastX = X;
                             ViewHelper.setScaleY(itemView, getScaleValue(viewXPosition));
@@ -128,138 +127,143 @@ public class CustomPagerBase {
 
                             // отвечает за прозначность карточок
                             if (firstTouchX - lastX > 10 && nextItem != null)  {
-                                if (ViewHelper.getAlpha(nextItem) < 0.93f) {
-                                    ViewHelper.setAlpha(itemView, ViewHelper.getScaleX(itemView));
-                                } else {
-                                    ViewHelper.setAlpha(itemView, 1f);
-                                }
-                                ViewHelper.setAlpha (nextItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
-                                ViewHelper.setScaleX(nextItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
-                                ViewHelper.setScaleY(nextItem, 0.8f + (1f - ViewHelper.getScaleY(itemView)));
-                                if (ViewHelper.getAlpha(nextItem) > 0.9f) {
-                                    nextItem.bringToFront();
-                                }
-                                else if (currentItem != null) {
-                                    currentItem.bringToFront();
-                                    Log.d(TAG, "Bring to Front");
-                                }
+                                    if (ViewHelper.getAlpha(nextItem) < 0.93f) {
+                                        ViewHelper.setAlpha(itemView, ViewHelper.getScaleX(itemView));
+                                    } else {
+                                        ViewHelper.setAlpha(itemView, 1f);
+                                    }
+                                    ViewHelper.setAlpha (nextItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
+                                    ViewHelper.setScaleX(nextItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
+                                    ViewHelper.setScaleY(nextItem, 0.8f + (1f - ViewHelper.getScaleY(itemView)));
+                                    if (ViewHelper.getAlpha(nextItem) > 0.9f) {
+                                        nextItem.bringToFront();
+                                    }
+                                    else if (currentItem != null) {
+                                        currentItem.bringToFront();
+                                        Log.d(TAG, "Bring to Front");
+                                    }
                             } else if (lastX - firstTouchX > 10 && previousItem != null) {
-                                if (ViewHelper.getAlpha(previousItem) < 0.93f) {
-                                    ViewHelper.setAlpha(itemView, ViewHelper.getScaleX(itemView));
-                                }
-                                else {
-                                    ViewHelper.setAlpha(itemView, 1f);
-                                }
-                                ViewHelper.setAlpha (previousItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
-                                ViewHelper.setScaleX(previousItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
-                                ViewHelper.setScaleY(previousItem, 0.8f + (1f - ViewHelper.getScaleY(itemView)));
-                                if (ViewHelper.getAlpha(previousItem) > 0.9f) {
-                                    previousItem.bringToFront();
-                                }
-                                else if (currentItem != null) {
-                                    currentItem.bringToFront();
-                                    Log.d(TAG, "Bring to Front");
-                                }
+                                    if (ViewHelper.getAlpha(previousItem) < 0.93f) {
+                                           ViewHelper.setAlpha(itemView, ViewHelper.getScaleX(itemView));
+                                    } else ViewHelper.setAlpha(itemView, 1f);
+
+                                    ViewHelper.setAlpha (previousItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
+                                    ViewHelper.setScaleX(previousItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
+                                    ViewHelper.setScaleY(previousItem, 0.8f + (1f - ViewHelper.getScaleY(itemView)));
+                                    if (ViewHelper.getAlpha(previousItem) > 0.9f) {
+                                        previousItem.bringToFront();
+                                    }
+                                    else if (currentItem != null) {
+                                        currentItem.bringToFront();
+                                        Log.d(TAG, "Bring to Front");
+                                    }
                             } else if  (currentItem != null) {
-                                Log.d(TAG, "Bring to Front");
-                                currentItem.bringToFront();
+                                    Log.d(TAG, "Bring to Front");
+                                    currentItem.bringToFront();
                             }
                             break;
+
+
+
                         case MotionEvent.ACTION_UP:
                             isTouchEnabled = false;
-                            if (Math.abs(lastX - firstTouchX) < 5) {
+                            /*if (Math.abs(lastX - firstTouchX) < 5) {
                                 // Click state
                                 // TODO: 05.10.2016 if 1 cards and X<5, need do something, ALLO
 
                               // поворот карточок справа вліво
-                            } else if (lastX - firstTouchX > 100) {
-                                if (previousItem != null)
-                                    changePageTo(PREVIOUS_PAGE);
-                                else {
-                                    AnimatorSet set = new AnimatorSet();
-                                    set.playTogether(
-                                            ObjectAnimator.ofFloat(itemView, "translationX", viewXPosition, CHWindowView.getCurrentCardPositionX(context)),
-                                            ObjectAnimator.ofFloat(itemView, "scaleX", ViewHelper.getScaleX(itemView), 1f),
-                                            ObjectAnimator.ofFloat(itemView, "scaleY", ViewHelper.getScaleY(itemView), 1f),
-                                            ObjectAnimator.ofFloat(itemView, "alpha", ViewHelper.getAlpha(itemView), 1f)
-                                    );
-                                    set.setDuration(90);
-                                    set.start();
-                                }
+                            } else*/
+                            if (lastX - firstTouchX > 100) {
+                                    if (previousItem != null) {
+                                        Log.d(TAG, "Ready to previous: "+(lastX - firstTouchX));
+                                        changePageTo(PREVIOUS_PAGE); }
+                                    else {
+                                        AnimatorSet set = new AnimatorSet();
+                                        set.playTogether(
+                                                ObjectAnimator.ofFloat(itemView, "translationX", viewXPosition, CHWindowView.getCurrentCardPositionX(context)),
+                                                ObjectAnimator.ofFloat(itemView, "scaleX", ViewHelper.getScaleX(itemView), 1f),
+                                                ObjectAnimator.ofFloat(itemView, "scaleY", ViewHelper.getScaleY(itemView), 1f),
+                                                ObjectAnimator.ofFloat(itemView, "alpha", ViewHelper.getAlpha(itemView), 1f)
+                                        );
+                                        set.setDuration(90);
+                                        set.start();
+                                    }
                                 // поворот карточок зліва на право
                             } else if (firstTouchX - lastX > 100) {
-                                if (nextItem != null) {
-                                    Log.d(TAG, "Ready to next:"+(firstTouchX - lastX));
-                                    changePageTo(NEXT_PAGE);}
-                                else {
-                                    AnimatorSet set = new AnimatorSet();
-                                    set.playTogether(
-                                            ObjectAnimator.ofFloat(itemView, "translationX", viewXPosition, CHWindowView.getCurrentCardPositionX(context)),
-                                            ObjectAnimator.ofFloat(itemView, "scaleX", ViewHelper.getScaleX(itemView), 1f),
-                                            ObjectAnimator.ofFloat(itemView, "scaleY", ViewHelper.getScaleY(itemView), 1f),
-                                            ObjectAnimator.ofFloat(itemView, "alpha", ViewHelper.getAlpha(itemView), 1f)
-                                    );
-                                    set.setDuration(90);
-                                    set.start();
-                                }
-                            } else {
-                                // збільшує розмір бокових карточок, якщо вибрана одна із центральних
-                                if (nextItem != null && previousItem != null) {
-                                    AnimatorSet set = new AnimatorSet();
-                                    set.playTogether(
-                                            ObjectAnimator.ofFloat(itemView, "translationX", viewXPosition, CHWindowView.getCurrentCardPositionX(context)),
-                                            ObjectAnimator.ofFloat(itemView, "scaleX", ViewHelper.getScaleX(itemView), 1f),
-                                            ObjectAnimator.ofFloat(itemView, "scaleY", ViewHelper.getScaleY(itemView), 1f),
-                                            ObjectAnimator.ofFloat(itemView, "alpha", ViewHelper.getAlpha(itemView), 1f),
-                                            ObjectAnimator.ofFloat(nextItem, "scaleX", ViewHelper.getScaleX(itemView), 0.8f),
-                                            ObjectAnimator.ofFloat(nextItem, "scaleY", ViewHelper.getScaleY(itemView), 0.8f),
-                                            ObjectAnimator.ofFloat(nextItem, "alpha", ViewHelper.getAlpha(itemView), 0.8f),
-                                            ObjectAnimator.ofFloat(previousItem, "scaleX", ViewHelper.getScaleX(itemView), 0.8f),
-                                            ObjectAnimator.ofFloat(previousItem, "scaleY", ViewHelper.getScaleY(itemView), 0.8f),
-                                            ObjectAnimator.ofFloat(previousItem, "alpha", ViewHelper.getAlpha(itemView), 0.8f)
-
-                                    );
-                                    set.setDuration(90);
-                                    currentItem.bringToFront();
-                                    Log.d(TAG, "Bring to Front");
-                                    set.start();
-                                }
-                                // збільшує праву, якщо вибрана сама ліва
-                                else if (nextItem == null && previousItem != null){
-                                    AnimatorSet set = new AnimatorSet();
-                                    set.playTogether(
-                                            ObjectAnimator.ofFloat(itemView, "translationX", viewXPosition, CHWindowView.getCurrentCardPositionX(context)),
-                                            ObjectAnimator.ofFloat(itemView, "scaleX", ViewHelper.getScaleX(itemView), 1f),
-                                            ObjectAnimator.ofFloat(itemView, "scaleY", ViewHelper.getScaleY(itemView), 1f),
-                                            ObjectAnimator.ofFloat(itemView, "alpha", ViewHelper.getAlpha(itemView), 1f),
-                                            ObjectAnimator.ofFloat(previousItem, "scaleX", ViewHelper.getScaleX(itemView), 0.8f),
-                                            ObjectAnimator.ofFloat(previousItem, "scaleY", ViewHelper.getScaleY(itemView), 0.8f),
-                                            ObjectAnimator.ofFloat(previousItem, "alpha", ViewHelper.getAlpha(itemView), 0.8f)
-
-                                    );
-                                    set.setDuration(90);
-                                    currentItem.bringToFront();
-                                    Log.d(TAG, "Bring to Front");
-                                    set.start();
-                                }
-                                // збільшує ліву, якшо вибрана сама права
-                                else if (previousItem == null && nextItem != null) {
-                                    AnimatorSet set = new AnimatorSet();
-                                    set.playTogether(
-                                            ObjectAnimator.ofFloat(itemView, "translationX", viewXPosition, CHWindowView.getCurrentCardPositionX(context)),
-                                            ObjectAnimator.ofFloat(itemView, "scaleX", ViewHelper.getScaleX(itemView), 1f),
-                                            ObjectAnimator.ofFloat(itemView, "scaleY", ViewHelper.getScaleY(itemView), 1f),
-                                            ObjectAnimator.ofFloat(itemView, "alpha", ViewHelper.getAlpha(itemView), 1f),
-                                            ObjectAnimator.ofFloat(nextItem, "scaleX", ViewHelper.getScaleX(itemView), 0.8f),
-                                            ObjectAnimator.ofFloat(nextItem, "scaleY", ViewHelper.getScaleY(itemView), 0.8f),
-                                            ObjectAnimator.ofFloat(nextItem, "alpha", ViewHelper.getAlpha(itemView), 0.8f)
-
-                                    );
-                                    set.setDuration(90);
-                                    currentItem.bringToFront();
-                                    set.start();
-                                }
+                                    if (nextItem != null) {
+                                        Log.d(TAG, "Ready to next:"+(firstTouchX - lastX));
+                                        changePageTo(NEXT_PAGE);}
+                                    else {
+                                        AnimatorSet set = new AnimatorSet();
+                                        set.playTogether(
+                                                ObjectAnimator.ofFloat(itemView, "translationX", viewXPosition, CHWindowView.getCurrentCardPositionX(context)),
+                                                ObjectAnimator.ofFloat(itemView, "scaleX", ViewHelper.getScaleX(itemView), 1f),
+                                                ObjectAnimator.ofFloat(itemView, "scaleY", ViewHelper.getScaleY(itemView), 1f),
+                                                ObjectAnimator.ofFloat(itemView, "alpha", ViewHelper.getAlpha(itemView), 1f)
+                                        );
+                                        set.setDuration(90);
+                                        set.start();
+                                    }
                             }
+                            else {
+                                Log.d(TAG, "onTouch: HOUSTON, ELSE PROWEL BLYAT");
+                                    // збільшує розмір бокових карточок, якщо вибрана одна із центральних
+                                    if (nextItem != null && previousItem != null) {
+                                        AnimatorSet set = new AnimatorSet();
+                                        set.playTogether(
+                                                ObjectAnimator.ofFloat(itemView, "translationX", viewXPosition, CHWindowView.getCurrentCardPositionX(context)),
+                                                ObjectAnimator.ofFloat(itemView, "scaleX", ViewHelper.getScaleX(itemView), 1f),
+                                                ObjectAnimator.ofFloat(itemView, "scaleY", ViewHelper.getScaleY(itemView), 1f),
+                                                ObjectAnimator.ofFloat(itemView, "alpha", ViewHelper.getAlpha(itemView), 1f),
+                                                ObjectAnimator.ofFloat(nextItem, "scaleX", ViewHelper.getScaleX(itemView), 0.8f),
+                                                ObjectAnimator.ofFloat(nextItem, "scaleY", ViewHelper.getScaleY(itemView), 0.8f),
+                                                ObjectAnimator.ofFloat(nextItem, "alpha", ViewHelper.getAlpha(itemView), 0.8f),
+                                                ObjectAnimator.ofFloat(previousItem, "scaleX", ViewHelper.getScaleX(itemView), 0.8f),
+                                                ObjectAnimator.ofFloat(previousItem, "scaleY", ViewHelper.getScaleY(itemView), 0.8f),
+                                                ObjectAnimator.ofFloat(previousItem, "alpha", ViewHelper.getAlpha(itemView), 0.8f)
+
+                                        );
+                                        set.setDuration(90);
+                                        currentItem.bringToFront();
+                                        Log.d(TAG, "Bring to Front");
+                                        set.start();
+                                    }
+                                    // збільшує праву, якщо вибрана сама ліва
+                                    else if (nextItem == null && previousItem != null){
+                                        AnimatorSet set = new AnimatorSet();
+                                        set.playTogether(
+                                                ObjectAnimator.ofFloat(itemView, "translationX", viewXPosition, CHWindowView.getCurrentCardPositionX(context)),
+                                                ObjectAnimator.ofFloat(itemView, "scaleX", ViewHelper.getScaleX(itemView), 1f),
+                                                ObjectAnimator.ofFloat(itemView, "scaleY", ViewHelper.getScaleY(itemView), 1f),
+                                                ObjectAnimator.ofFloat(itemView, "alpha", ViewHelper.getAlpha(itemView), 1f),
+                                                ObjectAnimator.ofFloat(previousItem, "scaleX", ViewHelper.getScaleX(itemView), 0.8f),
+                                                ObjectAnimator.ofFloat(previousItem, "scaleY", ViewHelper.getScaleY(itemView), 0.8f),
+                                                ObjectAnimator.ofFloat(previousItem, "alpha", ViewHelper.getAlpha(itemView), 0.8f)
+
+                                        );
+                                        set.setDuration(90);
+                                        currentItem.bringToFront();
+                                        Log.d(TAG, "Bring to Front");
+                                        set.start();
+                                    }
+                                    // збільшує ліву, якшо вибрана сама права
+                                    else if (previousItem == null && nextItem != null) {
+                                        AnimatorSet set = new AnimatorSet();
+                                        set.playTogether(
+                                                ObjectAnimator.ofFloat(itemView, "translationX", viewXPosition, CHWindowView.getCurrentCardPositionX(context)),
+                                                ObjectAnimator.ofFloat(itemView, "scaleX", ViewHelper.getScaleX(itemView), 1f),
+                                                ObjectAnimator.ofFloat(itemView, "scaleY", ViewHelper.getScaleY(itemView), 1f),
+                                                ObjectAnimator.ofFloat(itemView, "alpha", ViewHelper.getAlpha(itemView), 1f),
+                                                ObjectAnimator.ofFloat(nextItem, "scaleX", ViewHelper.getScaleX(itemView), 0.8f),
+                                                ObjectAnimator.ofFloat(nextItem, "scaleY", ViewHelper.getScaleY(itemView), 0.8f),
+                                                ObjectAnimator.ofFloat(nextItem, "alpha", ViewHelper.getAlpha(itemView), 0.8f)
+
+                                        );
+                                        set.setDuration(90);
+                                        currentItem.bringToFront();
+                                        set.start();
+                                    }
+                                }
                             isTouchEnabled = true;
                             break;
                     }
