@@ -126,7 +126,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
 
         if (duration != null && !duration.isEmpty()) days = Integer.parseInt(duration) / 86400;
 
-        tvDays.setText(days + "");
+        tvDays.setText(days + " days");
         tvGoal.setText(description);
         tvDays.setTypeface(typeface);
         tvGoal.setTypeface(typeface);

@@ -103,6 +103,7 @@ public class CustomPagerBase {
             int lastX;
             int firstTouchX;
 
+
             public boolean onTouch(View v, MotionEvent event) {
                 //Log.d(TAG, "touchListener Touch :" + isTouchEnabled);
 
@@ -122,11 +123,14 @@ public class CustomPagerBase {
 
                         // отвечает за боковые карточки, когда движется центральная
                         case MotionEvent.ACTION_MOVE:
-
                             // Расположение карточек на экране (дистанция между ними)
                             if (X > width*40 && X < width*60) { // was if (X > width*25 && X < width*80) {
                                 ViewHelper.setX(itemView, viewXPosition + (X - lastX));
                             }
+
+//                            if (X > width*25 && X < width*80) {
+//                                ViewHelper.setX(itemView, width*20);
+//                            }
 
                             lastX = X;
                             ViewHelper.setScaleY(itemView, getScaleValue(viewXPosition));
@@ -134,7 +138,6 @@ public class CustomPagerBase {
 
                             // анимация правых карточек, когда движется центральная
                             if (firstTouchX - lastX > 10 && nextItem != null)  {
-
 
 //                                    ViewHelper.setAlpha (itemView, 1f);
 //                                    ViewHelper.setAlpha (nextItem, 1f);
