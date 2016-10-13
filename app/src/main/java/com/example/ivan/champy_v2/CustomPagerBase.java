@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.example.ivan.champy_v2.adapter.MainActivityCardPagerAdapter;
 import com.example.ivan.champy_v2.helper.CHWindowView;
@@ -119,8 +120,9 @@ public class CustomPagerBase {
                             firstTouchX = X;
                             break;
 
+                        // отвечает за боковые карточки, когда движется центральная
                         case MotionEvent.ACTION_MOVE:
-                            // Прокрутка карточок
+                            // Расположение карточек на экране (дистанция между ними)
                             // was if (X > width*25 && X < width*80) {
                             if (X > width*40 && X < width*60) {
                                 ViewHelper.setX(itemView, viewXPosition + (X - lastX));
@@ -130,7 +132,7 @@ public class CustomPagerBase {
                             ViewHelper.setScaleY(itemView, getScaleValue(viewXPosition));
                             ViewHelper.setScaleX(itemView, getScaleValue(viewXPosition));
 
-                            // отвечает за прозрачность карточок
+                            // анимация правых карточек, когда движется центральная
                             if (firstTouchX - lastX > 10 && nextItem != null)  {
                                     if (ViewHelper.getAlpha(nextItem) < 0.93f) {
                                         ViewHelper.setAlpha(itemView, ViewHelper.getScaleX(itemView));
@@ -140,14 +142,16 @@ public class CustomPagerBase {
                                     ViewHelper.setAlpha (nextItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
                                     ViewHelper.setScaleX(nextItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
                                     ViewHelper.setScaleY(nextItem, 0.8f + (1f - ViewHelper.getScaleY(itemView)));
-                                    if (ViewHelper.getAlpha(nextItem) > 0.9f) {
-                                        nextItem.bringToFront();
-                                    }
-                                    else if (currentItem != null) {
-                                        currentItem.bringToFront();
-                                        Log.d(TAG, "Bring to Front");
-                                    }
-                            } else if (lastX - firstTouchX > 10 && previousItem != null) {
+//                                    if (ViewHelper.getAlpha(nextItem) > 0.9f) {
+//                                        nextItem.bringToFront();
+//                                    }
+//                                    else if (currentItem != null) {
+//                                        currentItem.bringToFront();
+//                                        Log.d(TAG, "Bring to Front");
+//                                    }
+                            }
+                            // анимация левых карточек, когда движется центральная
+                            else if (lastX - firstTouchX > 10 && previousItem != null) {
                                     if (ViewHelper.getAlpha(previousItem) < 0.93f) {
                                         ViewHelper.setAlpha(itemView, ViewHelper.getScaleX(itemView));
                                     } else {
@@ -157,23 +161,24 @@ public class CustomPagerBase {
                                     ViewHelper.setAlpha (previousItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
                                     ViewHelper.setScaleX(previousItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
                                     ViewHelper.setScaleY(previousItem, 0.8f + (1f - ViewHelper.getScaleY(itemView)));
-                                    if (ViewHelper.getAlpha(previousItem) > 0.9f) {
-                                        previousItem.bringToFront();
-                                    }
-                                    else if (currentItem != null) {
-                                        currentItem.bringToFront();
-                                        Log.d(TAG, "Bring to Front");
-                                    }
-                            } else if  (currentItem != null) {
-                                    Log.d(TAG, "Bring to Front");
-                                    currentItem.bringToFront();
+//                                    if (ViewHelper.getAlpha(previousItem) > 0.9f) {
+//                                        previousItem.bringToFront();
+//                                    }
+//                                    else if (currentItem != null) {
+//                                        currentItem.bringToFront();
+//                                        Log.d(TAG, "Bring to Front");
+//                                    }
+//                            } else if  (currentItem != null) {
+//                                    Log.d(TAG, "Bring to Front");
+//                                    currentItem.bringToFront();
                             }
                             break;
 
 
-
+                        // отвечает за повороты карточек взагальном, их движения
                         case MotionEvent.ACTION_UP:
                             isTouchEnabled = false;
+
 //                            /*if (Math.abs(lastX - firstTouchX) < 5) {
 //                                // Click state
 //                                // TODO: 05.10.2016 if 1 cards and X<5, need do something, ALLO
@@ -212,6 +217,7 @@ public class CustomPagerBase {
                                         set.start();
                                     }
                             }
+//                              // увелицение карточек когда тянешь вниз-вверх
 //                            else {
 //                                Log.d(TAG, "onTouch: HOUSTON, ELSE PROWEL BLYAT");
 //                                    // збільшує розмір бокових карточок, якщо вибрана одна із центральних
