@@ -33,8 +33,8 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
     public static final String TAG = "PendingDuelFragment";
     public int position, size, days = 21, o = 0;
     public String versus, duration, description, challenge_id, status, recipient;
-    public TextView tvGoal, tvDays, tvUserVsUser;
-    public ImageButton buttonAcceptBattle, buttonCancelBattle, btnAccept, btnCancel;
+    public TextView tvGoal, tvDays, tvUserVsUser, everyDayForTheNext;
+    public ImageButton btnAccept, btnCancel;
     public OfflineMode offlineMode;
     public ViewPager viewPager;
     public Typeface typeface;
@@ -94,9 +94,11 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
 
         typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
         viewPager = (ViewPager)getActivity().findViewById(R.id.pager_pending_duel);
+        everyDayForTheNext = (TextView)view.findViewById(R.id.tvEveryDayPending);
         tvUserVsUser  = (TextView)view.findViewById(R.id.tvYouVsSomebody);
         tvDays = (TextView)view.findViewById(R.id.textViewDuring);
         tvGoal = (TextView)view.findViewById(R.id.tv_goal);
+
 
         CHSetupUI chSetupUI= new CHSetupUI();
         chSetupUI.setupUI(view, getActivity());
@@ -130,7 +132,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         tvGoal.setText(description);
         tvDays.setTypeface(typeface);
         tvGoal.setTypeface(typeface);
-
+        everyDayForTheNext.setTypeface(typeface);
 
     }
 

@@ -90,13 +90,22 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         tvDays = (TextView)view.findViewById(R.id.days_text);
         etGoal = (EditText)view.findViewById(R.id.et_goal);
         etDays = (EditText)view.findViewById(R.id.et_days);
+        TextView textDays   = (TextView)view.findViewById(R.id.tvDays);
+        TextView tvLevel    = (TextView)view.findViewById(R.id.tvLevel1Chall);
+        TextView tvEveryDay = (TextView)view.findViewById(R.id.tvEveryDaySelf);
+        TextView tvPoint    = (TextView)view.findViewById(R.id.tvRewardPlus10Points);
 
         if (duration != null && !duration.isEmpty()) days = Integer.parseInt(duration) / 86400;
 
-        tvDays.setText("" + days);
-        tvDays.setTypeface(typeface);
+        tvDays.setText(days + " days");
         tvGoal.setText(name);
+        tvDays.setTypeface(typeface);
         tvGoal.setTypeface(typeface);
+        tvEveryDay.setTypeface(typeface);
+        textDays.setTypeface(typeface);
+        tvLevel.setTypeface(typeface);
+        tvPoint.setTypeface(typeface);
+        textDays.setVisibility(View.INVISIBLE);
 
         Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView)view.findViewById(R.id.imageViewPoints));
         ImageButton buttonAccept = (ImageButton) getActivity().findViewById(R.id.imageButtonAccept);
@@ -113,6 +122,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
             etDays.setVisibility(View.VISIBLE);
             etGoal.setVisibility(View.VISIBLE);
             tvDays.setVisibility(View.INVISIBLE);
+            textDays.setVisibility(View.VISIBLE);
         }
 
         OfflineMode offlineMode = new OfflineMode();

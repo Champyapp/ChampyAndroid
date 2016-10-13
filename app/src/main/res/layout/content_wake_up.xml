@@ -86,7 +86,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:text="@string/level_1_challenge"
                 android:id="@+id/tvLevel1Chall"
                 android:layout_alignBottom="@+id/imageViewPoints"
@@ -101,7 +101,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:text="@string/reward_10_points"
                 android:id="@+id/tvRewardPlus10Points"
                 android:layout_alignTop="@+id/imageViewPoints"
@@ -119,7 +119,7 @@
                 android:timePickerMode="spinner"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/goal_text"
-                android:layout_above="@+id/tvEveryDayForNext"
+                android:layout_above="@+id/tvEveryDayWakeUp"
                 tools:targetApi="lollipop" />
 
             <TextView
@@ -127,7 +127,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="@string/everyday_for_next"
-                android:id="@+id/tvEveryDayForNext"
+                android:id="@+id/tvEveryDayWakeUp"
                 android:layout_above="@+id/tvDays"
                 android:layout_centerHorizontal="true" />
 

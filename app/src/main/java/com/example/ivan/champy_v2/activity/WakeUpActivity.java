@@ -80,13 +80,19 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         final ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
         final ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
         final TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        final TextView tvIChallengeMyselfTo = (TextView) findViewById(R.id.tvChallengeToMySelf);
+        final TextView tvIChallMySelf = (TextView) findViewById(R.id.tvChallengeToMySelf);
+        final TextView tvPoints = (TextView) findViewById(R.id.tvRewardPlus10Points);
+        final TextView tvEveryDay = (TextView) findViewById(R.id.tvEveryDayWakeUp);
+        final TextView tvLevel = (TextView) findViewById(R.id.tvLevel1Chall);
         final TextView tvDuration = (TextView) findViewById(R.id.tvDays);
         final TextView tvGoal = (TextView) findViewById(R.id.goal_text);
 
-        tvIChallengeMyselfTo.setTypeface(typeface);
+        tvIChallMySelf.setTypeface(typeface);
+        tvEveryDay.setTypeface(typeface);
         tvDuration.setTypeface(typeface);
         tvGoal.setTypeface(typeface);
+        tvPoints.setTypeface(typeface);
+        tvLevel.setTypeface(typeface);
 
         Glide.with(this).load(R.drawable.wakeupwhite).override(110, 110).into((ImageView) findViewById(R.id.imageViewLogo));
         Glide.with(this).load(R.drawable.wakeuptext).override(180, 150).into((ImageView) findViewById(R.id.imageWakeUpChall));
