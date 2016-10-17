@@ -16,7 +16,6 @@ import com.nineoldandroids.animation.Animator.AnimatorListener;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
-
 /**
  * This class is responsible for cards animation [MainActivity]
  * Their size, alpha, movement, position and other operation
@@ -55,8 +54,6 @@ public class CustomPagerBase {
         customPagerBase = this;
     }
 
-    // TODO: 12.10.2016 зробити щоб переход був з малої на велику і велика ставала центральної
-    // TODO: а не таку: стає великою, здвигається і зменшується. бо це гавно.
 
     public void preparePager(int position) {
         int width = CHWindowView.getWindowWidth(context);
@@ -64,7 +61,9 @@ public class CustomPagerBase {
         previousItemXPosition = CHWindowView.getCurrentCardPositionX(context) - Math.round(width/1.5f); // but I wanna 2'
 
         if (pagerAdapter != null && pagerAdapter.dataCount() > 0) {
-            // we have more than 0 cards and we need to do something:
+            /**
+             * we have more than 0 cards and we need to do something
+             */
             if (position != 0 && pagerAdapter.dataCount() > 1) {
                 // Create previous view
                 previousItem = createCardLayout(position - 1);
@@ -105,12 +104,13 @@ public class CustomPagerBase {
 
 
             public boolean onTouch(View v, MotionEvent event) {
-                //Log.d(TAG, "touchListener Touch :" + isTouchEnabled);
 
-                if(isTouchEnabled){
-                    int width = Math.round(CHWindowView.getWindowWidth(context) / 100);
+                if (isTouchEnabled) {
+                    int width = Math.round(CHWindowView.getWindowWidth(context) / 100); // 10
                     final int X = (int) event.getRawX();
                     float viewXPosition = ViewHelper.getX(itemView);
+
+                    Log.d(TAG, "X: " + X + " | viewXPosition: " + viewXPosition);
 
                     switch (event.getAction() & MotionEvent.ACTION_MASK) {
                         case MotionEvent.ACTION_DOWN:
@@ -118,8 +118,10 @@ public class CustomPagerBase {
                             firstTouchX = X;
                             break;
 
-                        // отвечает за боковые карточки, когда движется центральная
-                        case MotionEvent.ACTION_MOVE:
+                        /**
+                         * отвечает за боковые карточки, когда движется центральная
+                         */
+                         case MotionEvent.ACTION_MOVE:
                             // Расположение карточек на экране (дистанция между ними)
                             if (X > width*40 && X < width*60) { // was (X > width*25 && X < width*80) | need (X > width*40 && X < width*60)
                                 ViewHelper.setX(itemView, viewXPosition + (X - lastX));
@@ -171,7 +173,9 @@ public class CustomPagerBase {
                             break;
 
 
-                        // отвечает за повороты карточек взагальном, их движения
+                        /**
+                         *  отвечает за повороты карточек взагальном, их движения
+                         */
                         case MotionEvent.ACTION_UP:
                             isTouchEnabled = false;
 //
@@ -193,7 +197,7 @@ public class CustomPagerBase {
                                             ObjectAnimator.ofFloat(itemView, "scaleY", ViewHelper.getScaleY(itemView), 1f)
                                             //ObjectAnimator.ofFloat(itemView, "alpha", ViewHelper.getAlpha(itemView), 1f)
                                     );
-                                    set.setDuration(90);
+                                    set.setDuration(270); // was 90, but 180 is good
                                     set.start();
                                 }
 
@@ -208,7 +212,7 @@ public class CustomPagerBase {
                                             ObjectAnimator.ofFloat(itemView, "scaleY", ViewHelper.getScaleY(itemView), 1f)
                                             //ObjectAnimator.ofFloat(itemView, "alpha", ViewHelper.getAlpha(itemView), 1f)
                                     );
-                                    set.setDuration(90);
+                                    set.setDuration(270); // was 90, but 180 is good
                                     set.start();
                                 }
                             }
@@ -274,6 +278,8 @@ public class CustomPagerBase {
 //                                }
                             isTouchEnabled = true;
                             break;
+
+                        //default: currentItem.bringToFront(); break;
                     }
                 }
                 return true;
@@ -293,8 +299,6 @@ public class CustomPagerBase {
             }
             AnimatorSet set = new AnimatorSet();
             set.playTogether(
-                    // TODO: 13.10.2016 перетаскивать предыдущую карточку с экрана if not null
-
                     // делает центральную карточку меньше и перемещает её в бок
                     ObjectAnimator.ofFloat(currentItem, "translationX", ViewHelper.getX(currentItem), previousItemXPosition),
                     ObjectAnimator.ofFloat(currentItem, "scaleX", ViewHelper.getScaleX(currentItem), 0.8f),
@@ -308,7 +312,7 @@ public class CustomPagerBase {
                     //ObjectAnimator.ofFloat(nextItem, "alpha", ViewHelper.getAlpha(nextItem), 1f)
 
             );
-            set.setDuration(90);
+            set.setDuration(270); // was 90, but 180 is good
             set.addListener(new AnimatorListener() {
 
                 @Override
@@ -333,10 +337,9 @@ public class CustomPagerBase {
                         ViewHelper.setScaleY(nextNext, 0.8f);
                         //ViewHelper.setAlpha(nextNext, 0.8f);
                         currentItem.bringToFront();
-                        Log.d(TAG, "Bring to Front");
                         rootView.invalidate();
                         ObjectAnimator anim = ObjectAnimator.ofFloat(nextNext, "translationX", ViewHelper.getX(nextNext), ViewHelper.getX(nextNext));
-                        anim.setDuration(90);
+                        anim.setDuration(270); // was 90, but 180 is good
                         anim.start();
                         nextItem = nextNext;
                     }
@@ -387,7 +390,7 @@ public class CustomPagerBase {
                     ObjectAnimator.ofFloat(previousItem, "scaleY", ViewHelper.getScaleY(previousItem), 1f)
                     //ObjectAnimator.ofFloat(previousItem, "alpha", ViewHelper.getAlpha(previousItem), 1f)
             );
-            set.setDuration(90);
+            set.setDuration(270); // was 90, but 180 is good
             set.addListener(new AnimatorListener() {
 
                 @Override
@@ -414,10 +417,9 @@ public class CustomPagerBase {
                         ViewHelper.setScaleY(prevPrev, 0.8f);
                         //ViewHelper.setAlpha(prevPrev, 0.8f);
                         ObjectAnimator anim = ObjectAnimator.ofFloat(prevPrev, "translationX", ViewHelper.getX(prevPrev), ViewHelper.getX(prevPrev));
-                        anim.setDuration(90);
+                        anim.setDuration(270); // was 90, but 180 is good
                         anim.start();
                         currentItem.bringToFront();
-                        Log.d(TAG, "Bring to Front");
                         rootView.invalidate();
                         previousItem = prevPrev;
                     }
@@ -472,11 +474,13 @@ public class CustomPagerBase {
 
 
     private void setTouchListenerToView(final View itemView, boolean state) {
-        if (state) {
-            itemView.setOnTouchListener(touchListener(itemView));
-        } else {
-            itemView.setOnTouchListener(null);
-        }
+//        if (state) {
+//            itemView.setOnTouchListener(touchListener(itemView));
+//        } else {
+//            itemView.setOnTouchListener(null);
+//        }
+        View.OnTouchListener myTouch = (state) ? touchListener(itemView) : null;
+        itemView.setOnTouchListener(myTouch);
     }
 
 
