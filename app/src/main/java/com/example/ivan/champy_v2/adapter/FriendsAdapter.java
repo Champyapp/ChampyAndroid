@@ -37,7 +37,7 @@ import retrofit.Retrofit;
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
 
     final private String API_URL = "http://46.101.213.24:3007";
-    final private String TAG = "myLogs";
+    final private String TAG = "FriendsAdapter";
     private List<Friend> mContacts;
     private Context context;
     private Activity activity;

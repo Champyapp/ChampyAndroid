@@ -52,13 +52,11 @@ public class MyGcmListenerService extends GcmListenerService {
         if (sessionManager.isUserLoggedIn()) {
             HashMap<String, String> user;
             user = sessionManager.getUserDetails();
-            String name = user.get("name");
 
+            String name = user.get("name");
             String message = data.getString("gcm.notification.body");
             String title = data.getString("gcm.notification.title");
-            //if (data != null) Log.d(TAG, "Bundle not null");
-            Log.d(TAG, "From: " + from + " " + name);
-            Log.d(TAG, "Message: " + message);
+            Log.d(TAG, "From: " + from + " " + name + "\nMessage: " + message);
 
             if (message != null && !message.toLowerCase().contains(name.toLowerCase()))
                 sendNotification(message, title);
@@ -75,24 +73,20 @@ public class MyGcmListenerService extends GcmListenerService {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         switch (title) {
             case "Friend request":
-                // done
                 intent = new Intent(this, FriendsActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("friend_request", "true");
                 notifyForFriends(intent, message);
                 break;
             case "Challenge request":
-                // done
                 Intent goToPendingDuels = new Intent(MyGcmListenerService.this, PendingDuelActivity.class);
                 refreshPendingDuels();
                 notifyChallenges(goToPendingDuels, message);
                 break;
             case "Challenge accepted":
-                // done
                 notifyChallenges(intent, message);
                 break;
             case "Win":
-                // done
                 notifyChallenges(intent, message);
                 break;
         }
@@ -132,30 +126,20 @@ public class MyGcmListenerService extends GcmListenerService {
                         String challengeDescription = challenge.getDescription();
                         int challengeDuration = challenge.getDuration();
 
-                        if (challenge.getType().equals("567d51c48322f85870fd931b")) {
-                            if (challengeStatus.equals("pending")) { //!challengeStatus.equals("started"))
-                                if (!challengeStatus.equals("failedBySender")) {
-                                    if (!challengeStatus.equals("rejectedByRecipient")) {
-                                        //if (userId.equals(recipient.getId())) {
-                                        if (userId.equals(recipient.getId())) {
-                                            cv.put("recipient", "true");
-                                            cv.put("versus", sender.getName());
-                                        } else {
-                                            cv.put("recipient", "false");
-                                            cv.put("versus", recipient.getName());
-                                        }
-                                        cv.put("challenge_id", inProgressId);
-                                        cv.put("description", challengeDescription);
-                                        cv.put("duration", challengeDuration);
-                                        db.insert("pending_duel", null, cv);
-                                        //}
-                                    }
-                                }
+                        if (challengeStatus.equals("pending")) {
+                            if (userId.equals(recipient.getId())) {
+                                cv.put("recipient", "true");
+                                cv.put("versus", sender.getName());
+                            } else {
+                                cv.put("recipient", "false");
+                                cv.put("versus", recipient.getName());
                             }
+                            cv.put("challenge_id", inProgressId);
+                            cv.put("description", challengeDescription);
+                            cv.put("duration", challengeDuration);
+                            db.insert("pending_duel", null, cv);
                         }
                     }
-                    //
-
                 }
             }
 

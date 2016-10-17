@@ -5,13 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -49,7 +43,6 @@ import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 
@@ -242,7 +235,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                                         }
                                     });
 
-                                    sessionManager.logoutUser();
+                                    sessionManager.logout(SettingsActivity.this);
                                     LoginManager.getInstance().logOut();
                                     Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
                                     startActivity(intent);
@@ -388,7 +381,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                     updateProfile(map);
                     LoginManager.getInstance().logOut();
                     SessionManager sessionManager = new SessionManager(getApplicationContext());
-                    sessionManager.logoutUser();
+                    sessionManager.logout(SettingsActivity.this);
                     Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
                     startActivity(intent);
                 }
@@ -501,10 +494,10 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         String id = user.get("id");
         String token = user.get("token");
 
-        sessionManager.toogle1(map.get("pushNotifications"));
-        sessionManager.toogle2(map.get("newChallengeRequests"));
-        sessionManager.toogle3(map.get("acceptedYourChallenge"));
-        sessionManager.toogle4(map.get("challengeEnd"));
+        sessionManager.togglePushNotification(map.get("pushNotifications"));
+        sessionManager.toggleNewChallengeRequest(map.get("newChallengeRequests"));
+        sessionManager.toggleAcceptYourChallenge(map.get("acceptedYourChallenge"));
+        sessionManager.toggleChallengeEnd(map.get("challengeEnd"));
 
         final String API_URL = "http://46.101.213.24:3007";
         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();

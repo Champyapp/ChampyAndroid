@@ -7,6 +7,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -76,9 +77,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         getFacebookHashKey(); // mast be above "setContentView"
         setContentView(R.layout.activity_login);
-
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
         TextView loginText = (TextView)findViewById(R.id.login_text);
+        spinner = findViewById(R.id.loadingPanel);
+
         loginText.setTypeface(typeface);
 
         initFacebookTokenTracker();
@@ -99,6 +101,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
+                        spinner.setVisibility(View.VISIBLE);
                         try {
                             user_email = object.getString("email");
                             fb_id = object.getString("id");
@@ -129,6 +132,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 parameters.putString("fields", "id, first_name, last_name, email, gender, birthday, location");
                 request.setParameters(parameters);
                 request.executeAsync();
+                spinner.setVisibility(View.INVISIBLE);
 //                spinner = findViewById(R.id.loadingPanel);
 //                spinner.setVisibility(View.VISIBLE);
             }
@@ -141,7 +145,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         });
 
     }
-
 
     @Override
     protected void onResume() {
@@ -291,5 +294,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         });
 
     }
+
+
 
 }

@@ -15,20 +15,18 @@ public class SessionManager {
 
     private static final String IS_USER_LOGIN = "IsUserLoggedIn"; // All Shared Preferences Keys
     private static final String PREFER_NAME = "Champy_pref";  // SharedPreference file name
-    private static final String KEY_PATH = "path_to_pic";
-    private static final String KEY_ID = "facebook_id"; // Users facebook id (make v
+    private static final String KEY_PATH = "path_to_pic"; // Users path to picture (avatar)
+    private static final String KEY_ID = "facebook_id"; // Users facebook id
     private static final String KEY_EMAIL = "email"; // Email address (make variable public to access from outside)
     private static final String KEY_NAME = "name"; // Friend_json name (make variable public to access from outside)
-    private static final String KEY_GCM = "gcm";
+    private static final String KEY_GCM = "gcm"; // Users Google Cloud Messaging id (for notification)
     private int PRIVATE_MODE = 0;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
-    private Context context;
 
     // Constructor
-    public SessionManager(Context context){
-        this.context = context;
-        pref = this.context.getSharedPreferences(PREFER_NAME, PRIVATE_MODE);
+    public SessionManager(Context context) {
+        pref = context.getSharedPreferences(PREFER_NAME, PRIVATE_MODE);
         editor = pref.edit();
         editor.apply();
     }
@@ -71,22 +69,22 @@ public class SessionManager {
         editor.commit();
     }
 
-    public void toogle1(String t){
+    public void togglePushNotification(String t){
         editor.putString("pushN", t);
         editor.commit();
     }
 
-    public void toogle2(String t){
+    public void toggleNewChallengeRequest(String t){
         editor.putString("newChallReq", t);
         editor.commit();
     }
 
-    public void toogle3(String t){
+    public void toggleAcceptYourChallenge(String t){
         editor.putString("acceptedYour", t);
         editor.commit();
     }
 
-    public void toogle4(String t){
+    public void toggleChallengeEnd(String t){
         editor.putString("challengeEnd", t);
         editor.commit();
     }
@@ -110,9 +108,8 @@ public class SessionManager {
         return pref.getString("facebook_id", null);
     }
 
-    //user id
     public String getObjectId() {
-        return pref.getString("id", null);
+        return pref.getString("id", null); //user id
     }
 
     public String getRefreshPending() {
@@ -163,7 +160,7 @@ public class SessionManager {
     }
 
     public HashMap<String, String> getChampyOptions(){
-        HashMap<String, String> champy = new HashMap<String, String>();
+        HashMap<String, String> champy = new HashMap<>();
         champy.put("challenges", pref.getString("challenges", null));
         champy.put("wins",       pref.getString("wins",       null));
         champy.put("total",      pref.getString("total",      null));
@@ -189,20 +186,15 @@ public class SessionManager {
         return user;
     }
 
-    public void logoutUser(){
-        // Clearing all user data from Shared Preferences
-        editor.clear();
-        editor.commit();
-        // After logout redirect user to Login Activity
-    }
-
     public boolean isUserLoggedIn(){
         return pref.getBoolean(IS_USER_LOGIN, false);
     }
 
     public void logout(Activity activity) {
         LoginManager.getInstance().logOut();
-        logoutUser();
+        // Clearing all user data from Shared Preferences
+        editor.clear(); // TODO: 17.10.2016 check if this really need to do.
+        editor.commit();
         Intent intent = new Intent(activity, RoleControllerActivity.class);
         activity.startActivity(intent);
     }

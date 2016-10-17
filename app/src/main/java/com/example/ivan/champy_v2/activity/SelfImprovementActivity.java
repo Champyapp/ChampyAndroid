@@ -4,13 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -40,7 +34,6 @@ import com.example.ivan.champy_v2.model.Self.Datum;
 import com.facebook.FacebookSdk;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.List;
@@ -176,15 +169,6 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
             startActivity(intent);
             super.onBackPressed();
         }
-    }
-
-    // background for drawer
-    private Drawable Init(String path) throws FileNotFoundException {
-        File file = new File(path, "blured2.jpg");
-        Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
-        Drawable dr = new BitmapDrawable(getResources(), bitmap);
-        dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
-        return dr;
     }
 
 

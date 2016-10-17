@@ -419,23 +419,20 @@ public class ChallengeController {
                         String challengeDescription = challenge.getDescription();
                         int challengeDuration = challenge.getDuration();
 
-                        if (challenge.getType().equals("567d51c48322f85870fd931b")) {
-                            if (challengeStatus.equals("pending")) {
-                                if (!challengeStatus.equals("failedBySender") && !challengeStatus.equals("rejectedByRecipient")) {
-
-                                    if (userId.equals(recipient.getId())) {
-                                        cv.put("recipient", "true");
-                                        cv.put("versus", sender.getName());
-                                    } else {
-                                        cv.put("recipient", "false");
-                                        cv.put("versus", recipient.getName());
-                                    }
-                                    cv.put("challenge_id", inProgressId);
-                                    cv.put("description", challengeDescription);
-                                    cv.put("duration", challengeDuration);
-                                    db.insert("pending_duel", null, cv);
+                        if (challengeStatus.equals("pending")) {
+                            //if (!challengeStatus.equals("failedBySender") && !challengeStatus.equals("rejectedByRecipient")) {
+                                if (userId.equals(recipient.getId())) {
+                                    cv.put("recipient", "true");
+                                    cv.put("versus", sender.getName());
+                                } else {
+                                    cv.put("recipient", "false");
+                                    cv.put("versus", recipient.getName());
                                 }
-                            }
+                                cv.put("challenge_id", inProgressId);
+                                cv.put("description", challengeDescription);
+                                cv.put("duration", challengeDuration);
+                                db.insert("pending_duel", null, cv);
+                            //}
                         }
                     }
                     generateCardsForMainActivity(token, userId);

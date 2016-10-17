@@ -1,5 +1,6 @@
 package com.example.ivan.champy_v2.helper;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
@@ -129,7 +130,7 @@ public class AppSync {
 
                     String api_path;
                     if (data.getPhoto() != null){
-                        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+                        @SuppressLint("SdCardPath") String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
                         File file = new File(path, "profile.jpg");
                         if (!file.exists()){
                             com.example.ivan.champy_v2.model.User.Photo photo = data.getPhoto();
@@ -177,26 +178,31 @@ public class AppSync {
 
                         if ((datum.getFriend() != null) && (datum.getOwner() != null)) {
                             if (datum.getStatus().toString().equals("false")) {
+
                                 if (datum.getOwner().get_id().equals(userId)) {
-                                    Friend_ friend = datum.getFriend();
-                                    cv.put("name", friend.getName());
-                                    if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
-                                    else cv.put("photo", "");
-                                    cv.put("user_id", friend.getId());
-                                    cv.put("inProgressChallengesCount", friend.getInProgressChallengesCount());
-                                    cv.put("allChallengesCount", friend.getAllChallengesCount());
-                                    cv.put("successChallenges", friend.getSuccessChallenges());
+                                    Friend_ recipientFriend = datum.getFriend();
+                                    cv.put("name", recipientFriend.getName());
+                                    //if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
+                                    //else cv.put("photo", "");
+                                    String friendPhoto = (recipientFriend.getPhoto() != null) ? recipientFriend.getPhoto().getMedium() : "";
+                                    cv.put("photo", friendPhoto);
+                                    cv.put("user_id", recipientFriend.getId());
+                                    cv.put("inProgressChallengesCount", recipientFriend.getInProgressChallengesCount());
+                                    cv.put("allChallengesCount", recipientFriend.getAllChallengesCount());
+                                    cv.put("successChallenges", recipientFriend.getSuccessChallenges());
                                     cv.put("owner", "false");
                                     db.insert("pending", null, cv);
                                 } else {
-                                    Owner friend = datum.getOwner();
-                                    cv.put("name", friend.getName());
-                                    if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
-                                    else cv.put("photo", "");
-                                    cv.put("user_id", friend.get_id());
-                                    cv.put("inProgressChallengesCount", friend.getInProgressChallengesCount());
-                                    cv.put("allChallengesCount", friend.getAllChallengesCount());
-                                    cv.put("successChallenges", friend.getSuccessChallenges());
+                                    Owner ownerFriend = datum.getOwner();
+                                    cv.put("name", ownerFriend.getName());
+                                    //if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
+                                    //else cv.put("photo", "");
+                                    String friendPhoto = (ownerFriend.getPhoto() != null) ? ownerFriend.getPhoto().getMedium() : "";
+                                    cv.put("photo", friendPhoto);
+                                    cv.put("user_id", ownerFriend.get_id());
+                                    cv.put("inProgressChallengesCount", ownerFriend.getInProgressChallengesCount());
+                                    cv.put("allChallengesCount", ownerFriend.getAllChallengesCount());
+                                    cv.put("successChallenges", ownerFriend.getSuccessChallenges());
                                     cv.put("owner", "true");
                                     db.insert("pending", null, cv);
                                 }
@@ -354,12 +360,11 @@ public class AppSync {
                                     String photo = null;
 
                                     if (data.getPhoto() != null) photo = API_URL + data.getPhoto().getMedium();
-                                    else { try {
+                                    else {
+                                        try {
                                             URL profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
                                             photo = profile_pic.toString();
-                                        } catch (MalformedURLException e) {
-                                            e.printStackTrace();
-                                        }
+                                        } catch (MalformedURLException e) { e.printStackTrace(); }
                                     }
                                     String name = data.getName();
                                     cv.put("name", name);
@@ -370,17 +375,15 @@ public class AppSync {
                                     cv.put("total", data.getScore());
                                     cv.put("level", data.getLevel().getNumber());
                                     if (!checkPendingFriends(data.get_id())) db.insert("mytable", null, cv); // ?
-                                    else Log.i("AppSync", "GetUserFriendsInfo | DBase: not added");
+                                    else Log.d("AppSync", "GetUserFriendsInfo | DBase: not added");
                                 } else {
-                                    Log.i("AppSync", "GetUserFriendsInfo | onResponse: " + response.message());
+                                    Log.d("AppSync", "GetUserFriendsInfo | onResponse: " + response.message());
                                     URL profile_pic;
                                     String photo = null;
                                     try {
                                         profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
                                         photo = profile_pic.toString();
-                                    } catch (MalformedURLException e) {
-                                        e.printStackTrace();
-                                    }
+                                    } catch (MalformedURLException e) { e.printStackTrace(); }
                                     cv.put("name", user_name);
                                     cv.put("photo", photo);
                                     cv.put("challenges", "0");
