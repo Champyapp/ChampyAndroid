@@ -74,13 +74,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
-
         getFacebookHashKey(); // mast be above "setContentView"
+
         setContentView(R.layout.activity_login);
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
         TextView loginText = (TextView)findViewById(R.id.login_text);
         spinner = findViewById(R.id.loadingPanel);
-
         loginText.setTypeface(typeface);
 
         initFacebookTokenTracker();

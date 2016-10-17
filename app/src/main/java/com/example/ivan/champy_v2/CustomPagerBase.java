@@ -109,10 +109,7 @@ public class CustomPagerBase {
 
                 if(isTouchEnabled){
                     int width = Math.round(CHWindowView.getWindowWidth(context) / 100);
-                    //Log.d(TAG, "touchListener Width: ="+width);
-
                     final int X = (int) event.getRawX();
-
                     float viewXPosition = ViewHelper.getX(itemView);
 
                     switch (event.getAction() & MotionEvent.ACTION_MASK) {
@@ -124,7 +121,7 @@ public class CustomPagerBase {
                         // отвечает за боковые карточки, когда движется центральная
                         case MotionEvent.ACTION_MOVE:
                             // Расположение карточек на экране (дистанция между ними)
-                            if (X > width*50 && X < width*50) { // was (X > width*25 && X < width*80) | need (X > width*40 && X < width*60)
+                            if (X > width*40 && X < width*60) { // was (X > width*25 && X < width*80) | need (X > width*40 && X < width*60)
                                 ViewHelper.setX(itemView, viewXPosition + (X - lastX));
                             }
 
@@ -133,12 +130,18 @@ public class CustomPagerBase {
                             ViewHelper.setScaleX(itemView, getScaleValue(viewXPosition));
 
                             // анимация правых карточек, когда движется центральная
-                            if (firstTouchX - lastX > 10 && nextItem != null)  {
+                            if (firstTouchX - lastX > 0.1 && nextItem != null)  {
 
 //                                    ViewHelper.setAlpha (itemView, 1f);
 //                                    ViewHelper.setAlpha (nextItem, 1f);
                                     ViewHelper.setScaleX(nextItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
                                     ViewHelper.setScaleY(nextItem, 0.8f + (1f - ViewHelper.getScaleY(itemView)));
+
+                                //Log.d(TAG, "onTouch: SCALE X: " + ViewHelper.getScaleX(currentItem) + "\nSCALE Y: " + ViewHelper.getScaleY(currentItem));
+
+//                                if (ViewHelper.getScaleX(currentItem) < 1f) {
+//                                    nextItem.bringToFront();
+//                                }
 //                                    if (ViewHelper.getAlpha(nextItem) > 0.9f) {
 //                                        nextItem.bringToFront();
 //                                    }
@@ -148,7 +151,7 @@ public class CustomPagerBase {
 //                                    }
                             }
                             // анимация левых карточек, когда движется центральная
-                            else if (lastX - firstTouchX > 10 && previousItem != null) {
+                            else if (lastX - firstTouchX > 0.1 && previousItem != null) {
 
 //                                    ViewHelper.setAlpha (itemView, 1f);
 //                                    ViewHelper.setAlpha (previousItem, 1);
@@ -179,38 +182,35 @@ public class CustomPagerBase {
 //
 //                            } else*/
 
-                            /*поворот карточок справа вліво*/
-                            if (lastX - firstTouchX > 100) {
-                                    if (previousItem != null) {
-                                        Log.d(TAG, "Ready to previous: "+(lastX - firstTouchX));
-                                        changePageTo(PREVIOUS_PAGE); }
-                                    else {
-                                        AnimatorSet set = new AnimatorSet();
-                                        set.playTogether(
-                                                ObjectAnimator.ofFloat(itemView, "translationX", viewXPosition, CHWindowView.getCurrentCardPositionX(context)),
-                                                ObjectAnimator.ofFloat(itemView, "scaleX", ViewHelper.getScaleX(itemView), 1f),
-                                                ObjectAnimator.ofFloat(itemView, "scaleY", ViewHelper.getScaleY(itemView), 1f)
-                                                //ObjectAnimator.ofFloat(itemView, "alpha", ViewHelper.getAlpha(itemView), 1f)
-                                        );
-                                        set.setDuration(90);
-                                        set.start();
-                                    }
+                            if (lastX - firstTouchX > 10) {
+                                // поворот карточок справа вліво
+                                if (previousItem != null) changePageTo(PREVIOUS_PAGE);
+                                else {
+                                    AnimatorSet set = new AnimatorSet();
+                                    set.playTogether(
+                                            ObjectAnimator.ofFloat(itemView, "translationX", viewXPosition, CHWindowView.getCurrentCardPositionX(context)),
+                                            ObjectAnimator.ofFloat(itemView, "scaleX", ViewHelper.getScaleX(itemView), 1f),
+                                            ObjectAnimator.ofFloat(itemView, "scaleY", ViewHelper.getScaleY(itemView), 1f)
+                                            //ObjectAnimator.ofFloat(itemView, "alpha", ViewHelper.getAlpha(itemView), 1f)
+                                    );
+                                    set.setDuration(90);
+                                    set.start();
+                                }
+
+                            } else if (firstTouchX - lastX > 10) {
                                 // поворот карточок зліва на право
-                            } else if (firstTouchX - lastX > 100) {
-                                    if (nextItem != null) {
-                                        Log.d(TAG, "Ready to next:"+(firstTouchX - lastX));
-                                        changePageTo(NEXT_PAGE);}
-                                    else {
-                                        AnimatorSet set = new AnimatorSet();
-                                        set.playTogether(
-                                                ObjectAnimator.ofFloat(itemView, "translationX", viewXPosition, CHWindowView.getCurrentCardPositionX(context)),
-                                                ObjectAnimator.ofFloat(itemView, "scaleX", ViewHelper.getScaleX(itemView), 1f),
-                                                ObjectAnimator.ofFloat(itemView, "scaleY", ViewHelper.getScaleY(itemView), 1f)
-                                                //ObjectAnimator.ofFloat(itemView, "alpha", ViewHelper.getAlpha(itemView), 1f)
-                                        );
-                                        set.setDuration(90);
-                                        set.start();
-                                    }
+                                if (nextItem != null) changePageTo(NEXT_PAGE);
+                                else {
+                                    AnimatorSet set = new AnimatorSet();
+                                    set.playTogether(
+                                            ObjectAnimator.ofFloat(itemView, "translationX", viewXPosition, CHWindowView.getCurrentCardPositionX(context)),
+                                            ObjectAnimator.ofFloat(itemView, "scaleX", ViewHelper.getScaleX(itemView), 1f),
+                                            ObjectAnimator.ofFloat(itemView, "scaleY", ViewHelper.getScaleY(itemView), 1f)
+                                            //ObjectAnimator.ofFloat(itemView, "alpha", ViewHelper.getAlpha(itemView), 1f)
+                                    );
+                                    set.setDuration(90);
+                                    set.start();
+                                }
                             }
 //                              // увелицение карточек когда тянешь вниз-вверх
 //                            else {
