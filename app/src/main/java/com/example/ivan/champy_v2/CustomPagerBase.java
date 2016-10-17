@@ -54,6 +54,9 @@ public class CustomPagerBase {
         customPagerBase = this;
     }
 
+    // TODO: 17.10.2016 NEW BUG: если взять по центру екрана то ок, если взять справа, то в левую
+    // TODO: 17.10.2016 сторону будет норм работать, а в правую нет, и на оборот. если брать по
+    // TODO: 17.10.2016 бокам, то буде норм работать, но без анимаций.
 
     public void preparePager(int position) {
         int width = CHWindowView.getWindowWidth(context);
@@ -185,35 +188,30 @@ public class CustomPagerBase {
 //
 //
 //                            } else*/
+                            Log.d(TAG, "lastX - firstTouchX = " + (lastX - firstTouchX));
+                            Log.d(TAG, "firstTouchX - lastX = " + (firstTouchX - lastX));
 
-                            if (lastX - firstTouchX > 10) {
-                                // поворот карточок справа вліво
+                            if (lastX - firstTouchX <= 99 || firstTouchX - lastX <= 99) {
+                                // если юзер потянул карточку недостаточно сильно, то она вернется в центр.
+                                moveToCenter(itemView);
+                            }
+
+                            if (lastX - firstTouchX > 100) {
+                                /**
+                                 * поворот карточок справа вліво
+                                 */
+                                // если есть предыдующая карточка, то мы подготавливаем её и поворачиваем
                                 if (previousItem != null) changePageTo(PREVIOUS_PAGE);
+                                // есди нету предыдущей, то мы
                                 else {
-                                    AnimatorSet set = new AnimatorSet();
-                                    set.playTogether(
-                                            ObjectAnimator.ofFloat(itemView, "translationX", viewXPosition, CHWindowView.getCurrentCardPositionX(context)),
-                                            ObjectAnimator.ofFloat(itemView, "scaleX", ViewHelper.getScaleX(itemView), 1f),
-                                            ObjectAnimator.ofFloat(itemView, "scaleY", ViewHelper.getScaleY(itemView), 1f)
-                                            //ObjectAnimator.ofFloat(itemView, "alpha", ViewHelper.getAlpha(itemView), 1f)
-                                    );
-                                    set.setDuration(270); // was 90, but 180 is good
-                                    set.start();
+                                    moveToCenter(itemView);
                                 }
 
-                            } else if (firstTouchX - lastX > 10) {
+                            } else if (firstTouchX - lastX > 100) {
                                 // поворот карточок зліва на право
                                 if (nextItem != null) changePageTo(NEXT_PAGE);
                                 else {
-                                    AnimatorSet set = new AnimatorSet();
-                                    set.playTogether(
-                                            ObjectAnimator.ofFloat(itemView, "translationX", viewXPosition, CHWindowView.getCurrentCardPositionX(context)),
-                                            ObjectAnimator.ofFloat(itemView, "scaleX", ViewHelper.getScaleX(itemView), 1f),
-                                            ObjectAnimator.ofFloat(itemView, "scaleY", ViewHelper.getScaleY(itemView), 1f)
-                                            //ObjectAnimator.ofFloat(itemView, "alpha", ViewHelper.getAlpha(itemView), 1f)
-                                    );
-                                    set.setDuration(270); // was 90, but 180 is good
-                                    set.start();
+                                    moveToCenter(itemView);
                                 }
                             }
 //                              // увелицение карточек когда тянешь вниз-вверх
@@ -481,6 +479,19 @@ public class CustomPagerBase {
 //        }
         View.OnTouchListener myTouch = (state) ? touchListener(itemView) : null;
         itemView.setOnTouchListener(myTouch);
+    }
+
+
+    private void moveToCenter(View currentCard) {
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(
+                ObjectAnimator.ofFloat(currentCard, "translationX", ViewHelper.getX(currentCard), CHWindowView.getCurrentCardPositionX(context)),
+                ObjectAnimator.ofFloat(currentCard, "scaleX", ViewHelper.getScaleX(currentCard), 1f),
+                ObjectAnimator.ofFloat(currentCard, "scaleY", ViewHelper.getScaleY(currentCard), 1f)
+                //ObjectAnimator.ofFloat(itemView, "alpha", ViewHelper.getAlpha(itemView), 1f)
+        );
+        set.setDuration(270); // was 90, but 180 is good
+        set.start();
     }
 
 
