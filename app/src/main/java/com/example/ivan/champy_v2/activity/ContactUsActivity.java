@@ -2,12 +2,6 @@ package com.example.ivan.champy_v2.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -38,7 +32,6 @@ import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 
@@ -164,15 +157,6 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-
-    private Drawable Init(String path) throws FileNotFoundException {
-        File file = new File(path, "blured2.jpg");
-        Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
-        Drawable dr = new BitmapDrawable(getResources(), bitmap);
-        dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
-        return dr;
     }
 
 

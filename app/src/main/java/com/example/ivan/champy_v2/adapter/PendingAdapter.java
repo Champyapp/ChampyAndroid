@@ -17,14 +17,12 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.ivan.champy_v2.Friend;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.interfaces.CustomItemClickListener;
 import com.example.ivan.champy_v2.interfaces.Friends;
-import com.example.ivan.champy_v2.model.Other;
 import com.example.ivan.champy_v2.model.Pending_friend;
 
 import java.util.ArrayList;
@@ -47,8 +45,6 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
     private Activity activity;
     private CustomItemClickListener listener;
     private ArrayList<Integer> selected = new ArrayList<>();
-
-    private Other other = new Other(new ArrayList<Friend>());
 
 
     public PendingAdapter(List<Pending_friend> contacts, Context context, Activity activity, CustomItemClickListener customItemClickListener) {

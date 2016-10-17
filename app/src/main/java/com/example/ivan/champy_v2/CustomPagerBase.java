@@ -124,13 +124,9 @@ public class CustomPagerBase {
                         // отвечает за боковые карточки, когда движется центральная
                         case MotionEvent.ACTION_MOVE:
                             // Расположение карточек на экране (дистанция между ними)
-                            if (X > width*40 && X < width*60) { // was if (X > width*25 && X < width*80) {
+                            if (X > width*50 && X < width*50) { // was (X > width*25 && X < width*80) | need (X > width*40 && X < width*60)
                                 ViewHelper.setX(itemView, viewXPosition + (X - lastX));
                             }
-
-//                            if (X > width*25 && X < width*80) {
-//                                ViewHelper.setX(itemView, width*20);
-//                            }
 
                             lastX = X;
                             ViewHelper.setScaleY(itemView, getScaleValue(viewXPosition));

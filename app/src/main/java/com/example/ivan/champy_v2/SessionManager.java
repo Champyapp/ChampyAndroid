@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.example.ivan.champy_v2.activity.LoginActivity;
 import com.example.ivan.champy_v2.activity.RoleControllerActivity;
 import com.facebook.login.LoginManager;
 
@@ -14,27 +13,22 @@ import java.util.HashMap;
 
 public class SessionManager {
 
+    private static final String IS_USER_LOGIN = "IsUserLoggedIn"; // All Shared Preferences Keys
+    private static final String PREFER_NAME = "Champy_pref";  // SharedPreference file name
+    private static final String KEY_PATH = "path_to_pic";
+    private static final String KEY_ID = "facebook_id"; // Users facebook id (make v
+    private static final String KEY_EMAIL = "email"; // Email address (make variable public to access from outside)
+    private static final String KEY_NAME = "name"; // Friend_json name (make variable public to access from outside)
+    private static final String KEY_GCM = "gcm";
+    private int PRIVATE_MODE = 0;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
-    private Context _context;
-    private int PRIVATE_MODE = 0;
-
-    // SharedPreference file name
-    private static final String PREFER_NAME = "Champy_pref";
-    // All Shared Preferences Keys
-    private static final String IS_USER_LOGIN = "IsUserLoggedIn";
-    // Friend_json name (make variable public to access from outside)
-    private static final String KEY_NAME  = "name";
-    // Email address (make variable public to access from outside)
-    private static final String KEY_EMAIL = "email";
-    private static final String KEY_ID    = "facebook_id";
-    private static final String KEY_PATH  = "path_to_pic";
-    private static final String KEY_GCM  = "gcm";
+    private Context context;
 
     // Constructor
     public SessionManager(Context context){
-        this._context = context;
-        pref = _context.getSharedPreferences(PREFER_NAME, PRIVATE_MODE);
+        this.context = context;
+        pref = this.context.getSharedPreferences(PREFER_NAME, PRIVATE_MODE);
         editor = pref.edit();
         editor.apply();
     }

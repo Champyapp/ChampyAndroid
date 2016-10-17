@@ -117,12 +117,13 @@ public class AlarmReceiverActivity extends Activity {
         }
     }
 
+
     private Uri getAlarmUri() {
-        Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        Uri alert = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_ALARM);
         if (alert == null) {
-            alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            alert = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_NOTIFICATION);
             if (alert == null) {
-                alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+                alert = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE);
             }
         }
         return alert;

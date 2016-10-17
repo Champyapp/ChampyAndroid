@@ -2,12 +2,6 @@ package com.example.ivan.champy_v2.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,12 +25,11 @@ import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
+import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
@@ -88,10 +81,9 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile);
 
         try {
-            Drawable dr = Init(path);
             ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setImageDrawable(dr);
+            imageView.setImageDrawable(CHLoadBlurredPhoto.Init(path));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -150,15 +142,6 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-
-    private Drawable Init(String path) throws FileNotFoundException {
-        File file = new File(path, "blured2.jpg");
-        Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
-        Drawable dr = new BitmapDrawable(getResources(), bitmap);
-        dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
-        return dr;
     }
 
 

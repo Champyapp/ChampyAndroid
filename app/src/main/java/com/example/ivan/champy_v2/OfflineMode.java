@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.design.widget.Snackbar;
 import android.widget.Toast;
 
 public class OfflineMode {

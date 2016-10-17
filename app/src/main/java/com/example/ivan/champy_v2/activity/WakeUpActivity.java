@@ -3,13 +3,7 @@ package com.example.ivan.champy_v2.activity;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -37,7 +31,6 @@ import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -90,9 +83,9 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         tvIChallMySelf.setTypeface(typeface);
         tvEveryDay.setTypeface(typeface);
         tvDuration.setTypeface(typeface);
-        tvGoal.setTypeface(typeface);
         tvPoints.setTypeface(typeface);
         tvLevel.setTypeface(typeface);
+        tvGoal.setTypeface(typeface);
 
         Glide.with(this).load(R.drawable.wakeupwhite).override(110, 110).into((ImageView) findViewById(R.id.imageViewLogo));
         Glide.with(this).load(R.drawable.wakeuptext).override(180, 150).into((ImageView) findViewById(R.id.imageWakeUpChall));

@@ -10,12 +10,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.example.ivan.champy_v2.activity.FriendsActivity;
 import com.example.ivan.champy_v2.activity.MainActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.duel.Duel;
 import com.example.ivan.champy_v2.helper.CHLoadUserProgressBarInfo;
-import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
 import com.example.ivan.champy_v2.interfaces.CreateChallenge;
 import com.example.ivan.champy_v2.interfaces.SingleInProgress;
