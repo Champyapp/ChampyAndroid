@@ -123,7 +123,6 @@ public class CustomPagerBase {
                         case MotionEvent.ACTION_DOWN:
                             lastX = X;
                             firstTouchX = X;
-                            Log.d(TAG, "onTouch: ACTION DOWN, OMG");
                             break;
 
                         /**
@@ -141,27 +140,16 @@ public class CustomPagerBase {
 
                             // анимация правых карточек, когда движется центральная
                             if (firstTouchX - lastX > 20 && nextItem != null)  {
+                                Log.d(TAG, "onTouch: ACTION MOVE: я двигаю центральную ВЛЕВО");
                                 ViewHelper.setScaleX(nextItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
                                 ViewHelper.setScaleY(nextItem, 0.8f + (1f - ViewHelper.getScaleY(itemView)));
                             }
                             // анимация левых карточек, когда движется центральная
                             else if (lastX - firstTouchX > 20 && previousItem != null) {
+                                Log.d(TAG, "onTouch: ACTION MOVE: я двигаю центральную ВПРАВО");
                                 ViewHelper.setScaleX(previousItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
                                 ViewHelper.setScaleY(previousItem, 0.8f + (1f - ViewHelper.getScaleY(itemView)));
                             }
-
-                            else {
-                               Log.d(TAG, "onTouch: ACTION MOVE ELSE, OMG");
-                                // mb isTouchEnabled = false; ?
-                            }
-//                            else {
-//                                if (nextItem != null && previousItem != null) {
-//                                    ViewHelper.setScaleX(nextItem, 0.8f);
-//                                    ViewHelper.setScaleY(nextItem, 0.8f);
-//                                    ViewHelper.setScaleX(previousItem, 0.8f);
-//                                    ViewHelper.setScaleY(previousItem, 0.8f);
-//                                }
-//                            }
                             break;
 
 
@@ -170,14 +158,15 @@ public class CustomPagerBase {
                          */
                         case MotionEvent.ACTION_UP:
                             isTouchEnabled = false;
-                            Log.d(TAG, "lastX - firstTouchX = " + (lastX - firstTouchX));
-                            Log.d(TAG, "firstTouchX - lastX = " + (firstTouchX - lastX));
+                            //Log.d(TAG, "lastX - firstTouchX = " + (lastX - firstTouchX));
+                            //Log.d(TAG, "firstTouchX - lastX = " + (firstTouchX - lastX));
 
-                            if (lastX - firstTouchX <= 99 || firstTouchX - lastX <= 99) {
-                                // если юзер потянул карточку недостаточно сильно, то она вернется в центр.
-                                // TODO: мб засунуть это в ELSE и добавить туда moveToCenterSideCards() ?
-                                moveCentralItemToDefault();
-                            }
+//                            if (lastX - firstTouchX <= 99 || firstTouchX - lastX <= 99) {
+//                                // если юзер потянул карточку недостаточно сильно, то она вернется в центр.
+//                                // TODO: мб засунуть это в ELSE и добавить туда moveToCenterSideCards() ?
+//                                Log.d(TAG, "onTouch: ACTION_UP: ты слишком слабо тронул карточку, возвращаемся на центр");
+//                                moveCentralItemToDefault();
+//                            }
 
                             /**
                              * Translation cards from RIGHT to LEFT
@@ -186,6 +175,7 @@ public class CustomPagerBase {
                                 // если есть предыдующая карточка, то мы "подготавливаем" её и листаем назад
                                 /*if (previousItem != null)*/ changePageTo(PREVIOUS_PAGE);
                                 // есди нету предыдущей, то мы просто передвигаем текущую карточку в центр!
+                                Log.d(TAG, "onTouch: ACTION_UP: ты перешел на ЛЕВУЮ карточку");
                                 //else moveCentralItemToDefault(itemView);
 
                             /**
@@ -194,12 +184,19 @@ public class CustomPagerBase {
                             } else if (firstTouchX - lastX > 100 && nextItem != null) {
                                 // если есть следующая карточка, то мы "подготавливаем" её и листаем вперед
                                 /*if (nextItem != null)*/ changePageTo(NEXT_PAGE);
+                                Log.d(TAG, "onTouch: ACTION_UP: ты перешел на ПРАВУЮ карточку");
                                 // если нету следущей, то мы просто передвигаем текущую карточку в центр!
                                 //else moveCentralItemToDefault(itemView);
                             }
                             else {
-                                Log.d(TAG, "onTouch: ELSE INSIDE ACTION UP, HOUSTON");
                                 // mb isTouchEnabled = false; ?
+                                Log.d(TAG, "onTouch: ACTION_UP ELSE: ты слишком слабо тронул карточку, возвращаемся на центр");
+                                moveCentralItemToDefault();
+//                                isTouchEnabled = false;
+//                                currentItem.clearFocus();
+//                                currentItem.bringToFront();
+//                                currentItem.cancelLongPress();
+//                                currentItem.stopNestedScroll();
                             }
 //                            else {
 //                                moveCentralItemToDefault(itemView);
@@ -209,23 +206,25 @@ public class CustomPagerBase {
                             break;
 
                         default:
-                            Log.d(TAG, "onTouch: DEFAULT IN ACTION UP, HOUSTON");
-                            isTouchEnabled = false;
-
+                            Log.d(TAG, "onTouch: ACTION_UP: DEFAULT, HOUSTON");
+                            //isTouchEnabled = false;
                             moveCentralItemToDefault();
-                            if (previousItem != null && nextItem != null) {
+
+//                            if (previousItem != null && nextItem != null) {
+//                                movePreviousItemToDefault(previousItem);
+//                                moveNextItemToDefault(nextItem);
+//                            }
+
+                            if (previousItem != null) {
                                 movePreviousItemToDefault(previousItem);
+                            }
+                            if (nextItem != null) {
                                 moveNextItemToDefault(nextItem);
                             }
 
-                            if (previousItem != null && nextItem == null) {
-                                movePreviousItemToDefault(previousItem);
-                            } else if (nextItem != null && previousItem == null) {
-                                moveNextItemToDefault(nextItem);
-                            }
+                            lastX = 0;
+                            firstTouchX = 0;
 
-                            isTouchEnabled = true;
-                            break;
                     }
                 }
                 return true;
@@ -520,4 +519,5 @@ public class CustomPagerBase {
 //        currentPosition = 0;
 //        viewList = null;
 //    }
+
 }
