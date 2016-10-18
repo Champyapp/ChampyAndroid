@@ -152,6 +152,7 @@ public class CustomPagerBase {
 
                             else {
                                Log.d(TAG, "onTouch: ACTION MOVE ELSE, OMG");
+                                // mb isTouchEnabled = false; ?
                             }
 //                            else {
 //                                if (nextItem != null && previousItem != null) {
@@ -174,8 +175,8 @@ public class CustomPagerBase {
 
                             if (lastX - firstTouchX <= 99 || firstTouchX - lastX <= 99) {
                                 // если юзер потянул карточку недостаточно сильно, то она вернется в центр.
-                                // мб засунуть это в ELSE и добавить туда moveToCenterSideCards() ?
-                                moveToCenter();
+                                // TODO: мб засунуть это в ELSE и добавить туда moveToCenterSideCards() ?
+                                moveCentralItemToDefault();
                             }
 
                             /**
@@ -185,7 +186,7 @@ public class CustomPagerBase {
                                 // если есть предыдующая карточка, то мы "подготавливаем" её и листаем назад
                                 /*if (previousItem != null)*/ changePageTo(PREVIOUS_PAGE);
                                 // есди нету предыдущей, то мы просто передвигаем текущую карточку в центр!
-                                //else moveToCenter(itemView);
+                                //else moveCentralItemToDefault(itemView);
 
                             /**
                              * Translation cards from LEFT to RIGHT
@@ -194,13 +195,14 @@ public class CustomPagerBase {
                                 // если есть следующая карточка, то мы "подготавливаем" её и листаем вперед
                                 /*if (nextItem != null)*/ changePageTo(NEXT_PAGE);
                                 // если нету следущей, то мы просто передвигаем текущую карточку в центр!
-                                //else moveToCenter(itemView);
+                                //else moveCentralItemToDefault(itemView);
                             }
                             else {
                                 Log.d(TAG, "onTouch: ELSE INSIDE ACTION UP, HOUSTON");
+                                // mb isTouchEnabled = false; ?
                             }
 //                            else {
-//                                moveToCenter(itemView);
+//                                moveCentralItemToDefault(itemView);
 //                            }
 
                             isTouchEnabled = true;
@@ -208,10 +210,21 @@ public class CustomPagerBase {
 
                         default:
                             Log.d(TAG, "onTouch: DEFAULT IN ACTION UP, HOUSTON");
-                            moveToCenter(); /////////////&&&&&&&&&&&&& ??????????
-                            if (previousItem != null) movePreviousItemToDefault(previousItem);
-                            else if (nextItem != null) moveNextItemToDefault(nextItem);
+                            isTouchEnabled = false;
 
+                            moveCentralItemToDefault();
+                            if (previousItem != null && nextItem != null) {
+                                movePreviousItemToDefault(previousItem);
+                                moveNextItemToDefault(nextItem);
+                            }
+
+                            if (previousItem != null && nextItem == null) {
+                                movePreviousItemToDefault(previousItem);
+                            } else if (nextItem != null && previousItem == null) {
+                                moveNextItemToDefault(nextItem);
+                            }
+
+                            isTouchEnabled = true;
                             break;
                     }
                 }
@@ -409,7 +422,7 @@ public class CustomPagerBase {
     }
 
 
-    private void moveToCenter() {
+    private void moveCentralItemToDefault() {
         setTouchListenerToView(currentItem, false);
         AnimatorSet set = new AnimatorSet();
         set.playTogether(
@@ -424,10 +437,12 @@ public class CustomPagerBase {
 
 
     // TODO: 18.10.2016 Disable touch here OR in default (var2: card.invalidate() )
+
+    // TODO: 18.10.2016 it's work, but only for left, right cards and in central for left !!!!!!!!!
     private void movePreviousItemToDefault(View previousItem) {
         AnimatorSet set = new AnimatorSet();
         set.playTogether(
-                ObjectAnimator.ofFloat(previousItem, "translationX", ViewHelper.getX(previousItem), previousItemXPosition),
+                //ObjectAnimator.ofFloat(previousItem, "translationX", ViewHelper.getX(previousItem), previousItemXPosition),
                 ObjectAnimator.ofFloat(previousItem, "scaleX", ViewHelper.getScaleX(previousItem), 0.8f),
                 ObjectAnimator.ofFloat(previousItem, "scaleY", ViewHelper.getScaleY(previousItem), 0.8f)
 
@@ -439,7 +454,7 @@ public class CustomPagerBase {
     private void moveNextItemToDefault(View nextItem) {
         AnimatorSet set = new AnimatorSet();
         set.playTogether(
-                ObjectAnimator.ofFloat(nextItem, "translationX", ViewHelper.getX(nextItem), nextItemXPosition),
+                //ObjectAnimator.ofFloat(nextItem, "translationX", ViewHelper.getX(nextItem), nextItemXPosition),
                 ObjectAnimator.ofFloat(nextItem, "scaleX", ViewHelper.getScaleX(nextItem), 0.8f),
                 ObjectAnimator.ofFloat(nextItem, "scaleY", ViewHelper.getScaleY(nextItem), 0.8f)
         );
