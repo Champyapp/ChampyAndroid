@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.example.ivan.champy_v2.adapter.MainActivityCardPagerAdapter;
 import com.example.ivan.champy_v2.helper.CHWindowView;
@@ -58,6 +57,11 @@ public class CustomPagerBase {
     // TODO: 17.10.2016 сторону будет норм работать, а в правую нет, и на оборот. если брать по
     // TODO: 17.10.2016 бокам, то буде норм работать, но без анимаций.
 
+    /**
+     * This method for displaying cards on main screen in different situation.
+     * @param position its our card position: left, center or right. We need to include
+     *                 variable with one, two and three+ cards. Need to set touchListener for them;
+     */
     public void preparePager(int position) {
         int width = CHWindowView.getWindowWidth(context);
         nextItemXPosition     = CHWindowView.getCurrentCardPositionX(context) + Math.round(width/1.5f); // was 8, need 1.5f
@@ -113,12 +117,13 @@ public class CustomPagerBase {
                     final int X = (int) event.getRawX();
                     float viewXPosition = ViewHelper.getX(itemView);
 
-                    Log.d(TAG, "X: " + X + " | viewXPosition: " + viewXPosition);
+                    //Log.d(TAG, "X: " + X + " | viewXPosition: " + viewXPosition);
 
                     switch (event.getAction() & MotionEvent.ACTION_MASK) {
                         case MotionEvent.ACTION_DOWN:
                             lastX = X;
                             firstTouchX = X;
+                            Log.d(TAG, "onTouch: ACTION DOWN, OMG");
                             break;
 
                         /**
@@ -128,7 +133,6 @@ public class CustomPagerBase {
                             // Расположение карточек на экране (дистанция между ними)
                             if (X > width*40 && X < width*60) { // was (X > width*25 && X < width*80) | need (X > width*40 && X < width*60)
                                 ViewHelper.setX(itemView, viewXPosition + (X - lastX));
-                                // TODO: 18.10.2016  ViewHelper.setX(nextItem, nextItemXPosition + (X - lastX));
                             }
 
                             lastX = X;
@@ -145,6 +149,18 @@ public class CustomPagerBase {
                                 ViewHelper.setScaleX(previousItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
                                 ViewHelper.setScaleY(previousItem, 0.8f + (1f - ViewHelper.getScaleY(itemView)));
                             }
+
+                            else {
+                               Log.d(TAG, "onTouch: ACTION MOVE ELSE, OMG");
+                            }
+//                            else {
+//                                if (nextItem != null && previousItem != null) {
+//                                    ViewHelper.setScaleX(nextItem, 0.8f);
+//                                    ViewHelper.setScaleY(nextItem, 0.8f);
+//                                    ViewHelper.setScaleX(previousItem, 0.8f);
+//                                    ViewHelper.setScaleY(previousItem, 0.8f);
+//                                }
+//                            }
                             break;
 
 
@@ -158,7 +174,8 @@ public class CustomPagerBase {
 
                             if (lastX - firstTouchX <= 99 || firstTouchX - lastX <= 99) {
                                 // если юзер потянул карточку недостаточно сильно, то она вернется в центр.
-                                moveToCenter(itemView);
+                                // мб засунуть это в ELSE и добавить туда moveToCenterSideCards() ?
+                                moveToCenter();
                             }
 
                             /**
@@ -179,13 +196,22 @@ public class CustomPagerBase {
                                 // если нету следущей, то мы просто передвигаем текущую карточку в центр!
                                 //else moveToCenter(itemView);
                             }
+                            else {
+                                Log.d(TAG, "onTouch: ELSE INSIDE ACTION UP, HOUSTON");
+                            }
+//                            else {
+//                                moveToCenter(itemView);
+//                            }
 
                             isTouchEnabled = true;
                             break;
 
                         default:
-                            //moveToCenter(itemView);
-                            //moveSideCardsToDefault(previousItem, nextItem);
+                            Log.d(TAG, "onTouch: DEFAULT IN ACTION UP, HOUSTON");
+                            moveToCenter(); /////////////&&&&&&&&&&&&& ??????????
+                            if (previousItem != null) movePreviousItemToDefault(previousItem);
+                            else if (nextItem != null) moveNextItemToDefault(nextItem);
+
                             break;
                     }
                 }
@@ -215,10 +241,10 @@ public class CustomPagerBase {
                     ObjectAnimator.ofFloat(nextItem, "translationX", nextItemXPosition, CHWindowView.getCurrentCardPositionX(context)),
                     ObjectAnimator.ofFloat(nextItem, "scaleX", ViewHelper.getScaleX(nextItem), 1f),
                     ObjectAnimator.ofFloat(nextItem, "scaleY", ViewHelper.getScaleY(nextItem), 1f)
-
             );
             set.setDuration(270); // was 90, but 180 is good
             set.addListener(new AnimatorListener() {
+
                 @Override
                 public void onAnimationStart(Animator arg0) {
                     isTouchEnabled = false;
@@ -288,22 +314,19 @@ public class CustomPagerBase {
                     ObjectAnimator.ofFloat(currentItem, "scaleX", ViewHelper.getScaleX(currentItem), 0.8f),
                     ObjectAnimator.ofFloat(currentItem, "scaleY", ViewHelper.getScaleY(currentItem), 0.8f),
 
-
                     ObjectAnimator.ofFloat(previousItem, "translationX", previousItemXPosition, CHWindowView.getCurrentCardPositionX(context)),
                     ObjectAnimator.ofFloat(previousItem, "scaleX", ViewHelper.getScaleX(previousItem), 1f),
                     ObjectAnimator.ofFloat(previousItem, "scaleY", ViewHelper.getScaleY(previousItem), 1f)
             );
             set.setDuration(270); // was 90, but 180 is good
             set.addListener(new AnimatorListener() {
-
                 @Override
                 public void onAnimationStart(Animator arg0) {
                     isTouchEnabled = false;
                 }
 
                 @Override
-                public void onAnimationRepeat(Animator arg0) {
-                }
+                public void onAnimationRepeat(Animator arg0) { }
 
                 @Override
                 public void onAnimationEnd(Animator arg0) {
@@ -318,7 +341,6 @@ public class CustomPagerBase {
                         ViewHelper.setX(prevPrev, previousItemXPosition);
                         ViewHelper.setScaleX(prevPrev, 0.8f);
                         ViewHelper.setScaleY(prevPrev, 0.8f);
-                        //ViewHelper.setAlpha(prevPrev, 0.8f);
                         ObjectAnimator anim = ObjectAnimator.ofFloat(prevPrev, "translationX", ViewHelper.getX(prevPrev), ViewHelper.getX(prevPrev));
                         anim.setDuration(270); // was 90, but 180 is good
                         anim.start();
@@ -387,37 +409,44 @@ public class CustomPagerBase {
     }
 
 
-    private void moveToCenter(View currentCard) {
+    private void moveToCenter() {
         setTouchListenerToView(currentItem, false);
         AnimatorSet set = new AnimatorSet();
         set.playTogether(
-                ObjectAnimator.ofFloat(currentCard, "translationX", ViewHelper.getX(currentCard), CHWindowView.getCurrentCardPositionX(context)),
-                ObjectAnimator.ofFloat(currentCard, "scaleX", ViewHelper.getScaleX(currentCard), 1f),
-                ObjectAnimator.ofFloat(currentCard, "scaleY", ViewHelper.getScaleY(currentCard), 1f)
+                ObjectAnimator.ofFloat(currentItem, "translationX", ViewHelper.getX(currentItem), CHWindowView.getCurrentCardPositionX(context)),
+                ObjectAnimator.ofFloat(currentItem, "scaleX", ViewHelper.getScaleX(currentItem), 1f),
+                ObjectAnimator.ofFloat(currentItem, "scaleY", ViewHelper.getScaleY(currentItem), 1f)
         );
         set.setDuration(270); // was 90, but 180 is good
         set.start();
         setTouchListenerToView(currentItem, true);
     }
 
-    private void moveSideCardsToDefault(View previousItem, View nextItem) {
-        // TODO: 17.10.2016 зробити 1 метод для зменшення бокових на 0.8 або 2 метода для окремо правої, окремо лівої
+
+    // TODO: 18.10.2016 Disable touch here OR in default (var2: card.invalidate() )
+    private void movePreviousItemToDefault(View previousItem) {
         AnimatorSet set = new AnimatorSet();
         set.playTogether(
-                // делает центральную карточку меньше и перемещает её влево
                 ObjectAnimator.ofFloat(previousItem, "translationX", ViewHelper.getX(previousItem), previousItemXPosition),
                 ObjectAnimator.ofFloat(previousItem, "scaleX", ViewHelper.getScaleX(previousItem), 0.8f),
-                ObjectAnimator.ofFloat(previousItem, "scaleY", ViewHelper.getScaleY(previousItem), 0.8f),
-
-                // делает следующую карточку больше размером и перетаскивает её в центр
-                ObjectAnimator.ofFloat(nextItem, "translationX", ViewHelper.getX(nextItem), nextItemXPosition),
-                ObjectAnimator.ofFloat(nextItem, "scaleX", ViewHelper.getScaleX(nextItem), 0.8f),
-                ObjectAnimator.ofFloat(nextItem, "scaleY", ViewHelper.getScaleY(nextItem), 0.8f)
+                ObjectAnimator.ofFloat(previousItem, "scaleY", ViewHelper.getScaleY(previousItem), 0.8f)
 
         );
         set.setDuration(270); // was 90, but 180 is good
         set.start();
     }
+
+    private void moveNextItemToDefault(View nextItem) {
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(
+                ObjectAnimator.ofFloat(nextItem, "translationX", ViewHelper.getX(nextItem), nextItemXPosition),
+                ObjectAnimator.ofFloat(nextItem, "scaleX", ViewHelper.getScaleX(nextItem), 0.8f),
+                ObjectAnimator.ofFloat(nextItem, "scaleY", ViewHelper.getScaleY(nextItem), 0.8f)
+        );
+        set.setDuration(270); // was 90, but 180 is good
+        set.start();
+    }
+
 
 
 //    private void setIsTouchEnabled(boolean isEnabled) {
@@ -476,5 +505,4 @@ public class CustomPagerBase {
 //        currentPosition = 0;
 //        viewList = null;
 //    }
-
 }
