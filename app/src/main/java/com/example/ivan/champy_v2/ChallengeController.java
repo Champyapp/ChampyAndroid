@@ -569,7 +569,7 @@ public class ChallengeController {
     // method for check is active challenge self / duel
     public boolean isActive(String description) {
         DBHelper dbHelper = new DBHelper(context);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
         boolean ok = false;
         if (c.moveToFirst()) {
