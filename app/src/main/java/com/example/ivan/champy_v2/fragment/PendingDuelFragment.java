@@ -87,8 +87,6 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
 
         c.close();
 
-        //buttonAcceptBattle = (ImageButton)getActivity().findViewById(R.id.imageButtonAcceptBattle);
-        //buttonCancelBattle = (ImageButton)getActivity().findViewById(R.id.imageButtonCancelBattle);
         btnAccept = (ImageButton)view.findViewById(R.id.btn_accept);
         btnCancel = (ImageButton)view.findViewById(R.id.btn_cancel);
 
@@ -99,14 +97,11 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         tvDays = (TextView)view.findViewById(R.id.textViewDuring);
         tvGoal = (TextView)view.findViewById(R.id.tv_goal);
 
-
         CHSetupUI chSetupUI= new CHSetupUI();
         chSetupUI.setupUI(view, getActivity());
         Glide.with(getContext()).load(R.drawable.points).override(200, 200).into((ImageView)view.findViewById(R.id.imageViewPoints));
         offlineMode = new OfflineMode();
         offlineMode.isConnectedToRemoteAPI(getActivity());
-        //buttonAcceptBattle.setOnClickListener(this);
-        //buttonCancelBattle.setOnClickListener(this);
         btnAccept.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
 
@@ -167,11 +162,14 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
                 snackbar = Snackbar.make(view, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (!cc.isActive(description) && recipient.equals("true")) {
-                               cc.joinToChallenge(challenge_id, token, userId);
-                               snackbar = Snackbar.make(view, "Challenge Accepted!", Snackbar.LENGTH_SHORT);
-                        } else snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
-                        snackbar.show();
+                        try {
+                            if (!cc.isActive(description) && recipient.equals("true")) {
+                                cc.joinToChallenge(challenge_id, token, userId);
+                                snackbar = Snackbar.make(view, "Challenge Accepted!", Snackbar.LENGTH_SHORT);
+                            } else
+                                snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
+                            snackbar.show();
+                        } catch (NullPointerException e) { e.printStackTrace(); }
                     }
                 });
                 snackbar.show();
@@ -185,7 +183,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
                             cc.rejectInviteForPendingDuel(challenge_id, token, userId);
                             snackbar = Snackbar.make(view, "Challenge Canceled!", Snackbar.LENGTH_SHORT);
                             snackbar.show();
-                        } catch (IOException e) { e.printStackTrace(); }
+                        } catch (IOException | NullPointerException e) { e.printStackTrace(); }
                     }
                 });
                 snackbar.show();

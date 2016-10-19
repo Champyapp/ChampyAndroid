@@ -245,7 +245,7 @@ public class ChallengeController {
     private void sendSingleInProgressForWakeUp(String challenge, final int intentId, final long currentMidnight, final String token, final String userId) {
         Date date = new Date();
         date.setTime(((minute * 60) + (hour * 60 * 60) + currentMidnight) * 1000);
-        Calendar myCalendar = Calendar.getInstance();
+        final Calendar myCalendar = Calendar.getInstance();
         myCalendar.setTime(date);
         myCalendar.set(Calendar.SECOND, 0);
 
@@ -253,8 +253,8 @@ public class ChallengeController {
         db = dbHelper.getWritableDatabase();
         cv = new ContentValues();
 
-        final long current = Calendar.getInstance().getTimeInMillis();
-        final long userInputTime = myCalendar.getTimeInMillis();
+        final long current = Calendar.getInstance().getTimeInMillis() / 1000;
+        final long userInputTime = myCalendar.getTimeInMillis() / 1000;
         final Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
 
         if (current > userInputTime) myCalendar.add(Calendar.DATE, 1);

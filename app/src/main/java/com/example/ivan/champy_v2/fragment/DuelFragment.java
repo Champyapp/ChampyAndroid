@@ -181,13 +181,16 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
                     }
                     c.close();
 
-                    if (cc.isActive(name)) {
-                        snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
-                    } else {
-                        cc.sendSingleInProgressForDuel(challenge_id, friend_id, token, userId);
-                        snackbar = Snackbar.make(view, "Sent duel request", Snackbar.LENGTH_SHORT);
-                    }
-                    snackbar.show();
+                    try {
+
+                        if (cc.isActive(name)) {
+                            snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
+                        } else {
+                            cc.sendSingleInProgressForDuel(challenge_id, friend_id, token, userId);
+                            snackbar = Snackbar.make(view, "Sent duel request", Snackbar.LENGTH_SHORT);
+                        }
+                        snackbar.show();
+                    } catch (NullPointerException e) { e.printStackTrace(); }
                 }
             }
         });
@@ -197,7 +200,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
 
     // check user input data @description @days @isActive
     private boolean checkInputUserData(String name, String duration, View view) {
-        if (!cc.isActive(name) && !name.isEmpty() && !name.startsWith(" ") && !duration.isEmpty() && days != 0) {
+        if (!cc.isActive(name) && !name.isEmpty() && !name.startsWith(" ") && !duration.isEmpty() && !duration.equals("0")) {
             snackbar = Snackbar.make(view, "Sent duel request!", Snackbar.LENGTH_SHORT);
             snackbar.show();
             return true;

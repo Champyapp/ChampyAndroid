@@ -64,8 +64,8 @@ public class CustomPagerBase {
      */
     public void preparePager(int position) {
         int width = CHWindowView.getWindowWidth(context);
-        nextItemXPosition     = CHWindowView.getCurrentCardPositionX(context) + Math.round(width/1.5f); // was 8, need 1.5f
-        previousItemXPosition = CHWindowView.getCurrentCardPositionX(context) - Math.round(width/1.5f); // but I wanna 2'
+        nextItemXPosition     = CHWindowView.getCurrentCardPositionX(context) + Math.round(width/2f); // was 8, need 1.5f
+        previousItemXPosition = CHWindowView.getCurrentCardPositionX(context) - Math.round(width/2f); // but I wanna 2'
 
         if (pagerAdapter != null && pagerAdapter.dataCount() > 0) {
             /**

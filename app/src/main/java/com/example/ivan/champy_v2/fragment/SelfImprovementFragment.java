@@ -178,13 +178,16 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                     }
                     c.close();
 
-                    if (cc.isActive(name)) {
-                        snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
-                    } else {
-                        cc.sendSingleInProgressForSelf(challenge_id, token, userId);
-                        snackbar = Snackbar.make(view, "Challenge Created!", Snackbar.LENGTH_SHORT);
-                    }
-                    snackbar.show();
+                    try {
+
+                        if (cc.isActive(name)) {
+                            snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
+                        } else {
+                            cc.sendSingleInProgressForSelf(challenge_id, token, userId);
+                            snackbar = Snackbar.make(view, "Challenge Created!", Snackbar.LENGTH_SHORT);
+                        }
+                        snackbar.show();
+                    } catch (NullPointerException e) { e.printStackTrace(); }
                 }
             }
         });
@@ -195,7 +198,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
     // check user input data @description @days @isActive
     private boolean checkInputUserData(String name, String duration, View view) {
 
-        if (!cc.isActive(name) && !name.isEmpty() && !name.startsWith(" ") && !duration.isEmpty() && days != 0) {
+        if (!cc.isActive(name) && !name.isEmpty() && !name.startsWith(" ") && !duration.isEmpty() && !duration.equals("0")) {
             snackbar = Snackbar.make(view, "Challenge created!", Snackbar.LENGTH_SHORT);
             snackbar.show();
             return true;

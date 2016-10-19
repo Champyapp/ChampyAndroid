@@ -52,6 +52,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         ImageView cardImage = (ImageView)tempView.findViewById(R.id.cardImage);
         ImageView imageChallengeLogo = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
         Typeface typeface = android.graphics.Typeface.createFromAsset(getContext().getAssets(), "fonts/bebasneue.ttf");
+
         WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
@@ -90,6 +91,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                 break;
         }
 
+
         final TextView tvChallengeDescription = (TextView) tempView.findViewById(R.id.tvChallengeDescription);
         tvChallengeDescription.setText(itemGoal);
         tvChallengeDescription.setTextSize(y*2);
@@ -103,15 +105,21 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         final Button buttonShare = (Button) tempView.findViewById(R.id.buttonShare);
         buttonShare.getLayoutParams() .width  = x*10;
         buttonShare.getLayoutParams() .height = x*10;
+
+        final TextView tvEveryDayForTheNext = (TextView) tempView.findViewById(R.id.tvEveryDayForTheNext);
         final TextView tvDuration = (TextView) tempView.findViewById(R.id.textViewDuration);
+
         if (itemType.equals("Wake Up") || itemUpdate.equals("true")) { //?
             tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
             buttonShare.setVisibility(View.VISIBLE);
             buttonDone.setVisibility(View.INVISIBLE);
+            tvEveryDayForTheNext.setVisibility(View.VISIBLE);
+
         } else {
             tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
-            buttonShare.setVisibility(View.INVISIBLE);
             buttonDone.setVisibility(View.VISIBLE);
+            buttonShare.setVisibility(View.INVISIBLE);
+            tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
         }
         tvDuration.setTypeface(typeface);
         tvDuration.setTextSize(y*2);
@@ -193,6 +201,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                 tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
                 buttonShare.setVisibility(View.INVISIBLE);
                 buttonDone.setVisibility(View.VISIBLE);
+
             }
 
             if (now > senderProgressMidNight + oneDay + oneDay ) {
