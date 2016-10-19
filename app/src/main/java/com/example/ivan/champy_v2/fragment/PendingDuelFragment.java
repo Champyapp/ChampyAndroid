@@ -166,8 +166,9 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
                             if (!cc.isActive(description) && recipient.equals("true")) {
                                 cc.joinToChallenge(challenge_id, token, userId);
                                 snackbar = Snackbar.make(view, "Challenge Accepted!", Snackbar.LENGTH_SHORT);
-                            } else
+                            } else {
                                 snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
+                            }
                             snackbar.show();
                         } catch (NullPointerException e) { e.printStackTrace(); }
                     }

@@ -29,7 +29,7 @@
             android:gravity="center_vertical|center_horizontal"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:typeface="normal"
-            android:textColor="#339997"
+            android:textColor="@color/colorTextAqua"
             android:layout_above="@+id/tvEveryDaySelf" />
 
         <EditText
@@ -44,11 +44,12 @@
             android:textAllCaps="false"
             android:visibility="invisible"
             android:hint="@string/enter_your_challenge"
+            android:textColorHint="@color/colorHint"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:gravity="center_vertical|center_horizontal"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:textColor="#339997" />
+            android:textColor="@color/colorTextAqua" />
 
         <EditText
             android:layout_width="50dp"
@@ -59,9 +60,10 @@
             android:maxLength="3"
             android:visibility="invisible"
             android:hint="@string/hint_21"
+            android:textColorHint="@color/colorHint"
             android:gravity="center_vertical|center_horizontal"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:textColor="#339997"
+            android:textColor="@color/colorTextAqua"
             android:layout_below="@+id/tvEveryDaySelf"
             android:layout_alignLeft="@+id/imageViewPoints"
             android:layout_alignStart="@+id/imageViewPoints"
@@ -73,7 +75,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/days_text"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:textColor="#339997"
+            android:textColor="@color/colorTextAqua"
             android:visibility="visible"
             android:layout_alignBottom="@+id/et_days"
             android:layout_alignTop="@+id/et_days"
@@ -89,7 +91,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:id="@+id/tvDays"
-            android:textColor="#339997"
+            android:textColor="@color/colorTextAqua"
             android:visibility="visible"
             android:layout_alignBaseline="@+id/et_days"
             android:layout_alignBottom="@+id/et_days"
@@ -132,7 +134,7 @@
             android:layout_toStartOf="@+id/imageViewPoints"
             android:layout_alignTop="@+id/imageViewPoints"
             android:gravity="center_vertical|center_horizontal"
-            android:textColor="#339997" />
+            android:textColor="@color/colorTextAqua" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -146,7 +148,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:gravity="center_vertical|center_horizontal"
-            android:textColor="#339997" />
+            android:textColor="@color/colorTextAqua" />
 
     </RelativeLayout>
 

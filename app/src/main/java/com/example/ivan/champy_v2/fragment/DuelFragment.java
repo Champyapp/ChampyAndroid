@@ -126,7 +126,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
             etDays.setVisibility(View.VISIBLE);
             etGoal.setVisibility(View.VISIBLE);
             tvDays.setVisibility(View.INVISIBLE);
-            //tvGoal.setVisibility(View.INVISIBLE);
+            tvGoal.setVisibility(View.INVISIBLE);
             textDays.setVisibility(View.VISIBLE);
         }
 
