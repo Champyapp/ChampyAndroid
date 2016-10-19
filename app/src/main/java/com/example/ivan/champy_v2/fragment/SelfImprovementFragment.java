@@ -98,7 +98,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         if (duration != null && !duration.isEmpty()) days = Integer.parseInt(duration) / 86400;
 
         tvDays.setText(days + " days");
-        tvGoal.setText(name);
+        tvGoal.setText(description);
         tvDays.setTypeface(typeface);
         tvGoal.setTypeface(typeface);
         tvEveryDay.setTypeface(typeface);
@@ -117,7 +117,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         if (position == size) {
             etGoal.setTypeface(typeface);
             etDays.setTypeface(typeface);
-            etGoal.setText(name);
             etDays.setHint("21");
             etDays.setVisibility(View.VISIBLE);
             etGoal.setVisibility(View.VISIBLE);
@@ -134,12 +133,11 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
-        name = etGoal.getText().toString();
+        description = etGoal.getText().toString();
         duration = etDays.getText().toString();
         c = db.query("selfimprovement", null, null, null, null, null, null);
         position = viewPager.getCurrentItem();
         size = sessionManager.getSelfSize();
-
 
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
@@ -151,10 +149,12 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
             public void onClick(View view) {
                 cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
                 if (position == size) {
-                    if (checkInputUserData(name, duration, view)) {
-                        days = Integer.parseInt(duration);
-                        cc.createNewSelfImprovementChallenge(name, days, token, userId);
-                    }
+                    try {
+                        if (checkInputUserData(description, duration, view))
+                            days = Integer.parseInt(duration);
+                            cc.createNewSelfImprovementChallenge(description, days, token, userId);
+                    } catch (NullPointerException e) { e.printStackTrace(); }
+
                 } else {
                     if (c.moveToFirst()) {
                         int colchallenge_id = c.getColumnIndex("challenge_id");
@@ -172,19 +172,17 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                                 duration = c.getString(colduration);
                                 status = c.getString(colstatus);
                                 name = c.getString(colname);
-
                             }
                         } while (c.moveToNext());
                     }
                     c.close();
 
                     try {
-
-                        if (cc.isActive(name)) {
-                            snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
-                        } else {
+                        if (!cc.isActive(description)) {
                             cc.sendSingleInProgressForSelf(challenge_id, token, userId);
                             snackbar = Snackbar.make(view, "Challenge Created!", Snackbar.LENGTH_SHORT);
+                        } else {
+                            snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
                         }
                         snackbar.show();
                     } catch (NullPointerException e) { e.printStackTrace(); }
@@ -196,13 +194,12 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
     }
 
     // check user input data @description @days @isActive
-    private boolean checkInputUserData(String name, String duration, View view) {
-
-        if (!cc.isActive(name) && !name.isEmpty() && !name.startsWith(" ") && !duration.isEmpty() && !duration.equals("0")) {
+    private boolean checkInputUserData(String description, String duration, View view) {
+        if (!cc.isActive(description) && !description.isEmpty() && !description.startsWith(" ") && !duration.isEmpty() && !duration.equals("0")) {
             snackbar = Snackbar.make(view, "Challenge created!", Snackbar.LENGTH_SHORT);
             snackbar.show();
             return true;
-        } else if (cc.isActive(name)) {
+        } else if (cc.isActive(description)) {
             snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
             snackbar.show();
             return false;
