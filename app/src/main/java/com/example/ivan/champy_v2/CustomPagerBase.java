@@ -140,19 +140,28 @@ public class CustomPagerBase {
                              ViewHelper.setScaleX(itemView, getScaleValue(viewXPosition));
 
                              // анимация правых карточек, когда движется центральная
-                             if (firstTouchX - lastX > 20 && nextItem != null)  {
-                                 Log.d(TAG, "onTouch: ACTION MOVE: я двигаю центральную ВЛЕВО");
-                                 float newItemXPosition = itemView.getX() + itemView.getWidth();
+                             if (firstTouchX - lastX > 1 && nextItem != null)  {
+                                 //Log.d(TAG, "onTouch: ACTION MOVE: я двигаю центральную ВЛЕВО");
+                                 //float newItemXPosition = itemView.getX() + itemView.getWidth();
 
-                                 ViewHelper.setTranslationX(nextItem, newItemXPosition);
-//                                 ViewHelper.setScaleX(nextItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
-//                                 ViewHelper.setScaleY(nextItem, 0.8f + (1f - ViewHelper.getScaleY(itemView)));
+                                 ViewHelper.setTranslationX(nextItem, itemView.getX() + itemView.getWidth());
+                                 ViewHelper.setScaleX(nextItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
+                                 ViewHelper.setScaleY(nextItem, 0.8f + (1f - ViewHelper.getScaleY(itemView)));
+                                 if (previousItem != null) {
+                                     ViewHelper.setTranslationX(previousItem, itemView.getX() - itemView.getWidth());
+                                 }
                              }
+
                              // анимация левых карточек, когда движется центральная
-                             else if (lastX - firstTouchX > 20 && previousItem != null) {
-                                 Log.d(TAG, "onTouch: ACTION MOVE: я двигаю центральную ВПРАВО");
-//                                 ViewHelper.setScaleX(previousItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
-//                                 ViewHelper.setScaleY(previousItem, 0.8f + (1f - ViewHelper.getScaleY(itemView)));
+                             else if (lastX - firstTouchX > 1 && previousItem != null) {
+                                 //Log.d(TAG, "onTouch: ACTION MOVE: я двигаю центральную ВПРАВО");
+                                 //float newItemXPosition = itemView.getX() - itemView.getWidth();
+                                 ViewHelper.setTranslationX(previousItem, itemView.getX() - itemView.getWidth());
+                                 ViewHelper.setScaleX(previousItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
+                                 ViewHelper.setScaleY(previousItem, 0.8f + (1f - ViewHelper.getScaleY(itemView)));
+                                 if (nextItem != null) {
+                                     ViewHelper.setTranslationX(nextItem, itemView.getX() + itemView.getWidth());
+                                 }
 
                              }
 
