@@ -25,6 +25,7 @@ import com.example.ivan.champy_v2.model.SelfImprovement_model;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -97,14 +98,14 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         tvChallengeDescription.setTextSize(y*2);
         tvChallengeDescription.setTypeface(typeface);
         final Button buttonGiveUp = (Button) tempView.findViewById(R.id.buttonGiveUp);
-        buttonGiveUp.getLayoutParams().width  = x*10;
-        buttonGiveUp.getLayoutParams().height = x*10;
+        buttonGiveUp.getLayoutParams().width  = x*7;
+        buttonGiveUp.getLayoutParams().height = x*7;
         final Button buttonDone = (Button) tempView.findViewById(R.id.buttonDoneForToday);
-        buttonDone.getLayoutParams()  .width  = x*10;
-        buttonDone.getLayoutParams()  .height = x*10;
+        buttonDone.getLayoutParams()  .width  = x*7;
+        buttonDone.getLayoutParams()  .height = x*7;
         final Button buttonShare = (Button) tempView.findViewById(R.id.buttonShare);
-        buttonShare.getLayoutParams() .width  = x*10;
-        buttonShare.getLayoutParams() .height = x*10;
+        buttonShare.getLayoutParams() .width  = x*7;
+        buttonShare.getLayoutParams() .height = x*7;
 
         final TextView tvEveryDayForTheNext = (TextView) tempView.findViewById(R.id.tvEveryDayForTheNext);
         final TextView tvDuration = (TextView) tempView.findViewById(R.id.textViewDuration);
@@ -114,7 +115,6 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
             buttonShare.setVisibility(View.VISIBLE);
             buttonDone.setVisibility(View.INVISIBLE);
             tvEveryDayForTheNext.setVisibility(View.VISIBLE);
-
         } else {
             tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
             buttonDone.setVisibility(View.VISIBLE);
@@ -127,73 +127,31 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         userId = user.getUserObjectId();
         token  = user.getToken();
 
-//        long now = Calendar.getInstance().getTimeInMillis() / 1000;
-//        long longSenderProgress = 0;
-//        long lastCheckInPlusOneDay = 0;
-//        final long oneDay = 86400L;
-//        long endOfDay = 0;
-//        try {
-//            longSenderProgress = Long.parseLong(senderProgress[0]);
-//            long midNight = getMidNight();
-//            long odds = midNight - longSenderProgress;
-//            endOfDay = longSenderProgress + odds;
-//            Log.i(TAG, "getView TRY: longSenderProgress: " + longSenderProgress);
-//            Log.i(TAG, "getView TRY: midNight: " + midNight);
-//            Log.i(TAG, "getView TRY: odds: " + odds);
-//            Log.i(TAG, "getView TRY: endOfDay: " + endOfDay);
-//        } catch (NumberFormatException e) {
-//            e.printStackTrace();
-//            Toast.makeText(getContext(), "Time to improve yourself", Toast.LENGTH_SHORT).show();
-//        }
 //        /**
 //         * My algorithm for displaying buttons inside cards view and opportunity for check challenge
-//         * @param longSenderProgress it's last element of "Sender Progress" (api: 'at"). We are can
+//         * @param longSenderProgress it's last element of the "Sender Progress" (api: 'at"). We are can
 //         *                           take in from ChallengeController -> GenerateCardsForMainActivity()
 //         *                           method. We use it for compare.
 //         * @param checkInPlusOneDay it's parsed long of 'longSenderProgress' plus one day in seconds.
 //         *                          We use it to give the user time for relaxing. If current time
 //         *                          more than checkInPlusOneDay then we make button "doneForToday"
 //         *                          isActive and now we are ready to rewrite our 'senderProgress'
-//         * @param checkInPlusOneDayAndHour it's parsed long of 'longSenderProgress' plus one day and
-//         *                                 one hour in seconds. We use it to give user time for press
-//         *                                 the button "done for today". If user did it then we are
-//         *                                 rewrite senderProgress and make the button "doneForToday"
-//         *                                 not active, else - autoSurrender
+//         *  it's parsed long of 'longSenderProgress' plus one day and one hour in seconds.
+//         *  We use it to give user time for press the button "done for today". If user did it
+//         *  then we are rewrite senderProgress and make the button "doneForToday" not active
+//         *  else - autoSurrender
 //         */
-
-        //                          now > end of the day
-//        if (longSenderProgress != 0 && now > endOfDay) {
-//            Log.i(TAG, "getView: now > endOfDay (" + now + " > " + endOfDay + ")");
-//            if (!itemType.equals("Wake Up")) {
-//                tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
-//                buttonShare.setVisibility(View.INVISIBLE);
-//                buttonDone.setVisibility(View.VISIBLE);
-//            }
-//
-//            if (now > endOfDay + oneDay) {
-//                Log.i(TAG, "getView: now > endOfDay (" + now + " > " + endOfDay + ")\n" + "AND now > endOfDay + oneDay (" + now + " > " + endOfDay + " + " + oneDay + ")");
-//                try {
-//                    if (itemType.equals("Wake Up")) {
-//                        int i = Integer.parseInt(currentCard.getWakeUpTime());
-//                        cc.give_up(itemInProgressId, i, token, userId);
-//                    } else cc.give_up(itemInProgressId, 0, token, userId);
-//                } catch (IOException | NumberFormatException e) { e.printStackTrace(); }
-//            } else Log.i(TAG, "getView: now > endOfDay (" + now + " > " + endOfDay + ")\n"+ "BUT now < endOfDay + oneDay (" + now + " < " + endOfDay + " + " + oneDay + ")");
-//        } else Log.i(TAG, "getView: senderProgress = 0 OR now < endOfDay (" + now + " < " + endOfDay + ")");
 
         long now = Calendar.getInstance().getTimeInMillis() / 1000;
         long longSenderProgress = 0;
         long senderProgressMidNight = 0;
         final long oneDay = 86400L;
         try {
-            //TODO: 30.09.2016 i think need to change [0] for .size()-1 or .length-1;
             longSenderProgress = Long.parseLong(senderProgress[0]); // our last checkIn in seconds
-            Log.i(TAG, "getView: TRY longSenderProgress: " + longSenderProgress);
+            Log.d(TAG, "getView: longSenderProgress: " + longSenderProgress);
             Date date = new Date(longSenderProgress * 1000); // convert last checkIn in date format
-            senderProgressMidNight = longSenderProgress - (date.getHours() * 60 * 60) - (date.getMinutes() * 60) - (date.getSeconds()); // checkIn midNight
-        } catch (RuntimeException e) { // deleted NumberFormatException
-            e.printStackTrace();
-        }
+            senderProgressMidNight = longSenderProgress - (date.getHours() * 60 * 60) - (date.getMinutes() * 60) - (date.getSeconds());
+        } catch (RuntimeException e) { e.printStackTrace(); }
 
 
         if (longSenderProgress != 0 && now > senderProgressMidNight + oneDay) {
@@ -201,10 +159,9 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                 tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
                 buttonShare.setVisibility(View.INVISIBLE);
                 buttonDone.setVisibility(View.VISIBLE);
-
             }
 
-            if (now > senderProgressMidNight + oneDay + oneDay ) {
+            if (now > senderProgressMidNight + oneDay + oneDay) {
                 try {
                     if (itemType.equals("Wake Up")) {
                         int i = Integer.parseInt(currentCard.getWakeUpTime());

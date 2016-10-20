@@ -53,10 +53,6 @@ public class CustomPagerBase {
         customPagerBase = this;
     }
 
-    // TODO: 17.10.2016 NEW BUG: если взять по центру екрана то ок, если взять справа, то в левую
-    // TODO: 17.10.2016 сторону будет норм работать, а в правую нет, и на оборот. если брать по
-    // TODO: 17.10.2016 бокам, то буде норм работать, но без анимаций.
-
     /**
      * This method for displaying cards on main screen in different situation.
      * @param position its our card position: left, center or right. We need to include
@@ -130,7 +126,7 @@ public class CustomPagerBase {
                          */
                          case MotionEvent.ACTION_MOVE:
                             // Расположение карточек на экране (дистанция между ними)
-                            if (X > width*40 && X < width*60) { // was (X > width*25 && X < width*80) | need (X > width*40 && X < width*60)
+                            if (X > width*45 && X < width*55) { // was (X > width*25 && X < width*80) | need (X > width*40 && X < width*60)
                                 ViewHelper.setX(itemView, viewXPosition + (X - lastX));
                             }
 
@@ -172,31 +168,27 @@ public class CustomPagerBase {
                              * Translation cards from RIGHT to LEFT
                              */
                             if (lastX - firstTouchX > 100 && previousItem != null) {
-                                // если есть предыдующая карточка, то мы "подготавливаем" её и листаем назад
-                                /*if (previousItem != null)*/ changePageTo(PREVIOUS_PAGE);
-                                // есди нету предыдущей, то мы просто передвигаем текущую карточку в центр!
                                 Log.d(TAG, "onTouch: ACTION_UP: ты перешел на ЛЕВУЮ карточку");
-                                //else moveCentralItemToDefault(itemView);
+                                // если есть предыдующая карточка, то мы "подготавливаем" её и листаем назад
+                                changePageTo(PREVIOUS_PAGE);
+
+
 
                             /**
                              * Translation cards from LEFT to RIGHT
                              */
-                            } else if (firstTouchX - lastX > 100 && nextItem != null) {
-                                // если есть следующая карточка, то мы "подготавливаем" её и листаем вперед
-                                /*if (nextItem != null)*/ changePageTo(NEXT_PAGE);
+                            } else if (firstTouchX - lastX > 100) {
                                 Log.d(TAG, "onTouch: ACTION_UP: ты перешел на ПРАВУЮ карточку");
-                                // если нету следущей, то мы просто передвигаем текущую карточку в центр!
-                                //else moveCentralItemToDefault(itemView);
+                                // если есть следующая карточка, то мы "подготавливаем" её и листаем вперед
+                                if (nextItem != null) changePageTo(NEXT_PAGE);
+
                             }
+                            /**
+                             * Translate central card to Default Position
+                             */
                             else {
-                                // mb isTouchEnabled = false; ?
                                 Log.d(TAG, "onTouch: ACTION_UP ELSE: ты слишком слабо тронул карточку, возвращаемся на центр");
                                 moveCentralItemToDefault();
-//                                isTouchEnabled = false;
-//                                currentItem.clearFocus();
-//                                currentItem.bringToFront();
-//                                currentItem.cancelLongPress();
-//                                currentItem.stopNestedScroll();
                             }
 //                            else {
 //                                moveCentralItemToDefault(itemView);
@@ -217,8 +209,7 @@ public class CustomPagerBase {
 
                             if (previousItem != null) {
                                 movePreviousItemToDefault(previousItem);
-                            }
-                            if (nextItem != null) {
+                            } else if (nextItem != null) {
                                 moveNextItemToDefault(nextItem);
                             }
 
@@ -245,6 +236,7 @@ public class CustomPagerBase {
             AnimatorSet set = new AnimatorSet();
             set.playTogether(
                     // делает центральную карточку меньше и перемещает её влево
+                    //ObjectAnimator.ofFloat(previousItem, "translationX", ViewHelper.getX(previousItem), previousItemXPosition - 50),
                     ObjectAnimator.ofFloat(currentItem, "translationX", ViewHelper.getX(currentItem), previousItemXPosition),
                     ObjectAnimator.ofFloat(currentItem, "scaleX", ViewHelper.getScaleX(currentItem), 0.8f),
                     ObjectAnimator.ofFloat(currentItem, "scaleY", ViewHelper.getScaleY(currentItem), 0.8f),
@@ -322,6 +314,9 @@ public class CustomPagerBase {
             }
             AnimatorSet set = new AnimatorSet();
             set.playTogether(
+
+                    //ObjectAnimator.ofFloat(nextItem, "translationX", ViewHelper.getX(nextItem), nextItem + 50),
+
                     ObjectAnimator.ofFloat(currentItem, "translationX", ViewHelper.getX(currentItem), nextItemXPosition),
                     ObjectAnimator.ofFloat(currentItem, "scaleX", ViewHelper.getScaleX(currentItem), 0.8f),
                     ObjectAnimator.ofFloat(currentItem, "scaleY", ViewHelper.getScaleY(currentItem), 0.8f),

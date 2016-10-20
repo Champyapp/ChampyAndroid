@@ -137,6 +137,8 @@ public class ChallengeController {
         final String stringIntentId = String.valueOf(Integer.parseInt(sHour + sMinute));
         final int intentId = Integer.parseInt(sHour + sMinute);
 
+        // TODO: 19.10.2016 REWRITE
+
         Date date = new Date();
         Calendar myCalendar = GregorianCalendar.getInstance();
         myCalendar.setTime(date);
@@ -253,8 +255,10 @@ public class ChallengeController {
         db = dbHelper.getWritableDatabase();
         cv = new ContentValues();
 
-        final long current = Calendar.getInstance().getTimeInMillis() / 1000;
-        final long userInputTime = myCalendar.getTimeInMillis() / 1000;
+        // TODO: 19.10.2016 Переписати
+
+        final long current = Calendar.getInstance().getTimeInMillis();
+        final long userInputTime = myCalendar.getTimeInMillis();
         final Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
 
         if (current > userInputTime) myCalendar.add(Calendar.DATE, 1);
