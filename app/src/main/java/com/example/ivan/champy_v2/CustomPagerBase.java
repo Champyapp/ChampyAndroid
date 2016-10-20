@@ -60,8 +60,8 @@ public class CustomPagerBase {
      */
     public void preparePager(int position) {
         int width = CHWindowView.getWindowWidth(context);
-        nextItemXPosition     = CHWindowView.getCurrentCardPositionX(context) + Math.round(width/2f); // was 8, need 1.5f
-        previousItemXPosition = CHWindowView.getCurrentCardPositionX(context) - Math.round(width/2f); // but I wanna 2'
+        nextItemXPosition     = CHWindowView.getCurrentCardPositionX(context) + Math.round(width/1.65f); // was 8, need 1.5f
+        previousItemXPosition = CHWindowView.getCurrentCardPositionX(context) - Math.round(width/1.65f); // but I wanna 2'
 
         if (pagerAdapter != null && pagerAdapter.dataCount() > 0) {
             /**
@@ -131,9 +131,9 @@ public class CustomPagerBase {
                          case MotionEvent.ACTION_MOVE:
                              //isTouchEnabled = false;
                              // max distance for move cards to left or right;
-                             //if (X == width*50) { // was (X > width*25 && X < width*80) | need (X > width*40 && X < width*60)
+//                             if (X == width*50) { // was (X > width*25 && X < width*80) | need (X > width*40 && X < width*60)
                                  ViewHelper.setX(itemView, viewXPosition + (X - lastX));
-                             //}
+//                             }
 
                              lastX = X;
                              ViewHelper.setScaleY(itemView, getScaleValue(viewXPosition));
@@ -174,8 +174,6 @@ public class CustomPagerBase {
                          */
                         case MotionEvent.ACTION_UP:
                             isTouchEnabled = false;
-                            //Log.d(TAG, "lastX - firstTouchX = " + (lastX - firstTouchX));
-                            //Log.d(TAG, "firstTouchX - lastX = " + (firstTouchX - lastX));
 
                             /**
                              * Translation cards from RIGHT to LEFT
@@ -196,6 +194,12 @@ public class CustomPagerBase {
                              */
                             else {
                                 moveCentralItemToDefault();
+                                if (previousItem != null && nextItem != null) {
+                                    movePreviousItemToDefault(previousItem);
+                                    moveNextItemToDefault(nextItem);
+                                }
+                                else if (nextItem != null) moveNextItemToDefault(nextItem);
+                                else if (previousItem != null) movePreviousItemToDefault(previousItem);
                             }
 
                             isTouchEnabled = true;
