@@ -242,12 +242,15 @@ public class CustomPagerBase {
             AnimatorSet set = new AnimatorSet();
             set.playTogether(
                     // делает центральную карточку меньше и перемещает её влево
+                    //ObjectAnimator.ofFloat(currentItem, "translationX", ViewHelper.getX(currentItem), previousItemXPosition),
                     ObjectAnimator.ofFloat(currentItem, "translationX", ViewHelper.getX(currentItem), previousItemXPosition),
                     ObjectAnimator.ofFloat(currentItem, "scaleX", ViewHelper.getScaleX(currentItem), 0.8f),
                     ObjectAnimator.ofFloat(currentItem, "scaleY", ViewHelper.getScaleY(currentItem), 0.8f),
 
                     // делает следующую карточку больше размером и перетаскивает её в центр
-                    ObjectAnimator.ofFloat(nextItem, "translationX", nextItemXPosition, CHWindowView.getCurrentCardPositionX(context)),
+                    //ObjectAnimator.ofFloat(nextItem, "translationX", nextItemXPosition, CHWindowView.getCurrentCardPositionX(context)),
+                    // TODO: 21.10.2016 VICTORY!
+                    ObjectAnimator.ofFloat(nextItem, "translationX", ViewHelper.getX(nextItem), CHWindowView.getCurrentCardPositionX(context)),
                     ObjectAnimator.ofFloat(nextItem, "scaleX", ViewHelper.getScaleX(nextItem), 1f),
                     ObjectAnimator.ofFloat(nextItem, "scaleY", ViewHelper.getScaleY(nextItem), 1f)
             );

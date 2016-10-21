@@ -5,6 +5,9 @@ import android.graphics.Point;
 import android.view.Display;
 import android.view.WindowManager;
 
+/**
+ * Class helper for CustomPagerBase. With this class we can take WindowWidth and CurrentCardPositionX
+ */
 
 public class CHWindowView {
 
