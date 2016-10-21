@@ -2,7 +2,6 @@ package com.example.ivan.champy_v2;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -129,40 +128,31 @@ public class CustomPagerBase {
                          * Responsible for side cards when we touch central card
                          */
                          case MotionEvent.ACTION_MOVE:
-                             //isTouchEnabled = false;
-                             // max distance for move cards to left or right;
-//                             if (X == width*50) { // was (X > width*25 && X < width*80) | need (X > width*40 && X < width*60)
-                                 ViewHelper.setX(itemView, viewXPosition + (X - lastX));
-//                             }
-
+                             ViewHelper.setX(itemView, viewXPosition + (X - lastX));
                              lastX = X;
                              ViewHelper.setScaleY(itemView, getScaleValue(viewXPosition));
                              ViewHelper.setScaleX(itemView, getScaleValue(viewXPosition));
 
-                             // анимация правых карточек, когда движется центральная
+                             // animation of RIGHT cards when we touch central card (from left to right)
                              if (firstTouchX - lastX > 1 && nextItem != null)  {
-                                 //Log.d(TAG, "onTouch: ACTION MOVE: я двигаю центральную ВЛЕВО");
-                                 //float newItemXPosition = itemView.getX() + itemView.getWidth();
-
                                  ViewHelper.setTranslationX(nextItem, itemView.getX() + itemView.getWidth());
                                  ViewHelper.setScaleX(nextItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
                                  ViewHelper.setScaleY(nextItem, 0.8f + (1f - ViewHelper.getScaleY(itemView)));
+                                 // if our previousItem != null then slide her too
                                  if (previousItem != null) {
                                      ViewHelper.setTranslationX(previousItem, itemView.getX() - itemView.getWidth());
                                  }
                              }
 
-                             // анимация левых карточек, когда движется центральная
+                             // animation of LEFT cards when we touch central card (from right to left)
                              else if (lastX - firstTouchX > 1 && previousItem != null) {
-                                 //Log.d(TAG, "onTouch: ACTION MOVE: я двигаю центральную ВПРАВО");
-                                 //float newItemXPosition = itemView.getX() - itemView.getWidth();
                                  ViewHelper.setTranslationX(previousItem, itemView.getX() - itemView.getWidth());
                                  ViewHelper.setScaleX(previousItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
                                  ViewHelper.setScaleY(previousItem, 0.8f + (1f - ViewHelper.getScaleY(itemView)));
+                                 // if our nextItem != null then slide her too
                                  if (nextItem != null) {
                                      ViewHelper.setTranslationX(nextItem, itemView.getX() + itemView.getWidth());
                                  }
-
                              }
 
                              isTouchEnabled = true;
@@ -175,30 +165,29 @@ public class CustomPagerBase {
                         case MotionEvent.ACTION_UP:
                             isTouchEnabled = false;
 
-                            /**
-                             * Translation cards from RIGHT to LEFT
-                             */
+                            // translation cards from RIGHT to LEFT
                             if (lastX - firstTouchX > 100 && previousItem != null) {
-                                // если есть предыдующая карточка, то мы "подготавливаем" её и листаем назад
+                                // if we have previousItem then we 'prepare' her.
                                 changePageTo(PREVIOUS_PAGE);
 
-                            /**
-                             * Translation cards from LEFT to RIGHT
-                             */
+                            // translation cards from LEFT to RIGHT
                             } else if (firstTouchX - lastX > 100 && nextItem != null) {
-                                // если есть следующая карточка, то мы "подготавливаем" её и листаем вперед
+                                // if we have nextItem then we 'prepare' her.
                                 changePageTo(NEXT_PAGE);
                             }
-                            /**
-                             * Translate central card to Default Position
-                             */
+
+                            // if when we pick-up our finger from the screen x <> 100 then return card to default;
                             else {
+                                // return centralItem;
                                 moveCentralItemToDefault();
+                                // if we have right and left cards then return they (central position)
                                 if (previousItem != null && nextItem != null) {
                                     movePreviousItemToDefault(previousItem);
                                     moveNextItemToDefault(nextItem);
                                 }
+                                // return right card if @NotNull
                                 else if (nextItem != null) moveNextItemToDefault(nextItem);
+                                // return lift card if @NotNull
                                 else if (previousItem != null) movePreviousItemToDefault(previousItem);
                             }
 
@@ -206,22 +195,14 @@ public class CustomPagerBase {
                             break;
 
                         default:
-                            Log.d(TAG, "onTouch: ACTION_UP: DEFAULT, HOUSTON");
-                            //isTouchEnabled = false;
                             moveCentralItemToDefault();
-
-                            isTouchEnabled = false;
-
                             // for central position when we have both sides
                             if (previousItem != null && nextItem != null) {
                                 movePreviousItemToDefault(previousItem);
                                 moveNextItemToDefault(nextItem);
-                            }
-                            else if (nextItem != null) moveNextItemToDefault(nextItem);
+                            } else if (nextItem != null) moveNextItemToDefault(nextItem);
                             else if (previousItem != null) movePreviousItemToDefault(previousItem);
-
                             isTouchEnabled = true;
-
                     }
                 }
                 return true;
@@ -231,7 +212,7 @@ public class CustomPagerBase {
     }
 
     private void changePageTo(int direction) {
-        // подготавливаем следующую карточку и меняем центральную
+        // Prepare Next card and change it to central
         if (direction == NEXT_PAGE) {
             setTouchListenerToView(nextItem, true);
             setTouchListenerToView(currentItem, false);
@@ -241,19 +222,17 @@ public class CustomPagerBase {
             }
             AnimatorSet set = new AnimatorSet();
             set.playTogether(
-                    // делает центральную карточку меньше и перемещает её влево
-                    //ObjectAnimator.ofFloat(currentItem, "translationX", ViewHelper.getX(currentItem), previousItemXPosition),
+                    // We do central card less and move it to new position (previousItem)
                     ObjectAnimator.ofFloat(currentItem, "translationX", ViewHelper.getX(currentItem), previousItemXPosition),
                     ObjectAnimator.ofFloat(currentItem, "scaleX", ViewHelper.getScaleX(currentItem), 0.8f),
                     ObjectAnimator.ofFloat(currentItem, "scaleY", ViewHelper.getScaleY(currentItem), 0.8f),
 
-                    // делает следующую карточку больше размером и перетаскивает её в центр
-                    //ObjectAnimator.ofFloat(nextItem, "translationX", nextItemXPosition, CHWindowView.getCurrentCardPositionX(context)),
+                    // We do next card larger and move it to new position (centralItem)
                     ObjectAnimator.ofFloat(nextItem, "translationX", ViewHelper.getX(nextItem), CHWindowView.getCurrentCardPositionX(context)),
                     ObjectAnimator.ofFloat(nextItem, "scaleX", ViewHelper.getScaleX(nextItem), 1f),
                     ObjectAnimator.ofFloat(nextItem, "scaleY", ViewHelper.getScaleY(nextItem), 1f)
             );
-            set.setDuration(270); // was 90, but 180 is good
+            set.setDuration(270);
             set.addListener(new AnimatorListener() {
 
                 @Override
@@ -279,7 +258,7 @@ public class CustomPagerBase {
                         currentItem.bringToFront();
                         rootView.invalidate();
                         ObjectAnimator anim = ObjectAnimator.ofFloat(nextNext, "translationX", ViewHelper.getX(nextNext), ViewHelper.getX(nextNext));
-                        anim.setDuration(270); // was 90, but 180 is good
+                        anim.setDuration(270);
                         anim.start();
                         nextItem = nextNext;
                     }
@@ -308,8 +287,7 @@ public class CustomPagerBase {
 
         }
 
-
-        // подготавливаем предыдущую карточку и меняем центральную
+        // Prepare previous card and change it for central
         else if (direction == PREVIOUS_PAGE) {
             setTouchListenerToView(previousItem, true);
             setTouchListenerToView(currentItem, false);
@@ -320,10 +298,12 @@ public class CustomPagerBase {
             }
             AnimatorSet set = new AnimatorSet();
             set.playTogether(
+                    // We do central card less and move it to new position (nextItem)
                     ObjectAnimator.ofFloat(currentItem, "translationX", ViewHelper.getX(currentItem), nextItemXPosition),
                     ObjectAnimator.ofFloat(currentItem, "scaleX", ViewHelper.getScaleX(currentItem), 0.8f),
                     ObjectAnimator.ofFloat(currentItem, "scaleY", ViewHelper.getScaleY(currentItem), 0.8f),
 
+                    // We do previous card larger and move it to new position (centralItem)
                     ObjectAnimator.ofFloat(previousItem, "translationX", ViewHelper.getX(previousItem), CHWindowView.getCurrentCardPositionX(context)),
                     ObjectAnimator.ofFloat(previousItem, "scaleX", ViewHelper.getScaleX(previousItem), 1f),
                     ObjectAnimator.ofFloat(previousItem, "scaleY", ViewHelper.getScaleY(previousItem), 1f)
