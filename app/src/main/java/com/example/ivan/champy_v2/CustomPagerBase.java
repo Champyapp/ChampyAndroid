@@ -249,7 +249,6 @@ public class CustomPagerBase {
 
                     // делает следующую карточку больше размером и перетаскивает её в центр
                     //ObjectAnimator.ofFloat(nextItem, "translationX", nextItemXPosition, CHWindowView.getCurrentCardPositionX(context)),
-                    // TODO: 21.10.2016 VICTORY!
                     ObjectAnimator.ofFloat(nextItem, "translationX", ViewHelper.getX(nextItem), CHWindowView.getCurrentCardPositionX(context)),
                     ObjectAnimator.ofFloat(nextItem, "scaleX", ViewHelper.getScaleX(nextItem), 1f),
                     ObjectAnimator.ofFloat(nextItem, "scaleY", ViewHelper.getScaleY(nextItem), 1f)
@@ -325,7 +324,7 @@ public class CustomPagerBase {
                     ObjectAnimator.ofFloat(currentItem, "scaleX", ViewHelper.getScaleX(currentItem), 0.8f),
                     ObjectAnimator.ofFloat(currentItem, "scaleY", ViewHelper.getScaleY(currentItem), 0.8f),
 
-                    ObjectAnimator.ofFloat(previousItem, "translationX", previousItemXPosition, CHWindowView.getCurrentCardPositionX(context)),
+                    ObjectAnimator.ofFloat(previousItem, "translationX", ViewHelper.getX(previousItem), CHWindowView.getCurrentCardPositionX(context)),
                     ObjectAnimator.ofFloat(previousItem, "scaleX", ViewHelper.getScaleX(previousItem), 1f),
                     ObjectAnimator.ofFloat(previousItem, "scaleY", ViewHelper.getScaleY(previousItem), 1f)
             );
