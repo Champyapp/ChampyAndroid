@@ -147,13 +147,14 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         snackbar = Snackbar.make(view, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // TODO: 21.10.2016 ALLO ZACHEM TYT 0, 0, 0?! YBRATU >>>>|<<<<<
                 cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
                 if (position == size) {
-                    try {
-                        if (checkInputUserData(description, duration, view))
-                            days = Integer.parseInt(duration);
+                    days = Integer.parseInt(duration);
+                    if (checkInputUserData(description, duration, view))
+                        try {
                             cc.createNewSelfImprovementChallenge(description, days, token, userId);
-                    } catch (NullPointerException e) { e.printStackTrace(); }
+                        } catch (NullPointerException e) { e.printStackTrace(); }
 
                 } else {
                     if (c.moveToFirst()) {
