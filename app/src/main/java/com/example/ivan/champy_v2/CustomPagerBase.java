@@ -196,11 +196,13 @@ public class CustomPagerBase {
                         default:
                             moveCentralItemToDefault();
                             // for central position when we have both sides
-                            if (previousItem != null && nextItem != null)
+                            if (previousItem != null) movePreviousItemToDefault(previousItem);
+                            if (nextItem != null) moveNextItemToDefault(nextItem);
+
+                            if (nextItem != null && previousItem != null) {
                                 movePreviousItemToDefault(previousItem);
                                 moveNextItemToDefault(nextItem);
-                            if (nextItem != null) moveNextItemToDefault(nextItem);
-                            if (previousItem != null) movePreviousItemToDefault(previousItem);
+                            }
                             isTouchEnabled = true;
                     }
                 }
@@ -209,6 +211,7 @@ public class CustomPagerBase {
             }
         };
     }
+
 
     private void changePageTo(int direction) {
         // Prepare Next card and change it to central
@@ -232,7 +235,7 @@ public class CustomPagerBase {
                     ObjectAnimator.ofFloat(nextItem, "scaleX", ViewHelper.getScaleX(nextItem), 1f),
                     ObjectAnimator.ofFloat(nextItem, "scaleY", ViewHelper.getScaleY(nextItem), 1f)
             );
-            set.setDuration(270);
+            set.setDuration(90); // was 90, but 180 is good, but[2] i like 270
             set.addListener(new AnimatorListener() {
 
                 @Override
@@ -257,9 +260,10 @@ public class CustomPagerBase {
                         ViewHelper.setScaleY(nextNext, 0.8f);
                         currentItem.bringToFront();
                         rootView.invalidate();
-                        ObjectAnimator anim = ObjectAnimator.ofFloat(nextNext, "translationX", ViewHelper.getX(nextNext), ViewHelper.getX(nextNext));
+                        // little shit witch make lag
+                        /*ObjectAnimator anim = ObjectAnimator.ofFloat(nextNext, "translationX", ViewHelper.getX(nextNext), ViewHelper.getX(nextNext));
                         anim.setDuration(270);
-                        anim.start();
+                        anim.start();*/
                         nextItem = nextNext;
                     }
 
@@ -308,7 +312,7 @@ public class CustomPagerBase {
                     ObjectAnimator.ofFloat(previousItem, "scaleX", ViewHelper.getScaleX(previousItem), 1f),
                     ObjectAnimator.ofFloat(previousItem, "scaleY", ViewHelper.getScaleY(previousItem), 1f)
             );
-            set.setDuration(270); // was 90, but 180 is good
+            set.setDuration(90); // was 90, but 180 is good, but[2] i like 270
             set.addListener(new AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator arg0) {
@@ -331,9 +335,10 @@ public class CustomPagerBase {
                         ViewHelper.setX(prevPrev, previousItemXPosition);
                         ViewHelper.setScaleX(prevPrev, 0.8f);
                         ViewHelper.setScaleY(prevPrev, 0.8f);
-                        ObjectAnimator anim = ObjectAnimator.ofFloat(prevPrev, "translationX", ViewHelper.getX(prevPrev), ViewHelper.getX(prevPrev));
+                        // little shit witch make lag
+                        /*ObjectAnimator anim = ObjectAnimator.ofFloat(prevPrev, "translationX", ViewHelper.getX(prevPrev), ViewHelper.getX(prevPrev));
                         anim.setDuration(270); // was 90, but 180 is good
-                        anim.start();
+                        anim.start();*/
                         currentItem.bringToFront();
                         rootView.invalidate();
                         previousItem = prevPrev;
@@ -407,6 +412,7 @@ public class CustomPagerBase {
 
 
     private void movePreviousItemToDefault(View previousItem) {
+
         AnimatorSet set = new AnimatorSet();
         set.playTogether(
                 ObjectAnimator.ofFloat(previousItem, "translationX", ViewHelper.getX(previousItem), previousItemXPosition),
