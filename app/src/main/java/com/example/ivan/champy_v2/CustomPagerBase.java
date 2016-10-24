@@ -193,15 +193,18 @@ public class CustomPagerBase {
                                 if (previousItem != null) {
                                     movePreviousItemToDefault(previousItem);
                                 }
-                                Log.d(TAG, "onTouch: UP: else...");
                             }
 
                             isTouchEnabled = true;
                             break;
 
+                        case MotionEvent.ACTION_CANCEL:
+                            Log.d(TAG, "onTouch: CANCEL, WOW!");
+                            break;
+
                         default:
-                            event.setAction(MotionEvent.ACTION_CANCEL);
                             Log.d(TAG, "onTouch: Default: ...");
+                            event.setAction(MotionEvent.ACTION_CANCEL);
                             moveCentralItemToDefault();
                             // for central position when we have both sides
                             if (previousItem != null) {
@@ -218,7 +221,6 @@ public class CustomPagerBase {
                     }
                 }
                 return true;
-
             }
         };
     }

@@ -75,6 +75,15 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs_history);
         tabLayout.setupWithViewPager(viewPager);
 
+        // this out method for open "wins" when you click on notification about win request
+//        Bundle bundle = getIntent().getExtras();
+//        if (bundle != null) {
+//            String s = bundle.getString("win_request");
+//            if ("true".equals(s)) {
+//                viewPager.setCurrentItem(1);
+//            }
+//        }
+
         CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
         String name = user.getName();
 

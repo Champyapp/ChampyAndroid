@@ -13,6 +13,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.example.ivan.champy_v2.activity.FriendsActivity;
+import com.example.ivan.champy_v2.activity.HistoryActivity;
 import com.example.ivan.champy_v2.activity.MainActivity;
 import com.example.ivan.champy_v2.activity.PendingDuelActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
@@ -87,6 +88,11 @@ public class MyGcmListenerService extends GcmListenerService {
                 notifyChallenges(intent, message);
                 break;
             case "Win":
+                // TODO: якшо все-таки робити перенапавлення, то треба буде закинути сюда generate()
+                // метод и в сс.generate() убрати intent, ну і соответственно робити це всьо вручну.
+                //intent = new Intent(this, HistoryActivity.class);
+                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                //intent.putExtra("win_request", "true");
                 notifyChallenges(intent, message);
                 break;
         }

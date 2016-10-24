@@ -77,12 +77,12 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         viewPager.setAdapter(adapterViewPager);
 
         // this out method for open "pending" when you click on notification about friends request
-//        Bundle bundle = getIntent().getExtras();
-//        if (bundle != null) {
-//            String s = bundle.getString("friend_request");
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            String s = bundle.getString("friend_request");
 //            //loadUserPending();
-//            if (s != null) viewPager.setCurrentItem(1);
-//        }
+            if (s != null) viewPager.setCurrentItem(1);
+        }
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);

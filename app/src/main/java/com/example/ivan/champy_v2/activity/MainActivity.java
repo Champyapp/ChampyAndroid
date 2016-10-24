@@ -269,12 +269,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(goToSettings);
                 break;
             case R.id.pending_duels:
-                if (adapter.dataCount() <= 10) {
-                    Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
-                    startActivity(goToPendingDuel);
-                } else {
-                    Toast.makeText(MainActivity.this, "You have so much challenges", Toast.LENGTH_SHORT).show();
-                }
+                Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
+                startActivity(goToPendingDuel);
                 break;
             case R.id.share:
                 String message = "Check out Champy - it helps you improve and compete with your friends!";
