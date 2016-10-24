@@ -22,6 +22,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private long mLastClickTime = 0;
     public Activity activity;
     private SubActionButton buttonWakeUpChallenge, buttonDuelChallenge, buttonSelfImprovement;
+    private MainActivityCardsAdapter adapter;
     private FloatingActionMenu actionMenu;
     private View headerLayout;
 
@@ -74,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sockets.connectAndEmmit();
 
         RelativeLayout cards = (RelativeLayout)findViewById(R.id.cards);
-        MainActivityCardsAdapter adapter = new MainActivityCardsAdapter(this, SelfImprovement_model.generate(this));
+        adapter = new MainActivityCardsAdapter(this, SelfImprovement_model.generate(this));
         if (adapter.dataCount() > 0) {
             CustomPagerBase pager = new CustomPagerBase(this, cards, adapter);
             pager.preparePager(0);
@@ -197,29 +199,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             blurScreen.setVisibility(View.INVISIBLE);
             cardsLayout.setVisibility(View.VISIBLE);
         } else {
-            blurScreen.setVisibility(View.VISIBLE);
-            cardsLayout.setVisibility(View.INVISIBLE);
-            buttonSelfImprovement.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(MainActivity.this, SelfImprovementActivity.class);
-                    startActivity(intent);
-                }
-            });
-            buttonDuelChallenge.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
-                    startActivity(intent);
-                }
-            });
-            buttonWakeUpChallenge.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(MainActivity.this, WakeUpActivity.class);
-                    startActivity(intent);
-                }
-            });
+            if (adapter.dataCount() <= 10) {
+                blurScreen.setVisibility(View.VISIBLE);
+                cardsLayout.setVisibility(View.INVISIBLE);
+                buttonSelfImprovement.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(MainActivity.this, SelfImprovementActivity.class);
+                        startActivity(intent);
+                    }
+                });
+                buttonDuelChallenge.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
+                        startActivity(intent);
+                    }
+                });
+                buttonWakeUpChallenge.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(MainActivity.this, WakeUpActivity.class);
+                        startActivity(intent);
+
+                    }
+                });
+            } else {
+                actionMenu.toggle(false);
+                Toast.makeText(MainActivity.this, "You have so much challenges", Toast.LENGTH_SHORT).show();
+            }
         }
 
     }
@@ -261,8 +269,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(goToSettings);
                 break;
             case R.id.pending_duels:
-                Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
-                startActivity(goToPendingDuel);
+                if (adapter.dataCount() <= 10) {
+                    Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
+                    startActivity(goToPendingDuel);
+                } else {
+                    Toast.makeText(MainActivity.this, "You have so much challenges", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.share:
                 String message = "Check out Champy - it helps you improve and compete with your friends!";

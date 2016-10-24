@@ -167,12 +167,12 @@ public class CustomPagerBase {
                             isTouchEnabled = false;
 
                             // translation cards from RIGHT to LEFT
-                            if (lastX - firstTouchX > 125 && previousItem != null) {
+                            if (lastX - firstTouchX > 100 && previousItem != null) {
                                 // if we have previousItem then we 'prepare' her.
                                 changePageTo(PREVIOUS_PAGE);
 
                             // translation cards from LEFT to RIGHT
-                            } else if (firstTouchX - lastX > 125 && nextItem != null) {
+                            } else if (firstTouchX - lastX > 100 && nextItem != null) {
                                 // if we have nextItem then we 'prepare' her.
                                 changePageTo(NEXT_PAGE);
                             }
