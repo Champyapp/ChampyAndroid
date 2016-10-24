@@ -2,6 +2,7 @@ package com.example.ivan.champy_v2;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -119,7 +120,6 @@ public class CustomPagerBase {
                          * first touch the screen
                          */
                         case MotionEvent.ACTION_DOWN:
-                            isTouchEnabled = true;
                             lastX = X;
                             firstTouchX = X;
                             break;
@@ -127,37 +127,36 @@ public class CustomPagerBase {
                         /**
                          * Responsible for side cards when we touch central card
                          */
-                         case MotionEvent.ACTION_MOVE:
-                             ViewHelper.setX(itemView, viewXPosition + (X - lastX));
-                             lastX = X;
-                             ViewHelper.setScaleY(itemView, getScaleValue(viewXPosition));
-                             ViewHelper.setScaleX(itemView, getScaleValue(viewXPosition));
+                        case MotionEvent.ACTION_MOVE:
+                            ViewHelper.setX(itemView, viewXPosition + (X - lastX));
+                            lastX = X;
+                            ViewHelper.setScaleY(itemView, getScaleValue(viewXPosition));
+                            ViewHelper.setScaleX(itemView, getScaleValue(viewXPosition));
 
-                             // animation of RIGHT cards when we touch central card (from left to right)
-                             if (firstTouchX - lastX > 1 && nextItem != null)  {
-                                 ViewHelper.setTranslationX(nextItem, itemView.getX() + itemView.getWidth());
-                                 ViewHelper.setScaleX(nextItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
-                                 ViewHelper.setScaleY(nextItem, 0.8f + (1f - ViewHelper.getScaleY(itemView)));
-                                 // if our previousItem != null then slide her too
-                                 if (previousItem != null) {
-                                     ViewHelper.setTranslationX(previousItem, itemView.getX() - itemView.getWidth());
-                                 }
-                             }
+                            // animation of RIGHT cards when we touch central card (from left to right)
+                            if (firstTouchX - lastX > 1 && nextItem != null) {
+                                ViewHelper.setTranslationX(nextItem, itemView.getX() + itemView.getWidth());
+                                ViewHelper.setScaleX(nextItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
+                                ViewHelper.setScaleY(nextItem, 0.8f + (1f - ViewHelper.getScaleY(itemView)));
+                                // if our previousItem != null then slide her too
+                                if (previousItem != null) {
+                                    ViewHelper.setTranslationX(previousItem, itemView.getX() - itemView.getWidth());
+                                }
+                            }
 
-                             // animation of LEFT cards when we touch central card (from right to left)
-                             else if (lastX - firstTouchX > 1 && previousItem != null) {
-                                 ViewHelper.setTranslationX(previousItem, itemView.getX() - itemView.getWidth());
-                                 ViewHelper.setScaleX(previousItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
-                                 ViewHelper.setScaleY(previousItem, 0.8f + (1f - ViewHelper.getScaleY(itemView)));
-                                 // if our nextItem != null then slide her too
-                                 if (nextItem != null) {
-                                     ViewHelper.setTranslationX(nextItem, itemView.getX() + itemView.getWidth());
-                                 }
-                             }
+                            // animation of LEFT cards when we touch central card (from right to left)
+                            if (lastX - firstTouchX > 1 && previousItem != null) {
+                                ViewHelper.setTranslationX(previousItem, itemView.getX() - itemView.getWidth());
+                                ViewHelper.setScaleX(previousItem, 0.8f + (1f - ViewHelper.getScaleX(itemView)));
+                                ViewHelper.setScaleY(previousItem, 0.8f + (1f - ViewHelper.getScaleY(itemView)));
+                                // if our nextItem != null then slide her too
+                                if (nextItem != null) {
+                                    ViewHelper.setTranslationX(nextItem, itemView.getX() + itemView.getWidth());
+                                }
+                            }
 
-                             isTouchEnabled = true;
-                             break;
-
+                            isTouchEnabled = true;
+                            break;
 
                         /**
                          *  Responsible for sliding cards and their movement when your finger UP
@@ -166,12 +165,12 @@ public class CustomPagerBase {
                             isTouchEnabled = false;
 
                             // translation cards from RIGHT to LEFT
-                            if (lastX - firstTouchX > 100 && previousItem != null) {
+                            if (lastX - firstTouchX > 125 && previousItem != null) {
                                 // if we have previousItem then we 'prepare' her.
                                 changePageTo(PREVIOUS_PAGE);
 
                             // translation cards from LEFT to RIGHT
-                            } else if (firstTouchX - lastX > 100 && nextItem != null) {
+                            } else if (firstTouchX - lastX > 125 && nextItem != null) {
                                 // if we have nextItem then we 'prepare' her.
                                 changePageTo(NEXT_PAGE);
                             }
@@ -186,9 +185,9 @@ public class CustomPagerBase {
                                     moveNextItemToDefault(nextItem);
                                 }
                                 // return right card if @NotNull
-                                else if (nextItem != null) moveNextItemToDefault(nextItem);
+                                if (nextItem != null) moveNextItemToDefault(nextItem);
                                 // return lift card if @NotNull
-                                else if (previousItem != null) movePreviousItemToDefault(previousItem);
+                                if (previousItem != null) movePreviousItemToDefault(previousItem);
                             }
 
                             isTouchEnabled = true;
@@ -197,11 +196,11 @@ public class CustomPagerBase {
                         default:
                             moveCentralItemToDefault();
                             // for central position when we have both sides
-                            if (previousItem != null && nextItem != null) {
+                            if (previousItem != null && nextItem != null)
                                 movePreviousItemToDefault(previousItem);
                                 moveNextItemToDefault(nextItem);
-                            } else if (nextItem != null) moveNextItemToDefault(nextItem);
-                            else if (previousItem != null) movePreviousItemToDefault(previousItem);
+                            if (nextItem != null) moveNextItemToDefault(nextItem);
+                            if (previousItem != null) movePreviousItemToDefault(previousItem);
                             isTouchEnabled = true;
                     }
                 }
@@ -216,6 +215,7 @@ public class CustomPagerBase {
         if (direction == NEXT_PAGE) {
             setTouchListenerToView(nextItem, true);
             setTouchListenerToView(currentItem, false);
+            // if this is not last item then we place it above other (talking about layouts)
             if (nextItem != null) {
                 nextItem.bringToFront();
                 rootView.invalidate();
