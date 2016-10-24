@@ -235,9 +235,8 @@ public class CustomPagerBase {
                     ObjectAnimator.ofFloat(nextItem, "scaleX", ViewHelper.getScaleX(nextItem), 1f),
                     ObjectAnimator.ofFloat(nextItem, "scaleY", ViewHelper.getScaleY(nextItem), 1f)
             );
-            set.setDuration(90); // was 90, but 180 is good, but[2] i like 270
+            set.setDuration(120); // was 90, but i like 270
             set.addListener(new AnimatorListener() {
-
                 @Override
                 public void onAnimationStart(Animator arg0) {
                     isTouchEnabled = false;
@@ -258,36 +257,33 @@ public class CustomPagerBase {
                         ViewHelper.setX(nextNext, nextItemXPosition);
                         ViewHelper.setScaleX(nextNext, 0.8f);
                         ViewHelper.setScaleY(nextNext, 0.8f);
+                        // little shit witch make lag
+//                        ObjectAnimator anim = ObjectAnimator.ofFloat(nextNext, "translationX", ViewHelper.getX(nextNext), ViewHelper.getX(nextNext));
+//                        anim.setDuration(270);
+//                        anim.start();
                         currentItem.bringToFront();
                         rootView.invalidate();
-                        // little shit witch make lag
-                        /*ObjectAnimator anim = ObjectAnimator.ofFloat(nextNext, "translationX", ViewHelper.getX(nextNext), ViewHelper.getX(nextNext));
-                        anim.setDuration(270);
-                        anim.start();*/
                         nextItem = nextNext;
                     }
 
                     if (removedItem != null) {
-                        rootView.post(new Runnable() {
+                        context.runOnUiThread(new Runnable() {
+                            @Override
                             public void run() {
-                                context.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        rootView.removeView(removedItem);
-                                    }
-                                });
+                                rootView.removeView(removedItem);
                             }
                         });
                     }
                     currentPosition++;
-                    isTouchEnabled = true;
                 }
 
                 @Override
-                public void onAnimationCancel(Animator arg0) {}
+                public void onAnimationCancel(Animator arg0) { }
             });
             set.start();
+            nextItem.bringToFront();
             isTouchEnabled = true;
+            rootView.invalidate();
 
         }
 
@@ -300,6 +296,7 @@ public class CustomPagerBase {
                 previousItem.bringToFront();
                 rootView.invalidate();
             }
+
             AnimatorSet set = new AnimatorSet();
             set.playTogether(
                     // We do central card less and move it to new position (nextItem)
@@ -312,7 +309,7 @@ public class CustomPagerBase {
                     ObjectAnimator.ofFloat(previousItem, "scaleX", ViewHelper.getScaleX(previousItem), 1f),
                     ObjectAnimator.ofFloat(previousItem, "scaleY", ViewHelper.getScaleY(previousItem), 1f)
             );
-            set.setDuration(90); // was 90, but 180 is good, but[2] i like 270
+            set.setDuration(120); // was 90, but 180 is good, but[2] i like 270
             set.addListener(new AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator arg0) {
@@ -336,9 +333,9 @@ public class CustomPagerBase {
                         ViewHelper.setScaleX(prevPrev, 0.8f);
                         ViewHelper.setScaleY(prevPrev, 0.8f);
                         // little shit witch make lag
-                        /*ObjectAnimator anim = ObjectAnimator.ofFloat(prevPrev, "translationX", ViewHelper.getX(prevPrev), ViewHelper.getX(prevPrev));
-                        anim.setDuration(270); // was 90, but 180 is good
-                        anim.start();*/
+//                        ObjectAnimator anim = ObjectAnimator.ofFloat(prevPrev, "translationX", ViewHelper.getX(prevPrev), ViewHelper.getX(prevPrev));
+//                        anim.setDuration(270); // was 90, but 180 is good
+//                        anim.start();
                         currentItem.bringToFront();
                         rootView.invalidate();
                         previousItem = prevPrev;
@@ -346,7 +343,6 @@ public class CustomPagerBase {
 
                     if (removedItem != null) {
                         context.runOnUiThread(new Runnable() {
-
                             @Override
                             public void run() {
                                 rootView.removeView(removedItem);
@@ -354,10 +350,11 @@ public class CustomPagerBase {
                         });
                     }
                     currentPosition--;
+
                 }
 
                 @Override
-                public void onAnimationCancel(Animator arg0) {}
+                public void onAnimationCancel(Animator arg0) { }
             });
             set.start();
             previousItem.bringToFront();
