@@ -62,7 +62,6 @@ public class OtherFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate");
         FacebookSdk.sdkInitialize(getContext());
     }
 
@@ -70,7 +69,6 @@ public class OtherFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_first, container, false);
         final List<Friend> friends = new ArrayList<Friend>();
-        Log.i(TAG, "onCreateView");
         DBHelper dbHelper = new DBHelper(getContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         SessionManager sessionManager = new SessionManager(getContext());
@@ -124,7 +122,6 @@ public class OtherFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.i(TAG, "onActivityCreated");
     }
 
 
@@ -193,7 +190,6 @@ public class OtherFragment extends Fragment {
                                                 cv.put("wins", "" + data.getSuccessChallenges());
                                                 cv.put("total", "" + data.getScore());
                                                 cv.put("level", "" + data.getLevel().getNumber());
-                                                //Log.i("Users", "user: " + user_name + " photo: " + photo);
 
                                                 // отображаем друзей в списке
                                                 if (!getContact(data.get_id())) {
@@ -208,7 +204,7 @@ public class OtherFragment extends Fragment {
                                                             "" + data.getLevel().getNumber()
                                                     ));
                                                 } else {
-                                                    Log.i("stat", "DBase: not added " + user_name);
+                                                    Log.d("stat", "DBase: not added " + user_name);
                                                 }
                                                 swipeRefreshLayout.setRefreshing(false);
                                             } else {
@@ -227,7 +223,6 @@ public class OtherFragment extends Fragment {
                                                 cv.put("wins", "0");
                                                 cv.put("total", "0");
                                                 cv.put("level", "0");
-                                                Log.i("Users", "user: " + user_name + " photo: " + photo);
                                                 newFriends.add(new Friend(user_name, photo, null, "0", "0", "0", "0"));
                                                 db.insert("mytable", null, cv);
 
@@ -257,7 +252,7 @@ public class OtherFragment extends Fragment {
 
             }
         });
-        Log.i(TAG, "refreshFriendsView: finished");
+        Log.d(TAG, "refreshFriendsView: finished");
     }
 
 

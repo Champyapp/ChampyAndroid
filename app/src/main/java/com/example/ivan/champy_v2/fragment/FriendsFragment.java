@@ -55,7 +55,6 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate");
 
         try {
             mSocket = IO.socket("http://46.101.213.24:3007");
@@ -76,7 +75,6 @@ public class FriendsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)  {
         final View view = inflater.inflate(R.layout.fragment_first, container, false);
         final List<com.example.ivan.champy_v2.Friend> friends = new ArrayList<>();
-        Log.i(TAG, "onCreateView");
         DBHelper dbHelper = new DBHelper(getContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("friends", null, null, null, null, null, null);
@@ -126,7 +124,6 @@ public class FriendsFragment extends Fragment {
         this.gView = view;
 
         if (checkRefresh.equals("true")) {
-            Log.i(TAG, "refresh = true");
             refreshFriendsView(gSwipeRefreshLayout, gView);
             sessionManager.setRefreshFriends("false");
         }
@@ -250,13 +247,13 @@ public class FriendsFragment extends Fragment {
         public void call(final Object... args) {
             CurrentUserHelper currentUser = new CurrentUserHelper(getContext());
             mSocket.emit("ready", currentUser.getToken());
-            Log.i(TAG, "Sockets: connecting...");
+            Log.d(TAG, "Sockets: connecting...");
         }
     };
     private Emitter.Listener onConnected = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            Log.i(TAG, "Sockets: connected!");
+            Log.d(TAG, "Sockets: connected!");
         }
     };
     protected Emitter.Listener modifiedRelationship = new Emitter.Listener() {
@@ -267,7 +264,7 @@ public class FriendsFragment extends Fragment {
                 public void run() {
                     refreshFriendsView(gSwipeRefreshLayout, gView);
                 }});
-            Log.i(TAG, "Sockets: modifiedRelationship");
+            Log.d(TAG, "Sockets: modifiedRelationship");
         }
     };
 

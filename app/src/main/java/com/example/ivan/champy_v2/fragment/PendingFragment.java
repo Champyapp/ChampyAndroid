@@ -64,7 +64,6 @@ public class PendingFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-        Log.i(TAG, "onCreateView");
         final View view = inflater.inflate(R.layout.fragment_first, container, false);
         final List<Pending_friend> pendingFriends = new ArrayList<>();
 
@@ -123,7 +122,6 @@ public class PendingFragment extends Fragment {
         this.gView = view;
 
         if (checkRefresh.equals("true")) {
-            Log.i(TAG, "refresh = true");
             refreshPendingView(swipeRefreshLayout, gView);
             sessionManager.setRefreshPending("false");
         }
@@ -135,7 +133,6 @@ public class PendingFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.i(TAG, "onActivityCreated");
 
         mSocket.on("connect", onConnect);
         mSocket.on("connected", onConnected);
@@ -219,7 +216,6 @@ public class PendingFragment extends Fragment {
                             int successChallenges = c.getColumnIndex("successChallenges");
                             int allChallengesCount = c.getColumnIndex("allChallengesCount");
                             do {
-                                //Log.i(TAG, "NewUser: " + c.getString(nameColIndex) + " Photo: " + c.getString(photoColIndex));
                                 newfriends.add(new Pending_friend(
                                         c.getString(nameColIndex),
                                         API_URL + c.getString(photoColIndex),
@@ -243,7 +239,7 @@ public class PendingFragment extends Fragment {
                         rvContacts.setAdapter(adapter);
                         swipeRefreshLayout.setRefreshing(false);
                     }
-                    Log.i(TAG, "refreshPendingView: finish refreshing");
+                    Log.d(TAG, "refreshPendingView: finish refreshing");
                 }
 
                 @Override
@@ -260,13 +256,13 @@ public class PendingFragment extends Fragment {
         public void call(final Object... args) {
             CurrentUserHelper currentUser = new CurrentUserHelper(getContext());
             mSocket.emit("ready", currentUser.getToken());
-            Log.i(TAG, "Sockets: connecting...");
+            Log.d(TAG, "Sockets: connecting...");
         }
     };
     private Emitter.Listener onConnected = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            Log.i(TAG, "Sockets: connected!");
+            Log.d(TAG, "Sockets: connected!");
         }
     };
     protected Emitter.Listener modifiedRelationship = new Emitter.Listener() {
@@ -279,7 +275,7 @@ public class PendingFragment extends Fragment {
                     refreshPendingView(swipeRefreshLayout, gView);
                 }
             });
-            Log.i(TAG, "Sockets: modifiedRelationship");
+            Log.d(TAG, "Sockets: modifiedRelationship");
         }
     };
 
