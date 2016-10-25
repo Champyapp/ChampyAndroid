@@ -150,13 +150,14 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                 cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
 
                 if (position == size) {
-                    days = Integer.parseInt(duration);
-                    if (checkInputUserData(description, duration, view))
-                        try {
+                    try {
+                        if (checkInputUserData(description, duration, view)) {
+                            days = Integer.parseInt(duration);
                             cc.createNewSelfImprovementChallenge(description, days, token, userId);
-                        } catch (NullPointerException e) {
-                            e.printStackTrace();
                         }
+                    } catch (NullPointerException | NumberFormatException e) {
+                        e.printStackTrace();
+                    }
 
                 } else {
                     if (c.moveToFirst()) {

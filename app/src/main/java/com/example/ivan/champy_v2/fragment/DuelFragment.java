@@ -155,10 +155,11 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
             public void onClick(View view) {
                 cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
                 if (position == size) {
-                    days = Integer.parseInt(duration);
                     try {
-                        if (checkInputUserData(description, duration, view))
+                        if (checkInputUserData(description, duration, view)) {
+                            days = Integer.parseInt(duration);
                             cc.createNewDuelChallenge(description, days, friend_id, token, userId);
+                        }
                     } catch (NullPointerException e) { e.printStackTrace(); }
 
                 } else {

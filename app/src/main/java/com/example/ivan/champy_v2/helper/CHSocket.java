@@ -14,6 +14,7 @@ import java.net.URISyntaxException;
 public class CHSocket {
 
     public static final String TAG = "CHSockets";
+    private ChallengeController cc;
     private Socket mSocket;
     private String token, userId;
     private Activity activity;
@@ -28,8 +29,11 @@ public class CHSocket {
 
     public void tryToConnect() {
         try {
-            Log.i(TAG, "tryToConnect: trying...");
+            Log.d(TAG, "tryToConnect: trying...");
             mSocket = IO.socket("http://46.101.213.24:3007");
+            CurrentUserHelper user = new CurrentUserHelper(context);
+            token = user.getToken();
+            userId = user.getUserObjectId();
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -39,13 +43,13 @@ public class CHSocket {
     public void connectAndEmmit() {
         mSocket.on("connect",   onConnect);
         mSocket.on("connected", onConnected);
-        mSocket.on("InProgressChallenge:accepted", onAcceptedChallenge);
-//        mSocket.on("InProgressChallenge:won", onWonChallenge);
-//        mSocket.on("InProgressChallenge:failed",            onAcceptedChallenge);
+        mSocket.on("InProgressChallenge:accepted", onAcceptedOrWonChallenge);
+        mSocket.on("InProgressChallenge:won", onAcceptedOrWonChallenge);
+//        mSocket.on("InProgressChallenge:failed",            onAcceptedOrWonChallenge);
 //        mSocket.on("InProgressChallenge:new",               onRefreshPending);
 //        mSocket.on("InProgressChallenge:checked",           onNewChallenge);
 //        mSocket.on("InProgressChallenge:updated",           onNewChallenge);
-//        mSocket.on("InProgress:finish",                     onNewChallenge);
+          //        mSocket.on("InProgress:finish",                     onNewChallenge);
 //        mSocket.on("InProgressChallenge:recipient:checked", onNewChallenge);
 //        mSocket.on("InProgressChallenge:sender:checked",    onNewChallenge);
 
@@ -70,33 +74,29 @@ public class CHSocket {
         }
     };
 
-    private Emitter.Listener onAcceptedChallenge = new Emitter.Listener()  {
+    private Emitter.Listener onAcceptedOrWonChallenge = new Emitter.Listener()  {
         @Override
         public void call(final Object... args) {
             try {
-                ChallengeController cc = new ChallengeController(context, activity, 0, 0, 0);
-                CurrentUserHelper user = new CurrentUserHelper(context);
-                token = user.getToken();
-                userId = user.getUserObjectId();
-                cc.refreshCardsForPendingDuel(token, userId);
-                Log.i(TAG, "Sockets: onAcceptedChallenge success!");
-            } catch (Exception e) {Log.i(TAG, "Sockets: ERROR: " + e);}
+                //cc.refreshCardsForPendingDuel(token, userId);
+                activity.recreate();
+                Log.d(TAG, "Sockets: onAcceptedOrWonChallenge success!");
+            } catch (Exception e) { Log.d(TAG, "Sockets: ERROR: " + e); }
         }
     };
 
-//    private Emitter.Listener onWonChallenge = new Emitter.Listener()  {
-//        @Override
-//        public void call(final Object... args) {
-//            try {
-////                ChallengeController cc = new ChallengeController(context, activity, 0, 0, 0);
-////                cc.generateCardsForMainActivity();
-//                refreshCards();
-//                Log.i(TAG, "Sockets: onWonChallenge success!");
-//            } catch (Exception e) {
-//                Log.i(TAG, "Sockets: ERROR: " + e);
-//            }
-//        }
-//    };
+
+
+    private Emitter.Listener onWonChallenge = new Emitter.Listener()  {
+        @Override
+        public void call(final Object... args) {
+            try {
+                cc = new ChallengeController(context, activity, 0, 0, 0);
+                cc.generateCardsForMainActivity(token, userId);
+                Log.d(TAG, "Sockets: onWonChallenge success!");
+            } catch (Exception e) { Log.d(TAG, "Sockets: ERROR: " + e); }
+        }
+    };
 
 //    public void refreshCards() {
 //        DBHelper dbHelper = new DBHelper(context);

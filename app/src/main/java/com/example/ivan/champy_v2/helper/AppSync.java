@@ -159,7 +159,7 @@ public class AppSync {
     }
 
 
-    private void getUserPending(final String userId) {
+    public void getUserPending(final String userId) {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("pending", null, null);
@@ -328,7 +328,7 @@ public class AppSync {
         return lastUpdate;
     }
 
-    private void getUserFriendsInfo(final String gcm) {
+    public void getUserFriendsInfo(final String gcm) {
         final String API_URL = "http://46.101.213.24:3007";
         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         final NewUser newUser = retrofit.create(NewUser.class);

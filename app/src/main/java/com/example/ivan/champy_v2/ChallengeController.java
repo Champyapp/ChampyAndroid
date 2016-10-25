@@ -451,7 +451,7 @@ public class ChallengeController {
         });
     }
 
-    private void generateCardsForMainActivity(final String token, final String userId) {
+    public void generateCardsForMainActivity(final String token, final String userId) {
         dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
         cv = new ContentValues();
