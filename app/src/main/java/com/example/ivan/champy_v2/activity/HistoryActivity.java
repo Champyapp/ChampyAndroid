@@ -76,13 +76,9 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         tabLayout.setupWithViewPager(viewPager);
 
         // this out method for open "wins" when you click on notification about win request
-//        Bundle bundle = getIntent().getExtras();
-//        if (bundle != null) {
-//            String s = bundle.getString("win_request");
-//            if ("true".equals(s)) {
-//                viewPager.setCurrentItem(1);
-//            }
-//        }
+        //Bundle bundle = getIntent().getExtras();
+        String extras = this.getIntent().getStringExtra("win_request");
+        if (extras != null && "true".equals(extras)) { viewPager.setCurrentItem(1); }
 
         CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
         String name = user.getName();

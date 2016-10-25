@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,6 +18,8 @@ import com.example.ivan.champy_v2.activity.HistoryActivity;
 import com.example.ivan.champy_v2.activity.MainActivity;
 import com.example.ivan.champy_v2.activity.PendingDuelActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
+import com.example.ivan.champy_v2.helper.CHLoadUserProgressBarInfo;
+import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
 import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
 import com.example.ivan.champy_v2.model.active_in_progress.Datum;
@@ -24,6 +27,10 @@ import com.example.ivan.champy_v2.model.active_in_progress.Recipient;
 import com.example.ivan.champy_v2.model.active_in_progress.Sender;
 import com.google.android.gms.gcm.GcmListenerService;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,6 +39,10 @@ import retrofit.Callback;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
+
+import static com.example.ivan.champy_v2.ChallengeController.API_URL;
+import static com.example.ivan.champy_v2.ChallengeController.unixTime;
+import static java.lang.Math.round;
 
 public class MyGcmListenerService extends GcmListenerService {
 
@@ -90,9 +101,16 @@ public class MyGcmListenerService extends GcmListenerService {
             case "Win":
                 // TODO: якшо все-таки робити перенапавлення, то треба буде закинути сюда generate()
                 // метод и в сс.generate() убрати intent, ну і соответственно робити це всьо вручну.
-                //intent = new Intent(this, HistoryActivity.class);
-                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                //intent.putExtra("win_request", "true");
+                intent = new Intent(this, HistoryActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("win_request", "true");
+
+                CurrentUserHelper user = new CurrentUserHelper(this);
+                String userId = user.getUserObjectId();
+                String token  = user.getToken();
+                refreshPendingDuels();
+                generateCardsForMainActivity(token, userId);
+
                 notifyChallenges(intent, message);
                 break;
         }
@@ -152,6 +170,120 @@ public class MyGcmListenerService extends GcmListenerService {
             @Override
             public void onFailure(Throwable t) { }
         });
+    }
+
+
+    private void generateCardsForMainActivity(final String token, final String userId) {
+        DBHelper dbHelper = new DBHelper(getApplicationContext());
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        final ContentValues cv = new ContentValues();
+        int clearCount = db.delete("myChallenges", null, null);
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
+        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userId, "0", token);
+        call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
+            @Override
+            public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    List<Datum> data = response.body().getData();
+                    for (int i = 0; i < data.size(); i++) {
+                        com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
+                        Challenge challenge          = datum.getChallenge();
+                        Recipient recipient          = datum.getRecipient();
+                        Sender sender                = datum.getSender();
+
+                        String challenge_description = challenge.getDescription();   // no smoking
+                        String challenge_detail      = challenge.getDetails();       // no smoking + " during this period"
+                        String challenge_status      = datum.getStatus();            // active or not
+                        String challenge_id          = datum.get_id();               // im progress id
+                        String challenge_type        = challenge.getType();          // 567d51c48322f85870fd931a / b / c
+                        String challenge_name        = challenge.getName();          // wake up / self / duel
+                        String challenge_wakeUpTime  = challenge.getWakeUpTime();    // our specific time (intentId)
+                        String challenge_updated     = getLastUpdated(challenge_id); // bool check method;
+                        String challenge_duration    = "";
+                        String constDuration         = "";
+
+                        if (datum.getEnd() != null) {
+                            int end = datum.getEnd();
+                            int begin = datum.getBegin();
+                            int days = round((end - unixTime) / 86400);
+                            int constDays = round((end - begin) / 86400);
+                            challenge_duration = "" + days;
+                            constDuration = "" + constDays;
+                        }
+
+                        List<Object> senderProgress = datum.getSenderProgress();
+                        String stringSenderProgress[] = new String[senderProgress.size()];
+                        for (int j = 0; j < senderProgress.size(); j++) {
+                            try {
+                                JSONObject json = new JSONObject(senderProgress.get(j).toString());
+                                long at = json.getLong("at");
+                                stringSenderProgress[j] = String.valueOf(at);
+                            } catch (JSONException e) { e.printStackTrace(); }
+                        }
+
+                        if (challenge_description.equals("Wake Up")) {
+                            cv.put("name", "Wake Up"); // just name of Challenge
+                            cv.put("wakeUpTime", challenge_detail); // our specific field for delete wakeUp (example: 1448);
+                        } else if (challenge_type.equals("567d51c48322f85870fd931a")) {
+                            cv.put("name", "Self-Improvement"); // just name of Challenge
+                        } else if (challenge_type.equals("567d51c48322f85870fd931b")) {
+                            cv.put("name", "Duel"); // just name of Challenge
+                            if (userId.equals(recipient.getId())) {
+                                cv.put("recipient", "true");
+                                cv.put("versus", sender.getName());
+                            } else {
+                                cv.put("recipient", "false");
+                                cv.put("versus", recipient.getName());
+                            }
+                        }
+
+                        cv.put("challengeName", challenge_name); // default 'challenge'. this column only for wake up time
+                        cv.put("description", challenge_description); // smoking free life / wake up at 14:48
+                        cv.put("duration", challenge_duration); // duration of challenge
+                        cv.put("challenge_id", challenge_id); // in progress id
+                        cv.put("status", challenge_status); // active or not
+                        cv.put("updated", challenge_updated); // true / false
+                        cv.put("senderProgress", Arrays.toString(stringSenderProgress)); // last update time in millis
+                        cv.put("constDuration", constDuration);
+                        db.insert("myChallenges", null, cv);
+                    }
+                    Log.d(TAG, "Generate onResponse: VSE OK");
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) { }
+        });
+
+        /*CHLoadUserProgressBarInfo loadData = new CHLoadUserProgressBarInfo(firstActivity);
+        loadData.loadUserProgressBarInfo();*/
+
+    }
+
+    // method which returns our last update (true or false);
+    private String getLastUpdated(String challenge_id) {
+        DBHelper dbHelper = new DBHelper(this);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor c = db.query("updated", null, null, null, null, null, null);
+        String lastUpdate = "false";
+        if (c.moveToFirst()) {
+            int colchallenge_id = c.getColumnIndex("challenge_id");
+            do {
+                // в методе "sendSingleForDuel мы засовываем challenge_id в колонку "challenge_id" в
+                // таблице "updated", а тут мы ее проверяем. если она есть, то вернуть время когда
+                // мы нажимали "дан" для дуелей, если её здесь нету, то возвращаем "false" - это для
+                // wake-up и self-improvement челенджей.
+                // Соответственно данные про update time для дуелей находятся в таблице "updated",
+                // а для отсального в таблице "myChallenges".
+                if (c.getString(colchallenge_id).equals(challenge_id)) {
+                    lastUpdate = c.getString(c.getColumnIndex("updated"));
+                    break;
+                }
+            } while (c.moveToNext());
+        }
+        c.close();
+        return lastUpdate;
     }
 
 

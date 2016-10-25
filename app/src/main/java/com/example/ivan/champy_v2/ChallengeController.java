@@ -45,7 +45,7 @@ public class ChallengeController {
 
     public static final String API_URL = "http://46.101.213.24:3007";
     public static final String TAG = "ChallengeController";
-    private long unixTime = System.currentTimeMillis() / 1000L;
+    public static long unixTime = System.currentTimeMillis() / 1000L;
     private int hour, minute, seconds;
     private String duration, details, description, update = "0"; //1457019726;
     private Context context;

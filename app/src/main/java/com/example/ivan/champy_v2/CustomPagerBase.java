@@ -126,6 +126,9 @@ public class CustomPagerBase {
                             firstTouchX = X;
                             break;
 
+//                        case MotionEvent.ACTION_POINTER_DOWN:
+//                            Log.d(TAG, "onTouch: ACTION_POINTER_DOWN");
+//                            break;
                         /**
                          * Responsible for side cards when we touch central card
                          */
@@ -170,7 +173,6 @@ public class CustomPagerBase {
                             if (lastX - firstTouchX > 100 && previousItem != null) {
                                 // if we have previousItem then we 'prepare' her.
                                 changePageTo(PREVIOUS_PAGE);
-
                             // translation cards from LEFT to RIGHT
                             } else if (firstTouchX - lastX > 100 && nextItem != null) {
                                 // if we have nextItem then we 'prepare' her.
@@ -199,7 +201,7 @@ public class CustomPagerBase {
                             break;
 
                         case MotionEvent.ACTION_CANCEL:
-                            Log.d(TAG, "onTouch: CANCEL, WOW!");
+                            Log.d(TAG, "onTouch: CANCEL!");
                             break;
 
                         default:
@@ -229,6 +231,7 @@ public class CustomPagerBase {
     private void changePageTo(int direction) {
         // Prepare Next card and change it to central
         if (direction == NEXT_PAGE) {
+            setTouchListenerToView(currentItem, false);
             // if this is not last item then we place it above other (talking about layouts)
             if (nextItem != null) {
                 nextItem.bringToFront();
@@ -286,6 +289,7 @@ public class CustomPagerBase {
                             }
                         });
                     }
+
                     currentPosition++;
                 }
 
@@ -293,15 +297,16 @@ public class CustomPagerBase {
                 public void onAnimationCancel(Animator arg0) { }
             });
             set.start();
+            setTouchListenerToView(nextItem, true);
             nextItem.bringToFront();
             isTouchEnabled = true;
             rootView.invalidate(); // ??
-            setTouchListenerToView(nextItem, true);
-            setTouchListenerToView(currentItem, false);
         }
 
         // Prepare previous card and change it for central
         else if (direction == PREVIOUS_PAGE) {
+
+            setTouchListenerToView(currentItem, false);
 
             if (previousItem != null) {
                 previousItem.bringToFront();
@@ -360,6 +365,7 @@ public class CustomPagerBase {
                             }
                         });
                     }
+
                     currentPosition--;
 
                 }
@@ -368,12 +374,10 @@ public class CustomPagerBase {
                 public void onAnimationCancel(Animator arg0) { }
             });
             set.start();
+            setTouchListenerToView(previousItem, true);
             previousItem.bringToFront();
             isTouchEnabled = true;
             rootView.invalidate();
-            setTouchListenerToView(previousItem, true);
-            setTouchListenerToView(currentItem, false);
-
         }
     }
 
