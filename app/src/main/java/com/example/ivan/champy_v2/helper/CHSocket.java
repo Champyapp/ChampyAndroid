@@ -31,9 +31,6 @@ public class CHSocket {
         try {
             Log.d(TAG, "tryToConnect: trying...");
             mSocket = IO.socket("http://46.101.213.24:3007");
-            CurrentUserHelper user = new CurrentUserHelper(context);
-            token = user.getToken();
-            userId = user.getUserObjectId();
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -67,6 +64,7 @@ public class CHSocket {
             Log.i(TAG, "Sockets: onConnect");
         }
     };
+
     private Emitter.Listener onConnected = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
@@ -78,8 +76,10 @@ public class CHSocket {
         @Override
         public void call(final Object... args) {
             try {
-                //cc.refreshCardsForPendingDuel(token, userId);
-                activity.recreate();
+                cc.refreshCardsForPendingDuel(token, userId);
+                CurrentUserHelper user = new CurrentUserHelper(context);
+                token = user.getToken();
+                userId = user.getUserObjectId();
                 Log.d(TAG, "Sockets: onAcceptedOrWonChallenge success!");
             } catch (Exception e) { Log.d(TAG, "Sockets: ERROR: " + e); }
         }
@@ -87,16 +87,6 @@ public class CHSocket {
 
 
 
-    private Emitter.Listener onWonChallenge = new Emitter.Listener()  {
-        @Override
-        public void call(final Object... args) {
-            try {
-                cc = new ChallengeController(context, activity, 0, 0, 0);
-                cc.generateCardsForMainActivity(token, userId);
-                Log.d(TAG, "Sockets: onWonChallenge success!");
-            } catch (Exception e) { Log.d(TAG, "Sockets: ERROR: " + e); }
-        }
-    };
 
 //    public void refreshCards() {
 //        DBHelper dbHelper = new DBHelper(context);

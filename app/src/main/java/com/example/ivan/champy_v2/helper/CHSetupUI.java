@@ -8,19 +8,16 @@ import android.widget.EditText;
 
 public class CHSetupUI {
 
-    public static void hideSoftKeyboard(Activity activity) {
+    private static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 
 
     public void setupUI(View view, final Activity activity) {
-
         //Set up touch listener for non-text box views to hide keyboard.
         if (!(view instanceof EditText)) {
-
             view.setOnTouchListener(new View.OnTouchListener() {
-
                 public boolean onTouch(View v, MotionEvent event) {
                     hideSoftKeyboard(activity);
                     return false;
