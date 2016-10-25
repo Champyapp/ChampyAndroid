@@ -15,6 +15,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -61,17 +62,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private MainActivityCardsAdapter adapter;
     private FloatingActionMenu actionMenu;
     private View headerLayout;
+    private CHSocket sockets;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_main);
+        Log.d(TAG, "onCreate: ");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_gradient));
         setSupportActionBar(toolbar);
 
-        CHSocket sockets = new CHSocket(MainActivity.this, getApplicationContext());
+        sockets = new CHSocket(MainActivity.this, getApplicationContext());
         sockets.tryToConnect();
         sockets.connectAndEmmit();
 
@@ -135,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onStart() {
         super.onStart();
+        Log.d(TAG, "onStart: ");
         CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
         String pathToPic = user.getPathToPic();
         String name = user.getName();
@@ -247,9 +251,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
         ViewServer.get(this).removeWindow(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: ");
+        sockets.disconnectSockets();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

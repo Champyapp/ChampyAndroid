@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Champy</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open">Open</string>
+    <string name="navigation_drawer_close">Close</string>
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_login">LoginActivity</string>
@@ -110,7 +110,7 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="loginText">\'\'it\'s your thinking that \n decides whether you\'re \n going to succeed or fail\'\' - \n henry ford</string>
     <string name="foreveralonetext">You don\'t seem to be that guy</string>
     <string name="foreveralonetext2">get extra motivation and have fun challenging your \n friends. improve together and compete to become the \n ultimate champy!</string>

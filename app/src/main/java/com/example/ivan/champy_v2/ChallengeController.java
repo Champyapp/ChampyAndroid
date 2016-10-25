@@ -451,7 +451,7 @@ public class ChallengeController {
         });
     }
 
-    public void generateCardsForMainActivity(final String token, final String userId) {
+    private void generateCardsForMainActivity(final String token, final String userId) {
         dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
         cv = new ContentValues();
@@ -466,6 +466,7 @@ public class ChallengeController {
                     List<Datum> data = response.body().getData();
                     for (int i = 0; i < data.size(); i++) {
                         com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
+
                         Challenge challenge          = datum.getChallenge();
                         Recipient recipient          = datum.getRecipient();
                         Sender sender                = datum.getSender();
@@ -501,29 +502,46 @@ public class ChallengeController {
                         }
 
                         if (challenge_description.equals("Wake Up")) {
-                            cv.put("name", "Wake Up"); // just name of Challenge
-                            cv.put("wakeUpTime", challenge_detail); // our specific field for delete wakeUp (example: 1448);
+                            // just name of Challenge
+                            cv.put("name", "Wake Up");
+                            // our specific field for delete wakeUp (example: 1448);
+                            cv.put("wakeUpTime", challenge_detail);
                         } else if (challenge_type.equals("567d51c48322f85870fd931a")) {
-                            cv.put("name", "Self-Improvement"); // just name of Challenge
+                            // just name of Challenge
+                            cv.put("name", "Self-Improvement");
                         } else if (challenge_type.equals("567d51c48322f85870fd931b")) {
-                            cv.put("name", "Duel"); // just name of Challenge
+                            // just name of Challenge
+                            cv.put("name", "Duel");
                             if (userId.equals(recipient.getId())) {
+                                // if I accepted challenge, i'm "recipient"
                                 cv.put("recipient", "true");
+                                // name of the person with whom we have a duel
                                 cv.put("versus", sender.getName());
                             } else {
+                                // if I sent the challenge, i'm "sender"
                                 cv.put("recipient", "false");
+                                // name of the person with whom we have a duel
                                 cv.put("versus", recipient.getName());
                             }
                         }
 
-                        cv.put("challengeName", challenge_name); // default 'challenge'. this column only for wake up time
-                        cv.put("description", challenge_description); // smoking free life / wake up at 14:48
-                        cv.put("duration", challenge_duration); // duration of challenge
-                        cv.put("challenge_id", challenge_id); // in progress id
-                        cv.put("status", challenge_status); // active or not
-                        cv.put("updated", challenge_updated); // true / false
-                        cv.put("senderProgress", Arrays.toString(stringSenderProgress)); // last update time in millis
+                        // default 'challenge'. this column only for wake up time
+                        cv.put("challengeName", challenge_name);
+                        // smoking free life or wake up at 14:48
+                        cv.put("description", challenge_description);
+                        // duration of challenge
+                        cv.put("duration", challenge_duration);
+                        // in progress id
+                        cv.put("challenge_id", challenge_id);
+                        // active or not
+                        cv.put("status", challenge_status);
+                        // true or false
+                        cv.put("updated", challenge_updated);
+                        // last update time in millis
+                        cv.put("senderProgress", Arrays.toString(stringSenderProgress));
+                        // our constant value of challenge duration
                         cv.put("constDuration", constDuration);
+                        // db when we store all challenges and information about them
                         db.insert("myChallenges", null, cv);
                     }
                     Log.d(TAG, "Generate onResponse: VSE OK");

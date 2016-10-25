@@ -29,7 +29,7 @@ public class CHSocket {
 
     public void tryToConnect() {
         try {
-            Log.d(TAG, "tryToConnect: trying...");
+            Log.d(TAG, "connected!");
             mSocket = IO.socket("http://46.101.213.24:3007");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
@@ -40,8 +40,8 @@ public class CHSocket {
     public void connectAndEmmit() {
         mSocket.on("connect",   onConnect);
         mSocket.on("connected", onConnected);
-        mSocket.on("InProgressChallenge:accepted", onAcceptedOrWonChallenge);
-        mSocket.on("InProgressChallenge:won", onAcceptedOrWonChallenge);
+        mSocket.once("InProgressChallenge:accepted", onAcceptedOrWonChallenge);
+        mSocket.once("InProgressChallenge:won", onAcceptedOrWonChallenge);
 //        mSocket.on("InProgressChallenge:failed",            onAcceptedOrWonChallenge);
 //        mSocket.on("InProgressChallenge:new",               onRefreshPending);
 //        mSocket.on("InProgressChallenge:checked",           onNewChallenge);
@@ -54,6 +54,11 @@ public class CHSocket {
     }
 
 
+    public void disconnectSockets() {
+        mSocket.off();
+        mSocket.disconnect();
+        Log.d(TAG, "Sockets: disconnected");
+    }
 
 
     private Emitter.Listener onConnect = new Emitter.Listener() {
@@ -61,14 +66,14 @@ public class CHSocket {
         public void call(final Object... args) {
             CurrentUserHelper currentUser = new CurrentUserHelper(context);
             mSocket.emit("ready", currentUser.getToken());
-            Log.i(TAG, "Sockets: onConnect");
+            Log.d(TAG, "Sockets: onConnect");
         }
     };
 
     private Emitter.Listener onConnected = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            Log.i(TAG, "Sockets: onConnected");
+            Log.d(TAG, "Sockets: onConnected");
         }
     };
 
@@ -76,10 +81,11 @@ public class CHSocket {
         @Override
         public void call(final Object... args) {
             try {
-                cc.refreshCardsForPendingDuel(token, userId);
                 CurrentUserHelper user = new CurrentUserHelper(context);
                 token = user.getToken();
                 userId = user.getUserObjectId();
+                cc = new ChallengeController(context, activity, 0, 0, 0);
+                cc.refreshCardsForPendingDuel(token, userId);
                 Log.d(TAG, "Sockets: onAcceptedOrWonChallenge success!");
             } catch (Exception e) { Log.d(TAG, "Sockets: ERROR: " + e); }
         }

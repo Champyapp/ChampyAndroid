@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -151,7 +152,9 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
             Log.d(TAG, "getView: longSenderProgress: " + longSenderProgress);
             Date date = new Date(longSenderProgress * 1000); // convert last checkIn in date format
             senderProgressMidNight = longSenderProgress - (date.getHours() * 60 * 60) - (date.getMinutes() * 60) - (date.getSeconds());
-        } catch (RuntimeException e) { e.printStackTrace(); }
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
 
 
         if (longSenderProgress != 0 && now > senderProgressMidNight + oneDay) {
@@ -160,7 +163,6 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                 buttonShare.setVisibility(View.INVISIBLE);
                 buttonDone.setVisibility(View.VISIBLE);
             }
-
             if (now > senderProgressMidNight + oneDay + oneDay) {
                 try {
                     if (itemType.equals("Wake Up")) {
