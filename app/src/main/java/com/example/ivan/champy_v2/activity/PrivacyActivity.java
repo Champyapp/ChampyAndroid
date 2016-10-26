@@ -391,7 +391,7 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
                     "            </li>\n" +
                     "            <li>\n" +
                     "                <p>\n" +
-                    "                    Our Service may also deliver notifications to your phone or mobile device. You can disable these notifications by deleting the relevant\n" +
+                    "                    Our Service may also deliver notifications to your phone or mobile device. You can offAndDisconnect these notifications by deleting the relevant\n" +
                     "                    Service or by changing the settings on your mobile device.\n" +
                     "                </p>\n" +
                     "            </li>\n" +

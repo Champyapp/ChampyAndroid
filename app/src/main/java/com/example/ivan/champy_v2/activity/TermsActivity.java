@@ -185,7 +185,7 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
                     "    <li>\n" +
                     "        <p lang=\"en-US\">\n" +
                     "            <strong>Term and Termination.</strong>\n" +
-                    "            This Agreement will remain in full force and effect while you use the Service and/or have a Champy account. You may disable your account at any\n" +
+                    "            This Agreement will remain in full force and effect while you use the Service and/or have a Champy account. You may offAndDisconnect your account at any\n" +
                     "            time, for any reason, by following the instructions in “SettingsActivity” in the Service. The Company may terminate or suspend your account at any time\n" +
                     "            without notice if the Company believes that you have breached this Agreement, or for any other reason, with or without cause, in its sole\n" +
                     "            discretion. Upon such termination or suspension, you will not be entitled to any refund of unused fees for in app purchases. The Company is not\n" +

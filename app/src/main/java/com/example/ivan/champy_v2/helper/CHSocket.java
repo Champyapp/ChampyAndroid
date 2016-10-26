@@ -85,10 +85,15 @@ public class CHSocket {
         }
     };
 
+    public void socketOff() {
+        mSocket.off();
+    }
 
+    public void socketDisconnect() {
+        mSocket.disconnect();
+    }
 
-
-//    public void refreshCards() {
+    //    public void refreshCards() {
 //        DBHelper dbHelper = new DBHelper(context);
 //        final SQLiteDatabase db = dbHelper.getWritableDatabase();
 //        int clearCount = db.delete("myChallenges", null, null);

@@ -554,7 +554,7 @@ public class ChallengeController {
             public void onFailure(Throwable t) { }
         });
 
-        CHLoadUserProgressBarInfo loadData = new CHLoadUserProgressBarInfo(firstActivity);
+        CHLoadUserProgressBarInfo loadData = new CHLoadUserProgressBarInfo(context);
         loadData.loadUserProgressBarInfo();
 
     }
