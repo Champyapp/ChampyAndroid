@@ -52,8 +52,8 @@ public interface SingleInProgress {
     @FormUrlEncoded
     @POST("/v1/in-progress-challenges/duel")
     Call<Duel> Start_duel(
-      @Field("recipient") String recipient,
-      @Field("challenge") String challenge,
-      @Query("token") String token
+            @Field("recipient") String recipient,
+            @Field("challenge") String challenge,
+            @Query("token") String token
     );
 }

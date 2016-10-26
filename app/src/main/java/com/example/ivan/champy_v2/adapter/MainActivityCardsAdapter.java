@@ -75,6 +75,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         String itemGoal = currentCard.getGoal();
         String itemType = currentCard.getType();
         final String itemInProgressId = currentCard.getId();
+        Log.d(TAG, "getView: itemInProgressId: " + itemInProgressId);
         String[] senderProgress = toArrayOfStrings(itemSenderProgress);
 
         switch (itemType) {
@@ -199,12 +200,12 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                 try {
                     // TODO: 26.09.2016 replace this piece of code inside DoneForToday method in cc.
                     ////////////////////////////////////////////////////////////////////////
-                    DBHelper dbHelper = new DBHelper(getContext());
-                    SQLiteDatabase db = dbHelper.getWritableDatabase();
-                    ContentValues cv = new ContentValues();
-                    cv.put("updated", "true");
-                    db.update("myChallenges", cv, "challenge_id = ?", new String[]{itemInProgressId});
-                    db.update("updated", cv, "challenge_id = ?", new String[]{itemInProgressId});
+//                    DBHelper dbHelper = new DBHelper(getContext());
+//                    SQLiteDatabase db = dbHelper.getWritableDatabase();
+//                    ContentValues cv = new ContentValues();
+//                    cv.put("updated", "true");
+//                    db.update("myChallenges", cv, "challenge_id = ?", new String[]{itemInProgressId});
+//                    db.update("updated", cv, "challenge_id = ?", new String[]{itemInProgressId});
                     ////////////////////////////////////////////////////////////////////////
                     cc.doneForToday(itemInProgressId, token, userId);
                     buttonDone.setVisibility(View.INVISIBLE);

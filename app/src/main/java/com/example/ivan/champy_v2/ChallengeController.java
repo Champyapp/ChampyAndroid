@@ -47,7 +47,7 @@ public class ChallengeController {
     public static final String TAG = "ChallengeController";
     public static long unixTime = System.currentTimeMillis() / 1000L;
     private int hour, minute, seconds;
-    private String duration, details, description, update = "0"; //1457019726;
+    private String duration, details, update = "0";
     private Context context;
     private Activity firstActivity;
     private Retrofit retrofit;
@@ -71,8 +71,11 @@ public class ChallengeController {
         final String type_id = "567d51c48322f85870fd931a";
         duration = "" + (days * 86400);
         details = description + " during this period: " + days + " days";
+
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
+
         Call<com.example.ivan.champy_v2.create_challenge.CreateChallenge> call = createChallenge.createChallenge("User_Challenge", type_id, description, details, duration, token);
         call.enqueue(new Callback<com.example.ivan.champy_v2.create_challenge.CreateChallenge>() {
             @Override
@@ -80,14 +83,12 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
                     sendSingleInProgressForSelf(challengeId, token, userId);
-                    Log.d(TAG, "createNewSelfImprovementChallenge Status: VSE OK"
-                            + "\n CHALL_ID    = " + challengeId
-                            + "\n TYPE_ID     = " + type_id
-                            + "\n DESCRIPTION = " + description
-                            + "\n DETAILS     = " + details
-                            + "\n DURATION    = " + duration);
-                    // TODO: 10.10.2016 в detail записати всьо і просто так виводити
-
+                    Log.d(TAG, "createNewSelfImprovementChallenge Status: VSE OK");
+//                            + "\n CHALL_ID    = " + challengeId
+//                            + "\n TYPE_ID     = " + type_id
+//                            + "\n DESCRIPTION = " + description
+//                            + "\n DETAILS     = " + details
+//                            + "\n DURATION    = " + duration);
                 } else Log.d(TAG, "createNewSelfImprovementChallenge Status: Failed " + response.message());
             }
 
@@ -128,7 +129,7 @@ public class ChallengeController {
 
     public void createNewWakeUpChallenge(int days, final String type_id, final String token, final String userId) {
         duration = "" + (days * 86400);
-        description = "Wake Up";
+        String description = "Wake Up";
         String sHour = "" + hour;
         String sMinute = "" + minute;
         if (hour < 10) sHour = "0" + sHour; if (minute < 10) sMinute = "0" + sMinute;
@@ -194,8 +195,11 @@ public class ChallengeController {
         dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
         cv = new ContentValues();
+
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
+
         Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call = singleinprogress.start_single_in_progress(challenge, token);
         call.enqueue(new Callback<com.example.ivan.champy_v2.single_inprogress.SingleInProgress>() {
             @Override
@@ -222,7 +226,9 @@ public class ChallengeController {
         dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
         cv = new ContentValues();
+
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
         Call<com.example.ivan.champy_v2.duel.Duel> call = singleinprogress.Start_duel(friend_id, challenge, token);
         call.enqueue(new Callback<Duel>() {
@@ -424,19 +430,17 @@ public class ChallengeController {
                         int challengeDuration = challenge.getDuration();
 
                         if (challengeStatus.equals("pending")) {
-                            //if (!challengeStatus.equals("failedBySender") && !challengeStatus.equals("rejectedByRecipient")) {
-                                if (userId.equals(recipient.getId())) {
-                                    cv.put("recipient", "true");
-                                    cv.put("versus", sender.getName());
-                                } else {
-                                    cv.put("recipient", "false");
-                                    cv.put("versus", recipient.getName());
-                                }
-                                cv.put("challenge_id", inProgressId);
-                                cv.put("description", challengeDescription);
-                                cv.put("duration", challengeDuration);
-                                db.insert("pending_duel", null, cv);
-                            //}
+                            if (userId.equals(recipient.getId())) {
+                                cv.put("recipient", "true");
+                                cv.put("versus", sender.getName());
+                            } else {
+                                cv.put("recipient", "false");
+                                cv.put("versus", recipient.getName());
+                            }
+                            cv.put("challenge_id", inProgressId);
+                            cv.put("description", challengeDescription);
+                            cv.put("duration", challengeDuration);
+                            db.insert("pending_duel", null, cv);
                         }
                     }
                     generateCardsForMainActivity(token, userId);

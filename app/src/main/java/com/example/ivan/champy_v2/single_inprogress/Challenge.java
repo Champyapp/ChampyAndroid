@@ -28,6 +28,7 @@ public class Challenge {
         return senderProgress;
     }
 
+
     public void setSenderProgress(Integer senderProgress) {
         this.senderProgress = senderProgress;
     }
