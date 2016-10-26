@@ -42,22 +42,16 @@ public class CHSocket {
         mSocket.on("connected", onConnected);
         mSocket.once("InProgressChallenge:accepted", onAcceptedOrWonChallenge);
         mSocket.once("InProgressChallenge:won", onAcceptedOrWonChallenge);
+        //        mSocket.on("InProgress:finish",                     onNewChallenge);
+
 //        mSocket.on("InProgressChallenge:failed",            onAcceptedOrWonChallenge);
 //        mSocket.on("InProgressChallenge:new",               onRefreshPending);
 //        mSocket.on("InProgressChallenge:checked",           onNewChallenge);
 //        mSocket.on("InProgressChallenge:updated",           onNewChallenge);
-          //        mSocket.on("InProgress:finish",                     onNewChallenge);
 //        mSocket.on("InProgressChallenge:recipient:checked", onNewChallenge);
 //        mSocket.on("InProgressChallenge:sender:checked",    onNewChallenge);
 
         mSocket.connect();
-    }
-
-
-    public void disconnectSockets() {
-        mSocket.off();
-        mSocket.disconnect();
-        Log.d(TAG, "Sockets: disconnected");
     }
 
 
