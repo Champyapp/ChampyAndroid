@@ -1,7 +1,6 @@
 package com.example.ivan.champy_v2.fragment;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -42,12 +41,13 @@ import retrofit.Retrofit;
 
 public class PendingFragment extends Fragment {
 
+    public static final String API_URL = "http://46.101.213.24:3007";
     public static final String ARG_PAGE = "ARG_PAGE";
     public static final String TAG = "PendingFragment";
-    final String API_URL = "http://46.101.213.24:3007";
 
-    public View gView;
     public SwipeRefreshLayout swipeRefreshLayout;
+    public View gView;
+
     private int mPage;
     private Socket mSocket;
 
@@ -121,6 +121,11 @@ public class PendingFragment extends Fragment {
         });
         this.gView = view;
 
+        Bundle friendRequestExtra = getActivity().getIntent().getExtras();
+        if (friendRequestExtra != null) {
+            refreshPendingView(swipeRefreshLayout, gView);
+        }
+
         if (checkRefresh.equals("true")) {
             refreshPendingView(swipeRefreshLayout, gView);
             sessionManager.setRefreshPending("false");
@@ -147,6 +152,7 @@ public class PendingFragment extends Fragment {
         mSocket.on("Relationship:created:removed", modifiedRelationship);
         mSocket.connect();
     }
+
 
     private void refreshPendingView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         CurrentUserHelper currentUser = new CurrentUserHelper(getContext());
@@ -178,8 +184,7 @@ public class PendingFragment extends Fragment {
                                     status = "false";
                                     Friend_ friend = datum.getFriend();
                                     cv.put("name", friend.getName());
-                                    if (friend.getPhoto() != null)
-                                        cv.put("photo", friend.getPhoto().getMedium());
+                                    if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
                                     else cv.put("photo", "");
                                     cv.put("user_id", friend.getId());
                                     cv.put("inProgressChallengesCount", friend.getInProgressChallengesCount());
@@ -190,8 +195,7 @@ public class PendingFragment extends Fragment {
                                     status = "true";
                                     Owner friend = datum.getOwner();
                                     cv.put("name", friend.getName());
-                                    if (friend.getPhoto() != null)
-                                        cv.put("photo", friend.getPhoto().getMedium());
+                                    if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
                                     else cv.put("photo", "");
                                     cv.put("user_id", friend.get_id());
                                     cv.put("inProgressChallengesCount", friend.getInProgressChallengesCount());

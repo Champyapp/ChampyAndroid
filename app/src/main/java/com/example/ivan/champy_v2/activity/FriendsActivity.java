@@ -105,10 +105,11 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         String extras = getIntent().getStringExtra("friend_request");
         if (extras != null) {
             if ("true".equals(extras)) {
-                recreate();
 //                loadUserPending();
 //                loadUserFriends();
                 viewPager.setCurrentItem(1);
+                Intent mExtras = new Intent();
+                mExtras.putExtra("new_friend_request", "true");
             /*} else {
                 viewPager.setCurrentItem(0); */
             }

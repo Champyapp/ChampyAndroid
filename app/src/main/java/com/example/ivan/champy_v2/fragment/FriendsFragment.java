@@ -123,6 +123,11 @@ public class FriendsFragment extends Fragment {
         });
         this.gView = view;
 
+        Bundle friendRequestExtra = getActivity().getIntent().getExtras();
+        if (friendRequestExtra != null) {
+            refreshFriendsView(gSwipeRefreshLayout, gView);
+        }
+
         if (checkRefresh.equals("true")) {
             refreshFriendsView(gSwipeRefreshLayout, gView);
             sessionManager.setRefreshFriends("false");
