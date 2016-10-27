@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.StrictMode;
 import android.util.Log;
 
+import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.activity.RoleControllerActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
@@ -54,7 +55,6 @@ public class AppSync {
     private final String API_URL = "http://46.101.213.24:3007";
     private final String TAG = "AppSync";
     private Context context;
-    private Activity activity;
     private String fbId, gcm, token, path;
 
 
@@ -90,7 +90,7 @@ public class AppSync {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    Log.i(TAG, "onResponse: Success" + response.isSuccess());
+                    Log.d(TAG, "onResponse: Success" + response.isSuccess());
                     Data data = response.body().getData();
                     String email = data.getEmail();
                     final String user_name = data.getName();
@@ -104,8 +104,12 @@ public class AppSync {
                     SessionManager sessionManager = new SessionManager(context);
                     sessionManager.setRefreshPending("false"); // TODO: 26.08.2016 change for true maybe? for auto update pending list?
                     sessionManager.setRefreshFriends("true");
-                    sessionManager.createUserLoginSession(user_name, email, facebookId, path_to_pic,
-                            jwtString, userId, pushN, newChallReq, acceptedYour, challegeEnd, "true", gcm);
+                    sessionManager.createUserLoginSession(
+                            user_name, email, facebookId, path_to_pic,
+                            jwtString, userId, pushN, newChallReq,
+                            acceptedYour, challegeEnd, "true", gcm
+                    );
+
                     sessionManager.setChampyOptions(
                             data.getAllChallengesCount().toString(),
                             data.getSuccessChallenges().toString(),
@@ -121,7 +125,7 @@ public class AppSync {
                      * который брал инфу про друзей. Сейчас мы вызываем его здесь.
                      */
 
-                    getUserInProgressChallenges(userId);
+                    //getUserInProgressChallenges(userId);
                     getUserPending(userId);
                     getUserFriendsInfo(gcm);
 
@@ -140,6 +144,9 @@ public class AppSync {
                     NotificationController controller = new NotificationController(context);
                     controller.activateDailyNotificationReminder();
 
+                    ChallengeController cc = new ChallengeController(context, (Activity) context, token, userId);
+                    cc.generateCardsForMainActivity();
+
                     Intent goToRoleActivity = new Intent(context, RoleControllerActivity.class);
                     context.startActivity(goToRoleActivity);
                 } else {
@@ -157,7 +164,7 @@ public class AppSync {
     }
 
 
-    public void getUserPending(final String userId) {
+    private void getUserPending(final String userId) {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("pending", null, null);
@@ -195,8 +202,8 @@ public class AppSync {
                                     cv.put("name", ownerFriend.getName());
                                     //if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
                                     //else cv.put("photo", "");
-                                    String friendPhoto = (ownerFriend.getPhoto() != null) ? ownerFriend.getPhoto().getMedium() : "";
-                                    cv.put("photo", friendPhoto);
+                                    String ownerPhoto = (ownerFriend.getPhoto() != null) ? ownerFriend.getPhoto().getMedium() : "";
+                                    cv.put("photo", ownerPhoto);
                                     cv.put("user_id", ownerFriend.get_id());
                                     cv.put("inProgressChallengesCount", ownerFriend.getInProgressChallengesCount());
                                     cv.put("allChallengesCount", ownerFriend.getAllChallengesCount());
@@ -265,33 +272,52 @@ public class AppSync {
                         JSONObject json = new JSONObject(senderProgress.get(j).toString());
                         long at = json.getLong("at");
                         stringSenderProgress[j] = String.valueOf(at);
-                    } catch (JSONException e) { e.printStackTrace(); }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 if (challenge_description.equals("Wake Up")) {
-                    cv.put("name", "Wake Up"); // just name of Challenge
-                    cv.put("wakeUpTime", challenge_detail); // our specific field for delete wakeUp (example: 1448);
+                    // just name of Challenge
+                    cv.put("name", "Wake Up");
+                    // our specific field for delete wakeUp (example: 1448);
+                    cv.put("wakeUpTime", challenge_detail);
                 } else if (challenge_type.equals("567d51c48322f85870fd931a")) {
-                    cv.put("name", "Self-Improvement"); // just name of Challenge
+                    // just name of Challenge
+                    cv.put("name", "Self-Improvement");
                 } else if (challenge_type.equals("567d51c48322f85870fd931b")) {
-                    cv.put("name", "Duel"); // just name of Challenge
+                    // just name of Challenge
+                    cv.put("name", "Duel");
                     if (userId.equals(recipient.getId())) {
+                        // if I accepted challenge, i'm "recipient"
                         cv.put("recipient", "true");
+                        // name of the person with whom we have a duel
                         cv.put("versus", sender.getName());
                     } else {
+                        // if I sent the challenge, i'm "sender"
                         cv.put("recipient", "false");
+                        // name of the person with whom we have a duel
                         cv.put("versus", recipient.getName());
                     }
                 }
 
-                cv.put("challengeName", challenge_name); // default 'challenge'. this column only for wake up time
-                cv.put("description", challenge_description); // smoking free life / wake up at 14:48
-                cv.put("duration", challenge_duration); // duration of challenge
-                cv.put("challenge_id", challenge_id); // in progress id
-                cv.put("status", challenge_status); // active or not
-                cv.put("updated", challenge_updated); // true / false
-                cv.put("senderProgress", Arrays.toString(stringSenderProgress)); // last update time in millis
+                // default 'challenge'. this column only for wake up time
+                cv.put("challengeName", challenge_name);
+                // smoking free life or wake up at 14:48
+                cv.put("description", challenge_description);
+                // duration of challenge
+                cv.put("duration", challenge_duration);
+                // in progress id
+                cv.put("challenge_id", challenge_id);
+                // active or not
+                cv.put("status", challenge_status);
+                // true or false
+                cv.put("updated", challenge_updated);
+                // last update time in millis
+                cv.put("senderProgress", Arrays.toString(stringSenderProgress));
+                // our constant value of challenge duration
                 cv.put("constDuration", constDuration);
+                // db when we store all challenges and information about them
                 db.insert("myChallenges", null, cv);
             }
 
@@ -301,7 +327,7 @@ public class AppSync {
 
 
 
-    // method which returns our last update (true or false);
+    // method which get our last update (true or false);
     private String getLastUpdated(String challenge_id) {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -326,7 +352,9 @@ public class AppSync {
         return lastUpdate;
     }
 
-    public void getUserFriendsInfo(final String gcm) {
+    // method which get friends name / photo / count of challenge / etc
+    // TODO: 27.10.2016 RESPONSE FAILED, Check it
+    private void getUserFriendsInfo(final String gcm) {
         final String API_URL = "http://46.101.213.24:3007";
         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         final NewUser newUser = retrofit.create(NewUser.class);
@@ -337,7 +365,8 @@ public class AppSync {
         int clearCount = db.delete("mytable", null, null);
         final ContentValues cv = new ContentValues();
 
-        final GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONArrayCallback() {
+        final GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(),
+                new GraphRequest.GraphJSONArrayCallback() {
             @Override
             public void onCompleted(JSONArray array, GraphResponse response) {
                 for (int i = 0; i < array.length(); i++) {
@@ -357,8 +386,9 @@ public class AppSync {
                                     Data data = response.body().getData();
                                     String photo = null;
 
-                                    if (data.getPhoto() != null) photo = API_URL + data.getPhoto().getMedium();
-                                    else {
+                                    if (data.getPhoto() != null) {
+                                        photo = API_URL + data.getPhoto().getMedium();
+                                    } else {
                                         try {
                                             URL profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
                                             photo = profile_pic.toString();
