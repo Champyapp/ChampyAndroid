@@ -255,6 +255,13 @@ public class PendingFragment extends Fragment {
     }
 
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mSocket.off();
+        mSocket.disconnect();
+    }
+
     private Emitter.Listener onConnect = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {

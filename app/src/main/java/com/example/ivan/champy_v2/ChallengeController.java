@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.example.ivan.champy_v2.activity.MainActivity;
@@ -211,7 +212,7 @@ public class ChallengeController {
                     com.example.ivan.champy_v2.single_inprogress.SingleInProgress data = response.body();
                     String inProgressId = data.getData().get_id();
                     cv.put("challenge_id", inProgressId);
-                    cv.put("updated", "true");
+                    cv.put("updated", "false");
                     db.insert("updated", null, cv);
                     Log.d("sendSingleInProgress", "InProgressId: " + inProgressId);
                     generateCardsForMainActivity();
@@ -243,9 +244,15 @@ public class ChallengeController {
                     cv.put("challenge_id", inProgressId);
                     cv.put("updated", "false");
                     db.insert("updated", null, cv);
+
                     refreshCardsForPendingDuel();
+
+                    Intent intent = new Intent(firstActivity, MainActivity.class);
+                    firstActivity.startActivity(intent);
+
                     Log.d("startDuelInProgress", "Status: VSE OK");
-                } else Log.d("startDuelInProgress", "Status: FAILED " + response.code() + response.message());
+                } else
+                    Log.d("startDuelInProgress", "Status: FAILED " + response.code() + response.message());
             }
 
             @Override
@@ -316,6 +323,7 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     Log.d("JoinToChallenge", "onResponse: VSE OK");
                     refreshCardsForPendingDuel();
+                    generateCardsForMainActivity();
                 } else Log.d("JoinToChallenge", "onResponse: WTF" + " | ERROR = " + response.code());
             }
 
@@ -333,6 +341,7 @@ public class ChallengeController {
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()){
                     refreshCardsForPendingDuel();
+                    generateCardsForMainActivity();
                     Log.d(TAG, "RejectInviteForDuel onResponse: VSE OK");
                 } else Log.d(TAG, "RejectInviteForDuel onResponse: FAILED" + " | ERROR: " + response.code() + " " + response.message());
             }
@@ -359,7 +368,7 @@ public class ChallengeController {
                     cv.put("updated", "true");
                     db.update("updated",      cv, "challenge_id = ?", new String[]{inProgressId});
                     db.update("myChallenges", cv, "challenge_id = ?", new String[]{inProgressId});
-                    refreshCardsForPendingDuel();
+                    generateCardsForMainActivity();
                     Log.d(TAG, "doneForToday onResponse: VSE OK");
                 } else {
                     Log.d(TAG, "doneForToday onResponse: FAILED " + response.code() + response.message() + response.body());
@@ -446,7 +455,6 @@ public class ChallengeController {
                             db.insert("pending_duel", null, cv);
                         }
                     }
-                    generateCardsForMainActivity();
                     Log.d(TAG, "RefreshPendingDuels onResponse: VSE OK");
                 } else {
                     Log.d(TAG, "RefreshPendingDuels onResponse: FAILED: " + response.code());
@@ -458,7 +466,7 @@ public class ChallengeController {
         });
     }
 
-    private void generateCardsForMainActivity() {
+    public void generateCardsForMainActivity() {
         dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
         cv = new ContentValues();

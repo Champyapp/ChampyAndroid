@@ -58,7 +58,9 @@ public class FriendsFragment extends Fragment {
 
         try {
             mSocket = IO.socket("http://46.101.213.24:3007");
-        } catch (URISyntaxException e) { throw new RuntimeException(e); }
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
 
         mSocket.on("connect", onConnect);
         mSocket.on("connected", onConnected);
@@ -141,6 +143,7 @@ public class FriendsFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         mSocket.off();
+        mSocket.disconnect();
     }
 
 
