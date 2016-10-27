@@ -27,7 +27,7 @@ public class HistoryFailedFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_second, container, false);
 
         ArrayList<SelfImprovement_model> self_improvement = SelfImprovement_model.generateFailed(getContext());
-        ArrayList<HistoryChallenge> allArray = new ArrayList<>();
+        ArrayList<HistoryChallenge> arr = new ArrayList<>();
 
         for (int i = 0; i < self_improvement.size(); i++) {
             SelfImprovement_model item = self_improvement.get(i);
@@ -41,11 +41,13 @@ public class HistoryFailedFragment extends Fragment {
             String recipient = item.getRecipient();
             String constDuration = item.getConstDuration();
 
-            allArray.add(new HistoryChallenge(type, false, description, duration, status, goal, challengeName, versus, recipient, constDuration));
+            arr.add(new HistoryChallenge(
+                    type, false, description, duration, status, goal, challengeName, versus, recipient, constDuration
+            ));
         }
 
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-        HistoryChallengeAdapter adapter = new HistoryChallengeAdapter(allArray, getContext());
+        HistoryChallengeAdapter adapter = new HistoryChallengeAdapter(arr, getContext());
         rvContacts.setAdapter(adapter);
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         return view;

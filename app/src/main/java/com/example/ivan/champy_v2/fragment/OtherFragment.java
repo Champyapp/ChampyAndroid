@@ -1,7 +1,6 @@
 package com.example.ivan.champy_v2.fragment;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -78,14 +77,14 @@ public class OtherFragment extends Fragment {
 
         Cursor c = db.query("mytable", null, null, null, null, null, null);
         if (c.moveToFirst()) {
-            int idColIndex = c.getColumnIndex("id");
-            int nameColIndex = c.getColumnIndex("name");
-            int photoColIndex = c.getColumnIndex("photo");
-            int index = c.getColumnIndex("user_id");
             int challenges = c.getColumnIndex("challenges");
-            int wins = c.getColumnIndex("wins");
+            int photoColIndex = c.getColumnIndex("photo"); // mb ydalit' ?
+            int nameColIndex = c.getColumnIndex("name");
+            int idColIndex = c.getColumnIndex("id");
+            int index = c.getColumnIndex("user_id");
             int total = c.getColumnIndex("total");
             int level = c.getColumnIndex("level");
+            int wins = c.getColumnIndex("wins");
             do {
                 if (!getContact(c.getString(index)))
                     friends.add(new Friend(
@@ -263,9 +262,6 @@ public class OtherFragment extends Fragment {
         Boolean ok = false;
         Cursor c = db.query("pending", null, null, null, null, null, null);
         if (c.moveToFirst()) {
-            int idColIndex = c.getColumnIndex("id");
-            int nameColIndex = c.getColumnIndex("name");
-            int photoColIndex = c.getColumnIndex("photo");
             int index = c.getColumnIndex("user_id");
             do {
                 String user_id = c.getString(index);
@@ -277,9 +273,6 @@ public class OtherFragment extends Fragment {
         }
         c = db.query("friends", null, null, null, null, null, null);
         if (c.moveToFirst()) {
-            int idColIndex = c.getColumnIndex("id");
-            int nameColIndex = c.getColumnIndex("name");
-            int photoColIndex = c.getColumnIndex("photo");
             int index = c.getColumnIndex("user_id");
             do {
                 String user_id = c.getString(index);

@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,8 +99,6 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         CHSetupUI chSetupUI= new CHSetupUI();
         chSetupUI.setupUI(view, getActivity());
         Glide.with(getContext()).load(R.drawable.points).override(200, 200).into((ImageView)view.findViewById(R.id.imageViewPoints));
-        offlineMode = new OfflineMode();
-        offlineMode.isConnectedToRemoteAPI(getActivity());
         btnAccept.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
 
@@ -134,6 +131,8 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onClick(View view) {
+        offlineMode = new OfflineMode();
+        offlineMode.isConnectedToRemoteAPI(getActivity());
         CurrentUserHelper user = new CurrentUserHelper(getContext());
         final String token = user.getToken();
         final String userId = user.getUserObjectId();

@@ -1,11 +1,9 @@
 package com.example.ivan.champy_v2.fragment;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -81,14 +79,14 @@ public class FriendsFragment extends Fragment {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("friends", null, null, null, null, null, null);
         if (c.moveToFirst()) {
-            int idColIndex = c.getColumnIndex("id");
-            int nameColIndex = c.getColumnIndex("name");
-            int photoColIndex = c.getColumnIndex("photo");
             int inProgressChallengesCountIndex = c.getColumnIndex("inProgressChallengesCount");
-            int successChallenges = c.getColumnIndex("successChallenges");
             int allChallengesCount = c.getColumnIndex("allChallengesCount");
+            int successChallenges = c.getColumnIndex("successChallenges");
+            int photoColIndex = c.getColumnIndex("photo");
+            int nameColIndex = c.getColumnIndex("name");
             int level = c.getColumnIndex("level");
             int index = c.getColumnIndex("user_id");
+            int idColIndex = c.getColumnIndex("id");
             do {
                 friends.add(new com.example.ivan.champy_v2.Friend(
                         c.getString(nameColIndex),
@@ -176,43 +174,41 @@ public class FriendsFragment extends Fragment {
 
                         for (int i = 0; i < data.size(); i++) {
                             Datum datum = data.get(i);
-                            if (datum.getFriend() != null) {
-
-                                if (datum.getStatus().toString().equals("true")) {
-                                    if (datum.getOwner().get_id().equals(id)) {
-                                        Friend_ friend = datum.getFriend();
-                                        cv.put("name", friend.getName());
-                                        if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
-                                        else cv.put("photo", "");
-                                        cv.put("user_id", friend.getId());
-                                        cv.put("inProgressChallengesCount", friend.getInProgressChallengesCount());
-                                        cv.put("allChallengesCount", friend.getAllChallengesCount());
-                                        cv.put("successChallenges", friend.getSuccessChallenges());
-                                        db.insert("friends", null, cv);
-                                    } else {
-                                        Owner friend = datum.getOwner();
-                                        cv.put("name", friend.getName());
-                                        if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
-                                        else cv.put("photo", "");
-                                        cv.put("user_id", friend.get_id());
-                                        cv.put("inProgressChallengesCount", friend.getInProgressChallengesCount());
-                                        cv.put("allChallengesCount", friend.getAllChallengesCount());
-                                        cv.put("successChallenges", friend.getSuccessChallenges());
-                                        db.insert("friends", null, cv);
-                                    }
+                            if (datum.getFriend() != null && datum.getStatus().toString().equals("true")) {
+                                if (datum.getOwner().get_id().equals(id)) {
+                                    Friend_ friend = datum.getFriend();
+                                    cv.put("name", friend.getName());
+                                    if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
+                                    else cv.put("photo", "");
+                                    cv.put("user_id", friend.getId());
+                                    cv.put("inProgressChallengesCount", friend.getInProgressChallengesCount());
+                                    cv.put("allChallengesCount", friend.getAllChallengesCount());
+                                    cv.put("successChallenges", friend.getSuccessChallenges());
+                                    db.insert("friends", null, cv);
+                                } else {
+                                    Owner friend = datum.getOwner();
+                                    cv.put("name", friend.getName());
+                                    if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
+                                    else cv.put("photo", "");
+                                    cv.put("user_id", friend.get_id());
+                                    cv.put("inProgressChallengesCount", friend.getInProgressChallengesCount());
+                                    cv.put("allChallengesCount", friend.getAllChallengesCount());
+                                    cv.put("successChallenges", friend.getSuccessChallenges());
+                                    db.insert("friends", null, cv);
                                 }
                             }
                         }
+
                         final List<Friend> newfriends = new ArrayList<>();
                         Cursor c = db.query("friends", null, null, null, null, null, null);
                         if (c.moveToFirst()) {
-                            int idColIndex = c.getColumnIndex("id");
-                            int nameColIndex = c.getColumnIndex("name");
-                            int photoColIndex = c.getColumnIndex("photo");
-                            int index = c.getColumnIndex("user_id");
                             int inProgressChallengesCountIndex = c.getColumnIndex("inProgressChallengesCount");
-                            int successChallenges = c.getColumnIndex("successChallenges");
                             int allChallengesCount = c.getColumnIndex("allChallengesCount");
+                            int successChallenges = c.getColumnIndex("successChallenges");
+                            int photoColIndex = c.getColumnIndex("photo");
+                            int nameColIndex = c.getColumnIndex("name");
+                            int idColIndex = c.getColumnIndex("id");
+                            int index = c.getColumnIndex("user_id");
                             int level = c.getColumnIndex("level");
                             do {
                                 newfriends.add(new Friend(

@@ -41,7 +41,9 @@ public class HistoryInProgressFragment extends Fragment{
             String recipient = item.getRecipient();
             String constDuration = item.getConstDuration();
 
-            all.add(new HistoryChallenge(type, true, description, duration, status, goal, challengeName, versus, recipient, constDuration));
+            all.add(new HistoryChallenge(
+                    type, true, description, duration, status, goal, challengeName, versus, recipient, constDuration
+            ));
         }
 
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);

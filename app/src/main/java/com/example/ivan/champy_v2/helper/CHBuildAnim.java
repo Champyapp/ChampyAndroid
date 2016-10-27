@@ -3,7 +3,6 @@ package com.example.ivan.champy_v2.helper;
 import android.animation.TypeEvaluator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
-import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;

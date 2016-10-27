@@ -263,7 +263,7 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
                         final SQLiteDatabase db = dbHelper.getWritableDatabase();
                         final ContentValues cv = new ContentValues();
 
-                        //щоб воно не обновляло (і дублювало) лист друзів після додавання когось, то має юути false
+                        //щоб воно не обновляло (і дублювало) лист друзів після додавання когось, то має бути false
                         sessionManager.setRefreshPending("false");
 
                         com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(Friends.class);

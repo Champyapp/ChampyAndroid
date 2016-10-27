@@ -25,7 +25,6 @@ import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
-import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 
 import java.util.HashMap;
 

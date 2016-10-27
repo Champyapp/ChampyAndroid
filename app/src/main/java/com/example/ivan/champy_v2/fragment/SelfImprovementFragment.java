@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,6 @@ import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
-import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 
 import java.util.HashMap;
 
@@ -124,8 +122,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
             textDays.setVisibility(View.VISIBLE);
         }
 
-        OfflineMode offlineMode = new OfflineMode();
-        offlineMode.isConnectedToRemoteAPI(getActivity());
         buttonAccept.setOnClickListener(this);
 
         return view;
@@ -133,6 +129,9 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
+        OfflineMode offlineMode = new OfflineMode();
+        offlineMode.isConnectedToRemoteAPI(getActivity());
+
         description = etGoal.getText().toString();
         duration = etDays.getText().toString();
         c = db.query("selfimprovement", null, null, null, null, null, null);

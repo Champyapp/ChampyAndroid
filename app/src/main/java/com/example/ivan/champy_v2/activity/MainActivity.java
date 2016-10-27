@@ -38,7 +38,6 @@ import com.example.ivan.champy_v2.helper.CHBuildAnim;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHDownloadImageTask;
 import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
-import com.example.ivan.champy_v2.helper.CHSocket;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
 import com.facebook.FacebookSdk;

@@ -1,18 +1,14 @@
 package com.example.ivan.champy_v2.adapter;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -20,13 +16,11 @@ import android.widget.TextView;
 
 import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.R;
-import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -75,7 +69,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         String itemGoal = currentCard.getGoal();
         String itemType = currentCard.getType();
         final String itemInProgressId = currentCard.getId();
-        Log.d(TAG, "getView: itemInProgressId: " + itemInProgressId);
+        //Log.d(TAG, "getView: itemInProgressId: " + itemInProgressId);
         String[] senderProgress = toArrayOfStrings(itemSenderProgress);
 
         switch (itemType) {
@@ -153,7 +147,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         final long oneDay = 86400L;
         try {
             longSenderProgress = Long.parseLong(senderProgress[0]); // our last checkIn in seconds
-            Log.d(TAG, "getView: longSenderProgress: " + longSenderProgress);
+            //Log.d(TAG, "getView: longSenderProgress: " + longSenderProgress);
             Date date = new Date(longSenderProgress * 1000); // convert last checkIn in date format
             senderProgressMidNight = longSenderProgress - (date.getHours() * 60 * 60) - (date.getMinutes() * 60) - (date.getSeconds());
         } catch (RuntimeException e) {
@@ -209,15 +203,6 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
             @Override
             public void onClick(View v) {
                 try {
-                    // TODO: 26.09.2016 replace this piece of code inside DoneForToday method in cc.
-                    ////////////////////////////////////////////////////////////////////////
-//                    DBHelper dbHelper = new DBHelper(getContext());
-//                    SQLiteDatabase db = dbHelper.getWritableDatabase();
-//                    ContentValues cv = new ContentValues();
-//                    cv.put("updated", "true");
-//                    db.update("myChallenges", cv, "challenge_id = ?", new String[]{itemInProgressId});
-//                    db.update("updated", cv, "challenge_id = ?", new String[]{itemInProgressId});
-                    ////////////////////////////////////////////////////////////////////////
                     cc.doneForToday(itemInProgressId);
                     buttonDone.setVisibility(View.INVISIBLE);
                     buttonShare.setVisibility(View.VISIBLE);
