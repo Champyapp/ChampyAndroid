@@ -10,9 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.StrictMode;
 import android.util.Log;
 
-import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.SessionManager;
-import com.example.ivan.champy_v2.activity.LoginActivity;
 import com.example.ivan.champy_v2.activity.RoleControllerActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;

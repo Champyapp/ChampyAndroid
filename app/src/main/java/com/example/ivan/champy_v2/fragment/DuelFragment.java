@@ -153,14 +153,16 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         snackbar = Snackbar.make(view, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cc = new ChallengeController(getContext(), getActivity(), 0, 0);
+                cc = new ChallengeController(getContext(), getActivity(), token, userId);
                 if (position == size) {
                     try {
                         if (checkInputUserData(description, duration, view)) {
                             days = Integer.parseInt(duration);
-                            cc.createNewDuelChallenge(description, days, friend_id, token, userId);
+                            cc.createNewDuelChallenge(description, days, friend_id);
                         }
-                    } catch (NullPointerException e) { e.printStackTrace(); }
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
 
                 } else {
                     if (c.moveToFirst()) {
@@ -186,13 +188,15 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
 
                     try {
                         if (!cc.isActive(description)) {
-                            cc.sendSingleInProgressForDuel(challenge_id, friend_id, token, userId);
+                            cc.sendSingleInProgressForDuel(challenge_id, friend_id);
                             snackbar = Snackbar.make(view, "Sent duel request", Snackbar.LENGTH_SHORT);
                         } else {
                             snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
                         }
                         snackbar.show();
-                    } catch (NullPointerException e) { e.printStackTrace(); }
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });

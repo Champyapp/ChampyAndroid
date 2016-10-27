@@ -49,7 +49,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             tempView = inflater.inflate(R.layout.single_card_fragment_self, null, false);
         }
-        final ChallengeController cc = new ChallengeController(getContext(), (Activity) getContext(), 0 , 0);
+
         final SelfImprovement_model currentCard = arrayList.get(position);
         ImageView cardImage = (ImageView)tempView.findViewById(R.id.cardImage);
         ImageView imageChallengeLogo = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
@@ -125,9 +125,12 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         }
         tvDuration.setTypeface(typeface);
         tvDuration.setTextSize(y*2);
+
         CurrentUserHelper user = new CurrentUserHelper(getContext());
         userId = user.getUserObjectId();
         token  = user.getToken();
+
+        final ChallengeController cc = new ChallengeController(getContext(), (Activity) getContext(), token, userId);
 
 //        /**
 //         * My algorithm for displaying buttons inside cards view and opportunity for check challenge
@@ -168,8 +171,10 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                 try {
                     if (itemType.equals("Wake Up")) {
                         int i = Integer.parseInt(currentCard.getWakeUpTime());
-                           cc.give_up(itemInProgressId, i, token, userId);
-                    } else cc.give_up(itemInProgressId, 0, token, userId);
+                        cc.give_up(itemInProgressId, i);
+                    } else {
+                        cc.give_up(itemInProgressId, 0);
+                    }
                 } catch (IOException | NumberFormatException e) {
                     e.printStackTrace();
                 }
@@ -187,9 +192,9 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                         try {
                             if (currentCard.getType().equals("Wake Up")) {
                                 int i = Integer.parseInt(currentCard.getWakeUpTime());
-                                cc.give_up(itemInProgressId, i, token, userId);
+                                cc.give_up(itemInProgressId, i);
                             } else {
-                                cc.give_up(itemInProgressId, 0, token, userId);
+                                cc.give_up(itemInProgressId, 0);
                             }
                         } catch (IOException | NumberFormatException e) {
                             e.printStackTrace();
@@ -213,7 +218,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 //                    db.update("myChallenges", cv, "challenge_id = ?", new String[]{itemInProgressId});
 //                    db.update("updated", cv, "challenge_id = ?", new String[]{itemInProgressId});
                     ////////////////////////////////////////////////////////////////////////
-                    cc.doneForToday(itemInProgressId, token, userId);
+                    cc.doneForToday(itemInProgressId);
                     buttonDone.setVisibility(View.INVISIBLE);
                     buttonShare.setVisibility(View.VISIBLE);
                     snackbar = Snackbar.make(v, "Well done!", Snackbar.LENGTH_SHORT);

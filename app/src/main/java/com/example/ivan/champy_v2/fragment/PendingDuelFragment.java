@@ -137,7 +137,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         CurrentUserHelper user = new CurrentUserHelper(getContext());
         final String token = user.getToken();
         final String userId = user.getUserObjectId();
-        cc = new ChallengeController(getContext(), getActivity(), 0, 0);
+        cc = new ChallengeController(getContext(), getActivity(), token, userId);
         position = viewPager.getCurrentItem();
         c = db.query("pending_duel", null, null, null, null, null, null);
         if (c.moveToFirst()) {
@@ -164,13 +164,15 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
                     public void onClick(View view) {
                         try {
                             if (!cc.isActive(description) && recipient.equals("true")) {
-                                cc.joinToChallenge(challenge_id, token, userId);
+                                cc.joinToChallenge(challenge_id);
                                 snackbar = Snackbar.make(view, "Challenge Accepted!", Snackbar.LENGTH_SHORT);
                             } else {
                                 snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
                             }
                             snackbar.show();
-                        } catch (NullPointerException e) { e.printStackTrace(); }
+                        } catch (NullPointerException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
                 snackbar.show();
@@ -181,10 +183,12 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
                     @Override
                     public void onClick(View view) {
                         try {
-                            cc.rejectInviteForPendingDuel(challenge_id, token, userId);
+                            cc.rejectInviteForPendingDuel(challenge_id);
                             snackbar = Snackbar.make(view, "Challenge Canceled!", Snackbar.LENGTH_SHORT);
                             snackbar.show();
-                        } catch (IOException | NullPointerException e) { e.printStackTrace(); }
+                        } catch (IOException | NullPointerException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
                 snackbar.show();

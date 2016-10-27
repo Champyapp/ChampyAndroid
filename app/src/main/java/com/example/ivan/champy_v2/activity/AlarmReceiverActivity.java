@@ -44,7 +44,6 @@ public class AlarmReceiverActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         final String finalInProgressChallengeId = this.getIntent().getStringExtra("finalInProgressChallengeId");
-        final ChallengeController cc = new ChallengeController(getApplicationContext(), AlarmReceiverActivity.this, 0, 0);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.alarm);
@@ -55,6 +54,7 @@ public class AlarmReceiverActivity extends Activity {
         TextView textView = (TextView)findViewById(R.id.wakeup_text);
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         textView.setTypeface(typeface);
+
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
@@ -66,18 +66,19 @@ public class AlarmReceiverActivity extends Activity {
         CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
         token = user.getToken();
         userId = user.getUserObjectId();
+        final ChallengeController cc = new ChallengeController(getApplicationContext(), AlarmReceiverActivity.this, token, userId);
         buttonWakeUpDoneForToday.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View arg0, MotionEvent arg1) {
                 mMediaPlayer.stop();
                 try {
                     // TODO: 27.09.2016 replace this piece of code in CC, in doneForToday response
-                    DBHelper dbHelper = new DBHelper(getApplicationContext());
-                    SQLiteDatabase db = dbHelper.getWritableDatabase();
-                    ContentValues cv = new ContentValues();
-                    cv.put("updated", "true");
-                    db.update("myChallenges", cv, "challenge_id = ?", new String[]{finalInProgressChallengeId});
-                    db.update("updated", cv, "challenge_id = ?", new String[]{finalInProgressChallengeId});
-                    cc.doneForToday(finalInProgressChallengeId, token, userId);
+                    //DBHelper dbHelper = new DBHelper(getApplicationContext());
+                    //SQLiteDatabase db = dbHelper.getWritableDatabase();
+                    //ContentValues cv = new ContentValues();
+                    //cv.put("updated", "true");
+                    //db.update("myChallenges", cv, "challenge_id = ?", new String[]{finalInProgressChallengeId});
+                    //db.update("updated", cv, "challenge_id = ?", new String[]{finalInProgressChallengeId});
+                    cc.doneForToday(finalInProgressChallengeId);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

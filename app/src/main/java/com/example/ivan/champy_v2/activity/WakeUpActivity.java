@@ -41,8 +41,9 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
     public final static String API_URL = "http://46.101.213.24:3007";
     private String userId, token;
     private TimePicker alarmTimePicker;
-    public Snackbar snackbar;
-    AlarmManager alarmManager;
+    private AlarmManager alarmManager;
+    private CurrentUserHelper user;
+    private Snackbar snackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,10 +94,9 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         @SuppressLint("SdCardPath") String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
-        CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
+
+        user = new CurrentUserHelper(getApplicationContext());
         String userName = user.getName();
-        userId = user.getUserObjectId();
-        token  = user.getToken();
         drawerUserName.setText(userName);
 
         Glide.with(this).load(R.drawable.points).override(100, 100).into((ImageView) findViewById(R.id.imageViewPoints));
@@ -117,21 +117,29 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
 
     @Override
     public void onClick(final View v) {
-        final int hour = alarmTimePicker.getCurrentHour();
-        final int minute = alarmTimePicker.getCurrentMinute();
         final OfflineMode offlineMode = new OfflineMode();
         offlineMode.isConnectedToRemoteAPI(WakeUpActivity.this);
-        String sHour = "" + hour;
-        String sMinute = "" + minute;
-        if (hour < 10)   sHour   = "0" + sHour;
-        if (minute < 10) sMinute = "0" + sMinute;
-        final ChallengeController cc = new ChallengeController(WakeUpActivity.this, WakeUpActivity.this, hour, minute);
+
+        final int pickedHour = alarmTimePicker.getCurrentHour();
+        final int picketMin = alarmTimePicker.getCurrentMinute();
+
+        // this piece of code need only for check exist challenge
+        String sHour = "" + pickedHour;
+        String sMinute = "" + picketMin;
+
+        if (pickedHour < 10)   sHour   = "0" + sHour;
+        if (picketMin < 10) sMinute = "0" + sMinute;
+
+        userId = user.getUserObjectId();
+        token  = user.getToken();
+
+        final ChallengeController cc = new ChallengeController(this, this, token, userId);
         final boolean ok = cc.isActiveWakeUp(sHour + sMinute);
         snackbar = Snackbar.make(v, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes!", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (ok) {
-                    cc.createNewWakeUpChallenge(21, type_id, token, userId);
+                    cc.createNewWakeUpChallenge(21, type_id, pickedHour, picketMin);
                     snackbar = Snackbar.make(view, "Challenge Created!", Snackbar.LENGTH_SHORT);
                 } else {
                     snackbar = Snackbar.make(view, "Already Exist!", Snackbar.LENGTH_SHORT);

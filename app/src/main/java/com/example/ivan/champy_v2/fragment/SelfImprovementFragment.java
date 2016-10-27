@@ -147,13 +147,13 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         snackbar = Snackbar.make(view, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cc = new ChallengeController(getContext(), getActivity(), 0, 0);
+                cc = new ChallengeController(getContext(), getActivity(), token, userId);
 
                 if (position == size) {
                     try {
                         if (checkInputUserData(description, duration, view)) {
                             days = Integer.parseInt(duration);
-                            cc.createNewSelfImprovementChallenge(description, days, token, userId);
+                            cc.createNewSelfImprovementChallenge(description, days);
                         }
                     } catch (NullPointerException | NumberFormatException e) {
                         e.printStackTrace();
@@ -183,13 +183,15 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 
                     try {
                         if (!cc.isActive(description)) {
-                            cc.sendSingleInProgressForSelf(challenge_id, token, userId);
+                            cc.sendSingleInProgressForSelf(challenge_id);
                             snackbar = Snackbar.make(view, "Challenge Created!", Snackbar.LENGTH_SHORT);
                         } else {
                             snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
                         }
                         snackbar.show();
-                    } catch (NullPointerException e) { e.printStackTrace(); }
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
