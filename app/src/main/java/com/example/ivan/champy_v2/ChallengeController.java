@@ -304,9 +304,8 @@ public class ChallengeController {
             }
 
             @Override
-            public void onFailure(Throwable t) {
+            public void onFailure(Throwable t) { }
 
-            }
         });
     }
 
@@ -323,7 +322,7 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     Log.d("JoinToChallenge", "onResponse: VSE OK");
                     refreshCardsForPendingDuel();
-                    generateCardsForMainActivity();
+
                 } else Log.d("JoinToChallenge", "onResponse: WTF" + " | ERROR = " + response.code());
             }
 
@@ -341,7 +340,6 @@ public class ChallengeController {
             public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()){
                     refreshCardsForPendingDuel();
-                    generateCardsForMainActivity();
                     Log.d(TAG, "RejectInviteForDuel onResponse: VSE OK");
                 } else Log.d(TAG, "RejectInviteForDuel onResponse: FAILED" + " | ERROR: " + response.code() + " " + response.message());
             }
@@ -368,7 +366,7 @@ public class ChallengeController {
                     cv.put("updated", "true");
                     db.update("updated",      cv, "challenge_id = ?", new String[]{inProgressId});
                     db.update("myChallenges", cv, "challenge_id = ?", new String[]{inProgressId});
-                    generateCardsForMainActivity();
+                    refreshCardsForPendingDuel();
                     Log.d(TAG, "doneForToday onResponse: VSE OK");
                 } else {
                     Log.d(TAG, "doneForToday onResponse: FAILED " + response.code() + response.message() + response.body());
@@ -466,7 +464,7 @@ public class ChallengeController {
         });
     }
 
-    public void generateCardsForMainActivity() {
+    private void generateCardsForMainActivity() {
         dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
         cv = new ContentValues();
@@ -513,9 +511,7 @@ public class ChallengeController {
                                 JSONObject json = new JSONObject(senderProgress.get(j).toString());
                                 long at = json.getLong("at");
                                 stringSenderProgress[j] = String.valueOf(at);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                            } catch (JSONException e) { e.printStackTrace(); }
                         }
 
                         if (challenge_description.equals("Wake Up")) {
