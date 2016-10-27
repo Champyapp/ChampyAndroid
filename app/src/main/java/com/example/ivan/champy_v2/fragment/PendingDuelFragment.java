@@ -137,7 +137,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         CurrentUserHelper user = new CurrentUserHelper(getContext());
         final String token = user.getToken();
         final String userId = user.getUserObjectId();
-        cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
+        cc = new ChallengeController(getContext(), getActivity(), 0, 0);
         position = viewPager.getCurrentItem();
         c = db.query("pending_duel", null, null, null, null, null, null);
         if (c.moveToFirst()) {

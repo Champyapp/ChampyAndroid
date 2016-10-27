@@ -49,7 +49,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             tempView = inflater.inflate(R.layout.single_card_fragment_self, null, false);
         }
-        final ChallengeController cc = new ChallengeController(getContext(), (Activity) getContext(), 0 , 0, 0);
+        final ChallengeController cc = new ChallengeController(getContext(), (Activity) getContext(), 0 , 0);
         final SelfImprovement_model currentCard = arrayList.get(position);
         ImageView cardImage = (ImageView)tempView.findViewById(R.id.cardImage);
         ImageView imageChallengeLogo = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
@@ -170,7 +170,9 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                         int i = Integer.parseInt(currentCard.getWakeUpTime());
                            cc.give_up(itemInProgressId, i, token, userId);
                     } else cc.give_up(itemInProgressId, 0, token, userId);
-                } catch (IOException | NumberFormatException e) { e.printStackTrace(); }
+                } catch (IOException | NumberFormatException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -185,9 +187,13 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                         try {
                             if (currentCard.getType().equals("Wake Up")) {
                                 int i = Integer.parseInt(currentCard.getWakeUpTime());
-                                   cc.give_up(itemInProgressId, i, token, userId);
-                            } else cc.give_up(itemInProgressId, 0, token, userId);
-                        } catch (IOException | NumberFormatException e) { e.printStackTrace(); }
+                                cc.give_up(itemInProgressId, i, token, userId);
+                            } else {
+                                cc.give_up(itemInProgressId, 0, token, userId);
+                            }
+                        } catch (IOException | NumberFormatException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
                 snackbar.show();
@@ -212,7 +218,9 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                     buttonShare.setVisibility(View.VISIBLE);
                     snackbar = Snackbar.make(v, "Well done!", Snackbar.LENGTH_SHORT);
                     snackbar.show();
-                } catch (IOException e) { e.printStackTrace(); }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 

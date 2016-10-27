@@ -179,7 +179,7 @@ public class CustomPagerBase {
                                 changePageTo(NEXT_PAGE);
                             }
 
-                            // if when we pick-up our finger from the screen x <> 100 then return card to default;
+                            // if when we pick-up our finger from the screen and X <> 100 then return card to default;
                             else {
                                 moveCentralItemToDefault();
                                 // if we have right and left cards then return they (central position)
@@ -200,14 +200,12 @@ public class CustomPagerBase {
                             isTouchEnabled = true;
                             break;
 
-                        case MotionEvent.ACTION_CANCEL:
-                            Log.d(TAG, "onTouch: CANCEL!");
-                            break;
-
                         default:
                             Log.d(TAG, "onTouch: Default: ...");
                             event.setAction(MotionEvent.ACTION_CANCEL);
+
                             moveCentralItemToDefault();
+
                             // for central position when we have both sides
                             if (previousItem != null) {
                                 movePreviousItemToDefault(previousItem);

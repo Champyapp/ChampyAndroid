@@ -125,7 +125,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         String sMinute = "" + minute;
         if (hour < 10)   sHour   = "0" + sHour;
         if (minute < 10) sMinute = "0" + sMinute;
-        final ChallengeController cc = new ChallengeController(WakeUpActivity.this, WakeUpActivity.this, hour, minute, 0);
+        final ChallengeController cc = new ChallengeController(WakeUpActivity.this, WakeUpActivity.this, hour, minute);
         final boolean ok = cc.isActiveWakeUp(sHour + sMinute);
         snackbar = Snackbar.make(v, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes!", new View.OnClickListener() {
             @Override

@@ -296,7 +296,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_settings) {
-            ChallengeController cc = new ChallengeController(getApplicationContext(), MainActivity.this, 0, 0, 0);
+            ChallengeController cc = new ChallengeController(getApplicationContext(), MainActivity.this, 0, 0);
             CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
             String token = user.getToken();
             String userId = user.getUserObjectId();

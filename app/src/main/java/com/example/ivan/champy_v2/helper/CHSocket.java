@@ -78,7 +78,7 @@ public class CHSocket {
                 CurrentUserHelper user = new CurrentUserHelper(context);
                 token = user.getToken();
                 userId = user.getUserObjectId();
-                cc = new ChallengeController(context, activity, 0, 0, 0);
+                cc = new ChallengeController(context, activity, 0, 0);
                 cc.refreshCardsForPendingDuel(token, userId);
                 Log.d(TAG, "Sockets: onAcceptedOrWonChallenge success!");
             } catch (Exception e) { Log.d(TAG, "Sockets: ERROR: " + e); }

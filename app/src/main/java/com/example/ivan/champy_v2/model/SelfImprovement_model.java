@@ -147,7 +147,7 @@ public class SelfImprovement_model {
     }
 
 
-    //this method generates InProgress for History and for cards in MainActivity
+    // this method generates InProgress for History and for cards in MainActivity
     public static ArrayList<SelfImprovement_model> generate(Context context) {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -226,7 +226,7 @@ public class SelfImprovement_model {
 //        return  arrayList;
 //    }
 
-    //генерирует Wins в History
+    // generate Wins in History
     public static ArrayList<SelfImprovement_model> generateWins(Context context) {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -304,7 +304,7 @@ public class SelfImprovement_model {
         return arrayList;
     }
 
-    //генерирует Fails в History
+    // generate Fails in History
     public static ArrayList<SelfImprovement_model> generateFailed(Context context) {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();

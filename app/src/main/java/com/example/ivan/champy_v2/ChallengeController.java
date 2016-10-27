@@ -46,7 +46,7 @@ public class ChallengeController {
     public static final String API_URL = "http://46.101.213.24:3007";
     public static final String TAG = "ChallengeController";
     public static long unixTime = System.currentTimeMillis() / 1000L;
-    private int hour, minute, seconds;
+    private int hour, minute;
     private String duration, details, update = "0";
     private Context context;
     private Activity firstActivity;
@@ -56,12 +56,11 @@ public class ChallengeController {
     private SQLiteDatabase db;
 
 
-    public ChallengeController(Context mContext, Activity activity, int mHour, int mMinute, int mSeconds) {
+    public ChallengeController(Context mContext, Activity activity, int mHour, int mMinute) {
         context = mContext;
         firstActivity = activity;
         hour = mHour;
         minute = mMinute;
-        seconds = mSeconds;
     }
 
 
@@ -208,7 +207,7 @@ public class ChallengeController {
                     com.example.ivan.champy_v2.single_inprogress.SingleInProgress data = response.body();
                     String inProgressId = data.getData().get_id();
                     cv.put("challenge_id", inProgressId);
-                    cv.put("updated", "false");
+                    cv.put("updated", "true");
                     db.insert("updated", null, cv);
                     Log.d("sendSingleInProgress", "InProgressId: " + inProgressId);
                     generateCardsForMainActivity(token, userId);
@@ -569,7 +568,7 @@ public class ChallengeController {
 
     // method which returns our last update (true or false);
     private String getLastUpdated(String challenge_id) {
-        DBHelper dbHelper = new DBHelper(context); // was firstactivity
+        DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("updated", null, null, null, null, null, null);
         String lastUpdate = "false";

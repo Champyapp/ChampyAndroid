@@ -147,7 +147,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         snackbar = Snackbar.make(view, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cc = new ChallengeController(getContext(), getActivity(), 0, 0, 0);
+                cc = new ChallengeController(getContext(), getActivity(), 0, 0);
 
                 if (position == size) {
                     try {
