@@ -1,9 +1,7 @@
 package com.example.ivan.champy_v2.activity;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -21,7 +19,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.R;
-import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 
 import java.io.IOException;

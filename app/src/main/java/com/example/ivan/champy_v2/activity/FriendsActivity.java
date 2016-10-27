@@ -1,11 +1,7 @@
 package com.example.ivan.champy_v2.activity;
 
 import android.annotation.SuppressLint;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -15,10 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -31,41 +24,19 @@ import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.adapter.FriendsActivityPagerAdapter;
-import com.example.ivan.champy_v2.adapter.FriendsAdapter;
-import com.example.ivan.champy_v2.adapter.PendingAdapter;
-import com.example.ivan.champy_v2.data.DBHelper;
-import com.example.ivan.champy_v2.helper.AppSync;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
-import com.example.ivan.champy_v2.helper.CHImageModule;
 import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
-import com.example.ivan.champy_v2.interfaces.CustomItemClickListener;
-import com.example.ivan.champy_v2.model.Friend.Datum;
-import com.example.ivan.champy_v2.model.Friend.Friend;
-import com.example.ivan.champy_v2.model.Friend.Friend_;
-import com.example.ivan.champy_v2.model.Friend.Owner;
-import com.example.ivan.champy_v2.model.Pending_friend;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 
-import org.json.JSONException;
-
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.GsonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
 
 public class FriendsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    FriendsActivityPagerAdapter adapterViewPager;
     private final String TAG = "FriendsActivity";
     
     @Override
@@ -97,7 +68,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         if (count == 0) checker.hideItem();
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        adapterViewPager = new FriendsActivityPagerAdapter(getSupportFragmentManager(), getApplicationContext());
+        FriendsActivityPagerAdapter adapterViewPager = new FriendsActivityPagerAdapter(getSupportFragmentManager(), getApplicationContext());
         viewPager.setAdapter(adapterViewPager);
 
         // this out method for open "pending" when you click on notification about friends request

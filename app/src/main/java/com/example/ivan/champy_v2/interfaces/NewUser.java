@@ -12,6 +12,7 @@ import retrofit.http.Path;
 import retrofit.http.Query;
 
 public interface NewUser {
+
     @POST("/v1/users")
     Call<User> register(
             @Body LoginData loginData

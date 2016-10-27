@@ -4,9 +4,6 @@ import retrofit.Call;
 import retrofit.http.GET;
 import retrofit.http.Query;
 
-/**
- * Created by ivan on 14.03.16.
- */
 public interface SelfImprovement {
 
     @GET("/v1/challenges")

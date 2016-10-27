@@ -12,9 +12,6 @@ import retrofit.http.PUT;
 import retrofit.http.Path;
 import retrofit.http.Query;
 
-/**
- * Created by ivan on 07.03.16.
- */
 public interface Friends {
     @FormUrlEncoded
     @POST("/v1/users/{owner}/friends")

@@ -211,24 +211,13 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
                     int data_size = 0;
                     for (int i = 0; i < data.size(); i++) {
                         com.example.ivan.champy_v2.model.Self.Datum datum = data.get(i);
-                        if (datum.getType().getName().equals("duel")) {
-                            if (!datum.getName().equals("User_Challenge")) {
-                                //if (check(datum.get_id())) {
-                                cv.put("name", datum.getName());
-                                cv.put("description", datum.getDescription());
-                                cv.put("duration", datum.getDuration());
-                                cv.put("challenge_id", datum.get_id());
-                                db.insert("duel", null, cv);
-                                data_size++;
-//                                } else {
-//                                    cv.put("name", "active");
-//                                    cv.put("description", datum.getDescription());
-//                                    cv.put("duration", datum.getDuration());
-//                                    cv.put("challenge_id", datum.get_id());
-//                                    db.insert("duel", null, cv);
-//                                    data_size++;
-//                                }
-                            }
+                        if (datum.getType().getName().equals("duel") && !datum.getName().equals("User_Challenge")) {
+                            cv.put("name", datum.getName());
+                            cv.put("description", datum.getDescription());
+                            cv.put("duration", datum.getDuration());
+                            cv.put("challenge_id", datum.get_id());
+                            db.insert("duel", null, cv);
+                            data_size++;
                         }
                     }
                     sessionManager.setSelfSize(data_size);

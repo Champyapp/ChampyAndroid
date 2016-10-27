@@ -5,9 +5,6 @@ import retrofit.http.GET;
 import retrofit.http.Path;
 import retrofit.http.Query;
 
-/**
- * Created by ivan on 16.03.16.
- */
 public interface ActiveInProgress {
 
     @GET("/v1/users/{id}/history/events/{updated}")

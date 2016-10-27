@@ -130,12 +130,12 @@ public class SelfImprovement_model {
     }
 
     // constructor :P
-    private SelfImprovement_model(String mGoal, String mDays, String mType, String mid, String mStatus, String mUpdated, String mChallengeName,
+    private SelfImprovement_model(String mGoal, String mDays, String mType, String mId, String mStatus, String mUpdated, String mChallengeName,
                                   String versus, String recipient, String senderProgress, String wakeUpTime, String constDuration) {
         this.goal = mGoal;
         this.days = mDays;
         this.type = mType;
-        this.id = mid;
+        this.id = mId;
         this.status = mStatus;
         this.updated = mUpdated;
         this.challengeName = mChallengeName;
@@ -253,7 +253,7 @@ public class SelfImprovement_model {
                         arrayList.add(new SelfImprovement_model(
                                 c.getString(coldescription),
                                 c.getString(colduration),
-                                c.getString(nameColIndex),
+                                c.getString(nameColIndex), // it means "wake up" - is name and type..
                                 c.getString(colchallenge_id),
                                 "finished",
                                 c.getString(updated),
