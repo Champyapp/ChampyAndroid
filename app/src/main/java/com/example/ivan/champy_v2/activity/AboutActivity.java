@@ -3,6 +3,7 @@ package com.example.ivan.champy_v2.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -70,15 +71,18 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
         view.setText("+" + (count > 0 ? String.valueOf(count) : null));
         if (count == 0) checker.hideItem();
 
-        @SuppressLint("SdCardPath") String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+        @SuppressLint("SdCardPath")
+        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
         CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
         String name = user.getName();
 
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
         ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
         TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
         drawerUserName.setText(name);
+        drawerUserName.setTypeface(typeface);
 
         Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);

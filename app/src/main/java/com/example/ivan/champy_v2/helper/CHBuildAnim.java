@@ -3,6 +3,7 @@ package com.example.ivan.champy_v2.helper;
 import android.animation.TypeEvaluator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.activity.SettingsActivity;
 
 /**
  * this is class helper for create animation, set right size of circles, count, alpha of animation,
@@ -25,6 +27,8 @@ public class CHBuildAnim {
         CHMakeResponsiveScore chMakeResponsiveScore = new CHMakeResponsiveScore(activity);
         chMakeResponsiveScore.makeResponsiveScore(width);
 
+        Typeface typeface = Typeface.createFromAsset(activity.getAssets(), "fonts/bebasneue.ttf");
+        
 //          //uncomment if need animation in main activity
 //        ImageView mImageViewFilling0 = (ImageView)activity.findViewById(R.id.imageView_challenges_animation);
 //        ImageView mImageViewFilling1 = (ImageView)activity.findViewById(R.id.imageView_wins_animation);
@@ -36,6 +40,10 @@ public class CHBuildAnim {
         final TextView tvChallengesCounter = (TextView)activity.findViewById(R.id.textViewChallengesCounter);
         final TextView tvWinsCounter       = (TextView)activity.findViewById(R.id.textViewWinsCounter);
         final TextView tvTotalCounter      = (TextView)activity.findViewById(R.id.textViewTotalCounter);
+
+        tvChallengesCounter.setTypeface(typeface);
+        tvWinsCounter.setTypeface(typeface);
+        tvTotalCounter.setTypeface(typeface);
 
         SessionManager sessionManager = new SessionManager(activity);
         String challenges = sessionManager.getChampyOptions().get("challenges");
@@ -107,10 +115,13 @@ public class CHBuildAnim {
 
         textViewChallenges.setText("In Progress");
         textViewChallenges.startAnimation(alphaAnimation);
+        textViewChallenges.setTypeface(typeface);
         textViewWins.setText("Wins");
         textViewWins.startAnimation(alphaAnimation);
+        textViewWins.setTypeface(typeface);
         textViewTotal.setText("Total");
         textViewTotal.startAnimation(alphaAnimation);
+        textViewTotal.setTypeface(typeface);
 
         Uri uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/challenges");
         Glide.with(activity).load(uri).into(imageViewChallengesLogo);

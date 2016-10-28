@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -59,6 +60,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SubActionButton buttonWakeUpChallenge, buttonDuelChallenge, buttonSelfImprovement;
     private MainActivityCardsAdapter adapter;
     private FloatingActionMenu actionMenu;
+    private RelativeLayout cards;
+    private ImageView blurScreen;
+    private Toolbar toolbar;
     private View headerLayout;
     //private CHSocket sockets;
 
@@ -67,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_gradient));
         setSupportActionBar(toolbar);
 
@@ -75,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        sockets.tryToConnect();
 //        sockets.connectAndEmmit();
 
-        RelativeLayout cards = (RelativeLayout)findViewById(R.id.cards);
+        cards = (RelativeLayout)findViewById(R.id.cards);
         adapter = new MainActivityCardsAdapter(this, SelfImprovement_model.generate(this));
         if (adapter.dataCount() > 0) {
             CustomPagerBase pager = new CustomPagerBase(this, cards, adapter);
@@ -104,20 +108,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         actionButton.setOnClickListener(this);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-                super.onDrawerSlide(drawerView, slideOffset);
-                ImageView screen = (ImageView) findViewById(R.id.blurScreen);
-                RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.cards);
-                relativeLayout.setVisibility(View.VISIBLE);
-                screen.setVisibility(View.INVISIBLE);
-                actionMenu.close(true);
-            }
-        };
-        drawer.setDrawerListener(drawerToggle);
-        drawerToggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
@@ -139,13 +129,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String pathToPic = user.getPathToPic();
         String name = user.getName();
 
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+                cards.setVisibility(View.VISIBLE);
+                blurScreen.setVisibility(View.INVISIBLE);
+                actionMenu.close(true);
+            }
+        };
+        drawer.setDrawerListener(drawerToggle);
+        drawerToggle.syncState();
+
         if (pathToPic == null) pathToPic = getIntent().getExtras().getString("path_to_pic");
 
         ImageView drawerBackground = (ImageView)headerLayout.findViewById(R.id.slide_background);
         ImageView drawerUserPhoto = (ImageView)headerLayout.findViewById(R.id.profile_image);
         ImageView background = (ImageView)findViewById(R.id.main_background);
         TextView  drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        blurScreen = (ImageView) findViewById(R.id.blurScreen);
+
+        Typeface typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
         drawerUserName.setText(name);
+        drawerUserName.setTypeface(typeface);
 
         @SuppressLint("SdCardPath")
         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
@@ -182,26 +189,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mLastClickTime = SystemClock.elapsedRealtime();
 
         //Here we make our background is blurred
-        ImageView blurScreen;
+
         RelativeLayout contentMain = (RelativeLayout) findViewById(R.id.content_main);
         contentMain.destroyDrawingCache();
         contentMain.buildDrawingCache();
         Bitmap bm = contentMain.getDrawingCache();
-        Bitmap blured = Blur.blurRenderScript(getApplicationContext(), bm, 25);
-        blurScreen = (ImageView) findViewById(R.id.blurScreen);
-        Drawable ob = new BitmapDrawable(getResources(), blured);
+        Bitmap blurred = Blur.blurRenderScript(getApplicationContext(), bm, 25);
+        Drawable ob = new BitmapDrawable(getResources(), blurred);
         blurScreen.setImageDrawable(ob);
-        RelativeLayout cardsLayout = (RelativeLayout) findViewById(R.id.cards);
 
         // first we check action menu and if "is open" then we setup our inside click for FAB
         actionMenu.toggle(true);
         if (!actionMenu.isOpen()) {
             blurScreen.setVisibility(View.INVISIBLE);
-            cardsLayout.setVisibility(View.VISIBLE);
+            cards.setVisibility(View.VISIBLE);
         } else {
             if (adapter.dataCount() <= 5) {
                 blurScreen.setVisibility(View.VISIBLE);
-                cardsLayout.setVisibility(View.INVISIBLE);
+                cards.setVisibility(View.INVISIBLE);
                 buttonSelfImprovement.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

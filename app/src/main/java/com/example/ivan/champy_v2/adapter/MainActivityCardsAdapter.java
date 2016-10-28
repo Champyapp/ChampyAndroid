@@ -31,9 +31,9 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
     private String token, userId;
     private Snackbar snackbar;
 
-    public MainActivityCardsAdapter(Context context, ArrayList<SelfImprovement_model> marrayList) {
+    public MainActivityCardsAdapter(Context context, ArrayList<SelfImprovement_model> mArrayList) {
         super(context);
-        this.arrayList = marrayList;
+        this.arrayList = mArrayList;
     }
 
     @Override
@@ -80,7 +80,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
             case "Duel":
                 imageChallengeLogo.setImageResource(R.drawable.duel_white);
                 TextView tvRecipientName = (TextView)tempView.findViewById(R.id.tvRecipientName);
-                tvRecipientName.setText(currentCard.getVersus());
+                tvRecipientName.setText("with " + currentCard.getVersus());
                 tvRecipientName.setTypeface(typeface);
                 break;
             case "Self-Improvement":

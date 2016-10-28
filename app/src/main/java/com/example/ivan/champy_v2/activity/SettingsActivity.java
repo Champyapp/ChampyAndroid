@@ -97,17 +97,19 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         sessionManager = new SessionManager(getApplicationContext());
         user = sessionManager.getUserDetails();
         final String name = user.get("name");
+
         initSwitches();
 
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
 
+        Typeface typeface = Typeface.createFromAsset(SettingsActivity.this.getAssets(), "fonts/bebasneue.ttf");
         ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
         ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
         ImageView background = (ImageView) findViewById(R.id.back_settings);
         TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
         drawerUserName.setText(name);
-        Typeface typeface = Typeface.createFromAsset(SettingsActivity.this.getAssets(), "fonts/bebasneue.ttf");
+        drawerUserName.setTypeface(typeface);
 
         final TextView tvName = (TextView)findViewById(R.id.userNameInSettings);
         tvName.setText(name);
