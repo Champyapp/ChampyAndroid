@@ -49,17 +49,18 @@ public class CHBuildAnim {
         String challenges = sessionManager.getChampyOptions().get("challenges");
         String wins       = sessionManager.getChampyOptions().get("wins");
         String total      = sessionManager.getChampyOptions().get("total");
+        String userName   = sessionManager.getUserName();
 
         int challengesInteger = Integer.parseInt(challenges);
-        int totalInteger      = Integer.parseInt(total);
         int winsInteger       = Integer.parseInt(wins);
+        int totalInteger      = Integer.parseInt(total);
 
         // animator for In progress
         ValueAnimator animatorInProgress = new ValueAnimator();
         animatorInProgress.setObjectValues(0, challengesInteger);
         animatorInProgress.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             public void onAnimationUpdate(ValueAnimator animation) {
-                tvTotalCounter.setText(String.valueOf(animation.getAnimatedValue()));
+                tvChallengesCounter.setText(String.valueOf(animation.getAnimatedValue()));
             }
         });
         animatorInProgress.setEvaluator(new TypeEvaluator<Integer>() {
@@ -68,8 +69,9 @@ public class CHBuildAnim {
             }
         });
         animatorInProgress.setDuration(1000);
+        animatorInProgress.start();
 
-        // animator for Total
+        // animator for Wins
         ValueAnimator animatorWins = new ValueAnimator();
         animatorWins.setObjectValues(0, winsInteger);
         animatorWins.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -83,13 +85,15 @@ public class CHBuildAnim {
             }
         });
         animatorWins.setDuration(1000);
+        animatorWins.start();
 
-        // animator for total
+
+        // animator for Total
         ValueAnimator animatorTotal = new ValueAnimator();
         animatorTotal.setObjectValues(0, totalInteger);
         animatorTotal.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             public void onAnimationUpdate(ValueAnimator animation) {
-                tvChallengesCounter.setText(String.valueOf(animation.getAnimatedValue()));
+                tvTotalCounter.setText(String.valueOf(animation.getAnimatedValue()));
             }
         });
         animatorTotal.setEvaluator(new TypeEvaluator<Integer>() {
@@ -98,30 +102,34 @@ public class CHBuildAnim {
             }
         });
         animatorTotal.setDuration(1000);
-
         animatorTotal.start();
-        animatorWins.start();
-        animatorInProgress.start();
 
-        final TextView  textViewChallenges      = (TextView)  activity.findViewById(R.id.textViewChallenges);
+
         final TextView  textViewWins            = (TextView)  activity.findViewById(R.id.textViewWins);
         final TextView  textViewTotal           = (TextView)  activity.findViewById(R.id.textViewTotal);
-        final ImageView imageViewChallengesLogo = (ImageView) activity.findViewById(R.id.imageView_challenges_logo);
+        final TextView  welcomeUserName         = (TextView)  activity.findViewById(R.id.welcomeUserName);
+        final TextView  textViewChallenges      = (TextView)  activity.findViewById(R.id.textViewChallenges);
         final ImageView imageViewWinsLogo       = (ImageView) activity.findViewById(R.id.imageView_wins_logo);
         final ImageView imageViewTotalLogo      = (ImageView) activity.findViewById(R.id.imageView_total_logo);
-
+        final ImageView imageViewChallengesLogo = (ImageView) activity.findViewById(R.id.imageView_challenges_logo);
         final Animation alphaAnimation          = new AlphaAnimation(0.0f, 1.0f);
-        alphaAnimation.setDuration(3000);
+        alphaAnimation.setDuration(2000);
 
         textViewChallenges.setText("In Progress");
         textViewChallenges.startAnimation(alphaAnimation);
         textViewChallenges.setTypeface(typeface);
+
         textViewWins.setText("Wins");
         textViewWins.startAnimation(alphaAnimation);
         textViewWins.setTypeface(typeface);
+
         textViewTotal.setText("Total");
         textViewTotal.startAnimation(alphaAnimation);
         textViewTotal.setTypeface(typeface);
+
+        welcomeUserName.setText("Welcome " + userName);
+        welcomeUserName.startAnimation(alphaAnimation);
+        welcomeUserName.setTypeface(typeface);
 
         Uri uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/challenges");
         Glide.with(activity).load(uri).into(imageViewChallengesLogo);

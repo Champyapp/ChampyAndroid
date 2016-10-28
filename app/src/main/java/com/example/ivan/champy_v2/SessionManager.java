@@ -108,6 +108,10 @@ public class SessionManager {
         return pref.getString("facebook_id", null);
     }
 
+    public String getUserName() {
+        return pref.getString("name", null);
+    }
+
     public String getObjectId() {
         return pref.getString("id", null); //user id
     }
