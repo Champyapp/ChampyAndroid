@@ -13,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -32,6 +33,7 @@ import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Calendar;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
@@ -91,7 +93,8 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         Glide.with(this).load(R.drawable.wakeupwhite).override(110, 110).into((ImageView) findViewById(R.id.imageViewLogo));
         Glide.with(this).load(R.drawable.wakeuptext).override(180, 150).into((ImageView) findViewById(R.id.imageWakeUpChall));
 
-        @SuppressLint("SdCardPath") String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+        @SuppressLint("SdCardPath")
+        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
 
@@ -106,7 +109,9 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         try {
             drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
             drawerBackground.setImageDrawable(CHLoadBlurredPhoto.Init(path));
-        } catch (FileNotFoundException e) { e.printStackTrace(); }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarmTimePicker = (TimePicker) findViewById(R.id.timePicker);
@@ -120,6 +125,10 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         final OfflineMode offlineMode = new OfflineMode();
         offlineMode.isConnectedToRemoteAPI(WakeUpActivity.this);
 
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.set(Calendar.HOUR_OF_DAY, alarmTimePicker.getHour());
+//        calendar.set(Calendar.MINUTE, alarmTimePicker.getMinute());
+
         final int pickedHour = alarmTimePicker.getCurrentHour();
         final int picketMin = alarmTimePicker.getCurrentMinute();
 
@@ -127,8 +136,11 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         String sHour = "" + pickedHour;
         String sMinute = "" + picketMin;
 
-        if (pickedHour < 10)   sHour   = "0" + sHour;
+        if (pickedHour < 10) sHour   = "0" + sHour;
         if (picketMin < 10) sMinute = "0" + sMinute;
+
+        Log.d("WakeUp", "onClick: sHour: " + sHour);
+        Log.d("WakeUp", "onClick: sMinute: " + sMinute);
 
         userId = user.getUserObjectId();
         token  = user.getToken();

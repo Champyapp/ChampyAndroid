@@ -98,6 +98,39 @@ public class ChallengeController {
 
     }
 
+    public void sendSingleInProgressForSelf(String challenge) {
+        dbHelper = new DBHelper(context);
+        db = dbHelper.getWritableDatabase();
+        cv = new ContentValues();
+
+        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+
+        SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
+
+        Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call = singleinprogress.start_single_in_progress(challenge, token);
+        call.enqueue(new Callback<com.example.ivan.champy_v2.single_inprogress.SingleInProgress>() {
+            @Override
+            public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    com.example.ivan.champy_v2.single_inprogress.SingleInProgress data = response.body();
+                    String inProgressId = data.getData().get_id();
+                    cv.put("challenge_id", inProgressId);
+                    cv.put("updated", "false");
+                    db.insert("updated", null, cv);
+                    Log.d("sendSingleInProgress", "InProgressId: " + inProgressId);
+                    generateCardsForMainActivity();
+                } else {
+                    Log.d("sendSingleInProgress", "Status: FAILED: " + response.code() + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) { }
+        });
+    }
+
+
+
     public void createNewDuelChallenge(final String description, int days, final String friend_id) {
         final String type_id = "567d51c48322f85870fd931b";
         duration = "" + (days * 86400);
@@ -126,6 +159,42 @@ public class ChallengeController {
         });
 
     }
+
+    public void sendSingleInProgressForDuel(final String challenge, final String friend_id) {
+        dbHelper = new DBHelper(context);
+        db = dbHelper.getWritableDatabase();
+        cv = new ContentValues();
+
+        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+
+        SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
+        Call<com.example.ivan.champy_v2.duel.Duel> call = singleinprogress.Start_duel(friend_id, challenge, token);
+        call.enqueue(new Callback<Duel>() {
+            @Override
+            public void onResponse(Response<Duel> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    Duel duel = response.body();
+                    String inProgressId = duel.getData().getId();
+                    cv.put("challenge_id", inProgressId);
+                    cv.put("updated", "false");
+                    db.insert("updated", null, cv);
+
+                    refreshCardsForPendingDuel();
+
+                    Intent intent = new Intent(firstActivity, MainActivity.class);
+                    firstActivity.startActivity(intent);
+
+                    Log.d("startDuelInProgress", "Status: VSE OK");
+                } else
+                    Log.d("startDuelInProgress", "Status: FAILED " + response.code() + response.message());
+            }
+
+            @Override
+            public void onFailure(Throwable t) { }
+        });
+    }
+
+
 
     public void createNewWakeUpChallenge(int days, final String type_id, final int hour, final int minute) {
         duration = "" + (days * 86400);
@@ -189,74 +258,6 @@ public class ChallengeController {
             @Override
             public void onFailure(Throwable t) {
             }
-        });
-    }
-
-
-
-
-    public void sendSingleInProgressForSelf(String challenge) {
-        dbHelper = new DBHelper(context);
-        db = dbHelper.getWritableDatabase();
-        cv = new ContentValues();
-
-        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-
-        SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
-
-        Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> call = singleinprogress.start_single_in_progress(challenge, token);
-        call.enqueue(new Callback<com.example.ivan.champy_v2.single_inprogress.SingleInProgress>() {
-            @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    com.example.ivan.champy_v2.single_inprogress.SingleInProgress data = response.body();
-                    String inProgressId = data.getData().get_id();
-                    cv.put("challenge_id", inProgressId);
-                    cv.put("updated", "false");
-                    db.insert("updated", null, cv);
-                    Log.d("sendSingleInProgress", "InProgressId: " + inProgressId);
-                    generateCardsForMainActivity();
-                } else {
-                    Log.d("sendSingleInProgress", "Status: FAILED: " + response.code() + response.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable t) { }
-        });
-    }
-
-    public void sendSingleInProgressForDuel(final String challenge, final String friend_id) {
-        dbHelper = new DBHelper(context);
-        db = dbHelper.getWritableDatabase();
-        cv = new ContentValues();
-
-        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-
-        SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
-        Call<com.example.ivan.champy_v2.duel.Duel> call = singleinprogress.Start_duel(friend_id, challenge, token);
-        call.enqueue(new Callback<Duel>() {
-            @Override
-            public void onResponse(Response<Duel> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    Duel duel = response.body();
-                    String inProgressId = duel.getData().getId();
-                    cv.put("challenge_id", inProgressId);
-                    cv.put("updated", "false");
-                    db.insert("updated", null, cv);
-
-                    refreshCardsForPendingDuel();
-
-                    Intent intent = new Intent(firstActivity, MainActivity.class);
-                    firstActivity.startActivity(intent);
-
-                    Log.d("startDuelInProgress", "Status: VSE OK");
-                } else
-                    Log.d("startDuelInProgress", "Status: FAILED " + response.code() + response.message());
-            }
-
-            @Override
-            public void onFailure(Throwable t) { }
         });
     }
 
@@ -366,7 +367,7 @@ public class ChallengeController {
                     cv.put("updated", "true");
                     db.update("updated",      cv, "challenge_id = ?", new String[]{inProgressId});
                     db.update("myChallenges", cv, "challenge_id = ?", new String[]{inProgressId});
-                    refreshCardsForPendingDuel();
+                    generateCardsForMainActivity();
                     Log.d(TAG, "doneForToday onResponse: VSE OK");
                 } else {
                     Log.d(TAG, "doneForToday onResponse: FAILED " + response.code() + response.message() + response.body());
@@ -464,7 +465,7 @@ public class ChallengeController {
         });
     }
 
-    private void generateCardsForMainActivity() {
+    public void generateCardsForMainActivity() {
         dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
         cv = new ContentValues();

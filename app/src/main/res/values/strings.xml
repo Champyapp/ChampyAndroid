@@ -155,9 +155,6 @@
     <string name="backgroundforcircle">backgroundForCircle</string>
     <string name="button_block">button block</string>
     <string name="button_add">button add</string>
-    <string name="i">i</string>
-    <string name="w">w</string>
-    <string name="t">t</string>
     <string name="userPhoto">user photo</string>
     <string name="smallIcon">small icon</string>
     <string name="level">"Level "</string>

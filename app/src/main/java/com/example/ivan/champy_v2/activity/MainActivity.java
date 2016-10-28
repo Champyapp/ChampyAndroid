@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             blurScreen.setVisibility(View.INVISIBLE);
             cardsLayout.setVisibility(View.VISIBLE);
         } else {
-            if (adapter.dataCount() <= 10) {
+            if (adapter.dataCount() <= 5) {
                 blurScreen.setVisibility(View.VISIBLE);
                 cardsLayout.setVisibility(View.INVISIBLE);
                 buttonSelfImprovement.setOnClickListener(new View.OnClickListener() {
@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 });
             } else {
                 actionMenu.toggle(false);
-                Toast.makeText(MainActivity.this, "You have so much challenges", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "You have too much challenges", Toast.LENGTH_SHORT).show();
             }
         }
 

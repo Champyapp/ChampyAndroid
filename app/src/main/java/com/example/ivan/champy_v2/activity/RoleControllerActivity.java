@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.helper.NotificationController;
@@ -44,21 +45,27 @@ public class RoleControllerActivity extends AppCompatActivity {
         } catch (URISyntaxException e) { throw new RuntimeException(e); }
 
         SessionManager sessionManager = new SessionManager(getApplicationContext());
-        Intent goToActivity;
+
+
         if (sessionManager.isUserLoggedIn()) {
             mSocket.on("connect", onConnect);
             mSocket.on("connected", onConnected);
             mSocket.connect();
-            goToActivity = new Intent(this, MainActivity.class);
+
+            CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
+            String uId = user.getUserObjectId();
+            String uToken = user.getToken();
+            ChallengeController cc = new ChallengeController(getApplicationContext(), this, uToken, uId);
+            cc.generateCardsForMainActivity();
 //            goToActivity = new Intent(this, SettingsActivity.class);
         } else {
             mSocket.off();
             mSocket.disconnect();
             NotificationController controller = new NotificationController(getApplicationContext());
             controller.deactivateDailyNotificationReminder();
-            goToActivity = new Intent(this, LoginActivity.class);
+            Intent goToActivity = new Intent(this, LoginActivity.class);
+            startActivity(goToActivity);
         }
-        startActivity(goToActivity);
 
     }
 

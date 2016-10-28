@@ -125,7 +125,7 @@ public class AppSync {
                      * который брал инфу про друзей. Сейчас мы вызываем его здесь.
                      */
 
-                    //getUserInProgressChallenges(userId);
+                    getUserInProgressChallenges(userId);
                     getUserPending(userId);
                     getUserFriendsInfo(gcm);
 
@@ -144,8 +144,8 @@ public class AppSync {
                     NotificationController controller = new NotificationController(context);
                     controller.activateDailyNotificationReminder();
 
-                    ChallengeController cc = new ChallengeController(context, (Activity) context, token, userId);
-                    cc.generateCardsForMainActivity();
+                    //ChallengeController cc = new ChallengeController(context, (Activity) context, token, userId);
+                    //cc.generateCardsForMainActivity();
 
                     Intent goToRoleActivity = new Intent(context, RoleControllerActivity.class);
                     context.startActivity(goToRoleActivity);
