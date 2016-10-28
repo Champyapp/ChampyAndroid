@@ -66,7 +66,8 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
 
         Glide.with(this).load(R.drawable.duel_blue).override(130, 130).into((ImageView) findViewById(R.id.imageViewLogo));
 
-        @SuppressLint("SdCardPath") String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+        @SuppressLint("SdCardPath")
+        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
         CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
@@ -76,6 +77,7 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
         TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
         drawerUserName.setText(name);
+        drawerUserName.setTypeface(typeface);
 
         Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);

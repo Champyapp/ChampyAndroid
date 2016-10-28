@@ -101,6 +101,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         user = new CurrentUserHelper(getApplicationContext());
         String userName = user.getName();
         drawerUserName.setText(userName);
+        drawerUserName.setTypeface(typeface);
 
         Glide.with(this).load(R.drawable.points).override(100, 100).into((ImageView) findViewById(R.id.imageViewPoints));
         Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))

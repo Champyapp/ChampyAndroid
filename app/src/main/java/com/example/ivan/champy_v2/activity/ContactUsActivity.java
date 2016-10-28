@@ -2,6 +2,7 @@ package com.example.ivan.champy_v2.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -79,12 +80,14 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
             imageView.setImageDrawable(CHLoadBlurredPhoto.Init(path));
         } catch (FileNotFoundException e) { e.printStackTrace(); }
 
-        ImageView profile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        TextView textView = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        textView.setText(name);
+        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
+        ImageView drawerUserPhoto = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        drawerUserName.setText(name);
+        drawerUserName.setTypeface(typeface);
 
         Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(profile);
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
 
 
         ViewServer.get(this).addWindow(this);

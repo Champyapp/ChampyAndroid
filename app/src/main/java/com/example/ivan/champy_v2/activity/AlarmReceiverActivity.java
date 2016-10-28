@@ -68,13 +68,6 @@ public class AlarmReceiverActivity extends Activity {
             public boolean onTouch(View arg0, MotionEvent arg1) {
                 mMediaPlayer.stop();
                 try {
-                    // TODO: 27.09.2016 replace this piece of code in CC, in doneForToday response
-                    //DBHelper dbHelper = new DBHelper(getApplicationContext());
-                    //SQLiteDatabase db = dbHelper.getWritableDatabase();
-                    //ContentValues cv = new ContentValues();
-                    //cv.put("updated", "true");
-                    //db.update("myChallenges", cv, "challenge_id = ?", new String[]{finalInProgressChallengeId});
-                    //db.update("updated", cv, "challenge_id = ?", new String[]{finalInProgressChallengeId});
                     cc.doneForToday(finalInProgressChallengeId);
                 } catch (IOException e) {
                     e.printStackTrace();

@@ -113,6 +113,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
         TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
         drawerUserName.setText(name);
+        drawerUserName.setTypeface(typeface);
 
         Glide.with(this).load(friendsPhoto).centerCrop().into((ImageView)findViewById(R.id.imageFriendsPhoto));
         Glide.with(this).load(url).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(imageMyPhoto);

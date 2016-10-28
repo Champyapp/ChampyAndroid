@@ -2,6 +2,7 @@ package com.example.ivan.champy_v2.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -58,6 +59,7 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
@@ -88,6 +90,7 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         ImageView background = (ImageView) findViewById(R.id.history_background);
         TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
         drawerUserName.setText(name);
+        drawerUserName.setTypeface(typeface);
 
         @SuppressLint("SdCardPath") String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");

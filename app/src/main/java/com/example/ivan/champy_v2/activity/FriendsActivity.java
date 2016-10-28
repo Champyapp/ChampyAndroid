@@ -2,6 +2,7 @@ package com.example.ivan.champy_v2.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -89,11 +90,13 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
         String name = user.getName();
 
+        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
         ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
         ImageView background = (ImageView) findViewById(R.id.friends_background);
         TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
         drawerUserName.setText(name);
+        drawerUserName.setTypeface(typeface);
 
         @SuppressLint("SdCardPath")
         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";

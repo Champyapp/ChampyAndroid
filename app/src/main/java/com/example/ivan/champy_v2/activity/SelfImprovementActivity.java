@@ -97,6 +97,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
         TextView drawerUsername = (TextView) headerLayout.findViewById(R.id.tvUserName);
         drawerUsername.setText(name);
+        drawerUsername.setTypeface(typeface);
 
         Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
