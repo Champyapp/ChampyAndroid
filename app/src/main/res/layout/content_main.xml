@@ -12,6 +12,7 @@
     android:background="@drawable/champy_background"
     android:id="@+id/content_main"  >
 
+    <!-- background for user photo -->
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -19,41 +20,51 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true" />
 
-<!--
-     Bar with counters
-     android:background="@drawable/score_animation"    for anim
+    <!-- text "welcome username" -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/welcomeUserName"
+        android:textAllCaps="true"
+        android:textSize="20sp"
+        android:text="Welcome Sasha Khyzhun"
+        android:textColor="@android:color/white"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:gravity="center"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp" />
+
+    <!-- circles -->
     <ImageView
         android:id="@+id/imageView_challenges_animation"
         android:layout_width="90dp"
         android:layout_height="90dp"
         android:background="@drawable/start_circle_00026"
-        android:layout_alignTop="@+id/imageView_wins_animation"
+        android:layout_marginLeft="16dp"
+        android:layout_below="@+id/welcomeUserName"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginLeft="@dimen/activity_vertical_margin" />
+        android:layout_marginStart="16dp" />
 
     <ImageView
         android:id="@+id/imageView_wins_animation"
         android:layout_width="90dp"
         android:layout_height="90dp"
         android:background="@drawable/start_circle_00026"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/activity_vertical_margin" />
+        android:layout_below="@+id/welcomeUserName"
+        android:layout_centerHorizontal="true" />
 
     <ImageView
         android:id="@+id/imageView_total_animation"
         android:layout_width="90dp"
         android:layout_height="90dp"
         android:background="@drawable/start_circle_00026"
-        android:layout_alignTop="@+id/imageView_wins_animation"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="@dimen/activity_vertical_margin" />
+        android:layout_below="@+id/welcomeUserName"
+        android:layout_alignRight="@+id/fabPlus"
+        android:layout_alignEnd="@+id/fabPlus" />
 
-     End Bar with counters
-
-     Counters
+    <!-- android:background="@drawable/score_animation" for anim-->
+    <!-- Counters -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -65,13 +76,12 @@
         android:layout_centerInParent="@+id/imageView_challenges_animation"
         android:gravity="center_vertical|center_horizontal"
         android:textColor="#ffffff"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/imageView_challenges_animation"
         android:layout_alignEnd="@+id/imageView_challenges_animation"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_below="@+id/welcomeUserName"
         android:layout_alignBottom="@+id/imageView_challenges_logo" />
 
     <TextView
@@ -81,36 +91,32 @@
         android:id="@+id/textViewWinsCounter"
         android:layout_alignLeft="@+id/imageView_wins_animation"
         android:layout_alignStart="@+id/imageView_wins_animation"
-        android:layout_alignParentTop="true"
         android:gravity="center_vertical|center_horizontal"
         android:textSize="30sp"
-        android:text="@string/zero"
+        android:text="1"
         android:textColor="#ffffff"
-        android:layout_alignBottom="@+id/imageView_wins_logo"
         android:layout_alignRight="@+id/imageView_wins_animation"
         android:layout_alignEnd="@+id/imageView_wins_animation"
-        android:layout_marginTop="@dimen/activity_vertical_margin" />
+        android:layout_below="@+id/welcomeUserName"
+        android:layout_alignBottom="@+id/imageView_wins_logo" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/textViewTotalCounter"
-        android:layout_alignParentTop="true"
         android:layout_alignLeft="@+id/imageView_total_animation"
         android:layout_alignStart="@+id/imageView_total_animation"
         android:textSize="30sp"
         android:text="@string/zero"
         android:gravity="center_vertical|center_horizontal"
         android:textColor="#ffffff"
-        android:layout_alignBottom="@+id/imageView_total_logo"
         android:layout_alignRight="@+id/imageView_total_animation"
         android:layout_alignEnd="@+id/imageView_total_animation"
-        android:layout_marginTop="@dimen/activity_vertical_margin" />
+        android:layout_below="@+id/welcomeUserName"
+        android:layout_alignBottom="@+id/imageView_total_logo" />
 
-     End Counters
-
-     Icons in bar
+     <!-- icons inside circles -->
     <ImageView
         android:layout_width="20dp"
         android:layout_height="20dp"
@@ -146,8 +152,7 @@
         android:layout_alignLeft="@+id/imageView_total_animation"
         android:layout_alignStart="@+id/imageView_total_animation" />
 
-     Simple TextView
-
+    <!-- text in progress / wins / total -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -163,7 +168,7 @@
         android:layout_alignEnd="@+id/imageView_challenges_animation"
         android:gravity="center_vertical|center_horizontal"
         android:layout_marginLeft="@dimen/activity_vertical_margin"
-        android:paddingBottom="30dp"/>
+        android:paddingBottom="10dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -178,7 +183,7 @@
         android:layout_alignRight="@+id/imageView_wins_animation"
         android:layout_alignEnd="@+id/imageView_wins_animation"
         android:gravity="center_vertical|center_horizontal"
-        android:paddingBottom="30dp"
+        android:paddingBottom="10dp"
         android:textColor="#ffffff" />
 
     <TextView
@@ -195,51 +200,32 @@
         android:layout_alignLeft="@+id/imageView_total_animation"
         android:layout_alignStart="@+id/imageView_total_animation"
         android:gravity="center_vertical|center_horizontal"
-        android:paddingBottom="30dp"
+        android:paddingBottom="10dp"
         android:textColor="#ffffff" />
 
-     End Simple TextView
-  -->
-
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/welcomeUserName"
-        android:textAllCaps="true"
-        android:textSize="20sp"
-        android:textColor="@android:color/white"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:gravity="center"
-        android:paddingTop="5dp"/>
-
-    <include
+   <!-- <include
         layout="@layout/item_status_bar"
         android:layout_below="@+id/welcomeUserName"
         android:id="@+id/item_status_bar"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content" />-->
 
+    <!-- our cards -->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_above="@+id/fabPlus"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:paddingTop="10dp"
         android:id="@+id/cards"
-        android:layout_below="@+id/item_status_bar"
+        android:layout_below="@+id/textViewWins"
         android:focusable="false">
     </RelativeLayout>
 
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/blurScreen"
-        android:layout_centerHorizontal="true"
-        android:visibility="invisible"
-        android:clickable="true" />
+    <!-- blurred screen -->
 
+    <!-- fab -->
     <ImageButton
         android:layout_width="60dp"
         android:layout_height="60dp"
@@ -252,6 +238,19 @@
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/blurScreen"
+        android:visibility="invisible"
+        android:clickable="true"
+        android:layout_below="@+id/textViewChallenges"
+        android:layout_alignRight="@+id/textViewWins"
+        android:layout_alignEnd="@+id/textViewWins"
+        android:layout_marginRight="28dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginTop="40dp" />
 
 
 </RelativeLayout>

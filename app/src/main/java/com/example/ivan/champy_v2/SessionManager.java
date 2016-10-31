@@ -14,8 +14,8 @@ import java.util.HashMap;
 public class SessionManager {
 
     private static final String IS_USER_LOGIN = "IsUserLoggedIn"; // All Shared Preferences Keys
-    private static final String PREFER_NAME = "Champy_pref";  // SharedPreference file name
-    private static final String KEY_PATH = "path_to_pic"; // Users path to picture (avatar)
+    private static final String PREFER_NAME = "Champy_pref"; // SharedPreference file name
+    private static final String KEY_PATH = "path_to_pic"; // Users path to picture
     private static final String KEY_ID = "facebook_id"; // Users facebook id
     private static final String KEY_EMAIL = "email"; // Email address (make variable public to access from outside)
     private static final String KEY_NAME = "name"; // Friend_json name (make variable public to access from outside)

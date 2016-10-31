@@ -46,9 +46,9 @@ public class CHBuildAnim {
         tvTotalCounter.setTypeface(typeface);
 
         SessionManager sessionManager = new SessionManager(activity);
-        String challenges = sessionManager.getChampyOptions().get("challenges");
+        String challenges = sessionManager.getChampyOptions().get("total"); // i know
         String wins       = sessionManager.getChampyOptions().get("wins");
-        String total      = sessionManager.getChampyOptions().get("total");
+        String total      = sessionManager.getChampyOptions().get("challenges"); // i know
         String userName   = sessionManager.getUserName();
 
         int challengesInteger = Integer.parseInt(challenges);
