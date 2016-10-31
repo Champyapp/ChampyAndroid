@@ -40,6 +40,7 @@ import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHDownloadImageTask;
 import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
+import com.example.ivan.champy_v2.model.Self.SelfImprovement;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
 import com.facebook.FacebookSdk;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
@@ -79,28 +80,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        sockets.tryToConnect();
 //        sockets.connectAndEmmit();
 
-        cards = (RelativeLayout)findViewById(R.id.cards);
+        cards = (RelativeLayout) findViewById(R.id.cards);
         adapter = new MainActivityCardsAdapter(this, SelfImprovement_model.generate(this));
         if (adapter.dataCount() > 0) {
             CustomPagerBase pager = new CustomPagerBase(this, cards, adapter);
             pager.preparePager(0);
         }
 
-        final ImageButton actionButton = (ImageButton)findViewById(R.id.fabPlus);
+        final ImageButton actionButton = (ImageButton) findViewById(R.id.fabPlus);
         final SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
         buttonWakeUpChallenge = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeupcolor)).build();
-        buttonDuelChallenge   = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.duel_yellow)).build();
+        buttonDuelChallenge = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.duel_yellow)).build();
         buttonSelfImprovement = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.self_yellow)).build();
 
         int width = getWindowManager().getDefaultDisplay().getWidth();
-        int x = round(width/100);
+        int x = round(width / 100);
 
-        buttonWakeUpChallenge.getLayoutParams().height = x*20;
-        buttonWakeUpChallenge.getLayoutParams().width  = x*20;
-        buttonDuelChallenge  .getLayoutParams().height = x*20;
-        buttonDuelChallenge  .getLayoutParams().width  = x*20;
-        buttonSelfImprovement.getLayoutParams().height = x*20;
-        buttonSelfImprovement.getLayoutParams().width  = x*20;
+        buttonWakeUpChallenge.getLayoutParams().height = x * 20;
+        buttonWakeUpChallenge.getLayoutParams().width = x * 20;
+        buttonDuelChallenge.getLayoutParams().height = x * 20;
+        buttonDuelChallenge.getLayoutParams().width = x * 20;
+        buttonSelfImprovement.getLayoutParams().height = x * 20;
+        buttonSelfImprovement.getLayoutParams().width = x * 20;
 
         actionMenu = new FloatingActionMenu.Builder(this).addSubActionView(buttonWakeUpChallenge)
                 .addSubActionView(buttonDuelChallenge).addSubActionView(buttonSelfImprovement)
