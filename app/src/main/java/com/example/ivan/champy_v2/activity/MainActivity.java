@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             blurScreen.setVisibility(View.INVISIBLE);
             cards.setVisibility(View.VISIBLE);
         } else {
-            if (adapter.dataCount() <= 5) {
+            if (adapter.dataCount() < 5) {
                 blurScreen.setVisibility(View.VISIBLE);
                 cards.setVisibility(View.INVISIBLE);
                 buttonSelfImprovement.setOnClickListener(new View.OnClickListener() {
