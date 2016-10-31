@@ -1,7 +1,6 @@
 package com.example.ivan.champy_v2.helper;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -10,11 +9,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.StrictMode;
 import android.util.Log;
 
-import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.activity.RoleControllerActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
-import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
 import com.example.ivan.champy_v2.interfaces.NewUser;
 import com.example.ivan.champy_v2.model.Friend.Datum;
 import com.example.ivan.champy_v2.model.Friend.Friend;
@@ -22,9 +19,6 @@ import com.example.ivan.champy_v2.model.Friend.Friend_;
 import com.example.ivan.champy_v2.model.Friend.Owner;
 import com.example.ivan.champy_v2.model.User.Data;
 import com.example.ivan.champy_v2.model.User.User;
-import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
-import com.example.ivan.champy_v2.model.active_in_progress.Recipient;
-import com.example.ivan.champy_v2.model.active_in_progress.Sender;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
@@ -34,10 +28,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.List;
 
 import io.jsonwebtoken.Jwts;
@@ -349,7 +341,6 @@ public class AppSync {
 //    }
 
     // method which get friends and their data
-    // TODO: 27.10.2016 RESPONSE FAILED, Check it
     private void getUserFriendsInfo(final String gcm) {
         final String API_URL = "http://46.101.213.24:3007";
         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
@@ -360,7 +351,7 @@ public class AppSync {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("mytable", null, null);
         final ContentValues cv = new ContentValues();
-
+        final CHCheckTableForExist checkTableForExist = new CHCheckTableForExist(context);
         final GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(),
                 new GraphRequest.GraphJSONArrayCallback() {
             @Override
@@ -379,7 +370,6 @@ public class AppSync {
                             @Override
                             public void onResponse(Response<User> response, Retrofit retrofit) {
                                 if (response.isSuccess()) {
-                                    Log.d(TAG, "GetUserFriendsInfo onResponse: Success!");
                                     Data data = response.body().getData();
                                     String photo = null;
 
@@ -399,27 +389,16 @@ public class AppSync {
                                     cv.put("wins", data.getSuccessChallenges());
                                     cv.put("total", data.getScore());
                                     cv.put("level", data.getLevel().getNumber());
-                                    Log.d(TAG, "onResponse: User: " + name);
-                                    if (!checkPendingFriends(data.get_id())) {
-                                        // if (!checkPendingFriends) than we can add current user in friends table
-                                        db.insert("mytable", null, cv);
-                                    }
-                                    else {
-                                        Log.d("AppSync", "GetUserFriendsInfo: this user not in pending");
-                                    }
+                                    if (!checkTableForExist.isInOtherTable(data.get_id())) db.insert("mytable", null, cv); // ?
+                                    else Log.d("AppSync", "GetUserFriendsInfo | DBase: not added");
                                 } else {
-                                    Log.d(TAG, "onResponse: failed: " + response.message());
-                                }
-                                /*else {
-                                    Log.d("AppSync", "GetUserFriendsInfo onResponse: Failed: " + response.message());
+                                    Log.d("AppSync", "GetUserFriendsInfo | onResponse: " + response.message());
                                     URL profile_pic;
                                     String photo = null;
                                     try {
                                         profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
                                         photo = profile_pic.toString();
-                                    } catch (MalformedURLException e) {
-                                        e.printStackTrace();
-                                    }
+                                    } catch (MalformedURLException e) { e.printStackTrace(); }
                                     cv.put("name", user_name);
                                     cv.put("photo", photo);
                                     cv.put("challenges", "0");
@@ -427,7 +406,7 @@ public class AppSync {
                                     cv.put("total", "0");
                                     cv.put("level", "0");
                                     db.insert("mytable", null, cv);
-                                }*/
+                                }
                             }
 
                             @Override
@@ -445,23 +424,23 @@ public class AppSync {
     }
 
     // if this method return TRUE it mean what current user in "pending" table... (else in "other")
-    private Boolean checkPendingFriends(String someUserId) {
-        DBHelper dbHelper = new DBHelper(context);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Boolean ok = false;
-        Cursor c = db.query("pending", null, null, null, null, null, null);
-        if (c.moveToFirst()) {
-            int pendingUserId = c.getColumnIndex("user_id");
-            do {
-                String somePendingId = c.getString(pendingUserId);
-                if (somePendingId.equals(someUserId)) {
-                    ok = true;
-                    break;
-                }
-            } while (c.moveToNext());
-        }
-        c.close();
-        return ok;
-    }
+//    private Boolean isInOtherTable(String someUserId) {
+//        DBHelper dbHelper = new DBHelper(context);
+//        SQLiteDatabase db = dbHelper.getReadableDatabase();
+//        Boolean ok = false;
+//        Cursor c = db.query("pending", null, null, null, null, null, null);
+//        if (c.moveToFirst()) {
+//            int pendingUserId = c.getColumnIndex("user_id");
+//            do {
+//                String somePendingId = c.getString(pendingUserId);
+//                if (somePendingId.equals(someUserId)) {
+//                    ok = true;
+//                    break;
+//                }
+//            } while (c.moveToNext());
+//        }
+//        c.close();
+//        return ok;
+//    }
 
 }

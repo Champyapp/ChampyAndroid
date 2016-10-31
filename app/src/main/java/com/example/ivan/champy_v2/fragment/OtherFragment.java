@@ -22,6 +22,7 @@ import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.adapter.OtherAdapter;
 import com.example.ivan.champy_v2.data.DBHelper;
+import com.example.ivan.champy_v2.helper.CHCheckTableForExist;
 import com.example.ivan.champy_v2.interfaces.NewUser;
 import com.example.ivan.champy_v2.model.User.Data;
 import com.example.ivan.champy_v2.model.User.User;
@@ -54,6 +55,7 @@ public class OtherFragment extends Fragment {
 
     public static final String ARG_PAGE = "ARG_PAGE";
     public static final String TAG = "OtherFragment";
+    private CHCheckTableForExist checkTableForExist;
     private int mPage;
     public View gView;
     public SwipeRefreshLayout swipeRefreshLayout;
@@ -70,6 +72,7 @@ public class OtherFragment extends Fragment {
         final List<Friend> friends = new ArrayList<Friend>();
         DBHelper dbHelper = new DBHelper(getContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        checkTableForExist = new CHCheckTableForExist(getContext());
         SessionManager sessionManager = new SessionManager(getContext());
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
@@ -78,7 +81,7 @@ public class OtherFragment extends Fragment {
         Cursor c = db.query("mytable", null, null, null, null, null, null);
         if (c.moveToFirst()) {
             int challenges = c.getColumnIndex("challenges");
-            int photoColIndex = c.getColumnIndex("photo"); // mb ydalit' ?
+            int photoColIndex = c.getColumnIndex("photo");
             int nameColIndex = c.getColumnIndex("name");
             int idColIndex = c.getColumnIndex("id");
             int index = c.getColumnIndex("user_id");
@@ -86,7 +89,7 @@ public class OtherFragment extends Fragment {
             int level = c.getColumnIndex("level");
             int wins = c.getColumnIndex("wins");
             do {
-                if (!getContact(c.getString(index)))
+                if (!checkTableForExist.isInOtherTable(c.getString(index)))
                     friends.add(new Friend(
                             c.getString(nameColIndex),
                             c.getString(photoColIndex),
@@ -191,7 +194,7 @@ public class OtherFragment extends Fragment {
                                                 cv.put("level", "" + data.getLevel().getNumber());
 
                                                 // отображаем друзей в списке
-                                                if (!getContact(data.get_id())) {
+                                                if (!checkTableForExist.isInOtherTable(data.get_id())) {
                                                     db.insert("mytable", null, cv);
                                                     newFriends.add(new Friend(
                                                             name,
@@ -206,7 +209,7 @@ public class OtherFragment extends Fragment {
                                                     Log.d("stat", "DBase: not added " + user_name);
                                                 }
                                                 swipeRefreshLayout.setRefreshing(false);
-                                            } /*else {
+                                            } else {
                                                 // отображение всего у человека, который не установил champy
                                                 URL profile_pic = null;
                                                 String photo = null;
@@ -229,7 +232,7 @@ public class OtherFragment extends Fragment {
                                                 OtherAdapter adapter1 = new OtherAdapter(newFriends, getContext(), getActivity());
                                                 rvContacts.setAdapter(adapter1);
                                                 swipeRefreshLayout.setRefreshing(false);
-                                            } */
+                                            }
                                         }
 
                                         @Override
@@ -254,37 +257,8 @@ public class OtherFragment extends Fragment {
         Log.d(TAG, "refreshFriendsView: finished");
     }
 
+    // this method works like "if not in "pending" & "friends" -> insert into "other"
 
-    private Boolean getContact(String id) {
-        DBHelper dbHelper = new DBHelper(getContext());
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        Boolean ok = false;
-        Cursor c = db.query("pending", null, null, null, null, null, null);
-        if (c.moveToFirst()) {
-            int index = c.getColumnIndex("user_id");
-            do {
-                String user_id = c.getString(index);
-                if (user_id.equals(id)) {
-                    ok = true;
-                    break;
-                }
-            } while (c.moveToNext());
-        }
-        c = db.query("friends", null, null, null, null, null, null);
-        if (c.moveToFirst()) {
-            int index = c.getColumnIndex("user_id");
-            do {
-                String user_id = c.getString(index);
-                if (user_id.equals(id)) {
-                    ok = true;
-                    break;
-                }
-            } while (c.moveToNext());
-        }
-        c.close();
-        return ok;
-    }
 
 
 //    public static OtherFragment newInstance(int page) {
