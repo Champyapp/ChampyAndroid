@@ -90,7 +90,7 @@ public class AppSync {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    Log.d(TAG, "onResponse: Success" + response.isSuccess());
+                    Log.d(TAG, "getUserProfile onResponse: Success");
                     Data data = response.body().getData();
                     String email = data.getEmail();
                     final String user_name = data.getName();
@@ -144,13 +144,10 @@ public class AppSync {
                     NotificationController controller = new NotificationController(context);
                     controller.activateDailyNotificationReminder();
 
-                    //ChallengeController cc = new ChallengeController(context, (Activity) context, token, userId);
-                    //cc.generateCardsForMainActivity();
-
                     Intent goToRoleActivity = new Intent(context, RoleControllerActivity.class);
                     context.startActivity(goToRoleActivity);
                 } else {
-                    Log.i(TAG, "onResponse: failed " + response.message());
+                    Log.i(TAG, "getUserProfile onResponse: Failed " + response.message());
                 }
             }
 
@@ -180,38 +177,37 @@ public class AppSync {
 
                     for (int i = 0; i < data.size(); i++) {
                         Datum datum = data.get(i);
+                        String status = datum.getStatus().toString();
+                        if ((datum.getFriend() != null) && (datum.getOwner() != null) && status.equals("false")) {
 
-                        if ((datum.getFriend() != null) && (datum.getOwner() != null)) {
-                            if (datum.getStatus().toString().equals("false")) {
-
-                                if (datum.getOwner().get_id().equals(userId)) {
-                                    Friend_ recipientFriend = datum.getFriend();
-                                    cv.put("name", recipientFriend.getName());
-                                    //if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
-                                    //else cv.put("photo", "");
-                                    String friendPhoto = (recipientFriend.getPhoto() != null) ? recipientFriend.getPhoto().getMedium() : "";
-                                    cv.put("photo", friendPhoto);
-                                    cv.put("user_id", recipientFriend.getId());
-                                    cv.put("inProgressChallengesCount", recipientFriend.getInProgressChallengesCount());
-                                    cv.put("allChallengesCount", recipientFriend.getAllChallengesCount());
-                                    cv.put("successChallenges", recipientFriend.getSuccessChallenges());
-                                    cv.put("owner", "false");
-                                    db.insert("pending", null, cv);
-                                } else {
-                                    Owner ownerFriend = datum.getOwner();
-                                    cv.put("name", ownerFriend.getName());
-                                    //if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
-                                    //else cv.put("photo", "");
-                                    String ownerPhoto = (ownerFriend.getPhoto() != null) ? ownerFriend.getPhoto().getMedium() : "";
-                                    cv.put("photo", ownerPhoto);
-                                    cv.put("user_id", ownerFriend.get_id());
-                                    cv.put("inProgressChallengesCount", ownerFriend.getInProgressChallengesCount());
-                                    cv.put("allChallengesCount", ownerFriend.getAllChallengesCount());
-                                    cv.put("successChallenges", ownerFriend.getSuccessChallenges());
-                                    cv.put("owner", "true");
-                                    db.insert("pending", null, cv);
-                                }
+                            if (datum.getOwner().get_id().equals(userId)) {
+                                Friend_ recipientFriend = datum.getFriend();
+                                cv.put("name", recipientFriend.getName());
+                                //if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
+                                //else cv.put("photo", "");
+                                String friendPhoto = (recipientFriend.getPhoto() != null) ? recipientFriend.getPhoto().getMedium() : "";
+                                cv.put("photo", friendPhoto);
+                                cv.put("user_id", recipientFriend.getId());
+                                cv.put("inProgressChallengesCount", recipientFriend.getInProgressChallengesCount());
+                                cv.put("allChallengesCount", recipientFriend.getAllChallengesCount());
+                                cv.put("successChallenges", recipientFriend.getSuccessChallenges());
+                                cv.put("owner", "false");
+                                db.insert("pending", null, cv);
+                            } else {
+                                Owner ownerFriend = datum.getOwner();
+                                cv.put("name", ownerFriend.getName());
+                                //if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
+                                //else cv.put("photo", "");
+                                String ownerPhoto = (ownerFriend.getPhoto() != null) ? ownerFriend.getPhoto().getMedium() : "";
+                                cv.put("photo", ownerPhoto);
+                                cv.put("user_id", ownerFriend.get_id());
+                                cv.put("inProgressChallengesCount", ownerFriend.getInProgressChallengesCount());
+                                cv.put("allChallengesCount", ownerFriend.getAllChallengesCount());
+                                cv.put("successChallenges", ownerFriend.getSuccessChallenges());
+                                cv.put("owner", "true");
+                                db.insert("pending", null, cv);
                             }
+
                         }
                     }
                 }
@@ -224,135 +220,135 @@ public class AppSync {
     }
 
 
-    private void getUserInProgressChallenges(final String userId) {
-        DBHelper dbHelper = new DBHelper(context);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int clearCount = db.delete("myChallenges", null, null);
-        final ContentValues cv = new ContentValues();
-        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        final long unixTime = System.currentTimeMillis() / 1000L;
-        String update = "0";
+//    private void getUserInProgressChallenges(final String userId) {
+//        DBHelper dbHelper = new DBHelper(context);
+//        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+//        int clearCount = db.delete("myChallenges", null, null);
+//        final ContentValues cv = new ContentValues();
+//        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+//        final long unixTime = System.currentTimeMillis() / 1000L;
+//        String update = "0";
+//
+//        ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
+//        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> callActiveInProgress = activeInProgress.getActiveInProgress(userId, update, this.token);
+//        try {
+//            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//            StrictMode.setThreadPolicy(policy);
+//            List<com.example.ivan.champy_v2.model.active_in_progress.Datum> list  = callActiveInProgress.execute().body().getData();
+//            for (int i = 0; i < list.size(); i++) {
+//                com.example.ivan.champy_v2.model.active_in_progress.Datum datum = list.get(i);
+//                Challenge challenge = datum.getChallenge();
+//                Recipient recipient = datum.getRecipient();
+//                Sender sender = datum.getSender();
+//
+//                String challenge_description = challenge.getDescription();   // no smoking
+//                String challenge_detail      = challenge.getDetails();       // no smoking + " during this period"
+//                String challenge_status      = datum.getStatus();            // active or not
+//                String challenge_id          = datum.get_id();               // im progress id
+//                String challenge_type        = challenge.getType();          // 567d51c48322f85870fd931a / b / c
+//                String challenge_name        = challenge.getName();          // wake up / self / duel
+//                String challenge_wakeUpTime  = challenge.getWakeUpTime();    // our specific time (intentId)
+//                String challenge_updated     = getLastUpdated(challenge_id); // bool check method;
+//                String challenge_duration    = "";
+//                String constDuration         = "";
+//
+//                if (datum.getEnd() != null) {
+//                    int end = datum.getEnd();
+//                    int begin = datum.getBegin();
+//                    int days = round((end - unixTime) / 86400);
+//                    int constDays = round((end - begin) / 86400);
+//                    challenge_duration = "" + days;
+//                    constDuration = "" + constDays;
+//                }
+//
+//                List<Object> senderProgress = datum.getSenderProgress();
+//                String stringSenderProgress[] = new String[senderProgress.size()];
+//                for (int j = 0; j < senderProgress.size(); j++) {
+//                    try {
+//                        JSONObject json = new JSONObject(senderProgress.get(j).toString());
+//                        long at = json.getLong("at");
+//                        stringSenderProgress[j] = String.valueOf(at);
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//
+//                if (challenge_description.equals("Wake Up")) {
+//                    // just name of Challenge
+//                    cv.put("name", "Wake Up");
+//                    // our specific field for delete wakeUp (example: 1448);
+//                    cv.put("wakeUpTime", challenge_detail);
+//                } else if (challenge_type.equals("567d51c48322f85870fd931a")) {
+//                    // just name of Challenge
+//                    cv.put("name", "Self-Improvement");
+//                } else if (challenge_type.equals("567d51c48322f85870fd931b")) {
+//                    // just name of Challenge
+//                    cv.put("name", "Duel");
+//                    if (userId.equals(recipient.getId())) {
+//                        // if I accepted challenge, i'm "recipient"
+//                        cv.put("recipient", "true");
+//                        // name of the person with whom we have a duel
+//                        cv.put("versus", sender.getName());
+//                    } else {
+//                        // if I sent the challenge, i'm "sender"
+//                        cv.put("recipient", "false");
+//                        // name of the person with whom we have a duel
+//                        cv.put("versus", recipient.getName());
+//                    }
+//                }
+//
+//                // default 'challenge'. this column only for wake up time
+//                cv.put("challengeName", challenge_name);
+//                // smoking free life or wake up at 14:48
+//                cv.put("description", challenge_description);
+//                // duration of challenge
+//                cv.put("duration", challenge_duration);
+//                // in progress id
+//                cv.put("challenge_id", challenge_id);
+//                // active or not
+//                cv.put("status", challenge_status);
+//                // true or false
+//                cv.put("updated", challenge_updated);
+//                // last update time in millis
+//                cv.put("senderProgress", Arrays.toString(stringSenderProgress));
+//                // our constant value of challenge duration
+//                cv.put("constDuration", constDuration);
+//                // db when we store all challenges and information about them
+//                db.insert("myChallenges", null, cv);
+//            }
+//
+//        } catch (IOException e) { e.printStackTrace(); }
+//
+//    }
+//
+//
+//
+//    // method which get our last update (true or false);
+//    private String getLastUpdated(String challenge_id) {
+//        DBHelper dbHelper = new DBHelper(context);
+//        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+//        Cursor c = db.query("updated", null, null, null, null, null, null);
+//        String lastUpdate = "createdButNotUpdated";
+//        if (c.moveToFirst()) {
+//            int colchallenge_id = c.getColumnIndex("challenge_id");
+//            do {
+//                // в методе "sendSingleForDuel мы засовываем challenge_id в колонку "challenge_id" в
+//                // таблице "updated", а тут мы ее проверяем. если она есть, то вернуть время когда
+//                // мы нажимали "дан" для дуелей, если её здесь нету, то возвращаем "false" - это для
+//                // wake-up и self-improvement челенджей.
+//                // Соответственно данные про update time для дуелей находятся в таблице "updated",
+//                // а для отсального в таблице "myChallenges".
+//                if (c.getString(colchallenge_id).equals(challenge_id)) {
+//                    lastUpdate = c.getString(c.getColumnIndex("updated"));
+//                    break;
+//                }
+//            } while (c.moveToNext());
+//        }
+//        c.close();
+//        return lastUpdate;
+//    }
 
-        ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
-        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> callActiveInProgress = activeInProgress.getActiveInProgress(userId, update, this.token);
-        try {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-            List<com.example.ivan.champy_v2.model.active_in_progress.Datum> list  = callActiveInProgress.execute().body().getData();
-            for (int i = 0; i < list.size(); i++) {
-                com.example.ivan.champy_v2.model.active_in_progress.Datum datum = list.get(i);
-                Challenge challenge = datum.getChallenge();
-                Recipient recipient = datum.getRecipient();
-                Sender sender = datum.getSender();
-
-                String challenge_description = challenge.getDescription();   // no smoking
-                String challenge_detail      = challenge.getDetails();       // no smoking + " during this period"
-                String challenge_status      = datum.getStatus();            // active or not
-                String challenge_id          = datum.get_id();               // im progress id
-                String challenge_type        = challenge.getType();          // 567d51c48322f85870fd931a / b / c
-                String challenge_name        = challenge.getName();          // wake up / self / duel
-                String challenge_wakeUpTime  = challenge.getWakeUpTime();    // our specific time (intentId)
-                String challenge_updated     = getLastUpdated(challenge_id); // bool check method;
-                String challenge_duration    = "";
-                String constDuration         = "";
-
-                if (datum.getEnd() != null) {
-                    int end = datum.getEnd();
-                    int begin = datum.getBegin();
-                    int days = round((end - unixTime) / 86400);
-                    int constDays = round((end - begin) / 86400);
-                    challenge_duration = "" + days;
-                    constDuration = "" + constDays;
-                }
-
-                List<Object> senderProgress = datum.getSenderProgress();
-                String stringSenderProgress[] = new String[senderProgress.size()];
-                for (int j = 0; j < senderProgress.size(); j++) {
-                    try {
-                        JSONObject json = new JSONObject(senderProgress.get(j).toString());
-                        long at = json.getLong("at");
-                        stringSenderProgress[j] = String.valueOf(at);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                if (challenge_description.equals("Wake Up")) {
-                    // just name of Challenge
-                    cv.put("name", "Wake Up");
-                    // our specific field for delete wakeUp (example: 1448);
-                    cv.put("wakeUpTime", challenge_detail);
-                } else if (challenge_type.equals("567d51c48322f85870fd931a")) {
-                    // just name of Challenge
-                    cv.put("name", "Self-Improvement");
-                } else if (challenge_type.equals("567d51c48322f85870fd931b")) {
-                    // just name of Challenge
-                    cv.put("name", "Duel");
-                    if (userId.equals(recipient.getId())) {
-                        // if I accepted challenge, i'm "recipient"
-                        cv.put("recipient", "true");
-                        // name of the person with whom we have a duel
-                        cv.put("versus", sender.getName());
-                    } else {
-                        // if I sent the challenge, i'm "sender"
-                        cv.put("recipient", "false");
-                        // name of the person with whom we have a duel
-                        cv.put("versus", recipient.getName());
-                    }
-                }
-
-                // default 'challenge'. this column only for wake up time
-                cv.put("challengeName", challenge_name);
-                // smoking free life or wake up at 14:48
-                cv.put("description", challenge_description);
-                // duration of challenge
-                cv.put("duration", challenge_duration);
-                // in progress id
-                cv.put("challenge_id", challenge_id);
-                // active or not
-                cv.put("status", challenge_status);
-                // true or false
-                cv.put("updated", challenge_updated);
-                // last update time in millis
-                cv.put("senderProgress", Arrays.toString(stringSenderProgress));
-                // our constant value of challenge duration
-                cv.put("constDuration", constDuration);
-                // db when we store all challenges and information about them
-                db.insert("myChallenges", null, cv);
-            }
-
-        } catch (IOException e) { e.printStackTrace(); }
-
-    }
-
-
-
-    // method which get our last update (true or false);
-    private String getLastUpdated(String challenge_id) {
-        DBHelper dbHelper = new DBHelper(context);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Cursor c = db.query("updated", null, null, null, null, null, null);
-        String lastUpdate = "createdButNotUpdated";
-        if (c.moveToFirst()) {
-            int colchallenge_id = c.getColumnIndex("challenge_id");
-            do {
-                // в методе "sendSingleForDuel мы засовываем challenge_id в колонку "challenge_id" в
-                // таблице "updated", а тут мы ее проверяем. если она есть, то вернуть время когда
-                // мы нажимали "дан" для дуелей, если её здесь нету, то возвращаем "false" - это для
-                // wake-up и self-improvement челенджей.
-                // Соответственно данные про update time для дуелей находятся в таблице "updated",
-                // а для отсального в таблице "myChallenges".
-                if (c.getString(colchallenge_id).equals(challenge_id)) {
-                    lastUpdate = c.getString(c.getColumnIndex("updated"));
-                    break;
-                }
-            } while (c.moveToNext());
-        }
-        c.close();
-        return lastUpdate;
-    }
-
-    // method which get friends name / photo / count of challenge / etc
+    // method which get friends and their data
     // TODO: 27.10.2016 RESPONSE FAILED, Check it
     private void getUserFriendsInfo(final String gcm) {
         final String API_URL = "http://46.101.213.24:3007";
@@ -383,6 +379,7 @@ public class AppSync {
                             @Override
                             public void onResponse(Response<User> response, Retrofit retrofit) {
                                 if (response.isSuccess()) {
+                                    Log.d(TAG, "GetUserFriendsInfo onResponse: Success!");
                                     Data data = response.body().getData();
                                     String photo = null;
 
@@ -402,16 +399,27 @@ public class AppSync {
                                     cv.put("wins", data.getSuccessChallenges());
                                     cv.put("total", data.getScore());
                                     cv.put("level", data.getLevel().getNumber());
-                                    if (!checkPendingFriends(data.get_id())) db.insert("mytable", null, cv); // ?
-                                    else Log.d("AppSync", "GetUserFriendsInfo | DBase: not added");
+                                    Log.d(TAG, "onResponse: User: " + name);
+                                    if (!checkPendingFriends(data.get_id())) {
+                                        // if (!checkPendingFriends) than we can add current user in friends table
+                                        db.insert("mytable", null, cv);
+                                    }
+                                    else {
+                                        Log.d("AppSync", "GetUserFriendsInfo: this user not in pending");
+                                    }
                                 } else {
-                                    Log.d("AppSync", "GetUserFriendsInfo | onResponse: " + response.message());
+                                    Log.d(TAG, "onResponse: failed: " + response.message());
+                                }
+                                /*else {
+                                    Log.d("AppSync", "GetUserFriendsInfo onResponse: Failed: " + response.message());
                                     URL profile_pic;
                                     String photo = null;
                                     try {
                                         profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
                                         photo = profile_pic.toString();
-                                    } catch (MalformedURLException e) { e.printStackTrace(); }
+                                    } catch (MalformedURLException e) {
+                                        e.printStackTrace();
+                                    }
                                     cv.put("name", user_name);
                                     cv.put("photo", photo);
                                     cv.put("challenges", "0");
@@ -419,7 +427,7 @@ public class AppSync {
                                     cv.put("total", "0");
                                     cv.put("level", "0");
                                     db.insert("mytable", null, cv);
-                                }
+                                }*/
                             }
 
                             @Override
@@ -436,16 +444,17 @@ public class AppSync {
         request.executeAndWait();
     }
 
-    private Boolean checkPendingFriends(String id) {
+    // if this method return TRUE it mean what current user in "pending" table... (else in "other")
+    private Boolean checkPendingFriends(String someUserId) {
         DBHelper dbHelper = new DBHelper(context);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Boolean ok = false;
         Cursor c = db.query("pending", null, null, null, null, null, null);
         if (c.moveToFirst()) {
-            int userId = c.getColumnIndex("user_id");
+            int pendingUserId = c.getColumnIndex("user_id");
             do {
-                String user_id = c.getString(userId);
-                if (user_id.equals(id)) {
+                String somePendingId = c.getString(pendingUserId);
+                if (somePendingId.equals(someUserId)) {
                     ok = true;
                     break;
                 }
