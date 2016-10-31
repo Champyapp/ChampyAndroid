@@ -23,9 +23,9 @@ public class CHBuildAnim {
 
 
     public void buildAnim(Activity activity) {
-        int width = activity.getWindowManager().getDefaultDisplay().getWidth();
-        CHMakeResponsiveScore chMakeResponsiveScore = new CHMakeResponsiveScore(activity);
-        chMakeResponsiveScore.makeResponsiveScore(width);
+//        int width = activity.getWindowManager().getDefaultDisplay().getWidth();
+//        CHMakeResponsiveScore chMakeResponsiveScore = new CHMakeResponsiveScore(activity);
+//        chMakeResponsiveScore.makeResponsiveScore(width);
 
         Typeface typeface = Typeface.createFromAsset(activity.getAssets(), "fonts/bebasneue.ttf");
         

@@ -125,7 +125,7 @@ public class AppSync {
                      * который брал инфу про друзей. Сейчас мы вызываем его здесь.
                      */
 
-                    getUserInProgressChallenges(userId);
+                    //getUserInProgressChallenges(userId);
                     getUserPending(userId);
                     getUserFriendsInfo(gcm);
 

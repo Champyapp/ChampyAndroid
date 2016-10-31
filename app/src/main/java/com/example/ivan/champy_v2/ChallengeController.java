@@ -512,7 +512,9 @@ public class ChallengeController {
                                 JSONObject json = new JSONObject(senderProgress.get(j).toString());
                                 long at = json.getLong("at");
                                 stringSenderProgress[j] = String.valueOf(at);
-                            } catch (JSONException e) { e.printStackTrace(); }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
 
                         if (challenge_description.equals("Wake Up")) {

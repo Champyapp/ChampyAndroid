@@ -174,6 +174,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Glide.with(this).load(uri).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {

@@ -27,7 +27,6 @@
         android:id="@+id/welcomeUserName"
         android:textAllCaps="true"
         android:textSize="20sp"
-        android:text="Welcome Sasha Khyzhun"
         android:textColor="@android:color/white"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:gravity="center"
@@ -68,7 +67,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/textViewChallengesCounter"
         android:textIsSelectable="true"
         android:textSize="30sp"
@@ -87,13 +85,12 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/textViewWinsCounter"
         android:layout_alignLeft="@+id/imageView_wins_animation"
         android:layout_alignStart="@+id/imageView_wins_animation"
         android:gravity="center_vertical|center_horizontal"
         android:textSize="30sp"
-        android:text="1"
+        android:text="@string/zero"
         android:textColor="#ffffff"
         android:layout_alignRight="@+id/imageView_wins_animation"
         android:layout_alignEnd="@+id/imageView_wins_animation"
@@ -103,7 +100,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/textViewTotalCounter"
         android:layout_alignLeft="@+id/imageView_total_animation"
         android:layout_alignStart="@+id/imageView_total_animation"
@@ -158,32 +154,33 @@
         android:layout_height="wrap_content"
         android:id="@+id/textViewChallenges"
         android:text="@string/in_progress"
-        android:textSize="15sp"
+        android:textSize="18sp"
         android:textColor="#ffffff"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_below="@+id/imageView_challenges_animation"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/imageView_challenges_animation"
-        android:layout_alignEnd="@+id/imageView_challenges_animation"
         android:gravity="center_vertical|center_horizontal"
         android:layout_marginLeft="@dimen/activity_vertical_margin"
-        android:paddingBottom="10dp"/>
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:layout_alignRight="@+id/imageView_challenges_animation"
+        android:layout_alignEnd="@+id/imageView_challenges_animation"
+        android:layout_above="@+id/cards" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textViewWins"
         android:text="@string/wins"
-        android:textSize="15sp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="18sp"
         android:layout_below="@+id/imageView_wins_animation"
         android:layout_alignLeft="@+id/imageView_wins_animation"
         android:layout_alignStart="@+id/imageView_wins_animation"
         android:layout_alignRight="@+id/imageView_wins_animation"
         android:layout_alignEnd="@+id/imageView_wins_animation"
         android:gravity="center_vertical|center_horizontal"
-        android:paddingBottom="10dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:textColor="#ffffff" />
 
     <TextView
@@ -191,8 +188,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/textViewTotal"
         android:text="@string/total"
-        android:textSize="15sp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="18sp"
         android:layout_below="@+id/imageView_total_animation"
         android:layout_alignRight="@+id/imageView_total_animation"
         android:layout_alignEnd="@+id/imageView_total_animation"
@@ -200,15 +196,9 @@
         android:layout_alignLeft="@+id/imageView_total_animation"
         android:layout_alignStart="@+id/imageView_total_animation"
         android:gravity="center_vertical|center_horizontal"
-        android:paddingBottom="10dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:textColor="#ffffff" />
-
-   <!-- <include
-        layout="@layout/item_status_bar"
-        android:layout_below="@+id/welcomeUserName"
-        android:id="@+id/item_status_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />-->
 
     <!-- our cards -->
     <RelativeLayout
@@ -224,6 +214,14 @@
     </RelativeLayout>
 
     <!-- blurred screen -->
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/blurScreen"
+        android:visibility="invisible"
+        android:clickable="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <!-- fab -->
     <ImageButton
@@ -238,19 +236,6 @@
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginBottom="@dimen/activity_vertical_margin"/>
-
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/blurScreen"
-        android:visibility="invisible"
-        android:clickable="true"
-        android:layout_below="@+id/textViewChallenges"
-        android:layout_alignRight="@+id/textViewWins"
-        android:layout_alignEnd="@+id/textViewWins"
-        android:layout_marginRight="28dp"
-        android:layout_marginEnd="28dp"
-        android:layout_marginTop="40dp" />
 
 
 </RelativeLayout>

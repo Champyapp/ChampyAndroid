@@ -146,7 +146,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         long senderProgressMidNight = 0;
         final long oneDay = 86400L;
         try {
-            longSenderProgress = Long.parseLong(senderProgress[0]); // our last checkIn in seconds
+            longSenderProgress = Long.parseLong(senderProgress[senderProgress.length - 1]); // our last checkIn in seconds
             //Log.d(TAG, "getView: longSenderProgress: " + longSenderProgress);
             Date date = new Date(longSenderProgress * 1000); // convert last checkIn in date format
             senderProgressMidNight = longSenderProgress - (date.getHours() * 60 * 60) - (date.getMinutes() * 60) - (date.getSeconds());
@@ -155,7 +155,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         }
 
 
-        if (longSenderProgress != 0 && now > senderProgressMidNight + oneDay) {
+        if (longSenderProgress != 0L && now > senderProgressMidNight + oneDay) {
             if (!itemType.equals("Wake Up")) {
                 tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
                 buttonShare.setVisibility(View.INVISIBLE);
