@@ -95,14 +95,14 @@ public class PhotoActivity extends AppCompatActivity {
                 Bitmap thePic = extras.getParcelable("data");
                 savePhoto(thePic);
                 Upload_photo(SaveFromCamera(thePic));
-                Intent intent = new Intent(PhotoActivity.this, MainActivity.class);
+                Intent intent = new Intent(PhotoActivity.this, SettingsActivity.class);
                 startActivity(intent);
             } else if (requestCode == CROP_PIC) {
                 Bundle extras = data.getExtras();
                 // get the cropped bitmap
                 Bitmap thePic = extras.getParcelable("data");
                 savePhoto(thePic);
-                Intent intent = new Intent(PhotoActivity.this, MainActivity.class);
+                Intent intent = new Intent(PhotoActivity.this, SettingsActivity.class);
                 startActivity(intent);
             } else if (requestCode == Crop.REQUEST_PICK) {
                 beginCrop(data.getData());

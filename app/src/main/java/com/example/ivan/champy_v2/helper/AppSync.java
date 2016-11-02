@@ -30,6 +30,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.jsonwebtoken.Jwts;
@@ -124,7 +125,8 @@ public class AppSync {
 
                     String api_path;
                     if (data.getPhoto() != null){
-                        @SuppressLint("SdCardPath") String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+                        @SuppressLint("SdCardPath")
+                        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
                         File file = new File(path, "profile.jpg");
                         if (!file.exists()){
                             com.example.ivan.champy_v2.model.User.Photo photo = data.getPhoto();
@@ -352,8 +354,7 @@ public class AppSync {
         int clearCount = db.delete("mytable", null, null);
         final ContentValues cv = new ContentValues();
         final CHCheckTableForExist checkTableForExist = new CHCheckTableForExist(context);
-        final GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(),
-                new GraphRequest.GraphJSONArrayCallback() {
+        final GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONArrayCallback() {
             @Override
             public void onCompleted(JSONArray array, GraphResponse response) {
                 for (int i = 0; i < array.length(); i++) {
@@ -379,7 +380,9 @@ public class AppSync {
                                         try {
                                             URL profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
                                             photo = profile_pic.toString();
-                                        } catch (MalformedURLException e) { e.printStackTrace(); }
+                                        } catch (MalformedURLException e) {
+                                            e.printStackTrace();
+                                        }
                                     }
                                     String name = data.getName();
                                     cv.put("name", name);
@@ -389,9 +392,13 @@ public class AppSync {
                                     cv.put("wins", data.getSuccessChallenges());
                                     cv.put("total", data.getScore());
                                     cv.put("level", data.getLevel().getNumber());
-                                    if (!checkTableForExist.isInOtherTable(data.get_id())) db.insert("mytable", null, cv); // ?
-                                    else Log.d("AppSync", "GetUserFriendsInfo | DBase: not added");
-                                } else {
+                                    if (!checkTableForExist.isInOtherTable(data.get_id())) {
+                                        db.insert("mytable", null, cv);
+                                        Log.d("AppSync", "GetUserFriendsInfo | DBase: vse okay!");
+                                    } else {
+                                        Log.d("AppSync", "GetUserFriendsInfo | DBase: not added");
+                                    }
+                                } /*else {
                                     Log.d("AppSync", "GetUserFriendsInfo | onResponse: " + response.message());
                                     URL profile_pic;
                                     String photo = null;
@@ -406,7 +413,7 @@ public class AppSync {
                                     cv.put("total", "0");
                                     cv.put("level", "0");
                                     db.insert("mytable", null, cv);
-                                }
+                                }*/
                             }
 
                             @Override

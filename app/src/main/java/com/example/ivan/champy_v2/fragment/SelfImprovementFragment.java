@@ -122,6 +122,8 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
             textDays.setVisibility(View.VISIBLE);
         }
 
+        OfflineMode offlineMode = new OfflineMode();
+        offlineMode.isConnectedToRemoteAPI(getActivity());
         buttonAccept.setOnClickListener(this);
 
         return view;
@@ -129,9 +131,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
-        OfflineMode offlineMode = new OfflineMode();
-        offlineMode.isConnectedToRemoteAPI(getActivity());
-
         description = etGoal.getText().toString();
         duration = etDays.getText().toString();
         c = db.query("selfimprovement", null, null, null, null, null, null);

@@ -209,7 +209,7 @@ public class OtherFragment extends Fragment {
                                                     Log.d("stat", "DBase: not added " + user_name);
                                                 }
                                                 swipeRefreshLayout.setRefreshing(false);
-                                            } else {
+                                            } /*else {
                                                 // отображение всего у человека, который не установил champy
                                                 URL profile_pic = null;
                                                 String photo = null;
@@ -232,7 +232,7 @@ public class OtherFragment extends Fragment {
                                                 OtherAdapter adapter1 = new OtherAdapter(newFriends, getContext(), getActivity());
                                                 rvContacts.setAdapter(adapter1);
                                                 swipeRefreshLayout.setRefreshing(false);
-                                            }
+                                            }*/
                                         }
 
                                         @Override
