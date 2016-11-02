@@ -41,9 +41,9 @@ import retrofit.Retrofit;
 
 public class FriendsFragment extends Fragment {
 
-    final String API_URL = "http://46.101.213.24:3007";
-    public static final String ARG_PAGE = "ARG_PAGE";
-    public static final String TAG = "FriendsFragment";
+    private static final String API_URL = "http://46.101.213.24:3007";
+    private static final String ARG_PAGE = "ARG_PAGE";
+    private static final String TAG = "FriendsFragment";
 
     public View gView;
     public SwipeRefreshLayout gSwipeRefreshLayout;

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.StrictMode;
 import android.util.Log;
@@ -30,7 +29,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 import io.jsonwebtoken.Jwts;
@@ -120,7 +118,10 @@ public class AppSync {
 
                     //getUserInProgressChallenges(userId);
                     getUserPending(userId);
-                    getUserFriendsInfo(gcm);
+
+                    CHGetFacebookFriends getFbFriends = new CHGetFacebookFriends(context);
+                    getFbFriends.getUserFacebookFriends(gcm);
+
 
 
                     String api_path;
@@ -342,93 +343,7 @@ public class AppSync {
 //        return lastUpdate;
 //    }
 
-    // method which get friends and their data
-    private void getUserFriendsInfo(final String gcm) {
-        final String API_URL = "http://46.101.213.24:3007";
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        final NewUser newUser = retrofit.create(NewUser.class);
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        DBHelper dbHelper = new DBHelper(context);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int clearCount = db.delete("mytable", null, null);
-        final ContentValues cv = new ContentValues();
-        final CHCheckTableForExist checkTableForExist = new CHCheckTableForExist(context);
-        final GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONArrayCallback() {
-            @Override
-            public void onCompleted(JSONArray array, GraphResponse response) {
-                for (int i = 0; i < array.length(); i++) {
-                    try {
-                        final String fb_id = array.getJSONObject(i).getString("id");
-                        final String user_name = array.getJSONObject(i).getString("name");
-                        JSONObject jsonObject = new JSONObject();
-                        jsonObject.put("facebookId", fb_id);
-                        jsonObject.put("AndroidOS", gcm);
-                        String string = jsonObject.toString();
-                        final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
-                        Call<User> call = newUser.getUserInfo(jwtString);
-                        call.enqueue(new Callback<User>() {
-                            @Override
-                            public void onResponse(Response<User> response, Retrofit retrofit) {
-                                if (response.isSuccess()) {
-                                    Data data = response.body().getData();
-                                    String photo = null;
 
-                                    if (data.getPhoto() != null) {
-                                        photo = API_URL + data.getPhoto().getMedium();
-                                    } else {
-                                        try {
-                                            URL profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
-                                            photo = profile_pic.toString();
-                                        } catch (MalformedURLException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                    String name = data.getName();
-                                    cv.put("name", name);
-                                    cv.put("photo", photo);
-                                    cv.put("user_id", data.get_id());
-                                    cv.put("challenges", data.getAllChallengesCount());
-                                    cv.put("wins", data.getSuccessChallenges());
-                                    cv.put("total", data.getScore());
-                                    cv.put("level", data.getLevel().getNumber());
-                                    if (!checkTableForExist.isInOtherTable(data.get_id())) {
-                                        db.insert("mytable", null, cv);
-                                        Log.d("AppSync", "GetUserFriendsInfo | DBase: vse okay!");
-                                    } else {
-                                        Log.d("AppSync", "GetUserFriendsInfo | DBase: not added");
-                                    }
-                                } /*else {
-                                    Log.d("AppSync", "GetUserFriendsInfo | onResponse: " + response.message());
-                                    URL profile_pic;
-                                    String photo = null;
-                                    try {
-                                        profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
-                                        photo = profile_pic.toString();
-                                    } catch (MalformedURLException e) { e.printStackTrace(); }
-                                    cv.put("name", user_name);
-                                    cv.put("photo", photo);
-                                    cv.put("challenges", "0");
-                                    cv.put("wins", "0");
-                                    cv.put("total", "0");
-                                    cv.put("level", "0");
-                                    db.insert("mytable", null, cv);
-                                }*/
-                            }
-
-                            @Override
-                            public void onFailure(Throwable t) {}
-                        });
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-
-            }
-        });
-        request.executeAndWait();
-    }
 
     // if this method return TRUE it mean what current user in "pending" table... (else in "other")
 //    private Boolean isInOtherTable(String someUserId) {

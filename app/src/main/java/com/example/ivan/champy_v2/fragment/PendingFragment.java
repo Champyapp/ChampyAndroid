@@ -48,7 +48,7 @@ public class PendingFragment extends Fragment {
     public SwipeRefreshLayout swipeRefreshLayout;
     public View gView;
 
-    private int mPage;
+    public int mPage;
     private Socket mSocket;
 
     @Override
@@ -261,6 +261,7 @@ public class PendingFragment extends Fragment {
         mSocket.off();
         mSocket.disconnect();
     }
+
 
     private Emitter.Listener onConnect = new Emitter.Listener() {
         @Override

@@ -1,6 +1,7 @@
 package com.example.ivan.champy_v2.fragment;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -23,6 +24,8 @@ import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.adapter.OtherAdapter;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHCheckTableForExist;
+import com.example.ivan.champy_v2.helper.CHGetFacebookFriends;
+import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.interfaces.NewUser;
 import com.example.ivan.champy_v2.model.User.Data;
 import com.example.ivan.champy_v2.model.User.User;
@@ -30,11 +33,14 @@ import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,23 +59,54 @@ import retrofit.Retrofit;
  */
 public class OtherFragment extends Fragment {
 
-    public static final String ARG_PAGE = "ARG_PAGE";
-    public static final String TAG = "OtherFragment";
-    private CHCheckTableForExist checkTableForExist;
-    private int mPage;
     public View gView;
-    public SwipeRefreshLayout swipeRefreshLayout;
+
+    private static final String API_URL = "http://46.101.213.24:3007";
+    private static final String ARG_PAGE = "ARG_PAGE";
+    private static final String TAG = "OtherFragment";
+
+    private int mPage;
+
+    private Socket mSocket;
+    private SwipeRefreshLayout gSwipeRefreshLayout;
+    private CHGetFacebookFriends getFbFriends;
+    private CHCheckTableForExist checkTableForExist;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.d(TAG, "onAttach: ");
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getContext());
+        getFbFriends = new CHGetFacebookFriends(getContext());
+        Log.d(TAG, "onCreate: ");
+
+//        try {
+//            mSocket = IO.socket("http://46.101.213.24:3007");
+//        } catch (URISyntaxException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        mSocket.on("connect", onConnect);
+//        mSocket.on("connected", onConnected);
+//
+//        mSocket.on("Relationship:new:accepted", modifiedRelationship);
+//        mSocket.on("Relationship:new:removed", modifiedRelationship);
+//        mSocket.on("Relationship:created:accepted", modifiedRelationship);
+//        mSocket.on("Relationship:created:removed", modifiedRelationship);
+//
+//        mSocket.connect();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_first, container, false);
-        final List<Friend> friends = new ArrayList<Friend>();
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.fragment_first, container, false);
+        Log.d(TAG, "onCreateView: ");
+        final List<Friend> friends = new ArrayList<>();
         DBHelper dbHelper = new DBHelper(getContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         checkTableForExist = new CHCheckTableForExist(getContext());
@@ -77,6 +114,7 @@ public class OtherFragment extends Fragment {
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         final String id = user.get("id");
+        final String mToken = user.get("token");
 
         Cursor c = db.query("mytable", null, null, null, null, null, null);
         if (c.moveToFirst()) {
@@ -108,11 +146,13 @@ public class OtherFragment extends Fragment {
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         rvContacts.setAdapter(adapter);
 
-        swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        gSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
+        gSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshView(swipeRefreshLayout, gView);
+                //refreshOtherView(gSwipeRefreshLayout, gView);
+                getFbFriends.getUserFacebookFriends(mToken);
+                gSwipeRefreshLayout.setRefreshing(false);
             }
         });
         this.gView = view;
@@ -124,149 +164,221 @@ public class OtherFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Log.d(TAG, "onActivityCreated: ");
     }
 
-
-    private void refreshView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
-        // Проверка на оффлайн вкладке OTHERS
-        OfflineMode offlineMode = new OfflineMode();
-        offlineMode.isConnectedToRemoteAPI(getActivity());
-        swipeRefreshLayout.setRefreshing(true);
-        swipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                final String API_URL = "http://46.101.213.24:3007";
-                final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-                final NewUser newUser = retrofit.create(NewUser.class);
-                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-                StrictMode.setThreadPolicy(policy);
-                DBHelper dbHelper = new DBHelper(getActivity());
-                final SQLiteDatabase db = dbHelper.getWritableDatabase();
-                int clearCount = db.delete("mytable", null, null);
-                final ContentValues cv = new ContentValues();
-                final List<Friend> newFriends = new ArrayList<>();
-
-                OfflineMode offlineMode = new OfflineMode();
-                if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
-                    final GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONArrayCallback() {
-                        @Override
-                        public void onCompleted(JSONArray  array, GraphResponse response) {
-                            if (array.length() == 0) {
-                                Toast.makeText(getContext(), "No one of your friends has not installed Champy!", Toast.LENGTH_SHORT).show();
-                                swipeRefreshLayout.setRefreshing(false);
-                                return;
-                            }
-                            for (int i = 0; i < array.length(); i++) {
-                                try {
-                                    // jwt - Json Web Token...
-                                    final String fb_id = array.getJSONObject(i).getString("id");
-                                    final String user_name = array.getJSONObject(i).getString("name");
-                                    final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload("{\n" +
-                                            "  \"facebookId\": \"" + fb_id + "\"\n" +
-                                            "}").signWith(SignatureAlgorithm.HS256, "secret").compact();
-
-                                    Call<User> call = newUser.getUserInfo(jwtString);
-                                    call.enqueue(new Callback<User>() {
-                                        @Override
-                                        public void onResponse(Response<User> response, Retrofit retrofit) {
-                                            if (response.isSuccess()) {
-                                                Data data = response.body().getData();
-                                                String photo = null;
-                                                cv.put("user_id", data.get_id());
-
-                                                if (data.getPhoto() != null)
-                                                    photo = API_URL + data.getPhoto().getMedium();
-                                                else {
-                                                    try {
-                                                        URL profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
-                                                        photo = profile_pic.toString();
-                                                    } catch (Exception e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                }
-
-                                                String name = data.getName();
-                                                cv.put("name", name);
-                                                cv.put("photo", photo);
-                                                cv.put("challenges", "" + data.getAllChallengesCount());
-                                                cv.put("wins", "" + data.getSuccessChallenges());
-                                                cv.put("total", "" + data.getScore());
-                                                cv.put("level", "" + data.getLevel().getNumber());
-
-                                                // отображаем друзей в списке
-                                                if (!checkTableForExist.isInOtherTable(data.get_id())) {
-                                                    db.insert("mytable", null, cv);
-                                                    newFriends.add(new Friend(
-                                                            name,
-                                                            photo,
-                                                            data.get_id(),
-                                                            "" + data.getAllChallengesCount(),
-                                                            "" + data.getSuccessChallenges(),
-                                                            "" + data.getScore(),
-                                                            "" + data.getLevel().getNumber()
-                                                    ));
-                                                } else {
-                                                    Log.d("stat", "DBase: not added " + user_name);
-                                                }
-                                                swipeRefreshLayout.setRefreshing(false);
-                                            } /*else {
-                                                // отображение всего у человека, который не установил champy
-                                                URL profile_pic = null;
-                                                String photo = null;
-                                                try {
-                                                    profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
-                                                    photo = profile_pic.toString();
-                                                } catch (MalformedURLException e) {
-                                                    e.printStackTrace();
-                                                }
-                                                cv.put("name", user_name);
-                                                cv.put("photo", photo);
-                                                cv.put("challenges", "0");
-                                                cv.put("wins", "0");
-                                                cv.put("total", "0");
-                                                cv.put("level", "0");
-                                                newFriends.add(new Friend(user_name, photo, null, "0", "0", "0", "0"));
-                                                db.insert("mytable", null, cv);
-
-                                                RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-                                                OtherAdapter adapter1 = new OtherAdapter(newFriends, getContext(), getActivity());
-                                                rvContacts.setAdapter(adapter1);
-                                                swipeRefreshLayout.setRefreshing(false);
-                                            }*/
-                                        }
-
-                                        @Override
-                                        public void onFailure(Throwable t) {
-
-                                        }
-                                    });
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-
-                            }
-                        }
-                    });
-                    request.executeAsync();
-                } else {
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-
-            }
-        });
-        Log.d(TAG, "refreshFriendsView: finished");
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: ");
     }
 
-    // this method works like "if not in "pending" & "friends" -> insert into "other"
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: ");
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: ");
+    }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: ");
+    }
 
-//    public static OtherFragment newInstance(int page) {
-//        Bundle args = new Bundle();
-//        args.putInt(ARG_PAGE, page);
-//        OtherFragment fragment = new OtherFragment();
-//        fragment.setArguments(args);
-//        return fragment;
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d(TAG, "onDestroyView: ");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
+//        mSocket.off();
+//        mSocket.disconnect();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.d(TAG, "onDetach: ");
+    }
+
+//
+//    private Emitter.Listener onConnect = new Emitter.Listener() {
+//        @Override
+//        public void call(final Object... args) {
+//            CurrentUserHelper currentUser = new CurrentUserHelper(getContext());
+//            mSocket.emit("ready", currentUser.getToken());
+//            Log.d(TAG, "Sockets: connecting...");
+//        }
+//    };
+//    private Emitter.Listener onConnected = new Emitter.Listener() {
+//        @Override
+//        public void call(final Object... args) {
+//            Log.d(TAG, "Sockets: connected!");
+//        }
+//    };
+//    protected Emitter.Listener modifiedRelationship = new Emitter.Listener() {
+//        @Override
+//        public void call(final Object... args) {
+//            getActivity().runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    refreshOtherView(gSwipeRefreshLayout, gView);
+//                }});
+//            Log.d(TAG, "Sockets: modifiedRelationship");
+//        }
+//    };
+//
+//    public void refreshOtherView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
+//        // Проверка на оффлайн вкладке OTHERS
+//        OfflineMode offlineMode = new OfflineMode();
+//        if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
+//            swipeRefreshLayout.setRefreshing(true);
+//            swipeRefreshLayout.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    final String API_URL = "http://46.101.213.24:3007";
+//                    final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+//                    final NewUser newUser = retrofit.create(NewUser.class);
+//                    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//                    StrictMode.setThreadPolicy(policy);
+//                    DBHelper dbHelper = new DBHelper(getActivity());
+//                    final SQLiteDatabase db = dbHelper.getWritableDatabase();
+//                    int clearCount = db.delete("mytable", null, null);
+//                    final ContentValues cv = new ContentValues();
+//                    final List<Friend> newFriends = new ArrayList<>();
+//
+//                    OfflineMode offlineMode = new OfflineMode();
+//                    if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
+//                        final GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONArrayCallback() {
+//                            @Override
+//                            public void onCompleted(JSONArray array, GraphResponse response) {
+//                                if (array.length() == 0) {
+//                                    Toast.makeText(getContext(), "No one of your friends has not installed Champy!", Toast.LENGTH_SHORT).show();
+//                                    swipeRefreshLayout.setRefreshing(false);
+//                                    return;
+//                                }
+//                                for (int i = 0; i < array.length(); i++) {
+//                                    try {
+//                                        // jwt - Json Web Token...
+//                                        final String fb_id = array.getJSONObject(i).getString("id");
+//                                        final String user_name = array.getJSONObject(i).getString("name");
+//                                        final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload("{\n" +
+//                                                "  \"facebookId\": \"" + fb_id + "\"\n" +
+//                                                "}").signWith(SignatureAlgorithm.HS256, "secret").compact();
+//
+//                                        Call<User> call = newUser.getUserInfo(jwtString);
+//                                        call.enqueue(new Callback<User>() {
+//                                            @Override
+//                                            public void onResponse(Response<User> response, Retrofit retrofit) {
+//                                                if (response.isSuccess()) {
+//                                                    Data data = response.body().getData();
+//                                                    String photo = null;
+//                                                    cv.put("user_id", data.get_id());
+//
+//                                                    if (data.getPhoto() != null)
+//                                                        photo = API_URL + data.getPhoto().getMedium();
+//                                                    else {
+//                                                        try {
+//                                                            URL profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
+//                                                            photo = profile_pic.toString();
+//                                                        } catch (Exception e) {
+//                                                            e.printStackTrace();
+//                                                        }
+//                                                    }
+//
+//                                                    String name = data.getName();
+//                                                    cv.put("name", name);
+//                                                    cv.put("photo", photo);
+//                                                    cv.put("challenges", "" + data.getAllChallengesCount());
+//                                                    cv.put("wins", "" + data.getSuccessChallenges());
+//                                                    cv.put("total", "" + data.getScore());
+//                                                    cv.put("level", "" + data.getLevel().getNumber());
+//
+//                                                    // отображаем друзей в списке
+//                                                    if (!checkTableForExist.isInOtherTable(data.get_id())) {
+//                                                        db.insert("mytable", null, cv);
+//                                                        newFriends.add(new Friend(
+//                                                                name,
+//                                                                photo,
+//                                                                data.get_id(),
+//                                                                "" + data.getAllChallengesCount(),
+//                                                                "" + data.getSuccessChallenges(),
+//                                                                "" + data.getScore(),
+//                                                                "" + data.getLevel().getNumber()
+//                                                        ));
+//                                                    } else {
+//                                                        Log.d(TAG, "DBase: not added | " + user_name + " in other table");
+//                                                    }
+//                                                    swipeRefreshLayout.setRefreshing(false);
+//                                                }
+////                                            else {
+////                                                // отображение всего у человека, который не установил champy
+////                                                URL profile_pic = null;
+////                                                String photo = null;
+////                                                try {
+////                                                    profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
+////                                                    photo = profile_pic.toString();
+////                                                } catch (MalformedURLException e) {
+////                                                    e.printStackTrace();
+////                                                }
+////                                                cv.put("name", user_name);
+////                                                cv.put("photo", photo);
+////                                                cv.put("challenges", "0");
+////                                                cv.put("wins", "0");
+////                                                cv.put("total", "0");
+////                                                cv.put("level", "0");
+////                                                newFriends.add(new Friend(user_name, photo, null, "0", "0", "0", "0"));
+////                                                db.insert("mytable", null, cv);
+////
+////                                                RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
+////                                                OtherAdapter adapter1 = new OtherAdapter(newFriends, getContext(), getActivity());
+////                                                rvContacts.setAdapter(adapter1);
+////                                                gSwipeRefreshLayout.setRefreshing(false);
+////                                            }
+//                                            }
+//
+//                                            @Override
+//                                            public void onFailure(Throwable t) {
+//
+//                                            }
+//                                        });
+//                                    } catch (JSONException e) {
+//                                        e.printStackTrace();
+//                                    }
+//
+//                                }
+//                            }
+//                        });
+//                        request.executeAsync();
+//                    } else {
+//                        swipeRefreshLayout.setRefreshing(false);
+//                    }
+//
+//                }
+//            });
+//            Log.d(TAG, "refreshOtherView: finished");
+//        }
+//
+//        // this method works like "if not in "pending" & "friends" -> insert into "other"
+//
+//
+////    public static OtherFragment newInstance(int page) {
+////        Bundle args = new Bundle();
+////        args.putInt(ARG_PAGE, page);
+////        OtherFragment fragment = new OtherFragment();
+////        fragment.setArguments(args);
+////        return fragment;
+////    }
 //    }
 
 
