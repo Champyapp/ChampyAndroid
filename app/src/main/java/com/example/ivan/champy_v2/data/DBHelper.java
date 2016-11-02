@@ -105,7 +105,8 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("create table updated("
                 + "id integer primary key autoincrement,"
                 + "challenge_id text,"
-                + "updated text"
+                + "updated text,"
+                + "senderProgress text DEFAULT []"
                 + ");");
     }
 

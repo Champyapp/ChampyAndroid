@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.example.ivan.champy_v2.activity.MainActivity;
@@ -492,7 +491,8 @@ public class ChallengeController {
                         String challenge_type        = challenge.getType();          // 567d51c48322f85870fd931a / b / c
                         String challenge_name        = challenge.getName();          // wake up / self / duel
                         String challenge_wakeUpTime  = challenge.getWakeUpTime();    // our specific time (intentId)
-                        String challenge_updated     = getLastUpdated(challenge_id); // bool check method;
+                        String challenge_updated     = isUpdated(challenge_id);      // bool check method;
+                        List<Object> senderProgress = datum.getSenderProgress();     // sender progress
                         String challenge_duration    = "";
                         String constDuration         = "";
 
@@ -505,7 +505,6 @@ public class ChallengeController {
                             constDuration = "" + constDays;
                         }
 
-                        List<Object> senderProgress = datum.getSenderProgress();
                         String stringSenderProgress[] = new String[senderProgress.size()];
                         for (int j = 0; j < senderProgress.size(); j++) {
                             try {
@@ -577,10 +576,8 @@ public class ChallengeController {
 
 
 
-
-
     // method which returns our last update (true or false);
-    private String getLastUpdated(String challenge_id) {
+    private String isUpdated(String challenge_id) {
         DBHelper dbHelper = new DBHelper(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("updated", null, null, null, null, null, null);

@@ -16,6 +16,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,6 +40,7 @@ import com.example.ivan.champy_v2.helper.CHBuildAnim;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHDownloadImageTask;
 import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
+import com.example.ivan.champy_v2.helper.CHSocket;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.model.Self.SelfImprovement;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
@@ -63,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FloatingActionMenu actionMenu;
     private RelativeLayout cards;
     private ImageView blurScreen;
+    private CHSocket sockets;
     private Toolbar toolbar;
     private View headerLayout;
     //private CHSocket sockets;
@@ -73,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
+        Log.d(TAG, "onCreate: ");
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_gradient));
@@ -127,6 +131,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onStart() {
         super.onStart();
+        Log.d(TAG, "onStart: ");
 
         CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
         String pathToPic = user.getPathToPic();
@@ -182,6 +187,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d(TAG, "onResume: ");
+        sockets = new CHSocket(MainActivity.this, getApplicationContext());
+        sockets.tryToConnect();
+        sockets.connectAndEmmit();
+
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -189,6 +199,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 chBuildAnim.buildAnim(MainActivity.this);
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: ");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: ");
+        sockets.socketOff();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ViewServer.get(this).removeWindow(this);
     }
 
     @Override
@@ -257,12 +286,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ImageView screen = (ImageView) findViewById(R.id.blurScreen);
         screen.setVisibility(View.INVISIBLE);
 
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        ViewServer.get(this).removeWindow(this);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

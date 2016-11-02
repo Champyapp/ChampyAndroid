@@ -7,6 +7,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
 import com.example.ivan.champy_v2.activity.MainActivity;
@@ -30,9 +32,10 @@ public class NotifyReceiver extends BroadcastReceiver {
                 .setLights(Color.GREEN, 1000, 1500)
                 .setContentTitle("Champy")
                 .setContentText("Time to improve yourself")
-                .setAutoCancel(true);
+                .setAutoCancel(true).setWhen(System.currentTimeMillis());
 
         notificationManager.notify(100, builder.build());
+
     }
 
 }

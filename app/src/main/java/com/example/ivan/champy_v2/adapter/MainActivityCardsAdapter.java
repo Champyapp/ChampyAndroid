@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,10 +67,16 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 
         String itemSenderProgress = currentCard.getSenderProgress();
         String itemUpdate = currentCard.getUpdated();
+        Log.d(TAG, "getView: itemUpdate: " + itemUpdate);
         String itemGoal = currentCard.getGoal();
+        Log.d(TAG, "getView: itemGoal: " + itemGoal);
         String itemType = currentCard.getType();
+        Log.d(TAG, "getView: itemType: " + itemType);
         final String itemInProgressId = currentCard.getId();
-        //Log.d(TAG, "getView: itemInProgressId: " + itemInProgressId);
+        Log.d(TAG, "getView: itemID: " + itemInProgressId);
+        String itemStatus = currentCard.getStatus();
+        Log.d(TAG, "getView: itemStatus: " + itemStatus);
+
         String[] senderProgress = toArrayOfStrings(itemSenderProgress);
 
         switch (itemType) {
@@ -147,7 +154,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         final long oneDay = 86400L;
         try {
             longSenderProgress = Long.parseLong(senderProgress[senderProgress.length - 1]); // our last checkIn in seconds
-            //Log.d(TAG, "getView: longSenderProgress: " + longSenderProgress);
+            Log.d(TAG, "getView: lastCheckIn: " + longSenderProgress);
             Date date = new Date(longSenderProgress * 1000); // convert last checkIn in date format
             senderProgressMidNight = longSenderProgress - (date.getHours() * 60 * 60) - (date.getMinutes() * 60) - (date.getSeconds());
         } catch (RuntimeException e) {
