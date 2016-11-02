@@ -116,10 +116,10 @@ public class AppSync {
                      * который брал инфу про друзей. Сейчас мы вызываем его здесь.
                      */
 
-                    //getUserInProgressChallenges(userId);
-                    getUserPending(userId);
-
                     CHGetFacebookFriends getFbFriends = new CHGetFacebookFriends(context);
+
+                    //getUserInProgressChallenges(userId); // relocated in RoleActivity
+                    getUserPending(userId);
                     getFbFriends.getUserFacebookFriends(gcm);
 
 

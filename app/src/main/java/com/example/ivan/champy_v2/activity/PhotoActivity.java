@@ -158,7 +158,7 @@ public class PhotoActivity extends AppCompatActivity {
             Upload_photo(path);
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),uri);
             savePhoto(bitmap);
-            Intent intent = new Intent(PhotoActivity.this, MainActivity.class);
+            Intent intent = new Intent(PhotoActivity.this, SettingsActivity.class);
             startActivity(intent);
 
         } else if (resultCode == Crop.RESULT_ERROR) {

@@ -67,6 +67,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private View headerLayout;
     //private CHSocket sockets;
 
+    // TODO: 02.11.2016 Disable sockets in onStop() to avoid duplication
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -19,6 +19,7 @@ import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.adapter.PendingAdapter;
 import com.example.ivan.champy_v2.data.DBHelper;
+import com.example.ivan.champy_v2.helper.CHGetFacebookFriends;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.interfaces.CustomItemClickListener;
 import com.example.ivan.champy_v2.model.Friend.Datum;
@@ -45,6 +46,8 @@ public class PendingFragment extends Fragment {
     public static final String ARG_PAGE = "ARG_PAGE";
     public static final String TAG = "PendingFragment";
 
+    private String id = "", token = "";
+    private CurrentUserHelper currentUser;
     public SwipeRefreshLayout swipeRefreshLayout;
     public View gView;
 
@@ -54,13 +57,15 @@ public class PendingFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        currentUser = new CurrentUserHelper(getContext());
+        id = currentUser.getUserObjectId();
+        token = currentUser.getToken();
         try {
             mSocket = IO.socket("http://46.101.213.24:3007");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
@@ -144,21 +149,18 @@ public class PendingFragment extends Fragment {
 
         mSocket.on("Relationship:new", modifiedRelationship);
         mSocket.on("Relationship:new:accepted", modifiedRelationship);
-        mSocket.on("Relationship:new:removed", modifiedRelationship);
+        mSocket.on("Relationship:new:removed", removedRelationship);
         mSocket.on("Relationship:accepted", modifiedRelationship);
 
         mSocket.on("Relationship:created", modifiedRelationship);
         mSocket.on("Relationship:created:accepted", modifiedRelationship);
-        mSocket.on("Relationship:created:removed", modifiedRelationship);
+        mSocket.on("Relationship:created:removed", removedRelationship);
         mSocket.connect();
     }
 
 
     private void refreshPendingView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
-        CurrentUserHelper currentUser = new CurrentUserHelper(getContext());
         swipeRefreshLayout.setRefreshing(true);
-        final String id = currentUser.getUserObjectId();
-        String token = currentUser.getToken();
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         DBHelper dbHelper = new DBHelper(getContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -288,6 +290,19 @@ public class PendingFragment extends Fragment {
                 }
             });
             Log.d(TAG, "Sockets: modifiedRelationship");
+        }
+    };
+    protected Emitter.Listener removedRelationship = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    CHGetFacebookFriends others = new CHGetFacebookFriends(getContext());
+                    others.getUserFacebookFriends(token);
+                    refreshPendingView(swipeRefreshLayout, gView);
+                }
+            });
         }
     };
 
