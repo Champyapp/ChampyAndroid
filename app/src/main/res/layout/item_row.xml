@@ -9,8 +9,8 @@
 
     <!--   Recycler View Item Row   -->
     <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:paddingBottom="20dp">
 
@@ -23,10 +23,9 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:text="Taking Stares"
             android:textAllCaps="true"
             android:visibility="visible"
-            android:paddingTop="10dp"
+            android:paddingTop="20dp"
             android:gravity="center_vertical|center_horizontal"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textColor="@color/colorTextAqua" />
@@ -39,13 +38,14 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:paddingTop="22dp"
             android:inputType="textCapSentences"
             android:textAllCaps="false"
             android:visibility="invisible"
             android:hint="@string/enter_your_challenge"
             android:textColorHint="@color/colorHint"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
             android:gravity="center_vertical|center_horizontal"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textColor="@color/colorTextAqua" />
@@ -84,20 +84,8 @@
             android:gravity="center"
             android:layout_centerHorizontal="true" />
 
-<!--        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/days"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:id="@+id/tvDays"
-            android:textColor="@color/colorTextAqua"
-            android:visibility="visible"
-            android:layout_toRightOf="@+id/days_text"
-            android:layout_below="@id/tvEveryDaySelf"
-            android:layout_centerHorizontal="true" />-->
-
         <EditText
-            android:layout_width="50dp"
+            android:layout_width="35dp"
             android:layout_height="wrap_content"
             android:inputType="number"
             android:ems="10"
@@ -105,12 +93,27 @@
             android:maxLength="3"
             android:visibility="invisible"
             android:hint="@string/hint_21"
-            android:textColorHint="@color/colorHint"
             android:gravity="center"
+            android:textColorHint="@color/colorHint"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textColor="@color/colorTextAqua"
             android:layout_alignBaseline="@+id/days_text"
             android:layout_alignBottom="@+id/days_text"
+            android:layout_alignLeft="@+id/days_text"
+            android:layout_alignStart="@+id/days_text" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/days"
+            android:id="@+id/textDays"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textColor="@color/colorTextAqua"
+            android:visibility="invisible"
+            android:layout_below="@+id/tvEveryDaySelf"
+            android:layout_marginTop="25dp"
+            android:layout_toRightOf="@id/et_days"
+            android:gravity="center"
             android:layout_centerHorizontal="true" />
 
         <!--

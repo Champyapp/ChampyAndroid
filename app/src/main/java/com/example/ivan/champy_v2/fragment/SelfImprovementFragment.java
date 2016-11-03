@@ -88,8 +88,9 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         tvDays = (TextView)view.findViewById(R.id.days_text);
         etGoal = (EditText)view.findViewById(R.id.et_goal);
         etDays = (EditText)view.findViewById(R.id.et_days);
-        //TextView textDays   = (TextView)view.findViewById(R.id.tvDays);
+        TextView textDays   = (TextView)view.findViewById(R.id.textDays);
         TextView tvEveryDay = (TextView)view.findViewById(R.id.tvEveryDaySelf);
+        View line = view.findViewById(R.id.line);
 //        TextView tvLevel    = (TextView)view.findViewById(R.id.tvLevel1Chall);
 //        TextView tvPoint    = (TextView)view.findViewById(R.id.tvRewardPlus10Points);
 
@@ -100,8 +101,8 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         tvDays.setTypeface(typeface);
         tvGoal.setTypeface(typeface);
         tvEveryDay.setTypeface(typeface);
-        //textDays.setTypeface(typeface);
-        //textDays.setVisibility(View.INVISIBLE);
+        textDays.setTypeface(typeface);
+        textDays.setVisibility(View.INVISIBLE);
 //        tvLevel.setTypeface(typeface);
 //        tvPoint.setTypeface(typeface);
 
@@ -119,7 +120,8 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
             etDays.setVisibility(View.VISIBLE);
             etGoal.setVisibility(View.VISIBLE);
             tvDays.setVisibility(View.INVISIBLE);
-            //textDays.setVisibility(View.VISIBLE);
+            line.setVisibility(View.INVISIBLE);
+            textDays.setVisibility(View.VISIBLE);
         }
 
         OfflineMode offlineMode = new OfflineMode();

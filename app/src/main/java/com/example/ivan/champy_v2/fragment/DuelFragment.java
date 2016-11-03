@@ -94,8 +94,9 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         tvDays = (TextView)view.findViewById(R.id.days_text);
         etGoal = (EditText)view.findViewById(R.id.et_goal);
         etDays = (EditText)view.findViewById(R.id.et_days);
-        TextView textDays   = (TextView)view.findViewById(R.id.tvDays);
+        View line = view.findViewById(R.id.line);
         TextView tvEveryDay = (TextView)view.findViewById(R.id.tvEveryDaySelf);
+        TextView textDays   = (TextView)view.findViewById(R.id.textDays);
 //        TextView tvLevel    = (TextView)view.findViewById(R.id.tvLevel1Chall);
 //        TextView tvPoint    = (TextView)view.findViewById(R.id.tvRewardPlus10Points);
 
@@ -126,6 +127,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
             etGoal.setVisibility(View.VISIBLE);
             tvDays.setVisibility(View.INVISIBLE);
             tvGoal.setVisibility(View.INVISIBLE);
+            line.setVisibility(View.INVISIBLE);
             textDays.setVisibility(View.VISIBLE);
         }
 
