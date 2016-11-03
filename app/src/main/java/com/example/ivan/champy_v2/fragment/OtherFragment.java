@@ -72,11 +72,6 @@ public class OtherFragment extends Fragment {
     private CHGetFacebookFriends getFbFriends;
     private CHCheckTableForExist checkTableForExist;
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Log.d(TAG, "onAttach: ");
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -101,6 +96,7 @@ public class OtherFragment extends Fragment {
 //
 //        mSocket.connect();
     }
+
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
@@ -161,41 +157,13 @@ public class OtherFragment extends Fragment {
 
     }
 
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.d(TAG, "onActivityCreated: ");
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart: ");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume: ");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause: ");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d(TAG, "onStop: ");
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.d(TAG, "onDestroyView: ");
-    }
 
     @Override
     public void onDestroy() {
@@ -203,12 +171,6 @@ public class OtherFragment extends Fragment {
         Log.d(TAG, "onDestroy: ");
 //        mSocket.off();
 //        mSocket.disconnect();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.d(TAG, "onDetach: ");
     }
 
 //

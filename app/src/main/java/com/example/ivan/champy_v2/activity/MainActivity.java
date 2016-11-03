@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FloatingActionMenu actionMenu;
     private RelativeLayout cards;
     private ImageView blurScreen;
-    private CHSocket sockets;
+    //private CHSocket sockets;
     private Toolbar toolbar;
     private View headerLayout;
 
@@ -187,9 +187,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume: ");
-        sockets = new CHSocket(MainActivity.this, getApplicationContext());
-        sockets.tryToConnect();
-        sockets.connectAndEmmit();
+//        sockets = new CHSocket(MainActivity.this, getApplicationContext());
+//        sockets.tryToConnect();
+//        sockets.connectAndEmmit();
 
         this.runOnUiThread(new Runnable() {
             @Override
@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onStop() {
         super.onStop();
         Log.d(TAG, "onStop: ");
-        sockets.socketOff();
+        //sockets.socketOff();
     }
 
     @Override

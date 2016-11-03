@@ -17,6 +17,7 @@ import com.example.ivan.champy_v2.activity.FriendsActivity;
 import com.example.ivan.champy_v2.activity.HistoryActivity;
 import com.example.ivan.champy_v2.activity.MainActivity;
 import com.example.ivan.champy_v2.activity.PendingDuelActivity;
+import com.example.ivan.champy_v2.activity.RoleControllerActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHLoadUserProgressBarInfo;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
@@ -81,14 +82,12 @@ public class MyGcmListenerService extends GcmListenerService {
      */
     private void sendNotification(String message, String title) {
         Log.d(TAG, title);
-        Intent intent = new Intent(MyGcmListenerService.this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         switch (title) {
             case "Friend request":
-                intent = new Intent(this, FriendsActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("friend_request", "true");
-                notifyForFriends(intent, message);
+                Intent friendsIntent = new Intent(this, FriendsActivity.class);
+                friendsIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                friendsIntent.putExtra("friend_request", "true");
+                notifyForFriends(friendsIntent, message);
                 break;
             case "Challenge request":
                 Intent goToPendingDuels = new Intent(MyGcmListenerService.this, PendingDuelActivity.class);
@@ -96,12 +95,14 @@ public class MyGcmListenerService extends GcmListenerService {
                 notifyChallenges(goToPendingDuels, message);
                 break;
             case "Challenge accepted":
-                notifyChallenges(intent, message);
+                Intent roleIntent = new Intent(MyGcmListenerService.this, RoleControllerActivity.class);
+                roleIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                notifyChallenges(roleIntent, message);
                 break;
             case "Win":
-                intent = new Intent(this, HistoryActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("win_request", "true");
+                Intent historyIntent = new Intent(this, HistoryActivity.class);
+                historyIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                historyIntent.putExtra("win_request", "true");
 
                 CurrentUserHelper user = new CurrentUserHelper(this);
                 String userId = user.getUserObjectId();
@@ -109,7 +110,7 @@ public class MyGcmListenerService extends GcmListenerService {
                 refreshPendingDuels();
                 generateCardsForMainActivity(token, userId);
 
-                notifyChallenges(intent, message);
+                notifyChallenges(historyIntent, message);
                 break;
         }
     }

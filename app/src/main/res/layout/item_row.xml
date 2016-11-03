@@ -1,4 +1,5 @@
-<android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<android.support.v7.widget.CardView
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/card_view_non_edit"
     android:layout_width="fill_parent"
@@ -9,9 +10,8 @@
     <!--   Recycler View Item Row   -->
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:orientation="vertical"
         android:layout_height="fill_parent"
-        android:paddingTop="20dp"
+        android:orientation="vertical"
         android:paddingBottom="20dp">
 
         <TextView
@@ -23,14 +23,13 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:textAllCaps="false"
+            android:text="Taking Stares"
+            android:textAllCaps="true"
             android:visibility="visible"
             android:paddingTop="10dp"
             android:gravity="center_vertical|center_horizontal"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:typeface="normal"
-            android:textColor="@color/colorTextAqua"
-            android:layout_above="@+id/tvEveryDaySelf" />
+            android:textColor="@color/colorTextAqua" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -51,6 +50,52 @@
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textColor="@color/colorTextAqua" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:id="@+id/line"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:background="#339997"
+            android:layout_below="@+id/goal_text"
+            android:visibility="visible" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:text="@string/everyday_for_the_next"
+            android:id="@+id/tvEveryDaySelf"
+            android:layout_below="@id/line"
+            android:layout_marginTop="25dp"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/days_text"
+            android:text="@string/_21_days"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textColor="@color/colorTextAqua"
+            android:visibility="visible"
+            android:layout_below="@+id/tvEveryDaySelf"
+            android:layout_marginTop="25dp"
+            android:gravity="center"
+            android:layout_centerHorizontal="true" />
+
+<!--        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/days"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:id="@+id/tvDays"
+            android:textColor="@color/colorTextAqua"
+            android:visibility="visible"
+            android:layout_toRightOf="@+id/days_text"
+            android:layout_below="@id/tvEveryDaySelf"
+            android:layout_centerHorizontal="true" />-->
+
         <EditText
             android:layout_width="50dp"
             android:layout_height="wrap_content"
@@ -61,94 +106,55 @@
             android:visibility="invisible"
             android:hint="@string/hint_21"
             android:textColorHint="@color/colorHint"
-            android:gravity="center_vertical|center_horizontal"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:textColor="@color/colorTextAqua"
-            android:layout_below="@+id/tvEveryDaySelf"
-            android:layout_alignLeft="@+id/imageViewPoints"
-            android:layout_alignStart="@+id/imageViewPoints"
-            android:layout_alignRight="@+id/imageViewPoints"
-            android:layout_alignEnd="@+id/imageViewPoints" />
-
-        <TextView
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/days_text"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:textColor="@color/colorTextAqua"
-            android:visibility="visible"
-            android:layout_alignBottom="@+id/et_days"
-            android:layout_alignTop="@+id/et_days"
             android:gravity="center"
-            android:layout_alignRight="@+id/imageViewPoints"
-            android:layout_alignEnd="@+id/imageViewPoints"
-            android:layout_alignLeft="@+id/et_days"
-            android:layout_alignStart="@+id/et_days" />
-
-        <TextView
-            android:text="@string/days"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:id="@+id/tvDays"
             android:textColor="@color/colorTextAqua"
-            android:visibility="visible"
-            android:layout_alignBaseline="@+id/et_days"
-            android:layout_alignBottom="@+id/et_days"
-            android:layout_toRightOf="@+id/et_days"
-            android:layout_toEndOf="@+id/et_days" />
+            android:layout_alignBaseline="@+id/days_text"
+            android:layout_alignBottom="@+id/days_text"
+            android:layout_centerHorizontal="true" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:text="@string/everyday_for_the_next"
-            android:id="@+id/tvEveryDaySelf"
-            android:layout_below="@+id/et_goal"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="8dp" />
+        <!--
+                <ImageView
+                    android:layout_width="60sp"
+                    android:layout_height="60sp"
+                    android:id="@+id/imageViewPoints"
+                    android:visibility="visible"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/points"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:contentDescription="@string/count_of_points_10" />
 
-        <ImageView
-            android:layout_width="60sp"
-            android:layout_height="60sp"
-            android:id="@+id/imageViewPoints"
-            android:visibility="visible"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/points"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:contentDescription="@string/count_of_points_10" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:text="@string/level_1_n_challenge"
+                    android:id="@+id/tvLevel1Chall"
+                    android:layout_alignBottom="@+id/imageViewPoints"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_toLeftOf="@+id/imageViewPoints"
+                    android:layout_toStartOf="@+id/imageViewPoints"
+                    android:layout_alignTop="@+id/imageViewPoints"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:textColor="@color/colorTextAqua" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:text="@string/level_1_n_challenge"
-            android:id="@+id/tvLevel1Chall"
-            android:layout_alignBottom="@+id/imageViewPoints"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_toLeftOf="@+id/imageViewPoints"
-            android:layout_toStartOf="@+id/imageViewPoints"
-            android:layout_alignTop="@+id/imageViewPoints"
-            android:gravity="center_vertical|center_horizontal"
-            android:textColor="@color/colorTextAqua" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:text="@string/reward_10__n_points"
-            android:id="@+id/tvRewardPlus10Points"
-            android:layout_alignTop="@+id/imageViewPoints"
-            android:layout_toRightOf="@+id/imageViewPoints"
-            android:layout_alignBottom="@+id/imageViewPoints"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:gravity="center_vertical|center_horizontal"
-            android:textColor="@color/colorTextAqua" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:text="@string/reward_10__n_points"
+                    android:id="@+id/tvRewardPlus10Points"
+                    android:layout_alignTop="@+id/imageViewPoints"
+                    android:layout_toRightOf="@+id/imageViewPoints"
+                    android:layout_alignBottom="@+id/imageViewPoints"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:textColor="@color/colorTextAqua" />-->
 
     </RelativeLayout>
 

@@ -95,9 +95,9 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         etGoal = (EditText)view.findViewById(R.id.et_goal);
         etDays = (EditText)view.findViewById(R.id.et_days);
         TextView textDays   = (TextView)view.findViewById(R.id.tvDays);
-        TextView tvLevel    = (TextView)view.findViewById(R.id.tvLevel1Chall);
         TextView tvEveryDay = (TextView)view.findViewById(R.id.tvEveryDaySelf);
-        TextView tvPoint    = (TextView)view.findViewById(R.id.tvRewardPlus10Points);
+//        TextView tvLevel    = (TextView)view.findViewById(R.id.tvLevel1Chall);
+//        TextView tvPoint    = (TextView)view.findViewById(R.id.tvRewardPlus10Points);
 
         if (duration != null && !duration.isEmpty()) days = Integer.parseInt(duration) / 86400;
 
@@ -107,11 +107,11 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         tvGoal.setTypeface(typeface);
         tvEveryDay.setTypeface(typeface);
         textDays.setTypeface(typeface);
-        tvLevel.setTypeface(typeface);
-        tvPoint.setTypeface(typeface);
         textDays.setVisibility(View.INVISIBLE);
+//        tvLevel.setTypeface(typeface);
+//        tvPoint.setTypeface(typeface);
 
-        Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView) view.findViewById(R.id.imageViewPoints));
+//        Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView) view.findViewById(R.id.imageViewPoints));
         ImageButton imageButtonAccept = (ImageButton) getActivity().findViewById(R.id.ok);
 
         viewPager = (ViewPager) getActivity().findViewById(R.id.pager_duel);

@@ -172,6 +172,7 @@ public class FriendsFragment extends Fragment {
                     if (response.isSuccess()) {
                         List<Datum> data = response.body().getData();
 
+                        // get friends from response.
                         for (int i = 0; i < data.size(); i++) {
                             Datum datum = data.get(i);
                             if (datum.getFriend() != null && datum.getStatus().toString().equals("true")) {
@@ -199,6 +200,7 @@ public class FriendsFragment extends Fragment {
                             }
                         }
 
+                        // put friends from response on screen
                         final List<Friend> newfriends = new ArrayList<>();
                         Cursor c = db.query("friends", null, null, null, null, null, null);
                         if (c.moveToFirst()) {

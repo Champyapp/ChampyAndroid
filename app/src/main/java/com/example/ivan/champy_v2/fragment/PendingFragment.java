@@ -176,12 +176,11 @@ public class PendingFragment extends Fragment {
                 public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
                     if (response.isSuccess()) {
                         List<Datum> data = response.body().getData();
-
+                        // get data from response
                         for (int i = 0; i < data.size(); i++) {
                             Datum datum = data.get(i);
                             if ((datum.getFriend() != null) && (datum.getOwner() != null) && datum.getStatus().toString().equals("false")) {
                                 String status;
-//
                                 if (datum.getOwner().get_id().equals(id)) {
                                     status = "false";
                                     Friend_ friend = datum.getFriend();
@@ -210,6 +209,7 @@ public class PendingFragment extends Fragment {
 
                             }
                         }
+                        // put data in list
                         final List<Pending_friend> newfriends = new ArrayList<>();
                         Cursor c = db.query("pending", null, null, null, null, null, null);
                         if (c.moveToFirst()) {

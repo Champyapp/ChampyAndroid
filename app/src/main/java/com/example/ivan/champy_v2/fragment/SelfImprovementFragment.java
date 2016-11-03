@@ -88,10 +88,10 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         tvDays = (TextView)view.findViewById(R.id.days_text);
         etGoal = (EditText)view.findViewById(R.id.et_goal);
         etDays = (EditText)view.findViewById(R.id.et_days);
-        TextView textDays   = (TextView)view.findViewById(R.id.tvDays);
-        TextView tvLevel    = (TextView)view.findViewById(R.id.tvLevel1Chall);
+        //TextView textDays   = (TextView)view.findViewById(R.id.tvDays);
         TextView tvEveryDay = (TextView)view.findViewById(R.id.tvEveryDaySelf);
-        TextView tvPoint    = (TextView)view.findViewById(R.id.tvRewardPlus10Points);
+//        TextView tvLevel    = (TextView)view.findViewById(R.id.tvLevel1Chall);
+//        TextView tvPoint    = (TextView)view.findViewById(R.id.tvRewardPlus10Points);
 
         if (duration != null && !duration.isEmpty()) days = Integer.parseInt(duration) / 86400;
 
@@ -100,12 +100,12 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         tvDays.setTypeface(typeface);
         tvGoal.setTypeface(typeface);
         tvEveryDay.setTypeface(typeface);
-        textDays.setTypeface(typeface);
-        tvLevel.setTypeface(typeface);
-        tvPoint.setTypeface(typeface);
-        textDays.setVisibility(View.INVISIBLE);
+        //textDays.setTypeface(typeface);
+        //textDays.setVisibility(View.INVISIBLE);
+//        tvLevel.setTypeface(typeface);
+//        tvPoint.setTypeface(typeface);
 
-        Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView)view.findViewById(R.id.imageViewPoints));
+//        Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView)view.findViewById(R.id.imageViewPoints));
         ImageButton buttonAccept = (ImageButton) getActivity().findViewById(R.id.imageButtonAccept);
 
         viewPager = (ViewPager) getActivity().findViewById(R.id.pager);
@@ -119,7 +119,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
             etDays.setVisibility(View.VISIBLE);
             etGoal.setVisibility(View.VISIBLE);
             tvDays.setVisibility(View.INVISIBLE);
-            textDays.setVisibility(View.VISIBLE);
+            //textDays.setVisibility(View.VISIBLE);
         }
 
         OfflineMode offlineMode = new OfflineMode();
