@@ -1,5 +1,6 @@
 package com.example.ivan.champy_v2.fragment;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
@@ -20,6 +21,7 @@ import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.activity.MainActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
@@ -99,6 +101,9 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         CHSetupUI chSetupUI= new CHSetupUI();
         chSetupUI.setupUI(view, getActivity());
         Glide.with(getContext()).load(R.drawable.points).override(200, 200).into((ImageView)view.findViewById(R.id.imageViewPoints));
+
+        offlineMode = new OfflineMode();
+        offlineMode.isConnectedToRemoteAPI(getActivity());
         btnAccept.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
 
@@ -131,8 +136,6 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onClick(View view) {
-        offlineMode = new OfflineMode();
-        offlineMode.isConnectedToRemoteAPI(getActivity());
         CurrentUserHelper user = new CurrentUserHelper(getContext());
         final String token = user.getToken();
         final String userId = user.getUserObjectId();
@@ -185,6 +188,8 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
                             cc.rejectInviteForPendingDuel(challenge_id);
                             snackbar = Snackbar.make(view, "Challenge Canceled!", Snackbar.LENGTH_SHORT);
                             snackbar.show();
+                            Intent intent = new Intent(getActivity(), MainActivity.class);
+                            startActivity(intent);
                         } catch (IOException | NullPointerException e) {
                             e.printStackTrace();
                         }
