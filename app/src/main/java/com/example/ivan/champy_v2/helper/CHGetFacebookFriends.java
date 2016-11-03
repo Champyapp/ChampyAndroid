@@ -92,9 +92,9 @@ public class CHGetFacebookFriends {
                                     cv.put("level", data.getLevel().getNumber());
                                     if (!checkTableForExist.isInOtherTable(data.get_id())) {
                                         db.insert("mytable", null, cv);
-                                        Log.d("AppSync", "GetUserFriendsInfo | DBase: vse okay!");
+                                        Log.d("AppSync", "GetUserFriendsInfo | DBase: vse okay! " + name + " in other");
                                     } else {
-                                        Log.d("AppSync", "GetUserFriendsInfo | DBase: this friend in pending or friends");
+                                        Log.d("AppSync", "GetUserFriendsInfo | DBase: " + name + " in pending or friends");
                                     }
                                 }
 //                                else {

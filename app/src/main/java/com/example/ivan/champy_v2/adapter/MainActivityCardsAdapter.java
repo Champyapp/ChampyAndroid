@@ -67,14 +67,15 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 
         String itemSenderProgress = currentCard.getSenderProgress();
         String itemUpdate = currentCard.getUpdated();
-        Log.d(TAG, "getView: itemUpdate: " + itemUpdate);
         String itemGoal = currentCard.getGoal();
-        Log.d(TAG, "getView: itemGoal: " + itemGoal);
         String itemType = currentCard.getType();
-        Log.d(TAG, "getView: itemType: " + itemType);
         final String itemInProgressId = currentCard.getId();
-        Log.d(TAG, "getView: itemID: " + itemInProgressId);
         String itemStatus = currentCard.getStatus();
+
+        Log.d(TAG, "getView: itemUpdate: " + itemUpdate);
+        Log.d(TAG, "getView: itemGoal: " + itemGoal);
+        Log.d(TAG, "getView: itemType: " + itemType);
+        Log.d(TAG, "getView: itemID: " + itemInProgressId);
         Log.d(TAG, "getView: itemStatus: " + itemStatus);
 
         String[] senderProgress = toArrayOfStrings(itemSenderProgress);
