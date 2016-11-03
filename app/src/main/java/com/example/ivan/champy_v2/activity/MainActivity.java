@@ -335,7 +335,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String userId = user.getUserObjectId();
             ChallengeController cc = new ChallengeController(getApplicationContext(), MainActivity.this, token, userId);
             cc.refreshCardsForPendingDuel();
-            cc.generateCardsForMainActivity();
         }
         return super.onOptionsItemSelected(item);
     }

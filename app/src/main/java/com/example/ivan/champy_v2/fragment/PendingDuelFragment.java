@@ -188,8 +188,6 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
                             cc.rejectInviteForPendingDuel(challenge_id);
                             snackbar = Snackbar.make(view, "Challenge Canceled!", Snackbar.LENGTH_SHORT);
                             snackbar.show();
-                            Intent intent = new Intent(getActivity(), MainActivity.class);
-                            startActivity(intent);
                         } catch (IOException | NullPointerException e) {
                             e.printStackTrace();
                         }

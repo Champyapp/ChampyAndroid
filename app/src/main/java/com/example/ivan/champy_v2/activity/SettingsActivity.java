@@ -203,13 +203,16 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                                     callSurrenderAllChallenges.enqueue(new Callback<User>() {
                                         @Override
                                         public void onResponse(Response<User> response, Retrofit retrofit) {
-                                            String myLog = (response.isSuccess()) ? "SurrenderAllChallenge: vse ok" : "SurrenderAllChallenge: " + response.code();
-                                            Log.i(TAG, "onResponse: " + myLog);
+                                            String myLog = (response.isSuccess())
+                                                    ? "SurrenderAllChallenge: vse ok"
+                                                    : "SurrenderAllChallenge: " + response.code();
+                                            // TODO: 03.11.2016 get all inProgress challenges from bd and made give up
+                                            Log.d(TAG, "onResponse: " + myLog);
                                         }
 
                                         @Override
                                         public void onFailure(Throwable t) {
-                                            Log.i(TAG, "onFailureSurrenderAllChallenges: vse hyinja");
+                                            Log.d(TAG, "onFailureSurrenderAllChallenges: vse hyinja");
                                         }
                                     });
 
@@ -219,21 +222,22 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                                         public void onResponse(Response<Delete> response, Retrofit retrofit) {
                                             if (response.isSuccess()) {
                                                 File file = new File(path, "blured2.jpg");
+                                                file.delete();
                                                 DBHelper dbHelper = new DBHelper(getApplicationContext());
                                                 final SQLiteDatabase db = dbHelper.getWritableDatabase();
                                                 int clearCount = db.delete("pending", null, null);
                                                 clearCount = db.delete("pending_duel", null, null);
                                                 clearCount = db.delete("duel", null, null);
                                                 clearCount = db.delete("friends", null, null);
+                                                clearCount = db.delete("updated", null, null);
                                                 clearCount = db.delete("myChallenges", null, null);
-                                                file.delete();
-                                                Log.i(TAG, "onResponseDeleteUser: Vse ok");
-                                            } else Log.i(TAG, "onResponseDeleteUser: failed " + response.message());
+                                                Log.d(TAG, "onResponseDeleteUser: Vse ok");
+                                            } else Log.d(TAG, "onResponseDeleteUser: failed " + response.message());
                                         }
 
                                         @Override
                                         public void onFailure(Throwable t) {
-                                            Log.i(TAG, "onFailureDeleteUser: vse hyinja");
+                                            Log.d(TAG, "onFailureDeleteUser: vse hyinja");
                                         }
                                     });
 
@@ -479,11 +483,11 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
                 if (response.isSuccess()) recreate();
-                else Log.i(TAG , "SetNewName: Vse OK");
+                else Log.d(TAG , "SetNewName: Vse OK");
             }
             @Override
             public void onFailure(Throwable t) {
-                Log.i(TAG , "SetNewName: " + t);
+                Log.d(TAG , "SetNewName: " + t);
             }
         });
     }

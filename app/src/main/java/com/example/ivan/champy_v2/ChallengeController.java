@@ -180,9 +180,6 @@ public class ChallengeController {
 
                     refreshCardsForPendingDuel();
 
-                    Intent intent = new Intent(firstActivity, MainActivity.class);
-                    firstActivity.startActivity(intent);
-
                     Log.d("startDuelInProgress", "Status: VSE OK");
                 } else
                     Log.d("startDuelInProgress", "Status: FAILED " + response.code() + response.message());
@@ -453,6 +450,9 @@ public class ChallengeController {
                             db.insert("pending_duel", null, cv);
                         }
                     }
+
+                    generateCardsForMainActivity();
+
                     Log.d(TAG, "RefreshPendingDuels onResponse: VSE OK");
                 } else {
                     Log.d(TAG, "RefreshPendingDuels onResponse: FAILED: " + response.code());
@@ -501,8 +501,8 @@ public class ChallengeController {
                             int begin = datum.getBegin();
                             int days = round((end - unixTime) / 86400);
                             int constDays = round((end - begin) / 86400);
-                            challenge_duration = "" + days;
-                            constDuration = "" + constDays;
+                            challenge_duration = String.valueOf(days);
+                            constDuration = String.valueOf(constDays);
                         }
 
                         String stringSenderProgress[] = new String[senderProgress.size()];
