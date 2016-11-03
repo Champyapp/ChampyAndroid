@@ -140,12 +140,8 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        description = etGoal.getText().toString();
-        duration = etDays.getText().toString();
-        c = db.query("duel", null, null, null, null, null, null);
         position = viewPager.getCurrentItem();
         size = sessionManager.getSelfSize();
-
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         final String token  = user.get("token");
@@ -156,16 +152,21 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
             public void onClick(View view) {
                 cc = new ChallengeController(getContext(), getActivity(), token, userId);
                 if (position == size) {
+                    description = etGoal.getText().toString();
+                    duration = etDays.getText().toString();
                     try {
-                        if (checkInputUserData(description, duration, view)) {
-                            days = Integer.parseInt(duration);
+                        days = Integer.parseInt(duration);
+                        if (checkInputUserData(description, days, view)) {
                             cc.createNewDuelChallenge(description, days, friend_id);
                         }
-                    } catch (NullPointerException e) {
+                    } catch (NullPointerException |NumberFormatException e) {
                         e.printStackTrace();
+                        snackbar = Snackbar.make(view, "Can't create this challenge!", Snackbar.LENGTH_SHORT);
+                        snackbar.show();
                     }
 
                 } else {
+                    c = db.query("duel", null, null, null, null, null, null);
                     if (c.moveToFirst()) {
                         int colchallenge_id = c.getColumnIndex("challenge_id");
                         int coldescription = c.getColumnIndex("description");
@@ -206,17 +207,17 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
 
 
     // check user input data @description @days @isActive
-    private boolean checkInputUserData(String name, String duration, View view) {
-        if (!cc.isActive(name) && !name.isEmpty() && !name.startsWith(" ") && !duration.isEmpty() && !duration.equals("0")) {
+    private boolean checkInputUserData(String name, int days, View view) {
+        if (!cc.isActive(name) && !name.isEmpty() && !name.startsWith(" ") && days != 0) {
             snackbar = Snackbar.make(view, "Sent duel request!", Snackbar.LENGTH_SHORT);
             snackbar.show();
             return true;
-        } else if (cc.isActive(name)) {
-            snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
-            snackbar.show();
-            return false;
+//        } else if (cc.isActive(name)) {
+//            snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
+//            snackbar.show();
+//            return false;
         } else {
-            snackbar = Snackbar.make(view, "Complete all fields", Snackbar.LENGTH_SHORT);
+            snackbar = Snackbar.make(view, "Can't create this challenge", Snackbar.LENGTH_SHORT);
             snackbar.show();
             return false;
         }

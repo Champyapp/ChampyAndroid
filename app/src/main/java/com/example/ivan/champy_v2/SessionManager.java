@@ -63,7 +63,7 @@ public class SessionManager {
 
         editor.putString(KEY_GCM, gcm);
 
-        Log.i("YO", "LOGGED ID");
+        Log.d("YO", "LOGGED ID");
 
         // commit changes
         editor.commit();
@@ -163,7 +163,7 @@ public class SessionManager {
         editor.commit();
     }
 
-    public HashMap<String, String> getChampyOptions(){
+    public HashMap<String, String> getChampyOptions() {
         HashMap<String, String> champy = new HashMap<>();
         champy.put("challenges", pref.getString("challenges", null));
         champy.put("wins",       pref.getString("wins",       null));

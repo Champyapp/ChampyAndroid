@@ -1,5 +1,6 @@
 package com.example.ivan.champy_v2.fragment;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
@@ -96,6 +97,8 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 
         if (duration != null && !duration.isEmpty()) days = Integer.parseInt(duration) / 86400;
 
+        //days = (duration != null && !duration.isEmpty()) ? Integer.parseInt(duration) / 86400 : 21;
+
         tvDays.setText(days + " days");
         tvGoal.setText(description);
         tvDays.setTypeface(typeface);
@@ -133,12 +136,8 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
-        description = etGoal.getText().toString();
-        duration = etDays.getText().toString();
-        c = db.query("selfimprovement", null, null, null, null, null, null);
         position = viewPager.getCurrentItem();
         size = sessionManager.getSelfSize();
-
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         final String token  = user.get("token");
@@ -148,18 +147,23 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
             @Override
             public void onClick(View view) {
                 cc = new ChallengeController(getContext(), getActivity(), token, userId);
-
                 if (position == size) {
+                    description = etGoal.getText().toString();
+                    duration = etDays.getText().toString();
                     try {
-                        if (checkInputUserData(description, duration, view)) {
-                            days = Integer.parseInt(duration);
+                        //days = (!duration.isEmpty()) ? Integer.parseInt(duration) : 21;
+                        days = Integer.parseInt(duration);
+                        if (checkInputUserData(description, days, view)) {
                             cc.createNewSelfImprovementChallenge(description, days);
                         }
                     } catch (NullPointerException | NumberFormatException e) {
                         e.printStackTrace();
+                        snackbar = Snackbar.make(view, "Can't create this challenge!", Snackbar.LENGTH_SHORT);
+                        snackbar.show();
                     }
 
                 } else {
+                    c = db.query("selfimprovement", null, null, null, null, null, null);
                     if (c.moveToFirst()) {
                         int colchallenge_id = c.getColumnIndex("challenge_id");
                         int coldescription = c.getColumnIndex("description");
@@ -200,17 +204,17 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
     }
 
     // check user input data @description @days @isActive
-    private boolean checkInputUserData(String description, String duration, View view) {
-        if (!cc.isActive(description) && !description.isEmpty() && !description.startsWith(" ") && !duration.isEmpty() && !duration.equals("0")) {
+    private boolean checkInputUserData(String description, int days, View view) {
+        if (!cc.isActive(description) && !description.isEmpty() && !description.startsWith(" ") && days != 0) {
             snackbar = Snackbar.make(view, "Challenge created!", Snackbar.LENGTH_SHORT);
             snackbar.show();
             return true;
-        } else if (cc.isActive(description)) {
-            snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
-            snackbar.show();
-            return false;
+//        } else if (cc.isActive(description)) {
+//            snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
+//            snackbar.show();
+//            return false;
         } else {
-            snackbar = Snackbar.make(view, "Complete all fields", Snackbar.LENGTH_SHORT);
+            snackbar = Snackbar.make(view, "Can't create this challenge", Snackbar.LENGTH_SHORT);
             snackbar.show();
             return false;
         }
