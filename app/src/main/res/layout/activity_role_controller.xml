@@ -14,21 +14,8 @@
         android:layout_height="100dp"
         android:id="@+id/Champy_image"
         android:background="@drawable/icon_champy"
-        android:layout_marginBottom="61dp"
         android:contentDescription="@string/champy"
-        android:layout_above="@+id/login_text"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/loginText"
-        android:gravity="center"
-        android:textSize="24sp"
-        android:id="@+id/login_text"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:textStyle="bold"
-        android:textColor="#ffffff" />
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

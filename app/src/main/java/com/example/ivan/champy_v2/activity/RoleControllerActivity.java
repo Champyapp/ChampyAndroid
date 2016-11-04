@@ -45,10 +45,6 @@ public class RoleControllerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_role_controller);
-        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
-        TextView loginText = (TextView)findViewById(R.id.login_text);
-        loginText.setTypeface(typeface);
-
 //        spinner = findViewById(R.id.loadingPanel);
 
         try {
