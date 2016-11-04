@@ -70,8 +70,7 @@ public class CHGetFacebookFriends {
                             public void onResponse(Response<User> response, Retrofit retrofit) {
                                 if (response.isSuccess()) {
                                     Data data = response.body().getData();
-                                    String photo = null;
-
+                                    String photo = "";
                                     if (data.getPhoto() != null) {
                                         photo = API_URL + data.getPhoto().getMedium();
                                     } else {
@@ -100,7 +99,7 @@ public class CHGetFacebookFriends {
 //                                else {
 //                                    Log.d("AppSync", "GetUserFriendsInfo | onResponse: " + response.message());
 //                                    URL profile_pic;
-//                                    String photo = null;
+//                                    String photo = "";
 //                                    try {
 //                                        profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
 //                                        photo = profile_pic.toString();

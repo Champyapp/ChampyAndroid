@@ -47,17 +47,17 @@ public class RoleControllerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_role_controller);
 //        spinner = findViewById(R.id.loadingPanel);
 
-        try {
-            mSocket = IO.socket("http://46.101.213.24:3007");
-        } catch (URISyntaxException e) { throw new RuntimeException(e); }
+//        try {
+//            mSocket = IO.socket("http://46.101.213.24:3007");
+//        } catch (URISyntaxException e) { throw new RuntimeException(e); }
 
         SessionManager sessionManager = new SessionManager(getApplicationContext());
 
 
         if (sessionManager.isUserLoggedIn()) {
-            mSocket.on("connect", onConnect);
-            mSocket.on("connected", onConnected);
-            mSocket.connect();
+//            mSocket.on("connect", onConnect);
+//            mSocket.on("connected", onConnected);
+//            mSocket.connect();
 
             CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
             String uId = user.getUserObjectId();
@@ -65,8 +65,8 @@ public class RoleControllerActivity extends AppCompatActivity {
             ChallengeController cc = new ChallengeController(getApplicationContext(), this, uToken, uId);
             cc.generateCardsForMainActivity();
         } else {
-            mSocket.off();
-            mSocket.disconnect();
+//            mSocket.off();
+//            mSocket.disconnect();
             NotificationController controller = new NotificationController(getApplicationContext());
             controller.deactivateDailyNotificationReminder();
             Intent goToActivity = new Intent(this, LoginActivity.class);

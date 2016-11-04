@@ -37,7 +37,7 @@ public class CHSocket {
     }
 
 
-    public void connectAndEmmit() {
+    public void socketOnAndEmmit() {
         mSocket.on("connect",   onConnect);
         mSocket.on("connected", onConnected);
         mSocket.once("InProgressChallenge:accepted", onAcceptedOrWonChallenge);

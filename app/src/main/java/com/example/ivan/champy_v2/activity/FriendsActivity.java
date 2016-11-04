@@ -80,7 +80,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                 viewPager.setCurrentItem(1);
                 Intent mExtras = new Intent();
                 mExtras.putExtra("new_friend_request", "true");
-
             }
         }
 

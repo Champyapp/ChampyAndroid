@@ -42,7 +42,6 @@ import com.example.ivan.champy_v2.helper.CHDownloadImageTask;
 import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
 import com.example.ivan.champy_v2.helper.CHSocket;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
-import com.example.ivan.champy_v2.model.Self.SelfImprovement;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
 import com.facebook.FacebookSdk;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
@@ -57,17 +56,17 @@ import static java.lang.Math.round;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
-    public static final String TAG = "MainActivity";
-    private long mLastClickTime = 0;
-    public Activity activity;
+    private static final String TAG = "MainActivity";
+    private static long mLastClickTime = 0;
     private SubActionButton buttonWakeUpChallenge, buttonDuelChallenge, buttonSelfImprovement;
     private MainActivityCardsAdapter adapter;
     private FloatingActionMenu actionMenu;
+    private NavigationView navigationView;
     private RelativeLayout cards;
     private ImageView blurScreen;
-    //private CHSocket sockets;
     private Toolbar toolbar;
     private View headerLayout;
+    //private CHSocket sockets;
 
     // TODO: 02.11.2016 Disable sockets in onStop() to avoid duplication
 
@@ -83,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 //        sockets = new CHSocket(MainActivity.this, getApplicationContext());
 //        sockets.tryToConnect();
-//        sockets.connectAndEmmit();
+//        sockets.socketOnAndEmmit();
 
         cards = (RelativeLayout) findViewById(R.id.cards);
         adapter = new MainActivityCardsAdapter(this, SelfImprovement_model.generate(this));
@@ -114,15 +113,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         actionButton.setOnClickListener(this);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
-
-        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
-        int count = checker.getPendingCount();
-        TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-        view.setText("+" + (count > 0 ? String.valueOf(count) : null));
-        if (count == 0) checker.hideItem();
 
         ViewServer.get(this).addWindow(this);
     }
@@ -189,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.d(TAG, "onResume: ");
 //        sockets = new CHSocket(MainActivity.this, getApplicationContext());
 //        sockets.tryToConnect();
-//        sockets.connectAndEmmit();
+//        sockets.socketOnAndEmmit();
 
         this.runOnUiThread(new Runnable() {
             @Override
@@ -198,6 +191,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 chBuildAnim.buildAnim(MainActivity.this);
             }
         });
+
+        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+        int count = checker.getPendingCount();
+        if (count == 0) {
+            checker.hideItem();
+        } else {
+            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+        }
     }
 
     @Override
@@ -210,6 +212,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onStop() {
         super.onStop();
         Log.d(TAG, "onStop: ");
+        //sockets.socketDisconnect();
         //sockets.socketOff();
     }
 
