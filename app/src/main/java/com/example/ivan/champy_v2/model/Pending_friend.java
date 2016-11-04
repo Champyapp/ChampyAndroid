@@ -36,8 +36,8 @@ public class Pending_friend {
         return mOwner;
     }
 
-    public void setOwner(String mowner) {
-        this.mOwner = mowner;
+    public void setOwner(String mOwner) {
+        this.mOwner = mOwner;
     }
 
     private static int lastFriendId = 0;

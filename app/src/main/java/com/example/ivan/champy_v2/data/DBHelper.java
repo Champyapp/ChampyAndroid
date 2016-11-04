@@ -4,6 +4,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+/**
+ * Our Local DataBase which was named "myDB"
+ */
 public class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper(Context context) {

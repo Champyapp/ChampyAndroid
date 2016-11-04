@@ -1,4 +1,3 @@
-
 package com.example.ivan.champy_v2.model.Create_challenge;
 
 import java.util.HashMap;

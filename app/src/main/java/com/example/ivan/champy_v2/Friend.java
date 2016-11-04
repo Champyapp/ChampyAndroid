@@ -1,7 +1,8 @@
 package com.example.ivan.champy_v2;
 
 /**
- * Don't replace this class.
+ * Don't replace this class. Ya really.
+ * If you really want to replace this class you need to rename first.
  */
 public class Friend {
 
@@ -12,7 +13,6 @@ public class Friend {
     private String mName;
     private String mWins;
     private String mID;
-    //private List<Friend> friends;
 
     public Friend(String name, String picture, String ID, String challenges, String wins, String total, String level) {
         mName = name;

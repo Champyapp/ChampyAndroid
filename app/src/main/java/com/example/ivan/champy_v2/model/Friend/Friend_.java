@@ -11,7 +11,7 @@ public class Friend_ {
     private String name;
     private Integer successChallenges;
     private Integer failedChallenges;
-    private Integer allChallengesCount; // allChallengesCount =
+    private Integer allChallengesCount;
     private Integer inProgressChallengesCount;
     private Integer score;
     private String _id;

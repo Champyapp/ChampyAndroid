@@ -1,13 +1,14 @@
 package com.example.ivan.champy_v2.model.User;
 
 public class LoginData {
-    String facebookId;
-    String name;
-    String email;
 
-    public LoginData(String mfacebookId, String mname, String memail) {
-        this.facebookId = mfacebookId;
-        this.name = mname;
-        this.email = memail;
+    private String facebookId;
+    private String name;
+    private String email;
+
+    public LoginData(String mFacebookId, String mName, String mEmail) {
+        this.facebookId = mFacebookId;
+        this.name = mName;
+        this.email = mEmail;
     }
 }

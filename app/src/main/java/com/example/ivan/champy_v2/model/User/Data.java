@@ -1,4 +1,3 @@
-
 package com.example.ivan.champy_v2.model.User;
 
 import java.util.HashMap;

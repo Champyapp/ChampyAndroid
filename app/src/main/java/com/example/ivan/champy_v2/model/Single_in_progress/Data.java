@@ -1,4 +1,3 @@
-
 package com.example.ivan.champy_v2.model.Single_in_progress;
 
 import java.util.ArrayList;

@@ -85,13 +85,13 @@ public class HistoryChallenge {
         this.description = description;
     }
 
-    public HistoryChallenge(String mtype, boolean mactive, String mdescription, String mduration, String mstatus,
+    public HistoryChallenge(String mType, boolean mActive, String mDescription, String mDuration, String mStatus,
                             String goal, String challengeName, String versus, String recipient, String constDuration) {
-        this.type = mtype;
-        this.active = mactive;
-        this.description = mdescription;
-        this.duration = mduration;
-        this.status = mstatus;
+        this.type = mType;
+        this.active = mActive;
+        this.description = mDescription;
+        this.duration = mDuration;
+        this.status = mStatus;
         this.goal = goal;
         this.challengeName = challengeName;
         this.versus = versus;
