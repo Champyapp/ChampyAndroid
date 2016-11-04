@@ -1,12 +1,11 @@
-
-package com.example.ivan.champy_v2.create_challenge;
+package com.example.ivan.champy_v2.model.Single_in_progress;
 
 import java.util.HashMap;
 import java.util.Map;
-import javax.annotation.Generated;
 
-public class Data {
+public class Challenge {
 
+    private String Id;
     private String name;
     private String type;
     private String description;
@@ -14,12 +13,41 @@ public class Data {
     private String createdBy;
     private Integer created;
     private Integer updated;
-    private String _id;
     private Boolean approved;
     private Boolean active;
     private Integer duration;
     private Integer points;
+    private Integer senderProgress;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
+
+    // TODO: 06.10.2016 Delete trash
+    public Integer getSenderProgress() {
+        return senderProgress;
+    }
+
+
+    public void setSenderProgress(Integer senderProgress) {
+        this.senderProgress = senderProgress;
+    }
+
+    /**
+     * 
+     * @return
+     *     The Id
+     */
+    public String getId() {
+        return Id;
+    }
+
+    /**
+     * 
+     * @param Id
+     *     The _id
+     */
+    public void setId(String Id) {
+        this.Id = Id;
+    }
 
     /**
      * 
@@ -145,24 +173,6 @@ public class Data {
      */
     public void setUpdated(Integer updated) {
         this.updated = updated;
-    }
-
-    /**
-     * 
-     * @return
-     *     The Id
-     */
-    public String get_id() {
-        return _id;
-    }
-
-    /**
-     * 
-     * @param _id
-     *     The _id
-     */
-    public void set_id(String _id) {
-        this._id = _id;
     }
 
     /**

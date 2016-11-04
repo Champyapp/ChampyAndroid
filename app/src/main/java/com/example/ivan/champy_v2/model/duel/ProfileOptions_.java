@@ -1,10 +1,10 @@
 
-package com.example.ivan.champy_v2.single_inprogress;
+package com.example.ivan.champy_v2.model.Duel;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProfileOptions {
+public class ProfileOptions_ {
 
     private Boolean joinedChampy;
     private Boolean friendRequests;
@@ -16,8 +16,6 @@ public class ProfileOptions {
     private Boolean newChallengeRequests;
     private Boolean pushNotifications;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-
-    // TODO: 06.10.2016 Delete trash
 
     /**
      * 

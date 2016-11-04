@@ -1,4 +1,4 @@
-package com.example.ivan.champy_v2.model.active_in_progress;
+package com.example.ivan.champy_v2.model.Active_in_progress;
 
 import java.util.HashMap;
 import java.util.Map;

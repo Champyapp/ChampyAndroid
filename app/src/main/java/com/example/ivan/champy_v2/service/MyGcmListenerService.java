@@ -1,4 +1,4 @@
-package com.example.ivan.champy_v2;
+package com.example.ivan.champy_v2.service;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -13,19 +13,20 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.example.ivan.champy_v2.R;
+import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.activity.FriendsActivity;
 import com.example.ivan.champy_v2.activity.HistoryActivity;
-import com.example.ivan.champy_v2.activity.MainActivity;
 import com.example.ivan.champy_v2.activity.PendingDuelActivity;
 import com.example.ivan.champy_v2.activity.RoleControllerActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHLoadUserProgressBarInfo;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
-import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
-import com.example.ivan.champy_v2.model.active_in_progress.Datum;
-import com.example.ivan.champy_v2.model.active_in_progress.Recipient;
-import com.example.ivan.champy_v2.model.active_in_progress.Sender;
+import com.example.ivan.champy_v2.model.Active_in_progress.Challenge;
+import com.example.ivan.champy_v2.model.Active_in_progress.Datum;
+import com.example.ivan.champy_v2.model.Active_in_progress.Recipient;
+import com.example.ivan.champy_v2.model.Active_in_progress.Sender;
 import com.google.android.gms.gcm.GcmListenerService;
 
 import org.json.JSONException;
@@ -132,14 +133,14 @@ public class MyGcmListenerService extends GcmListenerService {
 
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
 
-        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userId, update, token);
-        call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
+        Call<com.example.ivan.champy_v2.model.Active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userId, update, token);
+        call1.enqueue(new Callback<com.example.ivan.champy_v2.model.Active_in_progress.ActiveInProgress>() {
             @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
+            public void onResponse(Response<com.example.ivan.champy_v2.model.Active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     List<Datum> data = response.body().getData();
                     for (int i = 0; i < data.size(); i++) {
-                        com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
+                        com.example.ivan.champy_v2.model.Active_in_progress.Datum datum = data.get(i);
                         Recipient recipient = datum.getRecipient();
                         Sender sender = datum.getSender();
                         Challenge challenge = datum.getChallenge();
@@ -179,14 +180,14 @@ public class MyGcmListenerService extends GcmListenerService {
         int clearCount = db.delete("myChallenges", null, null);
         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
-        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userId, "0", token);
-        call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
+        Call<com.example.ivan.champy_v2.model.Active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userId, "0", token);
+        call1.enqueue(new Callback<com.example.ivan.champy_v2.model.Active_in_progress.ActiveInProgress>() {
             @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
+            public void onResponse(Response<com.example.ivan.champy_v2.model.Active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     List<Datum> data = response.body().getData();
                     for (int i = 0; i < data.size(); i++) {
-                        com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
+                        com.example.ivan.champy_v2.model.Active_in_progress.Datum datum = data.get(i);
                         Challenge challenge          = datum.getChallenge();
                         Recipient recipient          = datum.getRecipient();
                         Sender sender                = datum.getSender();

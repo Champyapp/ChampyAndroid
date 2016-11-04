@@ -1,10 +1,9 @@
-
-package com.example.ivan.champy_v2.single_inprogress;
+package com.example.ivan.champy_v2.model.Create_challenge;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class SingleInProgress {
+public class CreateChallenge {
 
     private Integer code;
     private String description;

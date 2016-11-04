@@ -97,10 +97,10 @@ public class API_test {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
-        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call = activeInProgress.getActiveInProgress(id, "1457019726", token);
-        call.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
+        Call<com.example.ivan.champy_v2.model.Active_in_progress.ActiveInProgress> call = activeInProgress.getActiveInProgress(id, "1457019726", token);
+        call.enqueue(new Callback<com.example.ivan.champy_v2.model.Active_in_progress.ActiveInProgress>() {
             @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
+            public void onResponse(Response<com.example.ivan.champy_v2.model.Active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) assertEquals("OK", true, true);
                 else assertEquals("Wrong", true, false);
             }

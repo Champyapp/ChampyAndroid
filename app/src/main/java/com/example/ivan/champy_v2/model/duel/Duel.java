@@ -1,10 +1,12 @@
 
-package com.example.ivan.champy_v2.create_challenge;
+package com.example.ivan.champy_v2.model.Duel;
 
 import java.util.HashMap;
 import java.util.Map;
+import javax.annotation.Generated;
 
-public class CreateChallenge {
+@Generated("org.jsonschema2pojo")
+public class Duel {
 
     private Integer code;
     private String description;

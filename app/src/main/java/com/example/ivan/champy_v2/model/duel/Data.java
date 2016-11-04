@@ -1,5 +1,5 @@
 
-package com.example.ivan.champy_v2.single_inprogress;
+package com.example.ivan.champy_v2.model.Duel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,36 +9,34 @@ import java.util.Map;
 public class Data {
 
     private String _id;
-    private Integer end;
-    private String status;
     private Sender sender;
-    private Integer begin;
+    private Recipient recipient;
+    private Challenge challenge;
     private Integer created;
     private Integer updated;
-    private Challenge challenge;
     private Boolean senderSuccess;
     private Boolean recipientSuccess;
     private List<Object> recipientProgress = new ArrayList<Object>();
     private List<Object> senderProgress = new ArrayList<Object>();
+    private String status;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-
-    // TODO: 06.10.2016 Delete trash
 
     /**
      * 
      * @return
      *     The Id
      */
-    public String get_id() {
+    public String getId() {
         return _id;
     }
 
     /**
      * 
+     * @param Id
      *     The _id
      */
-    public void set_id(String _id) {
-        this._id = _id;
+    public void setId(String Id) {
+        this._id = Id;
     }
 
     /**
@@ -62,6 +60,24 @@ public class Data {
     /**
      * 
      * @return
+     *     The recipient
+     */
+    public Recipient getRecipient() {
+        return recipient;
+    }
+
+    /**
+     * 
+     * @param recipient
+     *     The recipient
+     */
+    public void setRecipient(Recipient recipient) {
+        this.recipient = recipient;
+    }
+
+    /**
+     * 
+     * @return
      *     The challenge
      */
     public Challenge getChallenge() {
@@ -75,42 +91,6 @@ public class Data {
      */
     public void setChallenge(Challenge challenge) {
         this.challenge = challenge;
-    }
-
-    /**
-     * 
-     * @return
-     *     The begin
-     */
-    public Integer getBegin() {
-        return begin;
-    }
-
-    /**
-     * 
-     * @param begin
-     *     The begin
-     */
-    public void setBegin(Integer begin) {
-        this.begin = begin;
-    }
-
-    /**
-     * 
-     * @return
-     *     The end
-     */
-    public Integer getEnd() {
-        return end;
-    }
-
-    /**
-     * 
-     * @param end
-     *     The end
-     */
-    public void setEnd(Integer end) {
-        this.end = end;
     }
 
     /**
@@ -235,7 +215,6 @@ public class Data {
      * @param status
      *     The status
      */
-
     public void setStatus(String status) {
         this.status = status;
     }

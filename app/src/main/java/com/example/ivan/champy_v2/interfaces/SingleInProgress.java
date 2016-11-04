@@ -1,6 +1,6 @@
 package com.example.ivan.champy_v2.interfaces;
 
-import com.example.ivan.champy_v2.duel.Duel;
+import com.example.ivan.champy_v2.model.Duel.Duel;
 
 import retrofit.Call;
 import retrofit.http.Field;
@@ -14,37 +14,37 @@ public interface SingleInProgress {
 
     @FormUrlEncoded
     @POST("/v1/in-progress-challenges/single")
-    Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> start_single_in_progress(
+    Call<com.example.ivan.champy_v2.model.Single_in_progress.SingleInProgress> start_single_in_progress(
             @Field("challenge") String challenge,
             @Query("token") String token
     );
 
     @GET("/v1/in-progress-challenges/{id}/surrender")
-    Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> Surrender(
+    Call<com.example.ivan.champy_v2.model.Single_in_progress.SingleInProgress> Surrender(
                     @Path("id") String id,
                     @Query("token") String token
     );
 
     @GET("/v1/in-progress-challenges/{id}/reject")
-    Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> Reject(
+    Call<com.example.ivan.champy_v2.model.Single_in_progress.SingleInProgress> Reject(
             @Path("id") String id,
             @Query("token") String token
     );
 
     @GET("/v1/in-progress-challenges/{id}/join")
-    Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> Join (
+    Call<com.example.ivan.champy_v2.model.Single_in_progress.SingleInProgress> Join (
             @Path("id") String id,
             @Query("token") String token
     );
 
     @GET("/v1/in-progress-challenges/{id}")
-    Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> get_challenge(
+    Call<com.example.ivan.champy_v2.model.Single_in_progress.SingleInProgress> get_challenge(
             @Path("id") String id,
             @Query("token") String token
     );
 
     @GET("/v1/in-progress-challenges/{id}/check")
-    Call<com.example.ivan.champy_v2.single_inprogress.SingleInProgress> CheckChallenge(
+    Call<com.example.ivan.champy_v2.model.Single_in_progress.SingleInProgress> CheckChallenge(
             @Path("id") String id,
             @Query("token") String token
     );

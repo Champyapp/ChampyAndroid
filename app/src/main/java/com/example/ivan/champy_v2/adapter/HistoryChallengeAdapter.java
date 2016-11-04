@@ -31,7 +31,7 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View contactView = inflater.inflate(R.layout.history_simple, parent, false);
+        View contactView = inflater.inflate(R.layout.item_history, parent, false);
 
         TextView tvUserName = (TextView)contactView.findViewById(R.id.challengeNameInHistory);
         Typeface typeFace = Typeface.createFromAsset(context.getAssets(), "fonts/bebasneue.ttf");

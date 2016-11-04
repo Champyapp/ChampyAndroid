@@ -1,5 +1,5 @@
 
-package com.example.ivan.champy_v2.single_inprogress;
+package com.example.ivan.champy_v2.model.Duel;
 
 import java.util.HashMap;
 import java.util.Map;

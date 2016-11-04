@@ -1,4 +1,4 @@
-package com.example.ivan.champy_v2;
+package com.example.ivan.champy_v2.service;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
+import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.activity.WakeUpActivity;
 
 public class AlarmService extends IntentService {

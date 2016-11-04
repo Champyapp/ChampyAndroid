@@ -1,37 +1,23 @@
 
-package com.example.ivan.champy_v2.single_inprogress;
+package com.example.ivan.champy_v2.model.Duel;
 
 import java.util.HashMap;
 import java.util.Map;
-import javax.annotation.Generated;
 
 public class Challenge {
 
-    private String Id;
+    private String _id;
     private String name;
     private String type;
     private String description;
     private String details;
-    private String createdBy;
     private Integer created;
     private Integer updated;
     private Boolean approved;
     private Boolean active;
     private Integer duration;
     private Integer points;
-    private Integer senderProgress;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-
-
-    // TODO: 06.10.2016 Delete trash
-    public Integer getSenderProgress() {
-        return senderProgress;
-    }
-
-
-    public void setSenderProgress(Integer senderProgress) {
-        this.senderProgress = senderProgress;
-    }
 
     /**
      * 
@@ -39,7 +25,7 @@ public class Challenge {
      *     The Id
      */
     public String getId() {
-        return Id;
+        return _id;
     }
 
     /**
@@ -48,7 +34,7 @@ public class Challenge {
      *     The _id
      */
     public void setId(String Id) {
-        this.Id = Id;
+        this._id = Id;
     }
 
     /**
@@ -121,24 +107,6 @@ public class Challenge {
      */
     public void setDetails(String details) {
         this.details = details;
-    }
-
-    /**
-     * 
-     * @return
-     *     The createdBy
-     */
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    /**
-     * 
-     * @param createdBy
-     *     The createdBy
-     */
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
     }
 
     /**

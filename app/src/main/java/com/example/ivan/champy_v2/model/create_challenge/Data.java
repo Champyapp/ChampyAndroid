@@ -1,41 +1,24 @@
 
-package com.example.ivan.champy_v2.duel;
+package com.example.ivan.champy_v2.model.Create_challenge;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Challenge {
+public class Data {
 
-    private String _id;
     private String name;
     private String type;
     private String description;
     private String details;
+    private String createdBy;
     private Integer created;
     private Integer updated;
+    private String _id;
     private Boolean approved;
     private Boolean active;
     private Integer duration;
     private Integer points;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-
-    /**
-     * 
-     * @return
-     *     The Id
-     */
-    public String getId() {
-        return _id;
-    }
-
-    /**
-     * 
-     * @param Id
-     *     The _id
-     */
-    public void setId(String Id) {
-        this._id = Id;
-    }
 
     /**
      * 
@@ -112,6 +95,24 @@ public class Challenge {
     /**
      * 
      * @return
+     *     The createdBy
+     */
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    /**
+     * 
+     * @param createdBy
+     *     The createdBy
+     */
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    /**
+     * 
+     * @return
      *     The created
      */
     public Integer getCreated() {
@@ -143,6 +144,24 @@ public class Challenge {
      */
     public void setUpdated(Integer updated) {
         this.updated = updated;
+    }
+
+    /**
+     * 
+     * @return
+     *     The Id
+     */
+    public String get_id() {
+        return _id;
+    }
+
+    /**
+     * 
+     * @param _id
+     *     The _id
+     */
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
     /**

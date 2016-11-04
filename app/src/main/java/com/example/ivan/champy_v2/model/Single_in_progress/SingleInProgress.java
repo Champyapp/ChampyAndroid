@@ -1,12 +1,10 @@
 
-package com.example.ivan.champy_v2.duel;
+package com.example.ivan.champy_v2.model.Single_in_progress;
 
 import java.util.HashMap;
 import java.util.Map;
-import javax.annotation.Generated;
 
-@Generated("org.jsonschema2pojo")
-public class Duel {
+public class SingleInProgress {
 
     private Integer code;
     private String description;

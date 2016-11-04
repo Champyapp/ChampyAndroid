@@ -1,9 +1,10 @@
-package com.example.ivan.champy_v2;
+package com.example.ivan.champy_v2.service;
 
 import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 
+import com.example.ivan.champy_v2.R;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 

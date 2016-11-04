@@ -1,10 +1,10 @@
 
-package com.example.ivan.champy_v2.duel;
+package com.example.ivan.champy_v2.model.Duel;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProfileOptions_ {
+public class ProfileOptions {
 
     private Boolean joinedChampy;
     private Boolean friendRequests;

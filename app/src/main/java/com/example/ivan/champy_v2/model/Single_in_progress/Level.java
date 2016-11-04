@@ -1,10 +1,10 @@
 
-package com.example.ivan.champy_v2.duel;
+package com.example.ivan.champy_v2.model.Single_in_progress;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Level_ {
+public class Level {
 
     private Integer progress;
     private Integer number;

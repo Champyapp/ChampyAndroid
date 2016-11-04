@@ -1,5 +1,5 @@
 
-package com.example.ivan.champy_v2.duel;
+package com.example.ivan.champy_v2.model.Single_in_progress;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +16,8 @@ public class ProfileOptions {
     private Boolean newChallengeRequests;
     private Boolean pushNotifications;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
+    // TODO: 06.10.2016 Delete trash
 
     /**
      * 

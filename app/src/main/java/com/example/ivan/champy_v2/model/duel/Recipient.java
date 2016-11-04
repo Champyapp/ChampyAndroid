@@ -1,10 +1,10 @@
 
-package com.example.ivan.champy_v2.single_inprogress;
+package com.example.ivan.champy_v2.model.Duel;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Sender {
+public class Recipient {
 
     private String email;
     private String name;
@@ -13,15 +13,13 @@ public class Sender {
     private Integer allChallengesCount;
     private Integer inProgressChallengesCount;
     private Integer score;
-    private String Id;
+    private String _id;
     private Integer created;
     private Integer updated;
-    private Level level;
-    private ProfileOptions profileOptions;
+    private Photo_ photo;
+    private Level_ level;
+    private ProfileOptions_ profileOptions;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-
-
-    // TODO: 06.10.2016 Delete trash
 
     /**
      * 
@@ -155,7 +153,7 @@ public class Sender {
      *     The Id
      */
     public String getId() {
-        return Id;
+        return _id;
     }
 
     /**
@@ -164,7 +162,7 @@ public class Sender {
      *     The _id
      */
     public void setId(String Id) {
-        this.Id = Id;
+        this._id = Id;
     }
 
     /**
@@ -206,9 +204,27 @@ public class Sender {
     /**
      * 
      * @return
+     *     The photo
+     */
+    public Photo_ getPhoto() {
+        return photo;
+    }
+
+    /**
+     * 
+     * @param photo
+     *     The photo
+     */
+    public void setPhoto(Photo_ photo) {
+        this.photo = photo;
+    }
+
+    /**
+     * 
+     * @return
      *     The level
      */
-    public Level getLevel() {
+    public Level_ getLevel() {
         return level;
     }
 
@@ -217,7 +233,7 @@ public class Sender {
      * @param level
      *     The level
      */
-    public void setLevel(Level level) {
+    public void setLevel(Level_ level) {
         this.level = level;
     }
 
@@ -226,7 +242,7 @@ public class Sender {
      * @return
      *     The profileOptions
      */
-    public ProfileOptions getProfileOptions() {
+    public ProfileOptions_ getProfileOptions() {
         return profileOptions;
     }
 
@@ -235,7 +251,7 @@ public class Sender {
      * @param profileOptions
      *     The profileOptions
      */
-    public void setProfileOptions(ProfileOptions profileOptions) {
+    public void setProfileOptions(ProfileOptions_ profileOptions) {
         this.profileOptions = profileOptions;
     }
 
