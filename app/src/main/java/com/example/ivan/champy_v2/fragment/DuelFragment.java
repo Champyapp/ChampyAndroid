@@ -15,10 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.OfflineMode;
 import com.example.ivan.champy_v2.R;
@@ -59,7 +57,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.item_row, container, false);
+        final View view = inflater.inflate(R.layout.item_card, container, false);
         Log.d(TAG, "onCreateView");
         Bundle extras = getActivity().getIntent().getExtras();
         friend_id = (extras == null) ? null : extras.getString("id");

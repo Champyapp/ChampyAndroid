@@ -73,7 +73,7 @@ public class FriendsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)  {
-        final View view = inflater.inflate(R.layout.fragment_first, container, false);
+        final View view = inflater.inflate(R.layout.fragment_friends, container, false);
         final List<com.example.ivan.champy_v2.Friend> friends = new ArrayList<>();
         DBHelper dbHelper = new DBHelper(getContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();

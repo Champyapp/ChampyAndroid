@@ -1,7 +1,6 @@
 package com.example.ivan.champy_v2.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -40,7 +39,6 @@ import com.example.ivan.champy_v2.helper.CHBuildAnim;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHDownloadImageTask;
 import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
-import com.example.ivan.champy_v2.helper.CHSocket;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
 import com.facebook.FacebookSdk;
@@ -344,7 +342,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.duel, menu);
+        getMenuInflater().inflate(R.menu.sync_app, menu);
         return true;
     }
 

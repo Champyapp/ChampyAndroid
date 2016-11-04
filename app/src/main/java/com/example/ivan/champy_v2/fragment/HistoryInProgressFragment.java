@@ -24,7 +24,7 @@ public class HistoryInProgressFragment extends Fragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_second, container, false);
+        final View view = inflater.inflate(R.layout.fragment_history, container, false);
 
         ArrayList<SelfImprovement_model> self_improvement = SelfImprovement_model.generate(getContext());
         ArrayList<HistoryChallenge> all = new ArrayList<>();

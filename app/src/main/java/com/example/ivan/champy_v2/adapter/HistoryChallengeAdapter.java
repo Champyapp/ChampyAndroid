@@ -112,7 +112,7 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
             super(itemView);
 
             nameTextView = (TextView) itemView.findViewById(R.id.challengeNameInHistory);
-            level = (TextView) itemView.findViewById(R.id.level);
+            //level = (TextView) itemView.findViewById(R.id.level);
             image = (ImageView) itemView.findViewById(R.id.picture);
             wins = (ImageView) itemView.findViewById(R.id.imageView_wins_logo);
             total = (ImageView) itemView.findViewById(R.id.imageView_total_logo);
