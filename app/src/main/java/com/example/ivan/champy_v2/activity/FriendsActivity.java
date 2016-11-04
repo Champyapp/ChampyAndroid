@@ -26,6 +26,7 @@ import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.adapter.FriendsActivityPagerAdapter;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
+import com.example.ivan.champy_v2.helper.CHGetFacebookFriends;
 import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.facebook.FacebookSdk;
@@ -111,6 +112,9 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
             drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
             drawerBackground.setImageDrawable(CHLoadBlurredPhoto.Init(path));
         } catch (FileNotFoundException e) { e.printStackTrace(); }
+
+        CHGetFacebookFriends getFbFriends = new CHGetFacebookFriends(getApplicationContext());
+        getFbFriends.getUserFacebookFriends(user.getToken());
 
         ViewServer.get(this).addWindow(this);
 
