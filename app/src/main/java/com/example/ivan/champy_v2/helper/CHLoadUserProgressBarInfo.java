@@ -1,8 +1,11 @@
 package com.example.ivan.champy_v2.helper;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 
 import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.activity.MainActivity;
 import com.example.ivan.champy_v2.interfaces.NewUser;
 import com.example.ivan.champy_v2.model.User.Data;
 import com.example.ivan.champy_v2.model.User.User;
@@ -32,14 +35,16 @@ public class CHLoadUserProgressBarInfo {
         userCall.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
-                User decodedResponse = response.body();
-                Data data = decodedResponse.getData();
-                SessionManager sessionManager = new SessionManager(context);
-                sessionManager.setChampyOptions(
-                        data.getAllChallengesCount().toString(),
-                        data.getSuccessChallenges().toString(),
-                        data.getScore().toString(),
-                        data.getLevel().getNumber().toString());
+                if (response.isSuccess()) {
+                    User decodedResponse = response.body();
+                    Data data = decodedResponse.getData();
+                    SessionManager sessionManager = new SessionManager(context);
+                    sessionManager.setChampyOptions(
+                            data.getAllChallengesCount().toString(),
+                            data.getSuccessChallenges().toString(),
+                            data.getScore().toString(),
+                            data.getLevel().getNumber().toString());
+                } else Log.d("LoadUserProgressBar", "onResponse: failed! " + response.message());
             }
 
             @Override

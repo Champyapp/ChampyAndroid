@@ -1,11 +1,15 @@
 package com.example.ivan.champy_v2.activity;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.ivan.champy_v2.ChallengeController;
+import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.SessionManager;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.helper.NotificationController;
@@ -19,6 +23,7 @@ public class RoleControllerActivity extends AppCompatActivity {
 
     public static final String TAG = "RoleControllerActivity";
     private Socket mSocket;
+    //public View spinner;
 
     private Emitter.Listener onConnect = new Emitter.Listener() {
         @Override
@@ -39,7 +44,13 @@ public class RoleControllerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_role_controller);
+        setContentView(R.layout.activity_role_controller);
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
+        TextView loginText = (TextView)findViewById(R.id.login_text);
+        loginText.setTypeface(typeface);
+
+//        spinner = findViewById(R.id.loadingPanel);
+
         try {
             mSocket = IO.socket("http://46.101.213.24:3007");
         } catch (URISyntaxException e) { throw new RuntimeException(e); }
@@ -57,7 +68,6 @@ public class RoleControllerActivity extends AppCompatActivity {
             String uToken = user.getToken();
             ChallengeController cc = new ChallengeController(getApplicationContext(), this, uToken, uId);
             cc.generateCardsForMainActivity();
-//            goToActivity = new Intent(this, SettingsActivity.class);
         } else {
             mSocket.off();
             mSocket.disconnect();
@@ -70,4 +80,9 @@ public class RoleControllerActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //spinner.setVisibility(View.INVISIBLE);
+    }
 }

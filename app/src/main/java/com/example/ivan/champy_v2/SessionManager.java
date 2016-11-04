@@ -63,7 +63,7 @@ public class SessionManager {
 
         editor.putString(KEY_GCM, gcm);
 
-        Log.d("YO", "LOGGED ID");
+        Log.i("YO", "LOGGED ID");
 
         // commit changes
         editor.commit();
