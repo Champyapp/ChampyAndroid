@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +14,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.ivan.champy_v2.utils.ChallengeController;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
+import com.example.ivan.champy_v2.utils.ChallengeController;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -71,11 +70,11 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         final String itemInProgressId = currentCard.getId();
         String itemStatus = currentCard.getStatus();
 
-        Log.d(TAG, "getView: itemUpdate: " + itemUpdate);
-        Log.d(TAG, "getView: itemGoal: " + itemGoal);
-        Log.d(TAG, "getView: itemType: " + itemType);
-        Log.d(TAG, "getView: itemID: " + itemInProgressId);
-        Log.d(TAG, "getView: itemStatus: " + itemStatus);
+//        Log.d(TAG, "getView: itemUpdate: " + itemUpdate);
+//        Log.d(TAG, "getView: itemGoal: " + itemGoal);
+//        Log.d(TAG, "getView: itemType: " + itemType);
+//        Log.d(TAG, "getView: itemID: " + itemInProgressId);
+//        Log.d(TAG, "getView: itemStatus: " + itemStatus);
 
         String[] senderProgress = toArrayOfStrings(itemSenderProgress);
 
@@ -152,7 +151,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         final long oneDay = 86400L;
         try {
             longSenderProgress = Long.parseLong(senderProgress[senderProgress.length - 1]); // our last checkIn in seconds
-            Log.d(TAG, "getView: lastCheckIn: " + longSenderProgress);
+            //Log.d(TAG, "getView: lastCheckIn: " + longSenderProgress);
             Date date = new Date(longSenderProgress * 1000); // convert last checkIn in date format
             senderProgressMidNight = longSenderProgress - (date.getHours() * 60 * 60) - (date.getMinutes() * 60) - (date.getSeconds());
         } catch (RuntimeException e) {

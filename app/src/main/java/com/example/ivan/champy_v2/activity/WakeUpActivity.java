@@ -13,7 +13,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -23,13 +22,13 @@ import android.widget.TimePicker;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.ivan.champy_v2.utils.ChallengeController;
-import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.R;
-import com.example.ivan.champy_v2.utils.SessionManager;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
+import com.example.ivan.champy_v2.utils.ChallengeController;
+import com.example.ivan.champy_v2.utils.OfflineMode;
+import com.example.ivan.champy_v2.utils.SessionManager;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -143,9 +142,6 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         final String finalSHour = sHour;
         final String finalSMinute = sMinute;
 
-        Log.d("WakeUp", "onClick: sHour: " + finalSHour);
-        Log.d("WakeUp", "onClick: sMinute: " + finalSMinute);
-
         userId = user.getUserObjectId();
         token  = user.getToken();
 
@@ -157,7 +153,6 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
             public void onClick(View view) {
                 if (ok) {
                     cc.createNewWakeUpChallenge(21, type_id, finalSHour, finalSMinute);
-                    Log.d("WakeUpActivity", "finalSHour: " + finalSHour + "\nfinalSMin: " + finalSMinute);
                     snackbar = Snackbar.make(view, "Challenge Created!", Snackbar.LENGTH_SHORT);
                 } else {
                     snackbar = Snackbar.make(view, "Already Exist!", Snackbar.LENGTH_SHORT);

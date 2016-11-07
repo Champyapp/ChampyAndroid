@@ -255,20 +255,22 @@ public class ChallengeController {
         dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
         cv = new ContentValues();
+        final Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
 
         Date date = new Date();
         Calendar c = GregorianCalendar.getInstance();
 
-        final long currentMidnight = unixTime - (c.get(Calendar.HOUR_OF_DAY) * 60 * 60) - (c.get(Calendar.MINUTE) * 60) - (c.get(Calendar.SECOND));
+        final long currentMidnight = unixTime - (c.get(Calendar.HOUR_OF_DAY) * 60 * 60)
+                - (c.get(Calendar.MINUTE) * 60) - (c.get(Calendar.SECOND));
+        Log.d(TAG,"currentMidnight: " + currentMidnight);
 
         date.setTime(((minute * 60) + (hour * 60 * 60) + currentMidnight) * 1000);
         c.setTime(date);
         // if user picked time which less than current we
-        if (Calendar.getInstance().getTimeInMillis() > c.getTimeInMillis()) c.add(Calendar.DATE, 1);
+        if (Calendar.getInstance().getTimeInMillis() > c.getTimeInMillis()) c.add(Calendar.DATE, 1); // mb +(24*60*60) ?
+
         final long userInputTime = c.getTimeInMillis();
-
-
-        final Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
+        Log.d(TAG, "userInputTime final result: " + userInputTime);
 
 
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
