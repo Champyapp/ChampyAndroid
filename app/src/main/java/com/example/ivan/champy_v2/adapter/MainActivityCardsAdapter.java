@@ -45,7 +45,6 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
             tempView = inflater.inflate(R.layout.single_card_fragment_self, null, false);
         }
 
-        final ChallengeController cc = new ChallengeController(getContext(), (Activity) getContext(), token, userId);
         final SelfImprovement_model currentCard = arrayList.get(position);
         ImageView cardImage = (ImageView)tempView.findViewById(R.id.cardImage);
         ImageView imageChallengeLogo = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
@@ -70,13 +69,13 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         String itemGoal = currentCard.getGoal();
         String itemType = currentCard.getType();
         final String itemInProgressId = currentCard.getId();
-//        String itemStatus = currentCard.getStatus();
+        String itemStatus = currentCard.getStatus();
 
-//        Log.d(TAG, "getView: itemUpdate: " + itemUpdate);
-//        Log.d(TAG, "getView: itemGoal: " + itemGoal);
-//        Log.d(TAG, "getView: itemType: " + itemType);
-//        Log.d(TAG, "getView: itemID: " + itemInProgressId);
-//        Log.d(TAG, "getView: itemStatus: " + itemStatus);
+        Log.d(TAG, "getView: itemUpdate: " + itemUpdate);
+        Log.d(TAG, "getView: itemGoal: " + itemGoal);
+        Log.d(TAG, "getView: itemType: " + itemType);
+        Log.d(TAG, "getView: itemID: " + itemInProgressId);
+        Log.d(TAG, "getView: itemStatus: " + itemStatus);
 
         String[] senderProgress = toArrayOfStrings(itemSenderProgress);
 
@@ -161,6 +160,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         }
 
 
+        final ChallengeController cc = new ChallengeController(getContext(), (Activity) getContext(), token, userId);
         if (longSenderProgress != 0L && now > senderProgressMidNight + oneDay) {
             if (!itemType.equals("Wake Up")) {
                 tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
