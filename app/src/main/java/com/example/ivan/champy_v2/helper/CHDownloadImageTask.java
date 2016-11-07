@@ -1,6 +1,5 @@
 package com.example.ivan.champy_v2.helper;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
@@ -18,14 +17,13 @@ import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.ivan.champy_v2.Blur;
+import com.example.ivan.champy_v2.utils.Blur;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.activity.MainActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;

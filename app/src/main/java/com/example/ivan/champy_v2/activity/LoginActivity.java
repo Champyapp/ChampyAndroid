@@ -15,9 +15,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.debug.hv.ViewServer;
-import com.example.ivan.champy_v2.OfflineMode;
+import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.R;
-import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.utils.SessionManager;
 import com.example.ivan.champy_v2.helper.AppSync;
 import com.example.ivan.champy_v2.interfaces.NewUser;
 import com.example.ivan.champy_v2.model.User.Data;
@@ -46,7 +46,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.Collections;
 
 import io.jsonwebtoken.Jwts;

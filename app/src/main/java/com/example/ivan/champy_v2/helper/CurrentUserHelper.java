@@ -2,7 +2,7 @@ package com.example.ivan.champy_v2.helper;
 
 import android.content.Context;
 
-import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.utils.SessionManager;
 
 import java.util.HashMap;
 

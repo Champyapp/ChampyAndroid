@@ -1,14 +1,10 @@
 package com.example.ivan.champy_v2.helper;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
-import com.example.ivan.champy_v2.SessionManager;
-import com.example.ivan.champy_v2.activity.LoginActivity;
-import com.example.ivan.champy_v2.activity.RoleControllerActivity;
+import com.example.ivan.champy_v2.utils.SessionManager;
 import com.example.ivan.champy_v2.interfaces.Update_user;
-import com.example.ivan.champy_v2.model.User.Data;
 import com.example.ivan.champy_v2.model.User.User;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.RequestBody;

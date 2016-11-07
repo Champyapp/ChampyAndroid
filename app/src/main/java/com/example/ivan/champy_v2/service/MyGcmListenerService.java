@@ -14,7 +14,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.example.ivan.champy_v2.R;
-import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.utils.SessionManager;
 import com.example.ivan.champy_v2.activity.FriendsActivity;
 import com.example.ivan.champy_v2.activity.HistoryActivity;
 import com.example.ivan.champy_v2.activity.PendingDuelActivity;
@@ -42,8 +42,8 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-import static com.example.ivan.champy_v2.ChallengeController.API_URL;
-import static com.example.ivan.champy_v2.ChallengeController.unixTime;
+import static com.example.ivan.champy_v2.utils.ChallengeController.API_URL;
+import static com.example.ivan.champy_v2.utils.ChallengeController.unixTime;
 import static java.lang.Math.round;
 
 public class MyGcmListenerService extends GcmListenerService {

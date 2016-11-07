@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.ivan.champy_v2.ChallengeController;
+import com.example.ivan.champy_v2.utils.ChallengeController;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
@@ -45,11 +45,11 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
             tempView = inflater.inflate(R.layout.single_card_fragment_self, null, false);
         }
 
+        final ChallengeController cc = new ChallengeController(getContext(), (Activity) getContext(), token, userId);
         final SelfImprovement_model currentCard = arrayList.get(position);
         ImageView cardImage = (ImageView)tempView.findViewById(R.id.cardImage);
         ImageView imageChallengeLogo = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
         Typeface typeface = android.graphics.Typeface.createFromAsset(getContext().getAssets(), "fonts/bebasneue.ttf");
-
         WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
@@ -70,13 +70,13 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         String itemGoal = currentCard.getGoal();
         String itemType = currentCard.getType();
         final String itemInProgressId = currentCard.getId();
-        String itemStatus = currentCard.getStatus();
+//        String itemStatus = currentCard.getStatus();
 
-        Log.d(TAG, "getView: itemUpdate: " + itemUpdate);
-        Log.d(TAG, "getView: itemGoal: " + itemGoal);
-        Log.d(TAG, "getView: itemType: " + itemType);
-        Log.d(TAG, "getView: itemID: " + itemInProgressId);
-        Log.d(TAG, "getView: itemStatus: " + itemStatus);
+//        Log.d(TAG, "getView: itemUpdate: " + itemUpdate);
+//        Log.d(TAG, "getView: itemGoal: " + itemGoal);
+//        Log.d(TAG, "getView: itemType: " + itemType);
+//        Log.d(TAG, "getView: itemID: " + itemInProgressId);
+//        Log.d(TAG, "getView: itemStatus: " + itemStatus);
 
         String[] senderProgress = toArrayOfStrings(itemSenderProgress);
 
@@ -131,8 +131,6 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         CurrentUserHelper user = new CurrentUserHelper(getContext());
         userId = user.getUserObjectId();
         token  = user.getToken();
-
-        final ChallengeController cc = new ChallengeController(getContext(), (Activity) getContext(), token, userId);
 
 //        /**
 //         * My algorithm for displaying buttons inside cards view and opportunity for check challenge

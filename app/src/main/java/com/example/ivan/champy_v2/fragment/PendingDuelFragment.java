@@ -1,6 +1,5 @@
 package com.example.ivan.champy_v2.fragment;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
@@ -18,14 +17,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.ivan.champy_v2.ChallengeController;
-import com.example.ivan.champy_v2.OfflineMode;
+import com.example.ivan.champy_v2.utils.ChallengeController;
+import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.R;
-import com.example.ivan.champy_v2.SessionManager;
-import com.example.ivan.champy_v2.activity.MainActivity;
+import com.example.ivan.champy_v2.utils.SessionManager;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
-import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 
 import java.io.IOException;
 import java.util.HashMap;

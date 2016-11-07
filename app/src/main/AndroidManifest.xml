@@ -126,7 +126,6 @@
         </receiver>
 
         <service android:name=".service.AlarmService"  android:enabled="true" />
-
         <service android:name="com.example.ivan.champy_v2.service.MyGcmListenerService" android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />

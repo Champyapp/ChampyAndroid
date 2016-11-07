@@ -1,4 +1,4 @@
-package com.example.ivan.champy_v2;
+package com.example.ivan.champy_v2.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

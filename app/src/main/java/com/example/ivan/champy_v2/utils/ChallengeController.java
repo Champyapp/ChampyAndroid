@@ -1,4 +1,4 @@
-package com.example.ivan.champy_v2;
+package com.example.ivan.champy_v2.utils;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.example.ivan.champy_v2.AlarmReceiver;
 import com.example.ivan.champy_v2.activity.MainActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.model.Duel.Duel;
@@ -22,6 +23,7 @@ import com.example.ivan.champy_v2.model.Active_in_progress.Datum;
 import com.example.ivan.champy_v2.model.Active_in_progress.Recipient;
 import com.example.ivan.champy_v2.model.Active_in_progress.Sender;
 import com.example.ivan.champy_v2.model.Single_in_progress.Data;
+import com.example.ivan.champy_v2.utils.OfflineMode;
 
 import org.json.JSONException;
 import org.json.JSONObject;

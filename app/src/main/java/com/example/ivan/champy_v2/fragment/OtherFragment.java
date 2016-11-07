@@ -18,9 +18,9 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.ivan.champy_v2.Friend;
-import com.example.ivan.champy_v2.OfflineMode;
+import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.R;
-import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.utils.SessionManager;
 import com.example.ivan.champy_v2.adapter.OtherAdapter;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHCheckTableForExist;

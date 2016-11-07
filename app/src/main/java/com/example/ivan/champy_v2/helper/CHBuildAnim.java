@@ -12,8 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.ivan.champy_v2.R;
-import com.example.ivan.champy_v2.SessionManager;
-import com.example.ivan.champy_v2.activity.SettingsActivity;
+import com.example.ivan.champy_v2.utils.SessionManager;
 
 /**
  * this is class helper for create animation, set right size of circles, count, alpha of animation,

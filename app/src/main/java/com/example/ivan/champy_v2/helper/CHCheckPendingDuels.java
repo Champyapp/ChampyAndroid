@@ -8,7 +8,7 @@ import android.view.Menu;
 import android.view.View;
 
 import com.example.ivan.champy_v2.R;
-import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.utils.SessionManager;
 import com.example.ivan.champy_v2.data.DBHelper;
 
 /**

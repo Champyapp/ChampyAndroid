@@ -1,23 +1,17 @@
 package com.example.ivan.champy_v2.activity;
 
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 
-import com.example.ivan.champy_v2.ChallengeController;
+import com.example.ivan.champy_v2.utils.ChallengeController;
 import com.example.ivan.champy_v2.R;
-import com.example.ivan.champy_v2.SessionManager;
+import com.example.ivan.champy_v2.utils.SessionManager;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.helper.NotificationController;
 import com.github.nkzawa.emitter.Emitter;
-import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
-
-import java.net.URISyntaxException;
 
 public class RoleControllerActivity extends AppCompatActivity {
 

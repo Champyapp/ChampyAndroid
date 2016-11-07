@@ -1,11 +1,9 @@
 package com.example.ivan.champy_v2.helper;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
-import com.example.ivan.champy_v2.SessionManager;
-import com.example.ivan.champy_v2.activity.MainActivity;
+import com.example.ivan.champy_v2.utils.SessionManager;
 import com.example.ivan.champy_v2.interfaces.NewUser;
 import com.example.ivan.champy_v2.model.User.Data;
 import com.example.ivan.champy_v2.model.User.User;
