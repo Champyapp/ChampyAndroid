@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.ivan.champy_v2.Friend;
+import com.example.ivan.champy_v2.model.FriendModel;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.utils.SessionManager;
@@ -38,12 +38,12 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
     final private String API_URL = "http://46.101.213.24:3007";
     final private String TAG = "FriendsAdapter";
-    private List<Friend> mContacts;
+    private List<FriendModel> mContacts;
     private Context context;
     private Activity activity;
     private ArrayList<Integer> selected = new ArrayList<>();
 
-    public FriendsAdapter(List<Friend> contacts, Context context, Activity activity, CustomItemClickListener itemOnClick) {
+    public FriendsAdapter(List<FriendModel> contacts, Context context, Activity activity, CustomItemClickListener itemOnClick) {
         mContacts = contacts;
         this.context = context;
         CustomItemClickListener listener = itemOnClick;
@@ -88,7 +88,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     @Override
     public void onBindViewHolder(final FriendsAdapter.ViewHolder viewHolder, final int position) {
         // Get the data model based on position
-        final Friend contact = mContacts.get(position);
+        final FriendModel contact = mContacts.get(position);
         // Set item views based on the data model
         TextView tvUserName = viewHolder.nameTextView;
         tvUserName.setText(contact.getName());

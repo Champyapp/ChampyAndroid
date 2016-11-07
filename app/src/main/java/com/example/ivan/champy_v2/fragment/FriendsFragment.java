@@ -13,7 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.ivan.champy_v2.Friend;
+import com.example.ivan.champy_v2.model.FriendModel;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.utils.SessionManager;
@@ -74,7 +74,7 @@ public class FriendsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)  {
         final View view = inflater.inflate(R.layout.fragment_friends, container, false);
-        final List<com.example.ivan.champy_v2.Friend> friends = new ArrayList<>();
+        final List<FriendModel> friends = new ArrayList<>();
         DBHelper dbHelper = new DBHelper(getContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("friends", null, null, null, null, null, null);
@@ -88,7 +88,7 @@ public class FriendsFragment extends Fragment {
             int index = c.getColumnIndex("user_id");
             int idColIndex = c.getColumnIndex("id");
             do {
-                friends.add(new com.example.ivan.champy_v2.Friend(
+                friends.add(new FriendModel(
                         c.getString(nameColIndex),
                         API_URL + c.getString(photoColIndex),
                         c.getString(index),
@@ -104,7 +104,7 @@ public class FriendsFragment extends Fragment {
         final FriendsAdapter adapter = new FriendsAdapter(friends, getContext(), getActivity(), new CustomItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Friend friend = friends.get(position);
+                FriendModel friend = friends.get(position);
             }
         });
         SessionManager sessionManager = new SessionManager(getActivity());
@@ -201,7 +201,7 @@ public class FriendsFragment extends Fragment {
                         }
 
                         // put friends from response on screen
-                        final List<Friend> newfriends = new ArrayList<>();
+                        final List<FriendModel> newfriends = new ArrayList<>();
                         Cursor c = db.query("friends", null, null, null, null, null, null);
                         if (c.moveToFirst()) {
                             int inProgressChallengesCountIndex = c.getColumnIndex("inProgressChallengesCount");
@@ -213,7 +213,7 @@ public class FriendsFragment extends Fragment {
                             int index = c.getColumnIndex("user_id");
                             int level = c.getColumnIndex("level");
                             do {
-                                newfriends.add(new Friend(
+                                newfriends.add(new FriendModel(
                                         c.getString(nameColIndex),
                                         API_URL + c.getString(photoColIndex),
                                         c.getString(index),
@@ -229,7 +229,7 @@ public class FriendsFragment extends Fragment {
                         final FriendsAdapter adapter = new FriendsAdapter(newfriends, getContext(), getActivity(), new CustomItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
-                                Friend friend = newfriends.get(position);
+                                FriendModel friend = newfriends.get(position);
                             }
                         });
 
@@ -296,10 +296,10 @@ public class FriendsFragment extends Fragment {
 //        final ContentValues cv = new ContentValues();
 //
 //        com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
-//        Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.getUserFriends(id, token);
-//        call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
+//        Call<com.example.ivan.champy_v2.model.FriendModel.FriendModel> call = friends.getUserFriends(id, token);
+//        call.enqueue(new Callback<com.example.ivan.champy_v2.model.FriendModel.FriendModel>() {
 //            @Override
-//            public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
+//            public void onResponse(Response<com.example.ivan.champy_v2.model.FriendModel.FriendModel> response, Retrofit retrofit) {
 //                if (response.isSuccess()) {
 //                    List<Datum> data = response.body().getData();
 //                    for (int i = 0; i < data.size(); i++) {
@@ -328,7 +328,7 @@ public class FriendsFragment extends Fragment {
 //                            }
 //                        }
 //                    }
-//                    final List<com.example.ivan.champy_v2.Friend> newfriends = new ArrayList<>();
+//                    final List<com.example.ivan.champy_v2.model.FriendModel> newfriends = new ArrayList<>();
 //                    Cursor c = db.query("friends", null, null, null, null, null, null);
 //                    if (c.moveToFirst()) {
 //                        int idColIndex = c.getColumnIndex("id");
@@ -337,7 +337,7 @@ public class FriendsFragment extends Fragment {
 //                        int index = c.getColumnIndex("user_id");
 //                        do {
 //                            Log.i("newusers", "NewUser: " + c.getString(nameColIndex) + " Photo: " + c.getString(photoColIndex));
-//                            newfriends.add(new com.example.ivan.champy_v2.Friend(
+//                            newfriends.add(new com.example.ivan.champy_v2.model.FriendModel(
 //                                    c.getString(nameColIndex),
 //                                    API_URL + c.getString(photoColIndex),
 //                                    c.getString(index),
@@ -352,7 +352,7 @@ public class FriendsFragment extends Fragment {
 //                    final FriendsAdapter adapter = new FriendsAdapter(newfriends, getContext(), getActivity(), new CustomItemClickListener() {
 //                        @Override
 //                        public void onItemClick(View view, int position) {
-//                            com.example.ivan.champy_v2.Friend friend = newfriends.get(position);
+//                            com.example.ivan.champy_v2.model.FriendModel friend = newfriends.get(position);
 //                        }
 //                    });
 //                    rvContacts.setAdapter(adapter);

@@ -17,7 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.ivan.champy_v2.Friend;
+import com.example.ivan.champy_v2.model.FriendModel;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.utils.SessionManager;
@@ -102,7 +102,7 @@ public class OtherFragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_friends, container, false);
         Log.d(TAG, "onCreateView: ");
-        final List<Friend> friends = new ArrayList<>();
+        final List<FriendModel> friends = new ArrayList<>();
         DBHelper dbHelper = new DBHelper(getContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         checkTableForExist = new CHCheckTableForExist(getContext());
@@ -124,7 +124,7 @@ public class OtherFragment extends Fragment {
             int wins = c.getColumnIndex("wins");
             do {
                 if (!checkTableForExist.isInOtherTable(c.getString(index)))
-                    friends.add(new Friend(
+                    friends.add(new FriendModel(
                             c.getString(nameColIndex),
                             c.getString(photoColIndex),
                             c.getString(index),
@@ -247,7 +247,7 @@ public class OtherFragment extends Fragment {
                     final SQLiteDatabase db = dbHelper.getWritableDatabase();
                     int clearCount = db.delete("mytable", null, null);
                     final ContentValues cv = new ContentValues();
-                    final List<Friend> newFriends = new ArrayList<>();
+                    final List<FriendModel> newFriends = new ArrayList<>();
 
                     OfflineMode offlineMode = new OfflineMode();
                     if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
@@ -299,7 +299,7 @@ public class OtherFragment extends Fragment {
                                                     // отображаем друзей в списке
                                                     if (!checkTableForExist.isInOtherTable(data.get_id())) {
                                                         db.insert("mytable", null, cv);
-                                                        newFriends.add(new Friend(
+                                                        newFriends.add(new FriendModel(
                                                                 name,
                                                                 photo,
                                                                 data.get_id(),
@@ -329,7 +329,7 @@ public class OtherFragment extends Fragment {
 //                                                cv.put("wins", "0");
 //                                                cv.put("total", "0");
 //                                                cv.put("level", "0");
-//                                                newFriends.add(new Friend(user_name, photo, null, "0", "0", "0", "0"));
+//                                                newFriends.add(new FriendModel(user_name, photo, null, "0", "0", "0", "0"));
 //                                                db.insert("mytable", null, cv);
 //
 //                                                RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);

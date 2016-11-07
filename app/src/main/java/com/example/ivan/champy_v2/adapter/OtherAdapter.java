@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.ivan.champy_v2.Friend;
+import com.example.ivan.champy_v2.model.FriendModel;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.utils.SessionManager;
@@ -47,7 +47,7 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
 
     final private String API_URL = "http://46.101.213.24:3007";
     final private String TAG = "myLogs";
-    private List<Friend> mContacts;
+    private List<FriendModel> mContacts;
     private com.facebook.CallbackManager CallbackManager;
     private Context context;
     private Activity activity;
@@ -55,7 +55,7 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
 
 
     // Pass in the contact array into the constructor
-    public OtherAdapter(List<Friend> contacts, Context context, Activity activity) {
+    public OtherAdapter(List<FriendModel> contacts, Context context, Activity activity) {
         mContacts = contacts;
         this.context = context;
         this.activity = activity;
@@ -102,7 +102,7 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(OtherAdapter.ViewHolder viewHolder, final int position) {
         // Get the data model based on position
-        final Friend contact = mContacts.get(position);
+        final FriendModel contact = mContacts.get(position);
 
         // Set item views based on the data model
         TextView nameTextView = viewHolder.nameTextView;
@@ -272,7 +272,7 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
                             @Override
                             public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
                                 if (response.isSuccess()) {
-                                    Log.d(TAG, "Status: Sent Friend Request");
+                                    Log.d(TAG, "Status: Sent FriendModel Request");
                                     cv.put("name", mContacts.get(position).getName());
                                     cv.put("photo", mContacts.get(position).getPicture());
                                     cv.put("user_id", mContacts.get(position).getID());
