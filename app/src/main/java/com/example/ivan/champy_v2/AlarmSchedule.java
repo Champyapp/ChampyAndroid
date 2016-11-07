@@ -16,7 +16,7 @@ public class AlarmSchedule extends WakefulBroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String newString;
         Bundle extras = intent.getExtras();
-        newString = (extras == null) ? null : extras.getString("alarm");
+        newString = (extras == null) ? "" : extras.getString("alarm");
 
         if ("reset".equals(newString)) {
             DBHelper dbHelper = new DBHelper(context);

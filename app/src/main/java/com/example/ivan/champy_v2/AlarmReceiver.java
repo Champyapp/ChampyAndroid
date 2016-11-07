@@ -21,7 +21,6 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         newIntent.setClassName("com.example.ivan.champy_v2", "com.example.ivan.champy_v2.activity.AlarmReceiverActivity");
         newIntent.putExtra("finalInProgressChallengeId", inProgressId);
         newIntent.putExtra("finalIntentId", intentId);
-
         newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         SessionManager sessionManager = new SessionManager(context);

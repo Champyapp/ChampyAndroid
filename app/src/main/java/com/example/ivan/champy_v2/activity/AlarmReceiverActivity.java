@@ -8,7 +8,6 @@ import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -17,21 +16,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.ivan.champy_v2.utils.ChallengeController;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
+import com.example.ivan.champy_v2.utils.ChallengeController;
 
 import java.io.IOException;
 
 /**
  * This is Wake-Up activity when our alarm manager starts ring
  */
-public class AlarmReceiverActivity extends Activity {
+public class AlarmReceiverActivity extends Activity implements View.OnClickListener {
 
     public static final String ARG_PAGE = "ARG_PAGE";
     public static final String TAG = "AlarmReceiverActivity";
     private MediaPlayer mMediaPlayer;
-    private String token, userId;
+    private ChallengeController cc;
+    private String finalInProgressChallengeId;
     public Context context;
     public Activity activity;
 
@@ -40,7 +40,7 @@ public class AlarmReceiverActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final String finalInProgressChallengeId = this.getIntent().getStringExtra("finalInProgressChallengeId");
+        finalInProgressChallengeId = this.getIntent().getStringExtra("finalInProgressChallengeId");
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.alarm);
@@ -58,14 +58,24 @@ public class AlarmReceiverActivity extends Activity {
         window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        ImageButton buttonWakeUpDoneForToday = (ImageButton) findViewById(R.id.buttonWakeUpDoneForToday);
 
         CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
-        token = user.getToken();
-        userId = user.getUserObjectId();
-        final ChallengeController cc = new ChallengeController(getApplicationContext(), AlarmReceiverActivity.this, token, userId);
-        buttonWakeUpDoneForToday.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View arg0, MotionEvent arg1) {
+        String token = user.getToken();
+        String userId = user.getUserObjectId();
+        cc = new ChallengeController(getApplicationContext(), AlarmReceiverActivity.this, token, userId);
+
+        ImageButton buttonWakeUpDoneForToday = (ImageButton) findViewById(R.id.buttonWakeUpDoneForToday);
+        ImageButton buttonWakeUpSurrender = (ImageButton) findViewById(R.id.buttonWakeUpSurrender);
+
+        buttonWakeUpDoneForToday.setOnClickListener(this);
+        buttonWakeUpSurrender.setOnClickListener(this);
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.buttonWakeUpDoneForToday:
                 mMediaPlayer.stop();
                 try {
                     cc.doneForToday(finalInProgressChallengeId);
@@ -73,24 +83,15 @@ public class AlarmReceiverActivity extends Activity {
                     e.printStackTrace();
                 }
                 finish();
-                return false;
-            }
-        });
+                break;
 
-        ImageButton buttonWakeUpSurrender = (ImageButton) findViewById(R.id.buttonWakeUpSurrender);
-        buttonWakeUpSurrender.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            case R.id.buttonWakeUpSurrender:
                 mMediaPlayer.stop();
                 // so, we take 0 updates and then this challenge will auto surrender.
                 finish();
-
-                return false;
-            }
-        });
-
+                break;
+        }
     }
-
 
     private void playSound(Context context, Uri alert) {
         mMediaPlayer = new MediaPlayer();

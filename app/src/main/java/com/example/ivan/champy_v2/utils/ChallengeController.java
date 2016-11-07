@@ -13,7 +13,6 @@ import android.util.Log;
 import com.example.ivan.champy_v2.AlarmReceiver;
 import com.example.ivan.champy_v2.activity.MainActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
-import com.example.ivan.champy_v2.model.Duel.Duel;
 import com.example.ivan.champy_v2.helper.CHLoadUserProgressBarInfo;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
 import com.example.ivan.champy_v2.interfaces.CreateChallenge;
@@ -22,8 +21,8 @@ import com.example.ivan.champy_v2.model.Active_in_progress.Challenge;
 import com.example.ivan.champy_v2.model.Active_in_progress.Datum;
 import com.example.ivan.champy_v2.model.Active_in_progress.Recipient;
 import com.example.ivan.champy_v2.model.Active_in_progress.Sender;
+import com.example.ivan.champy_v2.model.Duel.Duel;
 import com.example.ivan.champy_v2.model.Single_in_progress.Data;
-import com.example.ivan.champy_v2.utils.OfflineMode;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -194,29 +193,21 @@ public class ChallengeController {
 
 
 
-    public void createNewWakeUpChallenge(int days, final String type_id, final int hour, final int minute) {
+    public void createNewWakeUpChallenge(int days, final String type_id, String sHour, String sMinute) {
         duration = "" + (days * 86400);
         String description = "Wake Up";
-        String sHour = "" + hour;
-        String sMinute = "" + minute;
-        if (hour < 10) sHour = "0" + sHour;
-        if (minute < 10) sMinute = "0" + sMinute;
-
-        long currentTime = System.currentTimeMillis() / 1000;
+//        String sHour = "" + hour;
+//        String sMinute = "" + minute;
+//        if (hour < 10) sHour = "0" + sHour;
+//        if (minute < 10) sMinute = "0" + sMinute;
+        //long currentTime = System.currentTimeMillis() / 1000;
         final String wakeUpName = "Wake up at "+ sHour +":"+ sMinute;
         final String stringIntentId = String.valueOf(Integer.parseInt(sHour + sMinute));
-        final int intentId = Integer.parseInt(sHour + sMinute);
 
-        final int intHour = Integer.parseInt(sHour);
-        final int intMin  = Integer.parseInt(sMinute);
+        final int intHour  = Integer.parseInt(sHour); // this need for sending in progress method
+        final int intMin   = Integer.parseInt(sMinute); // this need for sending in progress method
+        final int intentId = Integer.parseInt(sHour + sMinute); // our unique id for pending intent
 
-        Date date = new Date();
-        Calendar myCalendar = GregorianCalendar.getInstance();
-        myCalendar.setTime(date);
-        myCalendar.get(Calendar.HOUR_OF_DAY); // ?
-        myCalendar.get(Calendar.HOUR); // ?
-        myCalendar.get(Calendar.MONTH); // ?
-        final long currentMidnight = currentTime - (myCalendar.get(Calendar.HOUR_OF_DAY) * 60 * 60) - (myCalendar.get(Calendar.MINUTE) * 60) - (myCalendar.get(Calendar.SECOND));
 //        Log.d(TAG, "createNewWakeUpChallenge CurrentMidNight: " + currentMidnight);
 
 //        final String[] details = new String[21];
@@ -235,14 +226,15 @@ public class ChallengeController {
         // change stringIntentId for myDetails
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
-        Call<com.example.ivan.champy_v2.model.Create_challenge.CreateChallenge> call = createChallenge.createChallenge(wakeUpName, type_id, description, stringIntentId, duration, token);
+        Call<com.example.ivan.champy_v2.model.Create_challenge.CreateChallenge> call = createChallenge
+                .createChallenge(wakeUpName, type_id, description, stringIntentId, duration, token);
+
         call.enqueue(new Callback<com.example.ivan.champy_v2.model.Create_challenge.CreateChallenge>() {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.model.Create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
-                    // if something will works wrong, change intMin/Hour to min/hour;
-                    sendSingleInProgressForWakeUp(challengeId, intentId, currentMidnight, intMin, intHour);
+                    sendSingleInProgressForWakeUp(challengeId, intentId, intMin, intHour);
 //                    Log.d(TAG, "createNewWakeUpChallenge Status: OK"
 //                            + "\n Intent_ID   = " + intentId
 //                            + "\n _ID         = " + challengeId
@@ -259,24 +251,25 @@ public class ChallengeController {
         });
     }
 
-    private void sendSingleInProgressForWakeUp(String challenge, final int intentId, long currentMidnight, int minute, int hour) {
-        Date date = new Date();
-        date.setTime(((minute * 60) + (hour * 60 * 60) + currentMidnight) * 1000);
-        final Calendar myCalendar = Calendar.getInstance();
-        myCalendar.setTime(date);
-        myCalendar.set(Calendar.SECOND, 0);
-
+    private void sendSingleInProgressForWakeUp(String challenge, final int intentId, int minute, int hour) {
         dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
         cv = new ContentValues();
 
-        // TODO: 19.10.2016 Переписати
+        Date date = new Date();
+        Calendar c = GregorianCalendar.getInstance();
 
-        final long current = Calendar.getInstance().getTimeInMillis();
-        final long userInputTime = myCalendar.getTimeInMillis();
+        final long currentMidnight = unixTime - (c.get(Calendar.HOUR_OF_DAY) * 60 * 60) - (c.get(Calendar.MINUTE) * 60) - (c.get(Calendar.SECOND));
+
+        date.setTime(((minute * 60) + (hour * 60 * 60) + currentMidnight) * 1000);
+        c.setTime(date);
+        // if user picked time which less than current we
+        if (Calendar.getInstance().getTimeInMillis() > c.getTimeInMillis()) c.add(Calendar.DATE, 1);
+        final long userInputTime = c.getTimeInMillis();
+
+
         final Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
 
-        if (current > userInputTime) myCalendar.add(Calendar.DATE, 1);
 
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
         Call<com.example.ivan.champy_v2.model.Single_in_progress.SingleInProgress> call = singleinprogress.start_single_in_progress(challenge, token);

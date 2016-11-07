@@ -116,15 +116,16 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarmTimePicker = (TimePicker) findViewById(R.id.timePicker);
         ImageButton imageButton = (ImageButton) findViewById(R.id.imageButtonAccept);
+
+        final OfflineMode offlineMode = new OfflineMode();
+        offlineMode.isConnectedToRemoteAPI(WakeUpActivity.this);
+
         imageButton.setOnClickListener(this);
 
     }
 
     @Override
     public void onClick(final View v) {
-        final OfflineMode offlineMode = new OfflineMode();
-        offlineMode.isConnectedToRemoteAPI(WakeUpActivity.this);
-
 //        Calendar calendar = Calendar.getInstance();
 //        calendar.set(Calendar.HOUR_OF_DAY, alarmTimePicker.getHour());
 //        calendar.set(Calendar.MINUTE, alarmTimePicker.getMinute());
@@ -136,22 +137,27 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         String sHour = "" + pickedHour;
         String sMinute = "" + picketMin;
 
-        if (pickedHour < 10) sHour   = "0" + sHour;
+        if (pickedHour < 10) sHour  = "0" + sHour;
         if (picketMin < 10) sMinute = "0" + sMinute;
 
-        Log.d("WakeUp", "onClick: sHour: " + sHour);
-        Log.d("WakeUp", "onClick: sMinute: " + sMinute);
+        final String finalSHour = sHour;
+        final String finalSMinute = sMinute;
+
+        Log.d("WakeUp", "onClick: sHour: " + finalSHour);
+        Log.d("WakeUp", "onClick: sMinute: " + finalSMinute);
 
         userId = user.getUserObjectId();
         token  = user.getToken();
 
         final ChallengeController cc = new ChallengeController(this, this, token, userId);
         final boolean ok = cc.isActiveWakeUp(sHour + sMinute);
+
         snackbar = Snackbar.make(v, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes!", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (ok) {
-                    cc.createNewWakeUpChallenge(21, type_id, pickedHour, picketMin);
+                    cc.createNewWakeUpChallenge(21, type_id, finalSHour, finalSMinute);
+                    Log.d("WakeUpActivity", "finalSHour: " + finalSHour + "\nfinalSMin: " + finalSMinute);
                     snackbar = Snackbar.make(view, "Challenge Created!", Snackbar.LENGTH_SHORT);
                 } else {
                     snackbar = Snackbar.make(view, "Already Exist!", Snackbar.LENGTH_SHORT);
