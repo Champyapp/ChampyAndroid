@@ -40,7 +40,7 @@ public class CHGetFacebookFriends {
         this.context = context;
     }
 
-    // method which get friends and their data
+    // OTHER TABLE. method which get friends and their data
     public void getUserFacebookFriends(final String gcm) {
         final String API_URL = "http://46.101.213.24:3007";
         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
@@ -127,6 +127,9 @@ public class CHGetFacebookFriends {
         });
         request.executeAndWait();
     }
+
+
+
 
 
 }

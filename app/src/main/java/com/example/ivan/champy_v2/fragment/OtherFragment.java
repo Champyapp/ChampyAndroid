@@ -17,17 +17,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.ivan.champy_v2.model.FriendModel;
-import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.R;
-import com.example.ivan.champy_v2.utils.SessionManager;
 import com.example.ivan.champy_v2.adapter.OtherAdapter;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHCheckTableForExist;
-import com.example.ivan.champy_v2.helper.CHGetFacebookFriends;
 import com.example.ivan.champy_v2.interfaces.NewUser;
+import com.example.ivan.champy_v2.model.FriendModel;
 import com.example.ivan.champy_v2.model.User.Data;
 import com.example.ivan.champy_v2.model.User.User;
+import com.example.ivan.champy_v2.utils.OfflineMode;
+import com.example.ivan.champy_v2.utils.SessionManager;
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
@@ -65,7 +64,7 @@ public class OtherFragment extends Fragment {
 
     private Socket mSocket;
     private SwipeRefreshLayout gSwipeRefreshLayout;
-    private CHGetFacebookFriends getFbFriends;
+    //private CHGetFacebookFriends getFbFriends;
     private CHCheckTableForExist checkTableForExist;
 
     @Override
@@ -78,7 +77,7 @@ public class OtherFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getContext());
-        getFbFriends = new CHGetFacebookFriends(getContext());
+        //getFbFriends = new CHGetFacebookFriends(getContext());
         Log.d(TAG, "onCreate: ");
 
 //        try {

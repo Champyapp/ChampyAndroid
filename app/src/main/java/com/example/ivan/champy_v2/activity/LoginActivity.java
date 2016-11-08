@@ -115,6 +115,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         jsonObject.put("timeZone", "-2");
                                         String json = jsonObject.toString();
                                         getUserData(fb_id, path_to_pic, json);
+                                        // make if statement here /\  -  \/
                                         registerUser(fb_id, name, user_email, json);
                                     } catch (Exception e) {Log.e(TAG, "error: ", e);}
                                 }
@@ -207,7 +208,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void getUserData(final String fb_id, final String path_to_pic, String gcm) throws JSONException {
         AppSync sync = new AppSync(fb_id, gcm, path_to_pic, this);
-        sync.getToken(fb_id, gcm);
+        //sync.getToken(fb_id, gcm);
         sync.getUserProfile();
     }
 

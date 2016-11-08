@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.example.ivan.champy_v2.utils.SessionManager;
 import com.example.ivan.champy_v2.activity.RoleControllerActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.interfaces.NewUser;
@@ -17,6 +16,7 @@ import com.example.ivan.champy_v2.model.Friend.Friend_;
 import com.example.ivan.champy_v2.model.Friend.Owner;
 import com.example.ivan.champy_v2.model.User.Data;
 import com.example.ivan.champy_v2.model.User.User;
+import com.example.ivan.champy_v2.utils.SessionManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,8 +31,6 @@ import retrofit.Callback;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
-
-import static java.lang.Math.round;
 
 public class AppSync {
 
@@ -207,7 +205,7 @@ public class AppSync {
 
     }
 
-
+//      // relocated in roleActivity
 //    private void getUserInProgressChallenges(final String userId) {
 //        DBHelper dbHelper = new DBHelper(context);
 //        final SQLiteDatabase db = dbHelper.getWritableDatabase();
