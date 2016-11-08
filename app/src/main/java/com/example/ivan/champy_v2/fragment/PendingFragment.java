@@ -158,6 +158,12 @@ public class PendingFragment extends Fragment {
         mSocket.connect();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mSocket.off();
+        mSocket.disconnect();
+    }
 
     private void refreshPendingView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         swipeRefreshLayout.setRefreshing(true);
@@ -254,14 +260,6 @@ public class PendingFragment extends Fragment {
         } else {
             swipeRefreshLayout.setRefreshing(false);
         }
-    }
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mSocket.off();
-        mSocket.disconnect();
     }
 
 

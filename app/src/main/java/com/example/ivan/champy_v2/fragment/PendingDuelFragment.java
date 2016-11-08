@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,15 +16,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.ivan.champy_v2.utils.ChallengeController;
-import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.R;
-import com.example.ivan.champy_v2.utils.SessionManager;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
+import com.example.ivan.champy_v2.helper.CurrentUserHelper;
+import com.example.ivan.champy_v2.utils.ChallengeController;
+import com.example.ivan.champy_v2.utils.OfflineMode;
+import com.example.ivan.champy_v2.utils.SessionManager;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 public class PendingDuelFragment extends Fragment implements View.OnClickListener {
 
@@ -135,13 +134,9 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onClick(View view) {
-        //CurrentUserHelper user = new CurrentUserHelper(getContext());
-        HashMap<String, String> user = sessionManager.getChampyOptions();
-        final String token = sessionManager.getGCM();
-        final String userId = sessionManager.getObjectId();
-        final String inProgressCount = user.get("challenges");
-
-        Log.d(TAG, "onClick: \n token: " + token + "\n userId: " + userId + "\n inProgressCount: " + inProgressCount);
+        CurrentUserHelper user = new CurrentUserHelper(getContext());
+        final String token = user.getToken();
+        final String userId = user.getUserObjectId();
 
         cc = new ChallengeController(getContext(), getActivity(), token, userId);
         position = viewPager.getCurrentItem();

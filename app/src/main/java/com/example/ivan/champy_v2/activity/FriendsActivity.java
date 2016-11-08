@@ -229,7 +229,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
     }
 
 
-    //    // load friends from bd
+    // load friends from bd
     public void loadUserFriends() {
         // TODO: 31.08.2016 use AppSync.loadUserFriends method;
         final String API_URL = "http://46.101.213.24:3007";

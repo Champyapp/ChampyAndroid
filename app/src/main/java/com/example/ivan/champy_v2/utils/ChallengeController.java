@@ -316,7 +316,6 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     Log.d("JoinToChallenge", "onResponse: VSE OK");
                     refreshCardsForPendingDuel();
-                    generateCardsForMainActivity();
                 } else Log.d("JoinToChallenge", "onResponse: WTF" + " | ERROR = " + response.code());
             }
 

@@ -54,6 +54,7 @@ public class FriendsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // TODO: 08.11.2016 zachem zdes' voobwe socketu?
         try {
             mSocket = IO.socket("http://46.101.213.24:3007");
         } catch (URISyntaxException e) {
