@@ -24,48 +24,50 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Self-Improvement"
         android:id="@+id/tvChallengeType"
         android:textColor="@android:color/white"
-        android:gravity="center_vertical|center_horizontal"
-        android:textSize="13sp"
+        android:textSize="20sp"
         android:textAllCaps="true"
-        android:paddingTop="2.5dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/imageViewChallengeLogo"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/imageViewChallengeLogo"
+        android:textAlignment="center"
         android:layout_alignRight="@+id/cardImage"
         android:layout_alignEnd="@+id/cardImage" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Taking Stares"
+        android:id="@+id/tvChallengeDescription"
+        android:textSize="20sp"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:textColor="@color/colorTextAqua"
+        android:textAlignment="center"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/cardImage"
+        android:layout_alignEnd="@+id/cardImage"
+        android:layout_below="@+id/tvChallengeType"
+        android:layout_marginTop="30dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvRecipientName"
-        android:textColor="@android:color/white"
-        android:gravity="center_vertical|center_horizontal"
-        android:textSize="13sp"
         android:textAllCaps="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/tvChallengeType"
-        android:layout_alignRight="@+id/cardImage"
-        android:layout_alignEnd="@+id/cardImage" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="No smoking"
-        android:id="@+id/tvChallengeDescription"
-        android:gravity="center_vertical|center_horizontal"
-        android:textSize="20sp"
-        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:layout_below="@+id/tvChallengeDescription"
+        android:textColor="@color/colorTextAqua"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/cardImage"
         android:layout_alignEnd="@+id/cardImage"
-        android:textStyle="bold"
-        android:textColor="@color/colorTextAqua" />
+        android:layout_marginTop="5dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -73,16 +75,16 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/everyday_for_the_next"
         android:id="@+id/tvEveryDayForTheNext"
-        android:textSize="10sp"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:textSize="12sp"
+        android:textAllCaps="true"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
         android:layout_alignRight="@+id/cardImage"
         android:layout_alignEnd="@+id/cardImage"
-        android:gravity="center_vertical|center_horizontal"
-        android:paddingTop="100dp"
-        android:textAllCaps="true"
-        android:textColor="@android:color/black" />
+        android:layout_below="@+id/tvRecipientName"
+        android:layout_marginTop="15dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -91,15 +93,14 @@
         android:id="@+id/textViewDuration"
         android:text="20 DAYS TO GO"
         android:textSize="24sp"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:textStyle="bold"
+        android:textColor="@color/colorTextAqua"
+        android:textAlignment="center"
         android:layout_alignRight="@+id/cardImage"
         android:layout_alignEnd="@+id/cardImage"
-        android:gravity="center_vertical|center_horizontal"
-        android:paddingTop="135dp"
-        android:textStyle="bold"
-        android:textColor="@color/colorTextAqua" />
+        android:layout_below="@id/tvEveryDayForTheNext"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="25dp"

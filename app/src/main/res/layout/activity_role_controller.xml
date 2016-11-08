@@ -9,6 +9,19 @@
     <!--<include layout="@layout/progress_bar_fragment"
         android:visibility="visible" />-->
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvChampy"
+        android:text="@string/app_name"
+        android:textSize="25sp"
+        android:textColor="@android:color/white"
+        android:textAllCaps="true"
+        android:layout_above="@+id/Champy_image"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp" />
+
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -17,5 +30,32 @@
         android:contentDescription="@string/champy"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvLostInternetConnection"
+        android:text="@string/lostInternetConnection"
+        android:textSize="20sp"
+        android:textColor="@android:color/white"
+        android:visibility="invisible"
+        android:textAllCaps="true"
+        android:layout_below="@+id/Champy_image"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp" />
+
+    <ImageView
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:id="@+id/imageRetry"
+        android:src="@drawable/reload"
+        android:visibility="invisible"
+        android:layout_below="@+id/tvLostInternetConnection"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" />
+
+
+
+
 
 </RelativeLayout>
