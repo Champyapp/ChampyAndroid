@@ -61,7 +61,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 
         final TextView tvChallengeType = (TextView) tempView.findViewById(R.id.tvChallengeType);
         tvChallengeType.setText(currentCard.getType());
-        tvChallengeType.setTextSize((float)(y*1.3));
+        //tvChallengeType.setTextSize((float)(y*1.7));
         tvChallengeType.setTypeface(typeface);
 
         String itemSenderProgress = currentCard.getSenderProgress();
