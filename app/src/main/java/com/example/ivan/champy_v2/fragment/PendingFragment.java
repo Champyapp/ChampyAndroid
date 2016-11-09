@@ -165,6 +165,7 @@ public class PendingFragment extends Fragment {
         mSocket.disconnect();
     }
 
+
     private void refreshPendingView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         swipeRefreshLayout.setRefreshing(true);
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();

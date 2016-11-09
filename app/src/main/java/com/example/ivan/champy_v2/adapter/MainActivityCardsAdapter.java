@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,11 +57,6 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         cardImage.getLayoutParams().height = y*50;
         if (y > 10) y = 10;
 
-        final TextView tvChallengeType = (TextView) tempView.findViewById(R.id.tvChallengeType);
-        tvChallengeType.setText(currentCard.getType());
-        //tvChallengeType.setTextSize((float)(y*1.7));
-        tvChallengeType.setTypeface(typeface);
-
         String itemSenderProgress = currentCard.getSenderProgress();
         String itemUpdate = currentCard.getUpdated();
         String itemGoal = currentCard.getGoal();
@@ -70,11 +64,11 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         String itemStatus = currentCard.getStatus();
         final String itemInProgressId = currentCard.getId();
 
-        Log.d(TAG, "getView: itemUpdate: " + itemUpdate);
-        Log.d(TAG, "getView: itemGoal: " + itemGoal);
-        Log.d(TAG, "getView: itemType: " + itemType);
-        Log.d(TAG, "getView: itemID: " + itemInProgressId);
-        Log.d(TAG, "getView: itemStatus: " + itemStatus);
+//        Log.d(TAG, "getView: itemUpdate: " + itemUpdate);
+//        Log.d(TAG, "getView: itemGoal: " + itemGoal);
+//        Log.d(TAG, "getView: itemType: " + itemType);
+//        Log.d(TAG, "getView: itemID: " + itemInProgressId);
+//        Log.d(TAG, "getView: itemStatus: " + itemStatus);
 
         String[] senderProgress = toArrayOfStrings(itemSenderProgress);
 
@@ -95,7 +89,10 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                 break;
         }
 
-
+        final TextView tvChallengeType = (TextView) tempView.findViewById(R.id.tvChallengeType);
+        tvChallengeType.setText(currentCard.getType());
+        tvChallengeType.setTextSize((float)(y*1.7));
+        tvChallengeType.setTypeface(typeface);
         final TextView tvChallengeDescription = (TextView) tempView.findViewById(R.id.tvChallengeDescription);
         tvChallengeDescription.setText(itemGoal);
         tvChallengeDescription.setTextSize(y*2);
@@ -131,6 +128,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         CurrentUserHelper user = new CurrentUserHelper(getContext());
         String userId = user.getUserObjectId();
         String token = user.getToken();
+        final ChallengeController cc = new ChallengeController(getContext(), (Activity) getContext(), token, userId);
 
 //        /**
 //         * My algorithm for displaying buttons inside cards view and opportunity for check challenge
@@ -161,7 +159,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         }
 
 
-        final ChallengeController cc = new ChallengeController(getContext(), (Activity) getContext(), token, userId);
+
         if (longSenderProgress != 0L && now > senderProgressMidNight + oneDay) {
             if (!itemType.equals("Wake Up")) {
                 tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
