@@ -49,6 +49,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         CustomItemClickListener listener = itemOnClick;
         this.activity = activity;
     }
+    
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

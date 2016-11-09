@@ -93,29 +93,13 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         FriendsActivityPagerAdapter adapterViewPager = new FriendsActivityPagerAdapter(getSupportFragmentManager(), getApplicationContext());
         viewPager.setAdapter(adapterViewPager);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
 
         // this out method for open "pending" when you click on notification about friends request
         //Bundle bundle = getIntent().getExtras();
         String extras = getIntent().getStringExtra("friend_request");
         if (extras != null) {
             if ("true".equals(extras)) {
-                viewPager.setCurrentItem(1);
+                viewPager.setCurrentItem(0);
                 Intent mExtras = new Intent();
                 mExtras.putExtra("new_friend_request", "true");
             }

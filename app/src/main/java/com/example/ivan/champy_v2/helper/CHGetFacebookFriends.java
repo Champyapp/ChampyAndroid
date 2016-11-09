@@ -89,6 +89,7 @@ public class CHGetFacebookFriends {
                                     cv.put("wins", data.getSuccessChallenges());
                                     cv.put("total", data.getInProgressChallenges());
                                     cv.put("level", data.getLevel().getNumber());
+
                                     if (!checkTableForExist.isInOtherTable(data.get_id())) {
                                         db.insert("mytable", null, cv);
                                         Log.d("GetFacebookFriends", "GetUserFriendsInfo | DBase: vse okay! " + name + " in other");
