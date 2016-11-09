@@ -29,7 +29,6 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 
     private ArrayList<SelfImprovement_model> arrayList;
     public static final String TAG = "CardsAdapterMain";
-    private String token, userId;
     private Snackbar snackbar;
 
     public MainActivityCardsAdapter(Context context, ArrayList<SelfImprovement_model> mArrayList) {
@@ -68,8 +67,8 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         String itemUpdate = currentCard.getUpdated();
         String itemGoal = currentCard.getGoal();
         String itemType = currentCard.getType();
-        final String itemInProgressId = currentCard.getId();
         String itemStatus = currentCard.getStatus();
+        final String itemInProgressId = currentCard.getId();
 
         Log.d(TAG, "getView: itemUpdate: " + itemUpdate);
         Log.d(TAG, "getView: itemGoal: " + itemGoal);
@@ -88,6 +87,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                 imageChallengeLogo.setImageResource(R.drawable.duel_white);
                 TextView tvRecipientName = (TextView)tempView.findViewById(R.id.tvRecipientName);
                 tvRecipientName.setText("with " + currentCard.getVersus());
+                //tvRecipientName.setTextSize((float) (y*1.4));
                 tvRecipientName.setTypeface(typeface);
                 break;
             case "Self-Improvement":
@@ -111,6 +111,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         buttonShare.getLayoutParams() .height = x*7;
 
         final TextView tvEveryDayForTheNext = (TextView) tempView.findViewById(R.id.tvEveryDayForTheNext);
+        tvEveryDayForTheNext.setTypeface(typeface);
         final TextView tvDuration = (TextView) tempView.findViewById(R.id.textViewDuration);
 
         if (itemType.equals("Wake Up") || itemUpdate.equals("true")) { //?
@@ -128,8 +129,8 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         tvDuration.setTextSize(y*2);
 
         CurrentUserHelper user = new CurrentUserHelper(getContext());
-        userId = user.getUserObjectId();
-        token  = user.getToken();
+        String userId = user.getUserObjectId();
+        String token = user.getToken();
 
 //        /**
 //         * My algorithm for displaying buttons inside cards view and opportunity for check challenge
