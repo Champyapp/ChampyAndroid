@@ -93,6 +93,22 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         FriendsActivityPagerAdapter adapterViewPager = new FriendsActivityPagerAdapter(getSupportFragmentManager(), getApplicationContext());
         viewPager.setAdapter(adapterViewPager);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         // this out method for open "pending" when you click on notification about friends request
         //Bundle bundle = getIntent().getExtras();
@@ -231,7 +247,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 
     // load friends from bd
     public void loadUserFriends() {
-        // TODO: 31.08.2016 use AppSync.loadUserFriends method;
         final String API_URL = "http://46.101.213.24:3007";
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user;
@@ -307,7 +322,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                     }
                     c.close();
 
-                    Log.i(TAG, "Displayed friends: " + newfriends.toString());
+                    Log.d(TAG, "Displayed friends: " + newfriends.toString());
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -329,7 +344,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                             });
                         }
                     }).start();
-                    Log.i(TAG, "loadUserFriends: finished");
+                    Log.d(TAG, "loadUserFriends: finished");
                 }
             }
 

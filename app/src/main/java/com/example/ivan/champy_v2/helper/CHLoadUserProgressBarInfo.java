@@ -38,9 +38,9 @@ public class CHLoadUserProgressBarInfo {
                     Data data = decodedResponse.getData();
                     SessionManager sessionManager = new SessionManager(context);
                     sessionManager.setChampyOptions(
-                            data.getAllChallengesCount().toString(),
+                            data.getInProgressChallenges().toString(),
                             data.getSuccessChallenges().toString(),
-                            data.getScore().toString(),
+                            data.getAllChallengesCount().toString(),
                             data.getLevel().getNumber().toString());
                 } else Log.d("LoadUserProgressBar", "onResponse: failed! " + response.message());
             }

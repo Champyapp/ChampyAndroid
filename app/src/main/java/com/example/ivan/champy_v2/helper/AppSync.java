@@ -95,7 +95,7 @@ public class AppSync {
                     sessionManager.setChampyOptions(
                             data.getAllChallengesCount().toString(),
                             data.getSuccessChallenges().toString(),
-                            data.getScore().toString(),
+                            data.getInProgressChallenges().toString(),
                             data.getLevel().getNumber().toString()
                     );
 

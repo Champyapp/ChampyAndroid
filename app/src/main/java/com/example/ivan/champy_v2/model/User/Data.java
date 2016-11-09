@@ -43,7 +43,7 @@ public class Data {
         return failedChallenges;
     }
 
-    public Integer getScore() {
+    public Integer getInProgressChallenges() {
         return inProgressChallengesCount;
     }
 
@@ -55,9 +55,7 @@ public class Data {
         return created;
     }
 
-    public Integer getAllChallengesCount() {
-        return this.inProgressChallengesCount + allChallengesCount;
-    }
+    public Integer getAllChallengesCount() { return this.inProgressChallengesCount + allChallengesCount; }
 
     public String getEmail() {
         return email;

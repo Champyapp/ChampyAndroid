@@ -292,7 +292,7 @@ public class OtherFragment extends Fragment {
                                                     cv.put("photo", photo);
                                                     cv.put("challenges", "" + data.getAllChallengesCount());
                                                     cv.put("wins", "" + data.getSuccessChallenges());
-                                                    cv.put("total", "" + data.getScore());
+                                                    cv.put("total", "" + data.getInProgressChallenges());
                                                     cv.put("level", "" + data.getLevel().getNumber());
 
                                                     // отображаем друзей в списке
@@ -304,7 +304,7 @@ public class OtherFragment extends Fragment {
                                                                 data.get_id(),
                                                                 "" + data.getAllChallengesCount(),
                                                                 "" + data.getSuccessChallenges(),
-                                                                "" + data.getScore(),
+                                                                "" + data.getInProgressChallenges(),
                                                                 "" + data.getLevel().getNumber()
                                                         ));
                                                     } else {

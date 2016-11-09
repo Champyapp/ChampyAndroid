@@ -50,4 +50,10 @@ public class CurrentUserHelper {
         return this.currentSession.getObjectId();
     }
 
+    public String getInProgressCount() {
+        HashMap<String, String> user;
+        user = this.currentSession.getChampyOptions();
+        return user.get("total");
+    }
+
 }
