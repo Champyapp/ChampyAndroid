@@ -21,6 +21,7 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
 
     private List<HistoryChallenge> mContacts;
     private Context mContext;
+    private Typeface typeFace;
 
     public HistoryChallengeAdapter (List<HistoryChallenge> contacts, Context context){
         mContacts = contacts;
@@ -33,9 +34,11 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         LayoutInflater inflater = LayoutInflater.from(context);
         View contactView = inflater.inflate(R.layout.item_history, parent, false);
 
+        typeFace = Typeface.createFromAsset(context.getAssets(), "fonts/bebasneue.ttf");
         TextView tvUserName = (TextView)contactView.findViewById(R.id.challengeNameInHistory);
-        Typeface typeFace = Typeface.createFromAsset(context.getAssets(), "fonts/bebasneue.ttf");
+        TextView tvPoint = (TextView)contactView.findViewById(R.id.counterInProgress);
         tvUserName.setTypeface(typeFace);
+        tvPoint.setTypeface(typeFace);
 
         return new ViewHolder(contactView);
     }
@@ -44,11 +47,11 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
     public void onBindViewHolder(final HistoryChallengeAdapter.ViewHolder viewHolder, int position) {
         HistoryChallenge itemRow = mContacts.get(position);
         TextView nameTextView = viewHolder.nameTextView;
-        String itemRowType = itemRow.getType();
-        String wakeUpTime = itemRow.getChallengeName();
-        String goal = itemRow.getGoal();
-        String versus = itemRow.getVersus();
         String constDuration = itemRow.getConstDuration();
+        String wakeUpTime = itemRow.getChallengeName();
+        String itemRowType = itemRow.getType();
+        String versus = itemRow.getVersus();
+        String goal = itemRow.getGoal();
 
         switch (itemRowType) {
             case "Duel":
@@ -84,7 +87,7 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
                 break;
         }
 
-        Typeface typeFace = Typeface.createFromAsset(mContext.getAssets(), "fonts/bebasneue.ttf");
+        //Typeface typeFace = Typeface.createFromAsset(mContext.getAssets(), "fonts/bebasneue.ttf");
         nameTextView.setTypeface(typeFace);
 
         Glide.with(mContext).load(R.drawable.challenges).override(40, 40).into(viewHolder.wins);

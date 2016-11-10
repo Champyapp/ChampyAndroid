@@ -101,12 +101,7 @@ public class AppSync {
                     );
 
 
-                    /**
-                     * у нас был Call с помощью которого мы брали данные юзера, а внутри call-а
-                     * мы делали еще 2, чтобы взять его InProgressChallenges и UserFriends.
-                     * поэтому здесь надо вызывать эти 2 метода. После вызывался отдельный метод
-                     * который брал инфу про друзей. Сейчас мы вызываем его здесь.
-                     */
+
 
                     CHGetFacebookFriends getFbFriends = new CHGetFacebookFriends(context);
 
