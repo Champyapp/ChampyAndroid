@@ -20,37 +20,37 @@
             android:id="@+id/settings_layout" >
 
             <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/img_profile"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="8dp"
-            android:contentDescription="@string/userPhoto"
-            android:clickable="true" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/img_profile"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:contentDescription="@string/userPhoto"
+                android:clickable="true" />
 
             <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:id="@+id/userNameInSettings"
-            android:layout_below="@+id/img_profile"
-            android:layout_centerHorizontal="true"
-            android:textColor="#ffffff" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/userNameInSettings"
+                android:layout_below="@+id/img_profile"
+                android:layout_centerHorizontal="true"
+                android:textColor="#ffffff" />
 
             <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/general"
-            android:id="@+id/tvGeneral"
-            android:layout_below="@+id/userNameInSettings"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="8dp"
-            android:textColor="#ffffff"
-            android:layout_marginBottom="8dp" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/general"
+                android:id="@+id/tvGeneral"
+                android:layout_below="@+id/userNameInSettings"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="8dp"
+                android:textColor="#ffffff"
+                android:layout_marginBottom="8dp" />
 
             <RelativeLayout
             android:layout_width="wrap_content"
