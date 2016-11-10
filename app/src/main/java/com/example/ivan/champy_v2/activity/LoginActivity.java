@@ -15,7 +15,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.debug.hv.ViewServer;
-import com.example.ivan.champy_v2.MyNotificationManager;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.helper.AppSync;
 import com.example.ivan.champy_v2.interfaces.NewUser;
@@ -278,8 +277,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         goToRoleControllerActivity.putExtra("path_to_pic", api_path);
                         sessionManager.change_avatar(api_path);
                     }
-                    MyNotificationManager notification = new MyNotificationManager(getApplicationContext());
-                    notification.activateDailyNotificationReminder();
+//                    MyNotificationController notification = new MyNotificationController(getApplicationContext());
+//                    notification.activateDailyNotificationReminder();
                     goToRoleControllerActivity.putExtra("name", user_name);
                     startActivity(goToRoleControllerActivity);
                 }

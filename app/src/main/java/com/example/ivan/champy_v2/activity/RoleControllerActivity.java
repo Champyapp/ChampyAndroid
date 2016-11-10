@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.ivan.champy_v2.MyNotificationManager;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.utils.ChallengeController;
@@ -100,8 +99,10 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
             ChallengeController cc = new ChallengeController(getApplicationContext(), this, uToken, uId);
             cc.generateCardsForMainActivity();
         } else {
-            MyNotificationManager controller = new MyNotificationManager(getApplicationContext());
-            controller.deactivateDailyNotificationReminder();
+            /**
+             * Here we need to disable notifications;
+             */
+
             Intent goToActivity = new Intent(this, LoginActivity.class);
             startActivity(goToActivity);
         }

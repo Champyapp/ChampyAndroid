@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.example.ivan.champy_v2.MyNotificationManager;
 import com.example.ivan.champy_v2.activity.RoleControllerActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.interfaces.NewUser;
@@ -134,8 +133,10 @@ public class AppSync {
                         sessionManager.change_avatar(api_path);
                     }
 
-                    MyNotificationManager notification = new MyNotificationManager(context);
-                    notification.activateDailyNotificationReminder();
+                    /**
+                     * Here we need to enable notification
+                     */
+
 
                     context.startActivity(goToRoleActivity);
                 } else {
