@@ -262,6 +262,7 @@ public class ChallengeController {
 
         final long currentMidnight = unixTime - (c.get(Calendar.HOUR_OF_DAY) * 60 * 60)
                 - (c.get(Calendar.MINUTE) * 60) - (c.get(Calendar.SECOND));
+
         Log.d(TAG,"currentMidnight: " + currentMidnight);
 
         date.setTime(((minute * 60) + (hour * 60 * 60) + currentMidnight) * 1000);

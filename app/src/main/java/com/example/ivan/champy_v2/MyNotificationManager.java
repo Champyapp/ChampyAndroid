@@ -1,21 +1,19 @@
-package com.example.ivan.champy_v2.helper;
+package com.example.ivan.champy_v2;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
-import com.example.ivan.champy_v2.NotifyReceiver;
-
 import java.util.Calendar;
 
 import static android.content.Context.ALARM_SERVICE;
 
-public class NotificationController {
+public class MyNotificationManager {
 
     private Context context;
 
-    public NotificationController(Context context) {
+    public MyNotificationManager(Context context) {
         this.context = context;
     }
 

@@ -198,19 +198,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause: ");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d(TAG, "onStop: ");
-        //sockets.socketDisconnect();
-        //sockets.socketOff();
-    }
 
     @Override
     protected void onDestroy() {

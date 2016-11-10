@@ -109,6 +109,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 
         final TextView tvEveryDayForTheNext = (TextView) tempView.findViewById(R.id.tvEveryDayForTheNext);
         tvEveryDayForTheNext.setTypeface(typeface);
+        tvEveryDayForTheNext.setTextSize((float)(y*1.3));
         final TextView tvDuration = (TextView) tempView.findViewById(R.id.textViewDuration);
 
         if (itemType.equals("Wake Up") || itemUpdate.equals("true")) { //?

@@ -115,6 +115,7 @@ public class AppSync {
 
 
 
+
                     String api_path;
                     if (data.getPhoto() != null){
                         @SuppressLint("SdCardPath")
@@ -126,9 +127,6 @@ public class AppSync {
                             Log.i("AppSync", "GetUserPhoto: " + api_path);
                         }
                     }
-
-                    NotificationController controller = new NotificationController(context);
-                    controller.activateDailyNotificationReminder();
 
                     Intent goToRoleActivity = new Intent(context, RoleControllerActivity.class);
                     context.startActivity(goToRoleActivity);

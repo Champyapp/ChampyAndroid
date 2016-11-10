@@ -113,14 +113,14 @@ public class OtherFragment extends Fragment {
 
         Cursor c = db.query("mytable", null, null, null, null, null, null);
         if (c.moveToFirst()) {
-            int challenges = c.getColumnIndex("challenges");
-            int photoColIndex = c.getColumnIndex("photo");
             int nameColIndex = c.getColumnIndex("name");
-            int idColIndex = c.getColumnIndex("id");
+            int photoColIndex = c.getColumnIndex("photo");
             int index = c.getColumnIndex("user_id");
+            int challenges = c.getColumnIndex("challenges");
+            int wins = c.getColumnIndex("wins");
             int total = c.getColumnIndex("total");
             int level = c.getColumnIndex("level");
-            int wins = c.getColumnIndex("wins");
+            int idColIndex = c.getColumnIndex("id");
             do {
                 if (!checkTableForExist.isInOtherTable(c.getString(index)))
                     friends.add(new FriendModel(
