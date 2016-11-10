@@ -404,6 +404,8 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         String newChallReq = user.get("newChallReq");
         String acceptedYour = user.get("acceptedYour");
         String challengeEnd = user.get("challengeEnd");
+        String dailyRemind = user.get("dailyRemind");
+
         map.put("joinedChampy", "true");
         map.put("friendRequests", "true");
         map.put("challengeConfirmation", "true");
@@ -414,7 +416,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         map.put("newChallengeRequests", newChallReq);
         map.put("pushNotifications", pushN);
 
-        Switch switchForPushNotif = (Switch) findViewById(R.id.switch1);
+        Switch switchForPushNotif = (Switch) findViewById(R.id.switchPushNotifications);
         if (pushN.equals("true")) switchForPushNotif.setChecked(true);
         else switchForPushNotif.setChecked(false);
 
@@ -427,7 +429,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
             }
         });
 
-        Switch switchorNewChallRequests = (Switch) findViewById(R.id.switch2);
+        Switch switchorNewChallRequests = (Switch) findViewById(R.id.switchNewChallengeRequest);
         if (newChallReq.equals("true")) switchorNewChallRequests.setChecked(true);
         else switchorNewChallRequests.setChecked(false);
 
@@ -440,7 +442,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
             }
         });
 
-        Switch switchForAcceptedYourChall = (Switch) findViewById(R.id.switch3);
+        Switch switchForAcceptedYourChall = (Switch) findViewById(R.id.switchAcceptedYourChallenge);
         if (acceptedYour.equals("true")) switchForAcceptedYourChall.setChecked(true);
         else switchForAcceptedYourChall.setChecked(false);
 
@@ -453,7 +455,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
             }
         });
 
-        Switch switchForChallengesEnd = (Switch) findViewById(R.id.switch4);
+        Switch switchForChallengesEnd = (Switch) findViewById(R.id.switchChallengeEnd);
         if (challengeEnd.equals("true")) switchForChallengesEnd.setChecked(true);
         else switchForChallengesEnd.setChecked(false);
 
@@ -465,6 +467,20 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                 else map.put("challengeEnd", "false");
             }
         });
+
+        Switch switchDailyRemind = (Switch) findViewById(R.id.switchDailyRemind);
+        if (dailyRemind.equals("true")) switchDailyRemind.setChecked(true);
+        else switchDailyRemind.setChecked(false);
+
+        switchDailyRemind.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.d(TAG, "Daily Remind: " + isChecked);
+                if (isChecked) map.put("dailyRemind", "true");
+                else map.put("dailyRemind", "false");
+            }
+        });
+
     }
 
 

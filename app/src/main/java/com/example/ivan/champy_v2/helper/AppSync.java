@@ -89,7 +89,7 @@ public class AppSync {
                     sessionManager.createUserLoginSession(
                             user_name, email, facebookId, path_to_pic,
                             jwtString, userId, pushN, newChallReq,
-                            acceptedYour, challegeEnd, "true", gcm
+                            acceptedYour, challegeEnd, "true", "true", gcm
                     );
 
                     sessionManager.setChampyOptions(

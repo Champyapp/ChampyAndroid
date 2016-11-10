@@ -6,6 +6,10 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+/**
+ * Class which help us to hide soft keyboard =\
+ * Check it later.
+ */
 public class CHSetupUI {
 
     private static void hideSoftKeyboard(Activity activity) {

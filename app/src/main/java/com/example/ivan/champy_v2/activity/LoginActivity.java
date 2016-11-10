@@ -242,7 +242,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     SessionManager sessionManager = new SessionManager(getApplicationContext());
                     sessionManager.setRefreshPending("false");
                     sessionManager.setRefreshFriends("false");
-                    sessionManager.createUserLoginSession(user_name, email, fb_id, path_to_pic, jwtString, id, pushN, newChallReq, acceptedYour, challegeEnd, "true", gcm);
+                    sessionManager.createUserLoginSession(user_name, email, fb_id, path_to_pic, jwtString,
+                            id, pushN, newChallReq, acceptedYour, challegeEnd, "true", "true", gcm);
                     sessionManager.setChampyOptions(
                             user.getAllChallengesCount().toString(),
                             user.getSuccessChallenges().toString(),

@@ -32,41 +32,27 @@ public class SessionManager {
     }
 
     //Create login session
-    public void createUserLoginSession(String name, String email, String facebook_id, String path_to_pic, String token, String id,
-                                       String pushN, String newChallReq, String acceptedYour, String challengeEnd, String updateDB, String gcm) {
-        // Storing login value as TRUE
-        editor.putBoolean(IS_USER_LOGIN, true);
+    public void createUserLoginSession(String name, String email, String facebook_id, String path_to_pic,
+                                       String token, String id, String pushN, String newChallReq, String acceptedYour,
+                                       String challengeEnd, String dailyRemind, String updateDB, String gcm) {
 
-        // Storing name in pref
-        editor.putString(KEY_NAME, name);
-
-        // Storing email in pref
-        editor.putString(KEY_EMAIL, email);
-
-        editor.putString(KEY_ID, facebook_id);
-
-        editor.putString(KEY_PATH, path_to_pic);
-
-        editor.putString("token", token);
-
-        editor.putString("id", id);
-
-        editor.putString("pushN", pushN);
-
-        editor.putString("newChallReq", newChallReq);
-
-        editor.putString("acceptedYour", acceptedYour);
-
-        editor.putString("challengeEnd", challengeEnd);
-
-        editor.putString("updateDB", updateDB);
-
-        editor.putString(KEY_GCM, gcm);
+        editor.putBoolean(IS_USER_LOGIN, true);         // Storing login value as TRUE
+        editor.putString(KEY_NAME,       name);         // Storing name in pref
+        editor.putString(KEY_EMAIL,      email);        // Storing email in pref
+        editor.putString(KEY_ID,         facebook_id);  // Storing facebookId
+        editor.putString(KEY_PATH,       path_to_pic);  // Storing path to picture (user photo)
+        editor.putString("token",        token);        // Storing token
+        editor.putString("id",           id);           // Storing userId
+        editor.putString("pushN",        pushN);        // Storing notification: PushNotifications
+        editor.putString("newChallReq",  newChallReq);  // Storing notification: new challenge request
+        editor.putString("acceptedYour", acceptedYour); // Storing notification: accepted your challenge
+        editor.putString("challengeEnd", challengeEnd); // Storing notification: challenge end
+        editor.putString("dailyRemind",  dailyRemind);  // Storing notification: daily remind
+        editor.putString("updateDB",     updateDB);     // Storing database update
+        editor.putString(KEY_GCM,        gcm);          // Storing GCM key
 
         Log.i("YO", "LOGGED ID");
-
-        // commit changes
-        editor.commit();
+        editor.commit(); // commit changes
     }
 
     public void togglePushNotification(String t){
@@ -86,6 +72,11 @@ public class SessionManager {
 
     public void toggleChallengeEnd(String t){
         editor.putString("challengeEnd", t);
+        editor.commit();
+    }
+
+    public void toggleDailyRemind(String t) {
+        editor.putString("dailyRemind", t);
         editor.commit();
     }
 
@@ -185,6 +176,7 @@ public class SessionManager {
         user.put("newChallReq",  pref.getString("newChallReq",  null));
         user.put("acceptedYour", pref.getString("acceptedYour", null));
         user.put("challengeEnd", pref.getString("challengeEnd", null));
+        user.put("dailyRemind",  pref.getString("dailyRemind", null));
         user.put("updateDB",     pref.getString("updateDB",     null));
 
         return user;
@@ -197,7 +189,7 @@ public class SessionManager {
     public void logout(Activity activity) {
         LoginManager.getInstance().logOut();
         // Clearing all user data from Shared Preferences
-        editor.clear(); // TODO: 17.10.2016 check if this really need to do.
+        editor.clear();
         editor.commit();
         Intent intent = new Intent(activity, RoleControllerActivity.class);
         activity.startActivity(intent);

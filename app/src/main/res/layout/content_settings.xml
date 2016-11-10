@@ -14,413 +14,456 @@
         android:layout_height="wrap_content"
         android:id="@+id/scrollView">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/settings_layout" >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/settings_layout" >
 
-<ImageView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:id="@+id/img_profile"
-    android:layout_alignParentTop="true"
-    android:layout_centerHorizontal="true"
-    android:layout_marginTop="8dp"
-    android:contentDescription="@string/userPhoto"
-    android:clickable="true" />
+            <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/img_profile"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@string/userPhoto"
+            android:clickable="true" />
 
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:textAppearance="?android:attr/textAppearanceLarge"
-    android:id="@+id/userNameInSettings"
-    android:layout_below="@+id/img_profile"
-    android:layout_centerHorizontal="true"
-    android:textColor="#ffffff" />
+            <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/userNameInSettings"
+            android:layout_below="@+id/img_profile"
+            android:layout_centerHorizontal="true"
+            android:textColor="#ffffff" />
 
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:textAppearance="?android:attr/textAppearanceMedium"
-    android:text="@string/general"
-    android:id="@+id/tvGeneral"
-    android:layout_below="@+id/userNameInSettings"
-    android:layout_alignParentLeft="true"
-    android:layout_alignParentStart="true"
-    android:layout_marginTop="8dp"
-    android:layout_marginLeft="8dp"
-    android:textColor="#ffffff"
-    android:layout_marginBottom="8dp" />
-<RelativeLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/tvGeneral"
-    android:visibility="visible"
-    android:id="@+id/change_name"
-    android:layout_alignParentLeft="true"
-    android:layout_alignParentStart="true">
+            <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/general"
+            android:id="@+id/tvGeneral"
+            android:layout_below="@+id/userNameInSettings"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
+            android:textColor="#ffffff"
+            android:layout_marginBottom="8dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/enter_new_name"
-        android:id="@+id/tvEntedYourName"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:textColor="#ffffff"
-        android:visibility="gone"
-        android:layout_marginTop="8dp" />
+            <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvGeneral"
+            android:visibility="visible"
+            android:id="@+id/change_name"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/new_name"
-        android:layout_below="@+id/tvEntedYourName"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:maxLength="25"
-        android:singleLine="true"
-        android:visibility="gone"
-        android:textColor="#ffffff"
-        android:inputType="text" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/enter_new_name"
+                    android:id="@+id/tvEntedYourName"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="#ffffff"
+                    android:visibility="gone"
+                    android:layout_marginTop="8dp" />
 
-    <ImageButton
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:id="@+id/imageButtonAcceptMaybe"
-        android:layout_below="@+id/new_name"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/accept1"
-        android:visibility="gone" />
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/new_name"
+                    android:layout_below="@+id/tvEntedYourName"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:maxLength="25"
+                    android:singleLine="true"
+                    android:visibility="gone"
+                    android:textColor="#ffffff"
+                    android:inputType="text" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/name"
-        android:id="@+id/tvName"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:textColor="#ffffff"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:clickable="true"
-        android:layout_marginLeft="16dp"
-        android:visibility="visible" />
+                <ImageButton
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:id="@+id/imageButtonAcceptMaybe"
+                    android:layout_below="@+id/new_name"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/accept1"
+                    android:visibility="gone" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#339997"
-        android:id="@+id/view11"
-        android:visibility="gone"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/tvName"
-        android:layout_alignEnd="@+id/tvName" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/name"
+                    android:id="@+id/tvName"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:textColor="#ffffff"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:clickable="true"
+                    android:layout_marginLeft="16dp"
+                    android:visibility="visible" />
 
-</RelativeLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="8dp"
-        android:background="#339997"
-        android:id="@+id/view"
-        android:visibility="visible"
-        android:layout_below="@+id/change_name"
-        android:layout_alignRight="@+id/change_name"
-        android:layout_alignEnd="@+id/change_name" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#339997"
+                    android:id="@+id/view11"
+                    android:visibility="gone"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignRight="@+id/tvName"
+                    android:layout_alignEnd="@+id/tvName" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/avatar"
-        android:id="@+id/avatar"
-        android:layout_below="@+id/view"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:clickable="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:textColor="#ffffff"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="16dp" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="8dp"
-        android:background="#339997"
-        android:id="@+id/view1"
-        android:visibility="visible"
-        android:layout_below="@+id/avatar"
-        android:layout_alignRight="@+id/change_name"
-        android:layout_alignEnd="@+id/change_name" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/delete_account"
-        android:id="@+id/delete_acc"
-        android:layout_below="@+id/view1"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:clickable="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:textColor="#ffffff"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="16dp" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#339997"
-        android:id="@+id/view2"
-        android:layout_marginTop="8dp"
-        android:visibility="visible"
-        android:layout_below="@+id/delete_acc"
-        android:layout_alignRight="@+id/change_name"
-        android:layout_alignEnd="@+id/change_name" />
+            </RelativeLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/notifications"
-        android:id="@+id/tvNotifications"
-        android:layout_below="@+id/view2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="8dp"
-        android:textColor="#ffffff" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:background="#339997"
+                android:id="@+id/view"
+                android:visibility="visible"
+                android:layout_below="@+id/change_name"
+                android:layout_alignRight="@+id/change_name"
+                android:layout_alignEnd="@+id/change_name" />
 
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/push_notifications"
-        android:id="@+id/switch1"
-        android:layout_below="@+id/tvNotifications"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/delete_acc"
-        android:layout_alignEnd="@+id/delete_acc"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="16dp"
-        android:textColor="#ffffff"
-        android:enabled="true" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#339997"
-        android:id="@+id/view3"
-        android:layout_marginTop="8dp"
-        android:visibility="visible"
-        android:layout_below="@+id/switch1"
-        android:layout_alignRight="@+id/change_name"
-        android:layout_alignEnd="@+id/change_name" />
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/new_challenge_requests"
-        android:id="@+id/switch2"
-        android:layout_below="@+id/view3"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/delete_acc"
-        android:layout_alignEnd="@+id/delete_acc"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="16dp"
-        android:textColor="#ffffff" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#339997"
-        android:id="@+id/view4"
-        android:layout_marginTop="8dp"
-        android:visibility="visible"
-        android:layout_below="@+id/switch2"
-        android:layout_alignRight="@+id/change_name"
-        android:layout_alignEnd="@+id/change_name" />
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/accepted_your_challenge"
-        android:id="@+id/switch3"
-        android:layout_below="@+id/view4"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/delete_acc"
-        android:layout_alignEnd="@+id/delete_acc"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="16dp"
-        android:textColor="#ffffff" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#339997"
-        android:id="@+id/view5"
-        android:layout_marginTop="8dp"
-        android:visibility="visible"
-        android:layout_below="@+id/switch3"
-        android:layout_alignRight="@+id/change_name"
-        android:layout_alignEnd="@+id/change_name" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/avatar"
+                android:id="@+id/avatar"
+                android:layout_below="@+id/view"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:clickable="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:textColor="#ffffff"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="16dp" />
 
-        <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/challenge_end"
-        android:id="@+id/switch4"
-        android:layout_below="@+id/view5"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/delete_acc"
-        android:layout_alignEnd="@+id/delete_acc"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="16dp"
-        android:textColor="#ffffff" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#339997"
-        android:id="@+id/view6"
-        android:layout_marginTop="8dp"
-        android:visibility="visible"
-        android:layout_below="@+id/switch4"
-        android:layout_alignRight="@+id/change_name"
-        android:layout_alignEnd="@+id/change_name" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:background="#339997"
+                android:id="@+id/view1"
+                android:visibility="visible"
+                android:layout_below="@+id/avatar"
+                android:layout_alignRight="@+id/change_name"
+                android:layout_alignEnd="@+id/change_name" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/legal"
-        android:id="@+id/tvLegal"
-        android:layout_below="@+id/view6"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="8dp"
-        android:textColor="#ffffff" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/delete_account"
+                android:id="@+id/delete_acc"
+                android:layout_below="@+id/view1"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:clickable="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:textColor="#ffffff"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="16dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/about"
-        android:id="@+id/about"
-        android:layout_below="@+id/tvLegal"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:textColor="#ffffff"
-        android:layout_alignRight="@+id/switch4"
-        android:layout_alignEnd="@+id/switch4"
-        android:clickable="true" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#339997"
-        android:id="@+id/view7"
-        android:layout_marginTop="8dp"
-        android:visibility="visible"
-        android:layout_below="@+id/about"
-        android:layout_alignRight="@+id/change_name"
-        android:layout_alignEnd="@+id/change_name" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#339997"
+                android:id="@+id/view2"
+                android:layout_marginTop="8dp"
+                android:visibility="visible"
+                android:layout_below="@+id/delete_acc"
+                android:layout_alignRight="@+id/change_name"
+                android:layout_alignEnd="@+id/change_name" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/privacy_policy"
-        android:id="@+id/privacy"
-        android:layout_below="@+id/view7"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:textColor="#ffffff"
-        android:layout_alignRight="@+id/switch4"
-        android:layout_alignEnd="@+id/switch4"
-        android:clickable="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/notifications"
+                android:id="@+id/tvNotifications"
+                android:layout_below="@+id/view2"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="8dp"
+                android:textColor="#ffffff" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#339997"
-        android:id="@+id/view8"
-        android:layout_marginTop="8dp"
-        android:visibility="visible"
-        android:layout_below="@+id/privacy"
-        android:layout_alignRight="@+id/change_name"
-        android:layout_alignEnd="@+id/change_name" />
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/push_notifications"
+                android:id="@+id/switchPushNotifications"
+                android:layout_below="@+id/tvNotifications"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignRight="@+id/delete_acc"
+                android:layout_alignEnd="@+id/delete_acc"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:textColor="#ffffff"
+                android:enabled="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/terms"
-        android:id="@+id/terms"
-        android:layout_below="@+id/view8"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:textColor="#ffffff"
-        android:layout_alignRight="@+id/switch4"
-        android:layout_alignEnd="@+id/switch4"
-        android:clickable="true" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#339997"
+                android:id="@+id/view3"
+                android:layout_marginTop="8dp"
+                android:visibility="visible"
+                android:layout_below="@+id/switchPushNotifications"
+                android:layout_alignRight="@+id/change_name"
+                android:layout_alignEnd="@+id/change_name" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#339997"
-        android:id="@+id/view9"
-        android:layout_marginTop="8dp"
-        android:visibility="visible"
-        android:layout_below="@+id/terms"
-        android:layout_alignRight="@+id/change_name"
-        android:layout_alignEnd="@+id/change_name" />
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/new_challenge_requests"
+                android:id="@+id/switchNewChallengeRequest"
+                android:layout_below="@+id/view3"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignRight="@+id/delete_acc"
+                android:layout_alignEnd="@+id/delete_acc"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:textColor="#ffffff" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/contact_us"
-        android:id="@+id/contact_us"
-        android:layout_below="@+id/view9"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:textColor="#ffffff"
-        android:layout_alignRight="@+id/switch4"
-        android:layout_alignEnd="@+id/switch4"
-        android:clickable="true"
-        android:layout_marginBottom="8dp" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#339997"
+                android:id="@+id/view4"
+                android:layout_marginTop="8dp"
+                android:visibility="visible"
+                android:layout_below="@+id/switchNewChallengeRequest"
+                android:layout_alignRight="@+id/change_name"
+                android:layout_alignEnd="@+id/change_name" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#339997"
-        android:id="@+id/view10"
-        android:layout_marginTop="8dp"
-        android:visibility="visible"
-        android:layout_below="@+id/privacy"
-        android:layout_alignRight="@+id/change_name"
-        android:layout_alignEnd="@+id/change_name" />
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/accepted_your_challenge"
+                android:id="@+id/switchAcceptedYourChallenge"
+                android:layout_below="@+id/view4"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignRight="@+id/delete_acc"
+                android:layout_alignEnd="@+id/delete_acc"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:textColor="#ffffff" />
 
-    </RelativeLayout>
+            <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#339997"
+            android:id="@+id/view5"
+            android:layout_marginTop="8dp"
+            android:visibility="visible"
+            android:layout_below="@+id/switchAcceptedYourChallenge"
+            android:layout_alignRight="@+id/change_name"
+            android:layout_alignEnd="@+id/change_name" />
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/challenge_end"
+                android:id="@+id/switchChallengeEnd"
+                android:layout_below="@+id/view5"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignRight="@+id/delete_acc"
+                android:layout_alignEnd="@+id/delete_acc"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:textColor="#ffffff" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#339997"
+                android:id="@+id/view6"
+                android:layout_marginTop="8dp"
+                android:visibility="visible"
+                android:layout_below="@+id/switchChallengeEnd"
+                android:layout_alignRight="@+id/change_name"
+                android:layout_alignEnd="@+id/change_name" />
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/daily_reminder"
+                android:id="@+id/switchDailyRemind"
+                android:layout_below="@+id/view6"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignRight="@+id/delete_acc"
+                android:layout_alignEnd="@+id/delete_acc"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:textColor="#ffffff" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#339997"
+                android:id="@+id/viewLine"
+                android:layout_marginTop="8dp"
+                android:visibility="visible"
+                android:layout_below="@+id/switchDailyRemind"
+                android:layout_alignRight="@+id/change_name"
+                android:layout_alignEnd="@+id/change_name" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/legal"
+                android:id="@+id/tvLegal"
+                android:layout_below="@+id/viewLine"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="8dp"
+                android:textColor="#ffffff" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/about"
+                android:id="@+id/about"
+                android:layout_below="@+id/tvLegal"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:textColor="#ffffff"
+                android:layout_alignRight="@+id/switchChallengeEnd"
+                android:layout_alignEnd="@+id/switchChallengeEnd"
+                android:clickable="true" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#339997"
+                android:id="@+id/view7"
+                android:layout_marginTop="8dp"
+                android:visibility="visible"
+                android:layout_below="@+id/about"
+                android:layout_alignRight="@+id/change_name"
+                android:layout_alignEnd="@+id/change_name" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/privacy_policy"
+                android:id="@+id/privacy"
+                android:layout_below="@+id/view7"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:textColor="#ffffff"
+                android:layout_alignRight="@+id/switchChallengeEnd"
+                android:layout_alignEnd="@+id/switchChallengeEnd"
+                android:clickable="true" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#339997"
+                android:id="@+id/view8"
+                android:layout_marginTop="8dp"
+                android:visibility="visible"
+                android:layout_below="@+id/privacy"
+                android:layout_alignRight="@+id/change_name"
+                android:layout_alignEnd="@+id/change_name" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/terms"
+                android:id="@+id/terms"
+                android:layout_below="@+id/view8"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:textColor="#ffffff"
+                android:layout_alignRight="@+id/switchChallengeEnd"
+                android:layout_alignEnd="@+id/switchChallengeEnd"
+                android:clickable="true" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#339997"
+                android:id="@+id/view9"
+                android:layout_marginTop="8dp"
+                android:visibility="visible"
+                android:layout_below="@+id/terms"
+                android:layout_alignRight="@+id/change_name"
+                android:layout_alignEnd="@+id/change_name" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/contact_us"
+                android:id="@+id/contact_us"
+                android:layout_below="@+id/view9"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:textColor="#ffffff"
+                android:layout_alignRight="@+id/switchChallengeEnd"
+                android:layout_alignEnd="@+id/switchChallengeEnd"
+                android:clickable="true"
+                android:layout_marginBottom="8dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#339997"
+                android:id="@+id/view10"
+                android:layout_marginTop="8dp"
+                android:visibility="visible"
+                android:layout_below="@+id/privacy"
+                android:layout_alignRight="@+id/change_name"
+                android:layout_alignEnd="@+id/change_name" />
+
+        </RelativeLayout>
 
     </ScrollView>
 

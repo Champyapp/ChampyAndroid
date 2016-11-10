@@ -198,5 +198,6 @@
     <string name="share_text2">\nTry and you - www.champyapp.com/download</string>
     <string name="how_would_you_like_to_share">How would you like to share?</string>
     <string name="avatar">Avatar</string>
+    <string name="daily_reminder">Daily Reminder</string>
 
 </resources>
