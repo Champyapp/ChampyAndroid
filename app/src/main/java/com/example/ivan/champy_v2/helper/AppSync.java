@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.example.ivan.champy_v2.MyNotificationManager;
 import com.example.ivan.champy_v2.activity.RoleControllerActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.interfaces.NewUser;
@@ -116,7 +117,7 @@ public class AppSync {
 
 
 
-                    String api_path;
+                    String api_path = null;
                     if (data.getPhoto() != null){
                         @SuppressLint("SdCardPath")
                         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
@@ -129,6 +130,18 @@ public class AppSync {
                     }
 
                     Intent goToRoleActivity = new Intent(context, RoleControllerActivity.class);
+
+                    if (api_path == null) {
+                        goToRoleActivity.putExtra("path_to_pic", path_to_pic);
+                        sessionManager.change_avatar(path_to_pic);
+                    } else {
+                        goToRoleActivity.putExtra("path_to_pic", api_path);
+                        sessionManager.change_avatar(api_path);
+                    }
+
+                    MyNotificationManager notification = new MyNotificationManager(context);
+                    notification.activateDailyNotificationReminder();
+
                     context.startActivity(goToRoleActivity);
                 } else {
                     Log.i(TAG, "getUserProfile onResponse: Failed " + response.message());

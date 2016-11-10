@@ -272,7 +272,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     if (api_path == null) {
                         // то... мы стягиваем стандартную фотку facebook-а и заливаем её
                         goToRoleControllerActivity.putExtra("path_to_pic", path_to_pic);
-                        sessionManager.change_avatar(path_to_pic); // не уверен что это надо
+                        sessionManager.change_avatar(path_to_pic);
                     } else {
                         // ну... а если получилось стянуть норм фотку, то заливаем её
                         goToRoleControllerActivity.putExtra("path_to_pic", api_path);
