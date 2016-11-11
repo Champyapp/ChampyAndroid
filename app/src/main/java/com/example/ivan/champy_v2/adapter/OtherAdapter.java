@@ -1,10 +1,8 @@
 package com.example.ivan.champy_v2.adapter;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
@@ -19,18 +17,13 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.ivan.champy_v2.model.FriendModel;
-import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.R;
-import com.example.ivan.champy_v2.utils.SessionManager;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.interfaces.Friends;
-import com.facebook.AccessToken;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
+import com.example.ivan.champy_v2.model.FriendModel;
+import com.example.ivan.champy_v2.utils.OfflineMode;
+import com.example.ivan.champy_v2.utils.SessionManager;
 import com.facebook.FacebookSdk;
-import com.facebook.share.model.AppInviteContent;
-import com.facebook.share.widget.AppInviteDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,10 +40,14 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
 
     final private String API_URL = "http://46.101.213.24:3007";
     final private String TAG = "myLogs";
-    private List<FriendModel> mContacts;
     private com.facebook.CallbackManager CallbackManager;
-    private Context context;
+    private SessionManager sessionManager;
+    private List<FriendModel> mContacts;
+    private OfflineMode offlineMode;
+    private String token, id;
     private Activity activity;
+    private Typeface typeFace;
+    private Context context;
     private ArrayList<Integer> selected = new ArrayList<>();
 
 
@@ -69,7 +66,7 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
         // Inflate the custom layout
         View contactView = inflater.inflate(R.layout.item_friends, parent, false);
         TextView tvUserName = (TextView)contactView.findViewById(R.id.userName);
-        Typeface typeFace = Typeface.createFromAsset(context.getAssets(), "fonts/bebasneue.ttf");
+        typeFace = Typeface.createFromAsset(context.getAssets(), "fonts/bebasneue.ttf");
         tvUserName.setTypeface(typeFace);
 
         // Return a new holder instance
@@ -96,6 +93,13 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
             }
         });
 
+        sessionManager = new SessionManager(context);
+        offlineMode = new OfflineMode();
+        HashMap<String, String> user;
+        user = sessionManager.getUserDetails();
+        token = user.get("token");
+        id = user.get("id");
+
         return viewHolder;
     }
 
@@ -107,8 +111,6 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
         // Set item views based on the data model
         TextView nameTextView = viewHolder.nameTextView;
         nameTextView.setText(contact.getName());
-        Typeface typeFace = Typeface.createFromAsset(context.getAssets(), "fonts/bebasneue.ttf");
-
 
         /**
          * below close view
@@ -169,21 +171,41 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
         if (selected.contains(position)) {
 
             Glide.with(context).load(R.drawable.wins).override(40, 40).into(imageViewWinsOpen);
-            Glide.with(context).load(contact.getPicture()).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).transform(new CropCircleTransformation(context)).placeholder(R.drawable.icon_champy).override(80, 80).dontAnimate().into(imageViewUserAvatar);
             Glide.with(context).load(R.drawable.challenges).override(40, 40).into(imageViewChallengesOpen);
             Glide.with(context).load(R.drawable.total).override(40, 40).into(imageViewTotalOpen);
-            Glide.with(context).load(R.drawable.start_circle_00026).placeholder(R.drawable.icon_champy).into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleChall));
-            Glide.with(context).load(R.drawable.start_circle_00026).placeholder(R.drawable.icon_champy).into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleWins));
-            Glide.with(context).load(R.drawable.start_circle_00026).placeholder(R.drawable.icon_champy).into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleTotal));
+            Glide.with(context).load(R.drawable.start_circle_00026).placeholder(R.drawable.icon_champy)
+                    .into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleChall));
+            Glide.with(context).load(R.drawable.start_circle_00026).placeholder(R.drawable.icon_champy)
+                    .into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleWins));
+            Glide.with(context).load(R.drawable.start_circle_00026).placeholder(R.drawable.icon_champy).
+                    into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleTotal));
+
+            Glide.with(context)
+                    .load(contact.getPicture())
+                    .asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .transform(new CropCircleTransformation(context))
+                    .placeholder(R.drawable.icon_champy)
+                    .override(80, 80)
+                    .into(imageViewUserAvatar);
+
             // made our "open-view" is visible and 'close-view' invisible
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.VISIBLE);
             viewHolder.itemView.findViewById(R.id.row_friends_list_close).setVisibility(View.GONE);
         }
         else {
             Glide.with(context).load(R.drawable.wins).override(40, 40).into(imageViewWins);
-            Glide.with(context).load(contact.getPicture()).asBitmap().transform(new CropCircleTransformation(context)).placeholder(R.drawable.icon_champy).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).override(80, 80).dontAnimate().into(imageViewFriendPicture);
             Glide.with(context).load(R.drawable.challenges).override(40, 40).into(imageViewChallenges);
             Glide.with(context).load(R.drawable.total).override(40, 40).into(imageViewTotal);
+            Glide.with(context)
+                    .load(contact.getPicture())
+                    .asBitmap()
+                    .transform(new CropCircleTransformation(context))
+                    .placeholder(R.drawable.icon_champy)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .override(80, 80)
+                    .into(imageViewFriendPicture);
+
             // made our "close-view" is visible and 'open-view' invisible
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.GONE);
             viewHolder.itemView.findViewById(R.id.row_friends_list_close).setVisibility(View.VISIBLE);
@@ -194,70 +216,9 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
         viewHolder.add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OfflineMode offlineMode = new OfflineMode();
                 if (offlineMode.isConnectedToRemoteAPI(activity)) {
-                    final SessionManager sessionManager = new SessionManager(context);
-                    HashMap<String, String> user;
-                    user = sessionManager.getUserDetails();
-                    final String token = user.get("token");
-                    final String id = user.get("id");
-                    
                     String friend = mContacts.get(position).getID();
-
-                    if (friend == null) {
-                        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                switch (which) {
-                                    case DialogInterface.BUTTON_POSITIVE:
-                                        String appLinkUrl, previewImageUrl;
-
-                                        appLinkUrl = "https://fb.me/583663125129793";
-                                        previewImageUrl = "http://champyapp.com/images/Icon.png";
-
-                                        if (AccessToken.getCurrentAccessToken() != null) {
-                                            FacebookSdk.sdkInitialize(context);
-                                            CallbackManager = com.facebook.CallbackManager.Factory.create();
-                                            FacebookCallback<AppInviteDialog.Result> facebookCallback= new FacebookCallback<AppInviteDialog.Result>() {
-                                                @Override
-                                                public void onSuccess(AppInviteDialog.Result result) {
-                                                    Log.i(TAG, "InviteCallback - SUCCESS!" + result.getData());
-                                                }
-
-                                                @Override
-                                                public void onCancel() {
-                                                    Log.i(TAG, "InviteCallback - CANCEL!");
-                                                }
-
-                                                @Override
-                                                public void onError(FacebookException e) {
-                                                    Log.e(TAG, "InviteCallback - ERROR! " + e.getMessage());
-                                                }
-
-                                            };
-                                            AppInviteDialog appInviteDialog = new AppInviteDialog(activity);
-                                            if (AppInviteDialog.canShow()) {
-                                                AppInviteContent.Builder content = new AppInviteContent.Builder();
-                                                content.setApplinkUrl(appLinkUrl);
-                                                content.setPreviewImageUrl(previewImageUrl);
-                                                AppInviteContent appInviteContent = content.build();
-                                                appInviteDialog.registerCallback(CallbackManager, facebookCallback);
-                                                AppInviteDialog.show(activity, appInviteContent);
-                                            }
-                                        }
-                                        break;
-                                    case DialogInterface.BUTTON_NEGATIVE:
-                                        break;
-                                }
-                            }
-                        };
-                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                        builder.setMessage("This user has not installed Champy. Do you want to send invite?")
-                                .setPositiveButton("Yes", dialogClickListener)
-                                .setNegativeButton("No", dialogClickListener)
-                                .show();
-                    }
-                    /*if (friend != null)*/  else {
+                    if (friend != null) {
                         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
                         DBHelper dbHelper = new DBHelper(context);
                         final SQLiteDatabase db = dbHelper.getWritableDatabase();

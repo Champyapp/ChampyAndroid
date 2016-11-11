@@ -38,12 +38,15 @@ import retrofit.Retrofit;
 
 public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHolder> {
 
-    final private String API_URL = "http://46.101.213.24:3007";
-    final private String TAG = "myLogs";
+    private static final String API_URL = "http://46.101.213.24:3007";
+    private static final String TAG = "myLogs";
     private List<Pending_friend> mContacts;
+    private String token, id;
     private Context context;
     private Activity activity;
     private CustomItemClickListener listener;
+    private SessionManager sessionManager;
+    private OfflineMode offlineMode;
     private ArrayList<Integer> selected = new ArrayList<>();
 
 
@@ -90,6 +93,14 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                 }
             }
         });
+
+        sessionManager = new SessionManager(context);
+        offlineMode = new OfflineMode();
+        HashMap<String, String> user;
+        user = sessionManager.getUserDetails();
+        token = user.get("token");
+        id = user.get("id");
+
         return viewHolder;
     }
 
@@ -159,14 +170,23 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         // при нажатии нужно переобъявлять view, поэтому делаем это.
         // отвечает за вид в развернутом состоянии
         if (selected.contains(position)) {
-
             Glide.with(context).load(R.drawable.wins).override(40, 40).into(imageViewWinsOpen);
-            Glide.with(context).load(contact.getPicture()).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).transform(new CropCircleTransformation(context)).placeholder(R.drawable.icon_champy).override(80, 80).dontAnimate().into(imageViewUserAvatar);
             Glide.with(context).load(R.drawable.challenges).override(40, 40).into(imageViewChallengesOpen);
             Glide.with(context).load(R.drawable.total).override(40, 40).into(imageViewTotalOpen);
-            Glide.with(context).load(R.drawable.start_circle_00026).placeholder(R.drawable.icon_champy).into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleChall));
-            Glide.with(context).load(R.drawable.start_circle_00026).placeholder(R.drawable.icon_champy).into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleWins));
-            Glide.with(context).load(R.drawable.start_circle_00026).placeholder(R.drawable.icon_champy).into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleTotal));
+            Glide.with(context).load(R.drawable.start_circle_00026).placeholder(R.drawable.icon_champy)
+                    .into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleChall));
+            Glide.with(context).load(R.drawable.start_circle_00026).placeholder(R.drawable.icon_champy)
+                    .into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleWins));
+            Glide.with(context).load(R.drawable.start_circle_00026).placeholder(R.drawable.icon_champy)
+                    .into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleTotal));
+            Glide.with(context)
+                    .load(contact.getPicture())
+                    .asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .transform(new CropCircleTransformation(context))
+                    .placeholder(R.drawable.icon_champy)
+                    .override(80, 80)
+                    .into(imageViewUserAvatar);
 
             // response for visible of button 'add' (owner = myself);
             if (contact.getOwner().equals("true")) {
@@ -185,9 +205,16 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         }
         else {
             Glide.with(context).load(R.drawable.wins).override(40, 40).into(imageViewWins);
-            Glide.with(context).load(contact.getPicture()).asBitmap().transform(new CropCircleTransformation(context)).placeholder(R.drawable.icon_champy).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).override(80, 80).dontAnimate().into(imageViewFriendPicture);
             Glide.with(context).load(R.drawable.challenges).override(40, 40).into(imageViewChallenges);
             Glide.with(context).load(R.drawable.total).override(40, 40).into(imageViewTotal);
+            Glide.with(context)
+                    .load(contact.getPicture())
+                    .asBitmap()
+                    .transform(new CropCircleTransformation(context))
+                    .placeholder(R.drawable.icon_champy)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .override(80, 80)
+                    .into(imageViewFriendPicture);
             // made our "close-view" is visible and 'open-view' invisible
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.GONE);
             viewHolder.itemView.findViewById(R.id.row_friends_list_close).setVisibility(View.VISIBLE);
@@ -196,13 +223,8 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         viewHolder.block.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final SessionManager sessionManager = new SessionManager(context);
-                OfflineMode offlineMode = new OfflineMode();
                 if (offlineMode.isConnectedToRemoteAPI(activity)) {
-                    HashMap<String, String> user;
-                    user = sessionManager.getUserDetails();
-                    final String token = user.get("token");
-                    final String id = user.get("id");
+
                     String friend = mContacts.get(position).getID();
                     Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
@@ -215,6 +237,8 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                         public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
                             if (response.isSuccess()) Log.d(TAG, "Status: Removed ");
                             else Log.d(TAG, "Status: " + response.toString());
+                            String myLog = (response.isSuccess()) ? "Status: Removed" : "Status: " + response.toString();
+                            Log.d(TAG, "onResponse: " + myLog);
                         }
 
                         @Override
@@ -234,13 +258,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         viewHolder.add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OfflineMode offlineMode = new OfflineMode();
                 if (offlineMode.isConnectedToRemoteAPI(activity)) {
-                    final SessionManager sessionManager = new SessionManager(context);
-                    HashMap<String, String> user;
-                    user = sessionManager.getUserDetails();
-                    final String token = user.get("token");
-                    final String id = user.get("id");
                     String friend = mContacts.get(position).getID();
                     Log.d(TAG, "User: " + friend);
                     if (friend != null) {

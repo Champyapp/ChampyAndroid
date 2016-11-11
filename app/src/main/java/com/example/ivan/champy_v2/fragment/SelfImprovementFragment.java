@@ -139,11 +139,11 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         user = sessionManager.getUserDetails();
         final String token  = user.get("token");
         final String userId = user.get("id");
-
+        cc = new ChallengeController(getContext(), getActivity(), token, userId);
         snackbar = Snackbar.make(view, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cc = new ChallengeController(getContext(), getActivity(), token, userId);
+
                 if (position == size) {
                     description = etGoal.getText().toString();
                     duration = etDays.getText().toString();

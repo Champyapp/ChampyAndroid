@@ -16,15 +16,15 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.ivan.champy_v2.R;
+import com.example.ivan.champy_v2.activity.DuelActivity;
+import com.example.ivan.champy_v2.interfaces.CustomItemClickListener;
 import com.example.ivan.champy_v2.model.FriendModel;
 import com.example.ivan.champy_v2.utils.OfflineMode;
-import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.utils.SessionManager;
-import com.example.ivan.champy_v2.activity.DuelActivity;
-import com.example.ivan.champy_v2.helper.CurrentUserHelper;
-import com.example.ivan.champy_v2.interfaces.CustomItemClickListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -39,6 +39,9 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     final private String API_URL = "http://46.101.213.24:3007";
     final private String TAG = "FriendsAdapter";
     private List<FriendModel> mContacts;
+    private SessionManager sessionManager;
+    private OfflineMode offlineMode;
+    private String token, id;
     private Context context;
     private Activity activity;
     private ArrayList<Integer> selected = new ArrayList<>();
@@ -83,6 +86,13 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             }
         });
 
+        sessionManager = new SessionManager(context);
+        offlineMode = new OfflineMode();
+        HashMap<String, String> user;
+        user = sessionManager.getUserDetails();
+        token = user.get("token");
+        id = user.get("id");
+
         return viewHolder;
     }
 
@@ -94,7 +104,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         TextView tvUserName = viewHolder.nameTextView;
         tvUserName.setText(contact.getName());
         Typeface typeFace = Typeface.createFromAsset(context.getAssets(), "fonts/bebasneue.ttf");
-
 
         /**
          * below close view
@@ -155,21 +164,35 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         if (selected.contains(position)) {
 
             Glide.with(context).load(R.drawable.wins).override(40, 40).into(imageViewWinsOpen);
-            Glide.with(context).load(contact.getPicture()).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).transform(new CropCircleTransformation(context)).placeholder(R.drawable.icon_champy).override(80, 80).dontAnimate().into(imageViewUserAvatar);
             Glide.with(context).load(R.drawable.challenges).override(40, 40).into(imageViewChallengesOpen);
             Glide.with(context).load(R.drawable.total).override(40, 40).into(imageViewTotalOpen);
             Glide.with(context).load(R.drawable.start_circle_00026).placeholder(R.drawable.icon_champy).into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleChall));
             Glide.with(context).load(R.drawable.start_circle_00026).placeholder(R.drawable.icon_champy).into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleWins));
             Glide.with(context).load(R.drawable.start_circle_00026).placeholder(R.drawable.icon_champy).into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleTotal));
+            Glide.with(context)
+                    .load(contact.getPicture())
+                    .asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .transform(new CropCircleTransformation(context))
+                    .placeholder(R.drawable.icon_champy)
+                    .override(80, 80)
+                    .into(imageViewUserAvatar);
             // made our "open-view" is visible and 'close-view' invisible
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.VISIBLE);
             viewHolder.itemView.findViewById(R.id.row_friends_list_close).setVisibility(View.GONE);
         }
         else {
             Glide.with(context).load(R.drawable.wins).override(40, 40).into(imageViewWins);
-            Glide.with(context).load(contact.getPicture()).asBitmap().transform(new CropCircleTransformation(context)).placeholder(R.drawable.icon_champy).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).override(80, 80).dontAnimate().into(imageViewFriendPicture);
             Glide.with(context).load(R.drawable.challenges).override(40, 40).into(imageViewChallenges);
             Glide.with(context).load(R.drawable.total).override(40, 40).into(imageViewTotal);
+            Glide.with(context)
+                    .load(contact.getPicture())
+                    .asBitmap()
+                    .transform(new CropCircleTransformation(context))
+                    .placeholder(R.drawable.icon_champy)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .override(80, 80)
+                    .into(imageViewFriendPicture);
             // made our "close-view" is visible and 'open-view' invisible
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.GONE);
             viewHolder.itemView.findViewById(R.id.row_friends_list_close).setVisibility(View.VISIBLE);
@@ -181,16 +204,11 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             public void onClick(View v) {
                 OfflineMode offlineMode = new OfflineMode();
                 if (offlineMode.isConnectedToRemoteAPI(activity)) {
-
-                    final SessionManager sessionManager = new SessionManager(context);
-                    CurrentUserHelper user = new CurrentUserHelper(context);
-                    final String token = user.getToken();
-                    final String userId = user.getUserObjectId();
                     String friend = mContacts.get(position).getID();
                     Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
                     com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
-                    Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.removeFriend(userId, friend, token);
+                    Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.removeFriend(id, friend, token);
                     call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
                         @Override
                         public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
@@ -214,7 +232,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         imageButtonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OfflineMode offlineMode = new OfflineMode();
                 if (offlineMode.isConnectedToRemoteAPI(activity)) {
                     Intent intent = new Intent(context, DuelActivity.class);
                     intent.putExtra("photo", contact.getPicture());
