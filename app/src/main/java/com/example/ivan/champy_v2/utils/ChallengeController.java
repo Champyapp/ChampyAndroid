@@ -474,6 +474,7 @@ public class ChallengeController {
             public void onResponse(Response<com.example.ivan.champy_v2.model.Active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     List<Datum> data = response.body().getData();
+
                     for (int i = 0; i < data.size(); i++) {
                         com.example.ivan.champy_v2.model.Active_in_progress.Datum datum = data.get(i);
 
@@ -590,6 +591,7 @@ public class ChallengeController {
                 // а для отсального в таблице "myChallenges".
                 if (c.getString(colchallenge_id).equals(challenge_id)) {
                     lastUpdate = c.getString(c.getColumnIndex("updated"));
+                    return lastUpdate;
                 }
             } while (c.moveToNext());
         }

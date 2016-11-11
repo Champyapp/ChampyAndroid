@@ -22,8 +22,8 @@ public class DailyRemind {
 
         Calendar myC = Calendar.getInstance();
         myC.set(Calendar.SECOND, 0);
-        myC.set(Calendar.MINUTE, 48);
-        myC.set(Calendar.HOUR, 11);
+        myC.set(Calendar.MINUTE, 37);
+        myC.set(Calendar.HOUR, 14);
         myC.add(Calendar.DAY_OF_YEAR, 0);
 
         if (Calendar.getInstance().getTimeInMillis() > myC.getTimeInMillis()) myC.add(Calendar.DATE, 1);

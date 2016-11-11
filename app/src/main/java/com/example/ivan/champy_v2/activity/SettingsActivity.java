@@ -64,7 +64,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private TextView tvChangeName, tvName;
     private String name;
     private OfflineMode offlineMode;
-    private SessionManager sessionManager;
     private DBHelper dbHelper;
     private DailyRemind mDailyRemind;
     HashMap<String, String> map = new HashMap<>();
@@ -103,7 +102,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
         dbHelper = new DBHelper(getApplicationContext());
         mDailyRemind = new DailyRemind(getApplicationContext());
-        sessionManager = new SessionManager(getApplicationContext());
+        SessionManager sessionManager = new SessionManager(getApplicationContext());
         user = sessionManager.getUserDetails();
         name = user.get("name");
 
@@ -139,11 +138,21 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         drawerUserName.setTypeface(typeface);
         tvNotifications.setTypeface(typeface);
 
-        Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
+        Glide.with(this)
+                .load(url)
+                .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(drawerImageProfile);
+
         drawerImageProfile = (ImageView) findViewById(R.id.img_profile);
-        Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).override(130, 130).into(drawerImageProfile);
+        Glide.with(this)
+                .load(url)
+                .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .override(130, 130)
+                .into(drawerImageProfile);
 
         try {
             background.setScaleType(ImageView.ScaleType.CENTER_CROP);
