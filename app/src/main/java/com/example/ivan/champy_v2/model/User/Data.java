@@ -23,11 +23,17 @@ public class Data {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
 
+    public Integer getAllChallengesCount() { return this.inProgressChallengesCount + allChallengesCount; }
+
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
     }
 
     public Integer getInProgressChallengesCount() {
+        return inProgressChallengesCount;
+    }
+
+    public Integer getInProgressChallenges() {
         return inProgressChallengesCount;
     }
 
@@ -43,10 +49,6 @@ public class Data {
         return failedChallenges;
     }
 
-    public Integer getInProgressChallenges() {
-        return inProgressChallengesCount;
-    }
-
     public Integer getUpdated() {
         return updated;
     }
@@ -54,8 +56,6 @@ public class Data {
     public Integer getCreated() {
         return created;
     }
-
-    public Integer getAllChallengesCount() { return this.inProgressChallengesCount + allChallengesCount; }
 
     public String getEmail() {
         return email;

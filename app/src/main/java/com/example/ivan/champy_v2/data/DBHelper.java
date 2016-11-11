@@ -109,7 +109,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 + "id integer primary key autoincrement,"
                 + "challenge_id text,"
                 + "updated text,"
-                + "senderProgress text DEFAULT []"
+                + "senderProgress text DEFAULT [],"
+                + "dailyRemind text DEFAULT 'true'"
                 + ");");
     }
 

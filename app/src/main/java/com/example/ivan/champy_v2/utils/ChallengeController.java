@@ -590,7 +590,6 @@ public class ChallengeController {
                 // а для отсального в таблице "myChallenges".
                 if (c.getString(colchallenge_id).equals(challenge_id)) {
                     lastUpdate = c.getString(c.getColumnIndex("updated"));
-                    return lastUpdate;
                 }
             } while (c.moveToNext());
         }

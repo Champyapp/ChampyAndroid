@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -37,6 +38,9 @@ public class AppSync {
     private final String API_URL = "http://46.101.213.24:3007";
     private final String TAG = "AppSync";
     private Context context;
+    private DBHelper dbHelper;
+    private ContentValues cv;
+    private SQLiteDatabase db;
     private String fbId, gcm, token, path;
 
 
@@ -65,6 +69,10 @@ public class AppSync {
         final String gcm = this.gcm;
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
+        dbHelper = new DBHelper(context);
+        cv = new ContentValues();
+        db = dbHelper.getWritableDatabase();
+
         NewUser newUser = retrofit.create(NewUser.class);
 
         Call<User> callGetUserInfo = newUser.getUserInfo(jwtString);
@@ -75,16 +83,17 @@ public class AppSync {
                     Log.d(TAG, "getUserProfile onResponse: Success");
                     Data data = response.body().getData();
                     String email = data.getEmail();
-                    final String user_name = data.getName();
-                    final String userId = data.get_id();
-
+                    String user_name = data.getName();
+                    String userId = data.get_id();
+                    String daily = getDailyRemind();
                     String pushN = data.getProfileOptions().getPushNotifications().toString();
                     String newChallReq = data.getProfileOptions().getNewChallengeRequests().toString();
                     String acceptedYour = data.getProfileOptions().getAcceptedYourChallenge().toString();
                     String challegeEnd = data.getProfileOptions().getChallengeEnd().toString();
 
+                    Log.d(TAG, "onResponse: DAILY = " + daily);
                     SessionManager sessionManager = new SessionManager(context);
-                    sessionManager.setRefreshPending("false"); // TODO: 26.08.2016 change for true maybe? for auto update pending list?
+                    sessionManager.setRefreshPending("false");
                     sessionManager.setRefreshFriends("true");
                     sessionManager.createUserLoginSession(
                             user_name, email, facebookId, path_to_pic,
@@ -92,6 +101,7 @@ public class AppSync {
                             acceptedYour, challegeEnd, "true", "true", gcm
                     );
 
+                    // TODO: 11.11.2016 change dailyNotification for real value!
                     sessionManager.setChampyOptions(
                             data.getAllChallengesCount().toString(),
                             data.getSuccessChallenges().toString(),
@@ -155,10 +165,7 @@ public class AppSync {
 
 
     private void getUserPending(final String userId) {
-        DBHelper dbHelper = new DBHelper(context);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("pending", null, null);
-        final ContentValues cv = new ContentValues();
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
         Call<com.example.ivan.champy_v2.model.Friend.Friend> callGetUserFriends = friends.getUserFriends(userId, this.token);
@@ -210,6 +217,23 @@ public class AppSync {
         });
 
 
+    }
+
+
+    private String getDailyRemind() {
+        Cursor c = db.query("updated", null, null, null, null, null, null);
+        String dailyNotification = "true";
+
+        if (c.moveToFirst()) {
+            int dailyNotifInt = c.getColumnIndex("dailyRemind");
+            do {
+                if (c.getString(dailyNotifInt).equals("false")) {
+                    dailyNotification = "false";
+                }
+            } while (c.moveToNext());
+        }
+        c.close();
+        return dailyNotification;
     }
 
 //      // relocated in roleActivity

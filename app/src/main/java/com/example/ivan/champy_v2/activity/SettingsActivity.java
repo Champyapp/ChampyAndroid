@@ -2,6 +2,7 @@ package com.example.ivan.champy_v2.activity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.ivan.champy_v2.utils.DailyRemind;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.utils.SessionManager;
@@ -61,8 +63,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     final private String TAG = "SettingsActivity";
     private TextView tvChangeName, tvName;
     private String name;
-    OfflineMode offlineMode;
-    SessionManager sessionManager;
+    private OfflineMode offlineMode;
+    private SessionManager sessionManager;
+    private DBHelper dbHelper;
+    private DailyRemind mDailyRemind;
     HashMap<String, String> map = new HashMap<>();
     HashMap<String, String> user = new HashMap<>();
 
@@ -97,6 +101,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         pendingCount.setText("+" + (count > 0 ? String.valueOf(count) : null));
         if (count == 0) checker.hideItem();
 
+        dbHelper = new DBHelper(getApplicationContext());
+        mDailyRemind = new DailyRemind(getApplicationContext());
         sessionManager = new SessionManager(getApplicationContext());
         user = sessionManager.getUserDetails();
         name = user.get("name");
@@ -112,13 +118,13 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         ImageView background = (ImageView) findViewById(R.id.back_settings);
         TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
 
+        tvName = (TextView)findViewById(R.id.tvUserName);
         tvChangeName = (TextView)findViewById(R.id.tvName);
         TextView terms = (TextView)findViewById(R.id.terms);
         TextView about = (TextView)findViewById(R.id.about);
         TextView avatar = (TextView)findViewById(R.id.avatar);
         TextView privacy = (TextView)findViewById(R.id.privacy);
         TextView tvLegal = (TextView)findViewById(R.id.tvLegal);
-        tvName = (TextView)findViewById(R.id.userNameInSettings);
         TextView delete = (TextView)findViewById(R.id.delete_acc);
         TextView tvGeneral = (TextView)findViewById(R.id.tvGeneral);
         TextView contactUs = (TextView)findViewById(R.id.contact_us);
@@ -314,8 +320,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                                             if (response.isSuccess()) {
                                                 File file = new File(path, "blured2.jpg");
                                                 file.delete();
-                                                DBHelper dbHelper = new DBHelper(getApplicationContext());
-                                                final SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+                                                SQLiteDatabase db = dbHelper.getWritableDatabase();
                                                 int clearCount = db.delete("pending", null, null);
                                                 clearCount = db.delete("pending_duel", null, null);
                                                 clearCount = db.delete("duel", null, null);
@@ -350,8 +356,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                         .setIcon(R.drawable.warn)
                         .setCancelable(false)
                         .setPositiveButton(R.string.yes, dialogClickListener)
-                        .setNegativeButton(R.string.no, dialogClickListener).show();
-
+                        .setNegativeButton(R.string.no, dialogClickListener)
+                        .show();
                 break;
             case R.id.about:
                 updateProfile(map);
@@ -384,12 +390,13 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+
     private void initSwitches() {
         String pushN = user.get("pushN");
         String newChallReq = user.get("newChallReq");
         String acceptedYour = user.get("acceptedYour");
         String challengeEnd = user.get("challengeEnd");
-        String dailyRemind = user.get("dailyRemind");
+        final String dailyRemind = user.get("dailyRemind");
 
         map.put("challengeEnd", challengeEnd);
         map.put("acceptedYourChallenge", acceptedYour);
@@ -462,8 +469,18 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Log.d(TAG, "Daily Remind: " + isChecked);
-                if (isChecked) map.put("dailyRemind", "true");
-                else map.put("dailyRemind", "false");
+                SQLiteDatabase db = dbHelper.getWritableDatabase();
+                ContentValues cv = new ContentValues();
+                if (isChecked) {
+                    map.put("dailyRemind", "true");
+                    cv.put("dailyRemind", "true");
+                    mDailyRemind.enableDailyRemind();
+                } else {
+                    map.put("dailyRemind", "false");
+                    cv.put("dailyRemind", "false");
+                    mDailyRemind.disableDailyReminder();
+                }
+                db.insert("updated", null, cv);
             }
         });
 
@@ -495,7 +512,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
-    public void updateProfile(HashMap<String, String> map){
+    public void updateProfile(HashMap<String, String> map) {
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();

@@ -1,5 +1,6 @@
 package com.example.ivan.champy_v2.utils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -20,15 +21,15 @@ public class SessionManager {
     private static final String KEY_EMAIL = "email"; // Email address (make variable public to access from outside)
     private static final String KEY_NAME = "name"; // Friend_json name (make variable public to access from outside)
     private static final String KEY_GCM = "gcm"; // Users Google Cloud Messaging id (for notification)
-    private int PRIVATE_MODE = 0;
+    private static final int PRIVATE_MODE = 0;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
 
     // Constructor
+    @SuppressLint("CommitPrefEdits")
     public SessionManager(Context context) {
         pref = context.getSharedPreferences(PREFER_NAME, PRIVATE_MODE);
         editor = pref.edit();
-        editor.apply();
     }
 
     //Create login session
@@ -148,7 +149,7 @@ public class SessionManager {
 
     public void setChampyOptions(String challenges, String wins, String total, String level){
         editor.putString("challenges", challenges);
-        editor.putString("wins", wins);
+        editor.putString("wins",  wins);
         editor.putString("total", total);
         editor.putString("level", level);
         editor.commit();
@@ -176,7 +177,7 @@ public class SessionManager {
         user.put("newChallReq",  pref.getString("newChallReq",  null));
         user.put("acceptedYour", pref.getString("acceptedYour", null));
         user.put("challengeEnd", pref.getString("challengeEnd", null));
-        user.put("dailyRemind",  pref.getString("dailyRemind", null));
+        user.put("dailyRemind",  pref.getString("dailyRemind",  null));
         user.put("updateDB",     pref.getString("updateDB",     null));
 
         return user;
