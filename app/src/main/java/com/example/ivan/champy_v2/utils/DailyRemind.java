@@ -18,7 +18,7 @@ public class DailyRemind {
     public void enableDailyRemind() {
         Intent myIntent = new Intent(context, MyNotifyService.class);
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(ALARM_SERVICE);
-        PendingIntent pendingIntent = PendingIntent.getService(context, 0, myIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getService(context, 228, myIntent, 0);
 
         Calendar myC = Calendar.getInstance();
         myC.set(Calendar.SECOND, 0);
@@ -37,6 +37,7 @@ public class DailyRemind {
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
     }
+
 
 
 }

@@ -69,12 +69,11 @@ public class AppSync {
         final String gcm = this.gcm;
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
-        dbHelper = new DBHelper(context);
         cv = new ContentValues();
+        dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
 
         NewUser newUser = retrofit.create(NewUser.class);
-
         Call<User> callGetUserInfo = newUser.getUserInfo(jwtString);
         callGetUserInfo.enqueue(new Callback<User>() {
             @Override
@@ -91,6 +90,7 @@ public class AppSync {
                     String acceptedYour = data.getProfileOptions().getAcceptedYourChallenge().toString();
                     String challegeEnd = data.getProfileOptions().getChallengeEnd().toString();
 
+
                     Log.d(TAG, "onResponse: DAILY = " + daily);
                     SessionManager sessionManager = new SessionManager(context);
                     sessionManager.setRefreshPending("false");
@@ -98,10 +98,9 @@ public class AppSync {
                     sessionManager.createUserLoginSession(
                             user_name, email, facebookId, path_to_pic,
                             jwtString, userId, pushN, newChallReq,
-                            acceptedYour, challegeEnd, "true", "true", gcm
+                            acceptedYour, challegeEnd, daily, "true", gcm
                     );
 
-                    // TODO: 11.11.2016 change dailyNotification for real value!
                     sessionManager.setChampyOptions(
                             data.getAllChallengesCount().toString(),
                             data.getSuccessChallenges().toString(),
@@ -110,15 +109,9 @@ public class AppSync {
                     );
 
 
-
-
                     CHGetFacebookFriends getFbFriends = new CHGetFacebookFriends(context);
-
-                    //getUserInProgressChallenges(userId); // relocated in RoleActivity
                     getUserPending(userId);
                     getFbFriends.getUserFacebookFriends(gcm);
-
-
 
 
                     String api_path = null;
@@ -134,7 +127,6 @@ public class AppSync {
                     }
 
                     Intent goToRoleActivity = new Intent(context, RoleControllerActivity.class);
-
                     if (api_path == null) {
                         goToRoleActivity.putExtra("path_to_pic", path_to_pic);
                         sessionManager.change_avatar(path_to_pic);
@@ -142,13 +134,9 @@ public class AppSync {
                         goToRoleActivity.putExtra("path_to_pic", api_path);
                         sessionManager.change_avatar(api_path);
                     }
-
-                    /**
-                     * Here we need to enable notification
-                     */
-
-
                     context.startActivity(goToRoleActivity);
+
+
                 } else {
                     Log.i(TAG, "getUserProfile onResponse: Failed " + response.message());
                 }

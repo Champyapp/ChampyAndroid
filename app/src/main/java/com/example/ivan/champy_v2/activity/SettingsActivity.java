@@ -396,7 +396,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         String newChallReq = user.get("newChallReq");
         String acceptedYour = user.get("acceptedYour");
         String challengeEnd = user.get("challengeEnd");
-        final String dailyRemind = user.get("dailyRemind");
+        String dailyRemind = user.get("dailyRemind");
 
         map.put("challengeEnd", challengeEnd);
         map.put("acceptedYourChallenge", acceptedYour);
