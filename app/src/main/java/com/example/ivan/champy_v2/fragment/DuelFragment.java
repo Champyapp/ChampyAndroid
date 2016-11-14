@@ -210,10 +210,6 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
             snackbar = Snackbar.make(view, "Sent duel request!", Snackbar.LENGTH_SHORT);
             snackbar.show();
             return true;
-//        } else if (cc.isActive(name)) {
-//            snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
-//            snackbar.show();
-//            return false;
         } else {
             snackbar = Snackbar.make(view, "Can't create this challenge", Snackbar.LENGTH_SHORT);
             snackbar.show();

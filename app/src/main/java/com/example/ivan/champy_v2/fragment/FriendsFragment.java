@@ -15,10 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.ivan.champy_v2.model.FriendModel;
-import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.R;
-import com.example.ivan.champy_v2.utils.SessionManager;
 import com.example.ivan.champy_v2.adapter.FriendsAdapter;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
@@ -26,6 +23,9 @@ import com.example.ivan.champy_v2.interfaces.CustomItemClickListener;
 import com.example.ivan.champy_v2.model.Friend.Datum;
 import com.example.ivan.champy_v2.model.Friend.Friend_;
 import com.example.ivan.champy_v2.model.Friend.Owner;
+import com.example.ivan.champy_v2.model.FriendModel;
+import com.example.ivan.champy_v2.utils.OfflineMode;
+import com.example.ivan.champy_v2.utils.SessionManager;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
@@ -55,14 +55,9 @@ public class FriendsFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         Log.d(TAG, "onAttach: ");
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
         try {
             mSocket = IO.socket("http://46.101.213.24:3007");
+            Log.d(TAG, "Sockets PODKLYCHIV");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -76,6 +71,12 @@ public class FriendsFragment extends Fragment {
         mSocket.on("Relationship:created:removed", modifiedRelationship);
 
         mSocket.connect();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate: ");
     }
 
     @Override
@@ -177,6 +178,7 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.d(TAG, "onActivityCreated: Sockets OTKLYCHIV");
         mSocket.off();
         mSocket.disconnect();
     }

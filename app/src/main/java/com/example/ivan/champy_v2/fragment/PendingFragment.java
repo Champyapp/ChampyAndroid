@@ -1,6 +1,7 @@
 package com.example.ivan.champy_v2.fragment;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -14,9 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.R;
-import com.example.ivan.champy_v2.utils.SessionManager;
 import com.example.ivan.champy_v2.adapter.PendingAdapter;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHGetFacebookFriends;
@@ -26,6 +25,8 @@ import com.example.ivan.champy_v2.model.Friend.Datum;
 import com.example.ivan.champy_v2.model.Friend.Friend_;
 import com.example.ivan.champy_v2.model.Friend.Owner;
 import com.example.ivan.champy_v2.model.Pending_friend;
+import com.example.ivan.champy_v2.utils.OfflineMode;
+import com.example.ivan.champy_v2.utils.SessionManager;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
@@ -55,16 +56,38 @@ public class PendingFragment extends Fragment {
     private Socket mSocket;
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.d(TAG, "onAttach: ");
+
+        try {
+            mSocket = IO.socket("http://46.101.213.24:3007");
+            Log.d(TAG, "Sockets PODKLYCHIV");
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+
+        mSocket.on("connect", onConnect);
+        mSocket.on("connected", onConnected);
+
+        mSocket.on("Relationship:new", modifiedRelationship);
+        mSocket.on("Relationship:new:accepted", modifiedRelationship);
+        mSocket.on("Relationship:new:removed", removedRelationship);
+        mSocket.on("Relationship:accepted", modifiedRelationship);
+
+        mSocket.on("Relationship:created", modifiedRelationship);
+        mSocket.on("Relationship:created:accepted", modifiedRelationship);
+        mSocket.on("Relationship:created:removed", removedRelationship);
+        mSocket.connect();
+
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         currentUser = new CurrentUserHelper(getContext());
         id = currentUser.getUserObjectId();
         token = currentUser.getToken();
-        try {
-            mSocket = IO.socket("http://46.101.213.24:3007");
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
@@ -143,24 +166,12 @@ public class PendingFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        mSocket.on("connect", onConnect);
-        mSocket.on("connected", onConnected);
-
-        mSocket.on("Relationship:new", modifiedRelationship);
-        mSocket.on("Relationship:new:accepted", modifiedRelationship);
-        mSocket.on("Relationship:new:removed", removedRelationship);
-        mSocket.on("Relationship:accepted", modifiedRelationship);
-
-        mSocket.on("Relationship:created", modifiedRelationship);
-        mSocket.on("Relationship:created:accepted", modifiedRelationship);
-        mSocket.on("Relationship:created:removed", removedRelationship);
-        mSocket.connect();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.d(TAG, "onDestroy: Sockets OTKLYCHIV");
         mSocket.off();
         mSocket.disconnect();
     }

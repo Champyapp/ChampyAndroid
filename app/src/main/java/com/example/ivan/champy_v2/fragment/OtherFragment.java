@@ -26,7 +26,6 @@ import com.example.ivan.champy_v2.model.FriendModel;
 import com.example.ivan.champy_v2.model.User.Data;
 import com.example.ivan.champy_v2.model.User.User;
 import com.example.ivan.champy_v2.utils.OfflineMode;
-import com.example.ivan.champy_v2.utils.SessionManager;
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
@@ -38,7 +37,6 @@ import org.json.JSONException;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import io.jsonwebtoken.Jwts;
@@ -105,11 +103,11 @@ public class OtherFragment extends Fragment {
         DBHelper dbHelper = new DBHelper(getContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         checkTableForExist = new CHCheckTableForExist(getContext());
-        SessionManager sessionManager = new SessionManager(getContext());
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        final String id = user.get("id");
-        final String mToken = user.get("token");
+//        SessionManager sessionManager = new SessionManager(getContext());
+//        HashMap<String, String> user;
+//        user = sessionManager.getUserDetails();
+//        final String id = user.get("id");
+//        final String mToken = user.get("token");
 
         Cursor c = db.query("mytable", null, null, null, null, null, null);
         if (c.moveToFirst()) {
@@ -231,7 +229,7 @@ public class OtherFragment extends Fragment {
 
     public void refreshOtherView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         // Проверка на оффлайн вкладке OTHERS
-        OfflineMode offlineMode = new OfflineMode();
+        final OfflineMode offlineMode = new OfflineMode();
         if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
             swipeRefreshLayout.setRefreshing(true);
             swipeRefreshLayout.post(new Runnable() {
@@ -248,7 +246,6 @@ public class OtherFragment extends Fragment {
                     final ContentValues cv = new ContentValues();
                     final List<FriendModel> newFriends = new ArrayList<>();
 
-                    OfflineMode offlineMode = new OfflineMode();
                     if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
                         final GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONArrayCallback() {
                             @Override
