@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,13 +18,13 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.R;
-import com.example.ivan.champy_v2.utils.SessionManager;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.interfaces.CustomItemClickListener;
 import com.example.ivan.champy_v2.interfaces.Friends;
 import com.example.ivan.champy_v2.model.Pending_friend;
+import com.example.ivan.champy_v2.utils.OfflineMode;
+import com.example.ivan.champy_v2.utils.SessionManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,9 +40,10 @@ import retrofit.Retrofit;
 public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHolder> {
 
     private static final String API_URL = "http://46.101.213.24:3007";
-    private static final String TAG = "myLogs";
+    private final String TAG = "PendingAdapter";
     private List<Pending_friend> mContacts;
     private String token, id;
+    private ImageView imageViewFriendPicture;
     private Context context;
     private Activity activity;
     private CustomItemClickListener listener;
@@ -117,7 +119,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
          * below close view
          */
         // response for icons in close view
-        ImageView imageViewFriendPicture = viewHolder.friendImage;
+        imageViewFriendPicture = viewHolder.friendImage;
         ImageView imageViewChallenges = viewHolder.challenges;
         ImageView imageViewTotal = viewHolder.total;
         ImageView imageViewWins = viewHolder.wins;
@@ -296,6 +298,13 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
     }
 
     @Override
+    public void unregisterAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
+        super.unregisterAdapterDataObserver(observer);
+        //new ProgressTask().execute();
+        Log.d(TAG, "unregisterAdapterDataObserver: ");
+    }
+
+    @Override
     public int getItemCount() {
         return mContacts.size();
     }
@@ -339,5 +348,26 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         }
 
     }
+
+
+    private class ProgressTask extends AsyncTask<Void,Void,Void> {
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            Glide.get(context).clearDiskCache();
+            Glide.get(context).clearMemory();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+        }
+
+    }
+
 
 }

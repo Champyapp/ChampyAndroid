@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -269,6 +270,13 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
     }
 
     @Override
+    public void unregisterAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
+        super.unregisterAdapterDataObserver(observer);
+        //new ProgressTask().execute();
+        Log.d(TAG, "unregisterAdapterDataObserver: ");
+    }
+
+    @Override
     public int getItemCount() {
         return mContacts.size();
     }
@@ -318,6 +326,24 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
 
         }
 
+    }
+
+
+    private class ProgressTask extends AsyncTask<Void,Void,Void> {
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            Glide.get(context).clearDiskCache();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+        }
     }
 
 }

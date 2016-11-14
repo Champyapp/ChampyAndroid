@@ -184,8 +184,8 @@ public class PendingFragment extends Fragment {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("pending", null, null);
         final ContentValues cv = new ContentValues();
-        com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
         OfflineMode offlineMode = new OfflineMode();
+        com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
 
         if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
             Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.getUserFriends(id, token);

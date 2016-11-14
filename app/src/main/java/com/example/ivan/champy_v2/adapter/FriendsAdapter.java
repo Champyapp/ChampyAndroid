@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,10 +53,10 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         CustomItemClickListener listener = itemOnClick;
         this.activity = activity;
     }
-    
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Log.d(TAG, "onCreateViewHolder: ");
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         // Inflate the custom layout
@@ -98,6 +99,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(final FriendsAdapter.ViewHolder viewHolder, final int position) {
+        Log.d(TAG, "onBindViewHolder: ");
         // Get the data model based on position
         final FriendModel contact = mContacts.get(position);
         // Set item views based on the data model
@@ -245,6 +247,13 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
     }
 
+    @Override // refresh page
+    public void unregisterAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
+        super.unregisterAdapterDataObserver(observer);
+        //new ProgressTask().execute();
+        Log.d(TAG, "unregisterAdapterDataObserver: ");
+    }
+
     @Override
     public int getItemCount() {
         return mContacts.size();
@@ -297,6 +306,24 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             add = (ImageButton)itemView.findViewById(R.id.imageButtonAddUser);
         }
 
+    }
+
+
+    private class ProgressTask extends AsyncTask<Void,Void,Void> {
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            Glide.get(context).clearDiskCache();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+        }
     }
 
 }
