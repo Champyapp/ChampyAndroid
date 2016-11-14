@@ -17,59 +17,26 @@ import com.example.ivan.champy_v2.utils.SessionManager;
 
 public class RoleControllerActivity extends AppCompatActivity implements View.OnClickListener {
 
-    public static final String TAG = "RoleControllerActivity";
+    public final String TAG = getClass().getName();
     private SessionManager sessionManager;
     private OfflineMode offlineMode;
+    private Typeface typeface;
     private TextView lostInternet;
     private ImageView imageReload;
-//    private Socket mSocket;
-//    //public View spinner;
-//
-//    private Emitter.Listener onConnect = new Emitter.Listener() {
-//        @Override
-//        public void call(final Object... args) {
-//            CurrentUserHelper currentUser = new CurrentUserHelper(getApplicationContext());
-//            mSocket.emit("ready", currentUser.getToken());
-//            Log.i(TAG, "Sockets: onConnect");
-//        }
-//    };
-//    private Emitter.Listener onConnected = new Emitter.Listener() {
-//        @Override
-//        public void call(final Object... args) {
-//            Log.i(TAG, "Sockets: onConnected");
-//        }
-//    };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_role_controller);
 
-        Typeface typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
+        typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
         TextView tvChampy = (TextView)findViewById(R.id.tvChampy);
         tvChampy.setTypeface(typeface);
-
-//        spinner = findViewById(R.id.loadingPanel);
-
-//        try {
-//            mSocket = IO.socket("http://46.101.213.24:3007");
-//        } catch (URISyntaxException e) { throw new RuntimeException(e); }
 
         sessionManager = new SessionManager(getApplicationContext());
         offlineMode = new OfflineMode();
 
-        if (offlineMode.isConnectedToRemoteAPI(this)) {
-            checkIfLoggedInAndMakeRedirect();
-        } else {
-            lostInternet = (TextView)findViewById(R.id.tvLostInternetConnection);
-            imageReload = (ImageView)findViewById(R.id.imageRetry);
-            lostInternet.setTypeface(typeface);
-
-            lostInternet.setVisibility(View.VISIBLE);
-            imageReload.setVisibility(View.VISIBLE);
-            imageReload.setOnClickListener(this);
-        }
+        checkIfLoggedInAndMakeRedirect();
 
 
     }
@@ -83,29 +50,30 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
         }
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        //spinner.setVisibility(View.INVISIBLE);
-    }
-
 
     private void checkIfLoggedInAndMakeRedirect() {
-        if (sessionManager.isUserLoggedIn()) {
-            CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
-            String uId = user.getUserObjectId();
-            String uToken = user.getToken();
-            Log.d(TAG, "inProgressCount: " + user.getInProgressCount());
-            ChallengeController cc = new ChallengeController(getApplicationContext(), this, uToken, uId);
-            cc.generateCardsForMainActivity();
+        if (offlineMode.isConnectedToRemoteAPI(this)) {
+            if (sessionManager.isUserLoggedIn()) {
+                CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
+                String uId = user.getUserObjectId();
+                String uToken = user.getToken();
+                Log.d(TAG, "inProgressCount: " + user.getInProgressCount());
+                ChallengeController cc = new ChallengeController(getApplicationContext(), this, uToken, uId);
+                cc.generateCardsForMainActivity();
+            } else {
+                Intent goToActivity = new Intent(this, LoginActivity.class);
+                startActivity(goToActivity);
+            }
         } else {
-            /**
-             * Here we need to disable notifications;
-             */
+            lostInternet = (TextView)findViewById(R.id.tvLostInternetConnection);
+            imageReload = (ImageView)findViewById(R.id.imageRetry);
+            lostInternet.setTypeface(typeface);
 
-            Intent goToActivity = new Intent(this, LoginActivity.class);
-            startActivity(goToActivity);
+            lostInternet.setVisibility(View.VISIBLE);
+            imageReload.setVisibility(View.VISIBLE);
+            imageReload.setOnClickListener(this);
         }
+
     }
 
 }
