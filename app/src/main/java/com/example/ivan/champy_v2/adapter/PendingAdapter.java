@@ -106,6 +106,8 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         return viewHolder;
     }
 
+    // TODO: 14.11.2016 в іфі убрати кеш і зробити шоб там загружало завжди нову...
+
     @Override
     public void onBindViewHolder(final PendingAdapter.ViewHolder viewHolder, final int position) {
         // Get the data model based on position
@@ -181,14 +183,26 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                     .into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleWins));
             Glide.with(context).load(R.drawable.start_circle_00026).placeholder(R.drawable.icon_champy)
                     .into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleTotal));
+
+
             Glide.with(context)
                     .load(contact.getPicture())
                     .asBitmap()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
                     .transform(new CropCircleTransformation(context))
                     .placeholder(R.drawable.icon_champy)
                     .override(80, 80)
+                    .dontAnimate()
                     .into(imageViewUserAvatar);
+//            Glide.with(context)
+//                    .load(contact.getPicture())
+//                    .asBitmap()
+//                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                    .transform(new CropCircleTransformation(context))
+//                    .placeholder(R.drawable.icon_champy)
+//                    .override(80, 80)
+//                    .into(imageViewUserAvatar);
 
             // response for visible of button 'add' (owner = myself);
             if (contact.getOwner().equals("true")) {
@@ -209,14 +223,25 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
             Glide.with(context).load(R.drawable.wins).override(40, 40).into(imageViewWins);
             Glide.with(context).load(R.drawable.challenges).override(40, 40).into(imageViewChallenges);
             Glide.with(context).load(R.drawable.total).override(40, 40).into(imageViewTotal);
+
             Glide.with(context)
                     .load(contact.getPicture())
                     .asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
                     .transform(new CropCircleTransformation(context))
                     .placeholder(R.drawable.icon_champy)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .override(80, 80)
+                    .dontAnimate()
                     .into(imageViewFriendPicture);
+//            Glide.with(context)
+//                    .load(contact.getPicture())
+//                    .asBitmap()
+//                    .transform(new CropCircleTransformation(context))
+//                    .placeholder(R.drawable.icon_champy)
+//                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                    .override(80, 80)
+//                    .into(imageViewFriendPicture);
             // made our "close-view" is visible and 'open-view' invisible
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.GONE);
             viewHolder.itemView.findViewById(R.id.row_friends_list_close).setVisibility(View.VISIBLE);
@@ -296,6 +321,20 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         });
 
     }
+
+    @Override
+    public void onViewRecycled(ViewHolder holder) {
+        super.onViewRecycled(holder);
+        Log.d(TAG, "onViewRecycled: ");
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        new ProgressTask().execute();
+        Log.d(TAG, "onDetachedFromRecyclerView: ");
+    }
+
 
     @Override
     public void unregisterAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {

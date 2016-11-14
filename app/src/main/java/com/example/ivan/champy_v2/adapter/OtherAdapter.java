@@ -184,11 +184,22 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
             Glide.with(context)
                     .load(contact.getPicture())
                     .asBitmap()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
                     .transform(new CropCircleTransformation(context))
                     .placeholder(R.drawable.icon_champy)
                     .override(80, 80)
+                    .dontAnimate()
                     .into(imageViewUserAvatar);
+
+//            Glide.with(context)
+//                    .load(contact.getPicture())
+//                    .asBitmap()
+//                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                    .transform(new CropCircleTransformation(context))
+//                    .placeholder(R.drawable.icon_champy)
+//                    .override(80, 80)
+//                    .into(imageViewUserAvatar);
 
             // made our "open-view" is visible and 'close-view' invisible
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.VISIBLE);
@@ -198,14 +209,26 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
             Glide.with(context).load(R.drawable.wins).override(40, 40).into(imageViewWins);
             Glide.with(context).load(R.drawable.challenges).override(40, 40).into(imageViewChallenges);
             Glide.with(context).load(R.drawable.total).override(40, 40).into(imageViewTotal);
+
             Glide.with(context)
                     .load(contact.getPicture())
                     .asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
                     .transform(new CropCircleTransformation(context))
                     .placeholder(R.drawable.icon_champy)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .override(80, 80)
+                    .dontAnimate()
                     .into(imageViewFriendPicture);
+//            Glide.with(context)
+//                    .load(contact.getPicture())
+//                    .asBitmap()
+//                    .transform(new CropCircleTransformation(context))
+//                    .placeholder(R.drawable.icon_champy)
+//                    //.diskCacheStrategy(DiskCacheStrategy.ALL)
+//                    .skipMemoryCache(true)
+//                    .override(80, 80)
+//                    .into(imageViewFriendPicture);
 
             // made our "close-view" is visible and 'open-view' invisible
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.GONE);
