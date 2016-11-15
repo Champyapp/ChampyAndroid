@@ -116,7 +116,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
             btnAccept.setVisibility(View.VISIBLE);
             btnCancel.setVisibility(View.VISIBLE);
         } else {
-            tvUserVsUser.setText(getContext().getResources().getString(R.string.waiting_for_your_recipient));
+            tvUserVsUser.setText(getContext().getResources().getString(R.string.waiting_for_your_recipient) + "\n " + versus);
             btnAccept.setVisibility(View.INVISIBLE);
         }
         tvUserVsUser.setTypeface(typeface);

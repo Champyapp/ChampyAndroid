@@ -57,7 +57,6 @@
             android:gravity="center"
             android:layout_marginTop="5dp" />
 
-        <!-- id = AcceptButton, but this is Points View. I Can't rename, because this will change name in -->
         <ImageView
             android:layout_width="60dp"
             android:layout_height="60dp"
