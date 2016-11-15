@@ -4,16 +4,19 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
-import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
+
+/**
+ * Splash screen with GenerateCards method
+ */
 
 public class RoleControllerActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -57,7 +60,6 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
                 CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
                 String uId = user.getUserObjectId();
                 String uToken = user.getToken();
-                Log.d(TAG, "inProgressCount: " + user.getInProgressCount());
                 ChallengeController cc = new ChallengeController(getApplicationContext(), this, uToken, uId);
                 cc.generateCardsForMainActivity();
             } else {

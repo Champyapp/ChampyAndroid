@@ -575,7 +575,7 @@ public class ChallengeController {
 
 
     // method which returns our last update (true or false);
-    public String isUpdated(String challenge_id) {
+    private String isUpdated(String challenge_id) {
         DBHelper dbHelper = new DBHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("updated", null, null, null, null, null, null);

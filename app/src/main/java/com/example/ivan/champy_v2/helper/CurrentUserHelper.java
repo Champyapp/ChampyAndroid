@@ -42,7 +42,7 @@ public class CurrentUserHelper {
         return this.currentSession.getPathToPic();
     }
 
-    public String getpendingDuelCount() {
+    public String getPendingDuelCount() {
         return this.currentSession.get_duel_pending();
     }
 
@@ -53,7 +53,7 @@ public class CurrentUserHelper {
     public String getInProgressCount() {
         HashMap<String, String> user;
         user = this.currentSession.getChampyOptions();
-        return user.get("total");
+        return user.get("challenges");
     }
 
 }

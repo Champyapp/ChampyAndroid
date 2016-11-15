@@ -1,8 +1,10 @@
 package com.example.ivan.champy_v2.adapter;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.support.design.widget.Snackbar;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 
 import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.R;
+import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
 
@@ -184,8 +187,14 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                 tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
                 buttonShare.setVisibility(View.INVISIBLE);
                 buttonDone.setVisibility(View.VISIBLE);
-            }
-            if (now > senderProgressMidNight + oneDay + oneDay) {
+
+                DBHelper dbHelper = new DBHelper(getContext());
+                SQLiteDatabase db = dbHelper.getWritableDatabase();
+                ContentValues cv = new ContentValues();
+                cv.put("updated", "true");
+                db.update("updated",      cv, "challenge_id = ?", new String[]{itemInProgressId});
+                db.update("myChallenges", cv, "challenge_id = ?", new String[]{itemInProgressId});
+            } else if (now > senderProgressMidNight + oneDay + oneDay) {
                 try {
                     if (itemType.equals("Wake Up")) {
                         int i = Integer.parseInt(currentCard.getWakeUpTime());

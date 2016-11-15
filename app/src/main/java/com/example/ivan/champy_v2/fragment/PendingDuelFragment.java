@@ -137,6 +137,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         CurrentUserHelper user = new CurrentUserHelper(getContext());
         final String token = user.getToken();
         final String userId = user.getUserObjectId();
+        final int inProgressCount = Integer.parseInt(user.getInProgressCount());
 
         cc = new ChallengeController(getContext(), getActivity(), token, userId);
         position = viewPager.getCurrentItem();
@@ -164,11 +165,11 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
                     @Override
                     public void onClick(View view) {
                         try {
-                            if (!cc.isActive(description) && recipient.equals("true")) {
+                            if (!cc.isActive(description) && recipient.equals("true") && inProgressCount < 5) {
                                 cc.joinToChallenge(challenge_id);
                                 snackbar = Snackbar.make(view, "Challenge Accepted!", Snackbar.LENGTH_SHORT);
                             } else {
-                                snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
+                                snackbar = Snackbar.make(view, "Can't create this challenge!", Snackbar.LENGTH_SHORT);
                             }
                             snackbar.show();
                         } catch (NullPointerException e) {

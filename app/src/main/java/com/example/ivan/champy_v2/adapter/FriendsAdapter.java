@@ -14,11 +14,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.activity.DuelActivity;
+import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.interfaces.CustomItemClickListener;
 import com.example.ivan.champy_v2.model.FriendModel;
 import com.example.ivan.champy_v2.utils.OfflineMode;
@@ -255,12 +257,16 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         imageButtonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (offlineMode.isConnectedToRemoteAPI(activity)) {
+                CurrentUserHelper user = new CurrentUserHelper(context);
+                int inProgressCounter = Integer.parseInt(user.getInProgressCount());
+                if (offlineMode.isConnectedToRemoteAPI(activity) && inProgressCounter < 5) {
                     Intent intent = new Intent(context, DuelActivity.class);
                     intent.putExtra("photo", contact.getPicture());
                     intent.putExtra("name", contact.getName());
                     intent.putExtra("id", contact.getID());
                     context.startActivity(intent);
+                } else {
+                    Toast.makeText(context, "You have too much challenges", Toast.LENGTH_SHORT).show();
                 }
             }
         });
