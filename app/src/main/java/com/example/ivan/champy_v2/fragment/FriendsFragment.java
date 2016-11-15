@@ -185,7 +185,7 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        Log.d(TAG, "onDetach: ");
+        Log.d(TAG, "onDetach: Sockets off & disconnect");
         mSocket.off();
         mSocket.disconnect();
     }

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,11 +64,11 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         String itemStatus = currentCard.getStatus();
         final String itemInProgressId = currentCard.getId();
 
-        Log.d(TAG, "getView: itemUpdate: " + itemUpdate + " !!!");
-        Log.d(TAG, "getView: itemGoal: " + itemGoal);
-        Log.d(TAG, "getView: itemType: " + itemType);
-        Log.d(TAG, "getView: itemID: " + itemInProgressId);
-        Log.d(TAG, "getView: itemStatus: " + itemStatus);
+//        Log.d(TAG, "getView: itemUpdate: " + itemUpdate + " !!!");
+//        Log.d(TAG, "getView: itemGoal: " + itemGoal);
+//        Log.d(TAG, "getView: itemType: " + itemType);
+//        Log.d(TAG, "getView: itemID: " + itemInProgressId);
+//        Log.d(TAG, "getView: itemStatus: " + itemStatus);
 
         String[] senderProgress = toArrayOfStrings(itemSenderProgress);
 

@@ -190,7 +190,7 @@ public class PendingFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.d(TAG, "onDestroyView: Sockets.disconnect");
+        Log.d(TAG, "onDestroyView: Sockets off & disconnect");
         mSocket.off();
         mSocket.disconnect();
     }
@@ -199,6 +199,12 @@ public class PendingFragment extends Fragment {
     public void onDestroy() {
         Log.d(TAG, "onDestroy: ");
         super.onDestroy();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.d(TAG, "onDetach: ");
     }
 
 

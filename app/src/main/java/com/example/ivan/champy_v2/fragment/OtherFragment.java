@@ -75,24 +75,7 @@ public class OtherFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getContext());
-        //getFbFriends = new CHGetFacebookFriends(getContext());
         Log.d(TAG, "onCreate: ");
-
-//        try {
-//            mSocket = IO.socket("http://46.101.213.24:3007");
-//        } catch (URISyntaxException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        mSocket.on("connect", onConnect);
-//        mSocket.on("connected", onConnected);
-//
-//        mSocket.on("Relationship:new:accepted", modifiedRelationship);
-//        mSocket.on("Relationship:new:removed", modifiedRelationship);
-//        mSocket.on("Relationship:created:accepted", modifiedRelationship);
-//        mSocket.on("Relationship:created:removed", modifiedRelationship);
-//
-//        mSocket.connect();
     }
 
     @Override
@@ -145,7 +128,6 @@ public class OtherFragment extends Fragment {
             public void onRefresh() {
                 //getFbFriends.getUserFacebookFriends(mToken);
                 refreshOtherView(gSwipeRefreshLayout, gView);
-                Toast.makeText(getContext(), "Refresh finished", Toast.LENGTH_SHORT).show();
                 gSwipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -189,8 +171,6 @@ public class OtherFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy: ");
-//        mSocket.off();
-//        mSocket.disconnect();
     }
 
     @Override

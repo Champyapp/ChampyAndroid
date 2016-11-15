@@ -179,7 +179,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        sockets = new CHSocket(MainActivity.this, getApplicationContext());
 //        sockets.tryToConnect();
 //        sockets.socketOnAndEmmit();
-
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
