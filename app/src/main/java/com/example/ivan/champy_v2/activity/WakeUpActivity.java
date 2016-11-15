@@ -26,7 +26,7 @@ import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
-import com.example.ivan.champy_v2.utils.ChallengeController;
+import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
 

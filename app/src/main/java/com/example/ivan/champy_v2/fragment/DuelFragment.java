@@ -17,7 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.ivan.champy_v2.utils.ChallengeController;
+import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.utils.SessionManager;

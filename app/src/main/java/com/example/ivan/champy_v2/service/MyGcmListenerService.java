@@ -42,8 +42,8 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-import static com.example.ivan.champy_v2.utils.ChallengeController.API_URL;
-import static com.example.ivan.champy_v2.utils.ChallengeController.unixTime;
+import static com.example.ivan.champy_v2.ChallengeController.API_URL;
+import static com.example.ivan.champy_v2.ChallengeController.unixTime;
 import static java.lang.Math.round;
 
 public class MyGcmListenerService extends GcmListenerService {

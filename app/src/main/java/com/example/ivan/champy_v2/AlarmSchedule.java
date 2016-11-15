@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.content.WakefulBroadcastReceiver;
+import android.util.Log;
 
 import com.example.ivan.champy_v2.data.DBHelper;
 
@@ -18,6 +19,7 @@ public class AlarmSchedule extends WakefulBroadcastReceiver {
         Bundle extras = intent.getExtras();
         newString = (extras == null) ? "" : extras.getString("alarm");
 
+        Log.d("ALARMSCHEDULE", "onReceive: OMG HOUSTON, ALARMSCHEDULE ZALLOGINUV");
         if ("reset".equals(newString)) {
             DBHelper dbHelper = new DBHelper(context);
             final SQLiteDatabase db = dbHelper.getWritableDatabase();

@@ -29,7 +29,7 @@ import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.ivan.champy_v2.utils.Blur;
-import com.example.ivan.champy_v2.utils.ChallengeController;
+import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.utils.CustomPagerBase;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.R;

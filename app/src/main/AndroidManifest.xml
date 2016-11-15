@@ -123,9 +123,9 @@
                 <category android:name="com.example.ivan.champy_v2" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".MyNotifyReceiver" android:enabled="true" />
 
         <service android:name=".service.AlarmService"  android:enabled="true" />
-        <service android:name=".utils.MyNotifyService" android:enabled="true" />
         <service android:name="com.example.ivan.champy_v2.service.MyGcmListenerService" android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />

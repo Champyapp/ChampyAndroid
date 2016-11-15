@@ -17,7 +17,7 @@ import android.widget.TextView;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
-import com.example.ivan.champy_v2.utils.ChallengeController;
+import com.example.ivan.champy_v2.ChallengeController;
 
 import java.io.IOException;
 import java.util.ArrayList;

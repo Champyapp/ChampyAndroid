@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.ivan.champy_v2.utils.ChallengeController;
+import com.example.ivan.champy_v2.ChallengeController;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
