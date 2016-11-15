@@ -44,20 +44,20 @@ import retrofit.Retrofit;
 public class FriendsFragment extends Fragment {
 
     private static final String API_URL = "http://46.101.213.24:3007";
-    private static final String ARG_PAGE = "ARG_PAGE";
     private static final String TAG = "FriendsFragment";
+    private static final String ARG_PAGE = "ARG_PAGE";
 
-    public View gView;
-    public SwipeRefreshLayout gSwipeRefreshLayout;
+    private SwipeRefreshLayout gSwipeRefreshLayout;
     private Socket mSocket;
+    private View gView;
+
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        Log.d(TAG, "onAttach: ");
+        Log.d(TAG, "onAttach: try to connect");
         try {
             mSocket = IO.socket("http://46.101.213.24:3007");
-            Log.d(TAG, "Sockets PODKLYCHIV");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -81,6 +81,7 @@ public class FriendsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)  {
+        Log.d(TAG, "onCreateView: ");
         final View view = inflater.inflate(R.layout.fragment_friends, container, false);
         final List<FriendModel> friends = new ArrayList<>();
         DBHelper dbHelper = new DBHelper(getContext());
@@ -178,15 +179,15 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "onActivityCreated: Sockets OTKLYCHIV");
-        mSocket.off();
-        mSocket.disconnect();
+        Log.d(TAG, "onDestroy: ");
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         Log.d(TAG, "onDetach: ");
+        mSocket.off();
+        mSocket.disconnect();
     }
 
 

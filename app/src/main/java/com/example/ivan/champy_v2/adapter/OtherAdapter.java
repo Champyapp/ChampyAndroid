@@ -292,12 +292,12 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
 
     }
 
-    @Override
-    public void unregisterAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
-        super.unregisterAdapterDataObserver(observer);
-        //new ProgressTask().execute();
-        Log.d(TAG, "unregisterAdapterDataObserver: ");
-    }
+//    @Override
+//    public void unregisterAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
+//        super.unregisterAdapterDataObserver(observer);
+//        //new ProgressTask().execute();
+//        Log.d(TAG, "unregisterAdapterDataObserver: ");
+//    }
 
     @Override
     public int getItemCount() {

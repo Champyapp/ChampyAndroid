@@ -59,32 +59,12 @@ public class PendingFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         Log.d(TAG, "onAttach: ");
-
-        try {
-            mSocket = IO.socket("http://46.101.213.24:3007");
-            Log.d(TAG, "Sockets PODKLYCHIV");
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-
-        mSocket.on("connect", onConnect);
-        mSocket.on("connected", onConnected);
-
-        mSocket.on("Relationship:new", modifiedRelationship);
-        mSocket.on("Relationship:new:accepted", modifiedRelationship);
-        mSocket.on("Relationship:new:removed", removedRelationship);
-        mSocket.on("Relationship:accepted", modifiedRelationship);
-
-        mSocket.on("Relationship:created", modifiedRelationship);
-        mSocket.on("Relationship:created:accepted", modifiedRelationship);
-        mSocket.on("Relationship:created:removed", removedRelationship);
-        mSocket.connect();
-
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate: ");
         currentUser = new CurrentUserHelper(getContext());
         id = currentUser.getUserObjectId();
         token = currentUser.getToken();
@@ -92,6 +72,7 @@ public class PendingFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
+        Log.d(TAG, "onCreateView: ");
         final View view = inflater.inflate(R.layout.fragment_friends, container, false);
         final List<Pending_friend> pendingFriends = new ArrayList<>();
 
@@ -166,14 +147,58 @@ public class PendingFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Log.d(TAG, "onActivityCreated: mSocket Connect");
+
+        try {
+            mSocket = IO.socket("http://46.101.213.24:3007");
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+
+        mSocket.on("connect", onConnect);
+        mSocket.on("connected", onConnected);
+
+        mSocket.on("Relationship:new", modifiedRelationship);
+        mSocket.on("Relationship:new:accepted", modifiedRelationship);
+        mSocket.on("Relationship:new:removed", removedRelationship);
+        mSocket.on("Relationship:accepted", modifiedRelationship);
+
+        mSocket.on("Relationship:created", modifiedRelationship);
+        mSocket.on("Relationship:created:accepted", modifiedRelationship);
+        mSocket.on("Relationship:created:removed", removedRelationship);
+        mSocket.connect();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: ");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: ");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: ");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d(TAG, "onDestroyView: Sockets.disconnect");
+        mSocket.off();
+        mSocket.disconnect();
     }
 
     @Override
     public void onDestroy() {
+        Log.d(TAG, "onDestroy: ");
         super.onDestroy();
-        Log.d(TAG, "onDestroy: Sockets OTKLYCHIV");
-        mSocket.off();
-        mSocket.disconnect();
     }
 
 

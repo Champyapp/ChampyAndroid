@@ -56,7 +56,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.d(TAG, "onCreateViewHolder: ");
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         // Inflate the custom layout
@@ -99,7 +98,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(final FriendsAdapter.ViewHolder viewHolder, final int position) {
-        Log.d(TAG, "onBindViewHolder: ");
         // Get the data model based on position
         final FriendModel contact = mContacts.get(position);
         // Set item views based on the data model
@@ -270,12 +268,12 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
     }
 
-    @Override // refresh page
-    public void unregisterAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
-        super.unregisterAdapterDataObserver(observer);
-        //new ProgressTask().execute();
-        Log.d(TAG, "unregisterAdapterDataObserver: ");
-    }
+//    @Override // refresh page
+//    public void unregisterAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
+//        super.unregisterAdapterDataObserver(observer);
+//        //new ProgressTask().execute();
+//        Log.d(TAG, "unregisterAdapterDataObserver: ");
+//    }
 
     @Override
     public int getItemCount() {

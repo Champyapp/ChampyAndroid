@@ -43,7 +43,6 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
     private final String TAG = "PendingAdapter";
     private List<Pending_friend> mContacts;
     private String token, id;
-    private ImageView imageViewFriendPicture;
     private Context context;
     private Activity activity;
     private CustomItemClickListener listener;
@@ -121,7 +120,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
          * below close view
          */
         // response for icons in close view
-        imageViewFriendPicture = viewHolder.friendImage;
+        ImageView imageViewFriendPicture = viewHolder.friendImage;
         ImageView imageViewChallenges = viewHolder.challenges;
         ImageView imageViewTotal = viewHolder.total;
         ImageView imageViewWins = viewHolder.wins;
@@ -322,26 +321,26 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
 
     }
 
-    @Override
-    public void onViewRecycled(ViewHolder holder) {
-        super.onViewRecycled(holder);
-        Log.d(TAG, "onViewRecycled: ");
-    }
-
-    @Override
-    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView);
-        new ProgressTask().execute();
-        Log.d(TAG, "onDetachedFromRecyclerView: ");
-    }
-
-
-    @Override
-    public void unregisterAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
-        super.unregisterAdapterDataObserver(observer);
-        //new ProgressTask().execute();
-        Log.d(TAG, "unregisterAdapterDataObserver: ");
-    }
+//    @Override
+//    public void onViewRecycled(ViewHolder holder) {
+//        super.onViewRecycled(holder);
+//        Log.d(TAG, "onViewRecycled: ");
+//    }
+//
+//    @Override
+//    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+//        super.onDetachedFromRecyclerView(recyclerView);
+//        //new ProgressTask().execute();
+//        Log.d(TAG, "onDetachedFromRecyclerView: ");
+//    }
+//
+//
+//    @Override
+//    public void unregisterAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
+//        super.unregisterAdapterDataObserver(observer);
+//        //new ProgressTask().execute();
+//        Log.d(TAG, "unregisterAdapterDataObserver: ");
+//    }
 
     @Override
     public int getItemCount() {
