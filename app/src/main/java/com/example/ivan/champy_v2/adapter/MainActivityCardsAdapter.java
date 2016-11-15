@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +15,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
-import com.example.ivan.champy_v2.ChallengeController;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -64,11 +65,11 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         String itemStatus = currentCard.getStatus();
         final String itemInProgressId = currentCard.getId();
 
-//        Log.d(TAG, "getView: itemUpdate: " + itemUpdate);
-//        Log.d(TAG, "getView: itemGoal: " + itemGoal);
-//        Log.d(TAG, "getView: itemType: " + itemType);
-//        Log.d(TAG, "getView: itemID: " + itemInProgressId);
-//        Log.d(TAG, "getView: itemStatus: " + itemStatus);
+        Log.d(TAG, "getView: itemUpdate: " + itemUpdate + " !!!");
+        Log.d(TAG, "getView: itemGoal: " + itemGoal);
+        Log.d(TAG, "getView: itemType: " + itemType);
+        Log.d(TAG, "getView: itemID: " + itemInProgressId);
+        Log.d(TAG, "getView: itemStatus: " + itemStatus);
 
         String[] senderProgress = toArrayOfStrings(itemSenderProgress);
 
@@ -112,16 +113,34 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         tvEveryDayForTheNext.setTextSize((float)(y*1.3));
         final TextView tvDuration = (TextView) tempView.findViewById(R.id.textViewDuration);
 
-        if (itemType.equals("Wake Up") || itemUpdate.equals("true")) { //?
-            tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
-            buttonShare.setVisibility(View.VISIBLE);
-            buttonDone.setVisibility(View.INVISIBLE);
-            tvEveryDayForTheNext.setVisibility(View.VISIBLE);
-        } else {
+//        if (itemType.equals("Wake Up") || itemUpdate.equals("true")) { //?
+//            tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
+//            buttonShare.setVisibility(View.VISIBLE);
+//            buttonDone.setVisibility(View.INVISIBLE);
+//            tvEveryDayForTheNext.setVisibility(View.VISIBLE);
+//        } else {
+//            tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
+//            buttonDone.setVisibility(View.VISIBLE);
+//            buttonShare.setVisibility(View.INVISIBLE);
+//            tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
+//        }
+
+        if (itemUpdate.equals("false")) {
             tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
             buttonDone.setVisibility(View.VISIBLE);
             buttonShare.setVisibility(View.INVISIBLE);
             tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
+            if (itemType.equals("Wake Up")) {
+                tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
+                buttonShare.setVisibility(View.VISIBLE);
+                buttonDone.setVisibility(View.INVISIBLE);
+                tvEveryDayForTheNext.setVisibility(View.VISIBLE);
+            }
+        } else {
+            tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
+            buttonShare.setVisibility(View.VISIBLE);
+            buttonDone.setVisibility(View.INVISIBLE);
+            tvEveryDayForTheNext.setVisibility(View.VISIBLE);
         }
         tvDuration.setTypeface(typeface);
         tvDuration.setTextSize(y*2);

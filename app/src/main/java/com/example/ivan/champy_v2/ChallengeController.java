@@ -589,9 +589,14 @@ public class ChallengeController {
                 // wake-up и self-improvement челенджей.
                 // Соответственно данные про update time для дуелей находятся в таблице "updated",
                 // а для отсального в таблице "myChallenges".
-                if (c.getString(colchallenge_id).equals(challenge_id)) {
-                    lastUpdate = c.getString(c.getColumnIndex("updated"));
-                    return lastUpdate;
+                try {
+                    if (c.getString(colchallenge_id).equals(challenge_id)) {
+                        lastUpdate = c.getString(c.getColumnIndex("updated"));
+                        return lastUpdate;
+                    }
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                    return "false";
                 }
             } while (c.moveToNext());
         }

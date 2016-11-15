@@ -28,7 +28,7 @@ import android.widget.TextView;
 import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.ivan.champy_v2.DailyRemind;
+import com.example.ivan.champy_v2.DailyRemindController;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.utils.SessionManager;
@@ -65,7 +65,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private String name;
     private OfflineMode offlineMode;
     private DBHelper dbHelper;
-    private DailyRemind mDailyRemind;
+    private DailyRemindController mDailyRemind;
     HashMap<String, String> map = new HashMap<>();
     HashMap<String, String> user = new HashMap<>();
 
@@ -101,7 +101,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         if (count == 0) checker.hideItem();
 
         dbHelper = new DBHelper(getApplicationContext());
-        mDailyRemind = new DailyRemind(getApplicationContext());
+        mDailyRemind = new DailyRemindController(getApplicationContext());
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         user = sessionManager.getUserDetails();
         name = user.get("name");
