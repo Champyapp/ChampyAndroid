@@ -21,6 +21,8 @@ import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.adapter.OtherAdapter;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHCheckTableForExist;
+import com.example.ivan.champy_v2.helper.CHGetFacebookFriends;
+import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.interfaces.NewUser;
 import com.example.ivan.champy_v2.model.FriendModel;
 import com.example.ivan.champy_v2.model.User.Data;
@@ -30,11 +32,14 @@ import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,16 +64,39 @@ public class OtherFragment extends Fragment {
     private static final String TAG = "OtherFragment";
 
     private int mPage;
+    private String gcm;
 
     private Socket mSocket;
     private SwipeRefreshLayout gSwipeRefreshLayout;
-    //private CHGetFacebookFriends getFbFriends;
+    private CHGetFacebookFriends getFbFriends;
     private CHCheckTableForExist checkTableForExist;
+
+    // TODO: 16.11.2016 Fix double refreshing
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        Log.d(TAG, "onAttach: ");
+        Log.d(TAG, "onAttach: try to connect");
+        try {
+            mSocket = IO.socket("http://46.101.213.24:3007");
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+
+        mSocket.on("connect", onConnect);
+        mSocket.on("connected", onConnected);
+
+        mSocket.on("Relationship:new:accepted", modifiedRelationship);
+        mSocket.on("Relationship:new:removed", modifiedRelationship);
+        mSocket.on("Relationship:created:accepted", modifiedRelationship);
+        mSocket.on("Relationship:created:removed", modifiedRelationship);
+
+        mSocket.connect();
+
+//        getFbFriends = new CHGetFacebookFriends(getContext());
+//        CurrentUserHelper user = new CurrentUserHelper(getContext());
+//        gcm = user.getGCM();
+
     }
 
     @Override
@@ -86,6 +114,7 @@ public class OtherFragment extends Fragment {
         DBHelper dbHelper = new DBHelper(getContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         checkTableForExist = new CHCheckTableForExist(getContext());
+
 //        SessionManager sessionManager = new SessionManager(getContext());
 //        HashMap<String, String> user;
 //        user = sessionManager.getUserDetails();
@@ -126,9 +155,9 @@ public class OtherFragment extends Fragment {
         gSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //getFbFriends.getUserFacebookFriends(mToken);
+//                getFbFriends.getUserFacebookFriends(gcm);
                 refreshOtherView(gSwipeRefreshLayout, gView);
-                gSwipeRefreshLayout.setRefreshing(false);
+                //gSwipeRefreshLayout.setRefreshing(false);
             }
         });
         this.gView = view;
@@ -176,36 +205,38 @@ public class OtherFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        Log.d(TAG, "onDetach: ");
+        Log.d(TAG, "onDetach: Sockets off & disconnect");
+        mSocket.off();
+        mSocket.disconnect();
     }
 
-    //
-//    private Emitter.Listener onConnect = new Emitter.Listener() {
-//        @Override
-//        public void call(final Object... args) {
-//            CurrentUserHelper currentUser = new CurrentUserHelper(getContext());
-//            mSocket.emit("ready", currentUser.getToken());
-//            Log.d(TAG, "Sockets: connecting...");
-//        }
-//    };
-//    private Emitter.Listener onConnected = new Emitter.Listener() {
-//        @Override
-//        public void call(final Object... args) {
-//            Log.d(TAG, "Sockets: connected!");
-//        }
-//    };
-//    protected Emitter.Listener modifiedRelationship = new Emitter.Listener() {
-//        @Override
-//        public void call(final Object... args) {
-//            getActivity().runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    refreshOtherView(gSwipeRefreshLayout, gView);
-//                }});
-//            Log.d(TAG, "Sockets: modifiedRelationship");
-//        }
-//    };
-//
+
+    private Emitter.Listener onConnect = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            CurrentUserHelper currentUser = new CurrentUserHelper(getContext());
+            mSocket.emit("ready", currentUser.getToken());
+            Log.d(TAG, "Sockets: connecting...");
+        }
+    };
+    private Emitter.Listener onConnected = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            Log.d(TAG, "Sockets: connected!");
+        }
+    };
+    protected Emitter.Listener modifiedRelationship = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    refreshOtherView(gSwipeRefreshLayout, gView);
+                }});
+            Log.d(TAG, "Sockets: modifiedRelationship");
+        }
+    };
+
 
     public void refreshOtherView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         // Проверка на оффлайн вкладке OTHERS
