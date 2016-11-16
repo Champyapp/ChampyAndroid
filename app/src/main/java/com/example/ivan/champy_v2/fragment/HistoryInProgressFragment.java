@@ -21,6 +21,9 @@ public class HistoryInProgressFragment extends Fragment {
 
     private SwipeRefreshLayout gSwipeRefreshLayout;
     private OfflineMode offlineMode;
+    private ArrayList<SelfImprovement_model> self_improvement;
+    private RecyclerView rvContacts;
+    private HistoryChallengeAdapter adapter;
     private View gView;
 
     @Override
@@ -33,7 +36,7 @@ public class HistoryInProgressFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_history, container, false);
 
-        ArrayList<SelfImprovement_model> self_improvement = SelfImprovement_model.generate(getContext());
+        self_improvement = SelfImprovement_model.generate(getContext());
         ArrayList<HistoryChallenge> all = new ArrayList<>();
 
         for (int i = 0; i < self_improvement.size(); i++) {
@@ -63,8 +66,8 @@ public class HistoryInProgressFragment extends Fragment {
         });
         this.gView = view;
 
-        final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-        HistoryChallengeAdapter adapter = new HistoryChallengeAdapter(all, getContext());
+        rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
+        adapter = new HistoryChallengeAdapter(all, getContext());
         rvContacts.setAdapter(adapter);
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         return view;
@@ -76,7 +79,7 @@ public class HistoryInProgressFragment extends Fragment {
             swipeRefreshLayout.post(new Runnable() {
                 @Override
                 public void run() {
-                    ArrayList<SelfImprovement_model> self_improvement = SelfImprovement_model.generate(getContext());
+                    //ArrayList<SelfImprovement_model> self_improvement = SelfImprovement_model.generate(getContext());
                     ArrayList<HistoryChallenge> all = new ArrayList<>();
 
                     for (int i = 0; i < self_improvement.size(); i++) {
@@ -96,11 +99,9 @@ public class HistoryInProgressFragment extends Fragment {
                         ));
                     }
 
-                    final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-                    HistoryChallengeAdapter adapter = new HistoryChallengeAdapter(all, getContext());
+                    //adapter = new HistoryChallengeAdapter(all, getContext());
                     rvContacts.setAdapter(adapter);
                     rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
-
                     swipeRefreshLayout.setRefreshing(false);
                 }
             });
