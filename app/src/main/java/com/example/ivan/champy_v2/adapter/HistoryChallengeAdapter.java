@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.model.HistoryChallenge;
 
@@ -56,15 +57,15 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         switch (itemRowType) {
             case "Duel":
                 nameTextView.setText(goal + " during this period: " + constDuration + " days\nwith " + versus);
-                Glide.with(mContext).load(R.drawable.duel_yellow).override(80, 80).into(viewHolder.image);
+                Glide.with(mContext).load(R.drawable.duel_yellow).diskCacheStrategy(DiskCacheStrategy.ALL).override(80, 80).into(viewHolder.image);
                 break;
             case "Wake Up":
                 nameTextView.setText(wakeUpTime + " during this period: " + constDuration + " days");
-                Glide.with(mContext).load(R.drawable.wakeup_yellow).override(80, 80).into(viewHolder.image);
+                Glide.with(mContext).load(R.drawable.wakeup_yellow).diskCacheStrategy(DiskCacheStrategy.ALL).override(80, 80).into(viewHolder.image);
                 break;
             case "Self-Improvement":
                 nameTextView.setText(goal + " during this period: " + constDuration + " days");
-                Glide.with(mContext).load(R.drawable.self_yellow).override(80, 80).into(viewHolder.image);
+                Glide.with(mContext).load(R.drawable.self_yellow).diskCacheStrategy(DiskCacheStrategy.ALL).override(80, 80).into(viewHolder.image);
                 break;
             default:
                 nameTextView.setText(R.string.lostInternetConnection);

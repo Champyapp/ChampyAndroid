@@ -255,21 +255,16 @@ public class ChallengeController {
         dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
         cv = new ContentValues();
-        final Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
 
         Date date = new Date();
         Calendar c = GregorianCalendar.getInstance();
-
-        final long currentMidnight = unixTime - (c.get(Calendar.HOUR_OF_DAY) * 60 * 60)
-                - (c.get(Calendar.MINUTE) * 60) - (c.get(Calendar.SECOND));
-
+        final long currentMidnight = unixTime - (c.get(Calendar.HOUR_OF_DAY)*60*60) - (c.get(Calendar.MINUTE)*60) - (c.get(Calendar.SECOND));
         Log.d(TAG,"currentMidnight: " + currentMidnight);
-
         date.setTime(((minute * 60) + (hour * 60 * 60) + currentMidnight) * 1000);
         c.setTime(date);
-        // if user picked time which less than current we
-        if (Calendar.getInstance().getTimeInMillis() > c.getTimeInMillis()) c.add(Calendar.DATE, 1); // mb +(24*60*60) ?
 
+        // if user picked time which biggest than current we
+        if (Calendar.getInstance().getTimeInMillis() > c.getTimeInMillis()) c.add(Calendar.DATE, 1); // mb +(24*60*60) ?
         final long userInputTime = c.getTimeInMillis();
         Log.d(TAG, "userInputTime final result: " + userInputTime);
 
@@ -283,6 +278,7 @@ public class ChallengeController {
                     com.example.ivan.champy_v2.model.Single_in_progress.SingleInProgress data = response.body();
                     String inProgressId = data.getData().get_id();
 
+                    Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
                     myIntent.putExtra("inProgressId", inProgressId);
                     myIntent.putExtra("intentId", intentId);
 
@@ -403,7 +399,6 @@ public class ChallengeController {
         });
 
     }
-
 
 
 
@@ -596,6 +591,7 @@ public class ChallengeController {
                     }
                 } catch (NullPointerException e) {
                     e.printStackTrace();
+                    Log.d(TAG, "isUpdated: vse xyuinja" + e.getMessage());
                     return "false";
                 }
             } while (c.moveToNext());

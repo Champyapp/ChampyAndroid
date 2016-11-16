@@ -31,7 +31,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
     public static final String TAG = "AlarmReceiverActivity";
     private MediaPlayer mMediaPlayer;
     private ChallengeController cc;
-    private String finalInProgressChallengeId;
+    private String inProgressChallengeId;
     public Context context;
     public Activity activity;
 
@@ -40,7 +40,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        finalInProgressChallengeId = this.getIntent().getStringExtra("finalInProgressChallengeId");
+        inProgressChallengeId = this.getIntent().getStringExtra("inProgressChallengeId");
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.alarm);
@@ -78,7 +78,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
             case R.id.buttonWakeUpDoneForToday:
                 mMediaPlayer.stop();
                 try {
-                    cc.doneForToday(finalInProgressChallengeId);
+                    cc.doneForToday(inProgressChallengeId);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

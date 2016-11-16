@@ -105,7 +105,8 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
 
         CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
         name = user.getName();
-        @SuppressLint("SdCardPath") String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+        @SuppressLint("SdCardPath")
+        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
 
