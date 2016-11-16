@@ -21,8 +21,8 @@ public class DailyRemindController {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 100, notifyIntent, PendingIntent.FLAG_ONE_SHOT);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 12);
-        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, 10);
+        calendar.set(Calendar.MINUTE, 48);
         calendar.set(Calendar.SECOND, 0);
 
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(ALARM_SERVICE);

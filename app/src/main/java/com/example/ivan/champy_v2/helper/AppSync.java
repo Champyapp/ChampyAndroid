@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.example.ivan.champy_v2.DailyRemindController;
 import com.example.ivan.champy_v2.activity.RoleControllerActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.interfaces.NewUser;
@@ -112,6 +113,9 @@ public class AppSync {
                     CHGetFacebookFriends getFbFriends = new CHGetFacebookFriends(context);
                     getUserPending(userId);
                     getFbFriends.getUserFacebookFriends(gcm);
+
+                    DailyRemindController dailyRemind = new DailyRemindController(context);
+                    dailyRemind.activateDailyNotificationReminder();
 
 
                     String api_path = null;

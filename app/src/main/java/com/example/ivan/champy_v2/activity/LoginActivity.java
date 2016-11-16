@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.debug.hv.ViewServer;
+import com.example.ivan.champy_v2.DailyRemindController;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.helper.AppSync;
 import com.example.ivan.champy_v2.interfaces.NewUser;
@@ -249,6 +250,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             user.getSuccessChallenges().toString(),
                             user.getInProgressChallengesCount().toString(),
                             user.getLevel().getNumber().toString());
+
+                    DailyRemindController dailyRemind = new DailyRemindController(getApplicationContext());
+                    dailyRemind.activateDailyNotificationReminder();
 
 
                     String api_path = null;

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.example.ivan.champy_v2.DailyRemindController;
 import com.example.ivan.champy_v2.activity.RoleControllerActivity;
 import com.facebook.login.LoginManager;
 
@@ -192,6 +193,10 @@ public class SessionManager {
         // Clearing all user data from Shared Preferences
         editor.clear();
         editor.commit();
+        // Disable daily notifications
+        DailyRemindController dailyRemind = new DailyRemindController(activity);
+        dailyRemind.deactivateDailyNotificationReminder();
+        // go to login activity
         Intent intent = new Intent(activity, RoleControllerActivity.class);
         activity.startActivity(intent);
     }
