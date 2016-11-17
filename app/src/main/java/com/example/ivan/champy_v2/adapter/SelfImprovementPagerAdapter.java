@@ -8,13 +8,13 @@ import android.view.ViewGroup;
 
 import com.example.ivan.champy_v2.fragment.SelfImprovementFragment;
 
-public class PagerAdapter extends FragmentStatePagerAdapter {
+public class SelfImprovementPagerAdapter extends FragmentStatePagerAdapter {
 
     private SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
 
     private int size = 0;
 
-    public PagerAdapter(FragmentManager fm) {
+    public SelfImprovementPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 

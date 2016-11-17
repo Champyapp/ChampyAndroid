@@ -261,7 +261,6 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         return tempView;
     }
 
-
     @Override
     public int dataCount() {
         return arrayList.size();

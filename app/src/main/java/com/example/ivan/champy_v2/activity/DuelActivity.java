@@ -31,7 +31,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.utils.SessionManager;
-import com.example.ivan.champy_v2.adapter.PagerAdapterDuel;
+import com.example.ivan.champy_v2.adapter.DuelPagerAdapter;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
@@ -226,7 +226,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
                     sessionManager.setSelfSize(data_size);
                     SessionManager sessionManager = new SessionManager(getApplicationContext());
                     int size = sessionManager.getSelfSize();
-                    PagerAdapterDuel pagerAdapter = new PagerAdapterDuel(getSupportFragmentManager());
+                    DuelPagerAdapter pagerAdapter = new DuelPagerAdapter(getSupportFragmentManager());
                     final ViewPager viewPager = (ViewPager) findViewById(R.id.pager_duel);
                     pagerAdapter.setCount(size);
                     viewPager.setAdapter(pagerAdapter);

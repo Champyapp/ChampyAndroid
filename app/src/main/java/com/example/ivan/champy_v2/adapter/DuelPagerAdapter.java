@@ -8,13 +8,13 @@ import android.view.ViewGroup;
 
 import com.example.ivan.champy_v2.fragment.DuelFragment;
 
-public class PagerAdapterDuel extends FragmentStatePagerAdapter {
+public class DuelPagerAdapter extends FragmentStatePagerAdapter {
 
     private int size = 0;
 
     private SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
 
-    public PagerAdapterDuel(FragmentManager fm) {
+    public DuelPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 

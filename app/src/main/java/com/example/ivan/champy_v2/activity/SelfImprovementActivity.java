@@ -23,7 +23,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.ivan.champy_v2.R;
-import com.example.ivan.champy_v2.adapter.PagerAdapter;
+import com.example.ivan.champy_v2.adapter.SelfImprovementPagerAdapter;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
@@ -214,7 +214,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
                     }
                     sessionManager.setSelfSize(data_size);
                     int size = sessionManager.getSelfSize();
-                    PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager());
+                    SelfImprovementPagerAdapter pagerAdapter = new SelfImprovementPagerAdapter(getSupportFragmentManager());
                     final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
                     pagerAdapter.setCount(size);
                     viewPager.setAdapter(pagerAdapter);
