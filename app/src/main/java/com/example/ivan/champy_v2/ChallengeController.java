@@ -589,10 +589,9 @@ public class ChallengeController {
                         lastUpdate = c.getString(c.getColumnIndex("updated"));
                         return lastUpdate;
                     }
-                } catch (NullPointerException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
-                    Log.d(TAG, "isUpdated: vse xyuinja" + e.getMessage());
-                    return "false";
+                    Log.d(TAG, "isUpdated: vse xyuinja: " + e.getMessage());
                 }
             } while (c.moveToNext());
         }
@@ -609,10 +608,15 @@ public class ChallengeController {
         if (c.moveToFirst()) {
             int coldescription = c.getColumnIndex("description");
             do {
-                if (c.getString(c.getColumnIndex("status")).equals("started")) {
-                    if (c.getString(coldescription).equals(description)) {
-                        ok = true;
+                try {
+                    if (c.getString(c.getColumnIndex("status")).equals("started")) {
+                        if (c.getString(coldescription).equals(description)) {
+                            ok = true;
+                        }
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.d(TAG, "isActive: vse xyunja: " + e.getMessage());
                 }
             } while (c.moveToNext());
         }
@@ -630,11 +634,16 @@ public class ChallengeController {
             int colDescription = c.getColumnIndex("wakeUpTime");
             int status = c.getColumnIndex("status");
             do {
-                if (c.getString(status).equals("started")) {
-                    if (c.getString(colDescription).equals(time)) {
-                        ok = false;
-                        break;
+                try {
+                    if (c.getString(status).equals("started")) {
+                        if (c.getString(colDescription).equals(time)) {
+                            ok = false;
+                            break;
+                        }
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.d(TAG, "isActiveWakeUp: vse xyunja: " + e.getMessage());
                 }
             } while (c.moveToNext());
         }
