@@ -22,8 +22,9 @@ public class HistoryInProgressFragment extends Fragment {
     private SwipeRefreshLayout gSwipeRefreshLayout;
     private OfflineMode offlineMode;
     private ArrayList<SelfImprovement_model> self_improvement;
-    private RecyclerView rvContacts;
+    private ArrayList<HistoryChallenge> all;
     private HistoryChallengeAdapter adapter;
+    private RecyclerView rvContacts;
     private View gView;
 
     @Override
@@ -37,7 +38,7 @@ public class HistoryInProgressFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_history, container, false);
 
         self_improvement = SelfImprovement_model.generate(getContext());
-        ArrayList<HistoryChallenge> all = new ArrayList<>();
+        all = new ArrayList<>();
 
         for (int i = 0; i < self_improvement.size(); i++) {
             SelfImprovement_model item = self_improvement.get(i);
@@ -80,7 +81,7 @@ public class HistoryInProgressFragment extends Fragment {
                 @Override
                 public void run() {
                     //ArrayList<SelfImprovement_model> self_improvement = SelfImprovement_model.generate(getContext());
-                    ArrayList<HistoryChallenge> all = new ArrayList<>();
+                    //ArrayList<HistoryChallenge> all = new ArrayList<>();
 
                     for (int i = 0; i < self_improvement.size(); i++) {
                         SelfImprovement_model item = self_improvement.get(i);

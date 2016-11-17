@@ -19,7 +19,11 @@ import java.util.ArrayList;
 
 public class HistoryWinsFragment extends Fragment {
 
+    private ArrayList<SelfImprovement_model> self_improvement = SelfImprovement_model.generateWins(getContext());
+    private ArrayList<HistoryChallenge> winsArray;
     private SwipeRefreshLayout gSwipeRefreshLayout;
+    private HistoryChallengeAdapter adapter;
+    private RecyclerView rvContacts;
     private OfflineMode offlineMode;
     private View gView;
 
@@ -33,8 +37,7 @@ public class HistoryWinsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_history, container, false);
 
-        ArrayList<SelfImprovement_model> self_improvement = SelfImprovement_model.generateWins(getContext());
-        ArrayList<HistoryChallenge> winsArray = new ArrayList<>();
+        winsArray = new ArrayList<>();
 
         for (int i = 0; i < self_improvement.size(); i++) {
             SelfImprovement_model item = self_improvement.get(i);
@@ -64,8 +67,8 @@ public class HistoryWinsFragment extends Fragment {
         });
         this.gView = view;
 
-        final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-        HistoryChallengeAdapter adapter = new HistoryChallengeAdapter(winsArray, getContext());
+        rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
+        adapter = new HistoryChallengeAdapter(winsArray, getContext());
         rvContacts.setAdapter(adapter);
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         return view;
@@ -77,9 +80,7 @@ public class HistoryWinsFragment extends Fragment {
             swipeRefreshLayout.post(new Runnable() {
                 @Override
                 public void run() {
-                    ArrayList<SelfImprovement_model> self_improvement = SelfImprovement_model.generateWins(getContext());
-                    ArrayList<HistoryChallenge> winsArray = new ArrayList<>();
-
+                    //winsArray = new ArrayList<>();
                     for (int i = 0; i < self_improvement.size(); i++) {
                         SelfImprovement_model item = self_improvement.get(i);
                         String description = item.getGoal();
@@ -97,8 +98,7 @@ public class HistoryWinsFragment extends Fragment {
                         ));
                     }
 
-                    final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-                    HistoryChallengeAdapter adapter = new HistoryChallengeAdapter(winsArray, getContext());
+                    adapter = new HistoryChallengeAdapter(winsArray, getContext());
                     rvContacts.setAdapter(adapter);
                     rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
 
