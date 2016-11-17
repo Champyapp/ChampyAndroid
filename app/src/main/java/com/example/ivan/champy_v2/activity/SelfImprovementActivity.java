@@ -22,15 +22,15 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.R;
-import com.example.ivan.champy_v2.utils.SessionManager;
 import com.example.ivan.champy_v2.adapter.PagerAdapter;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.model.Self.Datum;
+import com.example.ivan.champy_v2.utils.OfflineMode;
+import com.example.ivan.champy_v2.utils.SessionManager;
 import com.facebook.FacebookSdk;
 
 import java.io.File;
@@ -76,9 +76,12 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
 
         CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
         int count = checker.getPendingCount();
-        TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-        view.setText("+" + (count > 0 ? String.valueOf(count) : null));
-        if (count == 0) checker.hideItem();
+        if (count == 0) {
+            checker.hideItem();
+        } else {
+            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+        }
 
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         TextView tvIChallengeMySelfTo = (TextView)findViewById(R.id.tvChallengeToMySelf);
@@ -210,7 +213,6 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
                         }
                     }
                     sessionManager.setSelfSize(data_size);
-                    SessionManager sessionManager = new SessionManager(getApplicationContext());
                     int size = sessionManager.getSelfSize();
                     PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager());
                     final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);

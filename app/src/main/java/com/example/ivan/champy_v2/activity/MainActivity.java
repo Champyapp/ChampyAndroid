@@ -66,6 +66,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private View headerLayout;
     //private CHSocket sockets;
 
+    // TODO: 17.11.2016 Создати метод "updateUI", засунути туда створення карточок і визивати це
+    // TODO: 17.11.2016           після кожної зміни без перезавантаження сторінки (в UI потоці)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -196,7 +199,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             view.setText("+" + (count > 0 ? String.valueOf(count) : null));
         }
     }
-
 
     @Override
     protected void onDestroy() {

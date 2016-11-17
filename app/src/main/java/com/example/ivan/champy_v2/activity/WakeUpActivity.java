@@ -22,11 +22,11 @@ import android.widget.TimePicker;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
-import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
 
@@ -41,7 +41,6 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
     public final static String API_URL = "http://46.101.213.24:3007";
     private String userId, token;
     private TimePicker alarmTimePicker;
-    private AlarmManager alarmManager;
     private CurrentUserHelper user;
     private Snackbar snackbar;
 
@@ -112,7 +111,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
             e.printStackTrace();
         }
 
-        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarmTimePicker = (TimePicker) findViewById(R.id.timePicker);
         ImageButton imageButton = (ImageButton) findViewById(R.id.imageButtonAccept);
 

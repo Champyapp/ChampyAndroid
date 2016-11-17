@@ -142,12 +142,9 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 //            public void run() {
 //                loadUserFriends();
 //                loadUserPending();
-//            }
 //        });
-
-
+//            }
         ViewServer.get(this).addWindow(this);
-
     }
 
     @Override
