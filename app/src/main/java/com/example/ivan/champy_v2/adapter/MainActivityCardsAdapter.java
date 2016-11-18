@@ -67,13 +67,13 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         String itemStatus = currentCard.getStatus();
         final String itemInProgressId = currentCard.getId();
 
+        String[] senderProgress = toArrayOfStrings(itemSenderProgress);
+
 //        Log.d(TAG, "getView: itemUpdate: " + itemUpdate + " !!!");
 //        Log.d(TAG, "getView: itemGoal: " + itemGoal);
 //        Log.d(TAG, "getView: itemType: " + itemType);
 //        Log.d(TAG, "getView: itemID: " + itemInProgressId);
 //        Log.d(TAG, "getView: itemStatus: " + itemStatus);
-
-        String[] senderProgress = toArrayOfStrings(itemSenderProgress);
 
         switch (itemType) {
             case "Wake Up":
@@ -114,7 +114,6 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         tvEveryDayForTheNext.setTypeface(typeface);
         tvEveryDayForTheNext.setTextSize((float)(y*1.3));
         final TextView tvDuration = (TextView) tempView.findViewById(R.id.textViewDuration);
-
 //        if (itemType.equals("Wake Up") || itemUpdate.equals("true")) { //?
 //            tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
 //            buttonShare.setVisibility(View.VISIBLE);
@@ -127,18 +126,29 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 //            tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
 //        }
 
-        if (itemUpdate.equals("false")) {
+//        if (itemUpdate.equals("false")) {
+//            tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
+//            buttonDone.setVisibility(View.VISIBLE);
+//            buttonShare.setVisibility(View.INVISIBLE);
+//            tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
+//            if (itemType.equals("Wake Up")) {
+//                tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
+//                buttonShare.setVisibility(View.VISIBLE);
+//                buttonDone.setVisibility(View.INVISIBLE);
+//                tvEveryDayForTheNext.setVisibility(View.VISIBLE);
+//            }
+//        } else {
+//            tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
+//            buttonShare.setVisibility(View.VISIBLE);
+//            buttonDone.setVisibility(View.INVISIBLE);
+//            tvEveryDayForTheNext.setVisibility(View.VISIBLE);
+//        }
+        if (itemUpdate.equals("false") && !itemType.equals("Wake Up")) {
             tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
             buttonDone.setVisibility(View.VISIBLE);
             buttonShare.setVisibility(View.INVISIBLE);
             tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
-            if (itemType.equals("Wake Up")) {
-                tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
-                buttonShare.setVisibility(View.VISIBLE);
-                buttonDone.setVisibility(View.INVISIBLE);
-                tvEveryDayForTheNext.setVisibility(View.VISIBLE);
-            }
-        } else {
+        } else if (itemUpdate.equals("true") || itemType.equals("Wake Up")) {
             tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
             buttonShare.setVisibility(View.VISIBLE);
             buttonDone.setVisibility(View.INVISIBLE);
@@ -152,20 +162,20 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         String token = user.getToken();
         final ChallengeController cc = new ChallengeController(getContext(), (Activity) getContext(), token, userId);
 
-//        /**
-//         * My algorithm for displaying buttons inside cards view and opportunity for check challenge
-//         * @param longSenderProgress it's last element of the "Sender Progress" (api: 'at"). We are can
-//         *                           take in from ChallengeController -> GenerateCardsForMainActivity()
-//         *                           method. We use it for compare.
-//         * @param checkInPlusOneDay it's parsed long of 'longSenderProgress' plus one day in seconds.
-//         *                          We use it to give the user time for relaxing. If current time
-//         *                          more than checkInPlusOneDay then we make button "doneForToday"
-//         *                          isActive and now we are ready to rewrite our 'senderProgress'
-//         *  it's parsed long of 'longSenderProgress' plus one day and one hour in seconds.
-//         *  We use it to give user time for press the button "done for today". If user did it
-//         *  then we are rewrite senderProgress and make the button "doneForToday" not active
-//         *  else - autoSurrender
-//         */
+        /**
+         * My algorithm for displaying buttons inside cards view and opportunity for check challenge
+         * @param longSenderProgress it's last element of the "Sender Progress" (api: 'at"). We can
+         *                           take it from ChallengeController -> GenerateCardsForMainActivity()
+         *                           method. We use it for compare.
+         * @param checkInPlusOneDay it's parsed long of 'longSenderProgress' plus one day in seconds.
+         *                          We use it to give the user time for relaxing. If current time
+         *                          more than checkInPlusOneDay then we make button "doneForToday"
+         *                          isActive and now we are ready to rewrite our 'senderProgress'
+         *  @param checkInPlusTwoDays It's parsed long of 'longSenderProgress' plus two days in seconds.
+         *                            We use it to give user time for press the button "done for today".
+         *                            If user did it then we are rewrite senderProgress and make
+         *                            the button "doneForToday" active, else - autoSurrender
+         */
 
         long now = Calendar.getInstance().getTimeInMillis() / 1000;
         long longSenderProgress = 0;
@@ -183,6 +193,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 
 
         if (longSenderProgress != 0L && now > senderProgressMidNight + oneDay) {
+            // it's mean "self" and "duel"
             if (!itemType.equals("Wake Up")) {
                 tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
                 buttonShare.setVisibility(View.INVISIBLE);
@@ -191,7 +202,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                 DBHelper dbHelper = new DBHelper(getContext());
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
                 ContentValues cv = new ContentValues();
-                cv.put("updated", "true");
+                cv.put("updated", "false"); // was true
                 db.update("updated",      cv, "challenge_id = ?", new String[]{itemInProgressId});
                 db.update("myChallenges", cv, "challenge_id = ?", new String[]{itemInProgressId});
             } else if (now > senderProgressMidNight + oneDay + oneDay) {

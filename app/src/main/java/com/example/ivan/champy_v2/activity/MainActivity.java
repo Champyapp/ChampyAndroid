@@ -175,13 +175,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume: ");
-//        sockets = new CHSocket(MainActivity.this, getApplicationContext());
-//        sockets.tryToConnect();
-//        sockets.socketOnAndEmmit();
+
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {

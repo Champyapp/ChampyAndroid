@@ -25,7 +25,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         Intent notifyIntent = new Intent();
-        notifyIntent.setClassName("com.example.ivan.champy_v2", "com.example.ivan.champy_v2.MyNotifyReceiver");
+        notifyIntent.setClassName("com.example.ivan.champy_v2", "com.example.ivan.champy_v2.service.MyNotifyService");
         notifyIntent.putExtra("notifyIntent", notifyInt);
         notifyIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 

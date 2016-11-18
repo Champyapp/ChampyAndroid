@@ -22,6 +22,7 @@ import com.example.ivan.champy_v2.model.active_in_progress.Recipient;
 import com.example.ivan.champy_v2.model.active_in_progress.Sender;
 import com.example.ivan.champy_v2.model.duel.Duel;
 import com.example.ivan.champy_v2.model.single_in_progress.Data;
+import com.example.ivan.champy_v2.utils.Constants;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 
 import org.json.JSONException;
@@ -46,7 +47,6 @@ public class ChallengeController {
 
     public static final String API_URL = "http://46.101.213.24:3007";
     public static final String TAG = "ChallengeController";
-    public static long unixTime = System.currentTimeMillis() / 1000L;
     private String duration, details, update = "0";
     public String token, userId;
     private Context context;
@@ -258,7 +258,7 @@ public class ChallengeController {
 
         Date date = new Date();
         Calendar c = GregorianCalendar.getInstance();
-        final long currentMidnight = unixTime - (c.get(Calendar.HOUR_OF_DAY)*60*60) - (c.get(Calendar.MINUTE)*60) - (c.get(Calendar.SECOND));
+        final long currentMidnight = Constants.unixTime - (c.get(Calendar.HOUR_OF_DAY)*60*60) - (c.get(Calendar.MINUTE)*60) - (c.get(Calendar.SECOND));
         Log.d(TAG,"currentMidnight: " + currentMidnight);
         date.setTime(((minute * 60) + (hour * 60 * 60) + currentMidnight) * 1000);
         c.setTime(date);
@@ -492,7 +492,7 @@ public class ChallengeController {
                         if (datum.getEnd() != null) {
                             int end = datum.getEnd();
                             int begin = datum.getBegin();
-                            int days = round((end - unixTime) / 86400);
+                            int days = round((end - Constants.unixTime) / 86400);
                             int constDays = round((end - begin) / 86400);
                             challenge_duration = String.valueOf(days);
                             constDuration = String.valueOf(constDays);

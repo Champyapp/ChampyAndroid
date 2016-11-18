@@ -14,6 +14,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.example.ivan.champy_v2.R;
+import com.example.ivan.champy_v2.utils.Constants;
 import com.example.ivan.champy_v2.utils.SessionManager;
 import com.example.ivan.champy_v2.activity.FriendsActivity;
 import com.example.ivan.champy_v2.activity.HistoryActivity;
@@ -42,8 +43,6 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-import static com.example.ivan.champy_v2.ChallengeController.API_URL;
-import static com.example.ivan.champy_v2.ChallengeController.unixTime;
 import static java.lang.Math.round;
 
 public class MyGcmListenerService extends GcmListenerService {
@@ -178,7 +177,7 @@ public class MyGcmListenerService extends GcmListenerService {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final ContentValues cv = new ContentValues();
         int clearCount = db.delete("myChallenges", null, null);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
         Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userId, "0", token);
         call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
@@ -206,7 +205,7 @@ public class MyGcmListenerService extends GcmListenerService {
                         if (datum.getEnd() != null) {
                             int end = datum.getEnd();
                             int begin = datum.getBegin();
-                            int days = round((end - unixTime) / 86400);
+                            int days = round((end - Constants.unixTime) / 86400);
                             int constDays = round((end - begin) / 86400);
                             challenge_duration = "" + days;
                             constDuration = "" + constDays;

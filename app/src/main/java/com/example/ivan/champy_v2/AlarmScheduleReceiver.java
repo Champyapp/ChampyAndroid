@@ -11,7 +11,7 @@ import android.util.Log;
 
 import com.example.ivan.champy_v2.data.DBHelper;
 
-public class AlarmSchedule extends WakefulBroadcastReceiver {
+public class AlarmScheduleReceiver extends WakefulBroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {

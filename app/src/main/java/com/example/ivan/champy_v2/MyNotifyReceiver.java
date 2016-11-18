@@ -1,5 +1,6 @@
 package com.example.ivan.champy_v2;
 
+import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.app.NotificationCompat;
 
+import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.activity.MainActivity;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
@@ -35,5 +37,4 @@ public class MyNotifyReceiver extends BroadcastReceiver {
         notificationManager.notify(100, builder.build());
 
     }
-
 }

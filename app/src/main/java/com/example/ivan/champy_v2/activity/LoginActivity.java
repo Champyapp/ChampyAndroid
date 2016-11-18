@@ -259,7 +259,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     // если у юзера есть фото на facebook-e
                     if (user.getPhoto() != null) {
                         // создаем путь к файлу
-                        @SuppressLint("SdCardPath") String sdCardPath = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+                        @SuppressLint("SdCardPath")
+                        String sdCardPath = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
                         //String internalPath = "/android/data/com.azinecllc.champy/Images";
                         // создаем файл по нашему пути
                         File profilePhoto = new File(sdCardPath, "profile.jpg");
