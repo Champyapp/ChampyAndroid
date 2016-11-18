@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class HistoryWinsFragment extends Fragment {
 
-    private ArrayList<SelfImprovement_model> self_improvement = SelfImprovement_model.generateWins(getContext());
+    private ArrayList<SelfImprovement_model> self_improvement;
     private ArrayList<HistoryChallenge> winsArray;
     private SwipeRefreshLayout gSwipeRefreshLayout;
     private HistoryChallengeAdapter adapter;
@@ -36,6 +36,8 @@ public class HistoryWinsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_history, container, false);
+
+        self_improvement = SelfImprovement_model.generateWins(getContext());
 
         winsArray = new ArrayList<>();
 
@@ -80,7 +82,9 @@ public class HistoryWinsFragment extends Fragment {
             swipeRefreshLayout.post(new Runnable() {
                 @Override
                 public void run() {
-                    //winsArray = new ArrayList<>();
+
+                    winsArray = new ArrayList<>();
+
                     for (int i = 0; i < self_improvement.size(); i++) {
                         SelfImprovement_model item = self_improvement.get(i);
                         String description = item.getGoal();

@@ -44,11 +44,13 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp" />
 
+     <!-- change icon for @drawable/reload -->
+
     <ImageView
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:id="@+id/imageRetry"
-        android:src="@drawable/reload"
+        android:src="@drawable/block"
         android:visibility="invisible"
         android:layout_below="@+id/tvLostInternetConnection"
         android:layout_centerHorizontal="true"
