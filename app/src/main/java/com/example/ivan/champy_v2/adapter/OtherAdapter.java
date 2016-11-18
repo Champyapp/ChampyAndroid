@@ -250,10 +250,10 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
                         sessionManager.setRefreshPending("false");
 
                         com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(Friends.class);
-                        Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.sendFriendRequest(id, friend, token);
-                        call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
+                        Call<com.example.ivan.champy_v2.model.friend.Friend> call = friends.sendFriendRequest(id, friend, token);
+                        call.enqueue(new Callback<com.example.ivan.champy_v2.model.friend.Friend>() {
                             @Override
-                            public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
+                            public void onResponse(Response<com.example.ivan.champy_v2.model.friend.Friend> response, Retrofit retrofit) {
                                 if (response.isSuccess()) {
                                     Log.d(TAG, "Status: Sent FriendModel Request");
                                     cv.put("name", mContacts.get(position).getName());

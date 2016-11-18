@@ -10,7 +10,7 @@ public interface CreateChallenge {
 
     @FormUrlEncoded
     @POST("/v1/challenges")
-    Call<com.example.ivan.champy_v2.model.Create_challenge.CreateChallenge> createChallenge(
+    Call<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge> createChallenge(
             @Field("name") String name,
             @Field("type") String type_id,
             @Field("description") String description,

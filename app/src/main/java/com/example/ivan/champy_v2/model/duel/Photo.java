@@ -1,4 +1,4 @@
-package com.example.ivan.champy_v2.model.Duel;
+package com.example.ivan.champy_v2.model.duel;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,10 +1,8 @@
 package com.example.ivan.champy_v2.interfaces;
 
 import com.example.ivan.champy_v2.model.Token;
-import com.example.ivan.champy_v2.model.User.LoginData;
-import com.example.ivan.champy_v2.model.User.User;
-
-import java.util.List;
+import com.example.ivan.champy_v2.model.user.LoginData;
+import com.example.ivan.champy_v2.model.user.User;
 
 import retrofit.Call;
 import retrofit.http.Body;

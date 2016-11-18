@@ -48,6 +48,8 @@ public class FriendModel {
         return mPicture;
     }
 
-    public String getID() { return  mID; }
+    public String getID() {
+        return  mID;
+    }
 
 }

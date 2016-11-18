@@ -1,4 +1,4 @@
-package com.example.ivan.champy_v2.model.Self;
+package com.example.ivan.champy_v2.model.self;
 
 import java.util.HashMap;
 import java.util.Map;

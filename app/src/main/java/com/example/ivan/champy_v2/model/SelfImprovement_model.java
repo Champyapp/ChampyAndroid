@@ -216,7 +216,7 @@ public class SelfImprovement_model {
                         arrayList.add(new SelfImprovement_model(
                                 c.getString(coldescription),
                                 c.getString(colduration),
-                                c.getString(nameColIndex), // it means "wake up" - is name and type..
+                                c.getString(nameColIndex), // it's mean "wake up" - is name and type..
                                 c.getString(colchallenge_id),
                                 "finished",
                                 c.getString(updated),

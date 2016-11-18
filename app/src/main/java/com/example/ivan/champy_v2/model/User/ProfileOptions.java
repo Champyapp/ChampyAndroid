@@ -1,5 +1,5 @@
 
-package com.example.ivan.champy_v2.model.User;
+package com.example.ivan.champy_v2.model.user;
 
 import java.util.HashMap;
 import java.util.Map;

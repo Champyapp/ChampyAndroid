@@ -12,12 +12,12 @@ import com.example.ivan.champy_v2.DailyRemindController;
 import com.example.ivan.champy_v2.activity.RoleControllerActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.interfaces.NewUser;
-import com.example.ivan.champy_v2.model.Friend.Datum;
-import com.example.ivan.champy_v2.model.Friend.Friend;
-import com.example.ivan.champy_v2.model.Friend.Friend_;
-import com.example.ivan.champy_v2.model.Friend.Owner;
-import com.example.ivan.champy_v2.model.User.Data;
-import com.example.ivan.champy_v2.model.User.User;
+import com.example.ivan.champy_v2.model.friend.Datum;
+import com.example.ivan.champy_v2.model.friend.Friend;
+import com.example.ivan.champy_v2.model.friend.Friend_;
+import com.example.ivan.champy_v2.model.friend.Owner;
+import com.example.ivan.champy_v2.model.user.Data;
+import com.example.ivan.champy_v2.model.user.User;
 import com.example.ivan.champy_v2.utils.SessionManager;
 
 import org.json.JSONException;
@@ -124,7 +124,7 @@ public class AppSync {
                         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
                         File file = new File(path, "profile.jpg");
                         if (!file.exists()){
-                            com.example.ivan.champy_v2.model.User.Photo photo = data.getPhoto();
+                            com.example.ivan.champy_v2.model.user.Photo photo = data.getPhoto();
                             api_path = API_URL + photo.getLarge();
                             Log.i("AppSync", "GetUserPhoto: " + api_path);
                         }
@@ -160,7 +160,7 @@ public class AppSync {
         int clearCount = db.delete("pending", null, null);
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
-        Call<com.example.ivan.champy_v2.model.Friend.Friend> callGetUserFriends = friends.getUserFriends(userId, this.token);
+        Call<com.example.ivan.champy_v2.model.friend.Friend> callGetUserFriends = friends.getUserFriends(userId, this.token);
         callGetUserFriends.enqueue(new Callback<Friend>() {
             @Override
             public void onResponse(Response<Friend> response, Retrofit retrofit) {

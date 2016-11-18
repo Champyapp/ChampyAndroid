@@ -1,8 +1,8 @@
 package com.example.ivan.champy_v2.interfaces;
 
-import com.example.ivan.champy_v2.model.User.Delete;
-import com.example.ivan.champy_v2.model.User.Profile_data;
-import com.example.ivan.champy_v2.model.User.User;
+import com.example.ivan.champy_v2.model.user.Delete;
+import com.example.ivan.champy_v2.model.user.Profile_data;
+import com.example.ivan.champy_v2.model.user.User;
 import com.squareup.okhttp.RequestBody;
 
 import retrofit.Call;

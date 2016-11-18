@@ -35,10 +35,10 @@ import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.interfaces.CustomItemClickListener;
-import com.example.ivan.champy_v2.model.Friend.Datum;
-import com.example.ivan.champy_v2.model.Friend.Friend;
-import com.example.ivan.champy_v2.model.Friend.Friend_;
-import com.example.ivan.champy_v2.model.Friend.Owner;
+import com.example.ivan.champy_v2.model.friend.Datum;
+import com.example.ivan.champy_v2.model.friend.Friend;
+import com.example.ivan.champy_v2.model.friend.Friend_;
+import com.example.ivan.champy_v2.model.friend.Owner;
 import com.example.ivan.champy_v2.model.Pending_friend;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
@@ -349,10 +349,10 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         final ContentValues cv = new ContentValues();
 
         com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
-        Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.getUserFriends(id, token);
-        call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
+        Call<com.example.ivan.champy_v2.model.friend.Friend> call = friends.getUserFriends(id, token);
+        call.enqueue(new Callback<com.example.ivan.champy_v2.model.friend.Friend>() {
             @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
+            public void onResponse(Response<com.example.ivan.champy_v2.model.friend.Friend> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     List<Datum> data = response.body().getData();
                     for (int i = 0; i < data.size(); i++) {

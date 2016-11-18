@@ -2,8 +2,8 @@ import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
 import com.example.ivan.champy_v2.interfaces.Friends;
 import com.example.ivan.champy_v2.interfaces.NewUser;
 import com.example.ivan.champy_v2.interfaces.SelfImprovement;
-import com.example.ivan.champy_v2.model.Friend.Friend;
-import com.example.ivan.champy_v2.model.User.User;
+import com.example.ivan.champy_v2.model.friend.Friend;
+import com.example.ivan.champy_v2.model.user.User;
 
 import org.junit.Test;
 
@@ -75,10 +75,10 @@ public class API_test {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         SelfImprovement selfImprovement = retrofit.create(SelfImprovement.class);
-        Call<com.example.ivan.champy_v2.model.Self.SelfImprovement> call = selfImprovement.getChallenges(token);
-        call.enqueue(new Callback<com.example.ivan.champy_v2.model.Self.SelfImprovement>() {
+        Call<com.example.ivan.champy_v2.model.self.SelfImprovement> call = selfImprovement.getChallenges(token);
+        call.enqueue(new Callback<com.example.ivan.champy_v2.model.self.SelfImprovement>() {
             @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.Self.SelfImprovement> response, Retrofit retrofit) {
+            public void onResponse(Response<com.example.ivan.champy_v2.model.self.SelfImprovement> response, Retrofit retrofit) {
                 if (response.isSuccess()) assertEquals("OK", true, true);
                 else assertEquals("Wrong", true, false);
             }
@@ -97,10 +97,10 @@ public class API_test {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
-        Call<com.example.ivan.champy_v2.model.Active_in_progress.ActiveInProgress> call = activeInProgress.getActiveInProgress(id, "1457019726", token);
-        call.enqueue(new Callback<com.example.ivan.champy_v2.model.Active_in_progress.ActiveInProgress>() {
+        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call = activeInProgress.getActiveInProgress(id, "1457019726", token);
+        call.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
             @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.Active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
+            public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) assertEquals("OK", true, true);
                 else assertEquals("Wrong", true, false);
             }

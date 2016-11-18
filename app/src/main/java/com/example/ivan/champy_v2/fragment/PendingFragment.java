@@ -21,9 +21,9 @@ import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHGetFacebookFriends;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.interfaces.CustomItemClickListener;
-import com.example.ivan.champy_v2.model.Friend.Datum;
-import com.example.ivan.champy_v2.model.Friend.Friend_;
-import com.example.ivan.champy_v2.model.Friend.Owner;
+import com.example.ivan.champy_v2.model.friend.Datum;
+import com.example.ivan.champy_v2.model.friend.Friend_;
+import com.example.ivan.champy_v2.model.friend.Owner;
 import com.example.ivan.champy_v2.model.Pending_friend;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
@@ -219,10 +219,10 @@ public class PendingFragment extends Fragment {
         com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
 
         if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
-            Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.getUserFriends(id, token);
-            call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
+            Call<com.example.ivan.champy_v2.model.friend.Friend> call = friends.getUserFriends(id, token);
+            call.enqueue(new Callback<com.example.ivan.champy_v2.model.friend.Friend>() {
                 @Override
-                public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
+                public void onResponse(Response<com.example.ivan.champy_v2.model.friend.Friend> response, Retrofit retrofit) {
                     if (response.isSuccess()) {
                         List<Datum> data = response.body().getData();
                         // get data from response

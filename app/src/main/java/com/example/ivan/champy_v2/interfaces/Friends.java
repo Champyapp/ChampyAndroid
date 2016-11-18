@@ -1,6 +1,6 @@
 package com.example.ivan.champy_v2.interfaces;
 
-import com.example.ivan.champy_v2.model.Friend.Friend;
+import com.example.ivan.champy_v2.model.friend.Friend;
 
 import retrofit.Call;
 import retrofit.http.DELETE;

@@ -16,12 +16,12 @@ import com.example.ivan.champy_v2.helper.CHLoadUserProgressBarInfo;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
 import com.example.ivan.champy_v2.interfaces.CreateChallenge;
 import com.example.ivan.champy_v2.interfaces.SingleInProgress;
-import com.example.ivan.champy_v2.model.Active_in_progress.Challenge;
-import com.example.ivan.champy_v2.model.Active_in_progress.Datum;
-import com.example.ivan.champy_v2.model.Active_in_progress.Recipient;
-import com.example.ivan.champy_v2.model.Active_in_progress.Sender;
-import com.example.ivan.champy_v2.model.Duel.Duel;
-import com.example.ivan.champy_v2.model.Single_in_progress.Data;
+import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
+import com.example.ivan.champy_v2.model.active_in_progress.Datum;
+import com.example.ivan.champy_v2.model.active_in_progress.Recipient;
+import com.example.ivan.champy_v2.model.active_in_progress.Sender;
+import com.example.ivan.champy_v2.model.duel.Duel;
+import com.example.ivan.champy_v2.model.single_in_progress.Data;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 
 import org.json.JSONException;
@@ -76,10 +76,10 @@ public class ChallengeController {
 
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
 
-        Call<com.example.ivan.champy_v2.model.Create_challenge.CreateChallenge> call = createChallenge.createChallenge("User_Challenge", type_id, description, details, duration, token);
-        call.enqueue(new Callback<com.example.ivan.champy_v2.model.Create_challenge.CreateChallenge>() {
+        Call<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge> call = createChallenge.createChallenge("User_Challenge", type_id, description, details, duration, token);
+        call.enqueue(new Callback<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge>() {
             @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.Create_challenge.CreateChallenge> response, Retrofit retrofit) {
+            public void onResponse(Response<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
                     sendSingleInProgressForSelf(challengeId);
@@ -107,12 +107,12 @@ public class ChallengeController {
 
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
 
-        Call<com.example.ivan.champy_v2.model.Single_in_progress.SingleInProgress> call = singleinprogress.start_single_in_progress(challenge, token);
-        call.enqueue(new Callback<com.example.ivan.champy_v2.model.Single_in_progress.SingleInProgress>() {
+        Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> call = singleinprogress.start_single_in_progress(challenge, token);
+        call.enqueue(new Callback<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress>() {
             @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.Single_in_progress.SingleInProgress> response, Retrofit retrofit) {
+            public void onResponse(Response<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    com.example.ivan.champy_v2.model.Single_in_progress.SingleInProgress data = response.body();
+                    com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress data = response.body();
                     String inProgressId = data.getData().get_id();
                     cv.put("challenge_id", inProgressId);
                     cv.put("updated", "false");
@@ -137,10 +137,10 @@ public class ChallengeController {
         details = description + " during this period: " + days + " days";
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
-        Call<com.example.ivan.champy_v2.model.Create_challenge.CreateChallenge> call = createChallenge.createChallenge("User_Challenge", type_id, description, details, duration, token);
-        call.enqueue(new Callback<com.example.ivan.champy_v2.model.Create_challenge.CreateChallenge>() {
+        Call<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge> call = createChallenge.createChallenge("User_Challenge", type_id, description, details, duration, token);
+        call.enqueue(new Callback<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge>() {
             @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.Create_challenge.CreateChallenge> response, Retrofit retrofit) {
+            public void onResponse(Response<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
                     sendSingleInProgressForDuel(challengeId, friend_id);
@@ -168,7 +168,7 @@ public class ChallengeController {
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
-        Call<com.example.ivan.champy_v2.model.Duel.Duel> call = singleinprogress.Start_duel(friend_id, challenge, token);
+        Call<com.example.ivan.champy_v2.model.duel.Duel> call = singleinprogress.Start_duel(friend_id, challenge, token);
         call.enqueue(new Callback<Duel>() {
             @Override
             public void onResponse(Response<Duel> response, Retrofit retrofit) {
@@ -226,12 +226,12 @@ public class ChallengeController {
         // change stringIntentId for myDetails
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
-        Call<com.example.ivan.champy_v2.model.Create_challenge.CreateChallenge> call = createChallenge
+        Call<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge> call = createChallenge
                 .createChallenge(wakeUpName, type_id, description, stringIntentId, duration, token);
 
-        call.enqueue(new Callback<com.example.ivan.champy_v2.model.Create_challenge.CreateChallenge>() {
+        call.enqueue(new Callback<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge>() {
             @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.Create_challenge.CreateChallenge> response, Retrofit retrofit) {
+            public void onResponse(Response<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
                     sendSingleInProgressForWakeUp(challengeId, intentId, intMin, intHour);
@@ -270,12 +270,12 @@ public class ChallengeController {
 
 
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
-        Call<com.example.ivan.champy_v2.model.Single_in_progress.SingleInProgress> call = singleinprogress.start_single_in_progress(challenge, token);
-        call.enqueue(new Callback<com.example.ivan.champy_v2.model.Single_in_progress.SingleInProgress>() {
+        Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> call = singleinprogress.start_single_in_progress(challenge, token);
+        call.enqueue(new Callback<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress>() {
             @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.Single_in_progress.SingleInProgress> response, Retrofit retrofit) {
+            public void onResponse(Response<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    com.example.ivan.champy_v2.model.Single_in_progress.SingleInProgress data = response.body();
+                    com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress data = response.body();
                     String inProgressId = data.getData().get_id();
 
                     Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
@@ -306,10 +306,10 @@ public class ChallengeController {
     public void joinToChallenge(final String inProgressId) {
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         SingleInProgress singleInProgress = retrofit.create(SingleInProgress.class);
-        Call<com.example.ivan.champy_v2.model.Single_in_progress.SingleInProgress> call = singleInProgress.Join(inProgressId, token);
-        call.enqueue(new Callback<com.example.ivan.champy_v2.model.Single_in_progress.SingleInProgress>() {
+        Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> call = singleInProgress.Join(inProgressId, token);
+        call.enqueue(new Callback<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress>() {
             @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.Single_in_progress.SingleInProgress> response, Retrofit retrofit) {
+            public void onResponse(Response<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     Log.d("JoinToChallenge", "onResponse: VSE OK");
                     refreshCardsForPendingDuel();
@@ -324,10 +324,10 @@ public class ChallengeController {
     public void rejectInviteForPendingDuel(String inProgressId) throws IOException {
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
-        Call<com.example.ivan.champy_v2.model.Single_in_progress.SingleInProgress> call = activeInProgress.Reject(inProgressId, token);
-        call.enqueue(new Callback<com.example.ivan.champy_v2.model.Single_in_progress.SingleInProgress>() {
+        Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> call = activeInProgress.Reject(inProgressId, token);
+        call.enqueue(new Callback<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress>() {
             @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.Single_in_progress.SingleInProgress> response, Retrofit retrofit) {
+            public void onResponse(Response<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()){
                     refreshCardsForPendingDuel();
                     Log.d(TAG, "RejectInviteForDuel onResponse: VSE OK");
@@ -345,10 +345,10 @@ public class ChallengeController {
     public void doneForToday(final String inProgressId) throws IOException {
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
-        Call<com.example.ivan.champy_v2.model.Single_in_progress.SingleInProgress> call = activeInProgress.CheckChallenge(inProgressId, token);
-        call.enqueue(new Callback<com.example.ivan.champy_v2.model.Single_in_progress.SingleInProgress>() {
+        Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> call = activeInProgress.CheckChallenge(inProgressId, token);
+        call.enqueue(new Callback<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress>() {
             @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.Single_in_progress.SingleInProgress> response, Retrofit retrofit) {
+            public void onResponse(Response<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     dbHelper = new DBHelper(context);
                     db = dbHelper.getWritableDatabase();
@@ -371,10 +371,10 @@ public class ChallengeController {
     public void give_up(final String id, final int intentId) throws IOException {
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
-        Call<com.example.ivan.champy_v2.model.Single_in_progress.SingleInProgress> call = activeInProgress.Surrender(id, token);
-        call.enqueue(new Callback<com.example.ivan.champy_v2.model.Single_in_progress.SingleInProgress>() {
+        Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> call = activeInProgress.Surrender(id, token);
+        call.enqueue(new Callback<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress>() {
             @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.Single_in_progress.SingleInProgress> response, Retrofit retrofit) {
+            public void onResponse(Response<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     Data data = response.body().getData();
                     String type = data.getChallenge().getType();
@@ -410,14 +410,14 @@ public class ChallengeController {
         final int clearCount = db.delete("pending_duel", null, null);
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
-        Call<com.example.ivan.champy_v2.model.Active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userId, update, token);
-        call1.enqueue(new Callback<com.example.ivan.champy_v2.model.Active_in_progress.ActiveInProgress>() {
+        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userId, update, token);
+        call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
             @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.Active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
+            public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     List<Datum> data = response.body().getData();
                     for (int i = 0; i < data.size(); i++) {
-                        com.example.ivan.champy_v2.model.Active_in_progress.Datum datum = data.get(i);
+                        com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
                         Recipient recipient = datum.getRecipient();
                         Sender sender = datum.getSender();
                         Challenge challenge = datum.getChallenge();
@@ -463,15 +463,15 @@ public class ChallengeController {
         int clearCount = db.delete("myChallenges", null, null);
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
-        Call<com.example.ivan.champy_v2.model.Active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userId, update, token);
-        call1.enqueue(new Callback<com.example.ivan.champy_v2.model.Active_in_progress.ActiveInProgress>() {
+        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userId, update, token);
+        call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
             @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.Active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
+            public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     List<Datum> data = response.body().getData();
 
                     for (int i = 0; i < data.size(); i++) {
-                        com.example.ivan.champy_v2.model.Active_in_progress.Datum datum = data.get(i);
+                        com.example.ivan.champy_v2.model.active_in_progress.Datum datum = data.get(i);
 
                         Challenge challenge          = datum.getChallenge();
                         Recipient recipient          = datum.getRecipient();

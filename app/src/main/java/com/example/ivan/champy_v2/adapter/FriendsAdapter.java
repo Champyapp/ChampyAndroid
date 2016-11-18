@@ -233,10 +233,10 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                     Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
                     com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
-                    Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.removeFriend(id, friend, token);
-                    call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
+                    Call<com.example.ivan.champy_v2.model.friend.Friend> call = friends.removeFriend(id, friend, token);
+                    call.enqueue(new Callback<com.example.ivan.champy_v2.model.friend.Friend>() {
                         @Override
-                        public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
+                        public void onResponse(Response<com.example.ivan.champy_v2.model.friend.Friend> response, Retrofit retrofit) {
                             String myLog = (response.isSuccess()) ? "Status: Removed" : "Status: " + response.toString();
                             Log.d(TAG, "onResponse: " + myLog);
                         }

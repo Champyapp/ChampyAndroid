@@ -19,9 +19,9 @@ import com.example.ivan.champy_v2.DailyRemindController;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.helper.AppSync;
 import com.example.ivan.champy_v2.interfaces.NewUser;
-import com.example.ivan.champy_v2.model.User.Data;
-import com.example.ivan.champy_v2.model.User.LoginData;
-import com.example.ivan.champy_v2.model.User.User;
+import com.example.ivan.champy_v2.model.user.Data;
+import com.example.ivan.champy_v2.model.user.LoginData;
+import com.example.ivan.champy_v2.model.user.User;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
 import com.facebook.AccessToken;
@@ -266,7 +266,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         // если такой фотки не существует (так и должно быть)
                         if (!profilePhoto.exists()) {
                             // то мы заливаем нашу фотку на API
-                            com.example.ivan.champy_v2.model.User.Photo photo = user.getPhoto();
+                            com.example.ivan.champy_v2.model.user.Photo photo = user.getPhoto();
                             api_path = API_URL + photo.getLarge();
                         }
                     }

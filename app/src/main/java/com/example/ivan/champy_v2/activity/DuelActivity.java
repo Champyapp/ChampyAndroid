@@ -35,8 +35,8 @@ import com.example.ivan.champy_v2.adapter.DuelPagerAdapter;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
-import com.example.ivan.champy_v2.model.Self.Datum;
-import com.example.ivan.champy_v2.model.Self.SelfImprovement;
+import com.example.ivan.champy_v2.model.self.Datum;
+import com.example.ivan.champy_v2.model.self.SelfImprovement;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -205,7 +205,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
 
         com.example.ivan.champy_v2.interfaces.SelfImprovement selfImprovement = retrofit.create(com.example.ivan.champy_v2.interfaces.SelfImprovement.class);
 
-        Call<com.example.ivan.champy_v2.model.Self.SelfImprovement> call = selfImprovement.getChallenges(token);
+        Call<com.example.ivan.champy_v2.model.self.SelfImprovement> call = selfImprovement.getChallenges(token);
         call.enqueue(new Callback<SelfImprovement>() {
             @Override
             public void onResponse(Response<SelfImprovement> response, Retrofit retrofit) {
@@ -213,7 +213,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
                     List<Datum> data = response.body().getData();
                     int data_size = 0;
                     for (int i = 0; i < data.size(); i++) {
-                        com.example.ivan.champy_v2.model.Self.Datum datum = data.get(i);
+                        com.example.ivan.champy_v2.model.self.Datum datum = data.get(i);
                         if (datum.getType().getName().equals("duel") && !datum.getName().equals("User_Challenge")) {
                             cv.put("name", datum.getName());
                             cv.put("description", datum.getDescription());

@@ -7,7 +7,7 @@ import retrofit.http.Query;
 public interface SelfImprovement {
 
     @GET("/v1/challenges")
-    Call<com.example.ivan.champy_v2.model.Self.SelfImprovement> getChallenges(
+    Call<com.example.ivan.champy_v2.model.self.SelfImprovement> getChallenges(
          @Query("token") String token
     );
 }

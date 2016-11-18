@@ -5,8 +5,8 @@ import android.util.Log;
 
 import com.example.ivan.champy_v2.utils.SessionManager;
 import com.example.ivan.champy_v2.interfaces.NewUser;
-import com.example.ivan.champy_v2.model.User.Data;
-import com.example.ivan.champy_v2.model.User.User;
+import com.example.ivan.champy_v2.model.user.Data;
+import com.example.ivan.champy_v2.model.user.User;
 
 import retrofit.Call;
 import retrofit.Callback;

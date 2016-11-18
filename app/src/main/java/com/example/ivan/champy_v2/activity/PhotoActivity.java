@@ -22,7 +22,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.interfaces.Update_user;
-import com.example.ivan.champy_v2.model.User.User;
+import com.example.ivan.champy_v2.model.user.User;
 import com.example.ivan.champy_v2.utils.Blur;
 import com.example.ivan.champy_v2.utils.SessionManager;
 import com.soundcloud.android.crop.Crop;

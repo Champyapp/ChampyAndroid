@@ -1,4 +1,4 @@
-package com.example.ivan.champy_v2.model.Single_in_progress;
+package com.example.ivan.champy_v2.model.single_in_progress;
 
 import java.util.ArrayList;
 import java.util.HashMap;

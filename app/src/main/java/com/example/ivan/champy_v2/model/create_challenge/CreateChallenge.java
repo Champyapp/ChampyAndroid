@@ -1,4 +1,4 @@
-package com.example.ivan.champy_v2.model.Create_challenge;
+package com.example.ivan.champy_v2.model.create_challenge;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -28,7 +28,7 @@ import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
-import com.example.ivan.champy_v2.model.Self.Datum;
+import com.example.ivan.champy_v2.model.self.Datum;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
 import com.facebook.FacebookSdk;
@@ -191,15 +191,15 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         String token = user.get("token");
 
         com.example.ivan.champy_v2.interfaces.SelfImprovement selfImprovement = retrofit.create(com.example.ivan.champy_v2.interfaces.SelfImprovement.class);
-        Call<com.example.ivan.champy_v2.model.Self.SelfImprovement> call = selfImprovement.getChallenges(token);
-        call.enqueue(new Callback<com.example.ivan.champy_v2.model.Self.SelfImprovement>() {
+        Call<com.example.ivan.champy_v2.model.self.SelfImprovement> call = selfImprovement.getChallenges(token);
+        call.enqueue(new Callback<com.example.ivan.champy_v2.model.self.SelfImprovement>() {
             @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.Self.SelfImprovement> response, Retrofit retrofit) {
+            public void onResponse(Response<com.example.ivan.champy_v2.model.self.SelfImprovement> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     List<Datum> data = response.body().getData();
                     int data_size = 0;
                     for (int i = 0; i < data.size(); i++) {
-                        com.example.ivan.champy_v2.model.Self.Datum datum = data.get(i);
+                        com.example.ivan.champy_v2.model.self.Datum datum = data.get(i);
                         String datumType = datum.getType().getName();
                         if (datumType.equals("self improvement")) {
                             if (!datum.getName().equals("User_Challenge")) {

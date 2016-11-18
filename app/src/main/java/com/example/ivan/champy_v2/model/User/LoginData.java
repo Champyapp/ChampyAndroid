@@ -1,4 +1,4 @@
-package com.example.ivan.champy_v2.model.User;
+package com.example.ivan.champy_v2.model.user;
 
 public class LoginData {
 

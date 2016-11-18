@@ -257,10 +257,10 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                     Log.d(TAG, "Status: " + id + " " + friend);
 
                     com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
-                    Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.removeFriend(id, friend, token);
-                    call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
+                    Call<com.example.ivan.champy_v2.model.friend.Friend> call = friends.removeFriend(id, friend, token);
+                    call.enqueue(new Callback<com.example.ivan.champy_v2.model.friend.Friend>() {
                         @Override
-                        public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
+                        public void onResponse(Response<com.example.ivan.champy_v2.model.friend.Friend> response, Retrofit retrofit) {
                             if (response.isSuccess()) Log.d(TAG, "Status: Removed ");
                             else Log.d(TAG, "Status: " + response.toString());
                             String myLog = (response.isSuccess()) ? "Status: Removed" : "Status: " + response.toString();
@@ -296,10 +296,10 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                         final ContentValues cv = new ContentValues();
 
                         com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(Friends.class);
-                        Call<com.example.ivan.champy_v2.model.Friend.Friend> call = friends.acceptFriendRequest(id, friend, token);
-                        call.enqueue(new Callback<com.example.ivan.champy_v2.model.Friend.Friend>() {
+                        Call<com.example.ivan.champy_v2.model.friend.Friend> call = friends.acceptFriendRequest(id, friend, token);
+                        call.enqueue(new Callback<com.example.ivan.champy_v2.model.friend.Friend>() {
                             @Override
-                            public void onResponse(Response<com.example.ivan.champy_v2.model.Friend.Friend> response, Retrofit retrofit) {
+                            public void onResponse(Response<com.example.ivan.champy_v2.model.friend.Friend> response, Retrofit retrofit) {
                                 if (response.isSuccess()) {
                                     cv.put("name", mContacts.get(position).getName());
                                     cv.put("photo", mContacts.get(position).getPicture());
