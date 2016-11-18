@@ -47,17 +47,18 @@ public class FriendsFragment extends Fragment {
     private static final String TAG = "FriendsFragment";
     private static final String ARG_PAGE = "ARG_PAGE";
 
+    private View gView;
     private SwipeRefreshLayout gSwipeRefreshLayout;
     private Socket mSocket;
-    private View gView;
 
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        Log.d(TAG, "onAttach: try to connect");
+
         try {
             mSocket = IO.socket("http://46.101.213.24:3007");
+            Log.d(TAG, "onAttach: Sockets are connected");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }

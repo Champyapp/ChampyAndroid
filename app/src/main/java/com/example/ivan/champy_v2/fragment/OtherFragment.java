@@ -21,21 +21,26 @@ import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.adapter.OtherAdapter;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHCheckTableForExist;
+import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.interfaces.NewUser;
 import com.example.ivan.champy_v2.model.FriendModel;
 import com.example.ivan.champy_v2.model.User.Data;
 import com.example.ivan.champy_v2.model.User.User;
+import com.example.ivan.champy_v2.utils.Constants;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,62 +59,48 @@ import retrofit.Retrofit;
  */
 public class OtherFragment extends Fragment {
 
-    public View gView;
-
-    private static final String API_URL = "http://46.101.213.24:3007";
     private static final String ARG_PAGE = "ARG_PAGE";
     private static final String TAG = "OtherFragment";
-
     private int mPage;
 
+    private View gView;
+    private List<FriendModel> friends;
     private Socket mSocket;
     private SwipeRefreshLayout gSwipeRefreshLayout;
-    //private CHGetFacebookFriends getFbFriends;
     private CHCheckTableForExist checkTableForExist;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        Log.d(TAG, "onAttach: ");
+
+        try {
+            mSocket = IO.socket("http://46.101.213.24:3007");
+            Log.d(TAG, "onAttach: Sockets are connected");
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+
+        mSocket.on("connect", onConnect);
+        mSocket.on("connected", onConnected);
+
+        mSocket.on("Relationship:new:accepted", modifiedRelationship);
+        mSocket.on("Relationship:new:removed", modifiedRelationship);
+        mSocket.on("Relationship:created:accepted", modifiedRelationship);
+        mSocket.on("Relationship:created:removed", modifiedRelationship);
+
+        mSocket.connect();
+
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getContext());
-        //getFbFriends = new CHGetFacebookFriends(getContext());
-        Log.d(TAG, "onCreate: ");
 
-//        try {
-//            mSocket = IO.socket("http://46.101.213.24:3007");
-//        } catch (URISyntaxException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        mSocket.on("connect", onConnect);
-//        mSocket.on("connected", onConnected);
-//
-//        mSocket.on("Relationship:new:accepted", modifiedRelationship);
-//        mSocket.on("Relationship:new:removed", modifiedRelationship);
-//        mSocket.on("Relationship:created:accepted", modifiedRelationship);
-//        mSocket.on("Relationship:created:removed", modifiedRelationship);
-//
-//        mSocket.connect();
-    }
-
-    @Override
-    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_friends, container, false);
-        Log.d(TAG, "onCreateView: ");
-        final List<FriendModel> friends = new ArrayList<>();
+        friends = new ArrayList<>();
         DBHelper dbHelper = new DBHelper(getContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         checkTableForExist = new CHCheckTableForExist(getContext());
-        SessionManager sessionManager = new SessionManager(getContext());
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        final String id = user.get("id");
-        final String mToken = user.get("token");
 
         Cursor c = db.query("mytable", null, null, null, null, null, null);
         if (c.moveToFirst()) {
@@ -134,6 +125,20 @@ public class OtherFragment extends Fragment {
             } while (c.moveToNext());
         }
         c.close();
+
+    }
+
+    @Override
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.fragment_friends, container, false);
+        Log.d(TAG, "onCreateView: ");
+
+//        SessionManager sessionManager = new SessionManager(getContext());
+//        HashMap<String, String> user;
+//        user = sessionManager.getUserDetails();
+//        final String id = user.get("id");
+//        final String mToken = user.get("token");
+
 
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
         final OtherAdapter adapter = new OtherAdapter(friends, getContext(), getActivity());
@@ -191,54 +196,53 @@ public class OtherFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy: ");
-//        mSocket.off();
-//        mSocket.disconnect();
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        Log.d(TAG, "onDetach: ");
+        Log.d(TAG, "onDetach: Sockets are disconnected");
+        mSocket.off();
+        mSocket.disconnect();
     }
 
-    //
-//    private Emitter.Listener onConnect = new Emitter.Listener() {
-//        @Override
-//        public void call(final Object... args) {
-//            CurrentUserHelper currentUser = new CurrentUserHelper(getContext());
-//            mSocket.emit("ready", currentUser.getToken());
-//            Log.d(TAG, "Sockets: connecting...");
-//        }
-//    };
-//    private Emitter.Listener onConnected = new Emitter.Listener() {
-//        @Override
-//        public void call(final Object... args) {
-//            Log.d(TAG, "Sockets: connected!");
-//        }
-//    };
-//    protected Emitter.Listener modifiedRelationship = new Emitter.Listener() {
-//        @Override
-//        public void call(final Object... args) {
-//            getActivity().runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    refreshOtherView(gSwipeRefreshLayout, gView);
-//                }});
-//            Log.d(TAG, "Sockets: modifiedRelationship");
-//        }
-//    };
-//
+
+    private Emitter.Listener onConnect = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            CurrentUserHelper currentUser = new CurrentUserHelper(getContext());
+            mSocket.emit("ready", currentUser.getToken());
+            Log.d(TAG, "Sockets: connecting...");
+        }
+    };
+    private Emitter.Listener onConnected = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            Log.d(TAG, "Sockets: connected!");
+        }
+    };
+    protected Emitter.Listener modifiedRelationship = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    refreshOtherView(gSwipeRefreshLayout, gView);
+                }});
+            Log.d(TAG, "Sockets: modifiedRelationship");
+        }
+    };
+
 
     public void refreshOtherView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         // Проверка на оффлайн вкладке OTHERS
-        OfflineMode offlineMode = new OfflineMode();
+        final OfflineMode offlineMode = new OfflineMode();
         if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
             swipeRefreshLayout.setRefreshing(true);
             swipeRefreshLayout.post(new Runnable() {
                 @Override
                 public void run() {
-                    final String API_URL = "http://46.101.213.24:3007";
-                    final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+                    final Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.API_URL).addConverterFactory(GsonConverterFactory.create()).build();
                     final NewUser newUser = retrofit.create(NewUser.class);
                     StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
                     StrictMode.setThreadPolicy(policy);
@@ -248,13 +252,12 @@ public class OtherFragment extends Fragment {
                     final ContentValues cv = new ContentValues();
                     final List<FriendModel> newFriends = new ArrayList<>();
 
-                    OfflineMode offlineMode = new OfflineMode();
                     if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
                         final GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONArrayCallback() {
                             @Override
                             public void onCompleted(JSONArray array, GraphResponse response) {
                                 if (array.length() == 0) {
-                                    Toast.makeText(getContext(), "No one of your friends has not installed Champy!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), R.string.noOneHasInstalledChampy, Toast.LENGTH_SHORT).show();
                                     swipeRefreshLayout.setRefreshing(false);
                                     return;
                                 }
@@ -263,9 +266,12 @@ public class OtherFragment extends Fragment {
                                         // jwt - Json Web Token...
                                         final String fb_id = array.getJSONObject(i).getString("id");
                                         final String user_name = array.getJSONObject(i).getString("name");
-                                        final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload("{\n" +
-                                                "  \"facebookId\": \"" + fb_id + "\"\n" +
-                                                "}").signWith(SignatureAlgorithm.HS256, "secret").compact();
+                                        final String jwtString = Jwts.builder()
+                                                .setHeaderParam("alg", "HS256")
+                                                .setHeaderParam("typ", "JWT")
+                                                .setPayload("{\n"+"  \"facebookId\": \"" + fb_id + "\"\n" + "}")
+                                                .signWith(SignatureAlgorithm.HS256, "secret")
+                                                .compact();
 
                                         Call<User> call = newUser.getUserInfo(jwtString);
                                         call.enqueue(new Callback<User>() {
@@ -274,10 +280,10 @@ public class OtherFragment extends Fragment {
                                                 if (response.isSuccess()) {
                                                     Data data = response.body().getData();
                                                     String photo = null;
-                                                    cv.put("user_id", data.get_id());
 
-                                                    if (data.getPhoto() != null)
-                                                        photo = API_URL + data.getPhoto().getMedium();
+                                                    if (data.getPhoto() != null) {
+                                                        photo = Constants.API_URL + data.getPhoto().getMedium();
+                                                    }
                                                     else {
                                                         try {
                                                             URL profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
@@ -288,6 +294,7 @@ public class OtherFragment extends Fragment {
                                                     }
 
                                                     String name = data.getName();
+                                                    cv.put("user_id", data.get_id());
                                                     cv.put("name", name);
                                                     cv.put("photo", photo);
                                                     cv.put("challenges", "" + data.getAllChallengesCount());
@@ -308,7 +315,7 @@ public class OtherFragment extends Fragment {
                                                                 "" + data.getLevel().getNumber()
                                                         ));
                                                     } else {
-                                                        Log.d(TAG, "DBase: not added | " + user_name + " in other table");
+                                                        Log.d(TAG, "DBase: not added | " + user_name + " in another table");
                                                     }
                                                     swipeRefreshLayout.setRefreshing(false);
                                                 }
@@ -338,8 +345,8 @@ public class OtherFragment extends Fragment {
 //                                            }
 
                                                 RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-                                                OtherAdapter adapter1 = new OtherAdapter(newFriends, getContext(), getActivity());
-                                                rvContacts.setAdapter(adapter1);
+                                                OtherAdapter otherAdapter = new OtherAdapter(newFriends, getContext(), getActivity());
+                                                rvContacts.setAdapter(otherAdapter);
                                                 gSwipeRefreshLayout.setRefreshing(false);
                                             }
 
@@ -365,8 +372,6 @@ public class OtherFragment extends Fragment {
             Log.d(TAG, "refreshOtherView: finished");
         }
 
-
-
 //    public static OtherFragment newInstance(int page) {
 //        Bundle args = new Bundle();
 //        args.putInt(ARG_PAGE, page);
@@ -374,6 +379,7 @@ public class OtherFragment extends Fragment {
 //        fragment.setArguments(args);
 //        return fragment;
 //    }
+
     }
 
 
