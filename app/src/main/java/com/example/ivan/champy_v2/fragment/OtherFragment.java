@@ -71,22 +71,22 @@ public class OtherFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        try {
-            mSocket = IO.socket("http://46.101.213.24:3007");
-            Log.d(TAG, "onAttach: Sockets are connected");
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-
-        mSocket.on("connect", onConnect);
-        mSocket.on("connected", onConnected);
-
-        mSocket.on("Relationship:new:accepted", modifiedRelationship);
-        mSocket.on("Relationship:new:removed", modifiedRelationship);
-        mSocket.on("Relationship:created:accepted", modifiedRelationship);
-        mSocket.on("Relationship:created:removed", modifiedRelationship);
-
-        mSocket.connect();
+//        try {
+//            mSocket = IO.socket("http://46.101.213.24:3007");
+//            Log.d(TAG, "onAttach: Sockets are connected");
+//        } catch (URISyntaxException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        mSocket.on("connect", onConnect);
+//        mSocket.on("connected", onConnected);
+//
+//        mSocket.on("Relationship:new:accepted", modifiedRelationship);
+//        mSocket.on("Relationship:new:removed", modifiedRelationship);
+//        mSocket.on("Relationship:created:accepted", modifiedRelationship);
+//        mSocket.on("Relationship:created:removed", modifiedRelationship);
+//
+//        mSocket.connect();
 
     }
 
@@ -136,7 +136,6 @@ public class OtherFragment extends Fragment {
 //        user = sessionManager.getUserDetails();
 //        final String id = user.get("id");
 //        final String mToken = user.get("token");
-
 
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
         final OtherAdapter adapter = new OtherAdapter(friends, getContext(), getActivity());
@@ -199,9 +198,9 @@ public class OtherFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        Log.d(TAG, "onDetach: Sockets are disconnected");
-        mSocket.off();
-        mSocket.disconnect();
+        Log.d(TAG, "onDetach: Sockets off & disconnect");
+//        mSocket.off();
+//        mSocket.disconnect();
     }
 
 

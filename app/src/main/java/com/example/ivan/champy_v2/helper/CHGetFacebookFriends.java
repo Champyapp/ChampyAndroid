@@ -10,6 +10,7 @@ import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.interfaces.NewUser;
 import com.example.ivan.champy_v2.model.user.Data;
 import com.example.ivan.champy_v2.model.user.User;
+import com.example.ivan.champy_v2.utils.Constants;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
@@ -42,8 +43,7 @@ public class CHGetFacebookFriends {
 
     // OTHER TABLE. method which get friends and their data
     public void getUserFacebookFriends(final String gcm) {
-        final String API_URL = "http://46.101.213.24:3007";
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         final NewUser newUser = retrofit.create(NewUser.class);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -72,7 +72,7 @@ public class CHGetFacebookFriends {
                                     Data data = response.body().getData();
                                     String photo = "";
                                     if (data.getPhoto() != null) {
-                                        photo = API_URL + data.getPhoto().getMedium();
+                                        photo = Constants.API_URL + data.getPhoto().getMedium();
                                     } else {
                                         try {
                                             URL profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");

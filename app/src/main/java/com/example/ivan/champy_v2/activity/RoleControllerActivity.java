@@ -2,6 +2,7 @@ package com.example.ivan.champy_v2.activity;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -26,11 +27,14 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
     private Typeface typeface;
     private TextView lostInternet;
     private ImageView imageReload;
+    private View spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_role_controller);
+
+        spinner = findViewById(R.id.loadingPanel);
 
         typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
         TextView tvChampy = (TextView)findViewById(R.id.tvChampy);
@@ -47,6 +51,7 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
     @Override
     public void onClick(View v) {
         if (offlineMode.isConnectedToRemoteAPI(this)) {
+            spinner.setVisibility(View.VISIBLE);
             lostInternet.setVisibility(View.INVISIBLE);
             imageReload.setVisibility(View.INVISIBLE);
             checkIfLoggedInAndMakeRedirect();
@@ -74,8 +79,15 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
             lostInternet.setVisibility(View.VISIBLE);
             imageReload.setVisibility(View.VISIBLE);
             imageReload.setOnClickListener(this);
+
+            spinner = findViewById(R.id.loadingPanel);
+            spinner.setVisibility(View.INVISIBLE);
+            //findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
         }
 
+        //spinner.setVisibility(View.INVISIBLE);
+
     }
+
 
 }
