@@ -55,23 +55,7 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
-        try {
-            mSocket = IO.socket("http://46.101.213.24:3007");
-            Log.d(TAG, "onAttach: Sockets are connected");
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-
-        mSocket.on("connect", onConnect);
-        mSocket.on("connected", onConnected);
-
-        mSocket.on("Relationship:new:accepted", modifiedRelationship);
-        mSocket.on("Relationship:new:removed", modifiedRelationship);
-        mSocket.on("Relationship:created:accepted", modifiedRelationship);
-        mSocket.on("Relationship:created:removed", modifiedRelationship);
-
-        mSocket.connect();
+        Log.d(TAG, "onAttach: ");
     }
 
     @Override
@@ -157,6 +141,22 @@ public class FriendsFragment extends Fragment {
     public void onStart() {
         super.onStart();
         Log.d(TAG, "onStart: ");
+        try {
+            mSocket = IO.socket("http://46.101.213.24:3007");
+            Log.d(TAG, "onStart: Sockets are connected!");
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+
+        mSocket.on("connect", onConnect);
+        mSocket.on("connected", onConnected);
+
+        mSocket.on("Relationship:new:accepted", modifiedRelationship);
+        mSocket.on("Relationship:new:removed", modifiedRelationship);
+        mSocket.on("Relationship:created:accepted", modifiedRelationship);
+        mSocket.on("Relationship:created:removed", modifiedRelationship);
+
+        mSocket.connect();
     }
 
     @Override
@@ -168,7 +168,9 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(TAG, "onStop: ");
+        Log.d(TAG, "onStop: Sockets off & disconnect");
+        mSocket.off();
+        mSocket.disconnect();
     }
 
     @Override
@@ -186,9 +188,7 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        Log.d(TAG, "onDetach: Sockets off & disconnect");
-        mSocket.off();
-        mSocket.disconnect();
+        Log.d(TAG, "onDetach: ");
     }
 
 

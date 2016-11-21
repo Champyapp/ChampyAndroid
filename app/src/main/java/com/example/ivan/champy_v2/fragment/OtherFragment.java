@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -70,6 +71,7 @@ public class OtherFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        Log.d(TAG, "onAttach: ");
 
 //        try {
 //            mSocket = IO.socket("http://46.101.213.24:3007");
@@ -198,7 +200,7 @@ public class OtherFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        Log.d(TAG, "onDetach: Sockets off & disconnect");
+        Log.d(TAG, "onDetach: ");
 //        mSocket.off();
 //        mSocket.disconnect();
     }
@@ -378,6 +380,15 @@ public class OtherFragment extends Fragment {
 //    }
 
     }
+
+    public static OtherFragment newInstance(int page) {
+        Bundle args = new Bundle();
+        args.putInt(ARG_PAGE, page);
+        OtherFragment fragment = new OtherFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
 
 
 }

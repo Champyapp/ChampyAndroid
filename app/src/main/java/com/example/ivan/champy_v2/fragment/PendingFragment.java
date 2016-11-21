@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -166,10 +168,17 @@ public class PendingFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d(TAG, "onActivityCreated: Sockets are connected!");
+        Log.d(TAG, "onActivityCreated: ");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: ");
 
         try {
             mSocket = IO.socket("http://46.101.213.24:3007");
+            Log.d(TAG, "onStart: Sockets are connected!");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -186,12 +195,7 @@ public class PendingFragment extends Fragment {
         mSocket.on("Relationship:created:accepted", modifiedRelationship);
         mSocket.on("Relationship:created:removed", removedRelationship);
         mSocket.connect();
-    }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart: ");
     }
 
     @Override
@@ -203,21 +207,21 @@ public class PendingFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(TAG, "onStop: ");
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.d(TAG, "onDestroyView: Sockets off & disconnect");
+        Log.d(TAG, "onStop: Sockets off & disconnect");
         mSocket.off();
         mSocket.disconnect();
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d(TAG, "onDestroyView: ");
+    }
+
+    @Override
     public void onDestroy() {
-        Log.d(TAG, "onDestroy: ");
         super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
     }
 
     @Override
@@ -508,11 +512,7 @@ public class PendingFragment extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-//                    CHGetFacebookFriends others = new CHGetFacebookFriends(getContext());
-//                    others.getUserFacebookFriends(token);
                     refreshPendingView(swipeRefreshLayout, gView);
-                    //refreshOtherView(swipeRefreshLayout, gView);
-
                 }
             });
         }
