@@ -568,7 +568,7 @@ public class ChallengeController {
 
 
 
-    // method which returns our last update (true or false);
+    // method which returns our last update information (true or false);
     private String isUpdated(String challenge_id) {
         DBHelper dbHelper = new DBHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -578,14 +578,14 @@ public class ChallengeController {
             int colchallenge_id = c.getColumnIndex("challenge_id");
             do {
                 // в методе "sendSingleForDuel мы засовываем challenge_id в колонку "challenge_id" в
-                // таблице "updated", а тут мы ее проверяем. если она есть, то вернуть время когда
-                // мы нажимали "дан" для дуелей, если её здесь нету, то возвращаем "false" - это для
-                // wake-up и self-improvement челенджей.
-                // Соответственно данные про update time для дуелей находятся в таблице "updated",
-                // а для отсального в таблице "myChallenges".
+                // таблице "updated", а тут мы ее проверяем. если она есть, то вернуть true для
+                // дуелей, если её здесь нету, то возвращаем "false" - это для wake-up и
+                // self-improvement челенджей. Соответственно данные про update time для дуелей
+                // находятся в таблице "updated", а для отсального в таблице "myChallenges".
                 try {
                     if (c.getString(colchallenge_id).equals(challenge_id)) {
                         lastUpdate = c.getString(c.getColumnIndex("updated"));
+                        Log.d(TAG, "isUpdated: " + lastUpdate);
                         return lastUpdate;
                     }
                 } catch (Exception e) {

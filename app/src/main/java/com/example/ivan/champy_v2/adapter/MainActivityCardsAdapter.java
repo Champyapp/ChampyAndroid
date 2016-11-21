@@ -149,6 +149,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
             buttonShare.setVisibility(View.INVISIBLE);
             tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
         } else if (itemUpdate.equals("true") || itemType.equals("Wake Up")) {
+            // make "else" and inside else make "if (! wakeup)"
             tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
             buttonShare.setVisibility(View.VISIBLE);
             buttonDone.setVisibility(View.INVISIBLE);

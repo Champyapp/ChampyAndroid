@@ -211,12 +211,11 @@ public class SelfImprovement_model {
             int wakeUpTimeCol     = c.getColumnIndex("wakeUpTime");
             int colConstDuration  = c.getColumnIndex("constDuration");
             do {
-                if (c.getString(colrecipient).equals("true")) {
-                    if (c.getString(status).equals("failedBySender")) {
+                if (c.getString(colrecipient).equals("true") && c.getString(status).equals("failedBySender")) {
                         arrayList.add(new SelfImprovement_model(
                                 c.getString(coldescription),
                                 c.getString(colduration),
-                                c.getString(nameColIndex), // it's mean "wake up" - is name and type..
+                                c.getString(nameColIndex),
                                 c.getString(colchallenge_id),
                                 "finished",
                                 c.getString(updated),
@@ -226,7 +225,6 @@ public class SelfImprovement_model {
                                 c.getString(colsencerprogress),
                                 c.getString(wakeUpTimeCol),
                                 c.getString(colConstDuration)));
-                    }
                 }
                 if (c.getString(colrecipient).equals("false")) {
                     if (c.getString(status).equals("failedByRecipient")) {
@@ -243,8 +241,7 @@ public class SelfImprovement_model {
                                 c.getString(colsencerprogress),
                                 c.getString(wakeUpTimeCol),
                                 c.getString(colConstDuration)));
-                    }
-                    if (c.getString(status).equals("finished")) {
+                    } else if (c.getString(status).equals("finished")) {
                         arrayList.add(new SelfImprovement_model(
                                 c.getString(coldescription),
                                 c.getString(colduration),
