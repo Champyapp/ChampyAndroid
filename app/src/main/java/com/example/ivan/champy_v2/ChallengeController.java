@@ -66,7 +66,6 @@ public class ChallengeController {
 
 
 
-
     public void createNewSelfImprovementChallenge(final String description, int days) {
         final String type_id = "567d51c48322f85870fd931a";
         duration = "" + (days * 86400);
