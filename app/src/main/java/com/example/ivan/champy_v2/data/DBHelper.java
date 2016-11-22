@@ -100,7 +100,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 + "updated text,"
                 + "senderProgress text DEFAULT [],"
                 + "constDuration text DEFAULT '',"
-                + "needToCheck text DEFAULT ''"
+                + "needsToCheckSender text DEFAULT '',"
+                + "needsToCheckRecipient text DEFAULT ''"
                 + ");");
 
         // table-helper for "myChallenges". This table store inProgressId and last check-in time

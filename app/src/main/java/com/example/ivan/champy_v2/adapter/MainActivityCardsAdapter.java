@@ -1,5 +1,6 @@
 package com.example.ivan.champy_v2.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
@@ -39,6 +40,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         this.arrayList = mArrayList;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View getView(int position, View convertView) {
         View tempView = convertView;
@@ -66,11 +68,9 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         String itemGoal = currentCard.getGoal();
         String itemType = currentCard.getType();
         String itemStatus = currentCard.getStatus();
-        String itemNeedToCheck = currentCard.getNeedToCheck(); // don't forget about this
-
-        Log.d(TAG, "getView: itemGoal: " + itemGoal + " | needToCheck: " + itemNeedToCheck);
+        String itemNeedsToCheckSender = currentCard.getNeedsToCheckSender();
+        String itemNeedsToCheckRecipient = currentCard.getNeedsToCheckRecipient();
         final String itemInProgressId = currentCard.getId();
-
         String[] senderProgress = toArrayOfStrings(itemSenderProgress);
 
 //        Log.d(TAG, "getView: itemUpdate: " + itemUpdate + " !!!");
@@ -78,23 +78,6 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 //        Log.d(TAG, "getView: itemType: " + itemType);
 //        Log.d(TAG, "getView: itemID: " + itemInProgressId);
 //        Log.d(TAG, "getView: itemStatus: " + itemStatus);
-
-        switch (itemType) {
-            case "Wake Up":
-                imageChallengeLogo.setImageResource(R.drawable.wakeup_white);
-                itemGoal = currentCard.getChallengeName();
-                break;
-            case "Duel":
-                imageChallengeLogo.setImageResource(R.drawable.duel_white);
-                TextView tvRecipientName = (TextView)tempView.findViewById(R.id.tvRecipientName);
-                tvRecipientName.setText("with " + currentCard.getVersus());
-                //tvRecipientName.setTextSize((float) (y*1.4));
-                tvRecipientName.setTypeface(typeface);
-                break;
-            case "Self-Improvement":
-                imageChallengeLogo.setImageResource(R.drawable.self_white);
-                break;
-        }
 
         final TextView tvChallengeType = (TextView) tempView.findViewById(R.id.tvChallengeType);
         tvChallengeType.setText(currentCard.getType());
@@ -113,7 +96,6 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         final Button buttonShare = (Button) tempView.findViewById(R.id.buttonShare);
         buttonShare.getLayoutParams() .width  = x*7;
         buttonShare.getLayoutParams() .height = x*7;
-
         final TextView tvEveryDayForTheNext = (TextView) tempView.findViewById(R.id.tvEveryDayForTheNext);
         tvEveryDayForTheNext.setTypeface(typeface);
         tvEveryDayForTheNext.setTextSize((float)(y*1.3));
@@ -148,31 +130,64 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 //            tvEveryDayForTheNext.setVisibility(View.VISIBLE);
 //        }
 
-        /*if (itemUpdate.equals("false") && !itemType.equals("Wake Up")) {
-            tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
-            buttonDone.setVisibility(View.VISIBLE);
-            buttonShare.setVisibility(View.INVISIBLE);
-            tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
-        } else if (itemUpdate.equals("true") || itemType.equals("Wake Up")) {
-            // make "else" and inside else make "if (! wakeup)"
-            tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
-            buttonShare.setVisibility(View.VISIBLE);
-            buttonDone.setVisibility(View.INVISIBLE);
-            tvEveryDayForTheNext.setVisibility(View.VISIBLE);
-        }*/
+//        if (itemUpdate.equals("false") && !itemType.equals("Wake Up")) {
+//            tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
+//            buttonDone.setVisibility(View.VISIBLE);
+//            buttonShare.setVisibility(View.INVISIBLE);
+//            tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
+//        } else if (itemUpdate.equals("true") || itemType.equals("Wake Up")) {
+//            // make "else" and inside else make "if (! wakeup)"
+//            tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
+//            buttonShare.setVisibility(View.VISIBLE);
+//            buttonDone.setVisibility(View.INVISIBLE);
+//            tvEveryDayForTheNext.setVisibility(View.VISIBLE);
+//        }
 
-        if (itemNeedToCheck.equals("true")) {
-            tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
-            buttonDone.setVisibility(View.VISIBLE);
-            buttonShare.setVisibility(View.INVISIBLE);
-            tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
-        } else {
-            tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
-            buttonShare.setVisibility(View.VISIBLE);
-            buttonDone.setVisibility(View.INVISIBLE);
-            tvEveryDayForTheNext.setVisibility(View.VISIBLE);
+        switch (itemType) {
+            case "Wake Up":
+                imageChallengeLogo.setImageResource(R.drawable.wakeup_white);
+                itemGoal = currentCard.getChallengeName();
+                tvChallengeDescription.setText(itemGoal);
+                tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
+                buttonShare.setVisibility(View.VISIBLE);
+                buttonDone.setVisibility(View.INVISIBLE);
+                tvEveryDayForTheNext.setVisibility(View.VISIBLE);
+                break;
+            case "Duel":
+                imageChallengeLogo.setImageResource(R.drawable.duel_white);
+                TextView tvRecipientName = (TextView)tempView.findViewById(R.id.tvRecipientName);
+                tvRecipientName.setText("with " + currentCard.getVersus());
+                //tvRecipientName.setTextSize((float) (y*1.4));
+                tvRecipientName.setTypeface(typeface);
+                //Log.d(TAG, "getView: itemNeedsToCheckRecipient: " + itemNeedsToCheckRecipient);
+                if (itemNeedsToCheckRecipient.equals("true")) {
+                    tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
+                    buttonDone.setVisibility(View.VISIBLE);
+                    buttonShare.setVisibility(View.INVISIBLE);
+                    tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
+                } else {
+                    tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
+                    buttonShare.setVisibility(View.VISIBLE);
+                    buttonDone.setVisibility(View.INVISIBLE);
+                    tvEveryDayForTheNext.setVisibility(View.VISIBLE);
+                }
+                break;
+            case "Self-Improvement":
+                imageChallengeLogo.setImageResource(R.drawable.self_white);
+                //Log.d(TAG, "getView: itemNeedsToCheckSender: " + itemNeedsToCheckSender);
+                if (itemNeedsToCheckSender.equals("true")) {
+                    tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
+                    buttonDone.setVisibility(View.VISIBLE);
+                    buttonShare.setVisibility(View.INVISIBLE);
+                    tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
+                } else {
+                    tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
+                    buttonShare.setVisibility(View.VISIBLE);
+                    buttonDone.setVisibility(View.INVISIBLE);
+                    tvEveryDayForTheNext.setVisibility(View.VISIBLE);
+                }
+                break;
         }
-
 
         tvDuration.setTypeface(typeface);
         tvDuration.setTextSize(y*2);

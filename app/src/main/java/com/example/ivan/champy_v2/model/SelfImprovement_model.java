@@ -23,9 +23,12 @@ public class SelfImprovement_model {
     private String senderProgress;
     private String wakeUpTime;
     private String constDuration;
-    private String needToCheck;
+    private String needsToCheckSender;
+    private String needsToCheckRecipient;
 
-
+    /**
+     * setters
+     */
     public void setConstDuration(String constDuration) {
         this.constDuration = constDuration;
     }
@@ -38,10 +41,6 @@ public class SelfImprovement_model {
         this.challengeName = challengeName;
     }
 
-    public void setNeedToCheck(String needToCheck) {
-        this.needToCheck = needToCheck;
-    }
-
     public void setWakeUpTime(String wakeUpTime) {
         this.wakeUpTime = wakeUpTime;
     }
@@ -50,8 +49,16 @@ public class SelfImprovement_model {
         this.recipient = recipient;
     }
 
+    public void setNeedsToCheckRecipient(String needsToCheckRecipient) {
+        this.needsToCheckRecipient = needsToCheckRecipient;
+    }
+
     public void setUpdated(String updated) {
         this.updated = updated;
+    }
+
+    public void setNeedsToCheckSender(String needsToCheckSender) {
+        this.needsToCheckSender = needsToCheckSender;
     }
 
     public void setStatus(String status) {
@@ -60,18 +67,6 @@ public class SelfImprovement_model {
 
     public void setVersus(String versus) {
         this.versus = versus;
-    }
-
-    public String getSenderProgress() {
-        return senderProgress;
-    }
-
-    public String getConstDuration() {
-        return constDuration;
-    }
-
-    public String getChallengeName() {
-        return challengeName;
     }
 
     public void setGoal(String goal) {
@@ -90,8 +85,33 @@ public class SelfImprovement_model {
         this.type = type;
     }
 
-    public String getNeedToCheck() {
-        return needToCheck;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    /**
+     * getters
+     */
+
+
+    public String getNeedsToCheckRecipient() {
+        return needsToCheckRecipient;
+    }
+
+    public String getNeedsToCheckSender() {
+        return needsToCheckSender;
+    }
+
+    public String getSenderProgress() {
+        return senderProgress;
+    }
+
+    public String getConstDuration() {
+        return constDuration;
+    }
+
+    public String getChallengeName() {
+        return challengeName;
     }
 
     public String getWakeUpTime() {
@@ -100,10 +120,6 @@ public class SelfImprovement_model {
 
     public String getRecipient() {
         return recipient;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getUpdated() {
@@ -139,9 +155,9 @@ public class SelfImprovement_model {
     }
 
     // constructor :P
-    private SelfImprovement_model(String mGoal, String mDays, String mType, String mId, String mStatus,
-                                  String mUpdated, String mChallengeName, String versus, String recipient,
-                                  String senderProgress, String wakeUpTime, String constDuration, String needToCheck) {
+    private SelfImprovement_model(String mGoal, String mDays, String mType, String mId, String mStatus, String mUpdated,
+                                  String mChallengeName, String versus, String recipient, String senderProgress,
+                                  String wakeUpTime, String constDuration, String needsToCheckSender, String needsToCheckRecipient) {
         this.goal = mGoal;
         this.days = mDays;
         this.type = mType;
@@ -154,7 +170,8 @@ public class SelfImprovement_model {
         this.senderProgress = senderProgress;
         this.wakeUpTime = wakeUpTime;
         this.constDuration = constDuration;
-        this.needToCheck = needToCheck;
+        this.needsToCheckSender = needsToCheckSender;
+        this.needsToCheckRecipient = needsToCheckRecipient;
 
     }
 
@@ -180,7 +197,9 @@ public class SelfImprovement_model {
             int colsencerprogress = c.getColumnIndex("senderProgress");
             int wakeUpTimeCol     = c.getColumnIndex("wakeUpTime");
             int colConstDuration  = c.getColumnIndex("constDuration");
-            int colNeedToCheck    = c.getColumnIndex("needToCheck");
+            int needsToCheckSender= c.getColumnIndex("needsToCheckSender");
+            int needsToCheckRecip = c.getColumnIndex("needsToCheckRecipient");
+
             do {
                 if (c.getString(status).equals("started")) arrayList.add (new SelfImprovement_model(
                         c.getString(coldescription),
@@ -195,7 +214,8 @@ public class SelfImprovement_model {
                         c.getString(colsencerprogress),
                         c.getString(wakeUpTimeCol),
                         c.getString(colConstDuration),
-                        c.getString(colNeedToCheck)));
+                        c.getString(needsToCheckSender),
+                        c.getString(needsToCheckRecip)));
             } while (c.moveToNext());
         }
         c.close();
@@ -223,7 +243,8 @@ public class SelfImprovement_model {
             int colsencerprogress = c.getColumnIndex("senderProgress");
             int wakeUpTimeCol     = c.getColumnIndex("wakeUpTime");
             int colConstDuration  = c.getColumnIndex("constDuration");
-            int colNeedToCheck    = c.getColumnIndex("needToCheck");
+            int needsToCheckSender= c.getColumnIndex("needsToCheckSender");
+            int needsToCheckRecip = c.getColumnIndex("needsToCheckRecipient");
 
             do {
                 if (c.getString(colrecipient).equals("true") && c.getString(status).equals("failedBySender")) {
@@ -240,7 +261,8 @@ public class SelfImprovement_model {
                                 c.getString(colsencerprogress),
                                 c.getString(wakeUpTimeCol),
                                 c.getString(colConstDuration),
-                                c.getString(colNeedToCheck)));
+                                c.getString(needsToCheckSender),
+                                c.getString(needsToCheckRecip)));
                 }
                 if (c.getString(colrecipient).equals("false")) {
                     if (c.getString(status).equals("failedByRecipient")) {
@@ -257,7 +279,8 @@ public class SelfImprovement_model {
                                 c.getString(colsencerprogress),
                                 c.getString(wakeUpTimeCol),
                                 c.getString(colConstDuration),
-                                c.getString(colNeedToCheck)));
+                                c.getString(needsToCheckSender),
+                                c.getString(needsToCheckRecip)));
                     }
                     else if (c.getString(status).equals("finished")) {
                         arrayList.add(new SelfImprovement_model(
@@ -273,7 +296,8 @@ public class SelfImprovement_model {
                                 c.getString(colsencerprogress),
                                 c.getString(wakeUpTimeCol),
                                 c.getString(colConstDuration),
-                                c.getString(colNeedToCheck)));
+                                c.getString(needsToCheckSender),
+                                c.getString(needsToCheckRecip)));
                     }
                 }
 
@@ -304,7 +328,8 @@ public class SelfImprovement_model {
             int colsencerprogress = c.getColumnIndex("senderProgress");
             int wakeUpTimeCol     = c.getColumnIndex("wakeUpTime");
             int colConstDuration  = c.getColumnIndex("constDuration");
-            int colNeedToCheck    = c.getColumnIndex("needToCheck");
+            int needsToCheckSender= c.getColumnIndex("needsToCheckSender");
+            int needsToCheckRecip = c.getColumnIndex("needsToCheckRecipient");
 
             do {
                 if (c.getString(colrecipient).equals("true")) {
@@ -322,7 +347,8 @@ public class SelfImprovement_model {
                                 c.getString(colsencerprogress),
                                 c.getString(wakeUpTimeCol),
                                 c.getString(colConstDuration),
-                                c.getString(colNeedToCheck)));
+                                c.getString(needsToCheckSender),
+                                c.getString(needsToCheckRecip)));
                     }
                 }
                 if (c.getString(colrecipient).equals("false")) {
@@ -340,7 +366,8 @@ public class SelfImprovement_model {
                                 c.getString(colsencerprogress),
                                 c.getString(wakeUpTimeCol),
                                 c.getString(colConstDuration),
-                                c.getString(colNeedToCheck)));
+                                c.getString(needsToCheckSender),
+                                c.getString(needsToCheckRecip)));
                     }
                 }
             } while (c.moveToNext());
