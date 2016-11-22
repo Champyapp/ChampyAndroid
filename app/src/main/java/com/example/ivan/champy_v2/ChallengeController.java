@@ -484,7 +484,9 @@ public class ChallengeController {
                         String challenge_name        = challenge.getName();          // wake up / self / duel
                         String challenge_wakeUpTime  = challenge.getWakeUpTime();    // our specific time (intentId)
                         String challenge_updated     = isUpdated(challenge_id);      // bool check method;
-                        List<Object> senderProgress = datum.getSenderProgress();     // sender progress
+                        String needsToCheckSender    = datum.getNeedsToCheckSender();// true / false for today
+                        String needsToCheckRecipient = datum.getNeedsToCheckRecipient(); // true / false if this is duel and i'm recipient
+                        List<Object> senderProgress  = datum.getSenderProgress();    // sender progress
                         String challenge_duration    = "";
                         String constDuration         = "";
 
@@ -513,9 +515,13 @@ public class ChallengeController {
                             cv.put("name", "Wake Up");
                             // our specific field for delete wakeUp (example: 1448);
                             cv.put("wakeUpTime", challenge_detail);
+                            // method for check challenge for "needToCheck"
+                            cv.put("needsToCheckSender", needsToCheckSender);
                         } else if (challenge_type.equals("567d51c48322f85870fd931a")) {
                             // just name of Challenge
                             cv.put("name", "Self-Improvement");
+                            // method for check challenge for "needToCheck"
+                            cv.put("needsToCheckSender", needsToCheckSender);
                         } else if (challenge_type.equals("567d51c48322f85870fd931b")) {
                             // just name of Challenge
                             cv.put("name", "Duel");
@@ -524,11 +530,15 @@ public class ChallengeController {
                                 cv.put("recipient", "true");
                                 // name of the person with whom we have a duel
                                 cv.put("versus", sender.getName());
+                                // method for check challenge for "needToCheck"
+                                cv.put("needsToCheckRecipient", needsToCheckRecipient);
                             } else {
                                 // if I sent the challenge, i'm "sender"
                                 cv.put("recipient", "false");
                                 // name of the person with whom we have a duel
                                 cv.put("versus", recipient.getName());
+                                // method for check challenge for "needToCheck"
+                                cv.put("needsToCheckSender", needsToCheckSender);
                             }
                         }
 

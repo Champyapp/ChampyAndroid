@@ -21,29 +21,15 @@ public class Datum {
     private List<Object> senderProgress = new ArrayList<Object>();
     private String status;
     private String wakeUpTime;
+    private String needsToCheckSender;
+    private String needsToCheckRecipient;
     private Integer begin;
     private Integer end;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
 
-    public String getWakeUpTime() {
-        return wakeUpTime;
-    }
-
-    public void setWakeUpTime(String wakeUpTime) {
-        this.wakeUpTime = wakeUpTime;
-    }
-
     public Recipient getRecipient() {
         return recipient;
-    }
-
-    public String get_id() {
-        return _id;
-    }
-
-    public void set_id(String _id) {
-        this._id = _id;
     }
 
     public Challenge getChallenge() {
@@ -54,16 +40,32 @@ public class Datum {
         return sender;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
     public Boolean getSenderSuccess() {
         return senderSuccess;
     }
 
     public Boolean getRecipientSuccess() {
         return recipientSuccess;
+    }
+
+    public String get_id() {
+        return _id;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getNeedsToCheckRecipient() {
+        return needsToCheckRecipient;
+    }
+
+    public String getWakeUpTime() {
+        return wakeUpTime;
+    }
+
+    public String getNeedsToCheckSender() {
+        return needsToCheckSender;
     }
 
     public Integer getCreated() {
@@ -101,6 +103,10 @@ public class Datum {
 
     public void setRecipient(Recipient recipient) {
         this.recipient = recipient;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
     public void setChallenge(Challenge challenge) {
@@ -147,4 +153,15 @@ public class Datum {
         this.additionalProperties.put(name, value);
     }
 
+    public void setWakeUpTime(String wakeUpTime) {
+        this.wakeUpTime = wakeUpTime;
+    }
+
+    public void setNeedsToCheckSender(String needsToCheckSender) {
+        this.needsToCheckSender = needsToCheckSender;
+    }
+
+    public void setNeedsToCheckRecipient(String needsToCheckRecipient) {
+        this.needsToCheckRecipient = needsToCheckRecipient;
+    }
 }

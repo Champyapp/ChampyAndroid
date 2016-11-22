@@ -23,6 +23,7 @@ public class SelfImprovement_model {
     private String senderProgress;
     private String wakeUpTime;
     private String constDuration;
+    private String needToCheck;
 
 
     public void setConstDuration(String constDuration) {
@@ -35,6 +36,10 @@ public class SelfImprovement_model {
 
     public void setChallengeName(String challengeName) {
         this.challengeName = challengeName;
+    }
+
+    public void setNeedToCheck(String needToCheck) {
+        this.needToCheck = needToCheck;
     }
 
     public void setWakeUpTime(String wakeUpTime) {
@@ -85,6 +90,10 @@ public class SelfImprovement_model {
         this.type = type;
     }
 
+    public String getNeedToCheck() {
+        return needToCheck;
+    }
+
     public String getWakeUpTime() {
         return wakeUpTime;
     }
@@ -132,7 +141,7 @@ public class SelfImprovement_model {
     // constructor :P
     private SelfImprovement_model(String mGoal, String mDays, String mType, String mId, String mStatus,
                                   String mUpdated, String mChallengeName, String versus, String recipient,
-                                  String senderProgress, String wakeUpTime, String constDuration) {
+                                  String senderProgress, String wakeUpTime, String constDuration, String needToCheck) {
         this.goal = mGoal;
         this.days = mDays;
         this.type = mType;
@@ -145,6 +154,8 @@ public class SelfImprovement_model {
         this.senderProgress = senderProgress;
         this.wakeUpTime = wakeUpTime;
         this.constDuration = constDuration;
+        this.needToCheck = needToCheck;
+
     }
 
 
@@ -169,6 +180,7 @@ public class SelfImprovement_model {
             int colsencerprogress = c.getColumnIndex("senderProgress");
             int wakeUpTimeCol     = c.getColumnIndex("wakeUpTime");
             int colConstDuration  = c.getColumnIndex("constDuration");
+            int colNeedToCheck    = c.getColumnIndex("needToCheck");
             do {
                 if (c.getString(status).equals("started")) arrayList.add (new SelfImprovement_model(
                         c.getString(coldescription),
@@ -182,7 +194,8 @@ public class SelfImprovement_model {
                         c.getString(colrecipient),
                         c.getString(colsencerprogress),
                         c.getString(wakeUpTimeCol),
-                        c.getString(colConstDuration)));
+                        c.getString(colConstDuration),
+                        c.getString(colNeedToCheck)));
             } while (c.moveToNext());
         }
         c.close();
@@ -210,6 +223,8 @@ public class SelfImprovement_model {
             int colsencerprogress = c.getColumnIndex("senderProgress");
             int wakeUpTimeCol     = c.getColumnIndex("wakeUpTime");
             int colConstDuration  = c.getColumnIndex("constDuration");
+            int colNeedToCheck    = c.getColumnIndex("needToCheck");
+
             do {
                 if (c.getString(colrecipient).equals("true") && c.getString(status).equals("failedBySender")) {
                         arrayList.add(new SelfImprovement_model(
@@ -224,7 +239,8 @@ public class SelfImprovement_model {
                                 c.getString(colrecipient),
                                 c.getString(colsencerprogress),
                                 c.getString(wakeUpTimeCol),
-                                c.getString(colConstDuration)));
+                                c.getString(colConstDuration),
+                                c.getString(colNeedToCheck)));
                 }
                 if (c.getString(colrecipient).equals("false")) {
                     if (c.getString(status).equals("failedByRecipient")) {
@@ -240,8 +256,10 @@ public class SelfImprovement_model {
                                 c.getString(colrecipient),
                                 c.getString(colsencerprogress),
                                 c.getString(wakeUpTimeCol),
-                                c.getString(colConstDuration)));
-                    } else if (c.getString(status).equals("finished")) {
+                                c.getString(colConstDuration),
+                                c.getString(colNeedToCheck)));
+                    }
+                    else if (c.getString(status).equals("finished")) {
                         arrayList.add(new SelfImprovement_model(
                                 c.getString(coldescription),
                                 c.getString(colduration),
@@ -254,7 +272,8 @@ public class SelfImprovement_model {
                                 c.getString(colrecipient),
                                 c.getString(colsencerprogress),
                                 c.getString(wakeUpTimeCol),
-                                c.getString(colConstDuration)));
+                                c.getString(colConstDuration),
+                                c.getString(colNeedToCheck)));
                     }
                 }
 
@@ -285,6 +304,8 @@ public class SelfImprovement_model {
             int colsencerprogress = c.getColumnIndex("senderProgress");
             int wakeUpTimeCol     = c.getColumnIndex("wakeUpTime");
             int colConstDuration  = c.getColumnIndex("constDuration");
+            int colNeedToCheck    = c.getColumnIndex("needToCheck");
+
             do {
                 if (c.getString(colrecipient).equals("true")) {
                     if (c.getString(status).equals("failedByRecipient")) {
@@ -300,7 +321,8 @@ public class SelfImprovement_model {
                                 c.getString(colrecipient),
                                 c.getString(colsencerprogress),
                                 c.getString(wakeUpTimeCol),
-                                c.getString(colConstDuration)));
+                                c.getString(colConstDuration),
+                                c.getString(colNeedToCheck)));
                     }
                 }
                 if (c.getString(colrecipient).equals("false")) {
@@ -317,7 +339,8 @@ public class SelfImprovement_model {
                                 c.getString(colrecipient),
                                 c.getString(colsencerprogress),
                                 c.getString(wakeUpTimeCol),
-                                c.getString(colConstDuration)));
+                                c.getString(colConstDuration),
+                                c.getString(colNeedToCheck)));
                     }
                 }
             } while (c.moveToNext());

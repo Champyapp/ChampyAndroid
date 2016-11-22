@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,6 +66,9 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         String itemGoal = currentCard.getGoal();
         String itemType = currentCard.getType();
         String itemStatus = currentCard.getStatus();
+        String itemNeedToCheck = currentCard.getNeedToCheck(); // don't forget about this
+
+        Log.d(TAG, "getView: itemGoal: " + itemGoal + " | needToCheck: " + itemNeedToCheck);
         final String itemInProgressId = currentCard.getId();
 
         String[] senderProgress = toArrayOfStrings(itemSenderProgress);
@@ -143,7 +147,8 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 //            buttonDone.setVisibility(View.INVISIBLE);
 //            tvEveryDayForTheNext.setVisibility(View.VISIBLE);
 //        }
-        if (itemUpdate.equals("false") && !itemType.equals("Wake Up")) {
+
+        /*if (itemUpdate.equals("false") && !itemType.equals("Wake Up")) {
             tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
             buttonDone.setVisibility(View.VISIBLE);
             buttonShare.setVisibility(View.INVISIBLE);
@@ -154,7 +159,21 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
             buttonShare.setVisibility(View.VISIBLE);
             buttonDone.setVisibility(View.INVISIBLE);
             tvEveryDayForTheNext.setVisibility(View.VISIBLE);
+        }*/
+
+        if (itemNeedToCheck.equals("true")) {
+            tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
+            buttonDone.setVisibility(View.VISIBLE);
+            buttonShare.setVisibility(View.INVISIBLE);
+            tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
+        } else {
+            tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
+            buttonShare.setVisibility(View.VISIBLE);
+            buttonDone.setVisibility(View.INVISIBLE);
+            tvEveryDayForTheNext.setVisibility(View.VISIBLE);
         }
+
+
         tvDuration.setTypeface(typeface);
         tvDuration.setTextSize(y*2);
 

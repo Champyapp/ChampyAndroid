@@ -9,13 +9,11 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -26,7 +24,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
@@ -34,46 +31,30 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.adapter.FriendsActivityPagerAdapter;
 import com.example.ivan.champy_v2.adapter.FriendsAdapter;
-import com.example.ivan.champy_v2.adapter.OtherAdapter;
 import com.example.ivan.champy_v2.adapter.PendingAdapter;
 import com.example.ivan.champy_v2.data.DBHelper;
-import com.example.ivan.champy_v2.fragment.OtherFragment;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHCheckTableForExist;
-import com.example.ivan.champy_v2.helper.CHGetFacebookFriends;
 import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.interfaces.CustomItemClickListener;
-import com.example.ivan.champy_v2.interfaces.NewUser;
-import com.example.ivan.champy_v2.model.FriendModel;
 import com.example.ivan.champy_v2.model.friend.Datum;
 import com.example.ivan.champy_v2.model.friend.Friend;
 import com.example.ivan.champy_v2.model.friend.Friend_;
 import com.example.ivan.champy_v2.model.friend.Owner;
 import com.example.ivan.champy_v2.model.Pending_friend;
-import com.example.ivan.champy_v2.model.user.Data;
-import com.example.ivan.champy_v2.model.user.User;
 import com.example.ivan.champy_v2.utils.Constants;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
-import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import retrofit.Call;
 import retrofit.Callback;
@@ -138,7 +119,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 
         tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
-        setupTabIcons();
+        //setupCustomTabIcons();
 
         CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
         String name = user.getName();
@@ -275,28 +256,28 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
     }
 
 
-    private void setupTabIcons() {
-        TextView newTab1 = (TextView) LayoutInflater.from(this).inflate(R.layout.item_custom_tab, null);
-        newTab1.setText("Friends"); //tab label txt
-        newTab1.setTextColor(Color.WHITE);
-        newTab1.setTypeface(typeface);
-        newTab1.setCompoundDrawablesWithIntrinsicBounds(tabIcons[0], 0, 0, 0);
-        newTab1.setCompoundDrawablePadding(5);
-        tabLayout.getTabAt(0).setCustomView(newTab1);
+    private void setupCustomTabIcons() {
+        TextView tabFriends = (TextView) LayoutInflater.from(this).inflate(R.layout.item_custom_tab, null);
+        tabFriends.setText("Friends"); //tab label txt
+        tabFriends.setTextColor(Color.WHITE);
+        tabFriends.setTypeface(typeface);
+        tabFriends.setCompoundDrawablesWithIntrinsicBounds(tabIcons[0], 0, 0, 0);
+        tabFriends.setCompoundDrawablePadding(5);
+        tabLayout.getTabAt(0).setCustomView(tabFriends);
 
-        TextView newTab2 = (TextView) LayoutInflater.from(this).inflate(R.layout.item_custom_tab, null);
-        newTab2.setText("Pending");
-        newTab2.setTextColor(Color.WHITE);
-        newTab2.setTypeface(typeface);
-        newTab2.setCompoundDrawablesWithIntrinsicBounds(tabIcons[1], 0, 0, 0);
-        tabLayout.getTabAt(1).setCustomView(newTab2);
+        TextView tabPending = (TextView) LayoutInflater.from(this).inflate(R.layout.item_custom_tab, null);
+        tabPending.setText("Pending");
+        tabPending.setTextColor(Color.WHITE);
+        tabPending.setTypeface(typeface);
+        tabPending.setCompoundDrawablesWithIntrinsicBounds(tabIcons[1], 0, 0, 0);
+        tabLayout.getTabAt(1).setCustomView(tabPending);
 
-        TextView newTab3 = (TextView) LayoutInflater.from(this).inflate(R.layout.item_custom_tab, null);
-        newTab3.setText("Other");
-        newTab3.setTextColor(Color.WHITE);
-        newTab3.setTypeface(typeface);
-        newTab3.setCompoundDrawablesWithIntrinsicBounds(tabIcons[2], 0, 0, 0);
-        tabLayout.getTabAt(2).setCustomView(newTab3);
+        TextView tabOthers = (TextView) LayoutInflater.from(this).inflate(R.layout.item_custom_tab, null);
+        tabOthers.setText("Other");
+        tabOthers.setTextColor(Color.WHITE);
+        tabOthers.setTypeface(typeface);
+        tabOthers.setCompoundDrawablesWithIntrinsicBounds(tabIcons[2], 0, 0, 0);
+        tabLayout.getTabAt(2).setCustomView(tabOthers);
 
     }
 
