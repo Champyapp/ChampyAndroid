@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.design.widget.NavigationView;
@@ -82,7 +83,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        sockets = new CHSocket(MainActivity.this, getApplicationContext());
 //        sockets.tryToConnect();
 //        sockets.socketOnAndEmmit();
-
         cards = (RelativeLayout) findViewById(R.id.cards);
         adapter = new MainActivityCardsAdapter(this, SelfImprovement_model.generate(this));
         if (adapter.dataCount() > 0) {
@@ -175,28 +175,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume: ");
 
-        this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                CHBuildAnim chBuildAnim = new CHBuildAnim();
-                chBuildAnim.buildAnim(MainActivity.this);
-            }
-        });
-
-        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
-        int count = checker.getPendingCount();
-        if (count == 0) {
-            checker.hideItem();
-        } else {
-            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
-        }
+        new animationLoader().execute();
     }
 
     @Override
@@ -211,14 +195,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mLastClickTime = SystemClock.elapsedRealtime();
 
         //Here we make our background is blurred
-
-        RelativeLayout contentMain = (RelativeLayout) findViewById(R.id.content_main);
-        contentMain.destroyDrawingCache();
-        contentMain.buildDrawingCache();
-        Bitmap bm = contentMain.getDrawingCache();
-        Bitmap blurred = Blur.blurRenderScript(getApplicationContext(), bm, 25);
-        Drawable ob = new BitmapDrawable(getResources(), blurred);
-        blurScreen.setImageDrawable(ob);
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                RelativeLayout contentMain = (RelativeLayout) findViewById(R.id.content_main);
+                contentMain.destroyDrawingCache();
+                contentMain.buildDrawingCache();
+                Bitmap bm = contentMain.getDrawingCache();
+                Bitmap blurred = Blur.blurRenderScript(getApplicationContext(), bm, 25);
+                Drawable ob = new BitmapDrawable(getResources(), blurred);
+                blurScreen.setImageDrawable(ob);
+            }
+        });
 
         // first we check action menu and if "is open" then we setup our inside click for FAB
         actionMenu.toggle(true);
@@ -302,8 +290,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_logout:
                 OfflineMode offlineMode = new OfflineMode();
-                SessionManager sessionManager = new SessionManager(this);
                 if (offlineMode.isConnectedToRemoteAPI(this)) {
+                    SessionManager sessionManager = new SessionManager(this);
                     sessionManager.logout(this);
                 }
                 break;
@@ -329,6 +317,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.sync_app, menu);
         return true;
+    }
+
+
+    private class animationLoader extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    CHBuildAnim chBuildAnim = new CHBuildAnim();
+                    chBuildAnim.buildAnim(MainActivity.this);
+
+                    CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+                    int count = checker.getPendingCount();
+                    if (count == 0) {
+                        checker.hideItem();
+                    } else {
+                        TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+                        view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+                    }
+                }
+            });
+
+
+            return null;
+        }
     }
 
 

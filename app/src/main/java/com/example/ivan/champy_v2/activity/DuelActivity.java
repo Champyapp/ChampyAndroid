@@ -55,15 +55,18 @@ import static java.lang.Math.round;
 
 public class DuelActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private NavigationView navigationView;
     private View spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_duel);
+
         new ProgressTask().execute();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        Bundle extras = getIntent().getExtras();
+
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Bundle extras = getIntent().getExtras();
         String friendsPhoto, name;
         if(extras == null) {
             Uri uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/icon_champy");
@@ -76,10 +79,10 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
 
         int x = round(getWindowManager().getDefaultDisplay().getWidth() / 2);
 
-        TextView tvIChallengeMyFriendTo = (TextView)findViewById(R.id.tvIChallengeMyFriendTo);
-        TextView textViewYouVsFriend = (TextView)findViewById(R.id.tvYouVsFriend);
-        ImageView imageMyPhoto = (ImageView)findViewById(R.id.imageMyPhoto);
-        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
+        final TextView tvIChallengeMyFriendTo = (TextView)findViewById(R.id.tvIChallengeMyFriendTo);
+        final TextView textViewYouVsFriend = (TextView)findViewById(R.id.tvYouVsFriend);
+        final ImageView imageMyPhoto = (ImageView)findViewById(R.id.imageMyPhoto);
+        final Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
 
         textViewYouVsFriend.setText(getString(R.string.duel_with) + name);
         textViewYouVsFriend.setTypeface(typeface);
@@ -88,20 +91,14 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         imageMyPhoto.getLayoutParams().width = x;
         imageMyPhoto.getLayoutParams().height = x; // because we need a square
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
-
-        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
-        int count = checker.getPendingCount();
-        TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-        view.setText("+" + (count > 0 ? String.valueOf(count) : null));
-        if (count == 0) checker.hideItem();
 
         CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
         name = user.getName();
@@ -116,10 +113,23 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         drawerUserName.setText(name);
         drawerUserName.setTypeface(typeface);
 
-        Glide.with(this).load(friendsPhoto).centerCrop().into((ImageView)findViewById(R.id.imageFriendsPhoto));
-        Glide.with(this).load(url).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(imageMyPhoto);
-        Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
+        Glide.with(this)
+                .load(friendsPhoto)
+                .centerCrop()
+                .into((ImageView)findViewById(R.id.imageFriendsPhoto));
+
+        Glide.with(this)
+                .load(url)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(imageMyPhoto);
+
+        Glide.with(this)
+                .load(url)
+                .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(drawerImageProfile);
 
         try {
             drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -133,6 +143,21 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        final CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+        int count = checker.getPendingCount();
+        if (count == 0) {
+            checker.hideItem();
+        } else {
+            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+        }
     }
 
     @Override
@@ -189,7 +214,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    // отображаем стандартные карточки в активити
+    // get standard cards for duel activity
     private void getChallenges() {
         DBHelper dbHelper = new DBHelper(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();

@@ -66,6 +66,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private OfflineMode offlineMode;
     private DBHelper dbHelper;
     private DailyRemindController mDailyRemind;
+    private NavigationView navigationView;
+    private SessionManager sessionManager;
     HashMap<String, String> map = new HashMap<>();
     HashMap<String, String> user = new HashMap<>();
 
@@ -74,15 +76,19 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_settings);
-        offlineMode = new OfflineMode();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.bringToFront();
-        CHSetupUI chSetupUI = new CHSetupUI();
+        final CHSetupUI chSetupUI = new CHSetupUI();
         chSetupUI.setupUI(findViewById(R.id.settings_layout), this);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+        dbHelper = new DBHelper(getApplicationContext());
+        offlineMode = new OfflineMode();
+        mDailyRemind = new DailyRemindController(getApplicationContext());
+        sessionManager = new SessionManager(getApplicationContext());
+
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
@@ -91,18 +97,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
-        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
-        int count = checker.getPendingCount();
-        TextView pendingCount = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-        pendingCount.setText("+" + (count > 0 ? String.valueOf(count) : null));
-        if (count == 0) checker.hideItem();
-
-        dbHelper = new DBHelper(getApplicationContext());
-        mDailyRemind = new DailyRemindController(getApplicationContext());
-        SessionManager sessionManager = new SessionManager(getApplicationContext());
         user = sessionManager.getUserDetails();
         name = user.get("name");
 
@@ -111,24 +108,25 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
 
-        Typeface typeface = Typeface.createFromAsset(SettingsActivity.this.getAssets(), "fonts/bebasneue.ttf");
-        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
-        ImageView background = (ImageView) findViewById(R.id.back_settings);
-        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        final Typeface typeface = Typeface.createFromAsset(SettingsActivity.this.getAssets(), "fonts/bebasneue.ttf");
+        final ImageView background = (ImageView) findViewById(R.id.back_settings);
+        final ImageView userImageProfile = (ImageView) findViewById(R.id.img_profile);
+        final TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        final ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
+        final ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
+
+        final TextView terms = (TextView)findViewById(R.id.terms);
+        final TextView about = (TextView)findViewById(R.id.about);
+        final TextView avatar = (TextView)findViewById(R.id.avatar);
+        final TextView privacy = (TextView)findViewById(R.id.privacy);
+        final TextView tvLegal = (TextView)findViewById(R.id.tvLegal);
+        final TextView delete = (TextView)findViewById(R.id.delete_acc);
+        final TextView tvGeneral = (TextView)findViewById(R.id.tvGeneral);
+        final TextView contactUs = (TextView)findViewById(R.id.contact_us);
+        final TextView tvNotifications = (TextView)findViewById(R.id.tvNotifications);
 
         tvName = (TextView)findViewById(R.id.tvUserName);
         tvChangeName = (TextView)findViewById(R.id.tvName);
-        TextView terms = (TextView)findViewById(R.id.terms);
-        TextView about = (TextView)findViewById(R.id.about);
-        TextView avatar = (TextView)findViewById(R.id.avatar);
-        TextView privacy = (TextView)findViewById(R.id.privacy);
-        TextView tvLegal = (TextView)findViewById(R.id.tvLegal);
-        TextView delete = (TextView)findViewById(R.id.delete_acc);
-        TextView tvGeneral = (TextView)findViewById(R.id.tvGeneral);
-        TextView contactUs = (TextView)findViewById(R.id.contact_us);
-        TextView tvNotifications = (TextView)findViewById(R.id.tvNotifications);
-
         tvName.setText(name);
         drawerUserName.setText(name);
 
@@ -145,14 +143,13 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 .skipMemoryCache(true)
                 .into(drawerImageProfile);
 
-        drawerImageProfile = (ImageView) findViewById(R.id.img_profile);
         Glide.with(this)
                 .load(url)
                 .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .override(130, 130)
-                .into(drawerImageProfile);
+                .into(userImageProfile);
 
         try {
             background.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -173,11 +170,20 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         ViewServer.get(this).addWindow(this);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onStart() {
         super.onStart();
         OfflineMode offlineMode = new OfflineMode();
         offlineMode.isConnectedToRemoteAPI(this);
+        final CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+        int count = checker.getPendingCount();
+        if (count == 0) {
+            checker.hideItem();
+        } else {
+            TextView pendingCount = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+            pendingCount.setText("+" + (count > 0 ? String.valueOf(count) : null));
+        }
     }
 
     @Override
@@ -238,11 +244,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 startActivity(Intent.createChooser(share, "How would you like to share?"));
                 break;
             case R.id.nav_logout:
-                OfflineMode offlineMode = new OfflineMode();
                 if (offlineMode.isConnectedToRemoteAPI(this)) {
                     updateProfile(map);
                     LoginManager.getInstance().logOut();
-                    SessionManager sessionManager = new SessionManager(getApplicationContext());
                     sessionManager.logout(SettingsActivity.this);
                     Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
                     startActivity(intent);

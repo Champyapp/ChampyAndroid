@@ -42,34 +42,31 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
 
     private EditText inputSubject, inputMessage;
     private TextInputLayout inputLayoutSubject, inputLayoutMessage;
-    String[] recipients = {"azinecllc@gmail.com"};
+    private NavigationView navigationView;
+    private SessionManager sessionManager;
+    private String[] recipients = {"azinecllc@gmail.com"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_us);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
 
-        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
-        int count = checker.getPendingCount();
-        TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-        view.setText("+" + (count > 0 ? String.valueOf(count) : null));
-        if (count == 0) checker.hideItem();
-
-        SessionManager sessionManager = new SessionManager(getApplicationContext());
+        sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
-        @SuppressLint("SdCardPath") String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+        @SuppressLint("SdCardPath")
+        final String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
         String name = user.get("name");
@@ -80,16 +77,14 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
             imageView.setImageDrawable(CHLoadBlurredPhoto.Init(path));
         } catch (FileNotFoundException e) { e.printStackTrace(); }
 
-        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
-        ImageView drawerUserPhoto = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        final Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
+        final ImageView drawerUserPhoto = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        final TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
         drawerUserName.setText(name);
         drawerUserName.setTypeface(typeface);
 
         Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
-
-
         ViewServer.get(this).addWindow(this);
 
         inputLayoutSubject = (TextInputLayout)findViewById(R.id.input_layout_name);
@@ -97,10 +92,24 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         inputSubject = (EditText)findViewById(R.id.input_name);
         inputMessage = (EditText)findViewById(R.id.input_email);
 
-        Button buttonSend = (Button) findViewById(R.id.buttonSend);
+        final Button buttonSend = (Button) findViewById(R.id.buttonSend);
         inputSubject.addTextChangedListener(new MyTextWatcher(inputSubject));
         inputMessage.addTextChangedListener(new MyTextWatcher(inputMessage));
         buttonSend.setOnClickListener(this);
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    protected void onStart() {
+        super.onStart();
+        final CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+        int count = checker.getPendingCount();
+        if (count == 0) {
+            checker.hideItem();
+        } else {
+            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+        }
     }
 
     @Override
@@ -151,7 +160,6 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
                     break;
                 case R.id.nav_logout:
                     OfflineMode offlineMode = new OfflineMode();
-                    SessionManager sessionManager = new SessionManager(this);
                     if (offlineMode.isConnectedToRemoteAPI(this)) {
                         sessionManager.logout(this);
                     }

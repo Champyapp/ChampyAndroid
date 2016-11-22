@@ -36,6 +36,8 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class PrivacyActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private NavigationView navigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,9 +47,9 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
         TextView drawerUserName = (TextView)findViewById(R.id.textView1); // overloading, be care
         drawerUserName.setVisibility(View.INVISIBLE);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
@@ -57,16 +59,9 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
         toggle.setDrawerIndicatorEnabled(true);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
-
-        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
-        int count = checker.getPendingCount();
-        TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-        view.setText("+" + (count > 0 ? String.valueOf(count) : null));
-        if (count == 0) checker.hideItem();
-
 
         @SuppressLint("SdCardPath")
         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
@@ -75,8 +70,8 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
         CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
         String name = user.getName();
 
-        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
-        ImageView drawerUserPhoto = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        final Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
+        final ImageView drawerUserPhoto = (ImageView) headerLayout.findViewById(R.id.profile_image);
         drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
         drawerUserName.setText(name);
         drawerUserName.setTypeface(typeface);
@@ -93,6 +88,21 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
         }
 
         ViewServer.get(this).addWindow(this);
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        final CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+        int count = checker.getPendingCount();
+        if (count == 0) {
+            checker.hideItem();
+        } else {
+            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+        }
     }
 
     @Override

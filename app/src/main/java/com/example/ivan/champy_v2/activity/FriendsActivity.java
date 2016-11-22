@@ -84,8 +84,9 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
     private final String TAG = "FriendsActivity";
 
     private CHCheckTableForExist checkTableForExist;
-    private OfflineMode offlineMode;
+    private NavigationView navigationView;
     private SessionManager sessionManager;
+    private OfflineMode offlineMode;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -106,19 +107,9 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
-
-        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
-        int count = checker.getPendingCount();
-
-        if (count == 0) {
-            checker.hideItem();
-        } else {
-            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
-        }
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setOffscreenPageLimit(3);
@@ -136,12 +127,11 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
             }
         }
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        final TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
 
         CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
         String name = user.getName();
-        String gcm  = user.getGCM();
 
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
@@ -185,9 +175,20 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         ViewServer.get(this).addWindow(this);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onStart() {
         super.onStart();
+        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+        int count = checker.getPendingCount();
+
+        if (count == 0) {
+            checker.hideItem();
+        } else {
+            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+        }
+
         sessionManager = new SessionManager(this);
         offlineMode = new OfflineMode();
         offlineMode.isConnectedToRemoteAPI(this);

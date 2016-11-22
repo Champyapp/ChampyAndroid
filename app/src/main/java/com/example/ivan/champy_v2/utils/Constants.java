@@ -6,6 +6,4 @@ public class Constants {
 
     public static long unixTime = System.currentTimeMillis() / 1000L;
 
-
-
 }
