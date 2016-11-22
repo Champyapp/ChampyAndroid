@@ -181,6 +181,17 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
             Glide.with(context).load(R.drawable.start_circle_00026).placeholder(R.drawable.icon_champy).
                     into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleTotal));
 
+//            Glide.with(context)
+//                    .load(contact.getPicture())
+//                    .asBitmap()
+//                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                    .skipMemoryCache(true)
+//                    .transform(new CropCircleTransformation(context))
+//                    .placeholder(R.drawable.icon_champy)
+//                    .override(80, 80)
+//                    .dontAnimate()
+//                    .into(imageViewUserAvatar);
+
             Glide.with(context)
                     .load(contact.getPicture())
                     .asBitmap()
@@ -190,15 +201,6 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
                     .override(80, 80)
                     .dontAnimate()
                     .into(imageViewUserAvatar);
-
-//            Glide.with(context)
-//                    .load(contact.getPicture())
-//                    .asBitmap()
-//                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                    .transform(new CropCircleTransformation(context))
-//                    .placeholder(R.drawable.icon_champy)
-//                    .override(80, 80)
-//                    .into(imageViewUserAvatar);
 
             // made our "open-view" is visible and 'close-view' invisible
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.VISIBLE);

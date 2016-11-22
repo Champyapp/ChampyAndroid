@@ -90,6 +90,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             pager.preparePager(0);
         }
 
+        new animationLoader().execute();
+
         final ImageButton actionButton = (ImageButton) findViewById(R.id.fabPlus);
         final SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
         buttonWakeUpChallenge = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeupcolor)).build();
@@ -179,8 +181,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume: ");
-
-        new animationLoader().execute();
     }
 
     @Override
@@ -324,6 +324,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         protected Void doInBackground(Void... params) {
             runOnUiThread(new Runnable() {
+                @SuppressLint("SetTextI18n")
                 @Override
                 public void run() {
                     CHBuildAnim chBuildAnim = new CHBuildAnim();

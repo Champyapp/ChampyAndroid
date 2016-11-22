@@ -114,19 +114,19 @@ public class CHBuildAnim {
         final Animation alphaAnimation          = new AlphaAnimation(0.0f, 1.0f);
         alphaAnimation.setDuration(2000);
 
-        textViewChallenges.setText("In Progress");
+        textViewChallenges.setText(R.string.in_progress);
         textViewChallenges.startAnimation(alphaAnimation);
         textViewChallenges.setTypeface(typeface);
 
-        textViewWins.setText("Wins");
+        textViewWins.setText(R.string.wins);
         textViewWins.startAnimation(alphaAnimation);
         textViewWins.setTypeface(typeface);
 
-        textViewTotal.setText("Total");
+        textViewTotal.setText(R.string.total);
         textViewTotal.startAnimation(alphaAnimation);
         textViewTotal.setTypeface(typeface);
 
-        welcomeUserName.setText("Welcome " + userName);
+        welcomeUserName.setText(activity.getString(R.string.welcome) + userName);
         welcomeUserName.startAnimation(alphaAnimation);
         welcomeUserName.setTypeface(typeface);
 

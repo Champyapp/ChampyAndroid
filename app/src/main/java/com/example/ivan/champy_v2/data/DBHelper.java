@@ -14,6 +14,8 @@ public class DBHelper extends SQLiteOpenHelper {
         super(context, "myDB", null, 1);
     }
 
+    // TODO: 11/22/16 Delete "isUpdated" because we have a "needsToCheckRecipient / Sender"
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         // table for save info about "other" page

@@ -120,7 +120,6 @@ public class OtherFragment extends Fragment {
 //        user = sessionManager.getUserDetails();
 //        final String id = user.get("id");
 //        final String mToken = user.get("token");
-
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
         final OtherAdapter adapter = new OtherAdapter(friends, getContext(), getActivity());
 
@@ -133,7 +132,6 @@ public class OtherFragment extends Fragment {
             public void onRefresh() {
                 //getFbFriends.getUserFacebookFriends(mToken);
                 refreshOtherView(gSwipeRefreshLayout, gView);
-                Toast.makeText(getContext(), "Refresh finished", Toast.LENGTH_SHORT).show();
                 gSwipeRefreshLayout.setRefreshing(false);
             }
         });

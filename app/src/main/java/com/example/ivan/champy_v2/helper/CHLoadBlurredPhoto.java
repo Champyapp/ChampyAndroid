@@ -15,8 +15,6 @@ import java.io.FileNotFoundException;
 
 public class CHLoadBlurredPhoto {
 
-    Activity activity;
-
     public static Drawable Init(String path) throws FileNotFoundException {
         File file = new File(path, "blured2.jpg");
         Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
