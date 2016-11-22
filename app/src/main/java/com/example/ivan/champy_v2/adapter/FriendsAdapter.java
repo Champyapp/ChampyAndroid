@@ -23,6 +23,7 @@ import com.example.ivan.champy_v2.activity.DuelActivity;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.interfaces.CustomItemClickListener;
 import com.example.ivan.champy_v2.model.FriendModel;
+import com.example.ivan.champy_v2.utils.Constants;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
 
@@ -39,7 +40,6 @@ import retrofit.Retrofit;
 
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
 
-    final private String API_URL = "http://46.101.213.24:3007";
     final private String TAG = "FriendsAdapter";
     private List<FriendModel> mContacts;
     private SessionManager sessionManager;
@@ -230,7 +230,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                 OfflineMode offlineMode = new OfflineMode();
                 if (offlineMode.isConnectedToRemoteAPI(activity)) {
                     String friend = mContacts.get(position).getID();
-                    Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+                    Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
                     com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
                     Call<com.example.ivan.champy_v2.model.friend.Friend> call = friends.removeFriend(id, friend, token);

@@ -37,8 +37,10 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class WakeUpActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
-    public final static String type_id = "567d51c48322f85870fd931c";
     public final static String API_URL = "http://46.101.213.24:3007";
+    public final static String type_id = "567d51c48322f85870fd931c";
+    private NavigationView navigationView;
+    private OfflineMode offlineMode;
     private String userId, token;
     private TimePicker alarmTimePicker;
     private CurrentUserHelper user;
@@ -48,9 +50,9 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wake_up);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
@@ -60,14 +62,9 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         toggle.setDrawerIndicatorEnabled(true);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
-        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
-        int count = checker.getPendingCount();
-        TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-        view.setText("+" + (count > 0 ? String.valueOf(count) : null));
-        if (count == 0) checker.hideItem();
 
         final Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         final ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
@@ -115,11 +112,10 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         alarmTimePicker = (TimePicker) findViewById(R.id.timePicker);
         ImageButton imageButton = (ImageButton) findViewById(R.id.imageButtonAccept);
 
-        final OfflineMode offlineMode = new OfflineMode();
-        offlineMode.isConnectedToRemoteAPI(WakeUpActivity.this);
-
-        imageButton.setOnClickListener(this);
-
+        offlineMode = new OfflineMode();
+        if (offlineMode.isConnectedToRemoteAPI(WakeUpActivity.this)) {
+            imageButton.setOnClickListener(this);
+        }
     }
 
     @Override
@@ -165,8 +161,15 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
     @Override
     public void onStart() {
         super.onStart();
-        OfflineMode offlineMode = new OfflineMode();
         offlineMode.isConnectedToRemoteAPI(this);
+        final CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+        int count = checker.getPendingCount();
+        if (count == 0) {
+            checker.hideItem();
+        } else {
+            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+        }
     }
 
     @Override

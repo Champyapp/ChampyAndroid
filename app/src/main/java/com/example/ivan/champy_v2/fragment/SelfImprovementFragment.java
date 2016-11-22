@@ -91,7 +91,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         View line = view.findViewById(R.id.line);
 //        TextView tvLevel    = (TextView)view.findViewById(R.id.tvLevel1Chall);
 //        TextView tvPoint    = (TextView)view.findViewById(R.id.tvRewardPlus10Points);
-
         if (duration != null && !duration.isEmpty()) days = Integer.parseInt(duration) / 86400;
 
         //days = (duration != null && !duration.isEmpty()) ? Integer.parseInt(duration) / 86400 : 21;

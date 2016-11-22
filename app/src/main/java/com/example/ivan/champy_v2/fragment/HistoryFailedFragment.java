@@ -80,9 +80,7 @@ public class HistoryFailedFragment extends Fragment {
             swipeRefreshLayout.post(new Runnable() {
                 @Override
                 public void run() {
-
                     arr = new ArrayList<>();
-
                     for (int i = 0; i < self_improvement.size(); i++) {
                         SelfImprovement_model item = self_improvement.get(i);
                         String description = item.getGoal();

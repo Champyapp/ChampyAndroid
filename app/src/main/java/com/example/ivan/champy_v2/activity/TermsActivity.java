@@ -36,6 +36,8 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class TermsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private NavigationView navigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,15 +54,9 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
-
-        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
-        int count = checker.getPendingCount();
-        TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-        view.setText("+" + (count > 0 ? String.valueOf(count) : null));
-        if (count == 0) checker.hideItem();
 
 
         @SuppressLint("SdCardPath")
@@ -140,6 +136,19 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
         return true;
     }
 
+    @SuppressLint("SetTextI18n")
+    @Override
+    protected void onStart() {
+        super.onStart();
+        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+        int count = checker.getPendingCount();
+        if (count == 0) {
+            checker.hideItem();
+        } else {
+            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+        }
+    }
 
     private class LoadTermsText extends AsyncTask<String, Void, String> {
 
