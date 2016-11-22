@@ -39,4 +39,5 @@ public class FriendsActivityPagerAdapter extends FragmentPagerAdapter {
         return tabTitles[position];
     }
 
+
 }

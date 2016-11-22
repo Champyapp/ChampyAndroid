@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -87,6 +89,14 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
     private NavigationView navigationView;
     private SessionManager sessionManager;
     private OfflineMode offlineMode;
+    private TabLayout tabLayout;
+    private Typeface typeface;
+    private int[] tabIcons = {
+            R.drawable.ic_tab_friends,
+            R.drawable.ic_tab_pending,
+            R.drawable.ic_tab_others
+    };
+
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -117,7 +127,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         viewPager.setAdapter(adapterViewPager);
 
         // this out method for open "pending" when you click on notification about friends request
-        //Bundle bundle = getIntent().getExtras();
         String extras = getIntent().getStringExtra("friend_request");
         if (extras != null) {
             if ("true".equals(extras)) {
@@ -127,13 +136,14 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
             }
         }
 
-        final TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
+        setupTabIcons();
 
         CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
         String name = user.getName();
 
-        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
+        typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
         ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
         ImageView background = (ImageView) findViewById(R.id.friends_background);
@@ -262,6 +272,32 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
     protected void onPause() {
         super.onPause();
         AppEventsLogger.deactivateApp(this);
+    }
+
+
+    private void setupTabIcons() {
+        TextView newTab1 = (TextView) LayoutInflater.from(this).inflate(R.layout.item_custom_tab, null);
+        newTab1.setText("Friends"); //tab label txt
+        newTab1.setTextColor(Color.WHITE);
+        newTab1.setTypeface(typeface);
+        newTab1.setCompoundDrawablesWithIntrinsicBounds(tabIcons[0], 0, 0, 0);
+        newTab1.setCompoundDrawablePadding(5);
+        tabLayout.getTabAt(0).setCustomView(newTab1);
+
+        TextView newTab2 = (TextView) LayoutInflater.from(this).inflate(R.layout.item_custom_tab, null);
+        newTab2.setText("Pending");
+        newTab2.setTextColor(Color.WHITE);
+        newTab2.setTypeface(typeface);
+        newTab2.setCompoundDrawablesWithIntrinsicBounds(tabIcons[1], 0, 0, 0);
+        tabLayout.getTabAt(1).setCustomView(newTab2);
+
+        TextView newTab3 = (TextView) LayoutInflater.from(this).inflate(R.layout.item_custom_tab, null);
+        newTab3.setText("Other");
+        newTab3.setTextColor(Color.WHITE);
+        newTab3.setTypeface(typeface);
+        newTab3.setCompoundDrawablesWithIntrinsicBounds(tabIcons[2], 0, 0, 0);
+        tabLayout.getTabAt(2).setCustomView(newTab3);
+
     }
 
 
