@@ -2,6 +2,7 @@ package com.example.ivan.champy_v2.activity;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -107,6 +108,10 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         FriendsActivityPagerAdapter adapterViewPager = new FriendsActivityPagerAdapter(getSupportFragmentManager(), getApplicationContext());
         viewPager.setAdapter(adapterViewPager);
 
+        sessionManager = new SessionManager(getApplicationContext());
+        sessionManager.setRefreshFriends("true");
+        sessionManager.setRefreshPending("true");
+
         // this out method for open "pending" when you click on notification about friends request
         String extras = getIntent().getStringExtra("friend_request");
         if (extras != null) {
@@ -180,10 +185,9 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
             view.setText("+" + (count > 0 ? String.valueOf(count) : null));
         }
 
-        sessionManager = new SessionManager(this);
         offlineMode = new OfflineMode();
         offlineMode.isConnectedToRemoteAPI(this);
-        checkTableForExist = new CHCheckTableForExist(getApplicationContext());
+        //checkTableForExist = new CHCheckTableForExist(getApplicationContext());
     }
 
     @Override
@@ -284,13 +288,13 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 
     // load friends from bd
     public void loadUserFriends() {
-        final String API_URL = "http://46.101.213.24:3007";
+        //final String API_URL = "http://46.101.213.24:3007";
         SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         final String id = user.get("id");
         String token = user.get("token");
-        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         DBHelper dbHelper = new DBHelper(getApplicationContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.delete("friends", null, null);
@@ -349,7 +353,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                                     + " Photo: " + c.getString(photoColIndex));
                             newfriends.add(new com.example.ivan.champy_v2.model.FriendModel(
                                     c.getString(nameColIndex),
-                                    API_URL + c.getString(photoColIndex),
+                                    Constants.API_URL + c.getString(photoColIndex),
                                     c.getString(index),
                                     c.getString(inProgressChallengesCountIndex),
                                     c.getString(successChallenges),

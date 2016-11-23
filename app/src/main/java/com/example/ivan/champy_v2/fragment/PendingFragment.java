@@ -136,6 +136,7 @@ public class PendingFragment extends Fragment {
         });
 
         SessionManager sessionManager = new SessionManager(getActivity());
+        //sessionManager.setRefreshPending("true");
         String checkRefresh = sessionManager.getRefreshPending();
 
 
@@ -150,6 +151,8 @@ public class PendingFragment extends Fragment {
             }
         });
         this.gView = view;
+
+//        refreshPendingView(swipeRefreshLayout, gView);
 
         Bundle friendRequestExtra = getActivity().getIntent().getExtras();
         if (friendRequestExtra != null) {

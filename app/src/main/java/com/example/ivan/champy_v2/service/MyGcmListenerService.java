@@ -47,6 +47,7 @@ import static java.lang.Math.round;
 
 public class MyGcmListenerService extends GcmListenerService {
 
+    // TODO: 11/23/16 Delete from this class method "isUpdated" and update "Generate" method;
     private static final String TAG = "MyGcmListenerService";
 
     /**
@@ -109,7 +110,6 @@ public class MyGcmListenerService extends GcmListenerService {
                 String token  = user.getToken();
                 refreshPendingDuels();
                 generateCardsForMainActivity(token, userId);
-
                 notifyChallenges(historyIntent, message);
                 break;
         }

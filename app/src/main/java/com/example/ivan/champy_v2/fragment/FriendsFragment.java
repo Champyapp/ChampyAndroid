@@ -101,7 +101,10 @@ public class FriendsFragment extends Fragment {
                 FriendModel friend = friends.get(position);
             }
         });
+
+
         SessionManager sessionManager = new SessionManager(getActivity());
+        //sessionManager.setRefreshFriends("true");
         String checkRefresh = sessionManager.getRefreshFriends();
 
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -116,6 +119,8 @@ public class FriendsFragment extends Fragment {
             }
         });
         this.gView = view;
+
+//        refreshFriendsView(gSwipeRefreshLayout, gView);
 
         Bundle friendRequestExtra = getActivity().getIntent().getExtras();
         if (friendRequestExtra != null) {
