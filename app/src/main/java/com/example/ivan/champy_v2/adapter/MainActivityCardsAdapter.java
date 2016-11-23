@@ -63,10 +63,10 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         if (y > 10) y = 10;
 
         String itemSenderProgress = currentCard.getSenderProgress();
-        String itemUpdate = currentCard.getUpdated();
+        //String itemUpdate = currentCard.getUpdated();
         String itemGoal = currentCard.getGoal();
         String itemType = currentCard.getType();
-        String itemStatus = currentCard.getStatus();
+        //String itemStatus = currentCard.getStatus();
         String itemNeedsToCheckSender = currentCard.getNeedsToCheckSender();
         String itemNeedsToCheckRecipient = currentCard.getNeedsToCheckRecipient();
         final String itemInProgressId = currentCard.getId();

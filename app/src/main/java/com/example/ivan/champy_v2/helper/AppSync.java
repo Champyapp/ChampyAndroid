@@ -18,6 +18,7 @@ import com.example.ivan.champy_v2.model.friend.Friend_;
 import com.example.ivan.champy_v2.model.friend.Owner;
 import com.example.ivan.champy_v2.model.user.Data;
 import com.example.ivan.champy_v2.model.user.User;
+import com.example.ivan.champy_v2.utils.Constants;
 import com.example.ivan.champy_v2.utils.SessionManager;
 
 import org.json.JSONException;
@@ -36,7 +37,6 @@ import retrofit.Retrofit;
 
 public class AppSync {
 
-    private final String API_URL = "http://46.101.213.24:3007";
     private final String TAG = "AppSync";
     private Context context;
     private DBHelper dbHelper;
@@ -68,7 +68,7 @@ public class AppSync {
         final String jwtString = this.token;
         final String path_to_pic = this.path;
         final String gcm = this.gcm;
-        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
         cv = new ContentValues();
         dbHelper = new DBHelper(context);
@@ -91,8 +91,6 @@ public class AppSync {
                     String acceptedYour = data.getProfileOptions().getAcceptedYourChallenge().toString();
                     String challegeEnd = data.getProfileOptions().getChallengeEnd().toString();
 
-
-                    Log.d(TAG, "onResponse: DAILY = " + daily);
                     SessionManager sessionManager = new SessionManager(context);
                     sessionManager.setRefreshPending("false");
                     sessionManager.setRefreshFriends("true");
@@ -109,10 +107,11 @@ public class AppSync {
                             data.getLevel().getNumber().toString()
                     );
 
-
                     CHGetFacebookFriends getFbFriends = new CHGetFacebookFriends(context);
-                    getUserPending(userId);
                     getFbFriends.getUserFacebookFriends(gcm);
+
+                    CHGetPendingFriends getPendingFriends = new CHGetPendingFriends(context);
+                    getPendingFriends.getUserPending(userId, token);
 
                     DailyRemindController dailyRemind = new DailyRemindController(context);
                     dailyRemind.activateDailyNotificationReminder();
@@ -125,7 +124,7 @@ public class AppSync {
                         File file = new File(path, "profile.jpg");
                         if (!file.exists()){
                             com.example.ivan.champy_v2.model.user.Photo photo = data.getPhoto();
-                            api_path = API_URL + photo.getLarge();
+                            api_path = Constants.API_URL + photo.getLarge();
                             Log.i("AppSync", "GetUserPhoto: " + api_path);
                         }
                     }
@@ -150,62 +149,6 @@ public class AppSync {
             public void onFailure(Throwable t) {
                 Log.d(TAG, "VSE huynya");
             }
-        });
-
-
-    }
-
-
-    private void getUserPending(final String userId) {
-        int clearCount = db.delete("pending", null, null);
-        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
-        Call<com.example.ivan.champy_v2.model.friend.Friend> callGetUserFriends = friends.getUserFriends(userId, this.token);
-        callGetUserFriends.enqueue(new Callback<Friend>() {
-            @Override
-            public void onResponse(Response<Friend> response, Retrofit retrofit) {
-                if (response.isSuccess()){
-                    List<Datum> data = response.body().getData();
-
-                    for (int i = 0; i < data.size(); i++) {
-                        Datum datum = data.get(i);
-                        String status = datum.getStatus().toString();
-                        if ((datum.getFriend() != null) && (datum.getOwner() != null) && status.equals("false")) {
-
-                            if (datum.getOwner().get_id().equals(userId)) {
-                                Friend_ recipientFriend = datum.getFriend();
-                                cv.put("name", recipientFriend.getName());
-                                //if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
-                                //else cv.put("photo", "");
-                                String friendPhoto = (recipientFriend.getPhoto() != null) ? recipientFriend.getPhoto().getMedium() : "";
-                                cv.put("photo", friendPhoto);
-                                cv.put("user_id", recipientFriend.getId());
-                                cv.put("inProgressChallengesCount", recipientFriend.getInProgressChallengesCount());
-                                cv.put("allChallengesCount", recipientFriend.getAllChallengesCount());
-                                cv.put("successChallenges", recipientFriend.getSuccessChallenges());
-                                cv.put("owner", "false");
-                                db.insert("pending", null, cv);
-                            } else {
-                                Owner ownerFriend = datum.getOwner();
-                                cv.put("name", ownerFriend.getName());
-                                //if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
-                                //else cv.put("photo", "");
-                                String ownerPhoto = (ownerFriend.getPhoto() != null) ? ownerFriend.getPhoto().getMedium() : "";
-                                cv.put("photo", ownerPhoto);
-                                cv.put("user_id", ownerFriend.get_id());
-                                cv.put("inProgressChallengesCount", ownerFriend.getInProgressChallengesCount());
-                                cv.put("allChallengesCount", ownerFriend.getAllChallengesCount());
-                                cv.put("successChallenges", ownerFriend.getSuccessChallenges());
-                                cv.put("owner", "true");
-                                db.insert("pending", null, cv);
-                            }
-
-                        }
-                    }
-                }
-            }
-            @Override
-            public void onFailure(Throwable t) { }
         });
 
 

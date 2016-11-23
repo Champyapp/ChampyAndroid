@@ -24,6 +24,7 @@ import com.example.ivan.champy_v2.model.friend.Datum;
 import com.example.ivan.champy_v2.model.friend.Friend_;
 import com.example.ivan.champy_v2.model.friend.Owner;
 import com.example.ivan.champy_v2.model.FriendModel;
+import com.example.ivan.champy_v2.utils.Constants;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
 import com.github.nkzawa.emitter.Emitter;
@@ -43,7 +44,6 @@ import retrofit.Retrofit;
 
 public class FriendsFragment extends Fragment {
 
-    private static final String API_URL = "http://46.101.213.24:3007";
     private static final String TAG = "FriendsFragment";
     private static final String ARG_PAGE = "ARG_PAGE";
 
@@ -84,7 +84,7 @@ public class FriendsFragment extends Fragment {
             do {
                 friends.add(new FriendModel(
                         c.getString(nameColIndex),
-                        API_URL + c.getString(photoColIndex),
+                        Constants.API_URL + c.getString(photoColIndex),
                         c.getString(index),
                         c.getString(inProgressChallengesCountIndex),
                         c.getString(successChallenges),
@@ -120,12 +120,10 @@ public class FriendsFragment extends Fragment {
         });
         this.gView = view;
 
-//        refreshFriendsView(gSwipeRefreshLayout, gView);
-
-        Bundle friendRequestExtra = getActivity().getIntent().getExtras();
-        if (friendRequestExtra != null) {
-            refreshFriendsView(gSwipeRefreshLayout, gView);
-        }
+//        Bundle friendRequestExtra = getActivity().getIntent().getExtras();
+//        if (friendRequestExtra != null) {
+//            refreshFriendsView(gSwipeRefreshLayout, gView);
+//        }
 
         if (checkRefresh.equals("true")) {
             refreshFriendsView(gSwipeRefreshLayout, gView);

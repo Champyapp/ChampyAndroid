@@ -65,6 +65,7 @@ public class OtherFragment extends Fragment {
     private View gView;
     private List<FriendModel> friends;
     private Socket mSocket;
+    private String checkRefresh = "";
     private SwipeRefreshLayout gSwipeRefreshLayout;
     private CHCheckTableForExist checkTableForExist;
 
@@ -72,12 +73,8 @@ public class OtherFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         Log.d(TAG, "onAttach: ");
-    }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getContext());
+        checkRefresh = "true";
 
         friends = new ArrayList<>();
         DBHelper dbHelper = new DBHelper(getContext());
@@ -111,6 +108,14 @@ public class OtherFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getContext());
+
+
+    }
+
+    @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_friends, container, false);
         Log.d(TAG, "onCreateView: ");
@@ -136,6 +141,16 @@ public class OtherFragment extends Fragment {
             }
         });
         this.gView = view;
+
+        Bundle friendRequestExtra = getActivity().getIntent().getExtras();
+        if (friendRequestExtra != null) {
+            refreshOtherView(gSwipeRefreshLayout, gView);
+        }
+
+        if (checkRefresh.equals("true")) {
+            refreshOtherView(gSwipeRefreshLayout, gView);
+            checkRefresh = "false";
+        }
 
         return view;
 

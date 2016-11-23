@@ -117,8 +117,8 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         if (extras != null) {
             if ("true".equals(extras)) {
                 viewPager.setCurrentItem(0);
-                Intent mExtras = new Intent();
-                mExtras.putExtra("new_friend_request", "true");
+//                Intent mExtras = new Intent();
+//                mExtras.putExtra("new_friend_request", "true");
             }
         }
 

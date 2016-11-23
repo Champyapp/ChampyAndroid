@@ -152,12 +152,10 @@ public class PendingFragment extends Fragment {
         });
         this.gView = view;
 
-//        refreshPendingView(swipeRefreshLayout, gView);
-
-        Bundle friendRequestExtra = getActivity().getIntent().getExtras();
-        if (friendRequestExtra != null) {
-            refreshPendingView(swipeRefreshLayout, gView);
-        }
+//        Bundle friendRequestExtra = getActivity().getIntent().getExtras();
+//        if (friendRequestExtra != null) {
+//            refreshPendingView(swipeRefreshLayout, gView);
+//        }
 
         if (checkRefresh.equals("true")) {
             refreshPendingView(swipeRefreshLayout, gView);

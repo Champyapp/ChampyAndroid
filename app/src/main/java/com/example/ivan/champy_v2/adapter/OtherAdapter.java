@@ -214,21 +214,24 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
             Glide.with(context)
                     .load(contact.getPicture())
                     .asBitmap()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
                     .transform(new CropCircleTransformation(context))
                     .placeholder(R.drawable.icon_champy)
                     .override(80, 80)
                     .dontAnimate()
                     .into(imageViewFriendPicture);
+
 //            Glide.with(context)
 //                    .load(contact.getPicture())
 //                    .asBitmap()
+//                    .diskCacheStrategy(DiskCacheStrategy.ALL)
 //                    .transform(new CropCircleTransformation(context))
 //                    .placeholder(R.drawable.icon_champy)
-//                    //.diskCacheStrategy(DiskCacheStrategy.ALL)
-//                    .skipMemoryCache(true)
 //                    .override(80, 80)
+//                    .dontAnimate()
 //                    .into(imageViewFriendPicture);
+
 
             // made our "close-view" is visible and 'open-view' invisible
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.GONE);

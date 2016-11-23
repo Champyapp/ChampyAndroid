@@ -45,10 +45,9 @@ import static java.lang.Math.round;
 
 public class ChallengeController {
 
-    public static final String API_URL = "http://46.101.213.24:3007";
     public static final String TAG = "ChallengeController";
     private String duration, details, update = "0";
-    public String token, userId;
+    private String token, userId;
     private Context context;
     private Activity firstActivity;
     private Retrofit retrofit;
@@ -71,10 +70,8 @@ public class ChallengeController {
         duration = "" + (days * 86400);
         details = description + " during this period: " + days + " days";
 
-        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-
+        retrofit = new Retrofit.Builder().baseUrl(Constants.API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
-
         Call<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge> call = createChallenge.createChallenge("User_Challenge", type_id, description, details, duration, token);
         call.enqueue(new Callback<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge>() {
             @Override
@@ -98,14 +95,8 @@ public class ChallengeController {
     }
 
     public void sendSingleInProgressForSelf(String challenge) {
-        dbHelper = new DBHelper(context);
-        db = dbHelper.getWritableDatabase();
-        cv = new ContentValues();
-
-        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-
+        retrofit = new Retrofit.Builder().baseUrl(Constants.API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
-
         Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> call = singleinprogress.start_single_in_progress(challenge, token);
         call.enqueue(new Callback<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress>() {
             @Override
@@ -113,9 +104,15 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress data = response.body();
                     String inProgressId = data.getData().get_id();
+
+                    dbHelper = new DBHelper(context);
+                    db = dbHelper.getWritableDatabase();
+                    cv = new ContentValues();
+
                     cv.put("challenge_id", inProgressId);
                     cv.put("updated", "false");
                     db.insert("updated", null, cv);
+
                     Log.d("sendSingleInProgress", "InProgressId: " + inProgressId);
                     generateCardsForMainActivity();
                 } else {
@@ -134,7 +131,7 @@ public class ChallengeController {
         final String type_id = "567d51c48322f85870fd931b";
         duration = "" + (days * 86400);
         details = description + " during this period: " + days + " days";
-        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        retrofit = new Retrofit.Builder().baseUrl(Constants.API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
         Call<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge> call = createChallenge.createChallenge("User_Challenge", type_id, description, details, duration, token);
         call.enqueue(new Callback<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge>() {
@@ -164,7 +161,7 @@ public class ChallengeController {
         db = dbHelper.getWritableDatabase();
         cv = new ContentValues();
 
-        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        retrofit = new Retrofit.Builder().baseUrl(Constants.API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
         Call<com.example.ivan.champy_v2.model.duel.Duel> call = singleinprogress.Start_duel(friend_id, challenge, token);
@@ -223,7 +220,7 @@ public class ChallengeController {
 //        }
 
         // change stringIntentId for myDetails
-        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        retrofit = new Retrofit.Builder().baseUrl(Constants.API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
         Call<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge> call = createChallenge
                 .createChallenge(wakeUpName, type_id, description, stringIntentId, duration, token);
@@ -303,7 +300,7 @@ public class ChallengeController {
 
 
     public void joinToChallenge(final String inProgressId) {
-        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        retrofit = new Retrofit.Builder().baseUrl(Constants.API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         SingleInProgress singleInProgress = retrofit.create(SingleInProgress.class);
         Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> call = singleInProgress.Join(inProgressId, token);
         call.enqueue(new Callback<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress>() {
@@ -321,7 +318,7 @@ public class ChallengeController {
     }
 
     public void rejectInviteForPendingDuel(String inProgressId) throws IOException {
-        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        retrofit = new Retrofit.Builder().baseUrl(Constants.API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
         Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> call = activeInProgress.Reject(inProgressId, token);
         call.enqueue(new Callback<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress>() {
@@ -342,7 +339,7 @@ public class ChallengeController {
 
 
     public void doneForToday(final String inProgressId) throws IOException {
-        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        retrofit = new Retrofit.Builder().baseUrl(Constants.API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
         Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> call = activeInProgress.CheckChallenge(inProgressId, token);
         call.enqueue(new Callback<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress>() {
@@ -355,7 +352,9 @@ public class ChallengeController {
                     cv.put("updated", "true");
                     db.update("updated",      cv, "challenge_id = ?", new String[]{inProgressId});
                     db.update("myChallenges", cv, "challenge_id = ?", new String[]{inProgressId});
+
                     generateCardsForMainActivity();
+
                     Log.d(TAG, "doneForToday onResponse: VSE OK");
                 } else {
                     Log.d(TAG, "doneForToday onResponse: FAILED " + response.code() + response.message() + response.body());
@@ -368,7 +367,7 @@ public class ChallengeController {
     }
 
     public void give_up(final String id, final int intentId) throws IOException {
-        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        retrofit = new Retrofit.Builder().baseUrl(Constants.API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
         Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> call = activeInProgress.Surrender(id, token);
         call.enqueue(new Callback<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress>() {
@@ -377,8 +376,8 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     Data data = response.body().getData();
                     String type = data.getChallenge().getType();
-                    OfflineMode offlineMode = new OfflineMode();
-                    if (offlineMode.isConnectedToRemoteAPI(firstActivity)) {
+                    //OfflineMode offlineMode = new OfflineMode();
+                    //if (offlineMode.isConnectedToRemoteAPI(firstActivity)) {
                         //if this is "wake up" challenge then stop alarm manager;
                         if (type.equals("567d51c48322f85870fd931c")) {
                             Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
@@ -387,8 +386,9 @@ public class ChallengeController {
                             alarmManager.cancel(pendingIntent);
                             Log.d("GiveUp", "AlarmManager status: stopped " + alarmManager);
                         }
-                    }
+                    //}
                     Log.d(TAG, "GiveUp onResponse: VSE OK");
+
                     generateCardsForMainActivity();
                 } else Log.d(TAG, "GiveUp onResponse: FAILED: " + response.code());
             }
@@ -407,7 +407,7 @@ public class ChallengeController {
         dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
         final int clearCount = db.delete("pending_duel", null, null);
-        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        retrofit = new Retrofit.Builder().baseUrl(Constants.API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
         Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userId, update, token);
         call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
@@ -460,7 +460,7 @@ public class ChallengeController {
         db = dbHelper.getWritableDatabase();
         cv = new ContentValues();
         int clearCount = db.delete("myChallenges", null, null);
-        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        retrofit = new Retrofit.Builder().baseUrl(Constants.API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
         Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userId, update, token);
         call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
