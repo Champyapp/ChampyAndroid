@@ -194,8 +194,8 @@
     <string name="waiting_for_your_recipient">waiting for recipient</string>
     <string name="level_1_n_challenge"> Level 1 \n Challenge</string>
     <string name="reward_10_npoints">Reward +10 \npoints</string>
-    <string name="share_text1">"I'm done for today with my challenge: "</string>
-    <string name="share_text2">\nTry and you - www.champyapp.com/download</string>
+    <string name="constantly_improving_myself_with_champy">Constantly improving myself with Champy. \n</string>
+    <string name="champyapp_link">\n http://champyapp.com</string>
     <string name="how_would_you_like_to_share">How would you like to share?</string>
     <string name="avatar">Avatar</string>
     <string name="daily_reminder">Daily Reminder</string>

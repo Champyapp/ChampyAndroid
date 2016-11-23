@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -296,7 +295,24 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         buttonShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String message = getContext().getString(R.string.share_text1) + currentCard.getGoal() + getContext().getString(R.string.share_text2);
+                String message;
+                switch (currentCard.getType()) {
+                    case "Self-Improvement":
+                        message = getContext().getString(R.string.constantly_improving_myself_with_champy) + currentCard.getType()
+                                + " challenge '" + currentCard.getGoal() + "'" + getContext().getString(R.string.champyapp_link);
+                        break;
+                    case "Duel":
+                        message = getContext().getString(R.string.constantly_improving_myself_with_champy) + currentCard.getType()
+                                + " challenge '" + currentCard.getGoal() + "'" + getContext().getString(R.string.champyapp_link);
+                        break;
+                    case "Wake Up":
+                        message = getContext().getString(R.string.constantly_improving_myself_with_champy) + " "
+                                + currentCard.getChallengeName() + " challenge" + getContext().getString(R.string.champyapp_link);
+                        break;
+                    default:
+                        message = getContext().getString(R.string.constantly_improving_myself_with_champy) + getContext().getString(R.string.champyapp_link);
+
+                }
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 share.putExtra(Intent.EXTRA_TEXT, message);
