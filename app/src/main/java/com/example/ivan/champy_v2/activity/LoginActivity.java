@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.debug.hv.ViewServer;
 import com.example.ivan.champy_v2.DailyRemindController;
@@ -47,7 +48,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Set;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -93,6 +96,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+                if (!loginResult.getAccessToken().getDeclinedPermissions().isEmpty()) {
+                    Toast.makeText(LoginActivity.this, "Can't get permissions from Facebook", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
@@ -104,7 +111,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             try {
                                 URL profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
                                 path_to_pic = profile_pic.toString();
-                            } catch (MalformedURLException e) { e.printStackTrace(); }
+                            } catch (MalformedURLException e) {
+                                e.printStackTrace();
+                            }
                             new Thread(new Runnable() {
                                 public void run() {
                                     try {
@@ -118,10 +127,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         getUserData(fb_id, path_to_pic, json);
                                         // make if statement here /\  -  \/
                                         registerUser(fb_id, name, user_email, json);
-                                    } catch (Exception e) {Log.e(TAG, "error: ", e);}
+                                    } catch (Exception e) {
+                                        Log.e(TAG, "error: ", e);
+                                    }
                                 }
                             }).start();
-                        } catch (JSONException e) { e.printStackTrace(); }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e(TAG, "onCompleted: No Permission For Email Or Friends List");
+                        }
                     }
                 });
                 Bundle parameters = new Bundle();
@@ -134,10 +148,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
 
             @Override
-            public void onCancel() {}
+            public void onCancel() {
+                LoginManager.getInstance().logOut();
+                Toast.makeText(LoginActivity.this, "Try again", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "onCancel: LOGIN CANCELED");
+            }
 
             @Override
-            public void onError(FacebookException exception) {}
+            public void onError(FacebookException exception) {
+                Log.e(TAG, "onError: LOGIN FAILED");
+            }
         });
 
     }
