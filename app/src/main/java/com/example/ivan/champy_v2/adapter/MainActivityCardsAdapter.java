@@ -156,18 +156,18 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         }
 
         switch (itemType) {
-            case typeWake:
+            case "Wake Up":
                 imageChallengeLogo.setImageResource(R.drawable.wakeup_white);
                 itemGoal = currentCard.getChallengeName();
                 tvChallengeDescription.setText(itemGoal);
                 break;
-            case typeDuel:
+            case "Duel":
                 imageChallengeLogo.setImageResource(R.drawable.duel_white);
                 TextView tvRecipientName = (TextView)tempView.findViewById(R.id.tvRecipientName);
                 tvRecipientName.setText("with " + currentCard.getVersus());
                 tvRecipientName.setTypeface(typeface);
                 break;
-            case typeSelf:
+            case "Self-Improvement":
                 imageChallengeLogo.setImageResource(R.drawable.self_white);
                 break;
         }

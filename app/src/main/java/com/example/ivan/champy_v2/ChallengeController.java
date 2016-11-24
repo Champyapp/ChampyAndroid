@@ -488,12 +488,25 @@ public class ChallengeController {
                         String challenge_name        = challenge.getName();          // wake up (time / self / duel
                         String challenge_updated     = isUpdated(challenge_id);      // bool check method;
 
-                        String needsToCheck;
-                        List<Object> progress;
                         String challenge_duration = "";
                         String constDuration = "";
-                        String challType = (challenge_type.equals(typeSelf)) ? "Self-Improvement" : (challenge_type.equals(typeDuel)) ? "Duel" : "Wake Up";
-                        String versus = (challenge_type.equals(typeDuel)) ? (userId.equals(sender.get_id()) ? sender.getName() : recipient.getName()) : "notDuel";
+
+                        List<Object> progress; // = (userId.equals(sender.get_id())) ? datum.getSenderProgress() : datum.getRecipientProgress();
+                        String needsToCheck; // = (userId.equals(sender.get_id())) ? datum.getNeedsToCheckSender() : datum.getNeedsToCheckRecipient();
+                        //String recipientValue = (userId.equals(sender.get_id())) ? "false" : "true";
+                        String challType = (challenge_type.equals(typeSelf))
+                                ? "Self-Improvement"
+                                : (challenge_type.equals(typeDuel))
+                                                        ? "Duel"
+                                                        : "Wake Up";
+
+                        String versus = (challenge_type.equals(typeDuel))
+                                ? (userId.equals(sender.get_id())
+                                              ? recipient.getName()
+                                              : sender.getName())
+                                : "notDuel";
+
+                        Log.d(TAG, "onResponse: ASDASDADADASD \n\n challType: " + challType + "\n versus: " + versus);
 
                         if (userId.equals(sender.get_id())) {
                             progress = datum.getSenderProgress();
@@ -525,6 +538,7 @@ public class ChallengeController {
                             }
                         }
 
+                        //cv.put("recipient", recipientValue);
                         cv.put("name", challType); // Self-Improvement / Duel / Wake Up
                         cv.put("versus", versus); // if this is duel than versus = recipient / sender name
                         cv.put("wakeUpTime", challenge_detail); // our specific field for delete wakeUp (example: 1448);
