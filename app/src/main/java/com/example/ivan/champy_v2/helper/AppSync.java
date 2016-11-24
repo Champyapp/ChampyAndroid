@@ -213,7 +213,7 @@ public class AppSync {
 //                    constDuration = "" + constDays;
 //                }
 //
-//                List<Object> senderProgress = datum.getSenderProgress();
+//                List<Object> senderProgress = datum.getProgress();
 //                String stringSenderProgress[] = new String[senderProgress.size()];
 //                for (int j = 0; j < senderProgress.size(); j++) {
 //                    try {

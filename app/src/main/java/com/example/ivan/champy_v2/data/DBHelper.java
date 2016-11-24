@@ -88,7 +88,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 + ");");
 
 
-        // TODO: 11/24/16 Rename 'senderProgress' to 'progress'
         // table for store MY(!) in progress challenges and other data
         db.execSQL("create table myChallenges("
                 + "id integer primary key autoincrement,"
@@ -102,10 +101,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 + "challenge_id text,"
                 + "status text,"
                 + "updated text,"
-                + "senderProgress text DEFAULT [],"
+                + "myProgress text DEFAULT [],"
                 + "constDuration text DEFAULT '',"
-                + "needsToCheckSender text DEFAULT '',"
-                + "needsToCheckRecipient text DEFAULT ''"
+                + "needsToCheck text DEFAULT ''"
                 + ");");
 
         // table-helper for "myChallenges". This table store inProgressId and last check-in time
@@ -115,7 +113,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 + "id integer primary key autoincrement,"
                 + "challenge_id text,"
                 + "updated text,"
-                + "senderProgress text DEFAULT [],"
+                + "myProgress text DEFAULT [],"
                 + "dailyRemind text DEFAULT 'true'"
                 + ");");
     }

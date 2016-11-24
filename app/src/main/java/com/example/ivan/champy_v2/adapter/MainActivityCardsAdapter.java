@@ -16,9 +16,11 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ivan.champy_v2.ChallengeController;
 import com.example.ivan.champy_v2.R;
+import com.example.ivan.champy_v2.activity.ContactUsActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
@@ -27,6 +29,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import static com.example.ivan.champy_v2.utils.Constants.oneDay;
 
 public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 
@@ -39,7 +43,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         this.arrayList = mArrayList;
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "InflateParams"})
     @Override
     public View getView(int position, View convertView) {
         View tempView = convertView;
@@ -62,15 +66,14 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         cardImage.getLayoutParams().height = y*50;
         if (y > 10) y = 10;
 
-        String itemSenderProgress = currentCard.getSenderProgress();
+        String itemProgress = currentCard.getProgress();
         //String itemUpdate = currentCard.getUpdated();
+        //String itemStatus = currentCard.getStatus();
         String itemGoal = currentCard.getGoal();
         String itemType = currentCard.getType();
-        //String itemStatus = currentCard.getStatus();
-        String itemNeedsToCheckSender = currentCard.getNeedsToCheckSender();
-        String itemNeedsToCheckRecipient = currentCard.getNeedsToCheckRecipient();
+        String itemNeedsToCheck = currentCard.getNeedsToCheck();
         final String itemInProgressId = currentCard.getId();
-        String[] senderProgress = toArrayOfStrings(itemSenderProgress);
+        String[] challengeProgress = toArrayOfStrings(itemProgress);
 
 //        Log.d(TAG, "getView: itemUpdate: " + itemUpdate + " !!!");
 //        Log.d(TAG, "getView: itemGoal: " + itemGoal);
@@ -142,15 +145,27 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 //            tvEveryDayForTheNext.setVisibility(View.VISIBLE);
 //        }
 
+        if (itemNeedsToCheck.equals("true")) {
+            tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
+            buttonDone.setVisibility(View.VISIBLE);
+            buttonShare.setVisibility(View.INVISIBLE);
+            tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
+        } else {
+            tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
+            buttonShare.setVisibility(View.VISIBLE);
+            buttonDone.setVisibility(View.INVISIBLE);
+            tvEveryDayForTheNext.setVisibility(View.VISIBLE);
+        }
+
         switch (itemType) {
             case "Wake Up":
                 imageChallengeLogo.setImageResource(R.drawable.wakeup_white);
                 itemGoal = currentCard.getChallengeName();
                 tvChallengeDescription.setText(itemGoal);
-                tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
-                buttonShare.setVisibility(View.VISIBLE);
-                buttonDone.setVisibility(View.INVISIBLE);
-                tvEveryDayForTheNext.setVisibility(View.VISIBLE);
+//                tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
+//                buttonShare.setVisibility(View.VISIBLE);
+//                buttonDone.setVisibility(View.INVISIBLE);
+//                tvEveryDayForTheNext.setVisibility(View.VISIBLE);
                 break;
             case "Duel":
                 imageChallengeLogo.setImageResource(R.drawable.duel_white);
@@ -158,33 +173,10 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                 tvRecipientName.setText("with " + currentCard.getVersus());
                 //tvRecipientName.setTextSize((float) (y*1.4));
                 tvRecipientName.setTypeface(typeface);
-                //Log.d(TAG, "getView: itemNeedsToCheckRecipient: " + itemNeedsToCheckRecipient);
-                if (itemNeedsToCheckRecipient.equals("true")) {
-                    tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
-                    buttonDone.setVisibility(View.VISIBLE);
-                    buttonShare.setVisibility(View.INVISIBLE);
-                    tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
-                } else {
-                    tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
-                    buttonShare.setVisibility(View.VISIBLE);
-                    buttonDone.setVisibility(View.INVISIBLE);
-                    tvEveryDayForTheNext.setVisibility(View.VISIBLE);
-                }
                 break;
             case "Self-Improvement":
                 imageChallengeLogo.setImageResource(R.drawable.self_white);
                 //Log.d(TAG, "getView: itemNeedsToCheckSender: " + itemNeedsToCheckSender);
-                if (itemNeedsToCheckSender.equals("true")) {
-                    tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
-                    buttonDone.setVisibility(View.VISIBLE);
-                    buttonShare.setVisibility(View.INVISIBLE);
-                    tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
-                } else {
-                    tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
-                    buttonShare.setVisibility(View.VISIBLE);
-                    buttonDone.setVisibility(View.INVISIBLE);
-                    tvEveryDayForTheNext.setVisibility(View.VISIBLE);
-                }
                 break;
         }
 
@@ -195,51 +187,36 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         String userId = user.getUserObjectId();
         String token = user.getToken();
         final ChallengeController cc = new ChallengeController(getContext(), (Activity) getContext(), token, userId);
-
-        /**
-         * My algorithm for displaying buttons inside cards view and opportunity for check challenge
-         * @param longSenderProgress it's last element of the "Sender Progress" (api: 'at"). We can
-         *                           take it from ChallengeController -> GenerateCardsForMainActivity()
-         *                           method. We use it for compare.
-         * @param checkInPlusOneDay it's parsed long of 'longSenderProgress' plus one day in seconds.
-         *                          We use it to give the user time for relaxing. If current time
-         *                          more than checkInPlusOneDay then we make button "doneForToday"
-         *                          isActive and now we are ready to rewrite our 'senderProgress'
-         *  @param checkInPlusTwoDays It's parsed long of 'longSenderProgress' plus two days in seconds.
-         *                            We use it to give user time for press the button "done for today".
-         *                            If user did it then we are rewrite senderProgress and make
-         *                            the button "doneForToday" active, else - autoSurrender
-         */
-
         long now = Calendar.getInstance().getTimeInMillis() / 1000;
-        long longSenderProgress = 0;
-        long senderProgressMidNight = 0;
-        final long oneDay = 86400L;
+        long myProgress = 0;
+        long progressMidNight = 0;
+        //final long oneDay = 86400L;
         try {
-            longSenderProgress = Long.parseLong(senderProgress[senderProgress.length - 1]); // our last checkIn in seconds
-            //Log.d(TAG, "getView: lastCheckIn: " + longSenderProgress);
-            Date date = new Date(longSenderProgress * 1000); // convert last checkIn in date format
-            senderProgressMidNight = longSenderProgress - (date.getHours() * 60 * 60) - (date.getMinutes() * 60) - (date.getSeconds());
+            myProgress = Long.parseLong(challengeProgress[challengeProgress.length - 1]); // our last checkIn in seconds
+            Date date = new Date(myProgress * 1000); // convert last checkIn in date format
+            progressMidNight = myProgress - (date.getHours() * 60 * 60) - (date.getMinutes() * 60) - (date.getSeconds());
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
 
 
 
-        if (longSenderProgress != 0L && now > senderProgressMidNight + oneDay) {
+        if (myProgress != 0L && now > progressMidNight + oneDay) {
             // it's mean "self" and "duel"
+            DBHelper dbHelper = new DBHelper(getContext());
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("updated", "false"); // was true
+            db.update("updated",      cv, "challenge_id = ?", new String[]{itemInProgressId});
+            db.update("myChallenges", cv, "challenge_id = ?", new String[]{itemInProgressId});
+
             if (!itemType.equals("Wake Up")) {
                 tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
                 buttonShare.setVisibility(View.INVISIBLE);
                 buttonDone.setVisibility(View.VISIBLE);
+            }
 
-                DBHelper dbHelper = new DBHelper(getContext());
-                SQLiteDatabase db = dbHelper.getWritableDatabase();
-                ContentValues cv = new ContentValues();
-                cv.put("updated", "false"); // was true
-                db.update("updated",      cv, "challenge_id = ?", new String[]{itemInProgressId});
-                db.update("myChallenges", cv, "challenge_id = ?", new String[]{itemInProgressId});
-            } else if (now > senderProgressMidNight + oneDay + oneDay) {
+            if (now > progressMidNight + oneDay + oneDay) {
                 try {
                     if (itemType.equals("Wake Up")) {
                         int i = Integer.parseInt(currentCard.getWakeUpTime());
@@ -295,28 +272,15 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         buttonShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String message;
-                switch (currentCard.getType()) {
-                    case "Self-Improvement":
-                        message = getContext().getString(R.string.share_text) + currentCard.getType()
-                                + " challenge '" + currentCard.getGoal() + "'" + getContext().getString(R.string.champyapp_link);
-                        break;
-                    case "Duel":
-                        message = getContext().getString(R.string.share_text) + currentCard.getType()
-                                + " challenge '" + currentCard.getGoal() + "'" + getContext().getString(R.string.champyapp_link);
-                        break;
-                    case "Wake Up":
-                        message = getContext().getString(R.string.share_text) + " "
-                                + currentCard.getChallengeName() + " challenge" + getContext().getString(R.string.champyapp_link);
-                        break;
-                    default:
-                        message = getContext().getString(R.string.share_text) + getContext().getString(R.string.champyapp_link);
-
-                }
+                String message = getContext().getString(R.string.share_text) + currentCard.getChallengeName() + " challenge" + getContext().getString(R.string.champyapp_link);
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 share.putExtra(Intent.EXTRA_TEXT, message);
-                getContext().startActivity(Intent.createChooser(share, getContext().getString(R.string.how_would_you_like_to_share)));
+                try {
+                    getContext().startActivity(Intent.createChooser(share, getContext().getString(R.string.how_would_you_like_to_share)));
+                } catch (Exception e) {
+                    Toast.makeText(getContext(), "No email client installed.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -328,6 +292,23 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         return arrayList.size();
     }
 
+//                switch (currentCard.getType()) {
+//                    case "Self-Improvement":
+//                        message = getContext().getString(R.string.share_text) + currentCard.getType()
+//                                + " challenge '" + currentCard.getGoal() + "'" + getContext().getString(R.string.champyapp_link);
+//                        break;
+//                    case "Duel":
+//                        message = getContext().getString(R.string.share_text) + currentCard.getType()
+//                                + " challenge '" + currentCard.getGoal() + "'" + getContext().getString(R.string.champyapp_link);
+//                        break;
+//                    case "Wake Up":
+//                        message = getContext().getString(R.string.share_text) + " "
+//                                + currentCard.getChallengeName() + " challenge" + getContext().getString(R.string.champyapp_link);
+//                        break;
+//                    default:
+//                        message = getContext().getString(R.string.share_text) + getContext().getString(R.string.champyapp_link);
+//
+//                }
 
     private String[] toArrayOfStrings(String arg) {
         String a = arg.replace("[", "");
