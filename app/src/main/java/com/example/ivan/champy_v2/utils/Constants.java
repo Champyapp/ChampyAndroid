@@ -8,4 +8,8 @@ public class Constants {
 
     public static long unixTime = System.currentTimeMillis() / 1000L;
 
+    public static final String typeSelf = "567d51c48322f85870fd931a";
+    public static final String typeDuel = "567d51c48322f85870fd931b";
+    public static final String typeWake = "567d51c48322f85870fd931c";
+
 }

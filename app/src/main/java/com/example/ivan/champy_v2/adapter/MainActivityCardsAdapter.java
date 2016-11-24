@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +32,9 @@ import java.util.Calendar;
 import java.util.Date;
 
 import static com.example.ivan.champy_v2.utils.Constants.oneDay;
+import static com.example.ivan.champy_v2.utils.Constants.typeDuel;
+import static com.example.ivan.champy_v2.utils.Constants.typeSelf;
+import static com.example.ivan.champy_v2.utils.Constants.typeWake;
 
 public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 
@@ -67,19 +71,11 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         if (y > 10) y = 10;
 
         String itemProgress = currentCard.getProgress();
-        //String itemUpdate = currentCard.getUpdated();
-        //String itemStatus = currentCard.getStatus();
         String itemGoal = currentCard.getGoal();
         String itemType = currentCard.getType();
         String itemNeedsToCheck = currentCard.getNeedsToCheck();
         final String itemInProgressId = currentCard.getId();
         String[] challengeProgress = toArrayOfStrings(itemProgress);
-
-//        Log.d(TAG, "getView: itemUpdate: " + itemUpdate + " !!!");
-//        Log.d(TAG, "getView: itemGoal: " + itemGoal);
-//        Log.d(TAG, "getView: itemType: " + itemType);
-//        Log.d(TAG, "getView: itemID: " + itemInProgressId);
-//        Log.d(TAG, "getView: itemStatus: " + itemStatus);
 
         final TextView tvChallengeType = (TextView) tempView.findViewById(R.id.tvChallengeType);
         tvChallengeType.setText(currentCard.getType());
@@ -102,6 +98,8 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         tvEveryDayForTheNext.setTypeface(typeface);
         tvEveryDayForTheNext.setTextSize((float)(y*1.3));
         final TextView tvDuration = (TextView) tempView.findViewById(R.id.textViewDuration);
+        tvDuration.setTypeface(typeface);
+        tvDuration.setTextSize(y*2);
 //        if (itemType.equals("Wake Up") || itemUpdate.equals("true")) { //?
 //            tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
 //            buttonShare.setVisibility(View.VISIBLE);
@@ -158,30 +156,21 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         }
 
         switch (itemType) {
-            case "Wake Up":
+            case typeWake:
                 imageChallengeLogo.setImageResource(R.drawable.wakeup_white);
                 itemGoal = currentCard.getChallengeName();
                 tvChallengeDescription.setText(itemGoal);
-//                tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
-//                buttonShare.setVisibility(View.VISIBLE);
-//                buttonDone.setVisibility(View.INVISIBLE);
-//                tvEveryDayForTheNext.setVisibility(View.VISIBLE);
                 break;
-            case "Duel":
+            case typeDuel:
                 imageChallengeLogo.setImageResource(R.drawable.duel_white);
                 TextView tvRecipientName = (TextView)tempView.findViewById(R.id.tvRecipientName);
                 tvRecipientName.setText("with " + currentCard.getVersus());
-                //tvRecipientName.setTextSize((float) (y*1.4));
                 tvRecipientName.setTypeface(typeface);
                 break;
-            case "Self-Improvement":
+            case typeSelf:
                 imageChallengeLogo.setImageResource(R.drawable.self_white);
-                //Log.d(TAG, "getView: itemNeedsToCheckSender: " + itemNeedsToCheckSender);
                 break;
         }
-
-        tvDuration.setTypeface(typeface);
-        tvDuration.setTextSize(y*2);
 
         CurrentUserHelper user = new CurrentUserHelper(getContext());
         String userId = user.getUserObjectId();
