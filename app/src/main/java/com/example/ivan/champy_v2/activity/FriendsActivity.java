@@ -90,7 +90,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
@@ -113,13 +113,19 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         sessionManager.setRefreshPending("true");
 
         // this out method for open "pending" when you click on notification about friends request
-//        String extras = getIntent().getStringExtra("friend_request");
-        String extras = getIntent().getStringExtra("friend_request");
-        if (extras != null) {
-            if ("true".equals(extras)) {
+        Bundle bundle = getIntent().getExtras();
+        String newFriendRequest = getIntent().getStringExtra("new_friend_request");
+        String newRelationShip = getIntent().getStringExtra("new_relationship");
+
+        Log.d(TAG, "GCM: newFriendRequest: " + newFriendRequest);
+        Log.d(TAG, "GCM: newRelationship: " + newRelationShip);
+
+//        int page = ("new_friend_request".equals(newFriendRequest)) ? 0 : 1;
+        if (bundle != null) {
+            if ("new_friend_request".equals(newFriendRequest)) {
+                viewPager.setCurrentItem(1);
+            } else {
                 viewPager.setCurrentItem(0);
-//                Intent mExtras = new Intent();
-//                mExtras.putExtra("new_friend_request", "true");
             }
         }
 
