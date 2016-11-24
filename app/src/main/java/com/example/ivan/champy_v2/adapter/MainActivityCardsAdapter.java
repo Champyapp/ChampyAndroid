@@ -177,11 +177,10 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         String token = user.getToken();
         final ChallengeController cc = new ChallengeController(getContext(), (Activity) getContext(), token, userId);
         long now = Calendar.getInstance().getTimeInMillis() / 1000;
-        long myProgress = 0;
-        long progressMidNight = 0;
-        //final long oneDay = 86400L;
+        int myProgress = 0;
+        int progressMidNight = 0;
         try {
-            myProgress = Long.parseLong(challengeProgress[challengeProgress.length - 1]); // our last checkIn in seconds
+            myProgress = Integer.parseInt(challengeProgress[challengeProgress.length - 1]); // our last checkIn in seconds
             Date date = new Date(myProgress * 1000); // convert last checkIn in date format
             progressMidNight = myProgress - (date.getHours() * 60 * 60) - (date.getMinutes() * 60) - (date.getSeconds());
         } catch (RuntimeException e) {
@@ -190,7 +189,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 
 
 
-        if (myProgress != 0L && now > progressMidNight + oneDay) {
+        if (myProgress != 0 && now > progressMidNight + oneDay) {
             // it's mean "self" and "duel"
             DBHelper dbHelper = new DBHelper(getContext());
             SQLiteDatabase db = dbHelper.getWritableDatabase();

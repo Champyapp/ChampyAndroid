@@ -487,26 +487,12 @@ public class ChallengeController {
                         String challenge_type        = challenge.getType();          // 567d51c48322f85870fd931a / b / c
                         String challenge_name        = challenge.getName();          // wake up (time / self / duel
                         String challenge_updated     = isUpdated(challenge_id);      // bool check method;
-
                         String challenge_duration = "";
                         String constDuration = "";
-
-                        List<Object> progress; // = (userId.equals(sender.get_id())) ? datum.getSenderProgress() : datum.getRecipientProgress();
-                        String needsToCheck; // = (userId.equals(sender.get_id())) ? datum.getNeedsToCheckSender() : datum.getNeedsToCheckRecipient();
-                        //String recipientValue = (userId.equals(sender.get_id())) ? "false" : "true";
-                        String challType = (challenge_type.equals(typeSelf))
-                                ? "Self-Improvement"
-                                : (challenge_type.equals(typeDuel))
-                                                        ? "Duel"
-                                                        : "Wake Up";
-
-                        String versus = (challenge_type.equals(typeDuel))
-                                ? (userId.equals(sender.get_id())
-                                              ? recipient.getName()
-                                              : sender.getName())
-                                : "notDuel";
-
-                        Log.d(TAG, "onResponse: ASDASDADADASD \n\n challType: " + challType + "\n versus: " + versus);
+                        List<Object> progress;
+                        String needsToCheck;
+                        String challType = (challenge_type.equals(typeSelf)) ? "Self-Improvement" : (challenge_type.equals(typeDuel)) ? "Duel" : "Wake Up";
+                        String versus = (challenge_type.equals(typeDuel)) ? (userId.equals(sender.get_id()) ? recipient.getName() : sender.getName()) : "notDuel";
 
                         if (userId.equals(sender.get_id())) {
                             progress = datum.getSenderProgress();
@@ -519,10 +505,9 @@ public class ChallengeController {
                         }
 
                         if (datum.getEnd() != null) {
-                            int end = datum.getEnd();
-                            int begin = datum.getBegin();
-                            int days = round((end - Constants.unixTime) / 86400);
-                            int constDays = round((end - begin) / 86400);
+                            int constDays = round((datum.getEnd() - datum.getBegin()) / 86400);
+                            int duration = datum.getChallenge().getDuration();
+                            int days = (duration - (progress.size() * Constants.oneDay)) / Constants.oneDay;
                             challenge_duration = String.valueOf(days);
                             constDuration = String.valueOf(constDays);
                         }
@@ -533,12 +518,9 @@ public class ChallengeController {
                                 JSONObject json = new JSONObject(progress.get(j).toString());
                                 long at = json.getLong("at");
                                 stringSenderProgress[j] = String.valueOf(at);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                            } catch (JSONException e) { e.printStackTrace(); }
                         }
 
-                        //cv.put("recipient", recipientValue);
                         cv.put("name", challType); // Self-Improvement / Duel / Wake Up
                         cv.put("versus", versus); // if this is duel than versus = recipient / sender name
                         cv.put("wakeUpTime", challenge_detail); // our specific field for delete wakeUp (example: 1448);

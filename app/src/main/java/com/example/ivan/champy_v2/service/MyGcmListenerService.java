@@ -43,6 +43,8 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
+import static com.example.ivan.champy_v2.utils.Constants.typeDuel;
+import static com.example.ivan.champy_v2.utils.Constants.typeSelf;
 import static java.lang.Math.round;
 
 public class MyGcmListenerService extends GcmListenerService {
@@ -196,14 +198,24 @@ public class MyGcmListenerService extends GcmListenerService {
                         String challenge_status      = datum.getStatus();            // active or not
                         String challenge_id          = datum.get_id();               // im progress id
                         String challenge_type        = challenge.getType();          // 567d51c48322f85870fd931a / b / c
-                        String challenge_name        = challenge.getName();          // wake up / self / duel
-                        String challenge_wakeUpTime  = challenge.getWakeUpTime();    // our specific time (intentId)
+                        String challenge_name        = challenge.getName();          // wake up (time / self / duel
                         String challenge_updated     = isUpdated(challenge_id);      // bool check method;
-                        String needsToCheckSender    = datum.getNeedsToCheckSender();// true / false for today
-                        String needsToCheckRecipient = datum.getNeedsToCheckRecipient(); // true / false if this is duel and i'm recipient
-                        List<Object> senderProgress  = datum.getSenderProgress();    // sender progress
-                        String challenge_duration    = "";
-                        String constDuration         = "";
+                        String challenge_duration = "";
+                        String constDuration = "";
+                        List<Object> progress;
+                        String needsToCheck;
+                        String challType = (challenge_type.equals(typeSelf)) ? "Self-Improvement" : (challenge_type.equals(typeDuel)) ? "Duel" : "Wake Up";
+                        String versus = (challenge_type.equals(typeDuel)) ? (userId.equals(sender.get_id()) ? recipient.getName() : sender.getName()) : "notDuel";
+
+                        if (userId.equals(sender.get_id())) {
+                            progress = datum.getSenderProgress();
+                            needsToCheck = datum.getNeedsToCheckSender();
+                            cv.put("recipient", "false");
+                        } else {
+                            progress = datum.getRecipientProgress();
+                            needsToCheck = datum.getNeedsToCheckRecipient();
+                            cv.put("recipient", "true");
+                        }
 
                         if (datum.getEnd() != null) {
                             int end = datum.getEnd();
@@ -214,10 +226,10 @@ public class MyGcmListenerService extends GcmListenerService {
                             constDuration = String.valueOf(constDays);
                         }
 
-                        String stringSenderProgress[] = new String[senderProgress.size()];
-                        for (int j = 0; j < senderProgress.size(); j++) {
+                        String stringSenderProgress[] = new String[progress.size()];
+                        for (int j = 0; j < progress.size(); j++) {
                             try {
-                                JSONObject json = new JSONObject(senderProgress.get(j).toString());
+                                JSONObject json = new JSONObject(progress.get(j).toString());
                                 long at = json.getLong("at");
                                 stringSenderProgress[j] = String.valueOf(at);
                             } catch (JSONException e) {
@@ -225,56 +237,21 @@ public class MyGcmListenerService extends GcmListenerService {
                             }
                         }
 
-                        if (challenge_description.equals("Wake Up")) {
-                            // just name of Challenge
-                            cv.put("name", "Wake Up");
-                            // our specific field for delete wakeUp (example: 1448);
-                            cv.put("wakeUpTime", challenge_detail);
-                            // method for check challenge for "needToCheck"
-                            cv.put("needsToCheckSender", needsToCheckSender);
-                        } else if (challenge_type.equals("567d51c48322f85870fd931a")) {
-                            // just name of Challenge
-                            cv.put("name", "Self-Improvement");
-                            // method for check challenge for "needToCheck"
-                            cv.put("needsToCheckSender", needsToCheckSender);
-                        } else if (challenge_type.equals("567d51c48322f85870fd931b")) {
-                            // just name of Challenge
-                            cv.put("name", "Duel");
-                            if (userId.equals(recipient.getId())) {
-                                // if I accepted challenge, i'm "recipient"
-                                cv.put("recipient", "true");
-                                // name of the person with whom we have a duel
-                                cv.put("versus", sender.getName());
-                                // method for check challenge for "needToCheck"
-                                cv.put("needsToCheckRecipient", needsToCheckRecipient);
-                            } else {
-                                // if I sent the challenge, i'm "sender"
-                                cv.put("recipient", "false");
-                                // name of the person with whom we have a duel
-                                cv.put("versus", recipient.getName());
-                                // method for check challenge for "needToCheck"
-                                cv.put("needsToCheckSender", needsToCheckSender);
-                            }
-                        }
+                        cv.put("name", challType); // Self-Improvement / Duel / Wake Up
+                        cv.put("versus", versus); // if this is duel than versus = recipient / sender name
+                        cv.put("wakeUpTime", challenge_detail); // our specific field for delete wakeUp (example: 1448);
+                        cv.put("challengeName", challenge_name); // default 'challenge'. this column only for wake up time
+                        cv.put("description", challenge_description); // smoking free life or wake up at 14:48
+                        cv.put("duration", challenge_duration); // duration of challenge
+                        cv.put("challenge_id", challenge_id); // in progress id
+                        cv.put("status", challenge_status); // active or not
+                        cv.put("updated", challenge_updated); // true or false (need to delete)
+                        cv.put("myProgress", Arrays.toString(stringSenderProgress)); // last update time in millis
+                        cv.put("constDuration", constDuration); // our constant value of challenge duration
+                        cv.put("needsToCheck", needsToCheck); // method for check challenge for "needToCheck"
+                        db.insert("myChallenges", null, cv); // db when we store all challenges and information about them
 
-                        // default 'challenge'. this column only for wake up time
-                        cv.put("challengeName", challenge_name);
-                        // smoking free life or wake up at 14:48
-                        cv.put("description", challenge_description);
-                        // duration of challenge
-                        cv.put("duration", challenge_duration);
-                        // in progress id
-                        cv.put("challenge_id", challenge_id);
-                        // active or not
-                        cv.put("status", challenge_status);
-                        // true or false
-                        cv.put("updated", challenge_updated);
-                        // last update time in millis
-                        cv.put("senderProgress", Arrays.toString(stringSenderProgress));
-                        // our constant value of challenge duration
-                        cv.put("constDuration", constDuration);
-                        // db when we store all challenges and information about them
-                        db.insert("myChallenges", null, cv);
+
                     }
                     Log.d(TAG, "Generate onResponse: VSE OK");
                 }
