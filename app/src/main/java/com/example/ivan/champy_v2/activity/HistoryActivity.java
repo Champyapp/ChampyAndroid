@@ -23,13 +23,13 @@ import android.widget.TextView;
 import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.R;
-import com.example.ivan.champy_v2.utils.SessionManager;
 import com.example.ivan.champy_v2.adapter.HistoryPagerAdapter;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
+import com.example.ivan.champy_v2.utils.OfflineMode;
+import com.example.ivan.champy_v2.utils.SessionManager;
 import com.facebook.FacebookSdk;
 
 import java.io.File;

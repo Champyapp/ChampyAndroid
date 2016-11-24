@@ -19,15 +19,13 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-/**
- * Created by SashaKhyzhun on 11/23/16.
- */
 
 public class CHGetPendingFriends {
 
     private Context context;
     private ContentValues cv;
     private SQLiteDatabase db;
+
     public CHGetPendingFriends(Context context) {
         this.context = context;
     }

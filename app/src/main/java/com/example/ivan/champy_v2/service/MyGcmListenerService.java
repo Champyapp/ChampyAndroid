@@ -14,8 +14,6 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.example.ivan.champy_v2.R;
-import com.example.ivan.champy_v2.utils.Constants;
-import com.example.ivan.champy_v2.utils.SessionManager;
 import com.example.ivan.champy_v2.activity.FriendsActivity;
 import com.example.ivan.champy_v2.activity.HistoryActivity;
 import com.example.ivan.champy_v2.activity.PendingDuelActivity;
@@ -28,6 +26,8 @@ import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
 import com.example.ivan.champy_v2.model.active_in_progress.Datum;
 import com.example.ivan.champy_v2.model.active_in_progress.Recipient;
 import com.example.ivan.champy_v2.model.active_in_progress.Sender;
+import com.example.ivan.champy_v2.utils.Constants;
+import com.example.ivan.champy_v2.utils.SessionManager;
 import com.google.android.gms.gcm.GcmListenerService;
 
 import org.json.JSONException;

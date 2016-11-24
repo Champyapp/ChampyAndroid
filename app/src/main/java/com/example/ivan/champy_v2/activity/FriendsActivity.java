@@ -113,6 +113,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         sessionManager.setRefreshPending("true");
 
         // this out method for open "pending" when you click on notification about friends request
+//        String extras = getIntent().getStringExtra("friend_request");
         String extras = getIntent().getStringExtra("friend_request");
         if (extras != null) {
             if ("true".equals(extras)) {

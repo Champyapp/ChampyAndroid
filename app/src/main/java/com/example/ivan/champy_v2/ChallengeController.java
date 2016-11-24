@@ -23,13 +23,11 @@ import com.example.ivan.champy_v2.model.active_in_progress.Sender;
 import com.example.ivan.champy_v2.model.duel.Duel;
 import com.example.ivan.champy_v2.model.single_in_progress.Data;
 import com.example.ivan.champy_v2.utils.Constants;
-import com.example.ivan.champy_v2.utils.OfflineMode;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -44,7 +42,6 @@ import retrofit.Retrofit;
 
 import static com.example.ivan.champy_v2.utils.Constants.typeDuel;
 import static com.example.ivan.champy_v2.utils.Constants.typeSelf;
-import static com.example.ivan.champy_v2.utils.Constants.typeWake;
 import static java.lang.Math.round;
 
 public class ChallengeController {
