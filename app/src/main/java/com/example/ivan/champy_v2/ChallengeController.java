@@ -487,17 +487,22 @@ public class ChallengeController {
                         String challenge_type        = challenge.getType();          // 567d51c48322f85870fd931a / b / c
                         String challenge_name        = challenge.getName();          // wake up (time / self / duel
                         String challenge_updated     = isUpdated(challenge_id);      // bool check method;
+
                         String needsToCheck;
                         List<Object> progress;
                         String challenge_duration = "";
                         String constDuration = "";
+                        String challType = (challenge_type.equals(typeSelf)) ? "Self-Improvement" : (challenge_type.equals(typeDuel)) ? "Duel" : "Wake Up";
+                        String versus = (challenge_type.equals(typeDuel)) ? (userId.equals(sender.get_id()) ? sender.getName() : recipient.getName()) : "notDuel";
 
                         if (userId.equals(sender.get_id())) {
                             progress = datum.getSenderProgress();
                             needsToCheck = datum.getNeedsToCheckSender();
+                            cv.put("recipient", "false");
                         } else {
                             progress = datum.getRecipientProgress();
                             needsToCheck = datum.getNeedsToCheckRecipient();
+                            cv.put("recipient", "true");
                         }
 
                         if (datum.getEnd() != null) {
@@ -520,21 +525,8 @@ public class ChallengeController {
                             }
                         }
 
-                        if (challenge_type.equals(typeWake)) {
-                            cv.put("name", "Wake Up");
-                        } else if (challenge_type.equals(typeSelf)) {
-                            cv.put("name", "Self-Improvement");
-                        } else if (challenge_type.equals(typeDuel)) {
-                            cv.put("name", "Duel");
-                            if (userId.equals(recipient.getId())) {
-                                cv.put("recipient", "true");
-                                cv.put("versus", sender.getName());
-                            } else {
-                                cv.put("recipient", "false");
-                                cv.put("versus", recipient.getName());
-                            }
-                        }
-
+                        cv.put("name", challType); // Self-Improvement / Duel / Wake Up
+                        cv.put("versus", versus); // if this is duel than versus = recipient / sender name
                         cv.put("wakeUpTime", challenge_detail); // our specific field for delete wakeUp (example: 1448);
                         cv.put("challengeName", challenge_name); // default 'challenge'. this column only for wake up time
                         cv.put("description", challenge_description); // smoking free life or wake up at 14:48
@@ -546,6 +538,8 @@ public class ChallengeController {
                         cv.put("constDuration", constDuration); // our constant value of challenge duration
                         cv.put("needsToCheck", needsToCheck); // method for check challenge for "needToCheck"
                         db.insert("myChallenges", null, cv); // db when we store all challenges and information about them
+
+
                     }
                     Log.d(TAG, "Generate onResponse: VSE OK");
                     Intent intent = new Intent(firstActivity, MainActivity.class);
