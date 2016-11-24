@@ -87,6 +87,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 + "recipient text"
                 + ");");
 
+
+        // TODO: 11/24/16 Rename 'senderProgress' to 'progress'
         // table for store MY(!) in progress challenges and other data
         db.execSQL("create table myChallenges("
                 + "id integer primary key autoincrement,"

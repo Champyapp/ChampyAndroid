@@ -19,6 +19,7 @@ public class Datum {
     private Boolean recipientSuccess;
     private List<Object> recipientProgress = new ArrayList<Object>();
     private List<Object> senderProgress = new ArrayList<Object>();
+    private List<Object> progress = new ArrayList<>();
     private String status;
     private String wakeUpTime;
     private String needsToCheckSender;
@@ -92,6 +93,10 @@ public class Datum {
         return senderProgress;
     }
 
+    public List<Object> getProgress() {
+        return progress;
+    }
+
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
     }
@@ -135,6 +140,10 @@ public class Datum {
 
     public void setSenderProgress(List<Object> senderProgress) {
         this.senderProgress = senderProgress;
+    }
+
+    public void setProgress(List<Object> progress) {
+        this.progress = progress;
     }
 
     public void setStatus(String status) {

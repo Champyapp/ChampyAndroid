@@ -29,6 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -486,9 +487,17 @@ public class ChallengeController {
                         String challenge_updated     = isUpdated(challenge_id);      // bool check method;
                         String needsToCheckSender    = datum.getNeedsToCheckSender();// true / false for today
                         String needsToCheckRecipient = datum.getNeedsToCheckRecipient(); // true / false if this is duel and i'm recipient
-                        List<Object> senderProgress  = datum.getSenderProgress();    // sender progress
+                        //List<Object> senderProgress  = datum.getSenderProgress();    // sender progress
+                        //List<Object> recipProgress   = datum.getRecipientProgress(); // recipient progress
+                        List<Object> progress;
                         String challenge_duration    = "";
                         String constDuration         = "";
+
+                        if (userId.equals(sender.get_id())) {
+                            progress = datum.getSenderProgress();
+                        } else {
+                            progress = datum.getRecipientProgress();
+                        }
 
                         if (datum.getEnd() != null) {
                             int end = datum.getEnd();
@@ -499,10 +508,10 @@ public class ChallengeController {
                             constDuration = String.valueOf(constDays);
                         }
 
-                        String stringSenderProgress[] = new String[senderProgress.size()];
-                        for (int j = 0; j < senderProgress.size(); j++) {
+                        String stringSenderProgress[] = new String[progress.size()];
+                        for (int j = 0; j < progress.size(); j++) {
                             try {
-                                JSONObject json = new JSONObject(senderProgress.get(j).toString());
+                                JSONObject json = new JSONObject(progress.get(j).toString());
                                 long at = json.getLong("at");
                                 stringSenderProgress[j] = String.valueOf(at);
                             } catch (JSONException e) {
