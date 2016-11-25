@@ -104,6 +104,8 @@ public class AppSync {
                             acceptedYour, challegeEnd, daily, "true", gcm, token_android
                     );
 
+
+                    Log.d(TAG, "onResponse: QWERTY TOKEN: " + token);
                     sessionManager.setChampyOptions(
                             data.getAllChallengesCount().toString(),
                             data.getSuccessChallenges().toString(),

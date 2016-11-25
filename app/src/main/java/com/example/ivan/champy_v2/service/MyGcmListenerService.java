@@ -91,15 +91,15 @@ public class MyGcmListenerService extends GcmListenerService {
 
         switch (title) {
             case "Friend Request Confirmed":
-                friendsIntent.putExtra("friend_request_confirmed", "friend_request_confirmed");
+                friendsIntent.putExtra("friend_request", "friend_request_confirmed");
                 notifyForFriends(friendsIntent, message);
                 break;
             case "Incoming Friend Request":
-                friendsIntent.putExtra("incoming_friend_request", "incoming_friend_request");
+                friendsIntent.putExtra("friend_request", "incoming_friend_request");
                 notifyForFriends(friendsIntent, message);
                 break;
             case "Friend Request Removed":
-                friendsIntent.putExtra("friend_request_removed", "friend_request_removed");
+                friendsIntent.putExtra("friend_request", "friend_request_removed");
                 notifyForFriends(friendsIntent, message);
                 break;
             case "Challenge request":
