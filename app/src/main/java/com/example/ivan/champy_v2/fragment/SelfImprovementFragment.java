@@ -91,9 +91,8 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         ImageButton buttonPlus = (ImageButton) view.findViewById(R.id.imageButtonPlus);
         ImageButton buttonMinus = (ImageButton) view.findViewById(R.id.imageButtonMinus);
         View line = view.findViewById(R.id.line);
-        if (duration != null && !duration.isEmpty()) days = Integer.parseInt(duration) / 86400;
 
-        //days = (duration != null && !duration.isEmpty()) ? Integer.parseInt(duration) / 86400 : 21;
+        if (duration != null && !duration.isEmpty()) days = Integer.parseInt(duration) / 86400;
 
         tvDays.setText(days + " days");
         tvGoal.setText(description);
@@ -146,10 +145,10 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                 size = sessionManager.getSelfSize();
                 final String token = sessionManager.getToken();
                 final String userId = sessionManager.getObjectId();
-                cc = new ChallengeController(getContext(), getActivity(), token, userId);
                 snackbar = Snackbar.make(view, R.string.are_you_sure, Snackbar.LENGTH_LONG).setAction(R.string.yes, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        cc = new ChallengeController(getContext(), getActivity(), token, userId);
                         if (position == size) {
                             description = etGoal.getText().toString();
                             duration = etDays.getText().toString();
@@ -160,7 +159,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                                     snackbar = Snackbar.make(view, R.string.challenge_created, Snackbar.LENGTH_SHORT);
                                     snackbar.show();
                                 } else {
-                                    snackbar = Snackbar.make(view, R.string.cant_create_this_challenge, Snackbar.LENGTH_SHORT);
+                                    snackbar = Snackbar.make(view, R.string.challenge_created, Snackbar.LENGTH_SHORT);
                                     snackbar.show();
                                 }
                             } catch (NullPointerException | NumberFormatException e) {

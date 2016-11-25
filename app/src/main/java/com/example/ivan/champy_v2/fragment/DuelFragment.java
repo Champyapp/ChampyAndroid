@@ -34,8 +34,8 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
     public String name, duration, description, challenge_id, status, friend_id, token, userId;
     public SessionManager sessionManager;
     public ChallengeController cc;
-    public TextView tvGoal, tvDays;
-    public EditText etGoal, etDays;
+    public TextView tvGoal, tvDays, etDays;
+    public EditText etGoal;
     public ViewPager viewPager;
     public Typeface typeface;
     public SQLiteDatabase db;
@@ -91,12 +91,12 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         tvGoal = (TextView)view.findViewById(R.id.goal_text);
         tvDays = (TextView)view.findViewById(R.id.days_text);
         etGoal = (EditText)view.findViewById(R.id.et_goal);
-        etDays = (EditText)view.findViewById(R.id.et_days);
+        etDays = (TextView)view.findViewById(R.id.et_days);
         View line = view.findViewById(R.id.line);
         TextView tvEveryDay = (TextView)view.findViewById(R.id.tvEveryDaySelf);
         TextView textDays   = (TextView)view.findViewById(R.id.textDays);
-//        TextView tvLevel    = (TextView)view.findViewById(R.id.tvLevel1Chall);
-//        TextView tvPoint    = (TextView)view.findViewById(R.id.tvRewardPlus10Points);
+        ImageButton buttonPlus = (ImageButton) view.findViewById(R.id.imageButtonPlus);
+        ImageButton buttonMinus = (ImageButton) view.findViewById(R.id.imageButtonMinus);
 
         if (duration != null && !duration.isEmpty()) days = Integer.parseInt(duration) / 86400;
 
@@ -107,10 +107,6 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         tvEveryDay.setTypeface(typeface);
         textDays.setTypeface(typeface);
         textDays.setVisibility(View.INVISIBLE);
-//        tvLevel.setTypeface(typeface);
-//        tvPoint.setTypeface(typeface);
-
-//        Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView) view.findViewById(R.id.imageViewPoints));
         ImageButton imageButtonAccept = (ImageButton) getActivity().findViewById(R.id.ok);
 
         viewPager = (ViewPager) getActivity().findViewById(R.id.pager_duel);
@@ -127,95 +123,109 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
             tvGoal.setVisibility(View.INVISIBLE);
             line.setVisibility(View.INVISIBLE);
             textDays.setVisibility(View.VISIBLE);
+            buttonMinus.setVisibility(View.VISIBLE);
+            buttonPlus.setVisibility(View.VISIBLE);
         }
 
         OfflineMode offlineMode = new OfflineMode();
         offlineMode.isConnectedToRemoteAPI(getActivity());
         imageButtonAccept.setOnClickListener(this);
+        buttonMinus.setOnClickListener(this);
+        buttonPlus.setOnClickListener(this);
 
         return view;
     }
 
     @Override
     public void onClick(View view) {
-        position = viewPager.getCurrentItem();
-        size = sessionManager.getSelfSize();
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        final String token  = user.get("token");
-        final String userId = user.get("id");
+        int daysCount;
+        int newDaysCount;
 
-        snackbar = Snackbar.make(view, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes", new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cc = new ChallengeController(getContext(), getActivity(), token, userId);
-                if (position == size) {
-                    description = etGoal.getText().toString();
-                    duration = etDays.getText().toString();
-                    try {
-                        days = Integer.parseInt(duration);
-                        if (checkInputUserData(description, days, view)) {
-                            cc.createNewDuelChallenge(description, days, friend_id);
-                        }
-                    } catch (NullPointerException |NumberFormatException e) {
-                        e.printStackTrace();
-                        snackbar = Snackbar.make(view, "Can't create this challenge!", Snackbar.LENGTH_SHORT);
-                        snackbar.show();
-                    }
+        switch (view.getId()) {
+            case R.id.ok:
+                position = viewPager.getCurrentItem();
+                size = sessionManager.getSelfSize();
+                final String token = sessionManager.getToken();
+                final String userId = sessionManager.getObjectId();
 
-                } else {
-                    c = db.query("duel", null, null, null, null, null, null);
-                    if (c.moveToFirst()) {
-                        int colchallenge_id = c.getColumnIndex("challenge_id");
-                        int coldescription = c.getColumnIndex("description");
-                        int colduration = c.getColumnIndex("duration");
-                        int nameColIndex = c.getColumnIndex("name");
-                        int idColIndex = c.getColumnIndex("id");
-                        o = 0;
-                        do {
-                            o++;
-                            if (o > position + 1) break;
-                            if (o == position + 1) {
-                                challenge_id = c.getString(colchallenge_id);
-                                description = c.getString(coldescription);
-                                duration = c.getString(colduration);
-                                name = c.getString(nameColIndex);
-                                break;
+                snackbar = Snackbar.make(view, R.string.are_you_sure, Snackbar.LENGTH_LONG).setAction(R.string.yes, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        cc = new ChallengeController(getContext(), getActivity(), token, userId);
+                        if (position == size) {
+                            description = etGoal.getText().toString();
+                            duration = etDays.getText().toString();
+                            try {
+                                days = Integer.parseInt(duration);
+                                if (!cc.isActive(description) && !description.isEmpty() && !description.startsWith(" ")) {
+                                    cc.createNewDuelChallenge(description, days, friend_id);
+                                    snackbar = Snackbar.make(view, R.string.challenge_created, Snackbar.LENGTH_SHORT);
+                                    snackbar.show();
+                                } else {
+                                    snackbar = Snackbar.make(view, R.string.cant_create_this_challenge, Snackbar.LENGTH_SHORT);
+                                    snackbar.show();
+                                }
+                            } catch (NullPointerException | NumberFormatException e) {
+                                e.printStackTrace();
                             }
-                        } while (c.moveToNext());
-                    }
-                    c.close();
 
-                    try {
-                        if (!cc.isActive(description)) {
-                            cc.sendSingleInProgressForDuel(challenge_id, friend_id);
-                            snackbar = Snackbar.make(view, "Sent duel request", Snackbar.LENGTH_SHORT);
                         } else {
-                            snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
+                            c = db.query("duel", null, null, null, null, null, null);
+                            if (c.moveToFirst()) {
+                                int colchallenge_id = c.getColumnIndex("challenge_id");
+                                int coldescription = c.getColumnIndex("description");
+                                int colduration = c.getColumnIndex("duration");
+                                int nameColIndex = c.getColumnIndex("name");
+                                int idColIndex = c.getColumnIndex("id");
+                                o = 0;
+                                do {
+                                    o++;
+                                    if (o > position + 1) break;
+                                    if (o == position + 1) {
+                                        challenge_id = c.getString(colchallenge_id);
+                                        description = c.getString(coldescription);
+                                        duration = c.getString(colduration);
+                                        name = c.getString(nameColIndex);
+                                        break;
+                                    }
+                                } while (c.moveToNext());
+                            }
+                            c.close();
+
+                            try {
+                                if (!cc.isActive(description)) {
+                                    cc.sendSingleInProgressForDuel(challenge_id, friend_id);
+                                    snackbar = Snackbar.make(view, "Sent duel request", Snackbar.LENGTH_SHORT);
+                                } else {
+                                    snackbar = Snackbar.make(view, R.string.cant_create_this_challenge, Snackbar.LENGTH_SHORT);
+                                }
+                                snackbar.show();
+                            } catch (NullPointerException e) {
+                                e.printStackTrace();
+                            }
                         }
-                        snackbar.show();
-                    } catch (NullPointerException e) {
-                        e.printStackTrace();
                     }
+                });
+                snackbar.show();
+                break;
+
+            case R.id.imageButtonPlus:
+                daysCount = Integer.parseInt(etDays.getText().toString());
+                if (daysCount < 1000) {
+                    newDaysCount = daysCount + 1;
+                    etDays.setText(String.valueOf(newDaysCount));
                 }
-            }
-        });
-        snackbar.show();
-    }
-
-
-    // check user input data @description @days @isActive
-    private boolean checkInputUserData(String name, int days, View view) {
-        if (!cc.isActive(name) && !name.isEmpty() && !name.startsWith(" ") && days != 0) {
-            snackbar = Snackbar.make(view, "Sent duel request!", Snackbar.LENGTH_SHORT);
-            snackbar.show();
-            return true;
-        } else {
-            snackbar = Snackbar.make(view, "Can't create this challenge", Snackbar.LENGTH_SHORT);
-            snackbar.show();
-            return false;
+                break;
+            case R.id.imageButtonMinus:
+                daysCount = Integer.parseInt(etDays.getText().toString());
+                if (daysCount > 1) {
+                    newDaysCount = daysCount - 1;
+                    etDays.setText(String.valueOf(newDaysCount));
+                }
+                break;
         }
     }
+
 
 
 }
