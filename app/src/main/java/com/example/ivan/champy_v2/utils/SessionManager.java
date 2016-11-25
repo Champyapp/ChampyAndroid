@@ -16,6 +16,7 @@ import java.util.HashMap;
 public class SessionManager {
 
     private static final String IS_USER_LOGIN = "IsUserLoggedIn"; // All Shared Preferences Keys
+    private static final String TOKEN_ANDROID = "token_android"; // Google CloudM Token Android
     private static final String PREFER_NAME = "Champy_pref"; // SharedPreference file name
     private static final String KEY_PATH = "path_to_pic"; // Users path to picture
     private static final String KEY_ID = "facebook_id"; // Users facebook id
@@ -36,7 +37,7 @@ public class SessionManager {
     //Create login session
     public void createUserLoginSession(String name, String email, String facebook_id, String path_to_pic,
                                        String token, String id, String pushN, String newChallReq, String acceptedYour,
-                                       String challengeEnd, String dailyRemind, String updateDB, String gcm) {
+                                       String challengeEnd, String dailyRemind, String updateDB, String gcm, String token_android) {
 
         editor.putBoolean(IS_USER_LOGIN, true);         // Storing login value as TRUE
         editor.putString(KEY_NAME,       name);         // Storing name in pref
@@ -52,6 +53,7 @@ public class SessionManager {
         editor.putString("dailyRemind",  dailyRemind);  // Storing notification: daily remind
         editor.putString("updateDB",     updateDB);     // Storing database update
         editor.putString(KEY_GCM,        gcm);          // Storing GCM key
+        editor.putString(TOKEN_ANDROID,  token_android);// Storing GCM key
 
         Log.i("YO", "LOGGED ID");
         editor.commit(); // commit changes
@@ -101,6 +103,10 @@ public class SessionManager {
         return pref.getString("facebook_id", null);
     }
 
+    public String getToken() {
+        return pref.getString("token", "");
+    }
+
     public String getUserName() {
         return pref.getString("name", null);
     }
@@ -111,6 +117,10 @@ public class SessionManager {
 
     public String getRefreshPending() {
         return pref.getString("pendingRefresh", null);
+    }
+
+    public String getTokenAndroid() {
+        return pref.getString("token_android", null);
     }
 
     public void set_duel_pending(String count) {

@@ -13,10 +13,6 @@ import com.example.ivan.champy_v2.activity.RoleControllerActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.interfaces.NewUser;
 import com.example.ivan.champy_v2.interfaces.Update_user;
-import com.example.ivan.champy_v2.model.friend.Datum;
-import com.example.ivan.champy_v2.model.friend.Friend;
-import com.example.ivan.champy_v2.model.friend.Friend_;
-import com.example.ivan.champy_v2.model.friend.Owner;
 import com.example.ivan.champy_v2.model.user.Data;
 import com.example.ivan.champy_v2.model.user.Profile_data;
 import com.example.ivan.champy_v2.model.user.User;
@@ -28,8 +24,6 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -39,6 +33,8 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
+import static com.example.ivan.champy_v2.utils.Constants.API_URL;
+
 public class AppSync {
 
     private final String TAG = "AppSync";
@@ -47,20 +43,20 @@ public class AppSync {
     private ContentValues cv;
     private SQLiteDatabase db;
     private SessionManager sessionManager;
-    private String fbId, gcm, token, path;
-    private HashMap<String, String> map = new HashMap<>();
+    private String fbId, gcm, token, path, token_android;
 
 
-    public AppSync(String fb_id, String gcm, String path_to_pic, Context context) throws JSONException {
+    public AppSync(String fb_id, String gcm, String path_to_pic, Context context, String token_android) throws JSONException {
         this.fbId = fb_id;
         this.gcm = gcm;
         this.token = getToken(this.fbId, this.gcm);
         this.path = path_to_pic;
         this.context = context;
+        this.token_android = token_android;
     }
 
 
-    public String getToken(String fb_id, String gcm)  throws JSONException {
+    public String getToken(String fb_id, String gcm) throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("facebookId", fb_id);
         jsonObject.put("AndroidOS", gcm);
@@ -74,7 +70,7 @@ public class AppSync {
         final String jwtString = this.token;
         final String path_to_pic = this.path;
         final String gcm = this.gcm;
-        final Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
         cv = new ContentValues();
         dbHelper = new DBHelper(context);
@@ -105,7 +101,7 @@ public class AppSync {
                     sessionManager.createUserLoginSession(
                             user_name, email, facebookId, path_to_pic,
                             jwtString, userId, pushN, newChallReq,
-                            acceptedYour, challegeEnd, daily, "true", gcm
+                            acceptedYour, challegeEnd, daily, "true", gcm, token_android
                     );
 
                     sessionManager.setChampyOptions(
@@ -115,7 +111,10 @@ public class AppSync {
                             data.getLevel().getNumber().toString()
                     );
 
-                    qwerty(map);
+//                    HashMap<String, String> hashTokenAndroid = new HashMap<>();
+//                    hashTokenAndroid.put("GCM", token_android);
+                    UpdatePushIdentifier pushIdentifier = new UpdatePushIdentifier();
+                    pushIdentifier.updatePushIdentifier(sessionManager);
 
                     CHGetFacebookFriends getFbFriends = new CHGetFacebookFriends(context);
                     getFbFriends.getUserFacebookFriends(gcm);
@@ -134,7 +133,7 @@ public class AppSync {
                         File file = new File(path, "profile.jpg");
                         if (!file.exists()){
                             com.example.ivan.champy_v2.model.user.Photo photo = data.getPhoto();
-                            api_path = Constants.API_URL + photo.getLarge();
+                            api_path = API_URL + photo.getLarge();
                             Log.i("AppSync", "GetUserPhoto: " + api_path);
                         }
                     }
@@ -162,30 +161,6 @@ public class AppSync {
         });
 
 
-    }
-
-
-    private void qwerty(HashMap<String, String> map) {
-        //kris begined
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        String userID = sessionManager.getObjectId();
-        Update_user update_user = retrofit.create(Update_user.class);
-        Profile_data profile_data = new Profile_data(map);
-        Call<User> call = update_user.update_profile_options(userID, token, profile_data);
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Response<User> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    Log.d(TAG, "Status: Profile updated");
-                }
-            }
-            @Override
-            public void onFailure(Throwable t) {
-                Log.d(TAG, "VSE huynya");
-            }
-        });
-
-        //kris
     }
 
 

@@ -85,15 +85,21 @@ public class MyGcmListenerService extends GcmListenerService {
      */
     private void sendNotification(String message, String title) {
         Log.d(TAG, title);
+
+        Intent friendsIntent = new Intent(this, FriendsActivity.class);
+        friendsIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
         switch (title) {
-            case "Friend request":
-                Intent friendsIntent = new Intent(this, FriendsActivity.class);
-                friendsIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                if (message.contains("want to add you")) {
-                    friendsIntent.putExtra("new_friend_request", "new_friend_request");
-                } else {
-                    friendsIntent.putExtra("new_relationship", "new_relationship");
-                }
+            case "Friend Request Confirmed":
+                friendsIntent.putExtra("friend_request_confirmed", "friend_request_confirmed");
+                notifyForFriends(friendsIntent, message);
+                break;
+            case "Incoming Friend Request":
+                friendsIntent.putExtra("incoming_friend_request", "incoming_friend_request");
+                notifyForFriends(friendsIntent, message);
+                break;
+            case "Friend Request Removed":
+                friendsIntent.putExtra("friend_request_removed", "friend_request_removed");
                 notifyForFriends(friendsIntent, message);
                 break;
             case "Challenge request":
@@ -316,6 +322,7 @@ public class MyGcmListenerService extends GcmListenerService {
 
     private void notifyForFriends(Intent intent, String message) {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent, PendingIntent.FLAG_ONE_SHOT);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.friends)
@@ -329,5 +336,44 @@ public class MyGcmListenerService extends GcmListenerService {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
+
+//    module.exports = {
+//        challengeRequest : {
+//            title : 'Challenge request',
+//                    body : '%s sent you a challenge request'
+//        },
+//        challengeAccepted : {
+//            title : 'Challenge accepted',
+//                    body : '%s accepted your challenge request. Let the duel begins.'
+//        },
+//        challengesForToday : {
+//            title : 'Challenges for today',
+//                    body : 'Hey. You have some challenges for today. Don\'t forget to complete them.'
+//        },
+//        friendRequest : {
+//            title : 'Incoming Friend Request',
+//                    body : '%s want to add you as a friend'
+//        },
+//        acceptedFriendRequest :{
+//            title: 'Friend Request Confirmed',
+//                    body: '%s has just accepted your friend request'
+//        },
+//        declinedFriendRequest :{
+//            title: 'Friend Request Removed',
+//                    body: '%s has just removed you from friends'
+//        },
+//        submitForApprove : {
+//            title : 'Submit for approve',
+//                    body : '%s completed his/her part of the duel for today. Please, approve it.'
+//        },
+//        approved : {
+//            title : 'Approved',
+//                    body : '%s just approved your today\'s performance.'
+//        },
+//        win : {
+//            title : 'Win',
+//                    body : 'Congratulations! You just won the duel against %s'
+//        },
+//    };
 
 }

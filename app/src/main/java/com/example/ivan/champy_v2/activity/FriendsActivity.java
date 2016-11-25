@@ -114,20 +114,54 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 
         // this out method for open "pending" when you click on notification about friends request
         Bundle bundle = getIntent().getExtras();
-        String newFriendRequest = getIntent().getStringExtra("new_friend_request");
-        String newRelationShip = getIntent().getStringExtra("new_relationship");
+        String friendRequestConfirmed = getIntent().getStringExtra("friend_request_confirmed");
+        String incomingFriendRequest  = getIntent().getStringExtra("incoming_friend_request");
+        String friendRequestRemoved   = getIntent().getStringExtra("friend_request_removed");
 
-        Log.d(TAG, "GCM: newFriendRequest: " + newFriendRequest);
-        Log.d(TAG, "GCM: newRelationship: " + newRelationShip);
+
+        String myIntent = String.valueOf(getIntent().getExtras());
+
+        Log.d(TAG, "GCM: friendRequestConfirmed: " + friendRequestConfirmed);
+        Log.d(TAG, "GCM: incomingFriendRequest: " + incomingFriendRequest);
+        Log.d(TAG, "GCM: friendRequestRemoved: " + friendRequestRemoved);
+
+        Log.d(TAG, "onCreate: INTENT: " + myIntent);
+
+//        if (myIntent != null) {
+//            switch (myIntent) {
+//                case "friend_request_confirmed": viewPager.setCurrentItem(0); break;
+//                case "incoming_friend_request": viewPager.setCurrentItem(1); break;
+//                case "friend_request_removed": viewPager.setCurrentItem(2); break;
+//                default: viewPager.setCurrentItem(0);
+//            }
+//        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //        int page = ("new_friend_request".equals(newFriendRequest)) ? 0 : 1;
-        if (bundle != null) {
-            if ("new_friend_request".equals(newFriendRequest)) {
-                viewPager.setCurrentItem(1);
-            } else {
-                viewPager.setCurrentItem(0);
-            }
-        }
+//        if (bundle != null) {
+//            if ("new_friend_request".equals(newFriendRequest)) {
+//                viewPager.setCurrentItem(1);
+//            } else {
+//                viewPager.setCurrentItem(0);
+//            }
+//        }
 
         tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);

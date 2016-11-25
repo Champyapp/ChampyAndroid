@@ -19,10 +19,12 @@ import com.android.debug.hv.ViewServer;
 import com.example.ivan.champy_v2.DailyRemindController;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.helper.AppSync;
+import com.example.ivan.champy_v2.helper.UpdatePushIdentifier;
 import com.example.ivan.champy_v2.interfaces.NewUser;
 import com.example.ivan.champy_v2.model.user.Data;
 import com.example.ivan.champy_v2.model.user.LoginData;
 import com.example.ivan.champy_v2.model.user.User;
+import com.example.ivan.champy_v2.utils.Constants;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
 import com.facebook.AccessToken;
@@ -57,6 +59,8 @@ import retrofit.Callback;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
+
+import static com.example.ivan.champy_v2.utils.Constants.API_URL;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -122,9 +126,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         jsonObject.put("token", token_android);
                                         jsonObject.put("timeZone", "-2");
                                         String json = jsonObject.toString();
-                                        getUserData(fb_id, path_to_pic, json);
+                                        getUserData(fb_id, path_to_pic, json, token_android);
                                         // make if statement here /\  -  \/
-                                        registerUser(fb_id, name, user_email, json);
+                                        registerUser(fb_id, name, user_email, json, token_android);
                                     } catch (Exception e) {
                                         Log.e(TAG, "error: ", e);
                                     }
@@ -225,15 +229,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    private void getUserData(final String fb_id, final String path_to_pic, String gcm) throws JSONException {
-        AppSync sync = new AppSync(fb_id, gcm, path_to_pic, this);
+    private void getUserData(final String fb_id, final String path_to_pic, String gcm, String token_android) throws JSONException {
+        AppSync sync = new AppSync(fb_id, gcm, path_to_pic, this, token_android);
         //sync.getToken(fb_id, gcm);
         sync.getUserProfile();
     }
 
 
-    private void registerUser(String facebookId, String name, String email, final String gcm) throws JSONException {
-        final String API_URL = "http://46.101.213.24:3007";
+    private void registerUser(String facebookId, String name, String email, final String gcm, String token_android) throws JSONException {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("facebookId", fb_id);
@@ -261,48 +264,52 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     SessionManager sessionManager = new SessionManager(getApplicationContext());
                     sessionManager.setRefreshPending("false");
                     sessionManager.setRefreshFriends("false");
-                    sessionManager.createUserLoginSession(user_name, email, fb_id, path_to_pic, jwtString,
-                            id, pushN, newChallReq, acceptedYour, challegeEnd, "true", "true", gcm);
+                    sessionManager.createUserLoginSession(
+                            user_name, email, fb_id, path_to_pic,
+                            jwtString, id, pushN, newChallReq, acceptedYour,
+                            challegeEnd, "true", "true", gcm, token_android);
+
                     sessionManager.setChampyOptions(
                             user.getAllChallengesCount().toString(),
                             user.getSuccessChallenges().toString(),
                             user.getInProgressChallengesCount().toString(),
                             user.getLevel().getNumber().toString());
 
+                    UpdatePushIdentifier pushIdentifier = new UpdatePushIdentifier();
+                    pushIdentifier.updatePushIdentifier(sessionManager);
+
                     DailyRemindController dailyRemind = new DailyRemindController(getApplicationContext());
                     dailyRemind.activateDailyNotificationReminder();
 
 
                     String api_path = null;
-                    // если у юзера есть фото на facebook-e
+                    // if user has photo on facebook
                     if (user.getPhoto() != null) {
-                        // создаем путь к файлу
+                        // we make a path for 'file'
                         @SuppressLint("SdCardPath")
                         String sdCardPath = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
-                        //String internalPath = "/android/data/com.azinecllc.champy/Images";
-                        // создаем файл по нашему пути
+                        // also we make a new 'file'
                         File profilePhoto = new File(sdCardPath, "profile.jpg");
-                        // если такой фотки не существует (так и должно быть)
+                        // if user's photo file is not exist (it's mean in ChampyApp and it's must be true)
                         if (!profilePhoto.exists()) {
-                            // то мы заливаем нашу фотку на API
+                            // so, we make path for user's photo
                             com.example.ivan.champy_v2.model.user.Photo photo = user.getPhoto();
                             api_path = API_URL + photo.getLarge();
                         }
                     }
 
                     Intent goToRoleControllerActivity = new Intent(LoginActivity.this, RoleControllerActivity.class);
-                    // если у нас не получилось сделать выше написаное и api_path = null
+                    // if we could not do the above written code and api = null
                     if (api_path == null) {
-                        // то... мы стягиваем стандартную фотку facebook-а и заливаем её
+                        // then we trying to take user's photo from facebook and push her to api
                         goToRoleControllerActivity.putExtra("path_to_pic", path_to_pic);
                         sessionManager.change_avatar(path_to_pic);
                     } else {
-                        // ну... а если получилось стянуть норм фотку, то заливаем её
+                        // else we get existence photo from file
                         goToRoleControllerActivity.putExtra("path_to_pic", api_path);
                         sessionManager.change_avatar(api_path);
                     }
-//                    MyNotificationController notification = new MyNotificationController(getApplicationContext());
-//                    notification.activateDailyNotificationReminder();
+
                     goToRoleControllerActivity.putExtra("name", user_name);
                     startActivity(goToRoleControllerActivity);
                 }

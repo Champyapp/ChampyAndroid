@@ -22,9 +22,18 @@ public interface Update_user {
     @FormUrlEncoded
     @PUT("/v1/users/{id}")
     Call<User> update_user_name(
-      @Path("id") String id,
-      @Query("token") String token,
-      @Field("name") String name
+                    @Path("id") String id,
+                    @Query("token") String token,
+                    @Field("name") String name
+    );
+
+    @FormUrlEncoded
+    @PUT("/v1/users/{id}")
+    Call<User> update_gcm(
+            @Path("id") String id,
+            @Query("token") String token,
+            @Field("GCM") String GCM,
+            @Field("APNIdentifier") String APNIdentifier
     );
 
     @Multipart
