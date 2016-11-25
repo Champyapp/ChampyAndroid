@@ -12,11 +12,13 @@ import com.example.ivan.champy_v2.DailyRemindController;
 import com.example.ivan.champy_v2.activity.RoleControllerActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.interfaces.NewUser;
+import com.example.ivan.champy_v2.interfaces.Update_user;
 import com.example.ivan.champy_v2.model.friend.Datum;
 import com.example.ivan.champy_v2.model.friend.Friend;
 import com.example.ivan.champy_v2.model.friend.Friend_;
 import com.example.ivan.champy_v2.model.friend.Owner;
 import com.example.ivan.champy_v2.model.user.Data;
+import com.example.ivan.champy_v2.model.user.Profile_data;
 import com.example.ivan.champy_v2.model.user.User;
 import com.example.ivan.champy_v2.utils.Constants;
 import com.example.ivan.champy_v2.utils.SessionManager;
@@ -25,7 +27,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -42,7 +46,9 @@ public class AppSync {
     private DBHelper dbHelper;
     private ContentValues cv;
     private SQLiteDatabase db;
+    private SessionManager sessionManager;
     private String fbId, gcm, token, path;
+    private HashMap<String, String> map = new HashMap<>();
 
 
     public AppSync(String fb_id, String gcm, String path_to_pic, Context context) throws JSONException {
@@ -81,6 +87,8 @@ public class AppSync {
             public void onResponse(Response<User> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     Log.d(TAG, "getUserProfile onResponse: Success");
+
+
                     Data data = response.body().getData();
                     String email = data.getEmail();
                     String user_name = data.getName();
@@ -91,7 +99,7 @@ public class AppSync {
                     String acceptedYour = data.getProfileOptions().getAcceptedYourChallenge().toString();
                     String challegeEnd = data.getProfileOptions().getChallengeEnd().toString();
 
-                    SessionManager sessionManager = new SessionManager(context);
+                    sessionManager = new SessionManager(context);
                     sessionManager.setRefreshPending("false");
                     sessionManager.setRefreshFriends("true");
                     sessionManager.createUserLoginSession(
@@ -106,6 +114,8 @@ public class AppSync {
                             data.getInProgressChallenges().toString(),
                             data.getLevel().getNumber().toString()
                     );
+
+                    qwerty(map);
 
                     CHGetFacebookFriends getFbFriends = new CHGetFacebookFriends(context);
                     getFbFriends.getUserFacebookFriends(gcm);
@@ -152,6 +162,30 @@ public class AppSync {
         });
 
 
+    }
+
+
+    private void qwerty(HashMap<String, String> map) {
+        //kris begined
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        String userID = sessionManager.getObjectId();
+        Update_user update_user = retrofit.create(Update_user.class);
+        Profile_data profile_data = new Profile_data(map);
+        Call<User> call = update_user.update_profile_options(userID, token, profile_data);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Response<User> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    Log.d(TAG, "Status: Profile updated");
+                }
+            }
+            @Override
+            public void onFailure(Throwable t) {
+                Log.d(TAG, "VSE huynya");
+            }
+        });
+
+        //kris
     }
 
 

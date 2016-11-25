@@ -80,9 +80,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_gradient));
         setSupportActionBar(toolbar);
 
-//        sockets = new CHSocket(MainActivity.this, getApplicationContext());
-//        sockets.tryToConnect();
-//        sockets.socketOnAndEmmit();
         cards = (RelativeLayout) findViewById(R.id.cards);
         adapter = new MainActivityCardsAdapter(this, SelfImprovement_model.generate(this));
         if (adapter.dataCount() > 0) {
@@ -217,27 +214,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (adapter.dataCount() < 5) {
                 blurScreen.setVisibility(View.VISIBLE);
                 cards.setVisibility(View.INVISIBLE);
-                buttonSelfImprovement.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(MainActivity.this, SelfImprovementActivity.class);
-                        startActivity(intent);
-                    }
+                buttonSelfImprovement.setOnClickListener(v0 -> {
+                            Intent intent = new Intent(MainActivity.this, SelfImprovementActivity.class);
+                            startActivity(intent);
                 });
-                buttonDuelChallenge.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                buttonDuelChallenge.setOnClickListener(v1 -> {
                         Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
                         startActivity(intent);
-                    }
                 });
-                buttonWakeUpChallenge.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                buttonWakeUpChallenge.setOnClickListener(v2 -> {
                         Intent intent = new Intent(MainActivity.this, WakeUpActivity.class);
                         startActivity(intent);
-
-                    }
                 });
             } else {
                 actionMenu.toggle(false);

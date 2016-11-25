@@ -88,7 +88,6 @@ public class MyGcmListenerService extends GcmListenerService {
         switch (title) {
             case "Friend request":
                 Intent friendsIntent = new Intent(this, FriendsActivity.class);
-
                 friendsIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 if (message.contains("want to add you")) {
                     friendsIntent.putExtra("new_friend_request", "new_friend_request");
