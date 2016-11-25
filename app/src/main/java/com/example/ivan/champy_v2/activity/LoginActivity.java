@@ -24,7 +24,6 @@ import com.example.ivan.champy_v2.interfaces.NewUser;
 import com.example.ivan.champy_v2.model.user.Data;
 import com.example.ivan.champy_v2.model.user.LoginData;
 import com.example.ivan.champy_v2.model.user.User;
-import com.example.ivan.champy_v2.utils.Constants;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
 import com.facebook.AccessToken;

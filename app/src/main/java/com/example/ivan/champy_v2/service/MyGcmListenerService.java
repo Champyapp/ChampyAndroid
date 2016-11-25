@@ -85,10 +85,8 @@ public class MyGcmListenerService extends GcmListenerService {
      */
     private void sendNotification(String message, String title) {
         Log.d(TAG, title);
-
         Intent friendsIntent = new Intent(this, FriendsActivity.class);
         friendsIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
         switch (title) {
             case "Friend Request Confirmed":
                 friendsIntent.putExtra("friend_request", "friend_request_confirmed");

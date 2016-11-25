@@ -31,8 +31,8 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
     public int position, size, days = 21, o = 0;
     public String duration, description, challenge_id, status, name;
     public Typeface typeface;
-    public TextView tvGoal, tvDays;
-    public EditText etGoal, etDays;
+    public TextView tvGoal, tvDays, etDays;
+    public EditText etGoal;
     public ViewPager viewPager;
     public SessionManager sessionManager;
     public ChallengeController cc;
@@ -84,13 +84,13 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
         tvGoal = (TextView)view.findViewById(R.id.goal_text);
         tvDays = (TextView)view.findViewById(R.id.days_text);
+        etDays = (TextView)view.findViewById(R.id.et_days);
         etGoal = (EditText)view.findViewById(R.id.et_goal);
-        etDays = (EditText)view.findViewById(R.id.et_days);
-        TextView textDays   = (TextView)view.findViewById(R.id.textDays);
+        TextView textDays = (TextView)view.findViewById(R.id.textDays);
         TextView tvEveryDay = (TextView)view.findViewById(R.id.tvEveryDaySelf);
+        ImageButton buttonPlus = (ImageButton) view.findViewById(R.id.imageButtonPlus);
+        ImageButton buttonMinus = (ImageButton) view.findViewById(R.id.imageButtonMinus);
         View line = view.findViewById(R.id.line);
-//        TextView tvLevel    = (TextView)view.findViewById(R.id.tvLevel1Chall);
-//        TextView tvPoint    = (TextView)view.findViewById(R.id.tvRewardPlus10Points);
         if (duration != null && !duration.isEmpty()) days = Integer.parseInt(duration) / 86400;
 
         //days = (duration != null && !duration.isEmpty()) ? Integer.parseInt(duration) / 86400 : 21;
@@ -105,9 +105,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 //        tvLevel.setTypeface(typeface);
 //        tvPoint.setTypeface(typeface);
 
-//        Glide.with(getContext()).load(R.drawable.points).override(120, 120).into((ImageView)view.findViewById(R.id.imageViewPoints));
         ImageButton buttonAccept = (ImageButton) getActivity().findViewById(R.id.imageButtonAccept);
-
         viewPager = (ViewPager) getActivity().findViewById(R.id.pager);
         CHSetupUI chSetupUI = new CHSetupUI();
         chSetupUI.setupUI(view, getActivity());
@@ -121,100 +119,111 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
             tvDays.setVisibility(View.INVISIBLE);
             line.setVisibility(View.INVISIBLE);
             textDays.setVisibility(View.VISIBLE);
+            buttonMinus.setVisibility(View.VISIBLE);
+            buttonPlus.setVisibility(View.VISIBLE);
         }
+
+//        buttonMinus.setVisibility(View.INVISIBLE);
+//        buttonPlus.setVisibility(View.INVISIBLE);
 
         OfflineMode offlineMode = new OfflineMode();
         offlineMode.isConnectedToRemoteAPI(getActivity());
         buttonAccept.setOnClickListener(this);
+        buttonMinus.setOnClickListener(this);
+        buttonPlus.setOnClickListener(this);
 
         return view;
     }
 
     @Override
     public void onClick(View view) {
-        position = viewPager.getCurrentItem();
-        size = sessionManager.getSelfSize();
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        final String token  = user.get("token");
-        final String userId = user.get("id");
-        cc = new ChallengeController(getContext(), getActivity(), token, userId);
-        snackbar = Snackbar.make(view, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes", new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        int daysCount;
+        int newDaysCount;
 
-                if (position == size) {
-                    description = etGoal.getText().toString();
-                    duration = etDays.getText().toString();
-                    try {
-                        //days = (!duration.isEmpty()) ? Integer.parseInt(duration) : 21;
-                        days = Integer.parseInt(duration);
-                        if (checkInputUserData(description, days, view)) {
-                            cc.createNewSelfImprovementChallenge(description, days);
-                        }
-                    } catch (NullPointerException | NumberFormatException e) {
-                        e.printStackTrace();
-                        snackbar = Snackbar.make(view, "Can't create this challenge!", Snackbar.LENGTH_SHORT);
-                        snackbar.show();
-                    }
-
-                } else {
-                    c = db.query("selfimprovement", null, null, null, null, null, null);
-                    if (c.moveToFirst()) {
-                        int colchallenge_id = c.getColumnIndex("challenge_id");
-                        int coldescription = c.getColumnIndex("description");
-                        int colduration = c.getColumnIndex("duration");
-                        int colstatus = c.getColumnIndex("status");
-                        int colname = c.getColumnIndex("name");
-                        o = 0;
-                        do {
-                            o++;
-                            if (o > position + 1) break;
-                            if (o == position + 1) {
-                                challenge_id = c.getString(colchallenge_id);
-                                description = c.getString(coldescription);
-                                duration = c.getString(colduration);
-                                status = c.getString(colstatus);
-                                name = c.getString(colname);
+        switch (view.getId()) {
+            case R.id.imageButtonAccept:
+                position = viewPager.getCurrentItem();
+                size = sessionManager.getSelfSize();
+                final String token = sessionManager.getToken();
+                final String userId = sessionManager.getObjectId();
+                cc = new ChallengeController(getContext(), getActivity(), token, userId);
+                snackbar = Snackbar.make(view, R.string.are_you_sure, Snackbar.LENGTH_LONG).setAction(R.string.yes, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (position == size) {
+                            description = etGoal.getText().toString();
+                            duration = etDays.getText().toString();
+                            try {
+                                days = Integer.parseInt(duration);
+                                if (!cc.isActive(description) && !description.isEmpty() && !description.startsWith(" ")) {
+                                    cc.createNewSelfImprovementChallenge(description, days);
+                                    snackbar = Snackbar.make(view, R.string.challenge_created, Snackbar.LENGTH_SHORT);
+                                    snackbar.show();
+                                } else {
+                                    snackbar = Snackbar.make(view, R.string.cant_create_this_challenge, Snackbar.LENGTH_SHORT);
+                                    snackbar.show();
+                                }
+                            } catch (NullPointerException | NumberFormatException e) {
+                                e.printStackTrace();
                             }
-                        } while (c.moveToNext());
-                    }
-                    c.close();
-
-                    try {
-                        if (!cc.isActive(description)) {
-                            cc.sendSingleInProgressForSelf(challenge_id);
-                            snackbar = Snackbar.make(view, "Challenge Created!", Snackbar.LENGTH_SHORT);
+//                                snackbar = Snackbar.make(view, "Can't create this challenge!", Snackbar.LENGTH_SHORT);
+//                                snackbar.show();
                         } else {
-                            snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
+                            c = db.query("selfimprovement", null, null, null, null, null, null);
+                            if (c.moveToFirst()) {
+                                int colchallenge_id = c.getColumnIndex("challenge_id");
+                                int coldescription = c.getColumnIndex("description");
+                                int colduration = c.getColumnIndex("duration");
+                                int colstatus = c.getColumnIndex("status");
+                                int colname = c.getColumnIndex("name");
+                                o = 0;
+                                do {
+                                    o++;
+                                    if (o > position + 1) break;
+                                    if (o == position + 1) {
+                                        challenge_id = c.getString(colchallenge_id);
+                                        description = c.getString(coldescription);
+                                        duration = c.getString(colduration);
+                                        status = c.getString(colstatus);
+                                        name = c.getString(colname);
+                                    }
+                                } while (c.moveToNext());
+                            }
+                            c.close();
+
+                            try {
+                                if (!cc.isActive(description)) {
+                                    cc.sendSingleInProgressForSelf(challenge_id);
+                                    snackbar = Snackbar.make(view, R.string.challenge_created, Snackbar.LENGTH_SHORT);
+                                } else {
+                                    snackbar = Snackbar.make(view, R.string.cant_create_this_challenge, Snackbar.LENGTH_SHORT);
+                                }
+                                snackbar.show();
+                            } catch (NullPointerException e) {
+                                e.printStackTrace();
+                            }
                         }
-                        snackbar.show();
-                    } catch (NullPointerException e) {
-                        e.printStackTrace();
                     }
+                });
+                snackbar.show();
+                break;
+
+            case R.id.imageButtonPlus:
+                daysCount = Integer.parseInt(etDays.getText().toString());
+                if (daysCount < 1000) {
+                    newDaysCount = daysCount + 1;
+                    etDays.setText(String.valueOf(newDaysCount));
                 }
-            }
-        });
-        snackbar.show();
+                break;
 
-    }
-
-    // check user input data @description @days @isActive
-    private boolean checkInputUserData(String description, int days, View view) {
-        if (!cc.isActive(description) && !description.isEmpty() && !description.startsWith(" ") && days != 0) {
-            snackbar = Snackbar.make(view, "Challenge created!", Snackbar.LENGTH_SHORT);
-            snackbar.show();
-            return true;
-//        } else if (cc.isActive(description)) {
-//            snackbar = Snackbar.make(view, "This challenge is active!", Snackbar.LENGTH_SHORT);
-//            snackbar.show();
-//            return false;
-        } else {
-            snackbar = Snackbar.make(view, "Can't create this challenge", Snackbar.LENGTH_SHORT);
-            snackbar.show();
-            return false;
+            case R.id.imageButtonMinus:
+                daysCount = Integer.parseInt(etDays.getText().toString());
+                if (daysCount > 1) {
+                    newDaysCount = daysCount - 1;
+                    etDays.setText(String.valueOf(newDaysCount));
+                }
+                break;
         }
     }
-
 
 }

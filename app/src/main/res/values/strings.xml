@@ -201,5 +201,9 @@
     <string name="daily_reminder">Daily Reminder</string>
     <string name="noOneHasInstalledChampy">No one of your friends has not installed Champy!</string>
     <string name="welcome">"Welcome "</string>
+    <string name="twenty_one">21</string>
+    <string name="cant_create_this_challenge">Can\'t create this challenge</string>
+    <string name="challenge_created">Challenge  created!</string>
+    <string name="are_you_sure">Are you sure?</string>
 
 </resources>
