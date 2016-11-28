@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,9 +18,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ivan.champy_v2.ChallengeController;
+import com.example.ivan.champy_v2.controller.ChallengeController;
 import com.example.ivan.champy_v2.R;
-import com.example.ivan.champy_v2.activity.ContactUsActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
@@ -32,9 +30,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import static com.example.ivan.champy_v2.utils.Constants.oneDay;
-import static com.example.ivan.champy_v2.utils.Constants.typeDuel;
-import static com.example.ivan.champy_v2.utils.Constants.typeSelf;
-import static com.example.ivan.champy_v2.utils.Constants.typeWake;
 
 public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 

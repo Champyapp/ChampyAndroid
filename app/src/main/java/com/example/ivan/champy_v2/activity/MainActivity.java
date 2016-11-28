@@ -29,7 +29,7 @@ import android.widget.Toast;
 import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.ivan.champy_v2.ChallengeController;
+import com.example.ivan.champy_v2.controller.ChallengeController;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.adapter.MainActivityCardsAdapter;
 import com.example.ivan.champy_v2.helper.CHBuildAnim;

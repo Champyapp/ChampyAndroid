@@ -1,4 +1,4 @@
-package com.example.ivan.champy_v2;
+package com.example.ivan.champy_v2.controller;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.SystemClock;
 import android.util.Log;
 
 import com.example.ivan.champy_v2.activity.MainActivity;
@@ -23,6 +22,7 @@ import com.example.ivan.champy_v2.model.active_in_progress.Recipient;
 import com.example.ivan.champy_v2.model.active_in_progress.Sender;
 import com.example.ivan.champy_v2.model.duel.Duel;
 import com.example.ivan.champy_v2.model.single_in_progress.Data;
+import com.example.ivan.champy_v2.receiver.AlarmReceiver;
 import com.example.ivan.champy_v2.utils.Constants;
 
 import org.json.JSONException;

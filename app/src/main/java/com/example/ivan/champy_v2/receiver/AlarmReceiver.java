@@ -1,4 +1,4 @@
-package com.example.ivan.champy_v2;
+package com.example.ivan.champy_v2.receiver;
 
 import android.content.Context;
 import android.content.Intent;

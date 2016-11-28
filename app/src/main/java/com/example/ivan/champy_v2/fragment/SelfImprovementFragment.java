@@ -15,14 +15,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.ivan.champy_v2.ChallengeController;
+import com.example.ivan.champy_v2.controller.ChallengeController;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
-
-import java.util.HashMap;
 
 public class SelfImprovementFragment extends Fragment implements View.OnClickListener {
 
@@ -144,7 +142,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                 position = viewPager.getCurrentItem();
                 size = sessionManager.getSelfSize();
                 final String token = sessionManager.getToken();
-                final String userId = sessionManager.getObjectId();
+                final String userId = sessionManager.getUserId();
                 snackbar = Snackbar.make(view, R.string.are_you_sure, Snackbar.LENGTH_LONG).setAction(R.string.yes, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

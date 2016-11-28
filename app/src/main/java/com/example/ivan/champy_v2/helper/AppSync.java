@@ -8,22 +8,18 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.example.ivan.champy_v2.DailyRemindController;
+import com.example.ivan.champy_v2.controller.DailyRemindController;
 import com.example.ivan.champy_v2.activity.RoleControllerActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.interfaces.NewUser;
-import com.example.ivan.champy_v2.interfaces.Update_user;
 import com.example.ivan.champy_v2.model.user.Data;
-import com.example.ivan.champy_v2.model.user.Profile_data;
 import com.example.ivan.champy_v2.model.user.User;
-import com.example.ivan.champy_v2.utils.Constants;
 import com.example.ivan.champy_v2.utils.SessionManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.util.HashMap;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

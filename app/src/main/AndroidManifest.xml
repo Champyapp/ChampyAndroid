@@ -110,13 +110,13 @@
 
 
         <!-- RECEIVERS -->
-        <receiver android:name=".AlarmReceiver" android:enabled="false">
+        <receiver android:name=".receiver.AlarmReceiver" android:enabled="false">
             <!--added android:enabled="false" for reboot situation -->
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".CustomNotifyReceiver" android:enabled="true" />
+        <receiver android:name=".receiver.CustomNotifyReceiver" android:enabled="true" />
         <receiver android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND" >

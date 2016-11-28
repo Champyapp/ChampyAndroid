@@ -28,7 +28,7 @@ import android.widget.TextView;
 import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.ivan.champy_v2.DailyRemindController;
+import com.example.ivan.champy_v2.controller.DailyRemindController;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;

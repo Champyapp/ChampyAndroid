@@ -47,7 +47,7 @@ public class CurrentUserHelper {
     }
 
     public String getUserObjectId() {
-        return this.currentSession.getObjectId();
+        return this.currentSession.getUserId();
     }
 
     public String getInProgressCount() {

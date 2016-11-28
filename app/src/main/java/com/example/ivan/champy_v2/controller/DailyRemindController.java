@@ -1,9 +1,11 @@
-package com.example.ivan.champy_v2;
+package com.example.ivan.champy_v2.controller;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+
+import com.example.ivan.champy_v2.receiver.CustomNotifyReceiver;
 
 import java.util.Calendar;
 
@@ -12,6 +14,7 @@ import static android.content.Context.ALARM_SERVICE;
 public class DailyRemindController {
 
     private Context context;
+
 
     public DailyRemindController(Context context) { this.context = context; }
 
