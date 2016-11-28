@@ -68,24 +68,27 @@
             android:layout_marginTop="5dp" />
 
         <ImageButton
-            android:id="@+id/btn_accept"
-            android:background="@drawable/icon_done_for_today"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginTop="45dp"
-            android:layout_below="@+id/textViewDuring"
-            android:layout_alignRight="@+id/tvEveryDayPending"
-            android:layout_alignEnd="@+id/tvEveryDayPending" />
-
-        <ImageButton
             android:id="@+id/btn_cancel"
             android:background="@drawable/icon_give_up"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_marginTop="45dp"
+            android:layout_alignTop="@+id/btn_accept"
+            android:layout_toLeftOf="@+id/textViewDuring"
+            android:layout_toStartOf="@+id/textViewDuring"
+            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp" />
+
+        <ImageButton
+            android:id="@+id/btn_accept"
+            android:background="@drawable/icon_done_for_today"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="42dp"
             android:layout_below="@+id/textViewDuring"
-            android:layout_alignLeft="@+id/tvEveryDayPending"
-            android:layout_alignStart="@+id/tvEveryDayPending" />
+            android:layout_toRightOf="@+id/textViewDuring"
+            android:layout_toEndOf="@+id/textViewDuring"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp" />
 
     </RelativeLayout>
 

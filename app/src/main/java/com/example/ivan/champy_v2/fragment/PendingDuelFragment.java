@@ -8,11 +8,14 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -26,6 +29,9 @@ import com.example.ivan.champy_v2.utils.SessionManager;
 
 import java.io.IOException;
 
+import static android.R.attr.centerX;
+import static android.R.attr.width;
+import static android.support.v7.appcompat.R.attr.height;
 import static java.lang.Math.round;
 
 public class PendingDuelFragment extends Fragment implements View.OnClickListener {
@@ -88,8 +94,8 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
 
         c.close();
 
-        int width = getActivity().getWindowManager().getDefaultDisplay().getWidth();
-        int x = round(width/100);
+        int screenWidth = getActivity().getWindowManager().getDefaultDisplay().getWidth();
+        int x = round(screenWidth/100);
 
         btnAccept = (ImageButton)view.findViewById(R.id.btn_accept);
         btnCancel = (ImageButton)view.findViewById(R.id.btn_cancel);
@@ -107,6 +113,34 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         tvDays = (TextView)view.findViewById(R.id.textViewDuring);
         tvGoal = (TextView)view.findViewById(R.id.tv_goal);
 
+
+        if (recipient.equals("true")) {
+            tvUserVsUser.setText("from " + versus);
+            btnAccept.setVisibility(View.VISIBLE);
+            btnCancel.setVisibility(View.VISIBLE);
+        } else {
+            tvUserVsUser.setText(getContext().getResources().getString(R.string.waiting_for_your_recipient) + "\n " + versus);
+            btnAccept.setVisibility(View.INVISIBLE);
+//            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewPager.LayoutParams.WRAP_CONTENT, ViewPager.LayoutParams.WRAP_CONTENT);
+//            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+//            params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+//            params.height = x * 10;
+//            params.width  = x * 10;
+//            btnCancel.setLayoutParams(params);
+//            btnCancel.getLayoutParams().height=x*10;
+//            btnCancel.getLayoutParams().width=x*10;
+        }
+        tvUserVsUser.setTypeface(typeface);
+
+        if (duration != null && !duration.isEmpty()) days = Integer.parseInt(duration) / 86400;
+
+        tvDays.setText(days + " days");
+        tvGoal.setText(description);
+        tvDays.setTypeface(typeface);
+        tvGoal.setTypeface(typeface);
+        everyDayForTheNext.setTypeface(typeface);
+
+
         CHSetupUI chSetupUI= new CHSetupUI();
         chSetupUI.setupUI(view, getActivity());
 
@@ -121,24 +155,6 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (recipient.equals("true")) {
-            tvUserVsUser.setText("from " + versus);
-            btnAccept.setVisibility(View.VISIBLE);
-            btnCancel.setVisibility(View.VISIBLE);
-        } else {
-            tvUserVsUser.setText(getContext().getResources().getString(R.string.waiting_for_your_recipient) + "\n " + versus);
-            btnAccept.setVisibility(View.INVISIBLE);
-        }
-        tvUserVsUser.setTypeface(typeface);
-
-        if (duration != null && !duration.isEmpty()) days = Integer.parseInt(duration) / 86400;
-
-        tvDays.setText(days + " days");
-        tvGoal.setText(description);
-        tvDays.setTypeface(typeface);
-        tvGoal.setTypeface(typeface);
-        everyDayForTheNext.setTypeface(typeface);
-
     }
 
 

@@ -23,6 +23,7 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
     private List<HistoryChallenge> mContacts;
     private Context mContext;
     private Typeface typeFace;
+    private TextView tvPoint;
 
     public HistoryChallengeAdapter (List<HistoryChallenge> contacts, Context context){
         mContacts = contacts;
@@ -37,7 +38,7 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
 
         typeFace = Typeface.createFromAsset(context.getAssets(), "fonts/bebasneue.ttf");
         TextView tvUserName = (TextView)contactView.findViewById(R.id.challengeNameInHistory);
-        TextView tvPoint = (TextView)contactView.findViewById(R.id.counterInProgress);
+        tvPoint = (TextView)contactView.findViewById(R.id.counterInProgress);
         tvUserName.setTypeface(typeFace);
         tvPoint.setTypeface(typeFace);
 
@@ -54,17 +55,20 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         String versus = itemRow.getVersus();
         String goal = itemRow.getGoal();
 
+        tvPoint.setText(constDuration + " days");
+        tvPoint.setTypeface(typeFace);
+
         switch (itemRowType) {
             case "Duel":
-                nameTextView.setText(goal + " during this period: " + constDuration + " days\nwith " + versus);
+                nameTextView.setText(goal + " with " + versus);
                 Glide.with(mContext).load(R.drawable.duel_yellow).diskCacheStrategy(DiskCacheStrategy.ALL).override(80, 80).into(viewHolder.image);
                 break;
             case "Wake Up":
-                nameTextView.setText(wakeUpTime + " during this period: " + constDuration + " days");
+                nameTextView.setText(wakeUpTime);
                 Glide.with(mContext).load(R.drawable.wakeup_yellow).diskCacheStrategy(DiskCacheStrategy.ALL).override(80, 80).into(viewHolder.image);
                 break;
             case "Self-Improvement":
-                nameTextView.setText(goal + " during this period: " + constDuration + " days");
+                nameTextView.setText(goal);
                 Glide.with(mContext).load(R.drawable.self_yellow).diskCacheStrategy(DiskCacheStrategy.ALL).override(80, 80).into(viewHolder.image);
                 break;
             default:
@@ -73,22 +77,29 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
                 break;
         }
 
-        switch (itemRow.getStatus()) {
-            case "started":
-                nameTextView = (TextView) viewHolder.itemView.findViewById(R.id.counterWins);
-                nameTextView.setText(R.string.inProgress);
+        nameTextView = (TextView) viewHolder.itemView.findViewById(R.id.counterWins);
+//        switch (itemRow.getStatus()) {
+//            case "started":
+//                nameTextView.setText(R.string.inProgress);
+//                break;
+//            case "finished":
+//                nameTextView.setText(R.string.wins);
+//                break;
+//            case "failed":
+//                nameTextView.setText(R.string.failed);
+//                break;
+//        }
+        switch (itemRowType) {
+            case "Self-Improvement":
+                nameTextView.setText("Self-Imrovement");
                 break;
-            case "finished":
-                nameTextView = (TextView) viewHolder.itemView.findViewById(R.id.counterWins);
-                nameTextView.setText(R.string.wins);
+            case "Duel":
+                nameTextView.setText("Duel challenge");
                 break;
-            case "failed":
-                nameTextView = (TextView) viewHolder.itemView.findViewById(R.id.counterWins);
-                nameTextView.setText(R.string.failed);
-                break;
-        }
+            case "Wake Up":
+                nameTextView.setText("Wake Up");
 
-        //Typeface typeFace = Typeface.createFromAsset(mContext.getAssets(), "fonts/bebasneue.ttf");
+        }
         nameTextView.setTypeface(typeFace);
 
         Glide.with(mContext).load(R.drawable.challenges).override(40, 40).into(viewHolder.wins);

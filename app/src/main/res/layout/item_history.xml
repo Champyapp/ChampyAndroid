@@ -32,21 +32,10 @@
         android:layout_alignTop="@+id/picture"
         android:layout_marginLeft="8dp" />
 
-    <!--<TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/level_0_champy"
-        android:id="@+id/level"
-        android:visibility="invisible"
-        android:textColor="#ffffff"
-        android:layout_above="@+id/view"
-        android:layout_alignLeft="@+id/challengeNameInHistory"
-        android:layout_alignStart="@+id/challengeNameInHistory" />-->
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:id="@+id/imageView_wins_logo"
         android:src="@drawable/challenges"
         android:layout_above="@+id/view"
@@ -56,8 +45,8 @@
         android:contentDescription="@string/challengestatus" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:id="@+id/imageView_total_logo"
         android:src="@drawable/challenge"
         android:layout_above="@+id/view"
