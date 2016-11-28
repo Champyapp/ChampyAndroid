@@ -114,7 +114,7 @@ public class SessionManager {
         editor.commit();
         // Disable daily notifications
         DailyRemindController dailyRemind = new DailyRemindController(activity);
-        dailyRemind.deactivateDailyNotificationReminder();
+        dailyRemind.disableDailyNotificationReminder();
         // go to login activity
         Intent intent = new Intent(activity, RoleControllerActivity.class);
         activity.startActivity(intent);

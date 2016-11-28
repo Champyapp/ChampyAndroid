@@ -278,7 +278,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     pushIdentifier.updatePushIdentifier(sessionManager);
 
                     DailyRemindController dailyRemind = new DailyRemindController(getApplicationContext());
-                    dailyRemind.activateDailyNotificationReminder();
+                    dailyRemind.enableDailyNotificationReminder();
 
 
                     String api_path = null;

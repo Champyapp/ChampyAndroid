@@ -121,7 +121,7 @@ public class AppSync {
                     getPendingFriends.getUserPending(userId, token);
 
                     DailyRemindController dailyRemind = new DailyRemindController(context);
-                    dailyRemind.activateDailyNotificationReminder();
+                    dailyRemind.enableDailyNotificationReminder();
 
 
                     String api_path = null;

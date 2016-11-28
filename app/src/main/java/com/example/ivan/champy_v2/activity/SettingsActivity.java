@@ -487,11 +487,11 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 if (isChecked) {
                     map.put("dailyRemind", "true");
                     cv.put("dailyRemind", "true");
-                    //mDailyRemind.enableDailyRemind();
+                    mDailyRemind.enableDailyNotificationReminder();
                 } else {
                     map.put("dailyRemind", "false");
                     cv.put("dailyRemind", "false");
-                    //mDailyRemind.disableDailyReminder();
+                    mDailyRemind.disableDailyNotificationReminder();
                 }
                 db.insert("updated", null, cv);
             }

@@ -19,7 +19,7 @@ public class DailyRemindController {
     public DailyRemindController(Context context) { this.context = context; }
 
 
-    public void activateDailyNotificationReminder() {
+    public void enableDailyNotificationReminder() {
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 12);
@@ -40,7 +40,7 @@ public class DailyRemindController {
     }
 
 
-    public void deactivateDailyNotificationReminder() {
+    public void disableDailyNotificationReminder() {
         Intent alarmIntent = new Intent(context, CustomNotifyReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 228, alarmIntent, PendingIntent.FLAG_ONE_SHOT);
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(ALARM_SERVICE);
