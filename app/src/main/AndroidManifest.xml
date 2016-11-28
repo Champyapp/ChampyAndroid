@@ -5,7 +5,7 @@
 
     <uses-permission android:name="com.example.ivan.champy_v2.permission.C2D_MESSAGE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-<!--    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /> &lt;!&ndash;need?&ndash;&gt;-->
+<!--    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /> a nada? -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -108,12 +108,13 @@
         <activity android:name="com.soundcloud.android.crop.CropImageActivity"
             android:screenOrientation="portrait"/>
 
+
+        <!-- RECEIVERS -->
         <receiver android:name=".AlarmReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".AlarmScheduleReceiver" />
         <receiver android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND" >
@@ -124,6 +125,8 @@
         </receiver>
         <receiver android:name=".MyNotifyReceiver" android:enabled="true" />
 
+
+        <!-- SERVICES -->
         <service android:name=".service.AlarmService"  android:enabled="true" />
         <service android:name="com.example.ivan.champy_v2.service.MyGcmListenerService" android:exported="false" >
             <intent-filter>
