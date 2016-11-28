@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.SystemClock;
 import android.util.Log;
 
 import com.example.ivan.champy_v2.activity.MainActivity;
@@ -42,6 +43,7 @@ import retrofit.Retrofit;
 
 import static com.example.ivan.champy_v2.utils.Constants.typeDuel;
 import static com.example.ivan.champy_v2.utils.Constants.typeSelf;
+import static com.example.ivan.champy_v2.utils.Constants.unixTime;
 import static java.lang.Math.round;
 
 public class ChallengeController {
@@ -193,45 +195,25 @@ public class ChallengeController {
     public void createNewWakeUpChallenge(int days, final String type_id, String sHour, String sMinute) {
         duration = "" + (days * 86400);
         String description = "Wake Up";
-//        String sHour = "" + hour;
-//        String sMinute = "" + minute;
-//        if (hour < 10) sHour = "0" + sHour;
-//        if (minute < 10) sMinute = "0" + sMinute;
-        //long currentTime = System.currentTimeMillis() / 1000;
+
         final String wakeUpName = "Wake up at "+ sHour +":"+ sMinute;
         final String stringIntentId = String.valueOf(Integer.parseInt(sHour + sMinute));
 
         final int intHour  = Integer.parseInt(sHour); // this need for sending in progress method
         final int intMin   = Integer.parseInt(sMinute); // this need for sending in progress method
-        final int intentId = Integer.parseInt(sHour + sMinute); // our unique id for pending intent
+        final int alarmID  = Integer.parseInt(sHour + sMinute); // our unique id for pending intent
 
-//        Log.d(TAG, "createNewWakeUpChallenge CurrentMidNight: " + currentMidnight);
-
-//        final String[] details = new String[21];
-//        for (int i = 0; i <= 20; i++) {
-//            details[i] = String.valueOf(minute * 60 + hour * 60 * 60 + i*(24*60*60) + currentMidnight);
-//        }
-
-//        final String myDetails = Arrays.toString(details);
-
-//        boolean ok = checkActive(sHour + sMinute);
-//        if (!ok) {
-//            Toast.makeText(context, "Already Exist!", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-
-        // change stringIntentId for myDetails
         retrofit = new Retrofit.Builder().baseUrl(Constants.API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
-        Call<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge> call = createChallenge
-                .createChallenge(wakeUpName, type_id, description, stringIntentId, duration, token);
+        Call<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge> call =
+                createChallenge.createChallenge(wakeUpName, type_id, description, stringIntentId, duration, token);
 
         call.enqueue(new Callback<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge>() {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
-                    sendSingleInProgressForWakeUp(challengeId, intentId, intMin, intHour);
+                    sendSingleInProgressForWakeUp(challengeId, alarmID, intMin, intHour);
 //                    Log.d(TAG, "createNewWakeUpChallenge Status: OK"
 //                            + "\n Intent_ID   = " + intentId
 //                            + "\n _ID         = " + challengeId
@@ -248,22 +230,37 @@ public class ChallengeController {
         });
     }
 
-    private void sendSingleInProgressForWakeUp(String challenge, final int intentId, int minute, int hour) {
+    private void sendSingleInProgressForWakeUp(String challenge, final int alarmID, int minute, int hour) {
         dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
         cv = new ContentValues();
 
-        Date date = new Date();
         Calendar c = GregorianCalendar.getInstance();
-        final long currentMidnight = Constants.unixTime - (c.get(Calendar.HOUR_OF_DAY)*60*60) - (c.get(Calendar.MINUTE)*60) - (c.get(Calendar.SECOND));
-        Log.d(TAG,"currentMidnight: " + currentMidnight);
+        final long currentMidnight = unixTime - (c.get(Calendar.HOUR_OF_DAY)*60*60) - (c.get(Calendar.MINUTE)*60) - (c.get(Calendar.SECOND));
+
+        Log.d(TAG, "\ncalendar hours    : " + c.get(Calendar.HOUR_OF_DAY) + " (in seconds: " + c.get(Calendar.HOUR_OF_DAY)*60*60 + ")"
+                 + "\ncalendar minutes  : " + c.get(Calendar.MINUTE) + "   (in seconds: " + + c.get(Calendar.MINUTE)*60 +")"
+                 + "\ncalendar seconds  : " + c.get(Calendar.SECOND)
+                 + "\ncurrent  midnight : " + currentMidnight
+        );
+
+//        final String[] details = new String[21];
+//        for (int i = 0; i <= 20; i++) {
+//            details[i] = String.valueOf(minute * 60 + hour * 60 * 60 + i*(24*60*60) + currentMidnight);
+//        }
+
+        Date date = new Date();
         date.setTime(((minute * 60) + (hour * 60 * 60) + currentMidnight) * 1000);
         c.setTime(date);
 
+//        Log.d(TAG, "calendar for setting 'date': " + c.getTime() + " (simple date)");
+//        Log.d(TAG, "calendar for setting 'date': " + c.getTimeInMillis() + " (in millis)");
+
         // if user picked time which biggest than current we
-        if (Calendar.getInstance().getTimeInMillis() > c.getTimeInMillis()) c.add(Calendar.DATE, 1); // mb +(24*60*60) ?
-        final long userInputTime = c.getTimeInMillis();
-        Log.d(TAG, "userInputTime final result: " + userInputTime);
+        if (Calendar.getInstance().getTimeInMillis() > c.getTimeInMillis()) c.add(Calendar.DAY_OF_YEAR, 1);
+        // first we check if current time > than alarmClockTime and after that we set the time for new variable;
+        final long userInputTime = c.getTimeInMillis(); // must be in millis
+        Log.d(TAG, "final result when we need to ring: " + userInputTime);
 
 
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
@@ -275,18 +272,27 @@ public class ChallengeController {
                     com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress data = response.body();
                     String inProgressId = data.getData().get_id();
 
+                    /** Creating intent for alarmReceiver and putting some data in local DB **/
                     Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
                     myIntent.putExtra("inProgressId", inProgressId);
-                    myIntent.putExtra("intentId", intentId);
-
+                    myIntent.putExtra("alarmID", String.valueOf(alarmID));
                     cv.put("challenge_id", inProgressId);
                     cv.put("updated", "false");
                     db.insert("updated", null, cv);
 
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, intentId, myIntent, 0);
-                    AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, userInputTime, AlarmManager.INTERVAL_DAY, pendingIntent);
 
+                    // TODO: What if create array with triggered time + 24 h * 21 days and get current i-element for repeat it?
+
+
+                    /** Scheduling alarm **/
+                    // creating pending intent which will launch when our alarm clock must ring;
+                    PendingIntent pi = PendingIntent.getBroadcast(firstActivity, alarmID, myIntent, 0);
+                    // creating alarm manager which has a permission 'alarm_service' for invoke our alarm clock
+                    AlarmManager aManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                    // setting repeating our alarm clock (thing: what if in interval type: c.getCurrentTime() + 24*60*60; ? )
+                    aManager.setRepeating(AlarmManager.RTC_WAKEUP, userInputTime, 1000*60, pi);
+
+                    /** Generate current card in DB and for MainActivity **/
                     generateCardsForMainActivity();
                 } else Log.d("sendSingleInProgress", "Status: FAILED: " + response.code());
             }
@@ -568,7 +574,6 @@ public class ChallengeController {
                 try {
                     if (c.getString(colchallenge_id).equals(challenge_id)) {
                         lastUpdate = c.getString(c.getColumnIndex("updated"));
-                        Log.d(TAG, "isUpdated: " + lastUpdate);
                         return lastUpdate;
                     }
                 } catch (Exception e) {

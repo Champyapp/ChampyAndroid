@@ -8,6 +8,7 @@ import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -31,7 +32,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
     public static final String TAG = "AlarmReceiverActivity";
     private MediaPlayer mMediaPlayer;
     private ChallengeController cc;
-    private String inProgressChallengeId;
+    private String inProgressChallengeId, alarmID;
     public Context context;
     public Activity activity;
 
@@ -40,7 +41,13 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        inProgressChallengeId = this.getIntent().getStringExtra("inProgressChallengeId");
+        inProgressChallengeId = getIntent().getStringExtra("finalInProgressID");
+        alarmID = getIntent().getStringExtra("finalAlarmID");
+
+        Log.d(TAG, "AlarmReceiverActivity:"
+                + "\ninProgressChallengeId: " + inProgressChallengeId
+                + "\nalarmID: " + alarmID);
+
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.alarm);
@@ -87,6 +94,9 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
 
             case R.id.buttonWakeUpSurrender:
                 mMediaPlayer.stop();
+                try {
+                    cc.give_up(inProgressChallengeId, Integer.parseInt(alarmID));
+                } catch (IOException e) { e.printStackTrace(); }
                 // so, we take 0 updates and then this challenge will auto surrender.
                 finish();
                 break;
