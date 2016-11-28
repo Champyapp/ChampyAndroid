@@ -3,8 +3,12 @@ package com.example.ivan.champy_v2.helper;
 import android.animation.TypeEvaluator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.content.Context;
+import android.graphics.Point;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.view.Display;
+import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ImageView;
@@ -22,20 +26,36 @@ public class CHBuildAnim {
 
 
     public void buildAnim(Activity activity) {
-//        int width = activity.getWindowManager().getDefaultDisplay().getWidth();
-//        CHMakeResponsiveScore chMakeResponsiveScore = new CHMakeResponsiveScore(activity);
-//        chMakeResponsiveScore.makeResponsiveScore(width);
+        int width = activity.getWindowManager().getDefaultDisplay().getWidth();
+        CHMakeResponsiveScore chMakeResponsiveScore = new CHMakeResponsiveScore(activity);
+        chMakeResponsiveScore.makeResponsiveScore(width);
+//        WindowManager wm = (WindowManager)activity.getSystemService(Context.WINDOW_SERVICE);
+//        Display display = wm.getDefaultDisplay();
+//        Point size = new Point();
+//        display.getSize(size);
+//        int x = size.x / 100;
+//        int y = size.y / 100;
+//
+//        ImageView circleInProgress = (ImageView)activity.findViewById(R.id.imageView_challenges_animation);
+//        ImageView circleViewWins = (ImageView)activity.findViewById(R.id.imageView_wins_animation);
+//        ImageView circleViewTotal = (ImageView)activity.findViewById(R.id.imageView_total_animation);
+//
+//        circleInProgress.getLayoutParams().width = x*30;
+//        circleInProgress.getLayoutParams().height = y*15;
+//
+//        circleViewWins.getLayoutParams().width = x*30;
+//        circleViewWins.getLayoutParams().height = y*15;
+//
+//        circleViewTotal.getLayoutParams().width = x*30;
+//        circleViewTotal.getLayoutParams().height = y*15;
 
-        Typeface typeface = Typeface.createFromAsset(activity.getAssets(), "fonts/bebasneue.ttf");
-        
 //          //uncomment if need animation in main activity
-//        ImageView mImageViewFilling0 = (ImageView)activity.findViewById(R.id.imageView_challenges_animation);
-//        ImageView mImageViewFilling1 = (ImageView)activity.findViewById(R.id.imageView_wins_animation);
-//        ImageView mImageViewFilling2 = (ImageView)activity.findViewById(R.id.imageView_total_animation);
 //        ((AnimationDrawable) mImageViewFilling0.getBackground()).start();
 //        ((AnimationDrawable) mImageViewFilling1.getBackground()).start();
 //        ((AnimationDrawable) mImageViewFilling2.getBackground()).start();
 
+
+        Typeface typeface = Typeface.createFromAsset(activity.getAssets(), "fonts/bebasneue.ttf");
         final TextView tvChallengesCounter = (TextView)activity.findViewById(R.id.textViewChallengesCounter);
         final TextView tvWinsCounter       = (TextView)activity.findViewById(R.id.textViewWinsCounter);
         final TextView tvTotalCounter      = (TextView)activity.findViewById(R.id.textViewTotalCounter);
@@ -45,7 +65,7 @@ public class CHBuildAnim {
         tvTotalCounter.setTypeface(typeface);
 
         SessionManager sessionManager = new SessionManager(activity);
-        String challenges = sessionManager.getChampyOptions().get("challenges"); // i know
+        String challenges = sessionManager.getChampyOptions().get("challenges");
         String wins       = sessionManager.getChampyOptions().get("wins");
         String total      = sessionManager.getChampyOptions().get("total"); // i know
         String userName   = sessionManager.getUserName();
@@ -114,7 +134,7 @@ public class CHBuildAnim {
         final Animation alphaAnimation          = new AlphaAnimation(0.0f, 1.0f);
         alphaAnimation.setDuration(2000);
 
-        textViewChallenges.setText(R.string.in_progress);
+        textViewChallenges.setText(R.string.challenges);
         textViewChallenges.startAnimation(alphaAnimation);
         textViewChallenges.setTypeface(typeface);
 

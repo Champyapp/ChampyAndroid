@@ -22,7 +22,7 @@ class CHMakeResponsiveScore {
     void makeResponsiveScore(int width) {
         int x = round(width/100);
 
-        //-------------------------- Animation ---------------------------//
+        //-------------------------- Circles ---------------------------//
         ImageView imageView = (ImageView)activity.findViewById(R.id.imageView_challenges_animation);
         imageView.getLayoutParams().width = x*25;
         imageView.getLayoutParams().height = x*25;
@@ -58,25 +58,25 @@ class CHMakeResponsiveScore {
         imageView.getLayoutParams().height = x*25;*/
 
         //--------------------------- Score ----------------------------//
-        Float y = x*(float)3.5;
-
-        TextView textViewScoreChallenges = (TextView)activity.findViewById(R.id.textViewChallengesCounter);
-        textViewScoreChallenges.setTextSize(y);
-
-        TextView textViewScoreWins = (TextView)activity.findViewById(R.id.textViewWinsCounter);
-        textViewScoreWins.setTextSize(y);
-
-        TextView textViewScoreTotal = (TextView)activity.findViewById(R.id.textViewTotalCounter);
-        textViewScoreTotal.setTextSize(y);
-
-        //------------------------- TextViews -------------------------//
-        y = x*(float)1.5;
-        TextView textViewChallenges = (TextView)activity.findViewById(R.id.textViewChallenges);
-        TextView textViewWins = (TextView)activity.findViewById(R.id.textViewWins);
-        TextView textViewTotal = (TextView)activity.findViewById(R.id.textViewTotal);
-        textViewChallenges.setTextSize(y);
-        textViewWins.setTextSize(y);
-        textViewTotal.setTextSize(y);
+//        Float y = x*(float)5;
+//
+//        TextView textViewScoreChallenges = (TextView)activity.findViewById(R.id.textViewChallengesCounter);
+//        textViewScoreChallenges.setTextSize(y);
+//
+//        TextView textViewScoreWins = (TextView)activity.findViewById(R.id.textViewWinsCounter);
+//        textViewScoreWins.setTextSize(y);
+//
+//        TextView textViewScoreTotal = (TextView)activity.findViewById(R.id.textViewTotalCounter);
+//        textViewScoreTotal.setTextSize(y);
+//
+//        //------------------------- TextViews -------------------------//
+//        y = x*(float)3.5;
+//        TextView textViewChallenges = (TextView)activity.findViewById(R.id.textViewChallenges);
+//        TextView textViewWins = (TextView)activity.findViewById(R.id.textViewWins);
+//        TextView textViewTotal = (TextView)activity.findViewById(R.id.textViewTotal);
+//        textViewChallenges.setTextSize(y);
+//        textViewWins.setTextSize(y);
+//        textViewTotal.setTextSize(y);
 
     }
 
