@@ -253,14 +253,12 @@ public class ChallengeController {
         date.setTime(((minute * 60) + (hour * 60 * 60) + currentMidnight) * 1000);
         c.setTime(date);
 
-//        Log.d(TAG, "calendar for setting 'date': " + c.getTime() + " (simple date)");
-//        Log.d(TAG, "calendar for setting 'date': " + c.getTimeInMillis() + " (in millis)");
 
         // if user picked time which biggest than current we
         if (Calendar.getInstance().getTimeInMillis() > c.getTimeInMillis()) c.add(Calendar.DAY_OF_YEAR, 1);
         // first we check if current time > than alarmClockTime and after that we set the time for new variable;
         final long userInputTime = c.getTimeInMillis(); // must be in millis
-        Log.d(TAG, "final result when we need to ring: " + userInputTime);
+        Log.d(TAG, "Final Time for ring: " + userInputTime);
 
 
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
@@ -289,11 +287,12 @@ public class ChallengeController {
                     PendingIntent pi = PendingIntent.getBroadcast(firstActivity, alarmID, myIntent, 0);
                     // creating alarm manager which has a permission 'alarm_service' for invoke our alarm clock
                     AlarmManager aManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                    // setting repeating our alarm clock (thing: what if in interval type: c.getCurrentTime() + 24*60*60; ? )
-                    aManager.setRepeating(AlarmManager.RTC_WAKEUP, userInputTime, 1000*60, pi);
+                    // setting repeating our alarm clock
+                    aManager.setRepeating(AlarmManager.RTC_WAKEUP, userInputTime, 24*60*60*1000, pi);
 
                     /** Generate current card in DB and for MainActivity **/
                     generateCardsForMainActivity();
+
                 } else Log.d("sendSingleInProgress", "Status: FAILED: " + response.code());
             }
 
