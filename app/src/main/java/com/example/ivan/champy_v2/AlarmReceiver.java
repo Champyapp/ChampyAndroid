@@ -37,7 +37,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         if (sessionManager.isUserLoggedIn()) {
             context.startActivity(alarmIntent);
         } else {
-            Log.d(TAG, "onReceive: AutoGiveUp. Reason: not logged in");
+            Log.i(TAG, "onReceive: AutoGiveUp. Reason: not logged in");
         }
 
     }

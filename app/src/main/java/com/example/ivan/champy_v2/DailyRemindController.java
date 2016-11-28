@@ -19,21 +19,27 @@ public class DailyRemindController {
     public void activateDailyNotificationReminder() {
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 16);
-        calendar.set(Calendar.MINUTE, 26);
+        calendar.set(Calendar.HOUR_OF_DAY, 12);
+        calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
 
-        Intent notifyIntent = new Intent(context, MyNotifyReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 100, notifyIntent, PendingIntent.FLAG_ONE_SHOT);
+        if (Calendar.getInstance().getTimeInMillis() > calendar.getTimeInMillis()) {
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+        }
 
-        AlarmManager alarmManager = (AlarmManager)context.getSystemService(ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        Intent notifyIntent = new Intent(context, CustomNotifyReceiver.class);
+        notifyIntent.putExtra("notificationID", 228);
+
+        PendingIntent pi = PendingIntent.getBroadcast(context, 228, notifyIntent, PendingIntent.FLAG_ONE_SHOT);
+
+        AlarmManager manager = (AlarmManager)context.getSystemService(ALARM_SERVICE);
+        manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 24*60*60*1000, pi);
     }
 
 
     public void deactivateDailyNotificationReminder() {
-        Intent alarmIntent = new Intent(context, MyNotifyReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 100, alarmIntent, PendingIntent.FLAG_ONE_SHOT);
+        Intent alarmIntent = new Intent(context, CustomNotifyReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 228, alarmIntent, PendingIntent.FLAG_ONE_SHOT);
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
     }

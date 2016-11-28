@@ -244,10 +244,6 @@ public class ChallengeController {
                  + "\ncurrent  midnight : " + currentMidnight
         );
 
-//        final String[] details = new String[21];
-//        for (int i = 0; i <= 20; i++) {
-//            details[i] = String.valueOf(minute * 60 + hour * 60 * 60 + i*(24*60*60) + currentMidnight);
-//        }
         // create date
         Date date = new Date();
         // set time for date from user's input time;

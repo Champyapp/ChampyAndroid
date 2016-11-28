@@ -116,6 +116,7 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".CustomNotifyReceiver" android:enabled="true" />
         <receiver android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND" >
@@ -124,8 +125,6 @@
                 <category android:name="com.example.ivan.champy_v2" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".MyNotifyReceiver" android:enabled="true" />
-
 
         <!-- SERVICES -->
         <service android:name=".service.AlarmService"  android:enabled="true" />
