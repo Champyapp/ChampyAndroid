@@ -26,6 +26,8 @@ import com.example.ivan.champy_v2.utils.SessionManager;
 
 import java.io.IOException;
 
+import static java.lang.Math.round;
+
 public class PendingDuelFragment extends Fragment implements View.OnClickListener {
 
     public static final String ARG_PAGE = "ARG_PAGE";
@@ -86,8 +88,17 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
 
         c.close();
 
+        int width = getActivity().getWindowManager().getDefaultDisplay().getWidth();
+        int x = round(width/100);
+
         btnAccept = (ImageButton)view.findViewById(R.id.btn_accept);
         btnCancel = (ImageButton)view.findViewById(R.id.btn_cancel);
+
+        btnAccept.getLayoutParams().height = x*10;
+        btnAccept.getLayoutParams().width = x*10;
+
+        btnCancel.getLayoutParams().height = x*10;
+        btnCancel.getLayoutParams().width = x*10;
 
         typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
         viewPager = (ViewPager)getActivity().findViewById(R.id.pager_pending_duel);
@@ -98,7 +109,6 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
 
         CHSetupUI chSetupUI= new CHSetupUI();
         chSetupUI.setupUI(view, getActivity());
-        Glide.with(getContext()).load(R.drawable.points).override(200, 200).into((ImageView)view.findViewById(R.id.imageViewPoints));
 
         offlineMode = new OfflineMode();
         offlineMode.isConnectedToRemoteAPI(getActivity());

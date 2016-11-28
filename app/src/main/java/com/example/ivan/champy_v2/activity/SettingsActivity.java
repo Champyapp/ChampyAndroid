@@ -366,7 +366,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
                 builder.setTitle(R.string.areYouSure)
                         .setMessage(R.string.youWantToDeleteYourAcc)
-                        .setIcon(R.drawable.warn)
+                        //.setIcon(R.drawable.warn)
                         .setCancelable(false)
                         .setPositiveButton(R.string.yes, dialogClickListener)
                         .setNegativeButton(R.string.no, dialogClickListener)
