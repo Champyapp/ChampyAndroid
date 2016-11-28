@@ -71,17 +71,13 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         final ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
         final TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
         final TextView tvIChallMySelf = (TextView) findViewById(R.id.tvChallengeToMySelf);
-        final TextView tvPoints = (TextView) findViewById(R.id.tvRewardPlus10Points);
         final TextView tvEveryDay = (TextView) findViewById(R.id.tvEveryDayWakeUp);
-        final TextView tvLevel = (TextView) findViewById(R.id.tvLevel1Chall);
         final TextView tvDuration = (TextView) findViewById(R.id.tvDays);
         final TextView tvGoal = (TextView) findViewById(R.id.goal_text);
 
         tvIChallMySelf.setTypeface(typeface);
         tvEveryDay.setTypeface(typeface);
         tvDuration.setTypeface(typeface);
-        tvPoints.setTypeface(typeface);
-        tvLevel.setTypeface(typeface);
         tvGoal.setTypeface(typeface);
 
         Glide.with(this).load(R.drawable.wakeupwhite).override(110, 110).into((ImageView) findViewById(R.id.imageViewLogo));
@@ -97,7 +93,6 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         drawerUserName.setText(userName);
         drawerUserName.setTypeface(typeface);
 
-        Glide.with(this).load(R.drawable.points).override(100, 100).into((ImageView) findViewById(R.id.imageViewPoints));
         Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
 
