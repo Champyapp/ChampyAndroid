@@ -248,13 +248,15 @@ public class ChallengeController {
 //        for (int i = 0; i <= 20; i++) {
 //            details[i] = String.valueOf(minute * 60 + hour * 60 * 60 + i*(24*60*60) + currentMidnight);
 //        }
-
+        // create date
         Date date = new Date();
+        // set time for date from user's input time;
         date.setTime(((minute * 60) + (hour * 60 * 60) + currentMidnight) * 1000);
+        // set date for calendar. now our calendar has a right time for ring
         c.setTime(date);
 
 
-        // if user picked time which biggest than current we
+        // if user picked time which biggest than current we replace alarm for a next day in same time
         if (Calendar.getInstance().getTimeInMillis() > c.getTimeInMillis()) c.add(Calendar.DAY_OF_YEAR, 1);
         // first we check if current time > than alarmClockTime and after that we set the time for new variable;
         final long userInputTime = c.getTimeInMillis(); // must be in millis

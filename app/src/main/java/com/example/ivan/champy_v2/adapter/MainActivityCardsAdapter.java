@@ -198,11 +198,11 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
             db.update("updated",      cv, "challenge_id = ?", new String[]{itemInProgressId});
             db.update("myChallenges", cv, "challenge_id = ?", new String[]{itemInProgressId});
 
-            if (!itemType.equals("Wake Up")) {
-                tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
-                buttonShare.setVisibility(View.INVISIBLE);
-                buttonDone.setVisibility(View.VISIBLE);
-            }
+//            if (!itemType.equals("Wake Up")) {
+//                tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
+//                buttonShare.setVisibility(View.INVISIBLE);
+//                buttonDone.setVisibility(View.VISIBLE);
+//            }
 
             if (now > progressMidNight + oneDay + oneDay) {
                 try {
@@ -260,7 +260,25 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         buttonShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String message = getContext().getString(R.string.share_text) + currentCard.getChallengeName() + " challenge" + getContext().getString(R.string.champyapp_link);
+                String message;
+                switch (currentCard.getType()) {
+                    case "Self-Improvement":
+                        message = getContext().getString(R.string.share_text) + currentCard.getType()
+                                + " challenge '" + currentCard.getGoal() + "'" + getContext().getString(R.string.champyapp_link);
+                        break;
+                    case "Duel":
+                        message = getContext().getString(R.string.share_text) + currentCard.getType()
+                                + " challenge '" + currentCard.getGoal() + "'" + getContext().getString(R.string.champyapp_link);
+                        break;
+                    case "Wake Up":
+                        message = getContext().getString(R.string.share_text) + " "
+                                + currentCard.getChallengeName() + " challenge" + getContext().getString(R.string.champyapp_link);
+                        break;
+                    default:
+                        message = getContext().getString(R.string.share_text) + getContext().getString(R.string.champyapp_link);
+
+                }
+//                String message = getContext().getString(R.string.share_text) + currentCard.getGoal() + " challenge" + getContext().getString(R.string.champyapp_link);
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 share.putExtra(Intent.EXTRA_TEXT, message);
@@ -271,6 +289,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                 }
             }
         });
+
 
         return tempView;
     }
