@@ -51,19 +51,19 @@
         card_view:cardCornerRadius="8dp">
 
         <RelativeLayout
-            android:layout_width="fill_parent"
             android:orientation="vertical"
+            android:layout_width="fill_parent"
             android:layout_height="fill_parent" >
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/goal_text"
-                android:gravity="center_vertical|center_horizontal"
                 android:paddingTop="10dp"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                android:textColor="@color/colorTextAqua"
                 android:text="@string/wake_up_at"
+                android:textColor="@color/colorTextAqua"
+                android:textAlignment="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                 android:layout_alignParentTop="true" />
 
             <TimePicker
@@ -72,8 +72,8 @@
                 android:id="@+id/timePicker"
                 android:timePickerMode="spinner"
                 tools:targetApi="lollipop"
-                android:layout_below="@+id/goal_text"
-                android:layout_centerHorizontal="true" />
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -81,7 +81,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="@string/everyday_for_next"
                 android:id="@+id/tvEveryDayWakeUp"
-                android:layout_below="@+id/timePicker"
+                android:layout_above="@+id/tvDays"
                 android:layout_centerHorizontal="true" />
 
             <TextView
@@ -91,8 +91,9 @@
                 android:text="@string/_21_days"
                 android:id="@+id/tvDays"
                 android:textSize="20sp"
+                android:paddingBottom="10dp"
                 android:textColor="@color/colorTextAqua"
-                android:layout_below="@+id/tvEveryDayWakeUp"
+                android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true" />
 
         </RelativeLayout>
