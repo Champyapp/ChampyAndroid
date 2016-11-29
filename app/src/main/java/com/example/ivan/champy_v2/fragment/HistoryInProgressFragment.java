@@ -31,6 +31,8 @@ public class HistoryInProgressFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         offlineMode = new OfflineMode();
+        all = new ArrayList<>();
+        adapter = new HistoryChallengeAdapter(all, getContext());
     }
 
     @Override
@@ -38,7 +40,7 @@ public class HistoryInProgressFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_history, container, false);
 
         self_improvement = SelfImprovement_model.generate(getContext());
-        all = new ArrayList<>();
+
 
         for (int i = 0; i < self_improvement.size(); i++) {
             SelfImprovement_model item = self_improvement.get(i);
@@ -68,7 +70,6 @@ public class HistoryInProgressFragment extends Fragment {
         this.gView = view;
 
         rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-        adapter = new HistoryChallengeAdapter(all, getContext());
         rvContacts.setAdapter(adapter);
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         return view;
@@ -96,9 +97,8 @@ public class HistoryInProgressFragment extends Fragment {
                         String recipient = item.getRecipient();
                         String constDuration = item.getConstDuration();
 
-                        all.add(new HistoryChallenge(
-                                type, true, description, duration, status, goal, challengeName, versus, recipient, constDuration
-                        ));
+                        all.add(new HistoryChallenge(type, true, description, duration, status,
+                                goal, challengeName, versus, recipient, constDuration));
                     }
 
                     //adapter = new HistoryChallengeAdapter(all, getContext());

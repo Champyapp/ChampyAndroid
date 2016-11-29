@@ -14,4 +14,6 @@ public class Constants {
     public static final String typeDuel = "567d51c48322f85870fd931b";
     public static final String typeWake = "567d51c48322f85870fd931c";
 
+    public static final String azinecUrl = "http://www.azinec.com";
+
 }

@@ -31,6 +31,10 @@ public class HistoryWinsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         offlineMode = new OfflineMode();
+        winsArray = new ArrayList<>();
+        adapter = new HistoryChallengeAdapter(winsArray, getContext());
+
+
     }
 
     @Override
@@ -39,7 +43,6 @@ public class HistoryWinsFragment extends Fragment {
 
         self_improvement = SelfImprovement_model.generateWins(getContext());
 
-        winsArray = new ArrayList<>();
 
         for (int i = 0; i < self_improvement.size(); i++) {
             SelfImprovement_model item = self_improvement.get(i);
@@ -70,7 +73,6 @@ public class HistoryWinsFragment extends Fragment {
         this.gView = view;
 
         rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-        adapter = new HistoryChallengeAdapter(winsArray, getContext());
         rvContacts.setAdapter(adapter);
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         return view;

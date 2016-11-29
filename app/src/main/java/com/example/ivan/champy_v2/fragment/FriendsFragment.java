@@ -27,6 +27,7 @@ import com.example.ivan.champy_v2.model.friend.Owner;
 import com.example.ivan.champy_v2.utils.Constants;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
+import com.example.ivan.champy_v2.utils.Constants;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
@@ -42,6 +43,8 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
+import static com.example.ivan.champy_v2.utils.Constants.API_URL;
+
 public class FriendsFragment extends Fragment {
 
     private static final String TAG = "FriendsFragment";
@@ -49,6 +52,7 @@ public class FriendsFragment extends Fragment {
 
     private View gView;
     private SwipeRefreshLayout gSwipeRefreshLayout;
+    private SessionManager sessionManager;
     private Socket mSocket;
 
 
@@ -84,7 +88,7 @@ public class FriendsFragment extends Fragment {
             do {
                 friends.add(new FriendModel(
                         c.getString(nameColIndex),
-                        Constants.API_URL + c.getString(photoColIndex),
+                        API_URL + c.getString(photoColIndex),
                         c.getString(index),
                         c.getString(inProgressChallengesCountIndex),
                         c.getString(successChallenges),
@@ -102,9 +106,7 @@ public class FriendsFragment extends Fragment {
             }
         });
 
-
-        SessionManager sessionManager = new SessionManager(getActivity());
-        //sessionManager.setRefreshFriends("true");
+        sessionManager = new SessionManager(getActivity());
         String checkRefresh = sessionManager.getRefreshFriends();
 
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -119,11 +121,6 @@ public class FriendsFragment extends Fragment {
             }
         });
         this.gView = view;
-
-//        Bundle friendRequestExtra = getActivity().getIntent().getExtras();
-//        if (friendRequestExtra != null) {
-//            refreshFriendsView(gSwipeRefreshLayout, gView);
-//        }
 
         if (checkRefresh.equals("true")) {
             refreshFriendsView(gSwipeRefreshLayout, gView);
@@ -163,12 +160,6 @@ public class FriendsFragment extends Fragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause: ");
-    }
-
-    @Override
     public void onStop() {
         super.onStop();
         Log.d(TAG, "onStop: Sockets off & disconnect");
@@ -176,29 +167,9 @@ public class FriendsFragment extends Fragment {
         mSocket.disconnect();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.d(TAG, "onDestroyView: ");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "onDestroy: ");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.d(TAG, "onDetach: ");
-    }
-
 
     private void refreshFriendsView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         swipeRefreshLayout.setRefreshing(true);
-        final String API_URL = "http://46.101.213.24:3007";
-        SessionManager sessionManager = new SessionManager(getContext());
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         final String id = user.get("id");
@@ -306,12 +277,14 @@ public class FriendsFragment extends Fragment {
             Log.d(TAG, "Sockets: connecting...");
         }
     };
+
     private Emitter.Listener onConnected = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
             Log.d(TAG, "Sockets: connected!");
         }
     };
+
     protected Emitter.Listener modifiedRelationship = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {

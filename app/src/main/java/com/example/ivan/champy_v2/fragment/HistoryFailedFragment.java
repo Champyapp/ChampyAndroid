@@ -31,6 +31,9 @@ public class HistoryFailedFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         offlineMode = new OfflineMode();
+        arr = new ArrayList<>();
+        adapter = new HistoryChallengeAdapter(arr, getContext());
+
     }
 
     @Override
@@ -38,7 +41,6 @@ public class HistoryFailedFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_history, container, false);
 
         self_improvement = SelfImprovement_model.generateFailed(getContext());
-        arr = new ArrayList<>();
 
         for (int i = 0; i < self_improvement.size(); i++) {
             SelfImprovement_model item = self_improvement.get(i);
@@ -68,7 +70,6 @@ public class HistoryFailedFragment extends Fragment {
         this.gView = view;
 
         rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-        adapter = new HistoryChallengeAdapter(arr, getContext());
         rvContacts.setAdapter(adapter);
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         return view;

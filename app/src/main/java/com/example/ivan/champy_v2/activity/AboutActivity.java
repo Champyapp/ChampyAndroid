@@ -35,11 +35,12 @@ import java.io.FileNotFoundException;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
+import static com.example.ivan.champy_v2.utils.Constants.azinecUrl;
+
 public class AboutActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    public static final String azinecUrl = "http://www.azinec.com";
     private WebView webView;
-    public View spinner;
+    private View spinner;
 
     @SuppressLint({"SetJavaScriptEnabled", "SetTextI18n"})
     @Override

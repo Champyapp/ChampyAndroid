@@ -1,5 +1,6 @@
 package com.example.ivan.champy_v2.fragment;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
@@ -8,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,7 +40,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
 
     public static final String ARG_PAGE = "ARG_PAGE";
     public static final String TAG = "PendingDuelFragment";
-    public int position, size, days = 21, o = 0;
+    public int position, size, inProgressCount, days = 21, o = 0;
     public String versus, duration, description, challenge_id, status, recipient;
     public TextView tvGoal, tvDays, tvUserVsUser, everyDayForTheNext;
     public ImageButton btnAccept, btnCancel;
@@ -46,6 +48,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
     public ViewPager viewPager;
     public Typeface typeface;
     public SessionManager sessionManager;
+    private CurrentUserHelper user;
     public ChallengeController cc;
     public Snackbar snackbar;
     public DBHelper dbHelper;
@@ -59,6 +62,23 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         PendingDuelFragment fragment = new PendingDuelFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.d(TAG, "onAttach: ");
+
+
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: ");
+
+
     }
 
     @Nullable
@@ -149,6 +169,13 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         btnAccept.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
 
+        user = new CurrentUserHelper(getContext());
+        final String token = user.getToken();
+        final String userId = user.getUserObjectId();
+        inProgressCount = Integer.parseInt(user.getInProgressCount());
+        cc = new ChallengeController(getContext(), getActivity(), token, userId);
+
+
         return view;
     }
 
@@ -160,12 +187,6 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onClick(View view) {
-        CurrentUserHelper user = new CurrentUserHelper(getContext());
-        final String token = user.getToken();
-        final String userId = user.getUserObjectId();
-        final int inProgressCount = Integer.parseInt(user.getInProgressCount());
-
-        cc = new ChallengeController(getContext(), getActivity(), token, userId);
         position = viewPager.getCurrentItem();
         c = db.query("pending_duel", null, null, null, null, null, null);
         if (c.moveToFirst()) {

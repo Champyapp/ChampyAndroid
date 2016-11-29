@@ -41,9 +41,10 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
+import static com.example.ivan.champy_v2.utils.Constants.API_URL;
+
 public class PendingFragment extends Fragment {
 
-    public static final String API_URL = "http://46.101.213.24:3007";
     public static final String ARG_PAGE = "ARG_PAGE";
     public static final String TAG = "PendingFragment";
 

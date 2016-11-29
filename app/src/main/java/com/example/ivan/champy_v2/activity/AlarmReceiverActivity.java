@@ -43,9 +43,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
         inProgressChallengeId = getIntent().getStringExtra("finalInProgressID");
         alarmID = getIntent().getStringExtra("finalAlarmID");
 
-        Log.d(TAG, "AlarmReceiverActivity:"
-                + "\ninProgressChallengeId: " + inProgressChallengeId
-                + "\nalarmID: " + alarmID);
+        Log.d(TAG, "AlarmReceiverActivity:" + "\ninProgressChallengeId: " + inProgressChallengeId + "\nalarmID: " + alarmID);
 
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);

@@ -28,7 +28,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
 
     public static final String ARG_PAGE = "ARG_PAGE";
     public static final String TAG = "DuelFragment";
-    public int position, size, days = 21, o = 0;
+    public int position, size, daysCount, newDaysCount, days = 21, o = 0;
     public String name, duration, description, challenge_id, status, friend_id, token, userId;
     public SessionManager sessionManager;
     public ChallengeController cc;
@@ -84,6 +84,9 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         c.close();
 
         sessionManager = new SessionManager(getContext());
+        String token = sessionManager.getToken();
+        String userId = sessionManager.getUserId();
+        cc = new ChallengeController(getContext(), getActivity(), token, userId);
         size = sessionManager.getSelfSize();
         typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
         tvGoal = (TextView)view.findViewById(R.id.goal_text);
@@ -136,20 +139,14 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        int daysCount;
-        int newDaysCount;
-
         switch (view.getId()) {
             case R.id.ok:
                 position = viewPager.getCurrentItem();
                 size = sessionManager.getSelfSize();
-                final String token = sessionManager.getToken();
-                final String userId = sessionManager.getUserId();
-
                 snackbar = Snackbar.make(view, R.string.are_you_sure, Snackbar.LENGTH_LONG).setAction(R.string.yes, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        cc = new ChallengeController(getContext(), getActivity(), token, userId);
+
                         if (position == size) {
                             description = etGoal.getText().toString();
                             duration = etDays.getText().toString();

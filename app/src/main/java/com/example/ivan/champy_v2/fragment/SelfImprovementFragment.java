@@ -26,7 +26,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 
     public static final String ARG_PAGE = "ARG_PAGE";
     public static final String TAG = "SelfImprovementFragment";
-    public int position, size, days = 21, o = 0;
+    public int position, size, daysCount, newDaysCount, days = 21, o = 0;
     public String duration, description, challenge_id, status, name;
     public Typeface typeface;
     public TextView tvGoal, tvDays, etDays;
@@ -99,8 +99,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         tvEveryDay.setTypeface(typeface);
         textDays.setTypeface(typeface);
         textDays.setVisibility(View.INVISIBLE);
-//        tvLevel.setTypeface(typeface);
-//        tvPoint.setTypeface(typeface);
 
         ImageButton buttonAccept = (ImageButton) getActivity().findViewById(R.id.imageButtonAccept);
         viewPager = (ViewPager) getActivity().findViewById(R.id.pager);
@@ -123,6 +121,10 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 //        buttonMinus.setVisibility(View.INVISIBLE);
 //        buttonPlus.setVisibility(View.INVISIBLE);
 
+        final String token = sessionManager.getToken();
+        final String userId = sessionManager.getUserId();
+        cc = new ChallengeController(getContext(), getActivity(), token, userId);
+
         OfflineMode offlineMode = new OfflineMode();
         offlineMode.isConnectedToRemoteAPI(getActivity());
         buttonAccept.setOnClickListener(this);
@@ -134,19 +136,14 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
-        int daysCount;
-        int newDaysCount;
-
         switch (view.getId()) {
             case R.id.imageButtonAccept:
                 position = viewPager.getCurrentItem();
                 size = sessionManager.getSelfSize();
-                final String token = sessionManager.getToken();
-                final String userId = sessionManager.getUserId();
+
                 snackbar = Snackbar.make(view, R.string.are_you_sure, Snackbar.LENGTH_LONG).setAction(R.string.yes, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        cc = new ChallengeController(getContext(), getActivity(), token, userId);
                         if (position == size) {
                             description = etGoal.getText().toString();
                             duration = etDays.getText().toString();
@@ -157,14 +154,12 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                                     snackbar = Snackbar.make(view, R.string.challenge_created, Snackbar.LENGTH_SHORT);
                                     snackbar.show();
                                 } else {
-                                    snackbar = Snackbar.make(view, R.string.challenge_created, Snackbar.LENGTH_SHORT);
+                                    snackbar = Snackbar.make(view, R.string.cant_create_this_challenge, Snackbar.LENGTH_SHORT);
                                     snackbar.show();
                                 }
                             } catch (NullPointerException | NumberFormatException e) {
                                 e.printStackTrace();
                             }
-//                                snackbar = Snackbar.make(view, "Can't create this challenge!", Snackbar.LENGTH_SHORT);
-//                                snackbar.show();
                         } else {
                             c = db.query("selfimprovement", null, null, null, null, null, null);
                             if (c.moveToFirst()) {

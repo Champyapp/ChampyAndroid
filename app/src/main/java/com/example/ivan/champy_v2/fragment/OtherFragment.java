@@ -67,13 +67,32 @@ public class OtherFragment extends Fragment {
     private String checkRefresh = "";
     private SwipeRefreshLayout gSwipeRefreshLayout;
     private CHCheckTableForExist checkTableForExist;
+    private OfflineMode offlineMode;
+    private DBHelper dbHelper;
+    private ContentValues cv;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         Log.d(TAG, "onAttach: ");
-
         checkRefresh = "true";
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getContext());
+        offlineMode = new OfflineMode();
+        dbHelper = new DBHelper(getContext());
+        cv = new ContentValues();
+
+
+    }
+
+    @Override
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.fragment_friends, container, false);
+        Log.d(TAG, "onCreateView: ");
 
         friends = new ArrayList<>();
         DBHelper dbHelper = new DBHelper(getContext());
@@ -104,26 +123,6 @@ public class OtherFragment extends Fragment {
         }
         c.close();
 
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getContext());
-
-
-    }
-
-    @Override
-    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_friends, container, false);
-        Log.d(TAG, "onCreateView: ");
-
-//        SessionManager sessionManager = new SessionManager(getContext());
-//        HashMap<String, String> user;
-//        user = sessionManager.getUserDetails();
-//        final String id = user.get("id");
-//        final String mToken = user.get("token");
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
         final OtherAdapter adapter = new OtherAdapter(friends, getContext(), getActivity());
 
@@ -134,7 +133,6 @@ public class OtherFragment extends Fragment {
         gSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //getFbFriends.getUserFacebookFriends(mToken);
                 refreshOtherView(gSwipeRefreshLayout, gView);
                 gSwipeRefreshLayout.setRefreshing(false);
             }
@@ -185,11 +183,6 @@ public class OtherFragment extends Fragment {
 
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause: ");
-    }
 
     @Override
     public void onStop() {
@@ -197,24 +190,6 @@ public class OtherFragment extends Fragment {
         Log.d(TAG, "onStop: Sockets off & disconnect");
         mSocket.off();
         mSocket.disconnect();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.d(TAG, "onDestroyView: ");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "onDestroy: ");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.d(TAG, "onDetach: ");
     }
 
 
@@ -226,12 +201,14 @@ public class OtherFragment extends Fragment {
             Log.d(TAG, "Sockets: connecting...");
         }
     };
+
     private Emitter.Listener onConnected = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
             Log.d(TAG, "Sockets: connected!");
         }
     };
+
     protected Emitter.Listener modifiedRelationship = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
@@ -247,7 +224,6 @@ public class OtherFragment extends Fragment {
 
     public void refreshOtherView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         // Проверка на оффлайн вкладке OTHERS
-        final OfflineMode offlineMode = new OfflineMode();
         if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
             swipeRefreshLayout.setRefreshing(true);
             swipeRefreshLayout.post(new Runnable() {
@@ -257,10 +233,8 @@ public class OtherFragment extends Fragment {
                     final NewUser newUser = retrofit.create(NewUser.class);
                     StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
                     StrictMode.setThreadPolicy(policy);
-                    DBHelper dbHelper = new DBHelper(getActivity());
                     final SQLiteDatabase db = dbHelper.getWritableDatabase();
                     int clearCount = db.delete("mytable", null, null);
-                    final ContentValues cv = new ContentValues();
                     final List<FriendModel> newFriends = new ArrayList<>();
 
                     if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
@@ -380,16 +354,7 @@ public class OtherFragment extends Fragment {
 
                 }
             });
-            Log.d(TAG, "refreshOtherView: finished");
         }
-
-//    public static OtherFragment newInstance(int page) {
-//        Bundle args = new Bundle();
-//        args.putInt(ARG_PAGE, page);
-//        OtherFragment fragment = new OtherFragment();
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
 
     }
 
