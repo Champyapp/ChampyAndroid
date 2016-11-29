@@ -59,11 +59,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/goal_text"
-                android:paddingTop="10dp"
                 android:text="@string/wake_up_at"
                 android:textColor="@color/colorTextAqua"
                 android:textAlignment="center"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                android:paddingTop="10dp"
                 android:layout_alignParentTop="true" />
 
             <TimePicker
@@ -76,21 +76,23 @@
                 android:layout_centerVertical="true" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="@string/everyday_for_next"
+                android:textAlignment="center"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:id="@+id/tvEveryDayWakeUp"
                 android:layout_above="@+id/tvDays"
                 android:layout_centerHorizontal="true" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/_21_days"
                 android:id="@+id/tvDays"
+                android:text="@string/_21_days"
                 android:textSize="20sp"
+                android:textAlignment="center"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:paddingBottom="10dp"
                 android:textColor="@color/colorTextAqua"
                 android:layout_alignParentBottom="true"
