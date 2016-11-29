@@ -18,9 +18,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         String alarmID      = intent.getStringExtra("alarmID");
 //        int notifyInt = intent.getIntExtra("notifyIntent", 228);
 
-        Log.d(TAG, "onReceive: AlarmReceiver:"
-                + "\ninProgressId: " + inProgressId
-                + "\nalarmID : " + alarmID);
+        Log.d(TAG, "onReceive: AlarmReceiver:" + "\ninProgressId: " + inProgressId + "\nalarmID : " + alarmID);
 
         Intent alarmIntent = new Intent();
         alarmIntent.setClassName("com.example.ivan.champy_v2", "com.example.ivan.champy_v2.activity.AlarmReceiverActivity");

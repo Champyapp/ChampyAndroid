@@ -91,19 +91,19 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
 //        }
         switch (itemRowType) {
             case "Self-Improvement":
-                nameTextView.setText("Self-Imrovement");
+                nameTextView.setText("Self-Improvement");
                 break;
             case "Duel":
                 nameTextView.setText("Duel challenge");
                 break;
             case "Wake Up":
-                nameTextView.setText("Wake Up");
+                nameTextView.setText("Wake Up challenge");
 
         }
         nameTextView.setTypeface(typeFace);
 
         Glide.with(mContext).load(R.drawable.challenges).override(40, 40).into(viewHolder.wins);
-        Glide.with(mContext).load(R.drawable.challenge) .override(40, 40).into(viewHolder.total);
+        Glide.with(mContext).load(R.drawable.total) .override(40, 40).into(viewHolder.total);
 
     }
 
