@@ -45,6 +45,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     private SessionManager sessionManager;
     private OfflineMode offlineMode;
     private String token, id;
+    private int inProgressCounter;
     private Context context;
     private Activity activity;
     private ArrayList<Integer> selected = new ArrayList<>();
@@ -90,10 +91,9 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
         sessionManager = new SessionManager(context);
         offlineMode = new OfflineMode();
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        token = user.get("token");
-        id = user.get("id");
+        token = sessionManager.getToken();
+        id = sessionManager.getUserId();
+        inProgressCounter = Integer.parseInt(sessionManager.getChampyOptions().get("challenges"));
 
         return viewHolder;
     }
@@ -227,7 +227,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         viewHolder.block.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OfflineMode offlineMode = new OfflineMode();
                 if (offlineMode.isConnectedToRemoteAPI(activity)) {
                     String friend = mContacts.get(position).getID();
                     Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.API_URL).addConverterFactory(GsonConverterFactory.create()).build();
@@ -257,8 +256,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         imageButtonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CurrentUserHelper user = new CurrentUserHelper(context);
-                int inProgressCounter = Integer.parseInt(user.getInProgressCount());
                 if (offlineMode.isConnectedToRemoteAPI(activity) && inProgressCounter < 5) {
                     Intent intent = new Intent(context, DuelActivity.class);
                     intent.putExtra("photo", contact.getPicture());
@@ -274,12 +271,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
     }
 
-//    @Override // refresh page
-//    public void unregisterAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
-//        super.unregisterAdapterDataObserver(observer);
-//        //new ProgressTask().execute();
-//        Log.d(TAG, "unregisterAdapterDataObserver: ");
-//    }
 
     @Override
     public int getItemCount() {

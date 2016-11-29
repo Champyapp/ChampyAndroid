@@ -37,16 +37,18 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
+import static com.example.ivan.champy_v2.utils.Constants.API_URL;
+
 public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHolder> {
 
-    private static final String API_URL = "http://46.101.213.24:3007";
-    private final String TAG = "PendingAdapter";
+    private final String TAG = PendingAdapter.class.getSimpleName();
     private List<Pending_friend> mContacts;
     private String token, id;
     private Context context;
     private Activity activity;
     private CustomItemClickListener listener;
     private SessionManager sessionManager;
+    private Retrofit retrofit;
     private OfflineMode offlineMode;
     private ArrayList<Integer> selected = new ArrayList<>();
 
@@ -97,15 +99,14 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
 
         sessionManager = new SessionManager(context);
         offlineMode = new OfflineMode();
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        token = user.get("token");
-        id = user.get("id");
+        token = sessionManager.getToken();
+        id = sessionManager.getUserId();
+
+        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+
 
         return viewHolder;
     }
-
-    // TODO: 14.11.2016 в іфі убрати кеш і зробити шоб там загружало завжди нову...
 
     @Override
     public void onBindViewHolder(final PendingAdapter.ViewHolder viewHolder, final int position) {
@@ -250,19 +251,12 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
             @Override
             public void onClick(View v) {
                 if (offlineMode.isConnectedToRemoteAPI(activity)) {
-
                     String friend = mContacts.get(position).getID();
-                    Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-
-                    Log.d(TAG, "Status: " + id + " " + friend);
-
                     com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
                     Call<com.example.ivan.champy_v2.model.friend.Friend> call = friends.removeFriend(id, friend, token);
                     call.enqueue(new Callback<com.example.ivan.champy_v2.model.friend.Friend>() {
                         @Override
                         public void onResponse(Response<com.example.ivan.champy_v2.model.friend.Friend> response, Retrofit retrofit) {
-                            if (response.isSuccess()) Log.d(TAG, "Status: Removed ");
-                            else Log.d(TAG, "Status: " + response.toString());
                             String myLog = (response.isSuccess()) ? "Status: Removed" : "Status: " + response.toString();
                             Log.d(TAG, "onResponse: " + myLog);
                         }
@@ -286,9 +280,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
             public void onClick(View v) {
                 if (offlineMode.isConnectedToRemoteAPI(activity)) {
                     String friend = mContacts.get(position).getID();
-                    Log.d(TAG, "User: " + friend);
                     if (friend != null) {
-                        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
                         sessionManager.setRefreshFriends("false");
                         sessionManager.setRefreshPending("false");
                         DBHelper dbHelper = new DBHelper(context);
@@ -321,26 +313,6 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
 
     }
 
-//    @Override
-//    public void onViewRecycled(ViewHolder holder) {
-//        super.onViewRecycled(holder);
-//        Log.d(TAG, "onViewRecycled: ");
-//    }
-//
-//    @Override
-//    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
-//        super.onDetachedFromRecyclerView(recyclerView);
-//        //new ProgressTask().execute();
-//        Log.d(TAG, "onDetachedFromRecyclerView: ");
-//    }
-//
-//
-//    @Override
-//    public void unregisterAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
-//        super.unregisterAdapterDataObserver(observer);
-//        //new ProgressTask().execute();
-//        Log.d(TAG, "unregisterAdapterDataObserver: ");
-//    }
 
     @Override
     public int getItemCount() {
@@ -387,25 +359,6 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
 
     }
 
-
-    private class ProgressTask extends AsyncTask<Void,Void,Void> {
-        @Override
-        protected void onPreExecute() {
-
-        }
-
-        @Override
-        protected Void doInBackground(Void... arg0) {
-            Glide.get(context).clearDiskCache();
-            Glide.get(context).clearMemory();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-        }
-
-    }
 
 
 }

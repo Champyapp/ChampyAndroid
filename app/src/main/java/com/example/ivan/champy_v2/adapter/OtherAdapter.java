@@ -37,14 +37,18 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
+import static com.example.ivan.champy_v2.utils.Constants.API_URL;
+
 public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> {
 
-    final private String API_URL = "http://46.101.213.24:3007";
-    final private String TAG = "myLogs";
+    final private String TAG = OtherAdapter.class.getSimpleName();
     private com.facebook.CallbackManager CallbackManager;
     private SessionManager sessionManager;
     private List<FriendModel> mContacts;
     private OfflineMode offlineMode;
+    private Retrofit retrofit;
+    private SQLiteDatabase db;
+    private ContentValues cv;
     private String token, id;
     private Activity activity;
     private Typeface typeFace;
@@ -82,7 +86,6 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
                 if (selected.isEmpty()) {
                     selected.add(viewHolder.getAdapterPosition());
                     notifyItemChanged(viewHolder.getAdapterPosition());
-
                 } else {
                     int oldSelected = selected.get(0);
                     selected.clear();
@@ -96,10 +99,14 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
 
         sessionManager = new SessionManager(context);
         offlineMode = new OfflineMode();
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        token = user.get("token");
-        id = user.get("id");
+        token = sessionManager.getToken();
+        id = sessionManager.getUserId();
+
+        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        DBHelper dbHelper = new DBHelper(context);
+        db = dbHelper.getWritableDatabase();
+        cv = new ContentValues();
+
 
         return viewHolder;
     }
@@ -246,14 +253,8 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
                 if (offlineMode.isConnectedToRemoteAPI(activity)) {
                     String friend = mContacts.get(position).getID();
                     if (friend != null) {
-                        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-                        DBHelper dbHelper = new DBHelper(context);
-                        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-                        final ContentValues cv = new ContentValues();
-
                         //щоб воно не обновляло (і дублювало) лист друзів після додавання когось, то має бути false
                         sessionManager.setRefreshPending("false");
-
                         com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(Friends.class);
                         Call<com.example.ivan.champy_v2.model.friend.Friend> call = friends.sendFriendRequest(id, friend, token);
                         call.enqueue(new Callback<com.example.ivan.champy_v2.model.friend.Friend>() {
@@ -279,28 +280,13 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
                         mContacts.remove(position);
                         notifyItemRemoved(position);
                         selected.clear();
-
+                    }
                 }
             }
-        }
-//                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//                        builder.setMessage("Do you want add this user to your friends list?")
-//                                .setPositiveButton("Yes", dialogClickListener)
-//                                .setNegativeButton("No", dialogClickListener)
-//                                .show();
-//                    }
-//                }
-//            }
-});
+        });
 
     }
 
-//    @Override
-//    public void unregisterAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
-//        super.unregisterAdapterDataObserver(observer);
-//        //new ProgressTask().execute();
-//        Log.d(TAG, "unregisterAdapterDataObserver: ");
-//    }
 
     @Override
     public int getItemCount() {
@@ -354,22 +340,5 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
 
     }
 
-
-    private class ProgressTask extends AsyncTask<Void,Void,Void> {
-        @Override
-        protected void onPreExecute() {
-
-        }
-
-        @Override
-        protected Void doInBackground(Void... arg0) {
-            Glide.get(context).clearDiskCache();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-        }
-    }
 
 }
