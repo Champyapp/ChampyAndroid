@@ -55,6 +55,7 @@ import static java.lang.Math.round;
 
 public class DuelActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private SessionManager sessionManager;
     private NavigationView navigationView;
     private View spinner;
 
@@ -62,6 +63,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_duel);
+        sessionManager = new SessionManager(this);
 
         new ProgressTask().execute();
 
@@ -71,7 +73,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         if(extras == null) {
             Uri uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/icon_champy");
             friendsPhoto = uri.toString();
-            name = "";
+            name = "Your friend";
         } else {
             friendsPhoto = extras.getString("photo");
             name = extras.getString("name");
@@ -102,7 +104,6 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
 
         CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
         name = user.getName();
-        @SuppressLint("SdCardPath")
         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
@@ -113,52 +114,21 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         drawerUserName.setText(name);
         drawerUserName.setTypeface(typeface);
 
-        Glide.with(this)
-                .load(friendsPhoto)
-                .centerCrop()
-                .into((ImageView)findViewById(R.id.imageFriendsPhoto));
-
-        Glide.with(this)
-                .load(url)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(imageMyPhoto);
-
-        Glide.with(this)
-                .load(url)
-                .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(drawerImageProfile);
+        Glide.with(this).load(friendsPhoto).centerCrop().into((ImageView)findViewById(R.id.imageFriendsPhoto));
+        Glide.with(this).load(url).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(imageMyPhoto);
+        Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
 
         try {
             drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            drawerBackground.setImageDrawable(getPhotoForDrawerBackground());
-        } catch (FileNotFoundException e) { e.printStackTrace(); }
-
-        this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                getChallenges();
-            }
-        });
-
-    }
-
-    @SuppressLint("SetTextI18n")
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        final CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
-        int count = checker.getPendingCount();
-        if (count == 0) {
-            checker.hideItem();
-        } else {
-            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+            drawerBackground.setImageDrawable(getPhotoForDrawerBackground(path));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
+
+
     }
+
 
     @Override
     public void onBackPressed() {
@@ -170,7 +140,6 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -203,7 +172,6 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_logout:
                 OfflineMode offlineMode = new OfflineMode();
-                SessionManager sessionManager = new SessionManager(this);
                 if (offlineMode.isConnectedToRemoteAPI(this)) {
                     sessionManager.logout(this);
                 }
@@ -269,9 +237,8 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    private Drawable getPhotoForDrawerBackground() throws FileNotFoundException {
+    private Drawable getPhotoForDrawerBackground(String pathToPic) throws FileNotFoundException {
         @SuppressLint("SdCardPath")
-        String pathToPic = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(pathToPic, "blured2.jpg");
         Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
         Drawable dr = new BitmapDrawable(getResources(), bitmap);
@@ -293,13 +260,24 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
                 @Override
                 public void run() {
                     getChallenges();
+
+                    final CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+                    int count = checker.getPendingCount();
+                    if (count == 0) {
+                        checker.hideItem();
+                    } else {
+                        TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+                        view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+                    }
                 }
+
             });
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
+
         }
 
     }

@@ -39,11 +39,11 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
     private int size;
     public View spinner;
 
-    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pending__duel);
+
         new ProgressTask().execute();
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -85,24 +85,6 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         } catch (FileNotFoundException e) { e.printStackTrace(); }
 
         spinner.setVisibility(View.INVISIBLE);
-    }
-
-    @SuppressLint("SetTextI18n")
-    @Override
-    public void onStart() {
-        super.onStart();
-        OfflineMode offlineMode = new OfflineMode();
-        offlineMode.isConnectedToRemoteAPI(this);
-
-        final CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
-        int count = checker.getPendingCount();
-        if (count == 0) {
-            checker.hideItem();
-        } else {
-            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
-        }
-
     }
 
     @Override
@@ -180,6 +162,16 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
                     viewPager.setPageMargin(20);
                     viewPager.setClipToPadding(false);
                     viewPager.setPadding(90, 0, 90, 0);
+
+                    final CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+                    int count = checker.getPendingCount();
+                    if (count == 0) {
+                        checker.hideItem();
+                    } else {
+                        TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+                        view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+                    }
+
                 }
             });
             return null;

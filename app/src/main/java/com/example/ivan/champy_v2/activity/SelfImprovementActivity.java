@@ -2,6 +2,7 @@ package com.example.ivan.champy_v2.activity;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
@@ -49,6 +50,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
 
     public static final String TAG = "SelfImprovementActivity";
     private NavigationView navigationView;
+    private SessionManager sessionManager;
     public View spinner;
 
     @Override
@@ -56,6 +58,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_self_improvement);
+        sessionManager = new SessionManager(getApplicationContext());
 
         new ProgressTask().execute();
 
@@ -139,7 +142,6 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
                 break;
             case R.id.nav_logout:
                 OfflineMode offlineMode = new OfflineMode();
-                SessionManager sessionManager = new SessionManager(this);
                 if (offlineMode.isConnectedToRemoteAPI(this)) {
                     sessionManager.logout(this);
                 }
@@ -148,23 +150,6 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @SuppressLint("SetTextI18n")
-    @Override
-    public void onStart() {
-        super.onStart();
-        OfflineMode offlineMode = new OfflineMode();
-        offlineMode.isConnectedToRemoteAPI(this);
-
-        final CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
-        int count = checker.getPendingCount();
-        if (count == 0) {
-            checker.hideItem();
-        } else {
-            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
-        }
     }
 
     @Override
@@ -187,7 +172,6 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         final ContentValues cv = new ContentValues();
         final String API_URL = "http://46.101.213.24:3007";
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        final SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user;
         user = sessionManager.getUserDetails();
         String token = user.get("token");
@@ -255,6 +239,14 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
 
         @Override
         protected void onPostExecute(Void result) {
+            final CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+            int count = checker.getPendingCount();
+            if (count == 0) {
+                checker.hideItem();
+            } else {
+                TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+                view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+            }
         }
 
     }

@@ -24,8 +24,6 @@ public class SelfImprovement_model {
     private String wakeUpTime;
     private String needsToCheck;
     private String constDuration;
-//    private String needsToCheckSender;
-//    private String needsToCheckRecipient;
 
     /**
      * setters
@@ -53,14 +51,6 @@ public class SelfImprovement_model {
     public void setProgress(String progress) {
         this.progress = progress;
     }
-
-//    public void setNeedsToCheckRecipient(String needsToCheckRecipient) {
-//        this.needsToCheckRecipient = needsToCheckRecipient;
-//    }
-
-//    public void setNeedsToCheckSender(String needsToCheckSender) {
-//        this.needsToCheckSender = needsToCheckSender;
-//    }
 
     public void setUpdated(String updated) {
         this.updated = updated;
@@ -97,11 +87,6 @@ public class SelfImprovement_model {
     /**
      * getters
      */
-
-
-    //public String getNeedsToCheckRecipient() { return needsToCheckRecipient; }
-
-    //public String getNeedsToCheckSender() { return needsToCheckSender; }
 
 
     public String getConstDuration() {
@@ -161,7 +146,7 @@ public class SelfImprovement_model {
     }
 
     // constructor :P
-    private SelfImprovement_model(String mGoal, String mDays, String mType, String mId, String mStatus, String mUpdated,
+    private SelfImprovement_model(String mGoal, String mDays, String mType, String mId, String mStatus,
                                   String mChallengeName, String versus, String recipient, String senderProgress,
                                   String wakeUpTime, String constDuration, String needsToCheck) {
         this.goal = mGoal;
@@ -169,7 +154,6 @@ public class SelfImprovement_model {
         this.type = mType;
         this.id = mId;
         this.status = mStatus;
-        this.updated = mUpdated;
         this.challengeName = mChallengeName;
         this.versus = versus;
         this.recipient = recipient;
@@ -195,7 +179,6 @@ public class SelfImprovement_model {
             int colduration       = c.getColumnIndex("duration");
             int colchallenge_id   = c.getColumnIndex("challenge_id");
             int status            = c.getColumnIndex("status");
-            int updated           = c.getColumnIndex("updated");
             int challengeName     = c.getColumnIndex("challengeName");
             int colversus         = c.getColumnIndex("versus");
             int colrecipient      = c.getColumnIndex("recipient");
@@ -211,7 +194,6 @@ public class SelfImprovement_model {
                         c.getString(nameColIndex),
                         c.getString(colchallenge_id),
                         "started",
-                        c.getString(updated),
                         c.getString(challengeName),
                         c.getString(colversus),
                         c.getString(colrecipient),
@@ -239,7 +221,6 @@ public class SelfImprovement_model {
             int colduration       = c.getColumnIndex("duration");
             int colchallenge_id   = c.getColumnIndex("challenge_id");
             int status            = c.getColumnIndex("status");
-            int updated           = c.getColumnIndex("updated");
             int challengeName     = c.getColumnIndex("challengeName");
             int colversus         = c.getColumnIndex("versus");
             int colrecipient      = c.getColumnIndex("recipient");
@@ -256,7 +237,6 @@ public class SelfImprovement_model {
                                 c.getString(nameColIndex),
                                 c.getString(colchallenge_id),
                                 "finished",
-                                c.getString(updated),
                                 c.getString(challengeName),
                                 c.getString(colversus),
                                 c.getString(colrecipient),
@@ -273,7 +253,6 @@ public class SelfImprovement_model {
                                 c.getString(nameColIndex),
                                 c.getString(colchallenge_id),
                                 "finished",
-                                c.getString(updated),
                                 c.getString(challengeName),
                                 c.getString(colversus),
                                 c.getString(colrecipient),
@@ -289,7 +268,6 @@ public class SelfImprovement_model {
                                 c.getString(nameColIndex),
                                 c.getString(colchallenge_id),
                                 "finished",
-                                c.getString(updated),
                                 c.getString(challengeName),
                                 c.getString(colversus),
                                 c.getString(colrecipient),
@@ -320,7 +298,6 @@ public class SelfImprovement_model {
             int colduration       = c.getColumnIndex("duration");
             int colchallenge_id   = c.getColumnIndex("challenge_id");
             int status            = c.getColumnIndex("status");
-            int updated           = c.getColumnIndex("updated");
             int challengeName     = c.getColumnIndex("challengeName");
             int colversus         = c.getColumnIndex("versus");
             int colrecipient      = c.getColumnIndex("recipient"); // check recipient
@@ -338,7 +315,6 @@ public class SelfImprovement_model {
                                 c.getString(nameColIndex),
                                 c.getString(colchallenge_id),
                                 "failed",
-                                c.getString(updated),
                                 c.getString(challengeName),
                                 c.getString(colversus),
                                 c.getString(colrecipient),
@@ -356,7 +332,6 @@ public class SelfImprovement_model {
                                 c.getString(nameColIndex),
                                 c.getString(colchallenge_id),
                                 "failed",
-                                c.getString(updated),
                                 c.getString(challengeName),
                                 c.getString(colversus),
                                 c.getString(colrecipient),

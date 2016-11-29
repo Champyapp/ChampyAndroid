@@ -486,7 +486,7 @@ public class ChallengeController {
                         String challenge_id          = datum.get_id();               // im progress id
                         String challenge_type        = challenge.getType();          // 567d51c48322f85870fd931a / b / c
                         String challenge_name        = challenge.getName();          // wake up (time / self / duel
-                        String challenge_updated     = isUpdated(challenge_id);      // bool check method;
+                        //String challenge_updated     = isUpdated(challenge_id);      // bool check method;
                         String challenge_duration = "";
                         String constDuration = "";
                         List<Object> progress;
@@ -529,7 +529,7 @@ public class ChallengeController {
                         cv.put("duration", challenge_duration); // duration of challenge
                         cv.put("challenge_id", challenge_id); // in progress id
                         cv.put("status", challenge_status); // active or not
-                        cv.put("updated", challenge_updated); // true or false (need to delete)
+                        //cv.put("updated", challenge_updated); // true or false (need to delete)
                         cv.put("myProgress", Arrays.toString(stringSenderProgress)); // last update time in millis
                         cv.put("constDuration", constDuration); // our constant value of challenge duration
                         cv.put("needsToCheck", needsToCheck); // method for check challenge for "needToCheck"
@@ -553,35 +553,35 @@ public class ChallengeController {
     }
 
 
-
-    // method which returns our last update information (true or false);
-    private String isUpdated(String challenge_id) {
-        DBHelper dbHelper = new DBHelper(context);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Cursor c = db.query("updated", null, null, null, null, null, null);
-        String lastUpdate = "false";
-        if (c.moveToFirst()) {
-            int colchallenge_id = c.getColumnIndex("challenge_id");
-            do {
-                // в методе "sendSingleForDuel мы засовываем challenge_id в колонку "challenge_id" в
-                // таблице "updated", а тут мы ее проверяем. если она есть, то вернуть true для
-                // дуелей, если её здесь нету, то возвращаем "false" - это для wake-up и
-                // self-improvement челенджей. Соответственно данные про update time для дуелей
-                // находятся в таблице "updated", а для отсального в таблице "myChallenges".
-                try {
-                    if (c.getString(colchallenge_id).equals(challenge_id)) {
-                        lastUpdate = c.getString(c.getColumnIndex("updated"));
-                        return lastUpdate;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.d(TAG, "isUpdated: vse xyuinja: " + e.getMessage());
-                }
-            } while (c.moveToNext());
-        }
-        c.close();
-        return lastUpdate;
-    }
+//
+//    // method which returns our last update information (true or false);
+//    private String isUpdated(String challenge_id) {
+//        DBHelper dbHelper = new DBHelper(context);
+//        SQLiteDatabase db = dbHelper.getWritableDatabase();
+//        Cursor c = db.query("updated", null, null, null, null, null, null);
+//        String lastUpdate = "false";
+//        if (c.moveToFirst()) {
+//            int colchallenge_id = c.getColumnIndex("challenge_id");
+//            do {
+//                // в методе "sendSingleForDuel мы засовываем challenge_id в колонку "challenge_id" в
+//                // таблице "updated", а тут мы ее проверяем. если она есть, то вернуть true для
+//                // дуелей, если её здесь нету, то возвращаем "false" - это для wake-up и
+//                // self-improvement челенджей. Соответственно данные про update time для дуелей
+//                // находятся в таблице "updated", а для отсального в таблице "myChallenges".
+//                try {
+//                    if (c.getString(colchallenge_id).equals(challenge_id)) {
+//                        lastUpdate = c.getString(c.getColumnIndex("updated"));
+//                        return lastUpdate;
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    Log.d(TAG, "isUpdated: vse xyuinja: " + e.getMessage());
+//                }
+//            } while (c.moveToNext());
+//        }
+//        c.close();
+//        return lastUpdate;
+//    }
 
     // method for check is active challenge self / duel
     public boolean isActive(String description) {

@@ -167,15 +167,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         contactUs.setOnClickListener(this);
         tvChangeName.setOnClickListener(this);
 
-        ViewServer.get(this).addWindow(this);
-    }
-
-    @SuppressLint("SetTextI18n")
-    @Override
-    public void onStart() {
-        super.onStart();
-        OfflineMode offlineMode = new OfflineMode();
-        offlineMode.isConnectedToRemoteAPI(this);
         final CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
         int count = checker.getPendingCount();
         if (count == 0) {
@@ -184,6 +175,14 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             TextView pendingCount = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
             pendingCount.setText("+" + (count > 0 ? String.valueOf(count) : null));
         }
+
+        ViewServer.get(this).addWindow(this);
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 
     @Override

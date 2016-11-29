@@ -1,7 +1,6 @@
 package com.example.ivan.champy_v2.activity;
 
 import android.annotation.SuppressLint;
-import android.app.AlarmManager;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -27,6 +26,7 @@ import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
+import com.example.ivan.champy_v2.utils.Constants;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
 
@@ -35,15 +35,13 @@ import java.io.FileNotFoundException;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
+import static com.example.ivan.champy_v2.utils.Constants.typeWake;
+
 public class WakeUpActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
-    public final static String API_URL = "http://46.101.213.24:3007";
-    public final static String type_id = "567d51c48322f85870fd931c";
-    private NavigationView navigationView;
-    private OfflineMode offlineMode;
-    private String userId, token;
     private TimePicker alarmTimePicker;
-    private CurrentUserHelper user;
+    private OfflineMode offlineMode;
+    private ChallengeController cc;
     private Snackbar snackbar;
 
     @Override
@@ -62,7 +60,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         toggle.setDrawerIndicatorEnabled(true);
         toggle.syncState();
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -83,13 +81,15 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         Glide.with(this).load(R.drawable.wakeupwhite).override(110, 110).into((ImageView) findViewById(R.id.imageViewLogo));
         Glide.with(this).load(R.drawable.wakeuptext).override(180, 150).into((ImageView) findViewById(R.id.imageWakeUpChall));
 
-        @SuppressLint("SdCardPath")
         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
 
-        user = new CurrentUserHelper(getApplicationContext());
+        CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
         String userName = user.getName();
+        String userID = user.getUserObjectId();
+        String token = user.getToken();
+        cc = new ChallengeController(this, this, token, userID);
         drawerUserName.setText(userName);
         drawerUserName.setTypeface(typeface);
 
@@ -103,22 +103,24 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
             e.printStackTrace();
         }
 
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarmTimePicker = (TimePicker) findViewById(R.id.timePicker);
         ImageButton imageButton = (ImageButton) findViewById(R.id.imageButtonAccept);
+        imageButton.setOnClickListener(this);
 
         offlineMode = new OfflineMode();
-        if (offlineMode.isConnectedToRemoteAPI(WakeUpActivity.this)) {
-            imageButton.setOnClickListener(this);
+        final CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+        int count = checker.getPendingCount();
+        if (count == 0) {
+            checker.hideItem();
+        } else {
+            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
         }
+
     }
 
     @Override
     public void onClick(final View v) {
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.set(Calendar.HOUR_OF_DAY, alarmTimePicker.getHour());
-//        calendar.set(Calendar.MINUTE, alarmTimePicker.getMinute());
-
         final int pickedHour = alarmTimePicker.getCurrentHour();
         final int picketMin = alarmTimePicker.getCurrentMinute();
 
@@ -132,38 +134,21 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         final String finalSHour = sHour;
         final String finalSMinute = sMinute;
 
-        userId = user.getUserObjectId();
-        token  = user.getToken();
-
-        final ChallengeController cc = new ChallengeController(this, this, token, userId);
         final boolean ok = cc.isActiveWakeUp(sHour + sMinute);
-
-        snackbar = Snackbar.make(v, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes!", new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (ok) {
-                    cc.createNewWakeUpChallenge(21, type_id, finalSHour, finalSMinute);
-                    snackbar = Snackbar.make(view, "Challenge Created!", Snackbar.LENGTH_SHORT);
-                } else {
-                    snackbar = Snackbar.make(view, "Already Exist!", Snackbar.LENGTH_SHORT);
+        if (offlineMode.isConnectedToRemoteAPI(WakeUpActivity.this)) {
+            snackbar = Snackbar.make(v, R.string.are_you_sure, Snackbar.LENGTH_LONG).setAction(R.string.yes, new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (ok) {
+                        cc.createNewWakeUpChallenge(21, typeWake, finalSHour, finalSMinute);
+                        snackbar = Snackbar.make(view, R.string.challenge_created, Snackbar.LENGTH_SHORT);
+                    } else {
+                        snackbar = Snackbar.make(view, R.string.cant_create_this_challenge, Snackbar.LENGTH_SHORT);
+                    }
+                    snackbar.show();
                 }
-                snackbar.show();
-            }
-        });
-        snackbar.show();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        offlineMode.isConnectedToRemoteAPI(this);
-        final CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
-        int count = checker.getPendingCount();
-        if (count == 0) {
-            checker.hideItem();
-        } else {
-            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+            });
+            snackbar.show();
         }
     }
 
@@ -179,7 +164,6 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         }
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {

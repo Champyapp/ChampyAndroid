@@ -83,15 +83,15 @@ public class HistoryFailedFragment extends Fragment {
                     arr = new ArrayList<>();
                     for (int i = 0; i < self_improvement.size(); i++) {
                         SelfImprovement_model item = self_improvement.get(i);
+                        String challengeName = item.getChallengeName();
+                        String constDuration = item.getConstDuration();
+                        String recipient = item.getRecipient();
                         String description = item.getGoal();
                         String duration = item.getDays();
+                        String versus = item.getVersus();
                         String status = item.getStatus();
                         String type = item.getType();
                         String goal = item.getGoal();
-                        String challengeName = item.getChallengeName();
-                        String versus = item.getVersus();
-                        String recipient = item.getRecipient();
-                        String constDuration = item.getConstDuration();
 
                         arr.add(new HistoryChallenge(
                                 type, false, description, duration, status, goal, challengeName, versus, recipient, constDuration

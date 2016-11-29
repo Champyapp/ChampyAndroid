@@ -133,6 +133,16 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
             e.printStackTrace();
         }
 
+        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+        int count = checker.getPendingCount();
+
+        if (count == 0) {
+            checker.hideItem();
+        } else {
+            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+        }
+
 //        CHGetFacebookFriends getFacebookFriends = new CHGetFacebookFriends(getApplicationContext());
 //        getFacebookFriends.getUserFacebookFriends(gcm);
 
@@ -150,23 +160,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         ViewServer.get(this).addWindow(this);
     }
 
-    @SuppressLint("SetTextI18n")
-    @Override
-    public void onStart() {
-        super.onStart();
-        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
-        int count = checker.getPendingCount();
-
-        if (count == 0) {
-            checker.hideItem();
-        } else {
-            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
-        }
-
-        offlineMode = new OfflineMode();
-        offlineMode.isConnectedToRemoteAPI(this);
-    }
 
     @Override
     public void onBackPressed()  {
@@ -201,11 +194,11 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                 startActivity(goToPendingDuel);
                 break;
             case R.id.share:
-                String message = "Check out Champy - it helps you improve and compete with your friends!";
+                String message = getString(R.string.share_text2);
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 share.putExtra(Intent.EXTRA_TEXT, message);
-                startActivity(Intent.createChooser(share, "How would you like to share?"));
+                startActivity(Intent.createChooser(share, getString(R.string.how_would_you_like_to_share)));
                 break;
             case R.id.nav_logout:
                 if (offlineMode.isConnectedToRemoteAPI(this)) {

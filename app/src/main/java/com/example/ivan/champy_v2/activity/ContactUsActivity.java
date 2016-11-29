@@ -96,12 +96,7 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         inputSubject.addTextChangedListener(new MyTextWatcher(inputSubject));
         inputMessage.addTextChangedListener(new MyTextWatcher(inputMessage));
         buttonSend.setOnClickListener(this);
-    }
 
-    @SuppressLint("SetTextI18n")
-    @Override
-    protected void onStart() {
-        super.onStart();
         final CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
         int count = checker.getPendingCount();
         if (count == 0) {

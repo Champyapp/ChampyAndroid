@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -87,6 +88,7 @@ public class PhotoActivity extends AppCompatActivity {
         });
     }
 
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK){
             if (requestCode == CAMERA_REQUEST ) {
@@ -119,7 +121,9 @@ public class PhotoActivity extends AppCompatActivity {
         }
     }
 
-    public String getPath(Uri uri) throws URISyntaxException {
+
+    @Nullable
+    private String getPath(Uri uri) throws URISyntaxException {
         if ("content".equalsIgnoreCase(uri.getScheme())) {
             String[] projection = { "_data" };
             Cursor cursor;
@@ -143,10 +147,12 @@ public class PhotoActivity extends AppCompatActivity {
         return null;
     }
 
+
     private void beginCrop(Uri source) {
         Uri destination = Uri.fromFile(new File(getCacheDir(), "cropped"));
         Crop.of(source, destination).asSquare().withMaxSize(300, 300).start(this);
     }
+
 
     private void handleCrop(int resultCode, Intent result) throws IOException {
         if (resultCode == RESULT_OK) {
@@ -165,6 +171,7 @@ public class PhotoActivity extends AppCompatActivity {
             Toast.makeText(this, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
+
 
     private String SaveFromCamera(Bitmap finalBitmap) {
         String root = Environment.getExternalStorageDirectory().toString();
@@ -185,6 +192,7 @@ public class PhotoActivity extends AppCompatActivity {
 
         return (Uri.fromFile(file).getPath());
     }
+
 
     public void savePhoto (Bitmap photo) {
         File profileImage = new File(path, "profile.jpg");
@@ -230,6 +238,7 @@ public class PhotoActivity extends AppCompatActivity {
         }
     }
 
+
     private void performCrop(Uri picUri) {
         // take care of exceptions
         try {
@@ -257,6 +266,7 @@ public class PhotoActivity extends AppCompatActivity {
             toast.show();
         }
     }
+
 
     public void Upload_photo(String path) {
         final String API_URL = "http://46.101.213.24:3007";

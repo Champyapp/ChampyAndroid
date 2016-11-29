@@ -186,19 +186,18 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 
         if (myProgress != 0L && now > progressMidNight + oneDay) {
             // it's mean "self" and "duel"
-            DBHelper dbHelper = new DBHelper(getContext());
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
-            ContentValues cv = new ContentValues();
-            cv.put("updated", "false"); // was true
-            db.update("updated",      cv, "challenge_id = ?", new String[]{itemInProgressId});
-            db.update("myChallenges", cv, "challenge_id = ?", new String[]{itemInProgressId});
+//            DBHelper dbHelper = new DBHelper(getContext());
+//            SQLiteDatabase db = dbHelper.getWritableDatabase();
+//            ContentValues cv = new ContentValues();
+//            cv.put("updated", "false"); // was true
+//            db.update("updated",      cv, "challenge_id = ?", new String[]{itemInProgressId});
+//            db.update("myChallenges", cv, "challenge_id = ?", new String[]{itemInProgressId});
 
 //            if (!itemType.equals("Wake Up")) {
 //                tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
 //                buttonShare.setVisibility(View.INVISIBLE);
 //                buttonDone.setVisibility(View.VISIBLE);
 //            }
-
             if (now > progressMidNight + oneDay + oneDay) {
                 try {
                     if (itemType.equals("Wake Up")) {

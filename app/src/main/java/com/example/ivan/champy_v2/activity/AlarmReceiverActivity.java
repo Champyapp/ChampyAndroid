@@ -36,7 +36,6 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
     public Context context;
     public Activity activity;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +101,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
                 break;
         }
     }
+
 
     private void playSound(Context context, Uri alert) {
         mMediaPlayer = new MediaPlayer();

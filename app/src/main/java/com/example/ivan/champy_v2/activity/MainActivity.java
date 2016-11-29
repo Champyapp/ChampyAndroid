@@ -58,13 +58,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String TAG = "MainActivity";
     private static long mLastClickTime = 0;
     private SubActionButton buttonWakeUpChallenge, buttonDuelChallenge, buttonSelfImprovement;
+    private ImageView background, actionButton, blurScreen;
     private MainActivityCardsAdapter adapter;
     private FloatingActionMenu actionMenu;
     private NavigationView navigationView;
-    private RelativeLayout cards;
-    private ImageView blurScreen;
-    private Toolbar toolbar;
+    private TextView  drawerUserName;
+    private RelativeLayout cards, contentMain;
     private View headerLayout;
+    public String pathToPic;
     //private CHSocket sockets;
 
     // TODO: 17.11.2016 Создати метод "updateUI", засунути туда створення карточок і визивати це
@@ -76,21 +77,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FacebookSdk.sdkInitialize(getApplicationContext());
         Log.d(TAG, "onCreate: ");
         setContentView(R.layout.activity_main);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_gradient));
         setSupportActionBar(toolbar);
+
+        new asyncLoadPhotoForBackground().execute();
 
         cards = (RelativeLayout) findViewById(R.id.cards);
         adapter = new MainActivityCardsAdapter(this, SelfImprovement_model.generate(this));
         if (adapter.dataCount() > 0) {
-            CustomPagerBase pager = new CustomPagerBase(this, cards, adapter);
+            CustomPagerBase pager = new CustomPagerBase(MainActivity.this, cards, adapter);
             pager.preparePager(0);
         }
 
-        new animationLoader().execute();
-
-        final ImageButton actionButton = (ImageButton) findViewById(R.id.fabPlus);
-        final SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
+        actionButton = (ImageButton) findViewById(R.id.fabPlus);
+        final SubActionButton.Builder itemBuilder = new SubActionButton.Builder(MainActivity.this);
         buttonWakeUpChallenge = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeupcolor)).build();
         buttonDuelChallenge = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.duel_yellow)).build();
         buttonSelfImprovement = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.self_yellow)).build();
@@ -105,30 +107,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         buttonSelfImprovement.getLayoutParams().height = x * 20;
         buttonSelfImprovement.getLayoutParams().width = x * 20;
 
-        actionMenu = new FloatingActionMenu.Builder(this).addSubActionView(buttonWakeUpChallenge)
+        actionMenu = new FloatingActionMenu.Builder(MainActivity.this).addSubActionView(buttonWakeUpChallenge)
                 .addSubActionView(buttonDuelChallenge).addSubActionView(buttonSelfImprovement)
                 .setRadius(350).attachTo(actionButton).build();
-
-        actionButton.setOnClickListener(this);
+        actionButton.setOnClickListener(MainActivity.this);
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        ViewServer.get(this).addWindow(this);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart: ");
+        navigationView.setNavigationItemSelectedListener(MainActivity.this);
 
         CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
         String pathToPic = user.getPathToPic();
         String name = user.getName();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
@@ -142,36 +135,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (pathToPic == null) pathToPic = getIntent().getExtras().getString("path_to_pic");
 
-        ImageView drawerBackground = (ImageView)headerLayout.findViewById(R.id.slide_background);
-        ImageView drawerUserPhoto = (ImageView)headerLayout.findViewById(R.id.profile_image);
-        ImageView background = (ImageView)findViewById(R.id.main_background);
-        TextView  drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        background = (ImageView)findViewById(R.id.main_background);
+        drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
         blurScreen = (ImageView) findViewById(R.id.blurScreen);
 
         Typeface typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
         drawerUserName.setText(name);
         drawerUserName.setTypeface(typeface);
 
-        @SuppressLint("SdCardPath")
-        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
-        File file = new File(path, "blured2.jpg");
-        if (file.exists())
-            try {
-                background.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                background.setImageDrawable(CHLoadBlurredPhoto.Init(path));
-                drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                drawerBackground.setImageDrawable(CHLoadBlurredPhoto.Init(path));
-            } catch (FileNotFoundException e) { e.printStackTrace(); }
-        else {
-            CHDownloadImageTask chDownloadImageTask = new CHDownloadImageTask(getApplicationContext(), this);
-            chDownloadImageTask.execute(pathToPic);
-        }
 
-        file = new File(path, "profile.jpg");
-        Uri uri = Uri.fromFile(file);
-        Glide.with(this).load(uri).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
+        ViewServer.get(this).addWindow(this);
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: ");
     }
 
     @Override
@@ -183,6 +162,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
         ViewServer.get(this).removeWindow(this);
     }
 
@@ -195,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                RelativeLayout contentMain = (RelativeLayout) findViewById(R.id.content_main);
+                contentMain = (RelativeLayout) findViewById(R.id.content_main);
                 contentMain.destroyDrawingCache();
                 contentMain.buildDrawingCache();
                 Bitmap bm = contentMain.getDrawingCache();
@@ -307,13 +287,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    private class animationLoader extends AsyncTask<Void, Void, Void> {
+    private class asyncLoadPhotoForBackground extends AsyncTask<Void, Void, Void> {
+
         @Override
         protected Void doInBackground(Void... params) {
             runOnUiThread(new Runnable() {
-                @SuppressLint("SetTextI18n")
                 @Override
                 public void run() {
+                    ImageView drawerBackground = (ImageView)headerLayout.findViewById(R.id.slide_background);
+                    ImageView drawerUserPhoto = (ImageView)headerLayout.findViewById(R.id.profile_image);
+
+                    @SuppressLint("SdCardPath")
+                    String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+                    File file = new File(path, "blured2.jpg");
+                    if (file.exists())
+                        try {
+                            background.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                            background.setImageDrawable(CHLoadBlurredPhoto.Init(path));
+                            drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                            drawerBackground.setImageDrawable(CHLoadBlurredPhoto.Init(path));
+                        } catch (FileNotFoundException e) { e.printStackTrace(); }
+                    else {
+                        CHDownloadImageTask chDownloadImageTask = new CHDownloadImageTask(getApplicationContext(), MainActivity.this);
+                        chDownloadImageTask.execute(pathToPic);
+                    }
+
+                    file = new File(path, "profile.jpg");
+                    Uri uri = Uri.fromFile(file);
+                    Glide.with(MainActivity.this)
+                            .load(uri)
+                            .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(drawerUserPhoto);
+
                     CHBuildAnim chBuildAnim = new CHBuildAnim();
                     chBuildAnim.buildAnim(MainActivity.this);
 
@@ -325,12 +331,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
                         view.setText("+" + (count > 0 ? String.valueOf(count) : null));
                     }
+
                 }
             });
 
-
             return null;
         }
+
     }
 
 

@@ -20,9 +20,11 @@ import com.example.ivan.champy_v2.utils.SessionManager;
 
 public class RoleControllerActivity extends AppCompatActivity implements View.OnClickListener {
 
-    public final String TAG = getClass().getName();
+    public final String TAG = RoleControllerActivity.class.getSimpleName();
     private SessionManager sessionManager;
+    private ChallengeController cc;
     private OfflineMode offlineMode;
+    private CurrentUserHelper user;
     private Typeface typeface;
     private TextView lostInternet;
     private ImageView imageReload;
@@ -32,8 +34,12 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_role_controller);
-
         spinner = findViewById(R.id.loadingPanel);
+
+        user = new CurrentUserHelper(getApplicationContext());
+        String uId = user.getUserObjectId();
+        String uToken = user.getToken();
+        cc = new ChallengeController(getApplicationContext(), this, uToken, uId);
 
         typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
         TextView tvChampy = (TextView)findViewById(R.id.tvChampy);
@@ -61,10 +67,6 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
     private void checkIfLoggedInAndMakeRedirect() {
         if (offlineMode.isConnectedToRemoteAPI(this)) {
             if (sessionManager.isUserLoggedIn()) {
-                CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
-                String uId = user.getUserObjectId();
-                String uToken = user.getToken();
-                ChallengeController cc = new ChallengeController(getApplicationContext(), this, uToken, uId);
                 cc.refreshCardsForPendingDuel();
             } else {
                 Intent goToActivity = new Intent(this, LoginActivity.class);

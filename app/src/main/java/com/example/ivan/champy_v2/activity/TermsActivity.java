@@ -44,6 +44,7 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
         setContentView(R.layout.activity_terms);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         new LoadTermsText().execute();
 
         TextView tvTerms = (TextView)findViewById(R.id.textView_terms);
@@ -79,7 +80,9 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
         try {
             drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
             drawerBackground.setImageDrawable(CHLoadBlurredPhoto.Init(path));
-        } catch (FileNotFoundException e) { e.printStackTrace(); }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
         ViewServer.get(this).addWindow(this);
     }
@@ -89,7 +92,9 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else { super.onBackPressed(); }
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -136,19 +141,6 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
         return true;
     }
 
-    @SuppressLint("SetTextI18n")
-    @Override
-    protected void onStart() {
-        super.onStart();
-        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
-        int count = checker.getPendingCount();
-        if (count == 0) {
-            checker.hideItem();
-        } else {
-            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
-        }
-    }
 
     private class LoadTermsText extends AsyncTask<String, Void, String> {
 
@@ -738,7 +730,18 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
             progressBar.setVisibility(View.GONE);
             tvTerms.setVisibility(View.VISIBLE);
+
+            CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+            int count = checker.getPendingCount();
+            if (count == 0) {
+                checker.hideItem();
+            } else {
+                TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+                view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+            }
+
         }
     }
+
 
 }

@@ -44,6 +44,7 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
         setContentView(R.layout.activity_privacy);
 
         new LoadText().execute();
+
         TextView drawerUserName = (TextView)findViewById(R.id.textView1); // overloading, be care
         drawerUserName.setVisibility(View.INVISIBLE);
 
@@ -88,21 +89,6 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
         }
 
         ViewServer.get(this).addWindow(this);
-    }
-
-    @SuppressLint("SetTextI18n")
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        final CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
-        int count = checker.getPendingCount();
-        if (count == 0) {
-            checker.hideItem();
-        } else {
-            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
-        }
     }
 
     @Override
@@ -510,6 +496,15 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar2);
             progressBar.setVisibility(View.INVISIBLE);
             textView.setVisibility(View.VISIBLE);
+
+            final CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+            int count = checker.getPendingCount();
+            if (count == 0) {
+                checker.hideItem();
+            } else {
+                TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+                view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+            }
         }
     }
 
