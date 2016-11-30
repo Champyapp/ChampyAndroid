@@ -138,9 +138,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
                 break;
             case R.id.nav_logout:
                 OfflineMode offlineMode = new OfflineMode();
-                if (offlineMode.isConnectedToRemoteAPI(this)) {
-                    sessionManager.logout(this);
-                }
+                if (offlineMode.isConnectedToRemoteAPI(this)) { sessionManager.logout(this); }
                 break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

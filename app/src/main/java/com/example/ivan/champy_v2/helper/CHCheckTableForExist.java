@@ -10,11 +10,9 @@ import com.example.ivan.champy_v2.data.DBHelper;
  */
 public class CHCheckTableForExist {
 
-    private DBHelper dbHelper;
     private SQLiteDatabase db;
 
-    public CHCheckTableForExist(DBHelper dbHelper, SQLiteDatabase db) {
-        this.dbHelper = dbHelper;
+    public CHCheckTableForExist(SQLiteDatabase db) {
         this.db = db;
     }
 

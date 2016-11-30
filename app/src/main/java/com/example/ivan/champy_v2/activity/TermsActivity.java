@@ -126,15 +126,11 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 share.putExtra(Intent.EXTRA_TEXT, message);
-                try {
-                    startActivity(Intent.createChooser(share, "How would you like to share?"));
-                } catch (ActivityNotFoundException e) { e.printStackTrace(); }
+                startActivity(Intent.createChooser(share, "How would you like to share?"));
                 break;
             case R.id.nav_logout:
                 OfflineMode offlineMode = new OfflineMode();
-                if (offlineMode.isConnectedToRemoteAPI(this)) {
-                    sessionManager.logout(this);
-                }
+                if (offlineMode.isConnectedToRemoteAPI(this)) { sessionManager.logout(this); }
                 break;
         }
         drawer.closeDrawer(GravityCompat.START);

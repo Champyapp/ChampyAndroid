@@ -19,6 +19,7 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
+import static com.example.ivan.champy_v2.utils.Constants.API_URL;
 
 public class CHGetPendingFriends {
 
@@ -36,7 +37,7 @@ public class CHGetPendingFriends {
         DBHelper dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("pending", null, null);
-        final Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
         Call<Friend> callGetUserFriends = friends.getUserFriends(userId, token);
         callGetUserFriends.enqueue(new Callback<Friend>() {

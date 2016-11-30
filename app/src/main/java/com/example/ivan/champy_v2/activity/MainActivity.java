@@ -269,9 +269,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 share.putExtra(Intent.EXTRA_TEXT, message);
-                try {
-                    startActivity(Intent.createChooser(share, getString(R.string.how_would_you_like_to_share)));
-                } catch (android.content.ActivityNotFoundException ex) { ex.printStackTrace(); }
+                startActivity(Intent.createChooser(share, getString(R.string.how_would_you_like_to_share)));
                 break;
             case R.id.nav_logout:
                 OfflineMode offlineMode = new OfflineMode();

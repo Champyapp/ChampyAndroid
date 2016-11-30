@@ -41,6 +41,7 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
 
     private SessionManager sessionManager;
     private OfflineMode offlineMode;
+    private DrawerLayout drawer;
     private WebView webView;
     private View spinner;
 
@@ -56,7 +57,7 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
         new ProgressTask().execute();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
@@ -105,7 +106,6 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -148,7 +148,6 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
                 if (offlineMode.isConnectedToRemoteAPI(this)) sessionManager.logout(this);
                 break;
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

@@ -193,9 +193,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
                 startActivity(Intent.createChooser(share, getString(R.string.how_would_you_like_to_share)));
                 break;
             case R.id.nav_logout:
-                if (offlineMode.isConnectedToRemoteAPI(this)) {
-                    sessionManager.logout(this);
-                }
+                if (offlineMode.isConnectedToRemoteAPI(this)) { sessionManager.logout(this); }
                 break;
         }
         drawer.closeDrawer(GravityCompat.START);

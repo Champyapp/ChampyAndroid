@@ -145,11 +145,11 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
                 startActivity(goToPendingDuel);
                 break;
             case R.id.share:
-                String message = "Check out Champy - it helps you improve and compete with your friends!";
+                String message = getString(R.string.share_text2);
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 share.putExtra(Intent.EXTRA_TEXT, message);
-                startActivity(Intent.createChooser(share, "How would you like to share?"));
+                startActivity(Intent.createChooser(share, getString(R.string.how_would_you_like_to_share)));
                 break;
             case R.id.nav_logout:
                 OfflineMode offlineMode = new OfflineMode();

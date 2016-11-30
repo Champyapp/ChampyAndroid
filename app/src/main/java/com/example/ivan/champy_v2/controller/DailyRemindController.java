@@ -20,7 +20,6 @@ public class DailyRemindController {
 
 
     public void enableDailyNotificationReminder() {
-
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 12);
         calendar.set(Calendar.MINUTE, 0);

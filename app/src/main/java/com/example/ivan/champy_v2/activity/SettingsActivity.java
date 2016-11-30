@@ -234,17 +234,13 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 share.putExtra(Intent.EXTRA_TEXT, message);
-                try {
                 startActivity(Intent.createChooser(share, getString(R.string.how_would_you_like_to_share)));
-                } catch (ActivityNotFoundException e) { e.printStackTrace(); }
                 break;
             case R.id.nav_logout:
                 if (offlineMode.isConnectedToRemoteAPI(this)) {
                     updateProfile(map);
                     LoginManager.getInstance().logOut();
                     sessionManager.logout(SettingsActivity.this);
-                    Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
-                    startActivity(intent);
                 }
                 break;
         }

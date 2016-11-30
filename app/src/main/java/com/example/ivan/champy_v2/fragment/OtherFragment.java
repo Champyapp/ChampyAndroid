@@ -106,7 +106,7 @@ public class OtherFragment extends Fragment {
         friends = new ArrayList<>();
         DBHelper dbHelper = new DBHelper(getContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        checkTableForExist = new CHCheckTableForExist(dbHelper, db);
+        checkTableForExist = new CHCheckTableForExist(db);
 
         Cursor c = db.query("mytable", null, null, null, null, null, null);
         if (c.moveToFirst()) {

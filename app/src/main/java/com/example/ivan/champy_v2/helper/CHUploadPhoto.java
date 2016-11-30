@@ -18,6 +18,8 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
+import static com.example.ivan.champy_v2.utils.Constants.API_URL;
+
 public class CHUploadPhoto {
 
     public static final String TAG = "CHUploadPhoto";
@@ -28,13 +30,10 @@ public class CHUploadPhoto {
     }
 
     public void uploadPhotoForAPI(String path) {
-        final String API_URL = "http://46.101.213.24:3007";
         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         SessionManager sessionManager = new SessionManager(context);
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        String token = user.get("token");
-        String id = user.get("id");
+        String token = sessionManager.getToken();
+        String id = sessionManager.getUserId();
 
         File userPhotoFile = new File(path);
 
