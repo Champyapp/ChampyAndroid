@@ -37,10 +37,11 @@ import static com.example.ivan.champy_v2.utils.Constants.typeWake;
 
 public class WakeUpActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
-    private TimePicker alarmTimePicker;
     private SessionManager sessionManager;
+    private TimePicker alarmTimePicker;
     private OfflineMode offlineMode;
     private ChallengeController cc;
+    private DrawerLayout drawer;
     private Snackbar snackbar;
 
     @Override
@@ -48,7 +49,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wake_up);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -152,7 +153,6 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -186,11 +186,11 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
                 startActivity(goToPendingDuel);
                 break;
             case R.id.share:
-                String message = "Check out Champy - it helps you improve and compete with your friends!";
+                String message = getString(R.string.share_text2);
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 share.putExtra(Intent.EXTRA_TEXT, message);
-                startActivity(Intent.createChooser(share, "How would you like to share?"));
+                startActivity(Intent.createChooser(share, getString(R.string.how_would_you_like_to_share)));
                 break;
             case R.id.nav_logout:
                 if (offlineMode.isConnectedToRemoteAPI(this)) {
@@ -198,7 +198,6 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
                 }
                 break;
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

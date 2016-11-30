@@ -66,6 +66,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private DBHelper dbHelper;
     private DailyRemindController mDailyRemind;
     private NavigationView navigationView;
+    private DrawerLayout drawer;
     private SessionManager sessionManager;
     HashMap<String, String> map = new HashMap<>();
     HashMap<String, String> user = new HashMap<>();
@@ -88,7 +89,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         userID = sessionManager.getUserId();
         token = sessionManager.getToken();
 
-        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -182,7 +183,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         }
@@ -248,7 +248,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 }
                 break;
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -275,7 +274,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                         String checkName = etNewName.getText().toString();
                         if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this) && !checkName.isEmpty() && !checkName.startsWith(" ")) {
                             String newName = etNewName.getText().toString().trim();
-                            SessionManager sessionManager = new SessionManager(getApplicationContext());
                             sessionManager.change_name(newName);
                             setNewName(newName);
 
@@ -354,7 +352,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
                 builder.setTitle(R.string.areYouSure)
                         .setMessage(R.string.youWantToDeleteYourAcc)
-                        //.setIcon(R.drawable.warn)
                         .setCancelable(false)
                         .setPositiveButton(R.string.yes, dialogClickListener)
                         .setNegativeButton(R.string.no, dialogClickListener)
@@ -507,7 +504,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
 
     public void updateProfile(HashMap<String, String> map) {
-
         sessionManager.togglePushNotification(map.get("pushNotifications"));
         sessionManager.toggleNewChallengeRequest(map.get("newChallengeRequests"));
         sessionManager.toggleAcceptYourChallenge(map.get("acceptedYourChallenge"));

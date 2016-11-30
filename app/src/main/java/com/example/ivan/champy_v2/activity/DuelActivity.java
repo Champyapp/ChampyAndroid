@@ -1,6 +1,5 @@
 package com.example.ivan.champy_v2.activity;
 
-import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -58,6 +57,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
 
     private SessionManager sessionManager;
     private NavigationView navigationView;
+    private DrawerLayout drawer;
     private View spinner;
 
     @Override
@@ -81,20 +81,25 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         }
 
         int x = round(getWindowManager().getDefaultDisplay().getWidth() / 2);
+        final ImageView imageMyPhoto = (ImageView)findViewById(R.id.imageMyPhoto);
+        imageMyPhoto.getLayoutParams().width = x;
+        imageMyPhoto.getLayoutParams().height = x; // because we need a square
+        File file = new File(path, "profile.jpg");
+        Uri url = Uri.fromFile(file);
+        Glide.with(this).load(friendsPhoto).centerCrop().into((ImageView)findViewById(R.id.imageFriendsPhoto));
+        Glide.with(this).load(url).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(imageMyPhoto);
 
         final TextView tvIChallengeMyFriendTo = (TextView)findViewById(R.id.tvIChallengeMyFriendTo);
         final TextView textViewYouVsFriend = (TextView)findViewById(R.id.tvYouVsFriend);
-        final ImageView imageMyPhoto = (ImageView)findViewById(R.id.imageMyPhoto);
         final Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
 
         textViewYouVsFriend.setText(getString(R.string.duel_with) + name);
         textViewYouVsFriend.setTypeface(typeface);
         tvIChallengeMyFriendTo.setTypeface(typeface);
 
-        imageMyPhoto.getLayoutParams().width = x;
-        imageMyPhoto.getLayoutParams().height = x; // because we need a square
 
-        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
@@ -104,8 +109,6 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         name = sessionManager.getUserName();
-        File file = new File(path, "profile.jpg");
-        Uri url = Uri.fromFile(file);
 
         ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
         ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
@@ -113,8 +116,6 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         drawerUserName.setText(name);
         drawerUserName.setTypeface(typeface);
 
-        Glide.with(this).load(friendsPhoto).centerCrop().into((ImageView)findViewById(R.id.imageFriendsPhoto));
-        Glide.with(this).load(url).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(imageMyPhoto);
         Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
 
@@ -128,10 +129,8 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -163,11 +162,11 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(goToSettings);
                 break;
             case R.id.share:
-                String message = "Check out Champy - it helps you improve and compete with your friends!";
+                String message = getString(R.string.share_text2);
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 share.putExtra(Intent.EXTRA_TEXT, message);
-                startActivity(Intent.createChooser(share, "How would you like to share?"));
+                startActivity(Intent.createChooser(share, getString(R.string.how_would_you_like_to_share)));
                 break;
             case R.id.nav_logout:
                 OfflineMode offlineMode = new OfflineMode();
@@ -176,7 +175,6 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
                 }
                 break;
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -236,7 +234,6 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
 
 
     private Drawable getPhotoForDrawerBackground(String pathToPic) throws FileNotFoundException {
-        @SuppressLint("SdCardPath")
         File file = new File(pathToPic, "blured2.jpg");
         Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
         Drawable dr = new BitmapDrawable(getResources(), bitmap);

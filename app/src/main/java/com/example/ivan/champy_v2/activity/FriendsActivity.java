@@ -24,7 +24,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.adapter.FriendsActivityPagerAdapter;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
-import com.example.ivan.champy_v2.helper.CHCheckTableForExist;
 import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
@@ -40,19 +39,18 @@ import static com.example.ivan.champy_v2.utils.Constants.path;
 
 public class FriendsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private final String TAG = "FriendsActivity";
+    private static final String TAG = FriendsActivity.class.getSimpleName();
 
-    private CHCheckTableForExist checkTableForExist;
     private NavigationView navigationView;
     private SessionManager sessionManager;
-    private OfflineMode offlineMode;
+    private DrawerLayout drawer;
     private TabLayout tabLayout;
     private Typeface typeface;
-    private int[] tabIcons = {
-            R.drawable.ic_tab_friends,
-            R.drawable.ic_tab_pending,
-            R.drawable.ic_tab_others
-    };
+//    private int[] tabIcons = {
+//            R.drawable.ic_tab_friends,
+//            R.drawable.ic_tab_pending,
+//            R.drawable.ic_tab_others
+//    };
 
 
     @SuppressLint("SetTextI18n")
@@ -64,7 +62,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -161,7 +159,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 
     @Override
     public void onBackPressed()  {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -199,12 +196,10 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                 startActivity(Intent.createChooser(share, getString(R.string.how_would_you_like_to_share)));
                 break;
             case R.id.nav_logout:
-                if (offlineMode.isConnectedToRemoteAPI(this)) {
-                    sessionManager.logout(this);
-                }
+                OfflineMode offlineMode = new OfflineMode();
+                if (offlineMode.isConnectedToRemoteAPI(this)) sessionManager.logout(this);
                 break;
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

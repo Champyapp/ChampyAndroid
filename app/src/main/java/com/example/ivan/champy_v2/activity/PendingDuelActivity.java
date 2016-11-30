@@ -37,7 +37,7 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
 
     private NavigationView navigationView;
     private SessionManager sessionManager;
-
+    private DrawerLayout drawer;
     private int size;
     public View spinner;
 
@@ -50,7 +50,7 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         new ProgressTask().execute();
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         setSupportActionBar(toolbar);
@@ -89,7 +89,6 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -133,7 +132,6 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
                 }
                 break;
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

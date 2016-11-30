@@ -28,8 +28,7 @@ import java.io.IOException;
  */
 public class AlarmReceiverActivity extends Activity implements View.OnClickListener {
 
-    public static final String ARG_PAGE = "ARG_PAGE";
-    public static final String TAG = "AlarmReceiverActivity";
+    public static final String TAG = AlarmReceiverActivity.class.getSimpleName();
     private MediaPlayer mMediaPlayer;
     private ChallengeController cc;
     private String inProgressChallengeId, alarmID;

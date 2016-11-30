@@ -1,6 +1,5 @@
 package com.example.ivan.champy_v2.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -34,9 +33,10 @@ import com.example.ivan.champy_v2.utils.SessionManager;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+
+import static com.example.ivan.champy_v2.utils.Constants.path;
 
 public class ContactUsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
@@ -63,13 +63,9 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         navigationView.setNavigationItemSelectedListener(this);
 
         sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        @SuppressLint("SdCardPath")
-        final String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
-        String name = user.get("name");
+        String name = sessionManager.getUserName();
 
         try {
             ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
@@ -154,11 +150,11 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
                     startActivity(goToSettings);
                     break;
                 case R.id.share:
-                    String message = "Check out Champy - it helps you improve and compete with your friends!";
+                    String message = getString(R.string.share_text2);
                     Intent share = new Intent(Intent.ACTION_SEND);
                     share.setType("text/plain");
                     share.putExtra(Intent.EXTRA_TEXT, message);
-                    startActivity(Intent.createChooser(share, "How would you like to share?"));
+                    startActivity(Intent.createChooser(share, getString(R.string.how_would_you_like_to_share)));
                     break;
                 case R.id.nav_logout:
                     OfflineMode offlineMode = new OfflineMode();
