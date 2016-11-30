@@ -75,7 +75,9 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
             ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setImageDrawable(CHLoadBlurredPhoto.Init(path));
-        } catch (FileNotFoundException e) { e.printStackTrace(); }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
         final Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         final ImageView drawerUserPhoto = (ImageView) headerLayout.findViewById(R.id.profile_image);
@@ -83,8 +85,13 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         drawerUserName.setText(name);
         drawerUserName.setTypeface(typeface);
 
-        Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
+        Glide.with(this)
+                .load(url)
+                .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(drawerUserPhoto);
+
         ViewServer.get(this).addWindow(this);
 
         inputLayoutSubject = (TextInputLayout)findViewById(R.id.input_layout_name);

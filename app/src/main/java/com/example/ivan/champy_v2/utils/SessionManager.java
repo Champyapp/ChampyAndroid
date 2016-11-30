@@ -142,31 +142,31 @@ public class SessionManager {
     }
 
     public String getRefreshPending() {
-        return pref.getString("pendingRefresh", null);
+        return pref.getString("pendingRefresh", "");
     }
 
     public String getRefreshFriends() {
-        return pref.getString("friendsRefresh", null);
+        return pref.getString("friendsRefresh", "");
     }
 
     public String getTokenAndroid() {
-        return pref.getString("token_android", null);
+        return pref.getString("token_android", "");
     }
 
     public String get_duel_pending() {
-        return pref.getString("duel_pending", null);
+        return pref.getString("duel_pending", "");
     }
 
     public String getFacebookId() {
-        return pref.getString("facebook_id", null);
+        return pref.getString("facebook_id", "");
     }
 
     public String getPathToPic() {
-        return pref.getString(KEY_PATH, null);
+        return pref.getString(KEY_PATH, "");
     }
 
     public String getUserName() {
-        return pref.getString("name", null);
+        return pref.getString("name", "");
     }
 
     public String getToken() {
@@ -174,11 +174,11 @@ public class SessionManager {
     }
 
     public String getGCM() {
-        return pref.getString(KEY_GCM, null);
+        return pref.getString(KEY_GCM, "");
     }
 
     public String getUserId() {
-        return pref.getString("id", null);
+        return pref.getString("id", "");
     }
 
     public int getSelfSize() {

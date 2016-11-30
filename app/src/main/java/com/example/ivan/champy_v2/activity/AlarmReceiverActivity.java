@@ -93,7 +93,9 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
                 mMediaPlayer.stop();
                 try {
                     cc.give_up(inProgressChallengeId, Integer.parseInt(alarmID));
-                } catch (IOException e) { e.printStackTrace(); }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 // so, we take 0 updates and then this challenge will auto surrender.
                 finish();
                 break;

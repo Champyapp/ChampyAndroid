@@ -1,6 +1,5 @@
 package com.example.ivan.champy_v2.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -29,13 +28,14 @@ import android.widget.Toast;
 import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.ivan.champy_v2.controller.ChallengeController;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.adapter.MainActivityCardsAdapter;
+import com.example.ivan.champy_v2.controller.ChallengeController;
 import com.example.ivan.champy_v2.helper.CHBuildAnim;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHDownloadImageTask;
 import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
+import com.example.ivan.champy_v2.helper.CHMakeResponsiveScore;
 import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
 import com.example.ivan.champy_v2.utils.Blur;
@@ -58,18 +58,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String TAG = "MainActivity";
     private static long mLastClickTime = 0;
     private SubActionButton buttonWakeUpChallenge, buttonDuelChallenge, buttonSelfImprovement;
-    private ImageView background, actionButton, blurScreen;
+    private RelativeLayout cards, contentMain;
     private MainActivityCardsAdapter adapter;
     private FloatingActionMenu actionMenu;
-    private NavigationView navigationView;
-    private TextView  drawerUserName;
-    private RelativeLayout cards, contentMain;
-    private View headerLayout;
-    public String pathToPic;
-    //private CHSocket sockets;
-
-    // TODO: 17.11.2016 Создати метод "updateUI", засунути туда створення карточок і визивати це
-    // TODO: 17.11.2016           після кожної зміни без перезавантаження сторінки (в UI потоці)
+    private SessionManager sessionManager;
+    private ImageView blurScreen;
+    private DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,12 +71,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FacebookSdk.sdkInitialize(getApplicationContext());
         Log.d(TAG, "onCreate: ");
         setContentView(R.layout.activity_main);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_gradient));
         setSupportActionBar(toolbar);
 
-        new asyncLoadPhotoForBackground().execute();
+        int width = getWindowManager().getDefaultDisplay().getWidth();
+        CHMakeResponsiveScore chMakeResponsiveScore = new CHMakeResponsiveScore(this);
+        chMakeResponsiveScore.makeResponsiveScore(width);
+        //new asyncLoadPhotoForBackground().execute();
 
         cards = (RelativeLayout) findViewById(R.id.cards);
         adapter = new MainActivityCardsAdapter(this, SelfImprovement_model.generate(this));
@@ -91,36 +86,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             pager.preparePager(0);
         }
 
-        actionButton = (ImageButton) findViewById(R.id.fabPlus);
         final SubActionButton.Builder itemBuilder = new SubActionButton.Builder(MainActivity.this);
         buttonWakeUpChallenge = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeupcolor)).build();
         buttonDuelChallenge = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.duel_yellow)).build();
         buttonSelfImprovement = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.self_yellow)).build();
 
-        int width = getWindowManager().getDefaultDisplay().getWidth();
-        int x = round(width / 100);
+        ImageView fabPlus = (ImageButton) findViewById(R.id.fabPlus);
+        actionMenu = new FloatingActionMenu.Builder(MainActivity.this)
+                .addSubActionView(buttonWakeUpChallenge)
+                .addSubActionView(buttonDuelChallenge)
+                .addSubActionView(buttonSelfImprovement)
+                .setRadius(350).attachTo(fabPlus).build();
 
-        buttonWakeUpChallenge.getLayoutParams().height = x * 20;
-        buttonWakeUpChallenge.getLayoutParams().width = x * 20;
-        buttonDuelChallenge.getLayoutParams().height = x * 20;
-        buttonDuelChallenge.getLayoutParams().width = x * 20;
-        buttonSelfImprovement.getLayoutParams().height = x * 20;
-        buttonSelfImprovement.getLayoutParams().width = x * 20;
-
-        actionMenu = new FloatingActionMenu.Builder(MainActivity.this).addSubActionView(buttonWakeUpChallenge)
-                .addSubActionView(buttonDuelChallenge).addSubActionView(buttonSelfImprovement)
-                .setRadius(350).attachTo(actionButton).build();
-        actionButton.setOnClickListener(MainActivity.this);
-
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(MainActivity.this);
 
-        CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
-        String pathToPic = user.getPathToPic();
-        String name = user.getName();
+        sessionManager = new SessionManager(getApplicationContext());
+        String pathToPic = sessionManager.getPathToPic();
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -135,28 +120,69 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (pathToPic == null) pathToPic = getIntent().getExtras().getString("path_to_pic");
 
-        background = (ImageView)findViewById(R.id.main_background);
-        drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        blurScreen = (ImageView) findViewById(R.id.blurScreen);
+        ImageView background = (ImageView) findViewById(R.id.main_background);
+        blurScreen = (ImageView)findViewById(R.id.blurScreen);
+
 
         Typeface typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
+        ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
+        ImageView drawerUserPhoto = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+
+        String name = sessionManager.getUserName();
         drawerUserName.setText(name);
         drawerUserName.setTypeface(typeface);
 
+        /********************************* Get photo and make bg **********************************/
+        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+        File blurred = new File(path, "blured2.jpg");
+        if (blurred.exists())
+            try {
+                background.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                background.setImageDrawable(CHLoadBlurredPhoto.Init(path));
+                drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                drawerBackground.setImageDrawable(CHLoadBlurredPhoto.Init(path));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        else {
+            CHDownloadImageTask chDownloadImageTask = new CHDownloadImageTask(getApplicationContext(), MainActivity.this);
+            chDownloadImageTask.execute(pathToPic);
+        }
+
+        File profile = new File(path, "profile.jpg");
+        Uri uri = Uri.fromFile(profile);
+        Glide.with(MainActivity.this)
+                .load(uri).bitmapTransform(new CropCircleTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(drawerUserPhoto);
+
+        /******************************** Display 'Pending duels' menu ****************************/
+        CHCheckPendingDuels checker = new CHCheckPendingDuels(this, navigationView);
+        int count = checker.getPendingCount();
+        if (count == 0) {
+            checker.hideItem();
+        } else {
+            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+        }
+
+        /*********************************** Display fab buttons **********************************/
+        int x = round(width / 100);
+        buttonWakeUpChallenge.getLayoutParams().height = x * 20;
+        buttonWakeUpChallenge.getLayoutParams().width  = x * 20;
+        buttonDuelChallenge.getLayoutParams().height   = x * 20;
+        buttonDuelChallenge.getLayoutParams().width    = x * 20;
+        buttonSelfImprovement.getLayoutParams().height = x * 20;
+        buttonSelfImprovement.getLayoutParams().width  = x * 20;
+
+        fabPlus.setOnClickListener(MainActivity.this);
+
+        CHBuildAnim chBuildAnim = new CHBuildAnim(this, sessionManager, typeface);
+        chBuildAnim.buildAnim();
 
         ViewServer.get(this).addWindow(this);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart: ");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume: ");
     }
 
     @Override
@@ -171,8 +197,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
         mLastClickTime = SystemClock.elapsedRealtime();
 
+        /****************************************** Blur *****************************************/
         //Here we make our background is blurred
-        this.runOnUiThread(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 contentMain = (RelativeLayout) findViewById(R.id.content_main);
@@ -184,6 +211,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 blurScreen.setImageDrawable(ob);
             }
         });
+        /************************************** Fab Clicks ****************************************/
 
         // first we check action menu and if "is open" then we setup our inside click for FAB
         actionMenu.toggle(true);
@@ -216,7 +244,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         }
@@ -249,21 +276,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(goToPendingDuel);
                 break;
             case R.id.share:
-                String message = "Check out Champy - it helps you improve and compete with your friends!";
+                String message = getString(R.string.share_text2);
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 share.putExtra(Intent.EXTRA_TEXT, message);
-                startActivity(Intent.createChooser(share, "How would you like to share?"));
+                try {
+                    startActivity(Intent.createChooser(share, "How would you like to share?"));
+                } catch (android.content.ActivityNotFoundException ex) { ex.printStackTrace(); }
                 break;
             case R.id.nav_logout:
                 OfflineMode offlineMode = new OfflineMode();
                 if (offlineMode.isConnectedToRemoteAPI(this)) {
-                    SessionManager sessionManager = new SessionManager(this);
                     sessionManager.logout(this);
                 }
                 break;
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -294,43 +321,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ImageView drawerBackground = (ImageView)headerLayout.findViewById(R.id.slide_background);
-                    ImageView drawerUserPhoto = (ImageView)headerLayout.findViewById(R.id.profile_image);
 
-                    @SuppressLint("SdCardPath")
-                    String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
-                    File file = new File(path, "blured2.jpg");
-                    if (file.exists())
-                        try {
-                            background.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                            background.setImageDrawable(CHLoadBlurredPhoto.Init(path));
-                            drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                            drawerBackground.setImageDrawable(CHLoadBlurredPhoto.Init(path));
-                        } catch (FileNotFoundException e) { e.printStackTrace(); }
-                    else {
-                        CHDownloadImageTask chDownloadImageTask = new CHDownloadImageTask(getApplicationContext(), MainActivity.this);
-                        chDownloadImageTask.execute(pathToPic);
-                    }
-
-                    file = new File(path, "profile.jpg");
-                    Uri uri = Uri.fromFile(file);
-                    Glide.with(MainActivity.this)
-                            .load(uri)
-                            .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .into(drawerUserPhoto);
-
-                    CHBuildAnim chBuildAnim = new CHBuildAnim();
-                    chBuildAnim.buildAnim(MainActivity.this);
-
-                    CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
-                    int count = checker.getPendingCount();
-                    if (count == 0) {
-                        checker.hideItem();
-                    } else {
-                        TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-                        view.setText("+" + (count > 0 ? String.valueOf(count) : null));
-                    }
 
                 }
             });

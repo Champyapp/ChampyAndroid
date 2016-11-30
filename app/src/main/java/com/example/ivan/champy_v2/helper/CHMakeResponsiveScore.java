@@ -9,17 +9,16 @@ import com.example.ivan.champy_v2.R;
 
 import static java.lang.Math.round;
 
-class CHMakeResponsiveScore {
+public class CHMakeResponsiveScore {
 
 
     private Activity activity;
 
-
-    CHMakeResponsiveScore(Activity activity) {
+    public CHMakeResponsiveScore(Activity activity) {
         this.activity = activity;
     }
 
-    void makeResponsiveScore(int width) {
+    public void makeResponsiveScore(int width) {
         int x = round(width/100);
 
         //-------------------------- Circles ---------------------------//

@@ -24,11 +24,18 @@ import com.example.ivan.champy_v2.utils.SessionManager;
  */
 public class CHBuildAnim {
 
+    private Activity activity;
+    private SessionManager sessionManager;
+    private Typeface typeface;
 
-    public void buildAnim(Activity activity) {
-        int width = activity.getWindowManager().getDefaultDisplay().getWidth();
-        CHMakeResponsiveScore chMakeResponsiveScore = new CHMakeResponsiveScore(activity);
-        chMakeResponsiveScore.makeResponsiveScore(width);
+    public CHBuildAnim(Activity activity, SessionManager sessionManager, Typeface typeface) {
+        this.activity = activity;
+        this.sessionManager = sessionManager;
+        this.typeface = typeface;
+    }
+
+    public void buildAnim() {
+
 //        WindowManager wm = (WindowManager)activity.getSystemService(Context.WINDOW_SERVICE);
 //        Display display = wm.getDefaultDisplay();
 //        Point size = new Point();
@@ -54,8 +61,6 @@ public class CHBuildAnim {
 //        ((AnimationDrawable) mImageViewFilling1.getBackground()).start();
 //        ((AnimationDrawable) mImageViewFilling2.getBackground()).start();
 
-
-        Typeface typeface = Typeface.createFromAsset(activity.getAssets(), "fonts/bebasneue.ttf");
         final TextView tvChallengesCounter = (TextView)activity.findViewById(R.id.textViewChallengesCounter);
         final TextView tvWinsCounter       = (TextView)activity.findViewById(R.id.textViewWinsCounter);
         final TextView tvTotalCounter      = (TextView)activity.findViewById(R.id.textViewTotalCounter);
@@ -64,10 +69,9 @@ public class CHBuildAnim {
         tvWinsCounter.setTypeface(typeface);
         tvTotalCounter.setTypeface(typeface);
 
-        SessionManager sessionManager = new SessionManager(activity);
         String challenges = sessionManager.getChampyOptions().get("challenges");
         String wins       = sessionManager.getChampyOptions().get("wins");
-        String total      = sessionManager.getChampyOptions().get("total"); // i know
+        String total      = sessionManager.getChampyOptions().get("total");
         String userName   = sessionManager.getUserName();
 
         int challengesInteger = Integer.parseInt(challenges);
@@ -134,15 +138,15 @@ public class CHBuildAnim {
         final Animation alphaAnimation          = new AlphaAnimation(0.0f, 1.0f);
         alphaAnimation.setDuration(2000);
 
-        textViewChallenges.setText(R.string.challenges);
+        textViewChallenges.setText(activity.getString(R.string.challenges));
         textViewChallenges.startAnimation(alphaAnimation);
         textViewChallenges.setTypeface(typeface);
 
-        textViewWins.setText(R.string.wins);
+        textViewWins.setText(activity.getString(R.string.wins));
         textViewWins.startAnimation(alphaAnimation);
         textViewWins.setTypeface(typeface);
 
-        textViewTotal.setText(R.string.total);
+        textViewTotal.setText(activity.getString(R.string.total));
         textViewTotal.startAnimation(alphaAnimation);
         textViewTotal.setTypeface(typeface);
 

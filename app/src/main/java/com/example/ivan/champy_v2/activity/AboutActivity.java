@@ -26,7 +26,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
-import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
 
@@ -39,6 +38,8 @@ import static com.example.ivan.champy_v2.utils.Constants.azinecUrl;
 
 public class AboutActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private SessionManager sessionManager;
+    private OfflineMode offlineMode;
     private WebView webView;
     private View spinner;
 
@@ -47,6 +48,9 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
+
+        offlineMode = new OfflineMode();
+        sessionManager = new SessionManager(this);
         new ProgressTask().execute();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -72,12 +76,10 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
         view.setText("+" + (count > 0 ? String.valueOf(count) : null));
         if (count == 0) checker.hideItem();
 
-        @SuppressLint("SdCardPath")
         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
-        CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
-        String name = user.getName();
+        String name = sessionManager.getUserName();
 
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
         ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
@@ -102,7 +104,9 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else { super.onBackPressed(); }
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -137,8 +141,6 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
                 startActivity(Intent.createChooser(share, "How would you like to share?"));
                 break;
             case R.id.nav_logout:
-                OfflineMode offlineMode = new OfflineMode();
-                SessionManager sessionManager = new SessionManager(this);
                 if (offlineMode.isConnectedToRemoteAPI(this)) sessionManager.logout(this);
                 break;
         }
