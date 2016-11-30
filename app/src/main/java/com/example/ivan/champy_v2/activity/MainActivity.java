@@ -55,10 +55,10 @@ import static java.lang.Math.round;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = MainActivity.class.getSimpleName();
     private static long mLastClickTime = 0;
     private SubActionButton buttonWakeUpChallenge, buttonDuelChallenge, buttonSelfImprovement;
-    private RelativeLayout cards, contentMain;
+    private RelativeLayout contentMain;
     private MainActivityCardsAdapter adapter;
     private FloatingActionMenu actionMenu;
     private SessionManager sessionManager;
@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
-        Log.d(TAG, "onCreate: ");
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -77,26 +76,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int width = getWindowManager().getDefaultDisplay().getWidth();
         CHMakeResponsiveScore chMakeResponsiveScore = new CHMakeResponsiveScore(this);
         chMakeResponsiveScore.makeResponsiveScore(width);
-        //new asyncLoadPhotoForBackground().execute();
 
-        cards = (RelativeLayout) findViewById(R.id.cards);
         adapter = new MainActivityCardsAdapter(this, SelfImprovement_model.generate(this));
         if (adapter.dataCount() > 0) {
+            RelativeLayout cards = (RelativeLayout) findViewById(R.id.cards);
             CustomPagerBase pager = new CustomPagerBase(MainActivity.this, cards, adapter);
             pager.preparePager(0);
         }
 
         final SubActionButton.Builder itemBuilder = new SubActionButton.Builder(MainActivity.this);
         buttonWakeUpChallenge = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeupcolor)).build();
-        buttonDuelChallenge = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.duel_yellow)).build();
+        buttonDuelChallenge   = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.duel_yellow)).build();
         buttonSelfImprovement = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.self_yellow)).build();
 
         ImageView fabPlus = (ImageButton) findViewById(R.id.fabPlus);
         actionMenu = new FloatingActionMenu.Builder(MainActivity.this)
-                .addSubActionView(buttonWakeUpChallenge)
-                .addSubActionView(buttonDuelChallenge)
-                .addSubActionView(buttonSelfImprovement)
-                .setRadius(350).attachTo(fabPlus).build();
+                            .addSubActionView(buttonWakeUpChallenge)
+                            .addSubActionView(buttonDuelChallenge)
+                            .addSubActionView(buttonSelfImprovement)
+                            .setRadius(350).attachTo(fabPlus).build();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
@@ -106,11 +104,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String pathToPic = sessionManager.getPathToPic();
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
-                cards.setVisibility(View.VISIBLE);
+                //cards.setVisibility(View.VISIBLE);
                 blurScreen.setVisibility(View.INVISIBLE);
                 actionMenu.close(true);
             }
@@ -122,7 +120,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         ImageView background = (ImageView) findViewById(R.id.main_background);
         blurScreen = (ImageView)findViewById(R.id.blurScreen);
-
 
         Typeface typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
         ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
@@ -152,11 +149,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         File profile = new File(path, "profile.jpg");
         Uri uri = Uri.fromFile(profile);
-        Glide.with(MainActivity.this)
-                .load(uri).bitmapTransform(new CropCircleTransformation(this))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(drawerUserPhoto);
+        Glide.with(this).load(uri).bitmapTransform(new CropCircleTransformation(this)).into(drawerUserPhoto);
 
         /******************************** Display 'Pending duels' menu ****************************/
         CHCheckPendingDuels checker = new CHCheckPendingDuels(this, navigationView);
@@ -188,7 +181,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "onDestroy: ");
         ViewServer.get(this).removeWindow(this);
     }
 
@@ -217,22 +209,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         actionMenu.toggle(true);
         if (!actionMenu.isOpen()) {
             blurScreen.setVisibility(View.INVISIBLE);
-            cards.setVisibility(View.VISIBLE);
+//            cards.setVisibility(View.VISIBLE);
         } else {
             if (adapter.dataCount() < 5) {
                 blurScreen.setVisibility(View.VISIBLE);
-                cards.setVisibility(View.INVISIBLE);
+//                cards.setVisibility(View.INVISIBLE);
                 buttonSelfImprovement.setOnClickListener(v0 -> {
-                            Intent intent = new Intent(MainActivity.this, SelfImprovementActivity.class);
-                            startActivity(intent);
+                    Intent intent = new Intent(MainActivity.this, SelfImprovementActivity.class);
+                    startActivity(intent);
                 });
                 buttonDuelChallenge.setOnClickListener(v1 -> {
-                        Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
-                        startActivity(intent);
+                    Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
+                    startActivity(intent);
                 });
                 buttonWakeUpChallenge.setOnClickListener(v2 -> {
-                        Intent intent = new Intent(MainActivity.this, WakeUpActivity.class);
-                        startActivity(intent);
+                    Intent intent = new Intent(MainActivity.this, WakeUpActivity.class);
+                    startActivity(intent);
                 });
             } else {
                 actionMenu.toggle(false);
@@ -248,14 +240,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawer.closeDrawer(GravityCompat.START);
         }
         actionMenu.close(true);
-        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.cards);
-        relativeLayout.setVisibility(View.VISIBLE);
-        ImageView screen = (ImageView) findViewById(R.id.blurScreen);
-        screen.setVisibility(View.INVISIBLE);
+        //cards.setVisibility(View.VISIBLE);
+        blurScreen.setVisibility(View.INVISIBLE);
 
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -281,14 +270,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 share.setType("text/plain");
                 share.putExtra(Intent.EXTRA_TEXT, message);
                 try {
-                    startActivity(Intent.createChooser(share, "How would you like to share?"));
+                    startActivity(Intent.createChooser(share, getString(R.string.how_would_you_like_to_share)));
                 } catch (android.content.ActivityNotFoundException ex) { ex.printStackTrace(); }
                 break;
             case R.id.nav_logout:
                 OfflineMode offlineMode = new OfflineMode();
-                if (offlineMode.isConnectedToRemoteAPI(this)) {
-                    sessionManager.logout(this);
-                }
+                if (offlineMode.isConnectedToRemoteAPI(this)) { sessionManager.logout(this); }
                 break;
         }
         drawer.closeDrawer(GravityCompat.START);
@@ -298,10 +285,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_settings) {
-            CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
-            String token = user.getToken();
-            String userId = user.getUserObjectId();
-            ChallengeController cc = new ChallengeController(getApplicationContext(), MainActivity.this, token, userId);
+            // TODO: create method generate without intents and call this method and after this call 'pager.prepare(0)'
+            // TODO: remove from this initialization with word "new" !
+            String token = sessionManager.getToken();
+            String userId = sessionManager.getUserId();
+            ChallengeController cc = new ChallengeController(getApplicationContext(), this, token, userId);
             cc.refreshCardsForPendingDuel();
         }
         return super.onOptionsItemSelected(item);
