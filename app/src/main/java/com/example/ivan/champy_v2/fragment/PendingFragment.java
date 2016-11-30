@@ -315,12 +315,14 @@ public class PendingFragment extends Fragment {
             Log.d(TAG, "Sockets: connecting...");
         }
     };
+
     private Emitter.Listener onConnected = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
             Log.d(TAG, "Sockets: connected!");
         }
     };
+
     protected Emitter.Listener modifiedRelationship = new Emitter.Listener() {
 
         @Override
@@ -334,6 +336,7 @@ public class PendingFragment extends Fragment {
             Log.d(TAG, "Sockets: modifiedRelationship");
         }
     };
+
     protected Emitter.Listener removedRelationship = new Emitter.Listener() {
         @Override
         public void call(Object... args) {

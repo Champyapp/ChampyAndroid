@@ -72,11 +72,20 @@ public class OtherFragment extends Fragment {
     private DBHelper dbHelper;
     private ContentValues cv;
 
+    public static OtherFragment newInstance(int page) {
+        Bundle args = new Bundle();
+        args.putInt(ARG_PAGE, page);
+        OtherFragment fragment = new OtherFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         Log.d(TAG, "onAttach: ");
-        //checkRefresh = "true";
+        checkRefresh = "true";
     }
 
     @Override
@@ -97,7 +106,7 @@ public class OtherFragment extends Fragment {
         friends = new ArrayList<>();
         DBHelper dbHelper = new DBHelper(getContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        checkTableForExist = new CHCheckTableForExist(getContext());
+        checkTableForExist = new CHCheckTableForExist(dbHelper, db);
 
         Cursor c = db.query("mytable", null, null, null, null, null, null);
         if (c.moveToFirst()) {
@@ -144,9 +153,9 @@ public class OtherFragment extends Fragment {
             refreshOtherView(gSwipeRefreshLayout, gView);
         }
 
-        if (getActivity().getIntent().getExtras() != null) {
+        if (checkRefresh.equals("true")) {
             refreshOtherView(gSwipeRefreshLayout, gView);
-            //checkRefresh = "false";
+            checkRefresh = "false";
         }
 
         return view;
@@ -236,73 +245,72 @@ public class OtherFragment extends Fragment {
                     int clearCount = db.delete("mytable", null, null);
                     final List<FriendModel> newFriends = new ArrayList<>();
 
-                    if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
-                        final GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONArrayCallback() {
-                            @Override
-                            public void onCompleted(JSONArray array, GraphResponse response) {
-                                if (array.length() == 0) {
-                                    Toast.makeText(getContext(), R.string.noOneHasInstalledChampy, Toast.LENGTH_SHORT).show();
-                                    swipeRefreshLayout.setRefreshing(false);
-                                    return;
-                                }
-                                for (int i = 0; i < array.length(); i++) {
-                                    try {
-                                        // jwt - Json Web Token...
-                                        final String fb_id = array.getJSONObject(i).getString("id");
-                                        final String user_name = array.getJSONObject(i).getString("name");
-                                        final String jwtString = Jwts.builder()
-                                                .setHeaderParam("alg", "HS256")
-                                                .setHeaderParam("typ", "JWT")
-                                                .setPayload("{\n"+"  \"facebookId\": \"" + fb_id + "\"\n" + "}")
-                                                .signWith(SignatureAlgorithm.HS256, "secret")
-                                                .compact();
+                    final GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONArrayCallback() {
+                        @Override
+                        public void onCompleted(JSONArray array, GraphResponse response) {
+                            if (array.length() == 0) {
+                                Toast.makeText(getContext(), R.string.noOneHasInstalledChampy, Toast.LENGTH_SHORT).show();
+                                swipeRefreshLayout.setRefreshing(false);
+                                return;
+                            }
+                            for (int i = 0; i < array.length(); i++) {
+                                try {
+                                    // jwt - Json Web Token...
+                                    final String fb_id = array.getJSONObject(i).getString("id");
+                                    final String user_name = array.getJSONObject(i).getString("name");
+                                    final String jwtString = Jwts.builder()
+                                            .setHeaderParam("alg", "HS256")
+                                            .setHeaderParam("typ", "JWT")
+                                            .setPayload("{\n"+"  \"facebookId\": \"" + fb_id + "\"\n" + "}")
+                                            .signWith(SignatureAlgorithm.HS256, "secret")
+                                            .compact();
 
-                                        Call<User> call = newUser.getUserInfo(jwtString);
-                                        call.enqueue(new Callback<User>() {
-                                            @Override
-                                            public void onResponse(Response<User> response, Retrofit retrofit) {
-                                                if (response.isSuccess()) {
-                                                    Data data = response.body().getData();
-                                                    String photo = null;
+                                    Call<User> call = newUser.getUserInfo(jwtString);
+                                    call.enqueue(new Callback<User>() {
+                                        @Override
+                                        public void onResponse(Response<User> response, Retrofit retrofit) {
+                                            if (response.isSuccess()) {
+                                                Data data = response.body().getData();
+                                                String photo = null;
 
-                                                    if (data.getPhoto() != null) {
-                                                        photo = API_URL + data.getPhoto().getMedium();
-                                                    }
-                                                    else {
-                                                        try {
-                                                            URL profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
-                                                            photo = profile_pic.toString();
-                                                        } catch (Exception e) {
-                                                            e.printStackTrace();
-                                                        }
-                                                    }
-
-                                                    String name = data.getName();
-                                                    cv.put("user_id", data.get_id());
-                                                    cv.put("name", name);
-                                                    cv.put("photo", photo);
-                                                    cv.put("challenges", "" + data.getAllChallengesCount());
-                                                    cv.put("wins", "" + data.getSuccessChallenges());
-                                                    cv.put("total", "" + data.getInProgressChallenges());
-                                                    cv.put("level", "" + data.getLevel().getNumber());
-
-                                                    // отображаем друзей в списке
-                                                    if (!checkTableForExist.isInOtherTable(data.get_id())) {
-                                                        db.insert("mytable", null, cv);
-                                                        newFriends.add(new FriendModel(
-                                                                name,
-                                                                photo,
-                                                                data.get_id(),
-                                                                "" + data.getAllChallengesCount(),
-                                                                "" + data.getSuccessChallenges(),
-                                                                "" + data.getInProgressChallenges(),
-                                                                "" + data.getLevel().getNumber()
-                                                        ));
-                                                    } else {
-                                                        Log.d(TAG, "DBase: not added | " + user_name + " in another table");
-                                                    }
-                                                    swipeRefreshLayout.setRefreshing(false);
+                                                if (data.getPhoto() != null) {
+                                                    photo = API_URL + data.getPhoto().getMedium();
                                                 }
+                                                else {
+                                                    try {
+                                                        URL profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
+                                                        photo = profile_pic.toString();
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+
+                                                String name = data.getName();
+                                                cv.put("user_id", data.get_id());
+                                                cv.put("name", name);
+                                                cv.put("photo", photo);
+                                                cv.put("challenges", "" + data.getAllChallengesCount());
+                                                cv.put("wins", "" + data.getSuccessChallenges());
+                                                cv.put("total", "" + data.getInProgressChallenges());
+                                                cv.put("level", "" + data.getLevel().getNumber());
+
+                                                // отображаем друзей в списке
+                                                if (!checkTableForExist.isInOtherTable(data.get_id())) {
+                                                    db.insert("mytable", null, cv);
+                                                    newFriends.add(new FriendModel(
+                                                            name,
+                                                            photo,
+                                                            data.get_id(),
+                                                            "" + data.getAllChallengesCount(),
+                                                            "" + data.getSuccessChallenges(),
+                                                            "" + data.getInProgressChallenges(),
+                                                            "" + data.getLevel().getNumber()
+                                                    ));
+                                                } else {
+                                                    Log.d(TAG, "DBase: not added | " + user_name + " in another table");
+                                                }
+                                                swipeRefreshLayout.setRefreshing(false);
+                                            }
 //                                            else {
 //                                                // отображение всего у человека, который не установил champy
 //                                                URL profile_pic = null;
@@ -328,43 +336,33 @@ public class OtherFragment extends Fragment {
 //                                                gSwipeRefreshLayout.setRefreshing(false);
 //                                            }
 
-                                                RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-                                                OtherAdapter otherAdapter = new OtherAdapter(newFriends, getContext(), getActivity());
-                                                rvContacts.setAdapter(otherAdapter);
-                                                gSwipeRefreshLayout.setRefreshing(false);
-                                            }
+                                            RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
+                                            OtherAdapter otherAdapter = new OtherAdapter(newFriends, getContext(), getActivity());
+                                            rvContacts.setAdapter(otherAdapter);
+                                            gSwipeRefreshLayout.setRefreshing(false);
+                                        }
 
-                                            @Override
-                                            public void onFailure(Throwable t) {
+                                        @Override
+                                        public void onFailure(Throwable t) {
 
-                                            }
-                                        });
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-
+                                        }
+                                    });
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
+
                             }
-                        });
-                        request.executeAsync();
-                    } else {
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
+                        }
+                    });
+                    request.executeAsync();
 
                 }
             });
+        } else {
+            swipeRefreshLayout.setRefreshing(false);
         }
 
     }
-
-    public static OtherFragment newInstance(int page) {
-        Bundle args = new Bundle();
-        args.putInt(ARG_PAGE, page);
-        OtherFragment fragment = new OtherFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
 
 
 }

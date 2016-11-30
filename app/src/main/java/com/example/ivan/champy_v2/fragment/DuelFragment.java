@@ -141,12 +141,11 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ok:
-                position = viewPager.getCurrentItem();
-                size = sessionManager.getSelfSize();
                 snackbar = Snackbar.make(view, R.string.are_you_sure, Snackbar.LENGTH_LONG).setAction(R.string.yes, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        position = viewPager.getCurrentItem();
+                        size = sessionManager.getSelfSize();
                         if (position == size) {
                             description = etGoal.getText().toString();
                             duration = etDays.getText().toString();

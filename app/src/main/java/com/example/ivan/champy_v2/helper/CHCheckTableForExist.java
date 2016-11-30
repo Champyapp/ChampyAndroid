@@ -1,6 +1,5 @@
 package com.example.ivan.champy_v2.helper;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -11,22 +10,22 @@ import com.example.ivan.champy_v2.data.DBHelper;
  */
 public class CHCheckTableForExist {
 
-    Context context;
+    private DBHelper dbHelper;
+    private SQLiteDatabase db;
 
-    public CHCheckTableForExist(Context context) {
-        this.context = context;
+    public CHCheckTableForExist(DBHelper dbHelper, SQLiteDatabase db) {
+        this.dbHelper = dbHelper;
+        this.db = db;
     }
 
     public Boolean isInOtherTable(String id) {
-        DBHelper dbHelper = new DBHelper(context);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
         Boolean ok = false;
+        String user_id;
         Cursor c = db.query("pending", null, null, null, null, null, null);
         if (c.moveToFirst()) {
             int index = c.getColumnIndex("user_id");
             do {
-                String user_id = c.getString(index);
+                user_id = c.getString(index);
                 if (user_id.equals(id)) {
                     ok = true;
                     break;
@@ -37,7 +36,7 @@ public class CHCheckTableForExist {
         if (c.moveToFirst()) {
             int index = c.getColumnIndex("user_id");
             do {
-                String user_id = c.getString(index);
+                user_id = c.getString(index);
                 if (user_id.equals(id)) {
                     ok = true;
                     break;

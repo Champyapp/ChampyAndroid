@@ -15,8 +15,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.ivan.champy_v2.controller.ChallengeController;
 import com.example.ivan.champy_v2.R;
+import com.example.ivan.champy_v2.controller.ChallengeController;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
 import com.example.ivan.champy_v2.utils.OfflineMode;
@@ -25,7 +25,7 @@ import com.example.ivan.champy_v2.utils.SessionManager;
 public class SelfImprovementFragment extends Fragment implements View.OnClickListener {
 
     public static final String ARG_PAGE = "ARG_PAGE";
-    public static final String TAG = "SelfImprovementFragment";
+    public static final String TAG = SelfImprovementFragment.class.getSimpleName();
     public int position, size, daysCount, newDaysCount, days = 21, o = 0;
     public String duration, description, challenge_id, status, name;
     public Typeface typeface;
@@ -117,9 +117,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
             buttonMinus.setVisibility(View.VISIBLE);
             buttonPlus.setVisibility(View.VISIBLE);
         }
-
-//        buttonMinus.setVisibility(View.INVISIBLE);
-//        buttonPlus.setVisibility(View.INVISIBLE);
 
         final String token = sessionManager.getToken();
         final String userId = sessionManager.getUserId();

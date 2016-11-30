@@ -27,7 +27,6 @@ import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -39,7 +38,7 @@ import retrofit.Retrofit;
 
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
 
-    final private String TAG = "FriendsAdapter";
+    final private String TAG = FriendsAdapter.class.getSimpleName();
     private List<FriendModel> mContacts;
     private SessionManager sessionManager;
     private OfflineMode offlineMode;
@@ -325,22 +324,5 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
     }
 
-
-    private class ProgressTask extends AsyncTask<Void,Void,Void> {
-        @Override
-        protected void onPreExecute() {
-
-        }
-
-        @Override
-        protected Void doInBackground(Void... arg0) {
-            Glide.get(context).clearDiskCache();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-        }
-    }
 
 }
