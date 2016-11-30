@@ -1,8 +1,6 @@
 package com.example.ivan.champy_v2.activity;
 
-import android.annotation.SuppressLint;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
@@ -28,7 +26,6 @@ import com.example.ivan.champy_v2.adapter.SelfImprovementPagerAdapter;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
-import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.model.self.Datum;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
@@ -36,7 +33,6 @@ import com.facebook.FacebookSdk;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
 import java.util.List;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -45,6 +41,9 @@ import retrofit.Callback;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
+
+import static com.example.ivan.champy_v2.utils.Constants.API_URL;
+import static com.example.ivan.champy_v2.utils.Constants.path;
 
 public class SelfImprovementActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -85,12 +84,9 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         Glide.with(this).load(R.drawable.self_white).override(130, 130).into((ImageView) findViewById(R.id.imageViewLogo));
         Glide.with(this).load(R.drawable.selfimprtext).override(280, 250).into((ImageView) findViewById(R.id.imageWakeUpChall));
 
-        @SuppressLint("SdCardPath")
-        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
-        CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
-        String name = user.getName();
+        String name = sessionManager.getUserName();
 
         final ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
         final ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
@@ -170,14 +166,10 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("selfimprovement", null, null);
         final ContentValues cv = new ContentValues();
-        final String API_URL = "http://46.101.213.24:3007";
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        String token = user.get("token");
 
         com.example.ivan.champy_v2.interfaces.SelfImprovement selfImprovement = retrofit.create(com.example.ivan.champy_v2.interfaces.SelfImprovement.class);
-        Call<com.example.ivan.champy_v2.model.self.SelfImprovement> call = selfImprovement.getChallenges(token);
+        Call<com.example.ivan.champy_v2.model.self.SelfImprovement> call = selfImprovement.getChallenges(sessionManager.getToken());
         call.enqueue(new Callback<com.example.ivan.champy_v2.model.self.SelfImprovement>() {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.model.self.SelfImprovement> response, Retrofit retrofit) {

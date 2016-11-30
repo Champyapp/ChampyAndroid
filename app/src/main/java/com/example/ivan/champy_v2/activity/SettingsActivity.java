@@ -1,7 +1,7 @@
 package com.example.ivan.champy_v2.activity;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,13 +28,12 @@ import android.widget.TextView;
 import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.ivan.champy_v2.controller.DailyRemindController;
 import com.example.ivan.champy_v2.R;
+import com.example.ivan.champy_v2.controller.DailyRemindController;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
-import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.interfaces.Update_user;
 import com.example.ivan.champy_v2.model.user.Delete;
 import com.example.ivan.champy_v2.model.user.Profile_data;
@@ -55,14 +54,14 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
+import static com.example.ivan.champy_v2.utils.Constants.API_URL;
+import static com.example.ivan.champy_v2.utils.Constants.path;
+
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
 
-    @SuppressLint("SdCardPath")
-    final private String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
-    final private String API_URL = "http://46.101.213.24:3007";
     final private String TAG = "SettingsActivity";
     private TextView tvChangeName, tvName;
-    private String name;
+    private String name, userID, token;
     private OfflineMode offlineMode;
     private DBHelper dbHelper;
     private DailyRemindController mDailyRemind;
@@ -86,6 +85,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         offlineMode = new OfflineMode();
         mDailyRemind = new DailyRemindController(getApplicationContext());
         sessionManager = new SessionManager(getApplicationContext());
+        userID = sessionManager.getUserId();
+        token = sessionManager.getToken();
 
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
@@ -179,12 +180,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         ViewServer.get(this).addWindow(this);
     }
 
-    @SuppressLint("SetTextI18n")
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -210,7 +205,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -236,11 +230,13 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.share:
                 updateProfile(map);
-                String message = "Check out Champy - it helps you improve and compete with your friends!";
+                String message = getString(R.string.share_text2);
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 share.putExtra(Intent.EXTRA_TEXT, message);
-                startActivity(Intent.createChooser(share, "How would you like to share?"));
+                try {
+                startActivity(Intent.createChooser(share, getString(R.string.how_would_you_like_to_share)));
+                } catch (ActivityNotFoundException e) { e.printStackTrace(); }
                 break;
             case R.id.nav_logout:
                 if (offlineMode.isConnectedToRemoteAPI(this)) {
@@ -301,10 +297,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                         switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
                                 if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
-                                    SessionManager sessionManager = new SessionManager(getApplicationContext());
-                                    CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
-                                    final String token = user.getToken();
-                                    String id = user.getUserObjectId();
                                     Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
                                     final Update_user update_user = retrofit.create(Update_user.class);
 
@@ -312,11 +304,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                                     callSurrenderAllChallenges.enqueue(new Callback<User>() {
                                         @Override
                                         public void onResponse(Response<User> response, Retrofit retrofit) {
-                                            String myLog = (response.isSuccess())
-                                                    ? "SurrenderAllChallenge: vse ok"
-                                                    : "SurrenderAllChallenge: " + response.code();
-                                            // TODO: 03.11.2016 get all inProgress challenges from bd and made give up
-                                            Log.d(TAG, "onResponse: " + myLog);
+                                            String myLog = (response.isSuccess()) ? " vse ok" : response.message();
+                                            Log.d(TAG, "onResponse: surrenderAll: " + myLog);
                                         }
 
                                         @Override
@@ -325,7 +314,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                                         }
                                     });
 
-                                    Call<Delete> callForDeleteUser = update_user.delete_user(id, token);
+                                    Call<Delete> callForDeleteUser = update_user.delete_user(userID, token);
                                     callForDeleteUser.enqueue(new Callback<Delete>() {
                                         @Override
                                         public void onResponse(Response<Delete> response, Retrofit retrofit) {
@@ -500,21 +489,14 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
 
     private void setNewName(String newName) {
-        SessionManager sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        String id = user.get("id");
-        String token = user.get("token");
-
         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-
         Update_user update_user = retrofit.create(Update_user.class);
-        Call<User> call = update_user.update_user_name(id, token, newName);
+        Call<User> call = update_user.update_user_name(userID, token, newName);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
                 if (response.isSuccess()) recreate();
-                else Log.d(TAG , "SetNewName: Vse OK");
+                else Log.d(TAG , "SetNewName: vse hyinya");
             }
             @Override
             public void onFailure(Throwable t) {
@@ -525,11 +507,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
 
     public void updateProfile(HashMap<String, String> map) {
-        SessionManager sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        String id = user.get("id");
-        String token = user.get("token");
 
         sessionManager.togglePushNotification(map.get("pushNotifications"));
         sessionManager.toggleNewChallengeRequest(map.get("newChallengeRequests"));
@@ -537,19 +514,17 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         sessionManager.toggleChallengeEnd(map.get("challengeEnd"));
         sessionManager.toggleDailyRemind(map.get("dailyRemind"));
 
-        final String API_URL = "http://46.101.213.24:3007";
         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
         Update_user update_user = retrofit.create(Update_user.class);
         Profile_data profile_data = new Profile_data(map);
-        Call<User> call = update_user.update_profile_options(id, token, profile_data);
+        Call<User> call = update_user.update_profile_options(userID, token, profile_data);
 
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    Log.d(TAG, "Status: Profile updated");
-                }
+                String myLog = (response.isSuccess()) ? " Success" : " Denied";
+                Log.d(TAG, "Status: updatedProfile " + myLog);
             }
             @Override
             public void onFailure(Throwable t) {

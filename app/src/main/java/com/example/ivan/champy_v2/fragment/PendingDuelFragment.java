@@ -10,30 +10,21 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.example.ivan.champy_v2.controller.ChallengeController;
 import com.example.ivan.champy_v2.R;
+import com.example.ivan.champy_v2.controller.ChallengeController;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
-import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
 
 import java.io.IOException;
 
-import static android.R.attr.centerX;
-import static android.R.attr.width;
-import static android.support.v7.appcompat.R.attr.height;
 import static java.lang.Math.round;
 
 public class PendingDuelFragment extends Fragment implements View.OnClickListener {
@@ -48,7 +39,6 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
     public ViewPager viewPager;
     public Typeface typeface;
     public SessionManager sessionManager;
-    private CurrentUserHelper user;
     public ChallengeController cc;
     public Snackbar snackbar;
     public DBHelper dbHelper;
@@ -119,10 +109,8 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
 
         btnAccept = (ImageButton)view.findViewById(R.id.btn_accept);
         btnCancel = (ImageButton)view.findViewById(R.id.btn_cancel);
-
         btnAccept.getLayoutParams().height = x*10;
         btnAccept.getLayoutParams().width = x*10;
-
         btnCancel.getLayoutParams().height = x*10;
         btnCancel.getLayoutParams().width = x*10;
 
@@ -150,7 +138,6 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
 //            btnCancel.getLayoutParams().height=x*10;
 //            btnCancel.getLayoutParams().width=x*10;
         }
-        tvUserVsUser.setTypeface(typeface);
 
         if (duration != null && !duration.isEmpty()) days = Integer.parseInt(duration) / 86400;
 
@@ -158,6 +145,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         tvGoal.setText(description);
         tvDays.setTypeface(typeface);
         tvGoal.setTypeface(typeface);
+        tvUserVsUser.setTypeface(typeface);
         everyDayForTheNext.setTypeface(typeface);
 
 
@@ -169,11 +157,11 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         btnAccept.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
 
-        user = new CurrentUserHelper(getContext());
-        final String token = user.getToken();
-        final String userId = user.getUserObjectId();
-        inProgressCount = Integer.parseInt(user.getInProgressCount());
+        sessionManager = new SessionManager(getContext());
+        final String token = sessionManager.getToken();
+        final String userId = sessionManager.getUserId();
         cc = new ChallengeController(getContext(), getActivity(), token, userId);
+        inProgressCount = Integer.parseInt(sessionManager.getChampyOptions().get("challenges"));
 
 
         return view;

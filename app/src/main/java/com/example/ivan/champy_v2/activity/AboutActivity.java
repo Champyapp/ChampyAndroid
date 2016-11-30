@@ -35,6 +35,7 @@ import java.io.FileNotFoundException;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 import static com.example.ivan.champy_v2.utils.Constants.azinecUrl;
+import static com.example.ivan.champy_v2.utils.Constants.path;
 
 public class AboutActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -51,6 +52,7 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
 
         offlineMode = new OfflineMode();
         sessionManager = new SessionManager(this);
+
         new ProgressTask().execute();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -66,17 +68,19 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
         toggle.setDrawerIndicatorEnabled(true);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
 
-        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+        final CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
         int count = checker.getPendingCount();
-        TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-        view.setText("+" + (count > 0 ? String.valueOf(count) : null));
-        if (count == 0) checker.hideItem();
+        if (count == 0) {
+            checker.hideItem();
+        } else {
+            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+        }
 
-        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
         String name = sessionManager.getUserName();

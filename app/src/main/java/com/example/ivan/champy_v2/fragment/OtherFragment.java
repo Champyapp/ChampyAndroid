@@ -21,13 +21,12 @@ import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.adapter.OtherAdapter;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHCheckTableForExist;
-import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.interfaces.NewUser;
 import com.example.ivan.champy_v2.model.FriendModel;
 import com.example.ivan.champy_v2.model.user.Data;
 import com.example.ivan.champy_v2.model.user.User;
-import com.example.ivan.champy_v2.utils.Constants;
 import com.example.ivan.champy_v2.utils.OfflineMode;
+import com.example.ivan.champy_v2.utils.SessionManager;
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
@@ -52,6 +51,8 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
+import static com.example.ivan.champy_v2.utils.Constants.API_URL;
+
 /**
  * Класс отвечает за OTHER в разделе FriendsActivity
  */
@@ -66,6 +67,7 @@ public class OtherFragment extends Fragment {
     private String checkRefresh = "";
     private SwipeRefreshLayout gSwipeRefreshLayout;
     private CHCheckTableForExist checkTableForExist;
+    private SessionManager sessionManager;
     private OfflineMode offlineMode;
     private DBHelper dbHelper;
     private ContentValues cv;
@@ -83,6 +85,7 @@ public class OtherFragment extends Fragment {
         FacebookSdk.sdkInitialize(getContext());
         offlineMode = new OfflineMode();
         dbHelper = new DBHelper(getContext());
+        sessionManager = new SessionManager(getContext());
         cv = new ContentValues();
     }
 
@@ -193,8 +196,7 @@ public class OtherFragment extends Fragment {
     private Emitter.Listener onConnect = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            CurrentUserHelper currentUser = new CurrentUserHelper(getContext());
-            mSocket.emit("ready", currentUser.getToken());
+            mSocket.emit("ready", sessionManager.getToken());
             Log.d(TAG, "Sockets: connecting...");
         }
     };
@@ -226,7 +228,7 @@ public class OtherFragment extends Fragment {
             swipeRefreshLayout.post(new Runnable() {
                 @Override
                 public void run() {
-                    final Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+                    final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
                     final NewUser newUser = retrofit.create(NewUser.class);
                     StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
                     StrictMode.setThreadPolicy(policy);
@@ -264,7 +266,7 @@ public class OtherFragment extends Fragment {
                                                     String photo = null;
 
                                                     if (data.getPhoto() != null) {
-                                                        photo = Constants.API_URL + data.getPhoto().getMedium();
+                                                        photo = API_URL + data.getPhoto().getMedium();
                                                     }
                                                     else {
                                                         try {

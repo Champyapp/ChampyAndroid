@@ -25,7 +25,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
-import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
 
@@ -37,6 +36,7 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 public class PrivacyActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private NavigationView navigationView;
+    private SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +44,7 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
         setContentView(R.layout.activity_privacy);
 
         new LoadText().execute();
+        sessionManager = new SessionManager(this);
 
         TextView drawerUserName = (TextView)findViewById(R.id.textView1); // overloading, be care
         drawerUserName.setVisibility(View.INVISIBLE);
@@ -68,8 +69,7 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
-        CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
-        String name = user.getName();
+        String name = sessionManager.getUserName();
 
         final Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         final ImageView drawerUserPhoto = (ImageView) headerLayout.findViewById(R.id.profile_image);
@@ -133,7 +133,6 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
                 break;
             case R.id.nav_logout:
                 OfflineMode offlineMode = new OfflineMode();
-                SessionManager sessionManager = new SessionManager(this);
                 if (offlineMode.isConnectedToRemoteAPI(this)) {
                     sessionManager.logout(this);
                 }

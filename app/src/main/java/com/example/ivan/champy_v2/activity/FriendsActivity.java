@@ -26,7 +26,6 @@ import com.example.ivan.champy_v2.adapter.FriendsActivityPagerAdapter;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHCheckTableForExist;
 import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
-import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
 import com.facebook.FacebookSdk;
@@ -36,6 +35,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+
+import static com.example.ivan.champy_v2.utils.Constants.path;
 
 public class FriendsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -105,8 +106,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         tabLayout.setupWithViewPager(viewPager);
         //setupCustomTabIcons();
 
-        CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
-        String name = user.getName();
+        String name = sessionManager.getUserName();
 
         typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
@@ -116,8 +116,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         drawerUserName.setText(name);
         drawerUserName.setTypeface(typeface);
 
-        @SuppressLint("SdCardPath")
-        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
 

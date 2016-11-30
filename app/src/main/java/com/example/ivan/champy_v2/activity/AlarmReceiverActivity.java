@@ -17,9 +17,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.ivan.champy_v2.controller.ChallengeController;
 import com.example.ivan.champy_v2.R;
-import com.example.ivan.champy_v2.helper.CurrentUserHelper;
+import com.example.ivan.champy_v2.controller.ChallengeController;
+import com.example.ivan.champy_v2.utils.SessionManager;
 
 import java.io.IOException;
 
@@ -62,10 +62,9 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
         window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-
-        CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
-        String token = user.getToken();
-        String userId = user.getUserObjectId();
+        SessionManager sessionManager = new SessionManager(getApplicationContext());
+        String token = sessionManager.getToken();
+        String userId = sessionManager.getUserId();
         cc = new ChallengeController(getApplicationContext(), AlarmReceiverActivity.this, token, userId);
 
         ImageButton buttonWakeUpDoneForToday = (ImageButton) findViewById(R.id.buttonWakeUpDoneForToday);

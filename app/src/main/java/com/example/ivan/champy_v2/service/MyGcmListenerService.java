@@ -20,7 +20,6 @@ import com.example.ivan.champy_v2.activity.PendingDuelActivity;
 import com.example.ivan.champy_v2.activity.RoleControllerActivity;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHLoadUserProgressBarInfo;
-import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
 import com.example.ivan.champy_v2.model.active_in_progress.Challenge;
 import com.example.ivan.champy_v2.model.active_in_progress.Datum;
@@ -51,6 +50,7 @@ public class MyGcmListenerService extends GcmListenerService {
 
     // TODO: 11/23/16 Delete from this class method "isUpdated" and update "Generate" method;
     private static final String TAG = "MyGcmListenerService";
+    private SessionManager sessionManager;
 
     /**
      * Called when message is received.
@@ -64,7 +64,7 @@ public class MyGcmListenerService extends GcmListenerService {
     @Override
     public void onMessageReceived(String from, Bundle data) {
 
-        final SessionManager sessionManager = new SessionManager(this);
+        sessionManager = new SessionManager(this);
         if (sessionManager.isUserLoggedIn()) {
             HashMap<String, String> user;
             user = sessionManager.getUserDetails();
@@ -115,11 +115,8 @@ public class MyGcmListenerService extends GcmListenerService {
                 historyIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 historyIntent.putExtra("win_request", "true");
 
-                CurrentUserHelper user = new CurrentUserHelper(this);
-                String userId = user.getUserObjectId();
-                String token  = user.getToken();
                 refreshPendingDuels();
-                generateCardsForMainActivity(token, userId);
+                generateCardsForMainActivity(sessionManager.getToken(), sessionManager.getUserId());
                 notifyChallenges(historyIntent, message);
                 break;
         }

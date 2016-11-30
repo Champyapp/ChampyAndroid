@@ -1,6 +1,5 @@
 package com.example.ivan.champy_v2.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -21,12 +20,10 @@ import android.widget.TimePicker;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.ivan.champy_v2.controller.ChallengeController;
 import com.example.ivan.champy_v2.R;
+import com.example.ivan.champy_v2.controller.ChallengeController;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
-import com.example.ivan.champy_v2.helper.CurrentUserHelper;
-import com.example.ivan.champy_v2.utils.Constants;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
 
@@ -35,11 +32,13 @@ import java.io.FileNotFoundException;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
+import static com.example.ivan.champy_v2.utils.Constants.path;
 import static com.example.ivan.champy_v2.utils.Constants.typeWake;
 
 public class WakeUpActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private TimePicker alarmTimePicker;
+    private SessionManager sessionManager;
     private OfflineMode offlineMode;
     private ChallengeController cc;
     private Snackbar snackbar;
@@ -81,14 +80,13 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         Glide.with(this).load(R.drawable.wakeupwhite).override(110, 110).into((ImageView) findViewById(R.id.imageViewLogo));
         Glide.with(this).load(R.drawable.wakeuptext).override(180, 150).into((ImageView) findViewById(R.id.imageWakeUpChall));
 
-        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
 
-        CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
-        String userName = user.getName();
-        String userID = user.getUserObjectId();
-        String token = user.getToken();
+        sessionManager = new SessionManager(this);
+        String userName = sessionManager.getUserName();
+        String userID = sessionManager.getUserId();
+        String token = sessionManager.getToken();
         cc = new ChallengeController(this, this, token, userID);
         drawerUserName.setText(userName);
         drawerUserName.setTypeface(typeface);
@@ -195,10 +193,9 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
                 startActivity(Intent.createChooser(share, "How would you like to share?"));
                 break;
             case R.id.nav_logout:
-                OfflineMode offlineMode = new OfflineMode();
-                SessionManager sessionManager = new SessionManager(this);
-                offlineMode.isConnectedToRemoteAPI(this);
-                sessionManager.logout(this);
+                if (offlineMode.isConnectedToRemoteAPI(this)) {
+                    sessionManager.logout(this);
+                }
                 break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -1,6 +1,5 @@
 package com.example.ivan.champy_v2.activity;
 
-import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.database.Cursor;
@@ -21,7 +20,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.ivan.champy_v2.R;
-import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.interfaces.Update_user;
 import com.example.ivan.champy_v2.model.user.User;
 import com.example.ivan.champy_v2.utils.Blur;
@@ -42,13 +40,15 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
+import static com.example.ivan.champy_v2.utils.Constants.API_URL;
+import static com.example.ivan.champy_v2.utils.Constants.path;
+
 public class PhotoActivity extends AppCompatActivity {
 
     private static final int CAMERA_REQUEST = 1888;
     private static final int SELECT_FILE = 1999;
     private static final int CROP_PIC = 1777;
-    @SuppressLint("SdCardPath")
-    private static final String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+    private SessionManager sessionManager;
     public ImageView imageView;
     public Uri picUri;
     public final String TAG = "myLogs";
@@ -57,6 +57,7 @@ public class PhotoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
+        sessionManager = new SessionManager(getApplicationContext());
 
         RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.change_photo);
         relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.champy_background));
@@ -201,7 +202,6 @@ public class PhotoActivity extends AppCompatActivity {
 
         Bitmap blured = Blur.blurRenderScript(getApplicationContext(), photo, 10);
 
-        SessionManager sessionManager = new SessionManager(getApplicationContext());
         sessionManager.change_avatar(uri.toString());
 
         FileOutputStream out = null;
@@ -269,11 +269,9 @@ public class PhotoActivity extends AppCompatActivity {
 
 
     public void Upload_photo(String path) {
-        final String API_URL = "http://46.101.213.24:3007";
         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
-        String token = user.getToken();
-        String id = user.getUserObjectId();
+        String token = sessionManager.getToken();
+        String id = sessionManager.getUserId();
 
         File photoFile = new File(path);
         RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), photoFile);

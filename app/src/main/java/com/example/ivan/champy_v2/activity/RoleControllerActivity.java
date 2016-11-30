@@ -8,9 +8,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.ivan.champy_v2.controller.ChallengeController;
 import com.example.ivan.champy_v2.R;
-import com.example.ivan.champy_v2.helper.CurrentUserHelper;
+import com.example.ivan.champy_v2.controller.ChallengeController;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
 
@@ -24,7 +23,6 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
     private SessionManager sessionManager;
     private ChallengeController cc;
     private OfflineMode offlineMode;
-    private CurrentUserHelper user;
     private Typeface typeface;
     private TextView lostInternet;
     private ImageView imageReload;
@@ -36,17 +34,16 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
         setContentView(R.layout.activity_role_controller);
         spinner = findViewById(R.id.loadingPanel);
 
-        user = new CurrentUserHelper(getApplicationContext());
-        String uId = user.getUserObjectId();
-        String uToken = user.getToken();
+        sessionManager = new SessionManager(getApplicationContext());
+        offlineMode = new OfflineMode();
+        String uId = sessionManager.getUserId();
+        String uToken = sessionManager.getToken();
         cc = new ChallengeController(getApplicationContext(), this, uToken, uId);
 
         typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
         TextView tvChampy = (TextView)findViewById(R.id.tvChampy);
         tvChampy.setTypeface(typeface);
 
-        sessionManager = new SessionManager(getApplicationContext());
-        offlineMode = new OfflineMode();
 
         checkIfLoggedInAndMakeRedirect();
 

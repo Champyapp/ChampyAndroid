@@ -1,6 +1,5 @@
 package com.example.ivan.champy_v2.adapter;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
@@ -18,11 +17,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ivan.champy_v2.controller.ChallengeController;
 import com.example.ivan.champy_v2.R;
+import com.example.ivan.champy_v2.controller.ChallengeController;
 import com.example.ivan.champy_v2.data.DBHelper;
-import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
+import com.example.ivan.champy_v2.utils.SessionManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,16 +32,17 @@ import static com.example.ivan.champy_v2.utils.Constants.oneDay;
 
 public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 
-    private ArrayList<SelfImprovement_model> arrayList;
     public static final String TAG = "CardsAdapterMain";
+    private ArrayList<SelfImprovement_model> arrayList;
     private Snackbar snackbar;
+    private SessionManager sessionManager;
 
-    public MainActivityCardsAdapter(Context context, ArrayList<SelfImprovement_model> mArrayList) {
+    public MainActivityCardsAdapter(Context context, ArrayList<SelfImprovement_model> mArrayList, SessionManager session) {
         super(context);
         this.arrayList = mArrayList;
+        this.sessionManager = session;
     }
 
-    @SuppressLint({"SetTextI18n", "InflateParams"})
     @Override
     public View getView(int position, View convertView) {
         View tempView = convertView;
@@ -167,9 +167,8 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                 break;
         }
 
-        CurrentUserHelper user = new CurrentUserHelper(getContext());
-        String userId = user.getUserObjectId();
-        String token = user.getToken();
+        String userId = sessionManager.getUserId();
+        String token = sessionManager.getToken();
         final ChallengeController cc = new ChallengeController(getContext(), (Activity) getContext(), token, userId);
         long now = Calendar.getInstance().getTimeInMillis() / 1000;
         long myProgress = 0;
@@ -186,18 +185,18 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 
         if (myProgress != 0L && now > progressMidNight + oneDay) {
             // it's mean "self" and "duel"
-//            DBHelper dbHelper = new DBHelper(getContext());
-//            SQLiteDatabase db = dbHelper.getWritableDatabase();
-//            ContentValues cv = new ContentValues();
-//            cv.put("updated", "false"); // was true
-//            db.update("updated",      cv, "challenge_id = ?", new String[]{itemInProgressId});
-//            db.update("myChallenges", cv, "challenge_id = ?", new String[]{itemInProgressId});
+            DBHelper dbHelper = new DBHelper(getContext());
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("updated", "false"); // was true
+            db.update("updated",      cv, "challenge_id = ?", new String[]{itemInProgressId});
+            db.update("myChallenges", cv, "challenge_id = ?", new String[]{itemInProgressId});
 
-//            if (!itemType.equals("Wake Up")) {
-//                tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
-//                buttonShare.setVisibility(View.INVISIBLE);
-//                buttonDone.setVisibility(View.VISIBLE);
-//            }
+            if (!itemType.equals("Wake Up")) {
+                tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
+                buttonShare.setVisibility(View.INVISIBLE);
+                buttonDone.setVisibility(View.VISIBLE);
+            }
             if (now > progressMidNight + oneDay + oneDay) {
                 try {
                     if (itemType.equals("Wake Up")) {

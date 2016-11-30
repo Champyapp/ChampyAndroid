@@ -15,7 +15,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,7 +35,6 @@ import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHDownloadImageTask;
 import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
 import com.example.ivan.champy_v2.helper.CHMakeResponsiveScore;
-import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
 import com.example.ivan.champy_v2.utils.Blur;
 import com.example.ivan.champy_v2.utils.CustomPagerBase;
@@ -78,7 +76,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         CHMakeResponsiveScore chMakeResponsiveScore = new CHMakeResponsiveScore();
         chMakeResponsiveScore.makeResponsiveScore(this, width);
 
-        adapter = new MainActivityCardsAdapter(this, SelfImprovement_model.generate(this));
+        sessionManager = new SessionManager(getApplicationContext());
+        adapter = new MainActivityCardsAdapter(this, SelfImprovement_model.generate(this), sessionManager);
         if (adapter.dataCount() > 0) {
             RelativeLayout cards = (RelativeLayout) findViewById(R.id.cards);
             CustomPagerBase pager = new CustomPagerBase(MainActivity.this, cards, adapter);
@@ -112,7 +111,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ImageView drawerUserPhoto = (ImageView) headerLayout.findViewById(R.id.profile_image);
         TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
 
-        sessionManager = new SessionManager(getApplicationContext());
         String name = sessionManager.getUserName();
         drawerUserName.setText(name);
         Typeface typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
@@ -175,7 +173,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         contentMain = (RelativeLayout) findViewById(R.id.content_main);
         File profile = new File(path, "profile.jpg");
         Uri uri = Uri.fromFile(profile);
-        Glide.with(this).load(uri).bitmapTransform(new CropCircleTransformation(this)).into(drawerUserPhoto);
+        Glide.with(this)
+                .load(uri)
+                .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(drawerUserPhoto);
 
         ViewServer.get(this).addWindow(this);
     }

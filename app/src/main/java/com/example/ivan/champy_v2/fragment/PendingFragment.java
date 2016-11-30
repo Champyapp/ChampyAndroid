@@ -18,8 +18,6 @@ import android.view.ViewGroup;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.adapter.PendingAdapter;
 import com.example.ivan.champy_v2.data.DBHelper;
-import com.example.ivan.champy_v2.helper.CHCheckTableForExist;
-import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.interfaces.CustomItemClickListener;
 import com.example.ivan.champy_v2.model.Pending_friend;
 import com.example.ivan.champy_v2.model.friend.Datum;
@@ -50,7 +48,7 @@ public class PendingFragment extends Fragment {
 
     private String id = "", token = "";
     public SwipeRefreshLayout swipeRefreshLayout;
-    private CHCheckTableForExist chCheckTableForExist;
+    private SessionManager sessionManager;
     public View gView;
 
     public int mPage;
@@ -66,10 +64,9 @@ public class PendingFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: ");
-        CurrentUserHelper currentUser = new CurrentUserHelper(getContext());
-        chCheckTableForExist = new CHCheckTableForExist(getContext());
-        id = currentUser.getUserObjectId();
-        token = currentUser.getToken();
+        sessionManager = new SessionManager(getContext());
+        id = sessionManager.getUserId();
+        token = sessionManager.getToken();
     }
 
     @Override
@@ -314,8 +311,7 @@ public class PendingFragment extends Fragment {
     private Emitter.Listener onConnect = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            CurrentUserHelper currentUser = new CurrentUserHelper(getContext());
-            mSocket.emit("ready", currentUser.getToken());
+            mSocket.emit("ready", token);
             Log.d(TAG, "Sockets: connecting...");
         }
     };

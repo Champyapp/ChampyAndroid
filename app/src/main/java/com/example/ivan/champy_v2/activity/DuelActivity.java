@@ -32,7 +32,6 @@ import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.adapter.DuelPagerAdapter;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
-import com.example.ivan.champy_v2.helper.CurrentUserHelper;
 import com.example.ivan.champy_v2.model.self.Datum;
 import com.example.ivan.champy_v2.model.self.SelfImprovement;
 import com.example.ivan.champy_v2.utils.OfflineMode;
@@ -51,6 +50,8 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
+import static com.example.ivan.champy_v2.utils.Constants.API_URL;
+import static com.example.ivan.champy_v2.utils.Constants.path;
 import static java.lang.Math.round;
 
 public class DuelActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -102,9 +103,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
 
-        CurrentUserHelper user = new CurrentUserHelper(getApplicationContext());
-        name = user.getName();
-        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+        name = sessionManager.getUserName();
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
 
@@ -188,7 +187,6 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("duel", null, null);
         final ContentValues cv = new ContentValues();
-        final String API_URL = "http://46.101.213.24:3007";
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         final SessionManager sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> user;
