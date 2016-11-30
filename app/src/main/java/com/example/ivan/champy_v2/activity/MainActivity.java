@@ -51,6 +51,7 @@ import java.io.FileNotFoundException;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
+import static com.example.ivan.champy_v2.utils.Constants.path;
 import static java.lang.Math.round;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -74,8 +75,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         int width = getWindowManager().getDefaultDisplay().getWidth();
-        CHMakeResponsiveScore chMakeResponsiveScore = new CHMakeResponsiveScore(this);
-        chMakeResponsiveScore.makeResponsiveScore(width);
+        CHMakeResponsiveScore chMakeResponsiveScore = new CHMakeResponsiveScore();
+        chMakeResponsiveScore.makeResponsiveScore(this, width);
 
         adapter = new MainActivityCardsAdapter(this, SelfImprovement_model.generate(this));
         if (adapter.dataCount() > 0) {
@@ -84,26 +85,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             pager.preparePager(0);
         }
 
-        final SubActionButton.Builder itemBuilder = new SubActionButton.Builder(MainActivity.this);
-        buttonWakeUpChallenge = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeupcolor)).build();
-        buttonDuelChallenge   = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.duel_yellow)).build();
-        buttonSelfImprovement = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.self_yellow)).build();
 
-        ImageView fabPlus = (ImageButton) findViewById(R.id.fabPlus);
-        actionMenu = new FloatingActionMenu.Builder(MainActivity.this)
-                            .addSubActionView(buttonWakeUpChallenge)
-                            .addSubActionView(buttonDuelChallenge)
-                            .addSubActionView(buttonSelfImprovement)
-                            .setRadius(350).attachTo(fabPlus).build();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
-        navigationView.setNavigationItemSelectedListener(MainActivity.this);
-
-        sessionManager = new SessionManager(getApplicationContext());
-        String pathToPic = sessionManager.getPathToPic();
-
+        // DRAWER
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        blurScreen = (ImageView)findViewById(R.id.blurScreen);
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -116,22 +101,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.setDrawerListener(drawerToggle);
         drawerToggle.syncState();
 
-        if (pathToPic == null) pathToPic = getIntent().getExtras().getString("path_to_pic");
 
         ImageView background = (ImageView) findViewById(R.id.main_background);
-        blurScreen = (ImageView)findViewById(R.id.blurScreen);
 
-        Typeface typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
+        // NAVIGATION VIEW
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
+        navigationView.setNavigationItemSelectedListener(MainActivity.this);
         ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
         ImageView drawerUserPhoto = (ImageView) headerLayout.findViewById(R.id.profile_image);
         TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
 
+        sessionManager = new SessionManager(getApplicationContext());
         String name = sessionManager.getUserName();
         drawerUserName.setText(name);
+        Typeface typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
         drawerUserName.setTypeface(typeface);
 
         /********************************* Get photo and make bg **********************************/
-        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+
         File blurred = new File(path, "blured2.jpg");
         if (blurred.exists())
             try {
@@ -139,17 +127,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 background.setImageDrawable(CHLoadBlurredPhoto.Init(path));
                 drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 drawerBackground.setImageDrawable(CHLoadBlurredPhoto.Init(path));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            } catch (FileNotFoundException e) {e.printStackTrace();}
         else {
+            String pathToPic = sessionManager.getPathToPic();
+            if (pathToPic == null) pathToPic = getIntent().getExtras().getString("path_to_pic");
             CHDownloadImageTask chDownloadImageTask = new CHDownloadImageTask(getApplicationContext(), MainActivity.this);
             chDownloadImageTask.execute(pathToPic);
         }
 
-        File profile = new File(path, "profile.jpg");
-        Uri uri = Uri.fromFile(profile);
-        Glide.with(this).load(uri).bitmapTransform(new CropCircleTransformation(this)).into(drawerUserPhoto);
 
         /******************************** Display 'Pending duels' menu ****************************/
         CHCheckPendingDuels checker = new CHCheckPendingDuels(this, navigationView);
@@ -162,11 +147,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         /*********************************** Display fab buttons **********************************/
+        final SubActionButton.Builder itemBuilder = new SubActionButton.Builder(MainActivity.this);
+        buttonWakeUpChallenge = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeupcolor)).build();
+        buttonDuelChallenge   = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.duel_yellow)).build();
+        buttonSelfImprovement = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.self_yellow)).build();
+
+        ImageView fabPlus = (ImageButton) findViewById(R.id.fabPlus);
+        actionMenu = new FloatingActionMenu.Builder(this)
+                .addSubActionView(buttonWakeUpChallenge)
+                .addSubActionView(buttonDuelChallenge)
+                .addSubActionView(buttonSelfImprovement)
+                .setRadius(350).attachTo(fabPlus).build();
+
         int x = round(width / 100);
         buttonWakeUpChallenge.getLayoutParams().height = x * 20;
         buttonWakeUpChallenge.getLayoutParams().width  = x * 20;
-        buttonDuelChallenge.getLayoutParams().height   = x * 20;
-        buttonDuelChallenge.getLayoutParams().width    = x * 20;
+        buttonDuelChallenge  .getLayoutParams().height = x * 20;
+        buttonDuelChallenge  .getLayoutParams().width  = x * 20;
         buttonSelfImprovement.getLayoutParams().height = x * 20;
         buttonSelfImprovement.getLayoutParams().width  = x * 20;
 
@@ -174,6 +171,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         CHBuildAnim chBuildAnim = new CHBuildAnim(this, sessionManager, typeface);
         chBuildAnim.buildAnim();
+
+        contentMain = (RelativeLayout) findViewById(R.id.content_main);
+        File profile = new File(path, "profile.jpg");
+        Uri uri = Uri.fromFile(profile);
+        Glide.with(this).load(uri).bitmapTransform(new CropCircleTransformation(this)).into(drawerUserPhoto);
 
         ViewServer.get(this).addWindow(this);
     }
@@ -190,19 +192,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mLastClickTime = SystemClock.elapsedRealtime();
 
         /****************************************** Blur *****************************************/
-        //Here we make our background is blurred
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                contentMain = (RelativeLayout) findViewById(R.id.content_main);
-                contentMain.destroyDrawingCache();
-                contentMain.buildDrawingCache();
-                Bitmap bm = contentMain.getDrawingCache();
-                Bitmap blurred = Blur.blurRenderScript(getApplicationContext(), bm, 25);
-                Drawable ob = new BitmapDrawable(getResources(), blurred);
-                blurScreen.setImageDrawable(ob);
-            }
-        });
+
+        contentMain.destroyDrawingCache();
+        contentMain.buildDrawingCache();
+        Bitmap bm = contentMain.getDrawingCache();
+        Bitmap blurred = Blur.blurRenderScript(getApplicationContext(), bm, 25);
+        Drawable ob = new BitmapDrawable(getResources(), blurred);
+        blurScreen.setImageDrawable(ob);
+
         /************************************** Fab Clicks ****************************************/
 
         // first we check action menu and if "is open" then we setup our inside click for FAB

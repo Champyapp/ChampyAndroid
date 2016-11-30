@@ -60,7 +60,6 @@ public class OtherFragment extends Fragment {
     private static final String ARG_PAGE = "ARG_PAGE";
     private static final String TAG = "OtherFragment";
     private int mPage;
-
     private View gView;
     private List<FriendModel> friends;
     private Socket mSocket;
@@ -75,7 +74,7 @@ public class OtherFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         Log.d(TAG, "onAttach: ");
-        checkRefresh = "true";
+        //checkRefresh = "true";
     }
 
     @Override
@@ -85,8 +84,6 @@ public class OtherFragment extends Fragment {
         offlineMode = new OfflineMode();
         dbHelper = new DBHelper(getContext());
         cv = new ContentValues();
-
-
     }
 
     @Override
@@ -144,9 +141,9 @@ public class OtherFragment extends Fragment {
             refreshOtherView(gSwipeRefreshLayout, gView);
         }
 
-        if (checkRefresh.equals("true")) {
+        if (getActivity().getIntent().getExtras() != null) {
             refreshOtherView(gSwipeRefreshLayout, gView);
-            checkRefresh = "false";
+            //checkRefresh = "false";
         }
 
         return view;

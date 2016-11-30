@@ -18,7 +18,7 @@ public class Blur {
     @SuppressLint("NewApi")
     public static Bitmap blurRenderScript(Context context, Bitmap smallBitmap, int radius) {
         try {
-            smallBitmap = RGB565toARGB888(smallBitmap);
+            smallBitmap = RGB565toARGB888(smallBitmap); // ?
         } catch (Exception e) {e.printStackTrace();}
 
         Bitmap bitmap = Bitmap.createBitmap(smallBitmap.getWidth(), smallBitmap.getHeight(), Bitmap.Config.ARGB_8888);

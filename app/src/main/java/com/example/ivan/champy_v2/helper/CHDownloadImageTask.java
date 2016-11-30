@@ -34,7 +34,7 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
     private Context context;
-    MainActivity activity;
+    private MainActivity activity;
 
     public CHDownloadImageTask(Context context, MainActivity activity) {
         this.context = context;
@@ -55,6 +55,7 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         }
         return bitmapImage;
     }
+
 
     private String saveToInternalStorage(Bitmap bitmapImage){
         ContextWrapper cw = new ContextWrapper(context);
@@ -94,6 +95,7 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         }
         return directory.getAbsolutePath();
     }
+
 
     private void loadImageFromStorage(String path) {
         try {
@@ -152,6 +154,7 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         }
 
     }
+
 
     protected void onPostExecute(Bitmap result) {
         // Do your staff here to save image

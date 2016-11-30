@@ -16,4 +16,5 @@ public class Constants {
 
     public static final String azinecUrl = "http://www.azinec.com";
 
+    public static final String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
 }

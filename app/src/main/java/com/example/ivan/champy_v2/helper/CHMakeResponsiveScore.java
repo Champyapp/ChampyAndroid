@@ -12,13 +12,7 @@ import static java.lang.Math.round;
 public class CHMakeResponsiveScore {
 
 
-    private Activity activity;
-
-    public CHMakeResponsiveScore(Activity activity) {
-        this.activity = activity;
-    }
-
-    public void makeResponsiveScore(int width) {
+    public void makeResponsiveScore(Activity activity, int width) {
         int x = round(width/100);
 
         //-------------------------- Circles ---------------------------//
