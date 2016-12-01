@@ -3,7 +3,6 @@ package com.example.ivan.champy_v2.helper;
 import android.app.Activity;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.ivan.champy_v2.R;
 

@@ -9,7 +9,6 @@ import com.example.ivan.champy_v2.model.friend.Datum;
 import com.example.ivan.champy_v2.model.friend.Friend;
 import com.example.ivan.champy_v2.model.friend.Friend_;
 import com.example.ivan.champy_v2.model.friend.Owner;
-import com.example.ivan.champy_v2.utils.Constants;
 
 import java.util.List;
 

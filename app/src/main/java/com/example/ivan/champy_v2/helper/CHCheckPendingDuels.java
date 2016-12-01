@@ -8,8 +8,8 @@ import android.view.Menu;
 import android.view.View;
 
 import com.example.ivan.champy_v2.R;
-import com.example.ivan.champy_v2.utils.SessionManager;
 import com.example.ivan.champy_v2.data.DBHelper;
+import com.example.ivan.champy_v2.utils.SessionManager;
 
 /**
  * this class helps us to check pending duels and if count > 0 then we create new menu

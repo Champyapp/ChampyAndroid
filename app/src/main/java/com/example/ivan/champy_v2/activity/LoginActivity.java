@@ -16,8 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.debug.hv.ViewServer;
-import com.example.ivan.champy_v2.controller.DailyRemindController;
 import com.example.ivan.champy_v2.R;
+import com.example.ivan.champy_v2.controller.DailyRemindController;
 import com.example.ivan.champy_v2.helper.AppSync;
 import com.example.ivan.champy_v2.helper.UpdatePushIdentifier;
 import com.example.ivan.champy_v2.interfaces.NewUser;

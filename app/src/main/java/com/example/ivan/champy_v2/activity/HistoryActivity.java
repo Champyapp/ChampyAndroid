@@ -69,6 +69,7 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager_history);
         final FragmentPagerAdapter adapterViewPager = new HistoryPagerAdapter(getSupportFragmentManager(), getApplicationContext());
         viewPager.setAdapter(adapterViewPager);
+        viewPager.setOffscreenPageLimit(3);
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs_history);
         tabLayout.setupWithViewPager(viewPager);
 

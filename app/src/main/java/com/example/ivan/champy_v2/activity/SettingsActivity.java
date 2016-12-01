@@ -1,7 +1,6 @@
 package com.example.ivan.champy_v2.activity;
 
 import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;

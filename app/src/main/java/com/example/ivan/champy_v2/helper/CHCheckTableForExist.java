@@ -3,8 +3,6 @@ package com.example.ivan.champy_v2.helper;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.ivan.champy_v2.data.DBHelper;
-
 /**
  * Ultra stupid solution for checking other table.
  */

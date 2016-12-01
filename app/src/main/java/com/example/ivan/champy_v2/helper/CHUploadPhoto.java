@@ -3,14 +3,13 @@ package com.example.ivan.champy_v2.helper;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.ivan.champy_v2.utils.SessionManager;
 import com.example.ivan.champy_v2.interfaces.Update_user;
 import com.example.ivan.champy_v2.model.user.User;
+import com.example.ivan.champy_v2.utils.SessionManager;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.RequestBody;
 
 import java.io.File;
-import java.util.HashMap;
 
 import retrofit.Call;
 import retrofit.Callback;

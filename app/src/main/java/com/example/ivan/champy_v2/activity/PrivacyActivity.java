@@ -1,6 +1,5 @@
 package com.example.ivan.champy_v2.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;

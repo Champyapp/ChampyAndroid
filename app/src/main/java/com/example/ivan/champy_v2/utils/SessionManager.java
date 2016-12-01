@@ -7,8 +7,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.example.ivan.champy_v2.controller.DailyRemindController;
 import com.example.ivan.champy_v2.activity.RoleControllerActivity;
+import com.example.ivan.champy_v2.controller.DailyRemindController;
 import com.facebook.login.LoginManager;
 
 import java.util.HashMap;

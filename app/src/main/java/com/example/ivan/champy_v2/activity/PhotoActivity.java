@@ -34,7 +34,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Random;
 
-import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
