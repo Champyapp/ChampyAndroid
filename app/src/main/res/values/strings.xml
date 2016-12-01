@@ -160,8 +160,8 @@
     <string name="level">"Level "</string>
     <string name="champy">" Champy"</string>
     <string name="daysToGo">" DAYS TO GO"</string>
-    <string name="take_photo_from_camera">Take Photo from Camera</string>
-    <string name="take_photo_from_gallery">Take Photo from Gallery</string>
+    <string name="take_photo_from_camera">Take a picture</string>
+    <string name="take_photo_from_gallery">Choose from Gallery</string>
     <string name="areYouSure">Are you sure</string>
     <string name="youWannaCreateThisChall">You want to create this challenge?</string>
     <string name="yes">Yes</string>

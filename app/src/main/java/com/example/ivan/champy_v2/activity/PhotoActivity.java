@@ -4,16 +4,16 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Random;
 
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
@@ -49,7 +50,6 @@ public class PhotoActivity extends AppCompatActivity {
     private static final int SELECT_FILE = 1999;
     private static final int CROP_PIC = 1777;
     private SessionManager sessionManager;
-    public ImageView imageView;
     public Uri picUri;
     public final String TAG = "myLogs";
 
@@ -57,36 +57,44 @@ public class PhotoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         sessionManager = new SessionManager(getApplicationContext());
 
-        RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.change_photo);
-        relativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.champy_background));
+        Typeface typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
+        TextView tvChooseFromGallery = (TextView)findViewById(R.id.tv_choose_from_gallery);
+        TextView tvTakePicture = (TextView)findViewById(R.id.tv_take_a_picture);
+        ImageView imageView = (ImageView)findViewById(R.id.photo);
+        tvChooseFromGallery.setTypeface(typeface);
+        tvTakePicture.setTypeface(typeface);
+
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
 
         Glide.with(this).load(url).diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true).centerCrop().into((ImageView) findViewById(R.id.photo));
 
+//        Glide.with(this)
+//                .load(url)
+//                .asBitmap()
+//                .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                .skipMemoryCache(true)
+//                .override(200, 20)
+//                .dontAnimate()
+//                .into(imageView);
 
-        imageView = (ImageView)this.findViewById(R.id.photo);
-        TextView camera = (TextView)findViewById(R.id.camera);
-        camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                File f=new File(path, "test.jpg");
-                picUri = Uri.fromFile(f);
-                startActivityForResult(intent, CAMERA_REQUEST);
-            }
+        tvChooseFromGallery.setOnClickListener(v -> Crop.pickImage(PhotoActivity.this));
+
+        tvTakePicture.setOnClickListener(v -> {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            File f=new File(path, "test.jpg");
+            picUri = Uri.fromFile(f);
+            startActivityForResult(intent, CAMERA_REQUEST);
         });
-        TextView gallery = (TextView)findViewById(R.id.gallery);
-        gallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Crop.pickImage(PhotoActivity.this);
-            }
-        });
+
     }
 
 

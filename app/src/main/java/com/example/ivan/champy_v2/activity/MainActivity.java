@@ -291,22 +291,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    private class asyncLoadPhotoForBackground extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-
-
-                }
-            });
-
-            return null;
-        }
-
-    }
-
-
 }
