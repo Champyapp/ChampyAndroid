@@ -220,6 +220,4 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-
-
 }

@@ -42,6 +42,7 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
+import static com.example.ivan.champy_v2.utils.Constants.API_URL;
 import static com.example.ivan.champy_v2.utils.Constants.typeDuel;
 import static com.example.ivan.champy_v2.utils.Constants.typeSelf;
 import static java.lang.Math.round;
@@ -128,14 +129,11 @@ public class MyGcmListenerService extends GcmListenerService {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final int clearCount = db.delete("pending_duel", null, null);
         final ContentValues cv = new ContentValues();
-        final String API_URL = "http://46.101.213.24:3007";
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         final SessionManager sessionManager = new SessionManager(this);
         final String update = "0"; //1457019726
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        final String userId = user.get("id");
-        String token = user.get("token");
+        final String userId = sessionManager.getUserId();
+        final String token = sessionManager.getToken();
 
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
 
@@ -184,7 +182,7 @@ public class MyGcmListenerService extends GcmListenerService {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final ContentValues cv = new ContentValues();
         int clearCount = db.delete("myChallenges", null, null);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
         Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userId, "0", token);
         call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {

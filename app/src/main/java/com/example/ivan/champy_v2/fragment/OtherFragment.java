@@ -192,7 +192,6 @@ public class OtherFragment extends Fragment {
 
     }
 
-
     @Override
     public void onStop() {
         super.onStop();

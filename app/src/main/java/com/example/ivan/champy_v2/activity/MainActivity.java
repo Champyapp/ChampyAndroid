@@ -57,10 +57,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String TAG = MainActivity.class.getSimpleName();
     private static long mLastClickTime = 0;
     private SubActionButton buttonWakeUpChallenge, buttonDuelChallenge, buttonSelfImprovement;
-    private RelativeLayout contentMain;
     private MainActivityCardsAdapter adapter;
     private FloatingActionMenu actionMenu;
     private SessionManager sessionManager;
+    private RelativeLayout contentMain;
     private ImageView blurScreen;
     private DrawerLayout drawer;
 
@@ -105,8 +105,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // NAVIGATION VIEW
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(MainActivity.this);
+        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
         ImageView drawerUserPhoto = (ImageView) headerLayout.findViewById(R.id.profile_image);
         TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
@@ -165,7 +165,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         buttonSelfImprovement.getLayoutParams().height = x * 20;
         buttonSelfImprovement.getLayoutParams().width  = x * 20;
 
-        fabPlus.setOnClickListener(MainActivity.this);
 
         CHBuildAnim chBuildAnim = new CHBuildAnim(this, sessionManager, typeface);
         chBuildAnim.buildAnim();
@@ -173,13 +172,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         contentMain = (RelativeLayout) findViewById(R.id.content_main);
         File profile = new File(path, "profile.jpg");
         Uri uri = Uri.fromFile(profile);
-        Glide.with(this)
-                .load(uri)
-                .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(drawerUserPhoto);
+        Glide.with(this).load(uri).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
 
+        fabPlus.setOnClickListener(MainActivity.this);
         ViewServer.get(this).addWindow(this);
     }
 
@@ -193,6 +189,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onClick(View v) {
         if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
         mLastClickTime = SystemClock.elapsedRealtime();
+        if (adapter.dataCount() >= 5) {
+            Toast.makeText(this, "You have too much challenges", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         /****************************************** Blur *****************************************/
 
@@ -211,9 +211,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             blurScreen.setVisibility(View.INVISIBLE);
 //            cards.setVisibility(View.VISIBLE);
         } else {
-            if (adapter.dataCount() < 5) {
                 blurScreen.setVisibility(View.VISIBLE);
-//                cards.setVisibility(View.INVISIBLE);
                 buttonSelfImprovement.setOnClickListener(v0 -> {
                     Intent intent = new Intent(MainActivity.this, SelfImprovementActivity.class);
                     startActivity(intent);
@@ -226,10 +224,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Intent intent = new Intent(MainActivity.this, WakeUpActivity.class);
                     startActivity(intent);
                 });
-            } else {
-                actionMenu.toggle(false);
-                Toast.makeText(MainActivity.this, "You have too much challenges", Toast.LENGTH_SHORT).show();
-            }
         }
 
     }
