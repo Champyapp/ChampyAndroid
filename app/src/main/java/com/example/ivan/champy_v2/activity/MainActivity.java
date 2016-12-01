@@ -87,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // DRAWER
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        blurScreen = (ImageView)findViewById(R.id.blurScreen);
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -119,13 +118,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         /********************************* Get photo and make bg **********************************/
 
         File blurred = new File(path, "blured2.jpg");
-        if (blurred.exists())
+        if (blurred.exists()) {
             try {
                 background.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 background.setImageDrawable(CHLoadBlurredPhoto.Init(path));
                 drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 drawerBackground.setImageDrawable(CHLoadBlurredPhoto.Init(path));
             } catch (FileNotFoundException e) {e.printStackTrace();}
+        }
         else {
             String pathToPic = sessionManager.getPathToPic();
             if (pathToPic == null) pathToPic = getIntent().getExtras().getString("path_to_pic");
@@ -169,13 +169,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         CHBuildAnim chBuildAnim = new CHBuildAnim(this, sessionManager, typeface);
         chBuildAnim.buildAnim();
 
-        contentMain = (RelativeLayout) findViewById(R.id.content_main);
         File profile = new File(path, "profile.jpg");
         Uri uri = Uri.fromFile(profile);
         Glide.with(this).load(uri).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
 
         fabPlus.setOnClickListener(MainActivity.this);
+        contentMain = (RelativeLayout) findViewById(R.id.content_main);
+        blurScreen = (ImageView) findViewById(R.id.blurScreen);
+
         ViewServer.get(this).addWindow(this);
     }
 
@@ -194,36 +196,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return;
         }
 
-        /****************************************** Blur *****************************************/
-
-        contentMain.destroyDrawingCache();
-        contentMain.buildDrawingCache();
-        Bitmap bm = contentMain.getDrawingCache();
-        Bitmap blurred = Blur.blurRenderScript(getApplicationContext(), bm, 25);
-        Drawable ob = new BitmapDrawable(getResources(), blurred);
-        blurScreen.setImageDrawable(ob);
-
-        /************************************** Fab Clicks ****************************************/
-
-        // first we check action menu and if "is open" then we setup our inside click for FAB
         actionMenu.toggle(true);
-        if (!actionMenu.isOpen()) {
-            blurScreen.setVisibility(View.INVISIBLE);
-//            cards.setVisibility(View.VISIBLE);
+        if (actionMenu.isOpen()) {
+            /************************************** Blur *****************************************/
+            contentMain.buildDrawingCache();
+            Bitmap bm = contentMain.getDrawingCache();
+            Bitmap blurred = Blur.blurRenderScript(getApplicationContext(), bm, 25);
+            Drawable ob = new BitmapDrawable(getResources(), blurred);
+            blurScreen.setImageDrawable(ob);
+            blurScreen.setVisibility(View.VISIBLE);
+            contentMain.destroyDrawingCache();
+            /*********************************** Sub buttons **************************************/
+            buttonSelfImprovement.setOnClickListener(v0 -> {
+                Intent intent = new Intent(MainActivity.this, SelfImprovementActivity.class);
+                startActivity(intent);
+            });
+            buttonDuelChallenge.setOnClickListener(v1 -> {
+                Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
+                startActivity(intent);
+            });
+            buttonWakeUpChallenge.setOnClickListener(v2 -> {
+                Intent intent = new Intent(MainActivity.this, WakeUpActivity.class);
+                startActivity(intent);
+            });
         } else {
-                blurScreen.setVisibility(View.VISIBLE);
-                buttonSelfImprovement.setOnClickListener(v0 -> {
-                    Intent intent = new Intent(MainActivity.this, SelfImprovementActivity.class);
-                    startActivity(intent);
-                });
-                buttonDuelChallenge.setOnClickListener(v1 -> {
-                    Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
-                    startActivity(intent);
-                });
-                buttonWakeUpChallenge.setOnClickListener(v2 -> {
-                    Intent intent = new Intent(MainActivity.this, WakeUpActivity.class);
-                    startActivity(intent);
-                });
+            blurScreen.setVisibility(View.INVISIBLE);
         }
 
     }

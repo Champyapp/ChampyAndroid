@@ -130,14 +130,12 @@ public class MyGcmListenerService extends GcmListenerService {
         final int clearCount = db.delete("pending_duel", null, null);
         final ContentValues cv = new ContentValues();
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        final SessionManager sessionManager = new SessionManager(this);
-        final String update = "0"; //1457019726
         final String userId = sessionManager.getUserId();
         final String token = sessionManager.getToken();
 
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
 
-        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userId, update, token);
+        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userId, "0", token);
         call1.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
