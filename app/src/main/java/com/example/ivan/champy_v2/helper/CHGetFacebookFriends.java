@@ -30,6 +30,8 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
+import static com.example.ivan.champy_v2.utils.Constants.API_URL;
+
 /**
  * Class helper to get user who has installed champy
  */
@@ -43,7 +45,7 @@ public class CHGetFacebookFriends {
 
     // OTHER TABLE. method which get friends and their data
     public void getUserFacebookFriends(final String gcm) {
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         final NewUser newUser = retrofit.create(NewUser.class);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -63,7 +65,13 @@ public class CHGetFacebookFriends {
                         jsonObject.put("facebookId", fb_id);
                         jsonObject.put("AndroidOS", gcm);
                         String string = jsonObject.toString();
-                        final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
+                        final String jwtString = Jwts.builder()
+                                .setHeaderParam("alg", "HS256")
+                                .setHeaderParam("typ", "JWT")
+                                .setPayload(string)
+                                .signWith(SignatureAlgorithm.HS256, "secret")
+                                .compact();
+
                         Call<User> call = newUser.getUserInfo(jwtString);
                         call.enqueue(new Callback<User>() {
                             @Override
@@ -72,7 +80,7 @@ public class CHGetFacebookFriends {
                                     Data data = response.body().getData();
                                     String photo = "";
                                     if (data.getPhoto() != null) {
-                                        photo = Constants.API_URL + data.getPhoto().getMedium();
+                                        photo = API_URL + data.getPhoto().getMedium();
                                     } else {
                                         try {
                                             URL profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
@@ -92,9 +100,9 @@ public class CHGetFacebookFriends {
 
                                     if (!checkTableForExist.isInOtherTable(data.get_id())) {
                                         db.insert("mytable", null, cv);
-                                        Log.d("GetFacebookFriends", "GetUserFriendsInfo | DBase: vse okay! " + name + " in other");
-                                    } else {
-                                        Log.d("GetFacebookFriends", "GetUserFriendsInfo | DBase: " + name + " in pending or friends");
+//                                        Log.d("GetFacebookFriends", "GetUserFriendsInfo | DBase: vse okay! " + name + " in other");
+//                                    } else {
+//                                        Log.d("GetFacebookFriends", "GetUserFriendsInfo | DBase: " + name + " in pending or friends");
                                     }
                                 }
 //                                else {

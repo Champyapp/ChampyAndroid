@@ -6,6 +6,9 @@ import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
 import com.example.ivan.champy_v2.utils.SessionManager;
+import com.facebook.FacebookSdk;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class AlarmReceiver extends WakefulBroadcastReceiver {
 
@@ -13,10 +16,10 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, Intent intent) {
+        FacebookSdk.sdkInitialize(getApplicationContext());
 
         String inProgressId = intent.getStringExtra("inProgressId");
         String alarmID      = intent.getStringExtra("alarmID");
-//        int notifyInt = intent.getIntExtra("notifyIntent", 228);
 
         Log.d(TAG, "onReceive: AlarmReceiver:" + "\ninProgressId: " + inProgressId + "\nalarmID : " + alarmID);
 
@@ -25,11 +28,6 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         alarmIntent.putExtra("finalInProgressID", inProgressId);
         alarmIntent.putExtra("finalAlarmID", alarmID);
         alarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-//        Intent notifyIntent = new Intent();
-//        notifyIntent.setClassName("com.example.ivan.champy_v2", "com.example.ivan.champy_v2.service.MyNotifyService");
-//        notifyIntent.putExtra("notifyIntent", notifyInt);
-//        notifyIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         SessionManager sessionManager = new SessionManager(context);
         if (sessionManager.isUserLoggedIn()) {

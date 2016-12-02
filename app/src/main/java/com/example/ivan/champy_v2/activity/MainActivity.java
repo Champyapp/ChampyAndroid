@@ -83,6 +83,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             pager.preparePager(0);
         }
 
+        blurScreen = (ImageView)findViewById(R.id.blurScreen);
+        contentMain = (RelativeLayout) findViewById(R.id.content_main);
 
         // DRAWER
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -174,8 +176,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
 
         fabPlus.setOnClickListener(MainActivity.this);
-        contentMain = (RelativeLayout) findViewById(R.id.content_main);
-        blurScreen = (ImageView) findViewById(R.id.blurScreen);
 
         ViewServer.get(this).addWindow(this);
     }

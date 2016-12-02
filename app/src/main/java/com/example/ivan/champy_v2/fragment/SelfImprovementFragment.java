@@ -65,19 +65,22 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
             int nameColIndex = c.getColumnIndex("name");
             int colstatus = c.getColumnIndex("status");
             int idColIndex = c.getColumnIndex("id");
-            do {
-                o++;
-                if (o > position + 1) break;
-                if (o == position + 1) {
-                    challenge_id = c.getString(colchallenge_id);
-                    description = c.getString(coldescription);
-                    duration = c.getString(colduration);
-                    name = c.getString(nameColIndex);
-                    status = c.getString(colstatus);
-                }
-            } while (c.moveToNext());
+            try {
+                do {
+                    o++;
+                    if (o > position + 1) break;
+                    if (o == position + 1) {
+                        challenge_id = c.getString(colchallenge_id);
+                        description = c.getString(coldescription);
+                        duration = c.getString(colduration);
+                        name = c.getString(nameColIndex);
+                        status = c.getString(colstatus);
+                    }
+                } while (c.moveToNext());
+            } finally {
+                c.close();
+            }
         }
-        c.close();
 
         sessionManager = new SessionManager(getContext());
         size = sessionManager.getSelfSize();
@@ -168,19 +171,22 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                                 int colstatus = c.getColumnIndex("status");
                                 int colname = c.getColumnIndex("name");
                                 o = 0;
-                                do {
-                                    o++;
-                                    if (o > position + 1) break;
-                                    if (o == position + 1) {
-                                        challenge_id = c.getString(colchallenge_id);
-                                        description = c.getString(coldescription);
-                                        duration = c.getString(colduration);
-                                        status = c.getString(colstatus);
-                                        name = c.getString(colname);
-                                    }
-                                } while (c.moveToNext());
+                                try {
+                                    do {
+                                        o++;
+                                        if (o > position + 1) break;
+                                        if (o == position + 1) {
+                                            challenge_id = c.getString(colchallenge_id);
+                                            description = c.getString(coldescription);
+                                            duration = c.getString(colduration);
+                                            status = c.getString(colstatus);
+                                            name = c.getString(colname);
+                                        }
+                                    } while (c.moveToNext());
+                                } finally {
+                                    c.close();
+                                }
                             }
-                            c.close();
 
                             try {
                                 if (!cc.isActive(description)) {
@@ -217,4 +223,15 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         }
     }
 
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        Log.d(TAG, "onDestroy: ");
+//        try {
+//            db.endTransaction();
+//            db.close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

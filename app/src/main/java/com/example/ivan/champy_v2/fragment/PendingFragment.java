@@ -89,22 +89,24 @@ public class PendingFragment extends Fragment {
             int successChallenges = c.getColumnIndex("successChallenges");
             int allChallengesCount = c.getColumnIndex("allChallengesCount");
 
-            do {
-                pendingFriends.add(new Pending_friend(
-                                c.getString(nameColIndex),
-                                API_URL+c.getString(photoColIndex),
-                                c.getString(index),
-                                c.getString(owner),
-                                c.getString(successChallenges),
-                                c.getString(allChallengesCount),
-                                c.getString(inProgressChallengesCountIndex)
-                        )
-                );
-
-            } while (c.moveToNext());
+            //try {
+                do {
+                    pendingFriends.add(new Pending_friend(
+                            c.getString(nameColIndex),
+                            API_URL + c.getString(photoColIndex),
+                            c.getString(index),
+                            c.getString(owner),
+                            c.getString(successChallenges),
+                            c.getString(allChallengesCount),
+                            c.getString(inProgressChallengesCountIndex)
+                    ));
+                } while (c.moveToNext());
+//            } finally {
+//                c.close();
+//                db.close();
+//            }
         }
         c.close();
-
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
         final PendingAdapter adapter = new PendingAdapter(pendingFriends, getContext(), getActivity(), new CustomItemClickListener() {
             @Override
@@ -114,7 +116,6 @@ public class PendingFragment extends Fragment {
         });
 
         SessionManager sessionManager = new SessionManager(getActivity());
-        //sessionManager.setRefreshPending("true");
         String checkRefresh = sessionManager.getRefreshPending();
 
 
@@ -130,11 +131,6 @@ public class PendingFragment extends Fragment {
         });
         this.gView = view;
 
-//        Bundle friendRequestExtra = getActivity().getIntent().getExtras();
-//        if (friendRequestExtra != null) {
-//            refreshPendingView(swipeRefreshLayout, gView);
-//        }
-
         if (checkRefresh.equals("true")) {
             refreshPendingView(swipeRefreshLayout, gView);
             sessionManager.setRefreshPending("false");
@@ -144,17 +140,10 @@ public class PendingFragment extends Fragment {
 
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.d(TAG, "onActivityCreated: ");
-    }
 
     @Override
     public void onStart() {
         super.onStart();
-        Log.d(TAG, "onStart: ");
-
         try {
             mSocket = IO.socket("http://46.101.213.24:3007");
             Log.d(TAG, "onStart: Sockets are connected!");
@@ -178,35 +167,11 @@ public class PendingFragment extends Fragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause: ");
-    }
-
-    @Override
     public void onStop() {
         super.onStop();
         Log.d(TAG, "onStop: Sockets off & disconnect");
         mSocket.off();
         mSocket.disconnect();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.d(TAG, "onDestroyView: ");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "onDestroy: ");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.d(TAG, "onDetach: ");
     }
 
 
@@ -272,17 +237,22 @@ public class PendingFragment extends Fragment {
                             int inProgressChallengesCountIndex = c.getColumnIndex("inProgressChallengesCount");
                             int successChallenges = c.getColumnIndex("successChallenges");
                             int allChallengesCount = c.getColumnIndex("allChallengesCount");
-                            do {
-                                newfriends.add(new Pending_friend(
-                                        c.getString(nameColIndex),
-                                        API_URL + c.getString(photoColIndex),
-                                        c.getString(index),
-                                        c.getString(owner),
-                                        "" + c.getString(successChallenges),
-                                        "" + c.getString(allChallengesCount),
-                                        "" + c.getString(inProgressChallengesCountIndex)
-                                ));
-                            } while (c.moveToNext());
+                            try {
+                                do {
+                                    newfriends.add(new Pending_friend(
+                                            c.getString(nameColIndex),
+                                            API_URL + c.getString(photoColIndex),
+                                            c.getString(index),
+                                            c.getString(owner),
+                                            "" + c.getString(successChallenges),
+                                            "" + c.getString(allChallengesCount),
+                                            "" + c.getString(inProgressChallengesCountIndex)
+                                    ));
+                                } while (c.moveToNext());
+                            } finally {
+                                c.close();
+                                db.close();
+                            }
                         }
                         c.close();
 
