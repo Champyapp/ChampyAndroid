@@ -34,6 +34,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import jp.wasabeef.glide.transformations.CropSquareTransformation;
 
 import static com.example.ivan.champy_v2.utils.Constants.path;
 
@@ -47,7 +48,7 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_history);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         sessionManager = new SessionManager(this);
@@ -61,9 +62,30 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
+
+        final ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        final ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
+        final TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        final ImageView background = (ImageView) findViewById(R.id.history_background);
+        drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        background.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+        File fileProfile = new File(path, "profile.jpg");
+        Uri uriProfile = Uri.fromFile(fileProfile);
+        Glide.with(this).load(uriProfile).bitmapTransform(new CropCircleTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
+
+        File fileBlur = new File(path, "blured2.jpg");
+        Uri uriBlur = Uri.fromFile(fileBlur);
+        Glide.with(this).load(uriBlur).bitmapTransform(new CropSquareTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(background);
+        Glide.with(this).load(uriBlur).bitmapTransform(new CropSquareTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);
+
+
+        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         navigationView.setNavigationItemSelectedListener(this);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager_history);
@@ -78,28 +100,10 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         if (extras != null && "true".equals(extras)) { viewPager.setCurrentItem(1); }
 
 
-        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
-        ImageView background = (ImageView) findViewById(R.id.history_background);
-        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+
         String name = sessionManager.getUserName();
         drawerUserName.setText(name);
         drawerUserName.setTypeface(typeface);
-
-        File file = new File(path, "profile.jpg");
-        Uri url = Uri.fromFile(file);
-        Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
-
-        try {
-            Drawable dr = CHLoadBlurredPhoto.Init(path);
-            background.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            background.setImageDrawable(dr);
-            drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            drawerBackground.setImageDrawable(dr);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
 
         CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
         int count = checker.getPendingCount();

@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import jp.wasabeef.glide.transformations.CropSquareTransformation;
 
 import static com.example.ivan.champy_v2.utils.Constants.path;
 import static com.example.ivan.champy_v2.utils.Constants.typeWake;
@@ -60,18 +61,44 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         toggle.setDrawerIndicatorEnabled(true);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
 
         final Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         final ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
         final ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
+        drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+        File file = new File(path, "profile.jpg");
+        Uri url = Uri.fromFile(file);
+
+        Glide.with(this)
+                .load(url)
+                .bitmapTransform(new CropCircleTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(drawerImageProfile);
+
+        file = new File(path, "blured2.jpg");
+        url = Uri.fromFile(file);
+
+        Glide.with(this)
+                .load(url)
+                .bitmapTransform(new CropSquareTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(drawerBackground);
+
         final TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
         final TextView tvIChallMySelf = (TextView) findViewById(R.id.tvChallengeToMySelf);
         final TextView tvEveryDay = (TextView) findViewById(R.id.tvEveryDayWakeUp);
         final TextView tvDuration = (TextView) findViewById(R.id.tvDays);
         final TextView tvGoal = (TextView) findViewById(R.id.goal_text);
+
+        alarmTimePicker = (TimePicker) findViewById(R.id.timePicker);
+        final ImageButton imageButton = (ImageButton) findViewById(R.id.imageButtonAccept);
+        imageButton.setOnClickListener(this);
 
         tvIChallMySelf.setTypeface(typeface);
         tvEveryDay.setTypeface(typeface);
@@ -81,32 +108,6 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         Glide.with(this).load(R.drawable.wakeupwhite).override(110, 110).into((ImageView) findViewById(R.id.imageViewLogo));
         Glide.with(this).load(R.drawable.wakeuptext).override(180, 150).into((ImageView) findViewById(R.id.imageWakeUpChall));
 
-        File file = new File(path, "profile.jpg");
-        Uri url = Uri.fromFile(file);
-
-        sessionManager = new SessionManager(this);
-        String userName = sessionManager.getUserName();
-        String userID = sessionManager.getUserId();
-        String token = sessionManager.getToken();
-        cc = new ChallengeController(this, this, token, userID);
-        drawerUserName.setText(userName);
-        drawerUserName.setTypeface(typeface);
-
-        Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
-
-        try {
-            drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            drawerBackground.setImageDrawable(CHLoadBlurredPhoto.Init(path));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        alarmTimePicker = (TimePicker) findViewById(R.id.timePicker);
-        ImageButton imageButton = (ImageButton) findViewById(R.id.imageButtonAccept);
-        imageButton.setOnClickListener(this);
-
-        offlineMode = new OfflineMode();
         final CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
         int count = checker.getPendingCount();
         if (count == 0) {
@@ -115,6 +116,15 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
             TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
             view.setText("+" + (count > 0 ? String.valueOf(count) : null));
         }
+
+        offlineMode = new OfflineMode();
+        sessionManager = new SessionManager(this);
+        String userName = sessionManager.getUserName();
+        String userID = sessionManager.getUserId();
+        String token = sessionManager.getToken();
+        cc = new ChallengeController(this, this, token, userID);
+        drawerUserName.setText(userName);
+        drawerUserName.setTypeface(typeface);
 
     }
 
@@ -130,8 +140,8 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         if (pickedHour < 10) sHour  = "0" + sHour;
         if (picketMin < 10) sMinute = "0" + sMinute;
 
-        final String finalSHour = sHour;
-        final String finalSMinute = sMinute;
+        String finalSHour = sHour;
+        String finalSMinute = sMinute;
 
         final boolean ok = cc.isActiveWakeUp(sHour + sMinute);
         if (offlineMode.isConnectedToRemoteAPI(WakeUpActivity.this)) {

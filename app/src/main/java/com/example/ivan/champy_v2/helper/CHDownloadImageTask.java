@@ -57,7 +57,7 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
     }
 
 
-    private String saveToInternalStorage(Bitmap bitmapImage){
+    private String saveToInternalStorage(Bitmap bitmapImage) {
         ContextWrapper cw = new ContextWrapper(context);
         String root = Environment.getExternalStorageDirectory().toString();
         File myDir = new File(root + "/android/data/com.azinecllc.champy/images");
@@ -97,6 +97,13 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
     }
 
 
+    protected void onPostExecute(Bitmap result) {
+        // Do your staff here to save image
+        saveToInternalStorage(result);
+        loadImageFromStorage("/data/data/com.example.ivan.champy_v2/app_imageDir/");
+    }
+
+
     private void loadImageFromStorage(String path) {
         try {
             File f = new File(path, "profile.jpg");
@@ -112,28 +119,28 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
                 file.createNewFile();
                 Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
 
-                Blur blur = new Blur();
 
-                Bitmap blured = blur.blurRenderScript(context, b, 10);
+                Bitmap blurred = Blur.blurRenderScript(context, b, 10);
 
-                Bitmap bitmap = blured;
+                Bitmap bitmap = blurred;
 
                 Drawable dr = new BitmapDrawable(context.getResources(), bitmap);
                 dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
-                ImageView background = (ImageView)activity.findViewById(R.id.slide_background);
+                ImageView drawerBackground = (ImageView)activity.findViewById(R.id.slide_background);
+                drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                drawerBackground.setImageDrawable(dr);
+
+                ImageView background = (ImageView)activity.findViewById(R.id.main_background);
                 background.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 background.setImageDrawable(dr);
-                background = (ImageView)activity.findViewById(R.id.main_background);
-                background.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                background.setImageDrawable(dr);
-                bitmap = ((BitmapDrawable)dr).getBitmap();
 
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                bitmap = ((BitmapDrawable)dr).getBitmap();
                 bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos);
-                byte[] bitmapdata = bos.toByteArray();
+                byte[] bitmapData = bos.toByteArray();
 
                 FileOutputStream fos = new FileOutputStream(file);
-                fos.write(bitmapdata);
+                fos.write(bitmapData);
                 fos.flush();
                 fos.close();
 
@@ -141,11 +148,11 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
                 relativeLayout.setDrawingCacheEnabled(true);
                 relativeLayout.buildDrawingCache();
                 Bitmap bm = relativeLayout.getDrawingCache();
-                blured = Blur.blurRenderScript(context, bm, 25);
+                blurred = Blur.blurRenderScript(context, bm, 25);
 
                 ImageView screen = (ImageView)activity.findViewById(R.id.blurScreen);
 
-                Drawable ob = new BitmapDrawable(context.getResources(), blured);
+                Drawable ob = new BitmapDrawable(context.getResources(), blurred);
                 screen.setImageDrawable(ob);
             }
         }
@@ -153,13 +160,6 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
             e.printStackTrace();
         }
 
-    }
-
-
-    protected void onPostExecute(Bitmap result) {
-        // Do your staff here to save image
-        saveToInternalStorage(result);
-        loadImageFromStorage("/data/data/com.example.ivan.champy_v2/app_imageDir/");
     }
 
 }

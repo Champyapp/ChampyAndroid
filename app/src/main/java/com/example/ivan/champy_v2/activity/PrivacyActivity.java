@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import jp.wasabeef.glide.transformations.CropSquareTransformation;
 
 import static com.example.ivan.champy_v2.utils.Constants.path;
 
@@ -66,27 +67,27 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
+        final ImageView drawerUserPhoto = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        final ImageView drawerBG = (ImageView) headerLayout.findViewById(R.id.slide_background);
+        drawerBG.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
-        String name = sessionManager.getUserName();
 
-        final Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
-        final ImageView drawerUserPhoto = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        drawerUserName.setText(name);
-        drawerUserName.setTypeface(typeface);
-
-        Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+        Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(this))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
 
-        try {
-            ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setImageDrawable(CHLoadBlurredPhoto.Init(path));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        file = new File(path, "blured2.jpg");
+        url = Uri.fromFile(file);
+        Glide.with(this).load(url).bitmapTransform(new CropSquareTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBG);
+
+
+        final Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
+        drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        String name = sessionManager.getUserName();
+        drawerUserName.setText(name);
+        drawerUserName.setTypeface(typeface);
 
         ViewServer.get(this).addWindow(this);
     }

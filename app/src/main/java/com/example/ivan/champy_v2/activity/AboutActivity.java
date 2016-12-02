@@ -33,6 +33,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import jp.wasabeef.glide.transformations.CropSquareTransformation;
 
 import static com.example.ivan.champy_v2.utils.Constants.azinecUrl;
 import static com.example.ivan.champy_v2.utils.Constants.path;
@@ -58,7 +59,6 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -73,6 +73,28 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
 
+        File filePhoto = new File(path, "profile.jpg");
+        File fileBlur = new File(path, "blured2.jpg");
+        Uri profile = Uri.fromFile(filePhoto);
+        Uri blurred = Uri.fromFile(fileBlur);
+
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
+        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+
+        ImageView drawerBG = (ImageView) headerLayout.findViewById(R.id.slide_background);
+        drawerBG.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+
+        Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBG);
+        Glide.with(this).load(profile).bitmapTransform(new CropCircleTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
+
+        String name = sessionManager.getUserName();
+        drawerUserName.setText(name);
+        drawerUserName.setTypeface(typeface);
+
         final CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
         int count = checker.getPendingCount();
         if (count == 0) {
@@ -81,25 +103,6 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
             TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
             view.setText("+" + (count > 0 ? String.valueOf(count) : null));
         }
-
-        File file = new File(path, "profile.jpg");
-        Uri url = Uri.fromFile(file);
-        String name = sessionManager.getUserName();
-
-        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
-        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        drawerUserName.setText(name);
-        drawerUserName.setTypeface(typeface);
-
-        Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
-
-        try {
-            ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setImageDrawable(CHLoadBlurredPhoto.Init(path));
-        } catch (FileNotFoundException e) { e.printStackTrace(); }
 
         ViewServer.get(this).addWindow(this);
     }

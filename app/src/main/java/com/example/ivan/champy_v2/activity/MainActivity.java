@@ -47,6 +47,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import jp.wasabeef.glide.transformations.CropSquareTransformation;
 
 import static com.example.ivan.champy_v2.utils.Constants.path;
 import static java.lang.Math.round;
@@ -92,7 +93,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
-                //cards.setVisibility(View.VISIBLE);
                 blurScreen.setVisibility(View.INVISIBLE);
                 actionMenu.close(true);
             }
@@ -101,7 +101,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerToggle.syncState();
 
 
-        ImageView background = (ImageView) findViewById(R.id.main_background);
 
         // NAVIGATION VIEW
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -117,15 +116,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerUserName.setTypeface(typeface);
 
         /********************************* Get photo and make bg **********************************/
+        ImageView background = (ImageView) findViewById(R.id.main_background);
+        background.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
+        File profile = new File(path, "profile.jpg");
         File blurred = new File(path, "blured2.jpg");
         if (blurred.exists()) {
-            try {
-                background.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                background.setImageDrawable(CHLoadBlurredPhoto.Init(path));
-                drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                drawerBackground.setImageDrawable(CHLoadBlurredPhoto.Init(path));
-            } catch (FileNotFoundException e) {e.printStackTrace();}
+            Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(background);
+            drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);
+            Glide.with(this).load(profile).bitmapTransform(new CropCircleTransformation(this))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
         }
         else {
             String pathToPic = sessionManager.getPathToPic();
@@ -133,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             CHDownloadImageTask chDownloadImageTask = new CHDownloadImageTask(getApplicationContext(), MainActivity.this);
             chDownloadImageTask.execute(pathToPic);
         }
+
 
 
         /******************************** Display 'Pending duels' menu ****************************/
@@ -170,11 +174,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         CHBuildAnim chBuildAnim = new CHBuildAnim(this, sessionManager, typeface);
         chBuildAnim.buildAnim();
 
-        File profile = new File(path, "profile.jpg");
-        Uri uri = Uri.fromFile(profile);
-        Glide.with(this).load(uri).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
-
         fabPlus.setOnClickListener(MainActivity.this);
 
         ViewServer.get(this).addWindow(this);
@@ -198,6 +197,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         actionMenu.toggle(true);
         if (actionMenu.isOpen()) {
             /************************************** Blur *****************************************/
+
+            // idea: set "blurred2.jpg" upper all view except button 'fab';
             contentMain.buildDrawingCache();
             Bitmap bm = contentMain.getDrawingCache();
             Bitmap blurred = Blur.blurRenderScript(getApplicationContext(), bm, 25);

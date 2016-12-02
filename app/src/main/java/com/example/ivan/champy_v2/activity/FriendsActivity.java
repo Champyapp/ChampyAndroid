@@ -34,6 +34,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import jp.wasabeef.glide.transformations.CropSquareTransformation;
 
 import static com.example.ivan.champy_v2.utils.Constants.path;
 
@@ -53,7 +54,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 //    };
 
 
-    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,34 +104,43 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         tabLayout.setupWithViewPager(viewPager);
         //setupCustomTabIcons();
 
-        String name = sessionManager.getUserName();
 
         typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
         ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
         ImageView background = (ImageView) findViewById(R.id.friends_background);
         TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        background.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+        File fileProfile = new File(path, "profile.jpg");
+        Uri uriProfile = Uri.fromFile(fileProfile);
+        File fileBlur = new File(path, "blured2.jpg");
+        Uri uriBlur = Uri.fromFile(fileBlur);
+
+        Glide.with(this).load(uriBlur).bitmapTransform(new CropSquareTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(background);
+
+        Glide.with(this).load(uriBlur).bitmapTransform(new CropSquareTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);
+
+        Glide.with(this).load(uriProfile).bitmapTransform(new CropCircleTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
+
+
+//        try {
+//            background.setImageDrawable(CHLoadBlurredPhoto.Init(path));
+//            drawerBackground.setImageDrawable(CHLoadBlurredPhoto.Init(path));
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+
+        String name = sessionManager.getUserName();
         drawerUserName.setText(name);
         drawerUserName.setTypeface(typeface);
 
-        File file = new File(path, "profile.jpg");
-        Uri url = Uri.fromFile(file);
-
-        Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
-
-        try {
-            background.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            background.setImageDrawable(CHLoadBlurredPhoto.Init(path));
-            drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            drawerBackground.setImageDrawable(CHLoadBlurredPhoto.Init(path));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
         CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
         int count = checker.getPendingCount();
-
         if (count == 0) {
             checker.hideItem();
         } else {
@@ -139,20 +148,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
             view.setText("+" + (count > 0 ? String.valueOf(count) : null));
         }
 
-//        CHGetFacebookFriends getFacebookFriends = new CHGetFacebookFriends(getApplicationContext());
-//        getFacebookFriends.getUserFacebookFriends(gcm);
-
-
-//        CHGetFacebookFriends getFbFriends = new CHGetFacebookFriends(getApplicationContext());
-//        getFbFriends.getUserFacebookFriends(user.getToken());
-
-//        runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                loadUserFriends();
-//                loadUserPending();
-//        });
-//            }
         ViewServer.get(this).addWindow(this);
     }
 

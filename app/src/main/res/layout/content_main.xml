@@ -9,7 +9,6 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".activity.MainActivity"
     tools:showIn="@layout/app_bar_main"
-    android:background="@drawable/champy_background"
     android:id="@+id/content_main"  >
 
     <!-- background for user photo -->
@@ -19,6 +18,9 @@
         android:id="@+id/main_background"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true" />
+
+    <include layout="@layout/item_blur" />
+
 
     <!-- text "welcome username" -->
     <TextView

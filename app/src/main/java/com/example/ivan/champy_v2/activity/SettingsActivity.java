@@ -47,6 +47,7 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import jp.wasabeef.glide.transformations.CropSquareTransformation;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
@@ -106,8 +107,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
         initSwitches();
 
-        File file = new File(path, "profile.jpg");
-        Uri url = Uri.fromFile(file);
 
         final Typeface typeface = Typeface.createFromAsset(SettingsActivity.this.getAssets(), "fonts/bebasneue.ttf");
         final ImageView background = (ImageView) findViewById(R.id.back_settings);
@@ -115,6 +114,43 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         final TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
         final ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
         final ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        background.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+
+        File file = new File(path, "profile.jpg");
+        Uri url = Uri.fromFile(file);
+        Glide.with(this)
+                .load(url)
+                .bitmapTransform(new CropCircleTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(drawerImageProfile);
+
+        Glide.with(this)
+                .load(url)
+                .bitmapTransform(new CropCircleTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .override(130, 130)
+                .into(userImageProfile);
+
+
+
+        file = new File(path, "blured2.jpg");
+        url = Uri.fromFile(file);
+        Glide.with(this)
+                .load(url)
+                .bitmapTransform(new CropSquareTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(background);
+        Glide.with(this)
+                .load(url)
+                .bitmapTransform(new CropSquareTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(drawerBackground);
 
         final TextView terms = (TextView)findViewById(R.id.terms);
         final TextView about = (TextView)findViewById(R.id.about);
@@ -137,27 +173,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         drawerUserName.setTypeface(typeface);
         tvNotifications.setTypeface(typeface);
 
-        Glide.with(this)
-                .load(url)
-                .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(drawerImageProfile);
-
-        Glide.with(this)
-                .load(url)
-                .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .override(130, 130)
-                .into(userImageProfile);
-
-        try {
-            background.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            background.setImageDrawable(CHLoadBlurredPhoto.Init(path));
-            drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            drawerBackground.setImageDrawable(CHLoadBlurredPhoto.Init(path));
-        } catch (FileNotFoundException e) { e.printStackTrace(); }
+//        try {
+//            background.setImageDrawable(CHLoadBlurredPhoto.Init(path));
+//            drawerBackground.setImageDrawable(CHLoadBlurredPhoto.Init(path));
+//        } catch (FileNotFoundException e) { e.printStackTrace(); }
 
 
         about.setOnClickListener(this);

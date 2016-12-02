@@ -43,6 +43,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import jp.wasabeef.glide.transformations.CropSquareTransformation;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
@@ -84,10 +85,14 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         final ImageView imageMyPhoto = (ImageView)findViewById(R.id.imageMyPhoto);
         imageMyPhoto.getLayoutParams().width = x;
         imageMyPhoto.getLayoutParams().height = x; // because we need a square
-        File file = new File(path, "profile.jpg");
-        Uri url = Uri.fromFile(file);
-        Glide.with(this).load(friendsPhoto).centerCrop().into((ImageView)findViewById(R.id.imageFriendsPhoto));
-        Glide.with(this).load(url).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(imageMyPhoto);
+
+        File fileProfile = new File(path, "profile.jpg");
+        File fileBlur = new File(path, "blured2.jpg");
+        Uri uriProfile = Uri.fromFile(fileProfile);
+        Uri uriBlur = Uri.fromFile(fileBlur);
+        Glide.with(this).load(friendsPhoto).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
+                .centerCrop().into((ImageView)findViewById(R.id.imageFriendsPhoto));
+        Glide.with(this).load(uriProfile).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(imageMyPhoto);
 
         final TextView tvIChallengeMyFriendTo = (TextView)findViewById(R.id.tvIChallengeMyFriendTo);
         final TextView textViewYouVsFriend = (TextView)findViewById(R.id.tvYouVsFriend);
@@ -108,23 +113,26 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
 
-        name = sessionManager.getUserName();
 
         ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
         ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
         TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+        name = sessionManager.getUserName();
         drawerUserName.setText(name);
         drawerUserName.setTypeface(typeface);
 
-        Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+        Glide.with(this).load(uriBlur).bitmapTransform(new CropSquareTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);
+        Glide.with(this).load(uriProfile).bitmapTransform(new CropCircleTransformation(this))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
 
-        try {
-            drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            drawerBackground.setImageDrawable(getPhotoForDrawerBackground(path));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            drawerBackground.setImageDrawable(getPhotoForDrawerBackground(path));
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
 
 
     }
@@ -186,10 +194,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         int clearCount = db.delete("duel", null, null);
         final ContentValues cv = new ContentValues();
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        final SessionManager sessionManager = new SessionManager(getApplicationContext());
-        HashMap<String, String> user;
-        user = sessionManager.getUserDetails();
-        String token = user.get("token");
+        String token = sessionManager.getToken();
 
         com.example.ivan.champy_v2.interfaces.SelfImprovement selfImprovement = retrofit.create(com.example.ivan.champy_v2.interfaces.SelfImprovement.class);
 

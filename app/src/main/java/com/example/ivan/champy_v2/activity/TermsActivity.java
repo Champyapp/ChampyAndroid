@@ -31,57 +31,78 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import jp.wasabeef.glide.transformations.CropSquareTransformation;
 
 import static com.example.ivan.champy_v2.utils.Constants.path;
 
 public class TermsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private NavigationView navigationView;
     private SessionManager sessionManager;
+    private TextView tvTerms;
     private DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_terms);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         sessionManager = new SessionManager(this);
-        new LoadTermsText().execute();
-
-        TextView tvTerms = (TextView)findViewById(R.id.textView_terms);
+        tvTerms = (TextView)findViewById(R.id.textView_terms);
         tvTerms.setVisibility(View.INVISIBLE);
 
+        new LoadTermsText().execute();
+
+
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
 
 
+        final Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
+        final ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        final TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        final ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
+        drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
-        String name = sessionManager.getUserName();
 
-        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
-        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
-        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        Glide.with(this)
+                .load(url)
+                .bitmapTransform(new CropCircleTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(drawerImageProfile);
+
+        file = new File(path, "blured2.jpg");
+        url = Uri.fromFile(file);
+
+        Glide.with(this)
+                .load(url)
+                .bitmapTransform(new CropSquareTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(drawerBackground);
+
+
+        final String name = sessionManager.getUserName();
         drawerUserName.setText(name);
         drawerUserName.setTypeface(typeface);
 
-        Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
-
-        try {
-            drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            drawerBackground.setImageDrawable(CHLoadBlurredPhoto.Init(path));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+        int count = checker.getPendingCount();
+        if (count == 0) {
+            checker.hideItem();
+        } else {
+            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
         }
 
         ViewServer.get(this).addWindow(this);
@@ -720,21 +741,10 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
 
         protected void onPostExecute(String result) {
             // Do your staff here to save image
-            TextView tvTerms = (TextView) findViewById(R.id.textView_terms);
             tvTerms.setText(result, TextView.BufferType.SPANNABLE);
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
             progressBar.setVisibility(View.GONE);
             tvTerms.setVisibility(View.VISIBLE);
-
-            CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
-            int count = checker.getPendingCount();
-            if (count == 0) {
-                checker.hideItem();
-            } else {
-                TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-                view.setText("+" + (count > 0 ? String.valueOf(count) : null));
-            }
-
         }
     }
 

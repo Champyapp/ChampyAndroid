@@ -35,6 +35,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import jp.wasabeef.glide.transformations.CropSquareTransformation;
 
 import static com.example.ivan.champy_v2.utils.Constants.path;
 
@@ -42,7 +43,7 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
 
     private EditText inputSubject, inputMessage;
     private TextInputLayout inputLayoutSubject, inputLayoutMessage;
-    private NavigationView navigationView;
+    private DrawerLayout drawer;
     private SessionManager sessionManager;
     private String[] recipients = {"azinecllc@gmail.com"};
 
@@ -53,42 +54,37 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
 
-        sessionManager = new SessionManager(getApplicationContext());
-        File file = new File(path, "profile.jpg");
-        Uri url = Uri.fromFile(file);
+        sessionManager = new SessionManager(this);
+        File fileProfile = new File(path, "profile.jpg");
+        File fileBlur = new File(path, "blured2.jpg");
+        Uri uriProfile = Uri.fromFile(fileProfile);
+        Uri uriBlur = Uri.fromFile(fileBlur);
         String name = sessionManager.getUserName();
 
-        try {
-            ImageView imageView = (ImageView) headerLayout.findViewById(R.id.slide_background);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setImageDrawable(CHLoadBlurredPhoto.Init(path));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
 
         final Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
+        final ImageView drawerBG = (ImageView) headerLayout.findViewById(R.id.slide_background);
         final ImageView drawerUserPhoto = (ImageView) headerLayout.findViewById(R.id.profile_image);
         final TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        drawerBG.setScaleType(ImageView.ScaleType.CENTER_CROP);
         drawerUserName.setText(name);
         drawerUserName.setTypeface(typeface);
 
-        Glide.with(this)
-                .load(url)
-                .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(drawerUserPhoto);
 
-        ViewServer.get(this).addWindow(this);
+        Glide.with(this).load(uriBlur).bitmapTransform(new CropSquareTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBG);
+        Glide.with(this).load(uriProfile).bitmapTransform(new CropCircleTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
+
 
         inputLayoutSubject = (TextInputLayout)findViewById(R.id.input_layout_name);
         inputLayoutMessage = (TextInputLayout)findViewById(R.id.input_layout_email);
@@ -108,6 +104,8 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
             TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
             view.setText("+" + (count > 0 ? String.valueOf(count) : null));
         }
+
+        ViewServer.get(this).addWindow(this);
     }
 
     @Override
@@ -117,7 +115,6 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {

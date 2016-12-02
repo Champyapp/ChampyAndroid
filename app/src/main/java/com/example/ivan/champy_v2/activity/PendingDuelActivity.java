@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import jp.wasabeef.glide.transformations.CropSquareTransformation;
 
 import static com.example.ivan.champy_v2.utils.Constants.path;
 
@@ -66,23 +67,26 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
 
         Glide.with(this).load(R.drawable.duel_blue).override(130, 130).into((ImageView) findViewById(R.id.imageViewLogo));
 
-        File file = new File(path, "profile.jpg");
-        Uri url = Uri.fromFile(file);
-        String name = sessionManager.getUserName();
 
         final ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
         final ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
         final TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        drawerUserName.setText(name);
-        drawerUserName.setTypeface(typeface);
+        drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-        Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(getApplicationContext()))
+        File file = new File(path, "profile.jpg");
+        Uri url = Uri.fromFile(file);
+
+        Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(this))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
 
-        try {
-            drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            drawerBackground.setImageDrawable(CHLoadBlurredPhoto.Init(path));
-        } catch (FileNotFoundException e) { e.printStackTrace(); }
+        file = new File (path, "blured2.jpg");
+        url = Uri.fromFile(file);
+        Glide.with(this).load(url).bitmapTransform(new CropSquareTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);
+
+        String name = sessionManager.getUserName();
+        drawerUserName.setText(name);
+        drawerUserName.setTypeface(typeface);
 
         spinner.setVisibility(View.INVISIBLE);
     }

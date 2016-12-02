@@ -9,6 +9,8 @@
         android:layout_height="fill_parent"
         android:id="@+id/back_settings" />
 
+    <include layout="@layout/item_blur" />
+
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
