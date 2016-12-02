@@ -149,7 +149,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
                 @Override
                 public void onClick(View view) {
                     if (ok) {
-                        cc.createNewWakeUpChallenge(21, typeWake, finalSHour, finalSMinute);
+                        cc.createNewWakeUpChallenge(21, finalSHour, finalSMinute);
                         snackbar = Snackbar.make(view, R.string.challenge_created, Snackbar.LENGTH_SHORT);
                     } else {
                         snackbar = Snackbar.make(view, R.string.cant_create_this_challenge, Snackbar.LENGTH_SHORT);

@@ -195,21 +195,30 @@ public class ChallengeController {
 
 
 
-    public void createNewWakeUpChallenge(int days, final String type_id, String sHour, String sMinute) {
+    public void createNewWakeUpChallenge(int days, String sHour, String sMinute) {
         duration = "" + (days * 86400);
         String description = "Wake Up";
 
         final String wakeUpName = "Wake up at "+ sHour +":"+ sMinute;
-        final String stringIntentId = String.valueOf(Integer.parseInt(sHour + sMinute));
-
         final int intHour = Integer.parseInt(sHour); // this need for sending in progress method
         final int intMin  = Integer.parseInt(sMinute); // this need for sending in progress method
         final int alarmID = Integer.parseInt(sHour + sMinute); // our unique id for pending intent
 
+        Calendar c = GregorianCalendar.getInstance();
+        final long currentMidnight = unixTime - (c.get(Calendar.HOUR_OF_DAY)*60*60) - (c.get(Calendar.MINUTE)*60) - (c.get(Calendar.SECOND));
+
+        Log.d(TAG, "createNewWakeUpChallenge : current  midnight : " + currentMidnight);
+
+
+        final String[] details = new String[21];
+        for (int i = 0; i <= 20; i++) {
+            details[i] = String.valueOf(intMin * 60 + intHour * 60 * 60 + i* (24 * 60 * 60) + currentMidnight);
+        }
+
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
         Call<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge> call =
-                createChallenge.createChallenge(wakeUpName, type_id, description, stringIntentId, duration, token);
+                createChallenge.createChallenge(wakeUpName, typeWake, description, Arrays.toString(details), duration, token);
 
         call.enqueue(new Callback<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge>() {
             @Override
@@ -240,12 +249,11 @@ public class ChallengeController {
 
         Calendar c = GregorianCalendar.getInstance();
         final long currentMidnight = unixTime - (c.get(Calendar.HOUR_OF_DAY)*60*60) - (c.get(Calendar.MINUTE)*60) - (c.get(Calendar.SECOND));
-
-        Log.d(TAG, "\ncalendar hours    : " + c.get(Calendar.HOUR_OF_DAY) + " (in seconds: " + c.get(Calendar.HOUR_OF_DAY)*60*60 + ")"
-                 + "\ncalendar minutes  : " + c.get(Calendar.MINUTE) + "   (in seconds: " + + c.get(Calendar.MINUTE)*60 +")"
-                 + "\ncalendar seconds  : " + c.get(Calendar.SECOND)
-                 + "\ncurrent  midnight : " + currentMidnight
-        );
+//        Log.d(TAG, "\ncalendar hours    : " + c.get(Calendar.HOUR_OF_DAY) + " (in seconds: " + c.get(Calendar.HOUR_OF_DAY)*60*60 + ")"
+//                 + "\ncalendar minutes  : " + c.get(Calendar.MINUTE) + "   (in seconds: " + + c.get(Calendar.MINUTE)*60 +")"
+//                 + "\ncalendar seconds  : " + c.get(Calendar.SECOND)
+//                 + "\ncurrent  midnight : " + currentMidnight
+//        );
 
         // create date
         Date date = new Date();
