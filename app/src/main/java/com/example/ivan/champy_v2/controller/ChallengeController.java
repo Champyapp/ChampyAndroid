@@ -24,6 +24,7 @@ import com.example.ivan.champy_v2.model.duel.Duel;
 import com.example.ivan.champy_v2.model.single_in_progress.Data;
 import com.example.ivan.champy_v2.receiver.AlarmReceiver;
 import com.example.ivan.champy_v2.utils.Constants;
+import com.example.ivan.champy_v2.utils.OfflineMode;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,6 +45,7 @@ import retrofit.Retrofit;
 import static com.example.ivan.champy_v2.utils.Constants.API_URL;
 import static com.example.ivan.champy_v2.utils.Constants.typeDuel;
 import static com.example.ivan.champy_v2.utils.Constants.typeSelf;
+import static com.example.ivan.champy_v2.utils.Constants.typeWake;
 import static com.example.ivan.champy_v2.utils.Constants.unixTime;
 import static java.lang.Math.round;
 
@@ -70,13 +72,12 @@ public class ChallengeController {
 
 
     public void createNewSelfImprovementChallenge(final String description, int days) {
-        final String type_id = "567d51c48322f85870fd931a";
         duration = "" + (days * 86400);
         details = description + " during this period: " + days + " days";
-
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
-        Call<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge> call = createChallenge.createChallenge("User_Challenge", type_id, description, details, duration, token);
+        Call<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge> call =
+                createChallenge.createChallenge("User_Challenge", typeSelf, description, details, duration, token);
         call.enqueue(new Callback<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge>() {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge> response, Retrofit retrofit) {
@@ -89,7 +90,8 @@ public class ChallengeController {
 //                            + "\n DESCRIPTION = " + description
 //                            + "\n DETAILS     = " + details
 //                            + "\n DURATION    = " + duration);
-                } else Log.d(TAG, "createNewSelfImprovementChallenge Status: Failed " + response.message());
+                }
+                else Log.d(TAG, "createNewSelfImprovementChallenge Status: Failed " + response.message());
             }
 
             @Override
@@ -119,9 +121,8 @@ public class ChallengeController {
 
                     Log.d("sendSingleInProgress", "InProgressId: " + inProgressId);
                     generateCardsForMainActivity();
-                } else {
-                    Log.d("sendSingleInProgress", "Status: FAILED: " + response.code() + response.message());
                 }
+                else { Log.d("sendSingleInProgress", "Status: FAILED: " + response.code() + response.message()); }
             }
 
             @Override
@@ -151,7 +152,8 @@ public class ChallengeController {
 //                            + "\n DETAILS     = " + details
 //                            + "\n DURATION    = " + duration
 //                            + "\n recipientId = " + friend_id);
-                } else Log.d(TAG, "createNewDuelChallenge OnResponse: Failed " + response.message());
+                }
+                else Log.d(TAG, "createNewDuelChallenge OnResponse: Failed " + response.message());
             }
 
             @Override
@@ -182,8 +184,8 @@ public class ChallengeController {
                     refreshCardsForPendingDuel();
 
                     Log.d("startDuelInProgress", "Status: VSE OK");
-                } else
-                    Log.d("startDuelInProgress", "Status: FAILED " + response.code() + response.message());
+                }
+                else Log.d("startDuelInProgress", "Status: FAILED " + response.code() + response.message());
             }
 
             @Override
@@ -200,9 +202,9 @@ public class ChallengeController {
         final String wakeUpName = "Wake up at "+ sHour +":"+ sMinute;
         final String stringIntentId = String.valueOf(Integer.parseInt(sHour + sMinute));
 
-        final int intHour  = Integer.parseInt(sHour); // this need for sending in progress method
-        final int intMin   = Integer.parseInt(sMinute); // this need for sending in progress method
-        final int alarmID  = Integer.parseInt(sHour + sMinute); // our unique id for pending intent
+        final int intHour = Integer.parseInt(sHour); // this need for sending in progress method
+        final int intMin  = Integer.parseInt(sMinute); // this need for sending in progress method
+        final int alarmID = Integer.parseInt(sHour + sMinute); // our unique id for pending intent
 
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
@@ -270,6 +272,7 @@ public class ChallengeController {
                     String inProgressId = data.getData().get_id();
 
                     /** Creating intent for alarmReceiver and putting some data in local DB **/
+
                     Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
                     myIntent.putExtra("inProgressId", inProgressId);
                     myIntent.putExtra("alarmID", String.valueOf(alarmID));
@@ -277,11 +280,8 @@ public class ChallengeController {
                     cv.put("updated", "false");
                     db.insert("updated", null, cv);
 
-
-                    // TODO: What if create array with triggered time + 24 h * 21 days and get current i-element for repeat it?
-
-
                     /** Scheduling alarm **/
+
                     // creating pending intent which will launch when our alarm clock must ring;
                     PendingIntent pi = PendingIntent.getBroadcast(firstActivity, alarmID, myIntent, 0);
                     // creating alarm manager which has a permission 'alarm_service' for invoke our alarm clock
@@ -292,7 +292,8 @@ public class ChallengeController {
                     /** Generate current card in DB and for MainActivity **/
                     generateCardsForMainActivity();
 
-                } else Log.d("sendSingleInProgress", "Status: FAILED: " + response.code());
+                }
+                else Log.d("sendSingleInProgress", "Status: FAILED: " + response.code());
             }
 
             @Override
@@ -375,32 +376,34 @@ public class ChallengeController {
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
         Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> call = activeInProgress.Surrender(id, token);
-        call.enqueue(new Callback<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress>() {
-            @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    Data data = response.body().getData();
-                    String type = data.getChallenge().getType();
-                    //OfflineMode offlineMode = new OfflineMode();
-                    //if (offlineMode.isConnectedToRemoteAPI(firstActivity)) {
+
+        OfflineMode offlineMode = new OfflineMode();
+        if (offlineMode.isConnectedToRemoteAPI(firstActivity)) {
+            call.enqueue(new Callback<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress>() {
+                @Override
+                public void onResponse(Response<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
+                    if (response.isSuccess()) {
+                        Data data = response.body().getData();
+                        String type = data.getChallenge().getType();
                         //if this is "wake up" challenge then stop alarm manager;
-                        if (type.equals("567d51c48322f85870fd931c")) {
+                        if (type.equals(typeWake)) {
                             Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
                             PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, intentId, myIntent, 0);
                             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                             alarmManager.cancel(pendingIntent);
                             Log.d("GiveUp", "AlarmManager status: stopped " + alarmManager);
                         }
-                    //}
-                    Log.d(TAG, "GiveUp onResponse: VSE OK");
+                        Log.d(TAG, "GiveUp onResponse: VSE OK");
+                        generateCardsForMainActivity();
+                    }
+                    else Log.d(TAG, "GiveUp onResponse: FAILED: " + response.code());
+                }
 
-                    generateCardsForMainActivity();
-                } else Log.d(TAG, "GiveUp onResponse: FAILED: " + response.code());
-            }
+                @Override
+                public void onFailure(Throwable t) { }
+            });
 
-            @Override
-            public void onFailure(Throwable t) { }
-        });
+        }
 
     }
 

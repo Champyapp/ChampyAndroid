@@ -95,48 +95,6 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         final TextView tvDuration = (TextView) tempView.findViewById(R.id.textViewDuration);
         tvDuration.setTypeface(typeface);
         tvDuration.setTextSize(y*2);
-//        if (itemType.equals("Wake Up") || itemUpdate.equals("true")) { //?
-//            tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
-//            buttonShare.setVisibility(View.VISIBLE);
-//            buttonDone.setVisibility(View.INVISIBLE);
-//            tvEveryDayForTheNext.setVisibility(View.VISIBLE);
-//        } else {
-//            tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
-//            buttonDone.setVisibility(View.VISIBLE);
-//            buttonShare.setVisibility(View.INVISIBLE);
-//            tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
-//        }
-
-//        if (itemUpdate.equals("false")) {
-//            tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
-//            buttonDone.setVisibility(View.VISIBLE);
-//            buttonShare.setVisibility(View.INVISIBLE);
-//            tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
-//            if (itemType.equals("Wake Up")) {
-//                tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
-//                buttonShare.setVisibility(View.VISIBLE);
-//                buttonDone.setVisibility(View.INVISIBLE);
-//                tvEveryDayForTheNext.setVisibility(View.VISIBLE);
-//            }
-//        } else {
-//            tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
-//            buttonShare.setVisibility(View.VISIBLE);
-//            buttonDone.setVisibility(View.INVISIBLE);
-//            tvEveryDayForTheNext.setVisibility(View.VISIBLE);
-//        }
-
-//        if (itemUpdate.equals("false") && !itemType.equals("Wake Up")) {
-//            tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
-//            buttonDone.setVisibility(View.VISIBLE);
-//            buttonShare.setVisibility(View.INVISIBLE);
-//            tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
-//        } else if (itemUpdate.equals("true") || itemType.equals("Wake Up")) {
-//            // make "else" and inside else make "if (! wakeup)"
-//            tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
-//            buttonShare.setVisibility(View.VISIBLE);
-//            buttonDone.setVisibility(View.INVISIBLE);
-//            tvEveryDayForTheNext.setVisibility(View.VISIBLE);
-//        }
 
         if (itemNeedsToCheck.equals("true")) {
             tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
@@ -170,6 +128,9 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         String userId = sessionManager.getUserId();
         String token = sessionManager.getToken();
         final ChallengeController cc = new ChallengeController(getContext(), (Activity) getContext(), token, userId);
+
+
+        /*************************** last check-in time for auto surrender ************************/
         long now = Calendar.getInstance().getTimeInMillis() / 1000;
         long myProgress = 0;
         long progressMidNight = 0;
@@ -180,8 +141,6 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
-
-
 
         if (myProgress != 0L && now > progressMidNight + oneDay) {
             // it's mean "self" and "duel"
@@ -210,7 +169,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                 }
             }
         }
-
+        /******************************************************************************************/
 
 
         buttonGiveUp.setOnClickListener(new View.OnClickListener() {
@@ -271,15 +230,10 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                         message = getContext().getString(R.string.share_text) + getContext().getString(R.string.champyapp_link);
 
                 }
-//                String message = getContext().getString(R.string.share_text) + currentCard.getGoal() + " challenge" + getContext().getString(R.string.champyapp_link);
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 share.putExtra(Intent.EXTRA_TEXT, message);
-                try {
-                    getContext().startActivity(Intent.createChooser(share, getContext().getString(R.string.how_would_you_like_to_share)));
-                } catch (Exception e) {
-                    Toast.makeText(getContext(), "No email client installed.", Toast.LENGTH_SHORT).show();
-                }
+                getContext().startActivity(Intent.createChooser(share, getContext().getString(R.string.how_would_you_like_to_share)));
             }
         });
 
@@ -292,23 +246,6 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         return arrayList.size();
     }
 
-//                switch (currentCard.getType()) {
-//                    case "Self-Improvement":
-//                        message = getContext().getString(R.string.share_text) + currentCard.getType()
-//                                + " challenge '" + currentCard.getGoal() + "'" + getContext().getString(R.string.champyapp_link);
-//                        break;
-//                    case "Duel":
-//                        message = getContext().getString(R.string.share_text) + currentCard.getType()
-//                                + " challenge '" + currentCard.getGoal() + "'" + getContext().getString(R.string.champyapp_link);
-//                        break;
-//                    case "Wake Up":
-//                        message = getContext().getString(R.string.share_text) + " "
-//                                + currentCard.getChallengeName() + " challenge" + getContext().getString(R.string.champyapp_link);
-//                        break;
-//                    default:
-//                        message = getContext().getString(R.string.share_text) + getContext().getString(R.string.champyapp_link);
-//
-//                }
 
     private String[] toArrayOfStrings(String arg) {
         String a = arg.replace("[", "");
