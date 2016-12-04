@@ -1,6 +1,7 @@
 package com.example.ivan.champy_v2.fragment;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
@@ -26,21 +27,22 @@ import com.example.ivan.champy_v2.utils.SessionManager;
 
 public class DuelFragment extends Fragment implements View.OnClickListener {
 
-    public static final String ARG_PAGE = "ARG_PAGE";
-    public static final String TAG = "DuelFragment";
-    public int position, size, daysCount, newDaysCount, days = 21, o = 0;
-    public String name, duration, description, challenge_id, status, friend_id, token, userId;
-    public SessionManager sessionManager;
-    public ChallengeController cc;
-    public TextView tvGoal, tvDays, etDays;
-    public EditText etGoal;
-    public ViewPager viewPager;
-    public Typeface typeface;
-    public SQLiteDatabase db;
-    public Snackbar snackbar;
-    public DBHelper dbHelper;
-    public ContentValues cv;
-    public Cursor c;
+    private static final String ARG_PAGE = "ARG_PAGE";
+    private final String TAG = "DuelFragment";
+    private int position;
+    private int size;
+    private int days = 21;
+    private int o = 0;
+    private String name, duration, description, challenge_id, friend_id;
+    private SessionManager sessionManager;
+    private ChallengeController cc;
+    private TextView etDays;
+    private EditText etGoal;
+    private ViewPager viewPager;
+    private SQLiteDatabase db;
+    private Snackbar snackbar;
+    private ContentValues cv;
+    private Cursor c;
 
 
     public static DuelFragment newInstance(int page) {
@@ -52,6 +54,24 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
     }
 
 
+    // TODO: 12/4/16 Загружати все new тут, а данні в onCreate 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
@@ -59,7 +79,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         Log.d(TAG, "onCreateView");
         Bundle extras = getActivity().getIntent().getExtras();
         friend_id = (extras == null) ? null : extras.getString("id");
-        dbHelper = new DBHelper(getContext());
+        DBHelper dbHelper = new DBHelper(getContext());
         db = dbHelper.getWritableDatabase();
         final Bundle args = this.getArguments();
         c = db.query("duel", null, null, null, null, null, null);
@@ -88,9 +108,9 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         String userId = sessionManager.getUserId();
         cc = new ChallengeController(getContext(), getActivity(), token, userId);
         size = sessionManager.getSelfSize();
-        typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
-        tvGoal = (TextView)view.findViewById(R.id.goal_text);
-        tvDays = (TextView)view.findViewById(R.id.days_text);
+        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
+        TextView tvGoal = (TextView) view.findViewById(R.id.goal_text);
+        TextView tvDays = (TextView) view.findViewById(R.id.days_text);
         etGoal = (EditText)view.findViewById(R.id.et_goal);
         etDays = (TextView)view.findViewById(R.id.et_days);
         View line = view.findViewById(R.id.line);
@@ -204,7 +224,8 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.imageButtonPlus:
-                daysCount = Integer.parseInt(etDays.getText().toString());
+                int daysCount = Integer.parseInt(etDays.getText().toString());
+                int newDaysCount;
                 if (daysCount < 1000) {
                     newDaysCount = daysCount + 1;
                     etDays.setText(String.valueOf(newDaysCount));

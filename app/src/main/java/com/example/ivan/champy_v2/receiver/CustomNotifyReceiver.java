@@ -20,12 +20,12 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class CustomNotifyReceiver extends WakefulBroadcastReceiver {
 
-    public static final String TAG = "CustomNotifyReceiver";
+    public final String TAG = "CustomNotifyReceiver";
 
     @Override
     public void onReceive(Context context, Intent intent) {
         FacebookSdk.sdkInitialize(getApplicationContext());
-        String notificationID = intent.getStringExtra("notificationID");
+        final String notificationID = intent.getStringExtra("notificationID");
         Log.d(TAG, "onReceive: notificationID: " + notificationID);
 
         SessionManager sessionManager = new SessionManager(context);

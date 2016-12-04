@@ -23,8 +23,6 @@ import static com.example.ivan.champy_v2.utils.Constants.API_URL;
 public class CHGetPendingFriends {
 
     private Context context;
-    private ContentValues cv;
-    private SQLiteDatabase db;
 
     public CHGetPendingFriends(Context context) {
         this.context = context;
@@ -32,9 +30,9 @@ public class CHGetPendingFriends {
 
 
     public void getUserPending(final String userId, String token) {
-        cv = new ContentValues();
+        final ContentValues cv = new ContentValues();
         DBHelper dbHelper = new DBHelper(context);
-        db = dbHelper.getWritableDatabase();
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("pending", null, null);
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
@@ -50,13 +48,12 @@ public class CHGetPendingFriends {
                         String status = datum.getStatus().toString();
                         if ((datum.getFriend() != null) && (datum.getOwner() != null) && status.equals("false")) {
 
+                            String photo;
                             if (datum.getOwner().get_id().equals(userId)) {
                                 Friend_ recipientFriend = datum.getFriend();
+                                photo = (recipientFriend.getPhoto() != null) ? recipientFriend.getPhoto().getMedium() : "";
                                 cv.put("name", recipientFriend.getName());
-                                //if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
-                                //else cv.put("photo", "");
-                                String friendPhoto = (recipientFriend.getPhoto() != null) ? recipientFriend.getPhoto().getMedium() : "";
-                                cv.put("photo", friendPhoto);
+                                cv.put("photo", photo);
                                 cv.put("user_id", recipientFriend.getId());
                                 cv.put("inProgressChallengesCount", recipientFriend.getInProgressChallengesCount());
                                 cv.put("allChallengesCount", recipientFriend.getAllChallengesCount());
@@ -65,11 +62,9 @@ public class CHGetPendingFriends {
                                 db.insert("pending", null, cv);
                             } else {
                                 Owner ownerFriend = datum.getOwner();
+                                photo = (ownerFriend.getPhoto() != null) ? ownerFriend.getPhoto().getMedium() : "";
                                 cv.put("name", ownerFriend.getName());
-                                //if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
-                                //else cv.put("photo", "");
-                                String ownerPhoto = (ownerFriend.getPhoto() != null) ? ownerFriend.getPhoto().getMedium() : "";
-                                cv.put("photo", ownerPhoto);
+                                cv.put("photo", photo);
                                 cv.put("user_id", ownerFriend.get_id());
                                 cv.put("inProgressChallengesCount", ownerFriend.getInProgressChallengesCount());
                                 cv.put("allChallengesCount", ownerFriend.getAllChallengesCount());

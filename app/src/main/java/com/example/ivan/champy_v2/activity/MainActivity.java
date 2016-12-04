@@ -54,8 +54,7 @@ import static java.lang.Math.round;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
-    private static long mLastClickTime = 0;
+    private long mLastClickTime = 0;
     private SubActionButton buttonWakeUpChallenge, buttonDuelChallenge, buttonSelfImprovement;
     private MainActivityCardsAdapter adapter;
     private FloatingActionMenu actionMenu;
@@ -99,8 +98,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         };
         drawer.setDrawerListener(drawerToggle);
         drawerToggle.syncState();
-
-
 
         // NAVIGATION VIEW
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -207,18 +204,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             blurScreen.setVisibility(View.VISIBLE);
             contentMain.destroyDrawingCache();
             /*********************************** Sub buttons **************************************/
-            buttonSelfImprovement.setOnClickListener(v0 -> {
-                Intent intent = new Intent(MainActivity.this, SelfImprovementActivity.class);
-                startActivity(intent);
-            });
-            buttonDuelChallenge.setOnClickListener(v1 -> {
-                Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
-                startActivity(intent);
-            });
-            buttonWakeUpChallenge.setOnClickListener(v2 -> {
-                Intent intent = new Intent(MainActivity.this, WakeUpActivity.class);
-                startActivity(intent);
-            });
+            buttonSelfImprovement.setOnClickListener(v0 -> startActivity(new Intent(this, SelfImprovementActivity.class)));
+            buttonDuelChallenge  .setOnClickListener(v1 -> startActivity(new Intent(this, FriendsActivity.class)));
+            buttonWakeUpChallenge.setOnClickListener(v2 -> startActivity(new Intent(this, WakeUpActivity.class)));
         } else {
             blurScreen.setVisibility(View.INVISIBLE);
         }

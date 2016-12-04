@@ -31,7 +31,7 @@ public class UpdatePushIdentifier {
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
-                String log = (response.isSuccess()) ? "Profile Updated" : "ERROR: " + response.message();
+                final String log = (response.isSuccess()) ? "Profile Updated" : "ERROR: " + response.message();
                 Log.d("UpdatePushIdentifier", "onResponse: Status: " + log);
             }
             @Override

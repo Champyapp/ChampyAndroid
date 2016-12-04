@@ -59,7 +59,7 @@ import static com.example.ivan.champy_v2.utils.Constants.path;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
 
-    final private String TAG = "SettingsActivity";
+    private final String TAG = "SettingsActivity";
     private TextView tvChangeName, tvName;
     private String name, userID, token;
     private OfflineMode offlineMode;

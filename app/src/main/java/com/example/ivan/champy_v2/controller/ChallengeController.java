@@ -51,7 +51,7 @@ import static java.lang.Math.round;
 
 public class ChallengeController {
 
-    public static final String TAG = "ChallengeController";
+    public final String TAG = "ChallengeController";
     private String duration, details, update = "0";
     private String token, userId;
     private Context context;
@@ -74,7 +74,9 @@ public class ChallengeController {
     public void createNewSelfImprovementChallenge(final String description, int days) {
         duration = "" + (days * 86400);
         details = description + " during this period: " + days + " days";
+
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
         Call<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge> call =
                 createChallenge.createChallenge("User_Challenge", typeSelf, description, details, duration, token);

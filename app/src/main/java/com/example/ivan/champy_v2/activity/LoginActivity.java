@@ -63,7 +63,7 @@ import static com.example.ivan.champy_v2.utils.Constants.API_URL;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
-    public static final String TAG = "LoginActivity";
+    public final String TAG = "LoginActivity";
     private AccessTokenTracker mTokenTracker;
     private ProfileTracker mProfileTracker;
     private CallbackManager mCallbackManager;

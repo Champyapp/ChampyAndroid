@@ -43,7 +43,7 @@ import static com.example.ivan.champy_v2.utils.Constants.API_URL;
 
 public class FriendsFragment extends Fragment {
 
-    private static final String TAG = "FriendsFragment";
+    private final String TAG = "FriendsFragment";
     private static final String ARG_PAGE = "ARG_PAGE";
 
     private View gView;

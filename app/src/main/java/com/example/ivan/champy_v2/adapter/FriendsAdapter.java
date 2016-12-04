@@ -37,7 +37,7 @@ import retrofit.Retrofit;
 
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
 
-    final private String TAG = FriendsAdapter.class.getSimpleName();
+    private final String TAG = FriendsAdapter.class.getSimpleName();
     private List<FriendModel> mContacts;
     private SessionManager sessionManager;
     private OfflineMode offlineMode;

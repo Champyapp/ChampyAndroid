@@ -108,8 +108,11 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         try {
             File f = new File(path, "profile.jpg");
             Uri uri = Uri.fromFile(f);
-            Glide.with(context).load(uri).bitmapTransform(new CropCircleTransformation(context))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
+            Glide.with(context)
+                    .load(uri)
+                    .bitmapTransform(new CropCircleTransformation(context))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
                     .into((ImageView)activity.findViewById(R.id.profile_image));
 
             File file = new File(path, "blured2.jpg");

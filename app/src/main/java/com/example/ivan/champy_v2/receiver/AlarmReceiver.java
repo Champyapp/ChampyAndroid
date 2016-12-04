@@ -12,14 +12,14 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class AlarmReceiver extends WakefulBroadcastReceiver {
 
-    public static final String TAG = "AlarmReceiver";
+    public final String TAG = "AlarmReceiver";
 
     @Override
     public void onReceive(final Context context, Intent intent) {
         FacebookSdk.sdkInitialize(getApplicationContext());
 
-        String inProgressId = intent.getStringExtra("inProgressId");
-        String alarmID      = intent.getStringExtra("alarmID");
+        final String inProgressId = intent.getStringExtra("inProgressId");
+        final String alarmID      = intent.getStringExtra("alarmID");
 
         Log.d(TAG, "onReceive: AlarmReceiver:" + "\ninProgressId: " + inProgressId + "\nalarmID : " + alarmID);
 

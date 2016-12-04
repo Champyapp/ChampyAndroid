@@ -21,12 +21,9 @@ public class CHSetupUI {
     public void setupUI(View view, final Activity activity) {
         //Set up touch listener for non-text box views to hide keyboard.
         if (!(view instanceof EditText)) {
-            view.setOnTouchListener(new View.OnTouchListener() {
-                public boolean onTouch(View v, MotionEvent event) {
-                    hideSoftKeyboard(activity);
-                    return false;
-                }
-
+            view.setOnTouchListener((v, event) -> {
+                hideSoftKeyboard(activity);
+                return false;
             });
         }
 

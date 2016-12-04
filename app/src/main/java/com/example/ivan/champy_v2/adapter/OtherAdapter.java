@@ -41,7 +41,7 @@ import static com.example.ivan.champy_v2.utils.Constants.API_URL;
 
 public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> {
 
-    final private String TAG = OtherAdapter.class.getSimpleName();
+    private final String TAG = OtherAdapter.class.getSimpleName();
     private com.facebook.CallbackManager CallbackManager;
     private SessionManager sessionManager;
     private List<FriendModel> mContacts;

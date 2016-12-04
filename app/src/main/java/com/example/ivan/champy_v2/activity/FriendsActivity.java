@@ -1,6 +1,5 @@
 package com.example.ivan.champy_v2.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -24,14 +23,12 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.adapter.FriendsActivityPagerAdapter;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
-import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import jp.wasabeef.glide.transformations.CropSquareTransformation;
@@ -40,7 +37,7 @@ import static com.example.ivan.champy_v2.utils.Constants.path;
 
 public class FriendsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String TAG = FriendsActivity.class.getSimpleName();
+    private final String TAG = FriendsActivity.class.getSimpleName();
 
     private NavigationView navigationView;
     private SessionManager sessionManager;

@@ -32,7 +32,7 @@ import static com.example.ivan.champy_v2.utils.Constants.oneDay;
 
 public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 
-    public static final String TAG = "CardsAdapterMain";
+    private final String TAG = "CardsAdapterMain";
     private ArrayList<SelfImprovement_model> arrayList;
     private Snackbar snackbar;
     private SessionManager sessionManager;

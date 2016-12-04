@@ -48,7 +48,7 @@ import static com.example.ivan.champy_v2.utils.Constants.path;
 
 public class SelfImprovementActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    public static final String TAG = SelfImprovementActivity.class.getSimpleName();
+    public final String TAG = SelfImprovementActivity.class.getSimpleName();
     private NavigationView navigationView;
     private SessionManager sessionManager;
     public View spinner;

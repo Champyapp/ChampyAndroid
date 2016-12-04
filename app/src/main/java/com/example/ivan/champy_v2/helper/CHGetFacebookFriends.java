@@ -65,6 +65,7 @@ public class CHGetFacebookFriends {
                         jsonObject.put("facebookId", fb_id);
                         jsonObject.put("AndroidOS", gcm);
                         String string = jsonObject.toString();
+
                         final String jwtString = Jwts.builder()
                                 .setHeaderParam("alg", "HS256")
                                 .setHeaderParam("typ", "JWT")
@@ -89,7 +90,7 @@ public class CHGetFacebookFriends {
                                             e.printStackTrace();
                                         }
                                     }
-                                    String name = data.getName();
+                                    final String name = data.getName();
                                     cv.put("name", name);
                                     cv.put("photo", photo);
                                     cv.put("user_id", data.get_id());

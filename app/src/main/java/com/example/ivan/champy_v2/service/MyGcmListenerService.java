@@ -50,7 +50,7 @@ import static java.lang.Math.round;
 public class MyGcmListenerService extends GcmListenerService {
 
     // TODO: 11/23/16 Delete from this class method "isUpdated" and update "Generate" method;
-    private static final String TAG = "MyGcmListenerService";
+    private final String TAG = "MyGcmListenerService";
     private SessionManager sessionManager;
 
     /**

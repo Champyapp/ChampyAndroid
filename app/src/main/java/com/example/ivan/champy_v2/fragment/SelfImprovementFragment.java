@@ -26,7 +26,7 @@ import com.example.ivan.champy_v2.utils.SessionManager;
 public class SelfImprovementFragment extends Fragment implements View.OnClickListener {
 
     public static final String ARG_PAGE = "ARG_PAGE";
-    public static final String TAG = SelfImprovementFragment.class.getSimpleName();
+    public final String TAG = SelfImprovementFragment.class.getSimpleName();
     public int position, size, daysCount, newDaysCount, days = 21, o = 0;
     public String duration, description, challenge_id, status, name;
     public Typeface typeface;

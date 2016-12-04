@@ -21,7 +21,7 @@ import static com.example.ivan.champy_v2.utils.Constants.API_URL;
 
 public class CHUploadPhoto {
 
-    public static final String TAG = "CHUploadPhoto";
+    public final String TAG = "CHUploadPhoto";
     Context context;
 
     public CHUploadPhoto(Context context) {

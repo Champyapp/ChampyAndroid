@@ -15,7 +15,6 @@ public class DailyRemindController {
 
     private Context context;
 
-
     public DailyRemindController(Context context) { this.context = context; }
 
 

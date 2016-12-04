@@ -43,13 +43,12 @@ import static com.example.ivan.champy_v2.utils.Constants.API_URL;
 
 public class PendingFragment extends Fragment {
 
-    public static final String ARG_PAGE = "ARG_PAGE";
-    public static final String TAG = "PendingFragment";
-
+    private static final String ARG_PAGE = "ARG_PAGE";
+    private final String TAG = "PendingFragment";
     private String id = "", token = "";
-    public SwipeRefreshLayout swipeRefreshLayout;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private SessionManager sessionManager;
-    public View gView;
+    private View gView;
 
     public int mPage;
     private Socket mSocket;
@@ -108,12 +107,15 @@ public class PendingFragment extends Fragment {
         }
         c.close();
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-        final PendingAdapter adapter = new PendingAdapter(pendingFriends, getContext(), getActivity(), new CustomItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Pending_friend friend = pendingFriends.get(position);
-            }
+
+
+
+
+        final PendingAdapter adapter = new PendingAdapter(pendingFriends, getContext(), getActivity(), (view1, position) -> {
+            Pending_friend friend = pendingFriends.get(position);
         });
+
+
 
         SessionManager sessionManager = new SessionManager(getActivity());
         String checkRefresh = sessionManager.getRefreshPending();
@@ -123,12 +125,7 @@ public class PendingFragment extends Fragment {
         rvContacts.setAdapter(adapter);
 
         swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshPendingView(swipeRefreshLayout, gView);
-            }
-        });
+        swipeRefreshLayout.setOnRefreshListener(() -> refreshPendingView(swipeRefreshLayout, gView));
         this.gView = view;
 
         if (checkRefresh.equals("true")) {
