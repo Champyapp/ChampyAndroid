@@ -92,7 +92,6 @@ public class HistoryInProgressFragment extends Fragment {
                             goal, challengeName, versus, recipient, constDuration));
                 }
 
-                //adapter = new HistoryChallengeAdapter(all, getContext());
                 rvContacts.setAdapter(adapter);
                 rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
                 swipeRefreshLayout.setRefreshing(false);

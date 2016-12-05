@@ -141,11 +141,7 @@ public class OtherFragment extends Fragment {
         rvContacts.setAdapter(adapter);
 
         gSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
-        gSwipeRefreshLayout.setOnRefreshListener(() -> {
-//            refreshOtherView(gSwipeRefreshLayout, gView);
-            new refreshOtherView().doInBackground();
-            gSwipeRefreshLayout.setRefreshing(false);
-        });
+        gSwipeRefreshLayout.setOnRefreshListener(() -> new refreshOtherView().doInBackground() );
         this.gView = view;
 
 //        Bundle friendRequestExtra = getActivity().getIntent().getExtras();
@@ -154,11 +150,7 @@ public class OtherFragment extends Fragment {
 //            new refreshOtherView().doInBackground();
 //        }
 
-        if (checkRefresh.equals("true")) {
-            //refreshOtherView(gSwipeRefreshLayout, gView);
-            new refreshOtherView().doInBackground();
-            checkRefresh = "false";
-        }
+        if (checkRefresh.equals("true")) { new refreshOtherView().doInBackground(); }
 
         return view;
 
@@ -201,24 +193,7 @@ public class OtherFragment extends Fragment {
         mSocket.off();
         mSocket.disconnect();
     }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.d(TAG, "onDestroyView: ");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "onDestroy: ");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.d(TAG, "onDetach: ");
-    }
+    
 
     private class refreshOtherView extends AsyncTask<Void, Void, Void> {
         @Override
@@ -249,9 +224,7 @@ public class OtherFragment extends Fragment {
                     }
                     for (int i = 0; i < array.length(); i++) {
                         try {
-                            // jwt - Json Web Token...
                             final String fb_id = array.getJSONObject(i).getString("id");
-                            final String user_name = array.getJSONObject(i).getString("name");
                             final String jwtString = Jwts.builder()
                                     .setHeaderParam("alg", "HS256")
                                     .setHeaderParam("typ", "JWT")
@@ -269,14 +242,11 @@ public class OtherFragment extends Fragment {
 
                                         if (data.getPhoto() != null) {
                                             photo = API_URL + data.getPhoto().getMedium();
-                                        }
-                                        else {
+                                        } else {
                                             try {
                                                 URL profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
                                                 photo = profile_pic.toString();
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                            }
+                                            } catch (Exception e) { e.printStackTrace(); }
                                         }
 
                                         String name = data.getName();
@@ -300,10 +270,9 @@ public class OtherFragment extends Fragment {
                                                     "" + data.getInProgressChallenges(),
                                                     "" + data.getLevel().getNumber()
                                             ));
-                                        } else {
-                                            Log.d(TAG, "DBase: not added | " + user_name + " in another table");
                                         }
                                         swipeRefreshLayout.setRefreshing(false);
+                                        checkRefresh = "false";
                                     }
 //                                    else {
 //                                        // отображение всего у человека, который не установил champy
@@ -337,22 +306,14 @@ public class OtherFragment extends Fragment {
                                 }
 
                                 @Override
-                                public void onFailure(Throwable t) {
-
-                                }
+                                public void onFailure(Throwable t) { }
                             });
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
+                        } catch (JSONException e) { e.printStackTrace(); }
                     }
                 });
                 request.executeAsync();
-
             });
-        } else {
-            swipeRefreshLayout.setRefreshing(false);
-        }
+        } else { swipeRefreshLayout.setRefreshing(false); checkRefresh = "false"; }
 
     }
 

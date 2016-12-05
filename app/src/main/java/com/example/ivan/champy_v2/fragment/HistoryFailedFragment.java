@@ -73,32 +73,29 @@ public class HistoryFailedFragment extends Fragment {
     private void refreshOtherView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
             swipeRefreshLayout.setRefreshing(true);
-            swipeRefreshLayout.post(new Runnable() {
-                @Override
-                public void run() {
-                    arr = new ArrayList<>();
-                    for (int i = 0; i < self_improvement.size(); i++) {
-                        SelfImprovement_model item = self_improvement.get(i);
-                        String challengeName = item.getChallengeName();
-                        String constDuration = item.getConstDuration();
-                        String recipient = item.getRecipient();
-                        String description = item.getGoal();
-                        String duration = item.getDays();
-                        String versus = item.getVersus();
-                        String status = item.getStatus();
-                        String type = item.getType();
-                        String goal = item.getGoal();
+            swipeRefreshLayout.post(() -> {
 
-                        arr.add(new HistoryChallenge(
-                                type, false, description, duration, status, goal, challengeName, versus, recipient, constDuration
-                        ));
-                    }
+                arr = new ArrayList<>();
+                for (int i = 0; i < self_improvement.size(); i++) {
+                    SelfImprovement_model item = self_improvement.get(i);
+                    String challengeName = item.getChallengeName();
+                    String constDuration = item.getConstDuration();
+                    String recipient = item.getRecipient();
+                    String description = item.getGoal();
+                    String duration = item.getDays();
+                    String versus = item.getVersus();
+                    String status = item.getStatus();
+                    String type = item.getType();
+                    String goal = item.getGoal();
 
-                    //adapter = new HistoryChallengeAdapter(arr, getContext());
-                    rvContacts.setAdapter(adapter);
-                    rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
-                    swipeRefreshLayout.setRefreshing(false);
+                    arr.add(new HistoryChallenge(
+                            type, false, description, duration, status, goal, challengeName, versus, recipient, constDuration
+                    ));
                 }
+
+                rvContacts.setAdapter(adapter);
+                rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
+                swipeRefreshLayout.setRefreshing(false);
             });
         } else {
             swipeRefreshLayout.setRefreshing(false);

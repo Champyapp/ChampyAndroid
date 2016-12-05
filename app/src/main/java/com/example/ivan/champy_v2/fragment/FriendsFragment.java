@@ -45,7 +45,7 @@ public class FriendsFragment extends Fragment {
 
     private final String TAG = "FriendsFragment";
     private static final String ARG_PAGE = "ARG_PAGE";
-
+    private String id, token;
     private View gView;
     private SwipeRefreshLayout gSwipeRefreshLayout;
     private SessionManager sessionManager;
@@ -62,6 +62,9 @@ public class FriendsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: ");
+        sessionManager = new SessionManager(getActivity());
+        token = sessionManager.getToken();
+        id = sessionManager.getUserId();
     }
 
     @Override
@@ -99,8 +102,6 @@ public class FriendsFragment extends Fragment {
             FriendModel friend = friends.get(position);
         });
 
-        sessionManager = new SessionManager(getActivity());
-        String checkRefresh = sessionManager.getRefreshFriends();
 
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         rvContacts.setAdapter(adapter);
@@ -110,6 +111,7 @@ public class FriendsFragment extends Fragment {
         gSwipeRefreshLayout.setOnRefreshListener(() -> refreshFriendsView(gSwipeRefreshLayout, gView));
         this.gView = view;
 
+        String checkRefresh = sessionManager.getRefreshFriends();
         if (checkRefresh.equals("true")) {
             refreshFriendsView(gSwipeRefreshLayout, gView);
             sessionManager.setRefreshFriends("false");
@@ -176,8 +178,6 @@ public class FriendsFragment extends Fragment {
 
     private void refreshFriendsView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         swipeRefreshLayout.setRefreshing(true);
-        final String token = sessionManager.getToken();
-        final String id = sessionManager.getUserId();
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         final DBHelper dbHelper = new DBHelper(getContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();

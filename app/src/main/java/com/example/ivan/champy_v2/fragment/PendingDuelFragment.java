@@ -64,6 +64,17 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         super.onStart();
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d("PendingDuel", "onCreate: ");
+        sessionManager = new SessionManager(getContext());
+        final String token = sessionManager.getToken();
+        final String userId = sessionManager.getUserId();
+        cc = new ChallengeController(getContext(), getActivity(), token, userId);
+        inProgressCount = Integer.parseInt(sessionManager.getChampyOptions().get("challenges"));
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
@@ -122,14 +133,6 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         } else {
             tvUserVsUser.setText(getContext().getResources().getString(R.string.waiting_for_your_recipient) + "\n " + versus);
             btnAccept.setVisibility(View.INVISIBLE);
-//            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewPager.LayoutParams.WRAP_CONTENT, ViewPager.LayoutParams.WRAP_CONTENT);
-//            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-//            params.addRule(RelativeLayout.CENTER_HORIZONTAL);
-//            params.height = x * 10;
-//            params.width  = x * 10;
-//            btnCancel.setLayoutParams(params);
-//            btnCancel.getLayoutParams().height=x*10;
-//            btnCancel.getLayoutParams().width=x*10;
         }
 
         if (duration != null && !duration.isEmpty()) days = Integer.parseInt(duration) / 86400;
@@ -150,19 +153,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         btnAccept.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
 
-        sessionManager = new SessionManager(getContext());
-        final String token = sessionManager.getToken();
-        final String userId = sessionManager.getUserId();
-        cc = new ChallengeController(getContext(), getActivity(), token, userId);
-        inProgressCount = Integer.parseInt(sessionManager.getChampyOptions().get("challenges"));
-
-
         return view;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
     }
 
 
@@ -189,36 +180,30 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
 
         switch (view.getId()) {
             case R.id.btn_accept:
-                snackbar = Snackbar.make(view, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        try {
-                            if (!cc.isActive(description) && recipient.equals("true") && inProgressCount < 5) {
-                                cc.joinToChallenge(challenge_id);
-                                snackbar = Snackbar.make(view, "Challenge Accepted!", Snackbar.LENGTH_SHORT);
-                            } else {
-                                snackbar = Snackbar.make(view, "Can't create this challenge!", Snackbar.LENGTH_SHORT);
-                            }
-                            snackbar.show();
-                        } catch (NullPointerException e) {
-                            e.printStackTrace();
+                snackbar = Snackbar.make(view, getString(R.string.are_you_sure), Snackbar.LENGTH_LONG).setAction(getString(R.string.yes), vAccept -> {
+                    try {
+                        if (!cc.isActive(description) && recipient.equals("true") && inProgressCount < 5) {
+                            cc.joinToChallenge(challenge_id);
+                            snackbar = Snackbar.make(vAccept, getString(R.string.challenge_created), Snackbar.LENGTH_SHORT);
+                        } else {
+                            snackbar = Snackbar.make(vAccept, getString(R.string.cant_create_this_challenge), Snackbar.LENGTH_SHORT);
                         }
+                        snackbar.show();
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
                     }
                 });
                 snackbar.show();
                 break;
 
             case R.id.btn_cancel:
-                snackbar = Snackbar.make(view, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        try {
-                            cc.rejectInviteForPendingDuel(challenge_id);
-                            snackbar = Snackbar.make(view, "Challenge Canceled!", Snackbar.LENGTH_SHORT);
-                            snackbar.show();
-                        } catch (IOException | NullPointerException e) {
-                            e.printStackTrace();
-                        }
+                snackbar = Snackbar.make(view, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes", vCancel -> {
+                    try {
+                        cc.rejectInviteForPendingDuel(challenge_id);
+                        snackbar = Snackbar.make(vCancel, getString(R.string.challenge_created), Snackbar.LENGTH_SHORT);
+                        snackbar.show();
+                    } catch (IOException | NullPointerException e) {
+                        e.printStackTrace();
                     }
                 });
                 snackbar.show();

@@ -54,12 +54,6 @@ public class PendingFragment extends Fragment {
     private Socket mSocket;
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Log.d(TAG, "onAttach: ");
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: ");
@@ -128,15 +122,10 @@ public class PendingFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
     public void onStart() {
         super.onStart();
         try {
-            mSocket = IO.socket("http://46.101.213.24:3007");
+            mSocket = IO.socket(API_URL);
             Log.d(TAG, "onStart: Sockets are connected!");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
@@ -173,9 +162,10 @@ public class PendingFragment extends Fragment {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("pending", null, null);
         final ContentValues cv = new ContentValues();
-        OfflineMode offlineMode = new OfflineMode();
+
         com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
 
+        OfflineMode offlineMode = new OfflineMode();
         if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
             Call<com.example.ivan.champy_v2.model.friend.Friend> call = friends.getUserFriends(id, token);
             call.enqueue(new Callback<com.example.ivan.champy_v2.model.friend.Friend>() {
@@ -183,7 +173,8 @@ public class PendingFragment extends Fragment {
                 public void onResponse(Response<com.example.ivan.champy_v2.model.friend.Friend> response, Retrofit retrofit) {
                     if (response.isSuccess()) {
                         List<Datum> data = response.body().getData();
-                        // get data from response
+
+                        // get pending from response
                         for (int i = 0; i < data.size(); i++) {
                             Datum datum = data.get(i);
                             if ((datum.getFriend() != null) && (datum.getOwner() != null) && datum.getStatus().toString().equals("false")) {
