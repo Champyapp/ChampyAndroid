@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 /**
  * Our Local DataBase which was named "myDB"
  */
+// TODO: 11/22/16 Delete "isUpdated" because we have a "needsToCheckRecipient / Sender"
 public class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper(Context context) {
@@ -14,7 +15,6 @@ public class DBHelper extends SQLiteOpenHelper {
         super(context, "myDB", null, 1);
     }
 
-    // TODO: 11/22/16 Delete "isUpdated" because we have a "needsToCheckRecipient / Sender"
 
     @Override
     public void onCreate(SQLiteDatabase db) {

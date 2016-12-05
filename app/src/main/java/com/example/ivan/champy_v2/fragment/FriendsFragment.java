@@ -48,15 +48,10 @@ public class FriendsFragment extends Fragment {
     private String id, token;
     private View gView;
     private SwipeRefreshLayout gSwipeRefreshLayout;
+    private SQLiteDatabase db;
     private SessionManager sessionManager;
     private Socket mSocket;
 
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Log.d(TAG, "onAttach: ");
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,6 +60,9 @@ public class FriendsFragment extends Fragment {
         sessionManager = new SessionManager(getActivity());
         token = sessionManager.getToken();
         id = sessionManager.getUserId();
+
+        DBHelper dbHelper = new DBHelper(getContext());
+        db = dbHelper.getWritableDatabase();
     }
 
     @Override
@@ -72,8 +70,6 @@ public class FriendsFragment extends Fragment {
         Log.d(TAG, "onCreateView: ");
         final View view = inflater.inflate(R.layout.fragment_friends, container, false);
         final List<FriendModel> friends = new ArrayList<>();
-        DBHelper dbHelper = new DBHelper(getContext());
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("friends", null, null, null, null, null, null);
         if (c.moveToFirst()) {
             int inProgressChallengesCountIndex = c.getColumnIndex("inProgressChallengesCount");
@@ -157,22 +153,14 @@ public class FriendsFragment extends Fragment {
         mSocket.disconnect();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.d(TAG, "onDestroyView: ");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "onDestroy: ");
-    }
 
     @Override
     public void onDetach() {
         super.onDetach();
         Log.d(TAG, "onDetach: ");
+        try {
+            db.close();
+        } catch (Exception e) { e.printStackTrace(); }
     }
 
 

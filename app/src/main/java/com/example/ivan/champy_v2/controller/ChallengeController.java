@@ -51,8 +51,9 @@ import static java.lang.Math.round;
 
 public class ChallengeController {
 
-    public final String TAG = "ChallengeController";
-    private String duration, details, update = "0";
+    private final String TAG = "ChallengeController";
+    private final String update = "0";
+    private String duration, details;
     private String token, userId;
     private Context context;
     private Activity firstActivity;
@@ -76,10 +77,9 @@ public class ChallengeController {
         details = description + " during this period: " + days + " days";
 
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
-        Call<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge> call =
-                createChallenge.createChallenge("User_Challenge", typeSelf, description, details, duration, token);
+        Call<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge> call = createChallenge
+                .createChallenge("User_Challenge", typeSelf, description, details, duration, token);
         call.enqueue(new Callback<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge>() {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge> response, Retrofit retrofit) {
@@ -140,7 +140,8 @@ public class ChallengeController {
         details = description + " during this period: " + days + " days";
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
-        Call<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge> call = createChallenge.createChallenge("User_Challenge", type_id, description, details, duration, token);
+        Call<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge> call = createChallenge
+                .createChallenge("User_Challenge", type_id, description, details, duration, token);
         call.enqueue(new Callback<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge>() {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge> response, Retrofit retrofit) {
@@ -219,8 +220,8 @@ public class ChallengeController {
 
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
-        Call<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge> call =
-                createChallenge.createChallenge(wakeUpName, typeWake, description, Arrays.toString(details), duration, token);
+        Call<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge> call = createChallenge
+                .createChallenge(wakeUpName, typeWake, description, Arrays.toString(details), duration, token);
 
         call.enqueue(new Callback<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge>() {
             @Override
@@ -368,7 +369,6 @@ public class ChallengeController {
                     cv.put("updated", "true");
                     db.update("updated",      cv, "challenge_id = ?", new String[]{inProgressId});
                     db.update("myChallenges", cv, "challenge_id = ?", new String[]{inProgressId});
-
                     generateCardsForMainActivity();
 
                     Log.d(TAG, "doneForToday onResponse: VSE OK");
@@ -459,7 +459,6 @@ public class ChallengeController {
                             db.insert("pending_duel", null, cv);
                         }
                     }
-
                     generateCardsForMainActivity();
 
                     Log.d(TAG, "RefreshPendingDuels onResponse: VSE OK");
@@ -548,12 +547,10 @@ public class ChallengeController {
                         cv.put("constDuration", constDuration); // our constant value of challenge duration
                         cv.put("needsToCheck", needsToCheck); // method for check challenge for "needToCheck"
                         db.insert("myChallenges", null, cv); // db when we store all challenges and information about them
-
-
                     }
-                    Log.d(TAG, "Generate onResponse: VSE OK");
                     Intent intent = new Intent(firstActivity, MainActivity.class);
                     firstActivity.startActivity(intent);
+                    Log.d(TAG, "Generate onResponse: VSE OK");
                 }
             }
 
@@ -566,8 +563,7 @@ public class ChallengeController {
 
     }
 
-
-//
+    //
 //    // method which returns our last update information (true or false);
 //    private String isUpdated(String challenge_id) {
 //        DBHelper dbHelper = new DBHelper(context);
