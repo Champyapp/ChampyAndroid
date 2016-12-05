@@ -223,17 +223,5 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         }
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        try {
-            c.close();
-            db.close();
-            Log.d("SelfImprovementFragment", "onDestroyView: db.isOpen? = " + db.isOpen());
-            Log.d("SelfImprovementFragment", "onDestroyView: db.isClosed? = " + c.isClosed());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
 }

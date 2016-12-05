@@ -219,12 +219,4 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        try {
-            c.close();
-            db.close();
-        } catch (Exception e) { e.printStackTrace(); }
-    }
 }

@@ -102,7 +102,6 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         tvIChallengeMyFriendTo.setTypeface(typeface);
 
 
-
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -115,17 +114,26 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
 
         ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
         ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
-        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
         drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
-        name = sessionManager.getUserName();
-        drawerUserName.setText(name);
-        drawerUserName.setTypeface(typeface);
-
         Glide.with(this).load(uriBlur).bitmapTransform(new CropSquareTransformation(this))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);
         Glide.with(this).load(uriProfile).bitmapTransform(new CropCircleTransformation(this))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
+
+        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        name = sessionManager.getUserName();
+        drawerUserName.setText(name);
+        drawerUserName.setTypeface(typeface);
+
+
+        final CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+        int count = checker.getPendingCount();
+        if (count == 0) {
+            checker.hideItem();
+        } else {
+            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+        }
 
 //        try {
 //            drawerBackground.setImageDrawable(getPhotoForDrawerBackground(path));
@@ -237,15 +245,6 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    private Drawable getPhotoForDrawerBackground(String pathToPic) throws FileNotFoundException {
-        File file = new File(pathToPic, "blured2.jpg");
-        Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
-        Drawable dr = new BitmapDrawable(getResources(), bitmap);
-        dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
-        return dr;
-    }
-
-
     private class ProgressTask extends AsyncTask<Void,Void,Void> {
         @Override
         protected void onPreExecute() {
@@ -255,22 +254,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         protected Void doInBackground(Void... arg0) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    getChallenges();
-
-                    final CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
-                    int count = checker.getPendingCount();
-                    if (count == 0) {
-                        checker.hideItem();
-                    } else {
-                        TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-                        view.setText("+" + (count > 0 ? String.valueOf(count) : null));
-                    }
-                }
-
-            });
+            getChallenges();
             return null;
         }
 
