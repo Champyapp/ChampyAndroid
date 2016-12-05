@@ -1,5 +1,6 @@
 package com.example.ivan.champy_v2.fragment;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
@@ -48,11 +49,11 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         return fragment;
     }
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.item_card, container, false);
-        Log.d(TAG, "onCreateView: OnCreateView !");
         dbHelper = new DBHelper(getContext());
         db = dbHelper.getWritableDatabase();
         final Bundle args = this.getArguments();
@@ -135,6 +136,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 
         return view;
     }
+
 
     @Override
     public void onClick(View view) {
@@ -223,15 +225,14 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         }
     }
 
-//    @Override
-//    public void onDestroy() {
-//        super.onDestroy();
-//        Log.d(TAG, "onDestroy: ");
-//        try {
-//            db.endTransaction();
-//            db.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
+        try {
+            db.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

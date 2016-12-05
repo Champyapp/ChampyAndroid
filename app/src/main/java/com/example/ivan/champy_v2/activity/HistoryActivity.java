@@ -123,7 +123,6 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         ViewServer.get(this).removeWindow(this);
     }
 
-
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -134,7 +133,6 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
             super.onBackPressed();
         }
     }
-
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {

@@ -37,19 +37,14 @@ import static com.example.ivan.champy_v2.utils.Constants.path;
 
 public class FriendsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private final String TAG = FriendsActivity.class.getSimpleName();
-
-    private NavigationView navigationView;
     private SessionManager sessionManager;
     private DrawerLayout drawer;
-    private TabLayout tabLayout;
-    private Typeface typeface;
+
 //    private int[] tabIcons = {
 //            R.drawable.ic_tab_friends,
 //            R.drawable.ic_tab_pending,
 //            R.drawable.ic_tab_others
 //    };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,12 +64,32 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
 
+        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
+        ImageView background = (ImageView) findViewById(R.id.friends_background);
+        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        background.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+        File fileProfile = new File(path, "profile.jpg");
+        Uri uriProfile = Uri.fromFile(fileProfile);
+        File fileBlur = new File(path, "blured2.jpg");
+        Uri uriBlur = Uri.fromFile(fileBlur);
+
+        Glide.with(this).load(uriBlur).bitmapTransform(new CropSquareTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(background);
+        Glide.with(this).load(uriBlur).bitmapTransform(new CropSquareTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);
+        Glide.with(this).load(uriProfile).bitmapTransform(new CropCircleTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
+
+
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setOffscreenPageLimit(3);
+        viewPager.setOffscreenPageLimit(2);
         FriendsActivityPagerAdapter adapterViewPager = new FriendsActivityPagerAdapter(getSupportFragmentManager(), getApplicationContext());
         viewPager.setAdapter(adapterViewPager);
 
@@ -97,33 +112,9 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
             }
         }
 
-        tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
         //setupCustomTabIcons();
-
-
-        typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
-        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
-        ImageView background = (ImageView) findViewById(R.id.friends_background);
-        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        background.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
-        File fileProfile = new File(path, "profile.jpg");
-        Uri uriProfile = Uri.fromFile(fileProfile);
-        File fileBlur = new File(path, "blured2.jpg");
-        Uri uriBlur = Uri.fromFile(fileBlur);
-
-        Glide.with(this).load(uriBlur).bitmapTransform(new CropSquareTransformation(this))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(background);
-
-        Glide.with(this).load(uriBlur).bitmapTransform(new CropSquareTransformation(this))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);
-
-        Glide.with(this).load(uriProfile).bitmapTransform(new CropCircleTransformation(this))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
-
 
 //        try {
 //            background.setImageDrawable(CHLoadBlurredPhoto.Init(path));
@@ -134,6 +125,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 
         String name = sessionManager.getUserName();
         drawerUserName.setText(name);
+        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         drawerUserName.setTypeface(typeface);
 
         CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);

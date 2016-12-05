@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
@@ -200,6 +201,161 @@ public class OtherFragment extends Fragment {
         mSocket.disconnect();
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d(TAG, "onDestroyView: ");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.d(TAG, "onDetach: ");
+    }
+
+    private class loadOtherPeople extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            return null;
+        }
+    }
+
+    public void refreshOtherView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
+        // Проверка на оффлайн вкладке OTHERS
+        if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
+            swipeRefreshLayout.setRefreshing(true);
+            swipeRefreshLayout.post(() -> {
+                final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+                final NewUser newUser = retrofit.create(NewUser.class);
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+                final SQLiteDatabase db = dbHelper.getWritableDatabase();
+                int clearCount = db.delete("mytable", null, null);
+                final List<FriendModel> newFriends = new ArrayList<>();
+
+                final GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(), (array, response) -> {
+                    if (array.length() == 0) {
+                        Toast.makeText(getContext(), R.string.noOneHasInstalledChampy, Toast.LENGTH_SHORT).show();
+                        swipeRefreshLayout.setRefreshing(false);
+                        return;
+                    }
+                    for (int i = 0; i < array.length(); i++) {
+                        try {
+                            // jwt - Json Web Token...
+                            final String fb_id = array.getJSONObject(i).getString("id");
+                            final String user_name = array.getJSONObject(i).getString("name");
+                            final String jwtString = Jwts.builder()
+                                    .setHeaderParam("alg", "HS256")
+                                    .setHeaderParam("typ", "JWT")
+                                    .setPayload("{\n"+"  \"facebookId\": \"" + fb_id + "\"\n" + "}")
+                                    .signWith(SignatureAlgorithm.HS256, "secret")
+                                    .compact();
+
+                            Call<User> call = newUser.getUserInfo(jwtString);
+                            call.enqueue(new Callback<User>() {
+                                @Override
+                                public void onResponse(Response<User> response, Retrofit retrofit1) {
+                                    if (response.isSuccess()) {
+                                        Data data = response.body().getData();
+                                        String photo = null;
+
+                                        if (data.getPhoto() != null) {
+                                            photo = API_URL + data.getPhoto().getMedium();
+                                        }
+                                        else {
+                                            try {
+                                                URL profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
+                                                photo = profile_pic.toString();
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+
+                                        String name = data.getName();
+                                        cv.put("user_id", data.get_id());
+                                        cv.put("name", name);
+                                        cv.put("photo", photo);
+                                        cv.put("challenges", "" + data.getAllChallengesCount());
+                                        cv.put("wins", "" + data.getSuccessChallenges());
+                                        cv.put("total", "" + data.getInProgressChallenges());
+                                        cv.put("level", "" + data.getLevel().getNumber());
+
+                                        // отображаем друзей в списке
+                                        if (!checkTableForExist.isInOtherTable(data.get_id())) {
+                                            db.insert("mytable", null, cv);
+                                            newFriends.add(new FriendModel(
+                                                    name,
+                                                    photo,
+                                                    data.get_id(),
+                                                    "" + data.getAllChallengesCount(),
+                                                    "" + data.getSuccessChallenges(),
+                                                    "" + data.getInProgressChallenges(),
+                                                    "" + data.getLevel().getNumber()
+                                            ));
+                                        } else {
+                                            Log.d(TAG, "DBase: not added | " + user_name + " in another table");
+                                        }
+                                        swipeRefreshLayout.setRefreshing(false);
+                                    }
+//                                    else {
+//                                        // отображение всего у человека, который не установил champy
+//                                        URL profile_pic = null;
+//                                        String photo = null;
+//                                        try {
+//                                            profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
+//                                            photo = profile_pic.toString();
+//                                        } catch (MalformedURLException e) {
+//                                            e.printStackTrace();
+//                                        }
+//                                        cv.put("name", user_name);
+//                                        cv.put("photo", photo);
+//                                        cv.put("challenges", "0");
+//                                        cv.put("wins", "0");
+//                                        cv.put("total", "0");
+//                                        cv.put("level", "0");
+//                                        newFriends.add(new FriendModel(user_name, photo, null, "0", "0", "0", "0"));
+//                                        db.insert("mytable", null, cv);
+//
+//                                        RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
+//                                        OtherAdapter adapter1 = new OtherAdapter(newFriends, getContext(), getActivity());
+//                                        rvContacts.setAdapter(adapter1);
+//                                        gSwipeRefreshLayout.setRefreshing(false);
+//                                    }
+
+                                    RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
+                                    OtherAdapter otherAdapter = new OtherAdapter(newFriends, getContext(), getActivity());
+                                    rvContacts.setAdapter(otherAdapter);
+                                    gSwipeRefreshLayout.setRefreshing(false);
+                                }
+
+                                @Override
+                                public void onFailure(Throwable t) {
+
+                                }
+                            });
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                });
+                request.executeAsync();
+
+            });
+        } else {
+            swipeRefreshLayout.setRefreshing(false);
+        }
+
+    }
+
+
 
     private Emitter.Listener onConnect = new Emitter.Listener() {
         @Override
@@ -227,141 +383,6 @@ public class OtherFragment extends Fragment {
             Log.d(TAG, "Sockets: modifiedRelationship");
         }
     };
-
-
-    public void refreshOtherView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
-        // Проверка на оффлайн вкладке OTHERS
-        if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
-            swipeRefreshLayout.setRefreshing(true);
-            swipeRefreshLayout.post(new Runnable() {
-                @Override
-                public void run() {
-                    final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-                    final NewUser newUser = retrofit.create(NewUser.class);
-                    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-                    StrictMode.setThreadPolicy(policy);
-                    final SQLiteDatabase db = dbHelper.getWritableDatabase();
-                    int clearCount = db.delete("mytable", null, null);
-                    final List<FriendModel> newFriends = new ArrayList<>();
-
-                    final GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONArrayCallback() {
-                        @Override
-                        public void onCompleted(JSONArray array, GraphResponse response) {
-                            if (array.length() == 0) {
-                                Toast.makeText(getContext(), R.string.noOneHasInstalledChampy, Toast.LENGTH_SHORT).show();
-                                swipeRefreshLayout.setRefreshing(false);
-                                return;
-                            }
-                            for (int i = 0; i < array.length(); i++) {
-                                try {
-                                    // jwt - Json Web Token...
-                                    final String fb_id = array.getJSONObject(i).getString("id");
-                                    final String user_name = array.getJSONObject(i).getString("name");
-                                    final String jwtString = Jwts.builder()
-                                            .setHeaderParam("alg", "HS256")
-                                            .setHeaderParam("typ", "JWT")
-                                            .setPayload("{\n"+"  \"facebookId\": \"" + fb_id + "\"\n" + "}")
-                                            .signWith(SignatureAlgorithm.HS256, "secret")
-                                            .compact();
-
-                                    Call<User> call = newUser.getUserInfo(jwtString);
-                                    call.enqueue(new Callback<User>() {
-                                        @Override
-                                        public void onResponse(Response<User> response, Retrofit retrofit) {
-                                            if (response.isSuccess()) {
-                                                Data data = response.body().getData();
-                                                String photo = null;
-
-                                                if (data.getPhoto() != null) {
-                                                    photo = API_URL + data.getPhoto().getMedium();
-                                                }
-                                                else {
-                                                    try {
-                                                        URL profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
-                                                        photo = profile_pic.toString();
-                                                    } catch (Exception e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                }
-
-                                                String name = data.getName();
-                                                cv.put("user_id", data.get_id());
-                                                cv.put("name", name);
-                                                cv.put("photo", photo);
-                                                cv.put("challenges", "" + data.getAllChallengesCount());
-                                                cv.put("wins", "" + data.getSuccessChallenges());
-                                                cv.put("total", "" + data.getInProgressChallenges());
-                                                cv.put("level", "" + data.getLevel().getNumber());
-
-                                                // отображаем друзей в списке
-                                                if (!checkTableForExist.isInOtherTable(data.get_id())) {
-                                                    db.insert("mytable", null, cv);
-                                                    newFriends.add(new FriendModel(
-                                                            name,
-                                                            photo,
-                                                            data.get_id(),
-                                                            "" + data.getAllChallengesCount(),
-                                                            "" + data.getSuccessChallenges(),
-                                                            "" + data.getInProgressChallenges(),
-                                                            "" + data.getLevel().getNumber()
-                                                    ));
-                                                } else {
-                                                    Log.d(TAG, "DBase: not added | " + user_name + " in another table");
-                                                }
-                                                swipeRefreshLayout.setRefreshing(false);
-                                            }
-//                                            else {
-//                                                // отображение всего у человека, который не установил champy
-//                                                URL profile_pic = null;
-//                                                String photo = null;
-//                                                try {
-//                                                    profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
-//                                                    photo = profile_pic.toString();
-//                                                } catch (MalformedURLException e) {
-//                                                    e.printStackTrace();
-//                                                }
-//                                                cv.put("name", user_name);
-//                                                cv.put("photo", photo);
-//                                                cv.put("challenges", "0");
-//                                                cv.put("wins", "0");
-//                                                cv.put("total", "0");
-//                                                cv.put("level", "0");
-//                                                newFriends.add(new FriendModel(user_name, photo, null, "0", "0", "0", "0"));
-//                                                db.insert("mytable", null, cv);
-//
-//                                                RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-//                                                OtherAdapter adapter1 = new OtherAdapter(newFriends, getContext(), getActivity());
-//                                                rvContacts.setAdapter(adapter1);
-//                                                gSwipeRefreshLayout.setRefreshing(false);
-//                                            }
-
-                                            RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-                                            OtherAdapter otherAdapter = new OtherAdapter(newFriends, getContext(), getActivity());
-                                            rvContacts.setAdapter(otherAdapter);
-                                            gSwipeRefreshLayout.setRefreshing(false);
-                                        }
-
-                                        @Override
-                                        public void onFailure(Throwable t) {
-
-                                        }
-                                    });
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-
-                            }
-                        }
-                    });
-                    request.executeAsync();
-
-                }
-            });
-        } else {
-            swipeRefreshLayout.setRefreshing(false);
-        }
-
-    }
 
 
 }

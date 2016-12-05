@@ -25,14 +25,12 @@ import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.adapter.SelfImprovementPagerAdapter;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
-import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
 import com.example.ivan.champy_v2.model.self.Datum;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
 import com.facebook.FacebookSdk;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.List;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -59,11 +57,11 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_self_improvement);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         sessionManager = new SessionManager(getApplicationContext());
 
-        new ProgressTask().execute();
+        new getChallenges().execute();
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
@@ -114,7 +112,6 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         }
 
     }
-
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -218,7 +215,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
     }
 
 
-    private class ProgressTask extends AsyncTask<Void,Void,Void> {
+    private class getChallenges extends AsyncTask<Void,Void,Void> {
         @Override
         protected void onPreExecute() {
             spinner = findViewById(R.id.loadingPanel);
@@ -227,12 +224,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
 
         @Override
         protected Void doInBackground(Void... arg0) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    getChallenges();
-                }
-            });
+            getChallenges();
             return null;
         }
 

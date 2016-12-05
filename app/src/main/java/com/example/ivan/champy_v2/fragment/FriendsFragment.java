@@ -163,6 +163,24 @@ public class FriendsFragment extends Fragment {
         mSocket.disconnect();
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d(TAG, "onDestroyView: ");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.d(TAG, "onDetach: ");
+    }
+
 
     private void refreshFriendsView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         swipeRefreshLayout.setRefreshing(true);
