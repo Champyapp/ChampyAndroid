@@ -51,6 +51,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
     public final String TAG = SelfImprovementActivity.class.getSimpleName();
     private NavigationView navigationView;
     private SessionManager sessionManager;
+    private DrawerLayout drawer;
     public View spinner;
 
     @Override
@@ -63,7 +64,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         new ProgressTask().execute();
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -102,6 +103,15 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         String name = sessionManager.getUserName();
         drawerUsername.setText(name);
         drawerUsername.setTypeface(typeface);
+
+        final CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+        int count = checker.getPendingCount();
+        if (count == 0) {
+            checker.hideItem();
+        } else {
+            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+        }
 
     }
 
@@ -142,14 +152,12 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
                 if (offlineMode.isConnectedToRemoteAPI(this)) { sessionManager.logout(this); }
                 break;
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -226,18 +234,6 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
                 }
             });
             return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            final CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
-            int count = checker.getPendingCount();
-            if (count == 0) {
-                checker.hideItem();
-            } else {
-                TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-                view.setText("+" + (count > 0 ? String.valueOf(count) : null));
-            }
         }
 
     }

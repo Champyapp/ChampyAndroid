@@ -39,7 +39,6 @@ import com.example.ivan.champy_v2.utils.SessionManager;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
 import java.util.List;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;

@@ -117,6 +117,12 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         ViewServer.get(this).addWindow(this);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        ViewServer.get(this).removeWindow(this);
+    }
+
 
     @Override
     public void onBackPressed() {

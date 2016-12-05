@@ -14,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -83,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             pager.preparePager(0);
         }
 
-        blurScreen = (ImageView)findViewById(R.id.blurScreen);
+        blurScreen = (ImageView) findViewById(R.id.blurScreen);
         contentMain = (RelativeLayout) findViewById(R.id.content_main);
 
         // DRAWER
@@ -177,8 +178,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onStop() {
+        super.onStop();
         ViewServer.get(this).removeWindow(this);
     }
 
@@ -203,6 +204,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             blurScreen.setImageDrawable(ob);
             blurScreen.setVisibility(View.VISIBLE);
             contentMain.destroyDrawingCache();
+
             /*********************************** Sub buttons **************************************/
             buttonSelfImprovement.setOnClickListener(v0 -> startActivity(new Intent(this, SelfImprovementActivity.class)));
             buttonDuelChallenge  .setOnClickListener(v1 -> startActivity(new Intent(this, FriendsActivity.class)));

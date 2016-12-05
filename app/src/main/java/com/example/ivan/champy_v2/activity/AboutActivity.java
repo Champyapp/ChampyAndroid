@@ -107,6 +107,7 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
         ViewServer.get(this).addWindow(this);
     }
 
+
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -115,6 +116,14 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
             super.onBackPressed();
         }
     }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        ViewServer.get(this).removeWindow(this);
+    }
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -154,6 +163,7 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 
 
     private class ProgressTask extends AsyncTask<Void,Void,Void> {

@@ -114,6 +114,12 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        ViewServer.get(this).removeWindow(this);
+    }
+
+    @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);

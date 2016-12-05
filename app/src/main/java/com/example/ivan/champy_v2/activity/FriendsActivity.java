@@ -197,8 +197,8 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onStop() {
+        super.onStop();
         ViewServer.get(this).removeWindow(this);
     }
 
