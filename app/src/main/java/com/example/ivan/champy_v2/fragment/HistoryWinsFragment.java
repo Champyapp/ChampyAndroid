@@ -62,14 +62,7 @@ public class HistoryWinsFragment extends Fragment {
         }
 
         gSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
-        gSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                //getFbFriends.getUserFacebookFriends(mToken);
-                refreshOtherView(gSwipeRefreshLayout, gView);
-                gSwipeRefreshLayout.setRefreshing(false);
-            }
-        });
+        gSwipeRefreshLayout.setOnRefreshListener(() -> refreshOtherView(gSwipeRefreshLayout, gView));
         this.gView = view;
 
         rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
@@ -81,35 +74,30 @@ public class HistoryWinsFragment extends Fragment {
     private void refreshOtherView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
             swipeRefreshLayout.setRefreshing(true);
-            swipeRefreshLayout.post(new Runnable() {
-                @Override
-                public void run() {
+            swipeRefreshLayout.post(() -> {
+                winsArray = new ArrayList<>();
+                for (int i = 0; i < self_improvement.size(); i++) {
+                    SelfImprovement_model item = self_improvement.get(i);
+                    String description = item.getGoal();
+                    String duration = item.getDays();
+                    String status = item.getStatus();
+                    String type = item.getType();
+                    String goal = item.getGoal();
+                    String challengeName = item.getChallengeName();
+                    String versus = item.getVersus();
+                    String recipient = item.getRecipient();
+                    String constDuration = item.getConstDuration();
 
-                    winsArray = new ArrayList<>();
-
-                    for (int i = 0; i < self_improvement.size(); i++) {
-                        SelfImprovement_model item = self_improvement.get(i);
-                        String description = item.getGoal();
-                        String duration = item.getDays();
-                        String status = item.getStatus();
-                        String type = item.getType();
-                        String goal = item.getGoal();
-                        String challengeName = item.getChallengeName();
-                        String versus = item.getVersus();
-                        String recipient = item.getRecipient();
-                        String constDuration = item.getConstDuration();
-
-                        winsArray.add(new HistoryChallenge(
-                                type, false, description, duration, status, goal, challengeName, versus, recipient, constDuration
-                        ));
-                    }
-
-                    adapter = new HistoryChallengeAdapter(winsArray, getContext());
-                    rvContacts.setAdapter(adapter);
-                    rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
-
-                    swipeRefreshLayout.setRefreshing(false);
+                    winsArray.add(new HistoryChallenge(
+                            type, false, description, duration, status, goal, challengeName, versus, recipient, constDuration
+                    ));
                 }
+
+                adapter = new HistoryChallengeAdapter(winsArray, getContext());
+                rvContacts.setAdapter(adapter);
+                rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
+
+                swipeRefreshLayout.setRefreshing(false);
             });
         } else {
             swipeRefreshLayout.setRefreshing(false);

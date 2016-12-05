@@ -61,13 +61,7 @@ public class HistoryFailedFragment extends Fragment {
         }
 
         gSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
-        gSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshOtherView(gSwipeRefreshLayout, gView);
-                gSwipeRefreshLayout.setRefreshing(false);
-            }
-        });
+        gSwipeRefreshLayout.setOnRefreshListener(() -> refreshOtherView(gSwipeRefreshLayout, gView));
         this.gView = view;
 
         rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);

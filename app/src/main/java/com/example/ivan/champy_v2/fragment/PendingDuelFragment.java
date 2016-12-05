@@ -30,7 +30,6 @@ import static java.lang.Math.round;
 public class PendingDuelFragment extends Fragment implements View.OnClickListener {
 
     public static final String ARG_PAGE = "ARG_PAGE";
-    public final String TAG = PendingDuelFragment.class.getSimpleName();
     public int position, size, inProgressCount, days = 21, o = 0;
     public String versus, duration, description, challenge_id, status, recipient;
     public TextView tvGoal, tvDays, tvUserVsUser, everyDayForTheNext;
@@ -57,16 +56,12 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        Log.d(TAG, "onAttach: ");
-
-
     }
 
 
     @Override
     public void onStart() {
         super.onStart();
-        Log.d(TAG, "onStart: ");
     }
 
     @Nullable

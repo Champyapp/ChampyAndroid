@@ -28,7 +28,6 @@ import com.example.ivan.champy_v2.utils.SessionManager;
 public class DuelFragment extends Fragment implements View.OnClickListener {
 
     private static final String ARG_PAGE = "ARG_PAGE";
-    private final String TAG = "DuelFragment";
     private int position;
     private int size;
     private int days = 21;
@@ -41,7 +40,6 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
     private ViewPager viewPager;
     private SQLiteDatabase db;
     private Snackbar snackbar;
-    private ContentValues cv;
     private Cursor c;
 
 
@@ -53,30 +51,10 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         return fragment;
     }
 
-
-    // TODO: 12/4/16 Загружати все new тут, а данні в onCreate 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.item_card, container, false);
-        Log.d(TAG, "onCreateView");
         Bundle extras = getActivity().getIntent().getExtras();
         friend_id = (extras == null) ? null : extras.getString("id");
         DBHelper dbHelper = new DBHelper(getContext());
@@ -241,4 +219,10 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        c.close();
+        db.close();
+    }
 }

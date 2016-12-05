@@ -29,7 +29,7 @@ public class DailyRemindController {
         }
 
         Intent notifyIntent = new Intent(context, CustomNotifyReceiver.class);
-        notifyIntent.putExtra("notificationID", 228);
+        notifyIntent.putExtra("notificationID", "228");
 
         PendingIntent pi = PendingIntent.getBroadcast(context, 228, notifyIntent, PendingIntent.FLAG_ONE_SHOT);
 

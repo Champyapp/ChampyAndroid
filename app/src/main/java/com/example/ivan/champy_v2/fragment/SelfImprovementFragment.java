@@ -1,6 +1,5 @@
 package com.example.ivan.champy_v2.fragment;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
@@ -9,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +25,6 @@ import com.example.ivan.champy_v2.utils.SessionManager;
 public class SelfImprovementFragment extends Fragment implements View.OnClickListener {
 
     public static final String ARG_PAGE = "ARG_PAGE";
-    public final String TAG = SelfImprovementFragment.class.getSimpleName();
     public int position, size, daysCount, newDaysCount, days = 21, o = 0;
     public String duration, description, challenge_id, status, name;
     public Typeface typeface;
@@ -228,7 +225,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "onDestroy: ");
         try {
             db.close();
         } catch (Exception e) {

@@ -95,11 +95,8 @@ public class FriendsFragment extends Fragment {
         c.close();
 
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-        final FriendsAdapter adapter = new FriendsAdapter(friends, getContext(), getActivity(), new CustomItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                FriendModel friend = friends.get(position);
-            }
+        final FriendsAdapter adapter = new FriendsAdapter(friends, getContext(), getActivity(), (view1, position) -> {
+            FriendModel friend = friends.get(position);
         });
 
         sessionManager = new SessionManager(getActivity());
@@ -110,12 +107,7 @@ public class FriendsFragment extends Fragment {
 
 
         gSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
-        gSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshFriendsView(gSwipeRefreshLayout, gView);
-            }
-        });
+        gSwipeRefreshLayout.setOnRefreshListener(() -> refreshFriendsView(gSwipeRefreshLayout, gView));
         this.gView = view;
 
         if (checkRefresh.equals("true")) {
@@ -197,7 +189,6 @@ public class FriendsFragment extends Fragment {
         // Проверка на оффлайн вкладке FriendsActivity
         OfflineMode offlineMode = new OfflineMode();
         if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
-
             Call<com.example.ivan.champy_v2.model.friend.Friend> call = friends.getUserFriends(id, token);
             call.enqueue(new Callback<com.example.ivan.champy_v2.model.friend.Friend>() {
                 @Override
@@ -259,17 +250,13 @@ public class FriendsFragment extends Fragment {
                         c.close();
 
                         RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-                        final FriendsAdapter adapter = new FriendsAdapter(newfriends, getContext(), getActivity(), new CustomItemClickListener() {
-                            @Override
-                            public void onItemClick(View view, int position) {
-                                FriendModel friend = newfriends.get(position);
-                            }
+                        final FriendsAdapter adapter = new FriendsAdapter(newfriends, getContext(), getActivity(), (view1, position) -> {
+                            FriendModel friend = newfriends.get(position);
                         });
 
                         rvContacts.setAdapter(adapter);
                         swipeRefreshLayout.setRefreshing(false);
                     }
-                    Log.d(TAG, "refreshFriendsView: finish refreshing");
                 }
 
                 @Override

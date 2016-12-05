@@ -88,34 +88,24 @@ public class PendingFragment extends Fragment {
             int successChallenges = c.getColumnIndex("successChallenges");
             int allChallengesCount = c.getColumnIndex("allChallengesCount");
 
-            //try {
-                do {
-                    pendingFriends.add(new Pending_friend(
-                            c.getString(nameColIndex),
-                            API_URL + c.getString(photoColIndex),
-                            c.getString(index),
-                            c.getString(owner),
-                            c.getString(successChallenges),
-                            c.getString(allChallengesCount),
-                            c.getString(inProgressChallengesCountIndex)
-                    ));
-                } while (c.moveToNext());
-//            } finally {
-//                c.close();
-//                db.close();
-//            }
+            do {
+                pendingFriends.add(new Pending_friend(
+                        c.getString(nameColIndex),
+                        API_URL + c.getString(photoColIndex),
+                        c.getString(index),
+                        c.getString(owner),
+                        c.getString(successChallenges),
+                        c.getString(allChallengesCount),
+                        c.getString(inProgressChallengesCountIndex)
+                ));
+            } while (c.moveToNext());
         }
         c.close();
+
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-
-
-
-
         final PendingAdapter adapter = new PendingAdapter(pendingFriends, getContext(), getActivity(), (view1, position) -> {
             Pending_friend friend = pendingFriends.get(position);
         });
-
-
 
         SessionManager sessionManager = new SessionManager(getActivity());
         String checkRefresh = sessionManager.getRefreshPending();
@@ -140,7 +130,6 @@ public class PendingFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d(TAG, "onActivityCreated: ");
     }
 
     @Override
@@ -169,38 +158,12 @@ public class PendingFragment extends Fragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause: ");
-    }
-
-    @Override
     public void onStop() {
         super.onStop();
         Log.d(TAG, "onStop: Sockets off & disconnect");
         mSocket.off();
         mSocket.disconnect();
     }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.d(TAG, "onDestroyView: ");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "onDestroy: ");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.d(TAG, "onDetach: ");
-    }
-
-
 
 
     private void refreshPendingView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
