@@ -68,6 +68,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private ProfileTracker mProfileTracker;
     private CallbackManager mCallbackManager;
     private String user_email, path_to_pic, name, fb_id;
+    private OfflineMode offlineMode;
+
     public View spinner;
 
     @Override
@@ -85,58 +87,58 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         initFacebookTokenTracker();
 
         ImageButton buttonLogin = (ImageButton)findViewById(R.id.login_button);
+        offlineMode = new OfflineMode();
         buttonLogin.setOnClickListener(this);
+
         ViewServer.get(this).addWindow(this);
     }
 
     @Override
     public void onClick(View v) {
-        OfflineMode offlineMode = new OfflineMode();
         offlineMode.isConnectedToRemoteAPI(this);
         LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Collections.singletonList("public_profile, email, user_friends"));
         LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 if (!loginResult.getAccessToken().getDeclinedPermissions().isEmpty()) {
-                    Toast.makeText(LoginActivity.this, "Can't get permissions from Facebook", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "No Permissions Granted", Toast.LENGTH_LONG).show();
                     return;
                 }
-                GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
-                    @Override
-                    public void onCompleted(JSONObject object, GraphResponse response) {
-                        spinner.setVisibility(View.VISIBLE);
+                GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), (object, response) -> {
+                    spinner.setVisibility(View.VISIBLE);
+                    try {
+                        user_email = object.getString("email");
+                        fb_id = object.getString("id");
+                        name = object.getString("first_name") + " " + object.getString("last_name");
                         try {
-                            user_email = object.getString("email");
-                            fb_id = object.getString("id");
-                            name = object.getString("first_name") + " " + object.getString("last_name");
-                            try {
-                                URL profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
-                                path_to_pic = profile_pic.toString();
-                            } catch (MalformedURLException e) {
-                                e.printStackTrace();
-                            }
-                            new Thread(new Runnable() {
-                                public void run() {
-                                    try {
-                                        String token_android;
-                                        InstanceID instanceID = InstanceID.getInstance(LoginActivity.this);
-                                        token_android = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-                                        JSONObject jsonObject = new JSONObject();
-                                        jsonObject.put("token", token_android);
-                                        jsonObject.put("timeZone", "-2");
-                                        String json = jsonObject.toString();
-                                        getUserData(fb_id, path_to_pic, json, token_android);
-                                        // make if statement here /\  -  \/
-                                        registerUser(fb_id, name, user_email, json, token_android);
-                                    } catch (Exception e) {
-                                        Log.e(TAG, "error: ", e);
-                                    }
-                                }
-                            }).start();
-                        } catch (JSONException e) {
+                            URL profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
+                            path_to_pic = profile_pic.toString();
+                        } catch (MalformedURLException e) {
                             e.printStackTrace();
-                            Log.e(TAG, "onCompleted: No Permission For Email Or Friends List");
                         }
+                        new Thread(() -> {
+                            try {
+                                String token_android;
+                                InstanceID instanceID = InstanceID.getInstance(LoginActivity.this);
+                                token_android = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+                                JSONObject jsonObject = new JSONObject();
+                                jsonObject.put("token", token_android);
+                                jsonObject.put("timeZone", "-2");
+                                String json = jsonObject.toString();
+
+//                                getUserData(fb_id, path_to_pic, json, token_android);
+                                AppSync sync = new AppSync(fb_id, json, path_to_pic, LoginActivity.this, token_android);
+                                sync.getUserProfile();
+
+
+                                registerUser(fb_id, name, user_email, json, token_android);
+                            } catch (Exception e) {
+                                Log.e(TAG, "error: ", e);
+                            }
+                        }).start();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Log.e(TAG, "onCompleted: no permissions granted");
                     }
                 });
                 Bundle parameters = new Bundle();
@@ -151,7 +153,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onCancel() {
                 LoginManager.getInstance().logOut();
-                Toast.makeText(LoginActivity.this, "Try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Login status: Denied", Toast.LENGTH_SHORT).show();
                 Log.e(TAG, "onCancel: LOGIN CANCELED");
             }
 
@@ -228,11 +230,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    private void getUserData(final String fb_id, final String path_to_pic, String gcm, String token_android) throws JSONException {
-        AppSync sync = new AppSync(fb_id, gcm, path_to_pic, this, token_android);
-        //sync.getToken(fb_id, gcm);
-        sync.getUserProfile();
-    }
+//    private void getUserData(final String fb_id, final String path_to_pic, String gcm, String token_android) throws JSONException {
+//        AppSync sync = new AppSync(fb_id, gcm, path_to_pic, this, token_android);
+//        //sync.getToken(fb_id, gcm);
+//        sync.getUserProfile();
+//    }
 
 
     private void registerUser(String facebookId, String name, String email, final String gcm, String token_android) throws JSONException {

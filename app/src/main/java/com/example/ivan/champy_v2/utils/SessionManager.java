@@ -35,31 +35,31 @@ public class SessionManager {
     }
 
     // Create login session
-    public void createUserLoginSession(String name, String email, String facebook_id, String path_to_pic,
-                                       String token, String id, String pushN, String newChallReq, String acceptedYour,
-                                       String challengeEnd, String dailyRemind, String updateDB, String gcm, String token_android) {
+    public void createUserLoginSession(String name, String email, String facebook_id, String path_to_pic, String token, String id,
+                                       String pushN, String newChallengeReq, String acceptedYour, String challengeEnd,
+                                       String challengesForToday, String updateDB, String gcm, String token_android) {
 
-        editor.putBoolean(IS_USER_LOGIN, true);          // Storing login value as TRUE
-        editor.putString(KEY_NAME,       name);          // Storing name in pref
-        editor.putString(KEY_EMAIL,      email);         // Storing email in pref
-        editor.putString(KEY_ID,         facebook_id);   // Storing facebookId
-        editor.putString(KEY_PATH,       path_to_pic);   // Storing path to picture (user photo)
-        editor.putString("token",        token);         // Storing token
-        editor.putString("id",           id);            // Storing userId
-        editor.putString("pushN",        pushN);         // Storing notification: PushNotifications
-        editor.putString("newChallReq",  newChallReq);   // Storing notification: new challenge request
-        editor.putString("acceptedYour", acceptedYour);  // Storing notification: accepted your challenge
-        editor.putString("challengeEnd", challengeEnd);  // Storing notification: challenge end
-        editor.putString("dailyRemind",  dailyRemind);   // Storing notification: daily remind
-        editor.putString("updateDB",     updateDB);      // Storing database update
-        editor.putString(KEY_GCM,        gcm);           // Storing GCM key
-        editor.putString(TOKEN_ANDROID,  token_android); // Storing GCM key
+        editor.putBoolean(IS_USER_LOGIN,        true);               // Storing login value as TRUE
+        editor.putString(KEY_NAME,              name);               // Storing name in pref
+        editor.putString(KEY_EMAIL,             email);              // Storing email in pref
+        editor.putString(KEY_ID,                facebook_id);        // Storing facebookId
+        editor.putString(KEY_PATH,              path_to_pic);        // Storing path to picture (user photo)
+        editor.putString("token",               token);              // Storing token
+        editor.putString("id",                  id);                 // Storing userId
+        editor.putString("pushN",               pushN);              // Storing notification: PushNotifications
+        editor.putString("newChallReq",         newChallengeReq);    // Storing notification: new challenge request
+        editor.putString("acceptedYour",        acceptedYour);       // Storing notification: accepted your challenge
+        editor.putString("challengeEnd",        challengeEnd);       // Storing notification: challenge end
+        editor.putString("challengesForToday",  challengesForToday); // Storing notification: daily remind
+        editor.putString("updateDB",            updateDB);           // Storing database update
+        editor.putString(KEY_GCM,               gcm);                // Storing GCM key
+        editor.putString(TOKEN_ANDROID,         token_android);      // Storing GCM key
 
         Log.i("YO", "LOGGED ID");
         editor.commit(); // commit changes
     }
 
-    public void setChampyOptions(String challenges, String wins, String total, String level){
+    public void setChampyOptions(String challenges, String wins, String total, String level) {
         editor.putString("challenges", challenges);
         editor.putString("wins",  wins);
         editor.putString("total", total);
@@ -67,13 +67,18 @@ public class SessionManager {
         editor.commit();
     }
 
-    public void toggleNewChallengeRequest(String t){
+    public void toggleNewChallengeRequest(String t) {
         editor.putString("newChallReq", t);
         editor.commit();
     }
 
-    public void toggleAcceptYourChallenge(String t){
+    public void toggleAcceptYourChallenge(String t) {
         editor.putString("acceptedYour", t);
+        editor.commit();
+    }
+
+    public void toggleChallengesForToday(String t) {
+        editor.putString("challengesForToday", t);
         editor.commit();
     }
 
@@ -87,7 +92,7 @@ public class SessionManager {
         editor.commit();
     }
 
-    public void togglePushNotification(String t){
+    public void togglePushNotification(String t) {
         editor.putString("pushN", t);
         editor.commit();
     }
@@ -102,30 +107,25 @@ public class SessionManager {
         editor.commit();
     }
 
-    public void toggleDailyRemind(String t) {
-        editor.putString("dailyRemind", t);
-        editor.commit();
-    }
-
     public void logout(Activity activity) {
         LoginManager.getInstance().logOut();
         // Clearing all user data from Shared Preferences
         editor.clear();
         editor.commit();
-        // Disable daily notifications
-        DailyRemindController dailyRemind = new DailyRemindController(activity);
-        dailyRemind.disableDailyNotificationReminder();
+//        // Disable daily notifications
+//        DailyRemindController dailyRemind = new DailyRemindController(activity);
+//        dailyRemind.disableDailyNotificationReminder();
         // go to login activity
         Intent intent = new Intent(activity, RoleControllerActivity.class);
         activity.startActivity(intent);
     }
 
-    public void change_avatar(String url){
+    public void change_avatar(String url) {
         editor.putString(KEY_PATH, url);
         editor.commit();
     }
 
-    public void change_name(String name){
+    public void change_name(String name) {
         editor.putString(KEY_NAME, name);
         editor.commit();
     }
@@ -187,28 +187,28 @@ public class SessionManager {
 
     public HashMap<String, String> getChampyOptions() {
         HashMap<String, String> champy = new HashMap<>();
-        champy.put("challenges", pref.getString("challenges", null));
-        champy.put("wins",       pref.getString("wins",       null));
-        champy.put("total",      pref.getString("total",      null));
-        champy.put("level",      pref.getString("level",      null));
+        champy.put("challenges", pref.getString("challenges", ""));
+        champy.put("wins",       pref.getString("wins",       ""));
+        champy.put("total",      pref.getString("total",      ""));
+        champy.put("level",      pref.getString("level",      ""));
         return champy;
     }
 
     public HashMap<String, String> getUserDetails() {
         //Use HashMap to store user credentials
         HashMap<String, String> user = new HashMap<>();
-        user.put(KEY_NAME,       pref.getString(KEY_NAME,       null));
-        user.put(KEY_EMAIL,      pref.getString(KEY_EMAIL,      null));
-        user.put(KEY_ID,         pref.getString(KEY_EMAIL,      null));
-        user.put(KEY_PATH,       pref.getString(KEY_PATH,       null));
-        user.put("token",        pref.getString("token",        null));
-        user.put("id",           pref.getString("id",           null));
-        user.put("pushN",        pref.getString("pushN",        null));
-        user.put("newChallReq",  pref.getString("newChallReq",  null));
-        user.put("acceptedYour", pref.getString("acceptedYour", null));
-        user.put("challengeEnd", pref.getString("challengeEnd", null));
-        user.put("dailyRemind",  pref.getString("dailyRemind",  null));
-        user.put("updateDB",     pref.getString("updateDB",     null));
+        user.put(KEY_NAME,              pref.getString(KEY_NAME,              ""));
+        user.put(KEY_EMAIL,             pref.getString(KEY_EMAIL,             ""));
+        user.put(KEY_ID,                pref.getString(KEY_EMAIL,             ""));
+        user.put(KEY_PATH,              pref.getString(KEY_PATH,              ""));
+        user.put("token",               pref.getString("token",               ""));
+        user.put("id",                  pref.getString("id",                  ""));
+        user.put("pushN",               pref.getString("pushN",               ""));
+        user.put("newChallReq",         pref.getString("newChallReq",         ""));
+        user.put("acceptedYour",        pref.getString("acceptedYour",        ""));
+        user.put("challengeEnd",        pref.getString("challengeEnd",        ""));
+        user.put("challengesForToday",  pref.getString("challengesForToday",  ""));
+        user.put("updateDB",            pref.getString("updateDB",            ""));
 
         return user;
     }

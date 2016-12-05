@@ -1,7 +1,6 @@
 package com.example.ivan.champy_v2.activity;
 
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -31,7 +30,6 @@ import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.controller.DailyRemindController;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
-import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
 import com.example.ivan.champy_v2.interfaces.Update_user;
 import com.example.ivan.champy_v2.model.user.Delete;
@@ -43,7 +41,6 @@ import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -411,21 +408,21 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     private void initSwitches() {
         String pushN = user.get("pushN");
-        String newChallReq = user.get("newChallReq");
         String acceptedYour = user.get("acceptedYour");
         String challengeEnd = user.get("challengeEnd");
-        String dailyRemind = user.get("dailyRemind");
+        String newChallengeReq = user.get("newChallReq");
+        String challengesForToday = user.get("challengesForToday");
+        Log.d(TAG, "initSwitches: challengesForToday: " + challengesForToday);
 
-        map.put("challengeEnd", challengeEnd);
-        map.put("acceptedYourChallenge", acceptedYour);
-        map.put("newChallengeRequests", newChallReq);
-        map.put("pushNotifications", pushN);
-        map.put("dailyRemind", dailyRemind);
         map.put("joinedChampy", "true");
         map.put("friendRequests", "true");
         map.put("challengeConfirmation", "true");
+        map.put("challengeEnd", challengeEnd);
         map.put("reminderTime", "12"); // was 17
-        map.put("challengesForToday", "true");
+        map.put("challengesForToday", challengesForToday);
+        map.put("acceptedYourChallenge", acceptedYour);
+        map.put("newChallengeRequests", newChallengeReq);
+        map.put("pushNotifications", pushN);
 
         Switch switchForPushNotif = (Switch) findViewById(R.id.switchPushNotifications);
         if (pushN.equals("true")) switchForPushNotif.setChecked(true);
@@ -441,7 +438,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         });
 
         Switch switchorNewChallRequests = (Switch) findViewById(R.id.switchNewChallengeRequest);
-        if (newChallReq.equals("true")) switchorNewChallRequests.setChecked(true);
+        if (newChallengeReq.equals("true")) switchorNewChallRequests.setChecked(true);
         else switchorNewChallRequests.setChecked(false);
 
         switchorNewChallRequests.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -479,26 +476,21 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             }
         });
 
-        Switch switchDailyRemind = (Switch) findViewById(R.id.switchDailyRemind);
-        if (dailyRemind.equals("true")) switchDailyRemind.setChecked(true);
-        else switchDailyRemind.setChecked(false);
+        Switch switchChallengesForToday = (Switch) findViewById(R.id.switchChallengesForToday);
+        if (challengesForToday.equals("true")) switchChallengesForToday.setChecked(true);
+        else switchChallengesForToday.setChecked(false);
 
-        switchDailyRemind.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        switchChallengesForToday.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.d(TAG, "Daily Remind: " + isChecked);
-                SQLiteDatabase db = dbHelper.getWritableDatabase();
-                ContentValues cv = new ContentValues();
+                Log.d(TAG, "ChallengesForToday: " + isChecked);
                 if (isChecked) {
-                    map.put("dailyRemind", "true");
-                    cv.put("dailyRemind", "true");
+                    map.put("challengesForToday", "true");
                     mDailyRemind.enableDailyNotificationReminder();
                 } else {
-                    map.put("dailyRemind", "false");
-                    cv.put("dailyRemind", "false");
+                    map.put("challengesForToday", "false");
                     mDailyRemind.disableDailyNotificationReminder();
                 }
-                db.insert("updated", null, cv);
             }
         });
 
@@ -524,11 +516,11 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
 
     public void updateProfile(HashMap<String, String> map) {
+        sessionManager.toggleChallengeEnd(map.get("challengeEnd"));
         sessionManager.togglePushNotification(map.get("pushNotifications"));
+        sessionManager.toggleChallengesForToday(map.get("challengesForToday"));
         sessionManager.toggleNewChallengeRequest(map.get("newChallengeRequests"));
         sessionManager.toggleAcceptYourChallenge(map.get("acceptedYourChallenge"));
-        sessionManager.toggleChallengeEnd(map.get("challengeEnd"));
-        sessionManager.toggleDailyRemind(map.get("dailyRemind"));
 
         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 

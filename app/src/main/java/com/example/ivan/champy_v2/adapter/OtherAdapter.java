@@ -42,7 +42,6 @@ import static com.example.ivan.champy_v2.utils.Constants.API_URL;
 public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> {
 
     private final String TAG = OtherAdapter.class.getSimpleName();
-    private com.facebook.CallbackManager CallbackManager;
     private SessionManager sessionManager;
     private List<FriendModel> mContacts;
     private OfflineMode offlineMode;
@@ -79,21 +78,18 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
         viewHolder.simple.setVisibility(View.VISIBLE);
         viewHolder.info.setVisibility(View.GONE);
 
-        // клик по контакту
-        contactView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (selected.isEmpty()) {
-                    selected.add(viewHolder.getAdapterPosition());
-                    notifyItemChanged(viewHolder.getAdapterPosition());
-                } else {
-                    int oldSelected = selected.get(0);
-                    selected.clear();
-                    if (viewHolder.getAdapterPosition() == oldSelected) selected.add(-1);
-                    notifyItemChanged(oldSelected);
-                    notifyItemChanged(viewHolder.getAdapterPosition());
-                    selected.clear();
-                }
+        // click on same contact
+        contactView.setOnClickListener(v -> {
+            if (selected.isEmpty()) {
+                selected.add(viewHolder.getAdapterPosition());
+                notifyItemChanged(viewHolder.getAdapterPosition());
+            } else {
+                int oldSelected = selected.get(0);
+                selected.clear();
+                if (viewHolder.getAdapterPosition() == oldSelected) selected.add(-1);
+                notifyItemChanged(oldSelected);
+                notifyItemChanged(viewHolder.getAdapterPosition());
+                selected.clear();
             }
         });
 
@@ -247,40 +243,36 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
 
 
         // button add user
-        viewHolder.add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (offlineMode.isConnectedToRemoteAPI(activity)) {
-                    String friend = mContacts.get(position).getID();
-                    if (friend != null) {
-                        //щоб воно не обновляло (і дублювало) лист друзів після додавання когось, то має бути false
-                        sessionManager.setRefreshPending("false");
-                        com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(Friends.class);
-                        Call<com.example.ivan.champy_v2.model.friend.Friend> call = friends.sendFriendRequest(id, friend, token);
-                        call.enqueue(new Callback<com.example.ivan.champy_v2.model.friend.Friend>() {
-                            @Override
-                            public void onResponse(Response<com.example.ivan.champy_v2.model.friend.Friend> response, Retrofit retrofit) {
-                                if (response.isSuccess()) {
-                                    Log.d(TAG, "Status: Sent FriendModel Request");
-                                    cv.put("name", mContacts.get(position).getName());
-                                    cv.put("photo", mContacts.get(position).getPicture());
-                                    cv.put("user_id", mContacts.get(position).getID());
-                                    cv.put("level", mContacts.get(position).getmLevel());
-                                    cv.put("inProgressChallengesCount", mContacts.get(position).getmChallenges());
-                                    cv.put("successChallenges", mContacts.get(position).getmWins());
-                                    cv.put("allChallengesCount", mContacts.get(position).getmTotal());
-                                    db.insert("pending", null, cv);
-                                } else Log.d(TAG, "Status: " + response.toString());
-                            }
+        viewHolder.add.setOnClickListener(v -> {
+            if (offlineMode.isConnectedToRemoteAPI(activity)) {
+                String friend = mContacts.get(position).getID();
+                if (friend != null) {
+                    //щоб воно не обновляло (і дублювало) лист друзів після додавання когось, то має бути false
+                    sessionManager.setRefreshPending("false");
+                    Friends friends = retrofit.create(Friends.class);
+                    Call<com.example.ivan.champy_v2.model.friend.Friend> call = friends.sendFriendRequest(id, friend, token);
+                    call.enqueue(new Callback<com.example.ivan.champy_v2.model.friend.Friend>() {
+                        @Override
+                        public void onResponse(Response<com.example.ivan.champy_v2.model.friend.Friend> response, Retrofit retrofit1) {
+                            if (response.isSuccess()) {
+                                Log.d(TAG, "Status: Sent Friend Request");
+                                cv.put("name", mContacts.get(position).getName());
+                                cv.put("photo", mContacts.get(position).getPicture());
+                                cv.put("user_id", mContacts.get(position).getID());
+                                cv.put("level", mContacts.get(position).getmLevel());
+                                cv.put("inProgressChallengesCount", mContacts.get(position).getmChallenges());
+                                cv.put("successChallenges", mContacts.get(position).getmWins());
+                                cv.put("allChallengesCount", mContacts.get(position).getmTotal());
+                                db.insert("pending", null, cv);
+                            } else Log.d(TAG, "Status: " + response.toString());
+                        }
 
-                            @Override
-                            public void onFailure(Throwable t) {
-                            }
-                        });
-                        mContacts.remove(position);
-                        notifyItemRemoved(position);
-                        selected.clear();
-                    }
+                        @Override
+                        public void onFailure(Throwable t) { }
+                    });
+                    mContacts.remove(position);
+                    notifyItemRemoved(position);
+                    selected.clear();
                 }
             }
         });

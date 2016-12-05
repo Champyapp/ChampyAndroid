@@ -52,15 +52,6 @@ public class AppSync {
     }
 
 
-    public String getToken(String fb_id, String gcm) throws JSONException {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("facebookId", fb_id);
-        jsonObject.put("AndroidOS", gcm);
-        String string = jsonObject.toString();
-        return Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
-    }
-
-
     public void getUserProfile() {
         final String facebookId = this.fbId;
         final String jwtString = this.token;
@@ -80,28 +71,24 @@ public class AppSync {
                 if (response.isSuccess()) {
                     Log.d(TAG, "getUserProfile onResponse: Success");
 
+                    sessionManager = new SessionManager(context);
 
                     Data data = response.body().getData();
-                    String email = data.getEmail();
                     String user_name = data.getName();
                     String userId = data.get_id();
-                    String daily = getDailyRemind();
+                    String email = data.getEmail();
                     String pushN = data.getProfileOptions().getPushNotifications().toString();
-                    String newChallReq = data.getProfileOptions().getNewChallengeRequests().toString();
+                    String challengeEnd = data.getProfileOptions().getChallengeEnd().toString();
                     String acceptedYour = data.getProfileOptions().getAcceptedYourChallenge().toString();
-                    String challegeEnd = data.getProfileOptions().getChallengeEnd().toString();
+                    String newChallengeReq = data.getProfileOptions().getNewChallengeRequests().toString();
+                    String challengesForToday = data.getProfileOptions().getChallengesForToday().toString();
 
-                    sessionManager = new SessionManager(context);
                     sessionManager.setRefreshPending("false");
                     sessionManager.setRefreshFriends("true");
                     sessionManager.createUserLoginSession(
-                            user_name, email, facebookId, path_to_pic,
-                            jwtString, userId, pushN, newChallReq,
-                            acceptedYour, challegeEnd, daily, "true", gcm, token_android
+                            user_name, email, facebookId, path_to_pic, jwtString, userId, pushN, newChallengeReq,
+                            acceptedYour, challengeEnd, challengesForToday, "true", gcm, token_android
                     );
-
-
-                    Log.d(TAG, "onResponse: QWERTY TOKEN: " + token);
                     sessionManager.setChampyOptions(
                             data.getAllChallengesCount().toString(),
                             data.getSuccessChallenges().toString(),
@@ -109,8 +96,7 @@ public class AppSync {
                             data.getLevel().getNumber().toString()
                     );
 
-//                    HashMap<String, String> hashTokenAndroid = new HashMap<>();
-//                    hashTokenAndroid.put("GCM", token_android);
+                    Log.d(TAG, "onResponse: challengesForToday: " + challengesForToday);
                     UpdatePushIdentifier pushIdentifier = new UpdatePushIdentifier();
                     pushIdentifier.updatePushIdentifier(sessionManager);
 
@@ -126,7 +112,6 @@ public class AppSync {
 
                     String api_path = null;
                     if (data.getPhoto() != null){
-                        @SuppressLint("SdCardPath")
                         String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
                         File file = new File(path, "profile.jpg");
                         if (!file.exists()){
@@ -162,21 +147,35 @@ public class AppSync {
     }
 
 
-    private String getDailyRemind() {
-        Cursor c = db.query("updated", null, null, null, null, null, null);
-        String dailyNotification = "true";
-
-        if (c.moveToFirst()) {
-            int dailyNotifInt = c.getColumnIndex("dailyRemind");
-            do {
-                if (c.getString(dailyNotifInt).equals("false")) {
-                    dailyNotification = "false";
-                }
-            } while (c.moveToNext());
-        }
-        c.close();
-        return dailyNotification;
+    private String getToken(String fb_id, String gcm) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("facebookId", fb_id);
+        jsonObject.put("AndroidOS", gcm);
+        String string = jsonObject.toString();
+        return Jwts.builder()
+                .setHeaderParam("alg", "HS256")
+                .setHeaderParam("typ", "JWT")
+                .setPayload(string)
+                .signWith(SignatureAlgorithm.HS256, "secret")
+                .compact();
     }
+
+
+//    private String getDailyRemind() {
+//        Cursor c = db.query("updated", null, null, null, null, null, null);
+//        String dailyNotification = "true";
+//
+//        if (c.moveToFirst()) {
+//            int dailyNotifInt = c.getColumnIndex("dailyRemind");
+//            do {
+//                if (c.getString(dailyNotifInt).equals("false")) {
+//                    dailyNotification = "false";
+//                }
+//            } while (c.moveToNext());
+//        }
+//        c.close();
+//        return dailyNotification;
+//    }
 
 
 }

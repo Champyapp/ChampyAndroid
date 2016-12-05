@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.adapter.OtherAdapter;
 import com.example.ivan.champy_v2.data.DBHelper;
@@ -109,29 +110,29 @@ public class OtherFragment extends Fragment {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         checkTableForExist = new CHCheckTableForExist(db);
 
-        Cursor c = db.query("mytable", null, null, null, null, null, null);
-        if (c.moveToFirst()) {
-            int nameColIndex = c.getColumnIndex("name");
-            int photoColIndex = c.getColumnIndex("photo");
-            int index = c.getColumnIndex("user_id");
-            int challenges = c.getColumnIndex("challenges");
-            int wins = c.getColumnIndex("wins");
-            int total = c.getColumnIndex("total");
-            int level = c.getColumnIndex("level");
-            int idColIndex = c.getColumnIndex("id");
-            do {
-                if (!checkTableForExist.isInOtherTable(c.getString(index)))
-                    friends.add(new FriendModel(
-                            c.getString(nameColIndex),
-                            c.getString(photoColIndex),
-                            c.getString(index),
-                            c.getString(challenges),
-                            c.getString(wins),
-                            c.getString(total),
-                            c.getString(level)));
-            } while (c.moveToNext());
-        }
-        c.close();
+//        Cursor c = db.query("mytable", null, null, null, null, null, null);
+//        if (c.moveToFirst()) {
+//            int nameColIndex = c.getColumnIndex("name");
+//            int photoColIndex = c.getColumnIndex("photo");
+//            int index = c.getColumnIndex("user_id");
+//            int challenges = c.getColumnIndex("challenges");
+//            int wins = c.getColumnIndex("wins");
+//            int total = c.getColumnIndex("total");
+//            int level = c.getColumnIndex("level");
+//            int idColIndex = c.getColumnIndex("id");
+//            do {
+//                if (!checkTableForExist.isInOtherTable(c.getString(index)))
+//                    friends.add(new FriendModel(
+//                            c.getString(nameColIndex),
+//                            c.getString(photoColIndex),
+//                            c.getString(index),
+//                            c.getString(challenges),
+//                            c.getString(wins),
+//                            c.getString(total),
+//                            c.getString(level)));
+//            } while (c.moveToNext());
+//        }
+//        c.close();
 
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
         final OtherAdapter adapter = new OtherAdapter(friends, getContext(), getActivity());
@@ -140,22 +141,22 @@ public class OtherFragment extends Fragment {
         rvContacts.setAdapter(adapter);
 
         gSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
-        gSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshOtherView(gSwipeRefreshLayout, gView);
-                gSwipeRefreshLayout.setRefreshing(false);
-            }
+        gSwipeRefreshLayout.setOnRefreshListener(() -> {
+//            refreshOtherView(gSwipeRefreshLayout, gView);
+            new refreshOtherView().doInBackground();
+            gSwipeRefreshLayout.setRefreshing(false);
         });
         this.gView = view;
 
-        Bundle friendRequestExtra = getActivity().getIntent().getExtras();
-        if (friendRequestExtra != null) {
-            refreshOtherView(gSwipeRefreshLayout, gView);
-        }
+//        Bundle friendRequestExtra = getActivity().getIntent().getExtras();
+//        if (friendRequestExtra != null) {
+//            //refreshOtherView(gSwipeRefreshLayout, gView);
+//            new refreshOtherView().doInBackground();
+//        }
 
         if (checkRefresh.equals("true")) {
-            refreshOtherView(gSwipeRefreshLayout, gView);
+            //refreshOtherView(gSwipeRefreshLayout, gView);
+            new refreshOtherView().doInBackground();
             checkRefresh = "false";
         }
 
@@ -219,15 +220,15 @@ public class OtherFragment extends Fragment {
         Log.d(TAG, "onDetach: ");
     }
 
-    private class loadOtherPeople extends AsyncTask<Void, Void, Void> {
+    private class refreshOtherView extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
-
+            refreshOtherView(gSwipeRefreshLayout, gView);
             return null;
         }
     }
 
-    public void refreshOtherView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
+    private void refreshOtherView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         // Проверка на оффлайн вкладке OTHERS
         if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
             swipeRefreshLayout.setRefreshing(true);
