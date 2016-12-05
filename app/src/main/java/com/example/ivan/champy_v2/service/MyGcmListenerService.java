@@ -125,7 +125,7 @@ public class MyGcmListenerService extends GcmListenerService {
 
 
     private void refreshPendingDuels() {
-        DBHelper dbHelper = new DBHelper(this);
+        DBHelper dbHelper = DBHelper.getInstance(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final int clearCount = db.delete("pending_duel", null, null);
         final ContentValues cv = new ContentValues();
@@ -176,7 +176,7 @@ public class MyGcmListenerService extends GcmListenerService {
 
 
     private void generateCardsForMainActivity(final String token, final String userId) {
-        DBHelper dbHelper = new DBHelper(getApplicationContext());
+        DBHelper dbHelper = DBHelper.getInstance(getApplicationContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final ContentValues cv = new ContentValues();
         int clearCount = db.delete("myChallenges", null, null);
@@ -269,7 +269,7 @@ public class MyGcmListenerService extends GcmListenerService {
 
     // method which returns our last update (true or false);
     private String isUpdated(String challenge_id) {
-        DBHelper dbHelper = new DBHelper(this);
+        DBHelper dbHelper = DBHelper.getInstance(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("updated", null, null, null, null, null, null);
         String lastUpdate = "false";

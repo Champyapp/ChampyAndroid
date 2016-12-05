@@ -57,7 +57,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         final View view = inflater.inflate(R.layout.item_card, container, false);
         Bundle extras = getActivity().getIntent().getExtras();
         friend_id = (extras == null) ? null : extras.getString("id");
-        DBHelper dbHelper = new DBHelper(getContext());
+        DBHelper dbHelper = DBHelper.getInstance(getContext());
         db = dbHelper.getWritableDatabase();
         final Bundle args = this.getArguments();
         c = db.query("duel", null, null, null, null, null, null);

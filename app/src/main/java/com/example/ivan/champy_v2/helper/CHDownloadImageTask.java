@@ -30,7 +30,7 @@ import java.io.InputStream;
 import java.util.Random;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
-
+/** Class helper for download and blur user's photo **/
 public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
     private Context context;

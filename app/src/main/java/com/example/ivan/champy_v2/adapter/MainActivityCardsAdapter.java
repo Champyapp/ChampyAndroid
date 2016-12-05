@@ -144,7 +144,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 
         if (myProgress != 0L && now > progressMidNight + oneDay) {
             // it's mean "self" and "duel"
-            DBHelper dbHelper = new DBHelper(getContext());
+            DBHelper dbHelper = DBHelper.getInstance(getContext());
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             ContentValues cv = new ContentValues();
             cv.put("updated", "false"); // was true

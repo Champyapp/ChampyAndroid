@@ -47,7 +47,7 @@ public class PendingFragment extends Fragment {
     private final String TAG = "PendingFragment";
     private String id = "", token = "";
     private SwipeRefreshLayout swipeRefreshLayout;
-    private SessionManager sessionManager;
+    private SQLiteDatabase db;
     private View gView;
 
     public int mPage;
@@ -57,9 +57,12 @@ public class PendingFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: ");
-        sessionManager = new SessionManager(getContext());
+        SessionManager sessionManager = new SessionManager(getContext());
         id = sessionManager.getUserId();
         token = sessionManager.getToken();
+
+        DBHelper dbHelper = DBHelper.getInstance(getContext());
+        db = dbHelper.getWritableDatabase();
     }
 
     @Override
@@ -67,9 +70,6 @@ public class PendingFragment extends Fragment {
         Log.d(TAG, "onCreateView: ");
         final View view = inflater.inflate(R.layout.fragment_friends, container, false);
         final List<Pending_friend> pendingFriends = new ArrayList<>();
-
-        DBHelper dbHelper = new DBHelper(getContext());
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         Cursor c = db.query("pending", null, null, null, null, null, null);
         if (c.moveToFirst()) {
@@ -158,8 +158,6 @@ public class PendingFragment extends Fragment {
     private void refreshPendingView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         swipeRefreshLayout.setRefreshing(true);
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        DBHelper dbHelper = new DBHelper(getContext());
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("pending", null, null);
         final ContentValues cv = new ContentValues();
 
@@ -219,22 +217,17 @@ public class PendingFragment extends Fragment {
                             int inProgressChallengesCountIndex = c.getColumnIndex("inProgressChallengesCount");
                             int successChallenges = c.getColumnIndex("successChallenges");
                             int allChallengesCount = c.getColumnIndex("allChallengesCount");
-                            try {
-                                do {
-                                    newfriends.add(new Pending_friend(
-                                            c.getString(nameColIndex),
-                                            API_URL + c.getString(photoColIndex),
-                                            c.getString(index),
-                                            c.getString(owner),
-                                            "" + c.getString(successChallenges),
-                                            "" + c.getString(allChallengesCount),
-                                            "" + c.getString(inProgressChallengesCountIndex)
-                                    ));
-                                } while (c.moveToNext());
-                            } finally {
-                                c.close();
-                                db.close();
-                            }
+                            do {
+                                newfriends.add(new Pending_friend(
+                                        c.getString(nameColIndex),
+                                        API_URL + c.getString(photoColIndex),
+                                        c.getString(index),
+                                        c.getString(owner),
+                                        "" + c.getString(successChallenges),
+                                        "" + c.getString(allChallengesCount),
+                                        "" + c.getString(inProgressChallengesCountIndex)
+                                ));
+                            } while (c.moveToNext());
                         }
                         c.close();
 

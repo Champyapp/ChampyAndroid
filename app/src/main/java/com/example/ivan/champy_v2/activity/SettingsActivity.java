@@ -79,7 +79,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         final CHSetupUI chSetupUI = new CHSetupUI();
         chSetupUI.setupUI(findViewById(R.id.settings_layout), this);
 
-        dbHelper = new DBHelper(getApplicationContext());
+        dbHelper = DBHelper.getInstance(getApplicationContext());
         offlineMode = new OfflineMode();
         mDailyRemind = new DailyRemindController(getApplicationContext());
         sessionManager = new SessionManager(getApplicationContext());

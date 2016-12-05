@@ -26,7 +26,7 @@ public class CHCheckPendingDuels {
     }
 
     public int getPendingCount() {
-        DBHelper dbHelper = new DBHelper(context);
+        DBHelper dbHelper = DBHelper.getInstance(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("pending_duel", null, null, null, null, null, null);
         int countOfPendingDuel = 0;

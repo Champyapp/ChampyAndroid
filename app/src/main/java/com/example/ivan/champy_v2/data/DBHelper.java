@@ -10,11 +10,22 @@ import android.database.sqlite.SQLiteOpenHelper;
 // TODO: 11/22/16 Delete "isUpdated" because we have a "needsToCheckRecipient / Sender"
 public class DBHelper extends SQLiteOpenHelper {
 
-    public DBHelper(Context context) {
+    private static DBHelper instance = null;
+    private static final String DB_NAME = "myDB";
+    private static final int DB_VERSION = 1;
+
+    private DBHelper(Context context) {
         // constructor for superclass
-        super(context, "myDB", null, 1);
+        super(context, DB_NAME, null, DB_VERSION);
     }
 
+    public static DBHelper getInstance(Context context) {
+
+        if (instance == null) {
+            instance = new DBHelper(context.getApplicationContext());
+        }
+        return instance;
+    }
 
     @Override
     public void onCreate(SQLiteDatabase db) {

@@ -95,9 +95,11 @@ public class OtherFragment extends Fragment {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getContext());
         offlineMode = new OfflineMode();
-        dbHelper = new DBHelper(getContext());
+        dbHelper = DBHelper.getInstance(getContext());
         sessionManager = new SessionManager(getContext());
         cv = new ContentValues();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        checkTableForExist = new CHCheckTableForExist(db);
     }
 
     @Override
@@ -106,10 +108,6 @@ public class OtherFragment extends Fragment {
         Log.d(TAG, "onCreateView: ");
 
         friends = new ArrayList<>();
-        DBHelper dbHelper = new DBHelper(getContext());
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        checkTableForExist = new CHCheckTableForExist(db);
-
 //        Cursor c = db.query("mytable", null, null, null, null, null, null);
 //        if (c.moveToFirst()) {
 //            int nameColIndex = c.getColumnIndex("name");
@@ -133,7 +131,6 @@ public class OtherFragment extends Fragment {
 //            } while (c.moveToNext());
 //        }
 //        c.close();
-
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
         final OtherAdapter adapter = new OtherAdapter(friends, getContext(), getActivity());
 

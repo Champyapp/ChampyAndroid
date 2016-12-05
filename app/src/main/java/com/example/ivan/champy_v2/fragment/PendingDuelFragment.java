@@ -79,7 +79,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.item_pending_duel, container, false);
-        dbHelper = new DBHelper(getContext());
+        dbHelper = DBHelper.getInstance(getContext());
         db = dbHelper.getWritableDatabase();
         final Bundle args = this.getArguments();
         c = db.query("pending_duel", null, null, null, null, null, null);

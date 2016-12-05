@@ -60,7 +60,7 @@ public class AppSync {
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
         cv = new ContentValues();
-        dbHelper = new DBHelper(context);
+        dbHelper = DBHelper.getInstance(context);
         db = dbHelper.getWritableDatabase();
 
         NewUser newUser = retrofit.create(NewUser.class);

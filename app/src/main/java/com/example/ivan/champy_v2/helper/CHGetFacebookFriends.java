@@ -49,7 +49,7 @@ public class CHGetFacebookFriends {
         final NewUser newUser = retrofit.create(NewUser.class);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        DBHelper dbHelper = new DBHelper(context);
+        DBHelper dbHelper = DBHelper.getInstance(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("mytable", null, null);
         final ContentValues cv = new ContentValues();

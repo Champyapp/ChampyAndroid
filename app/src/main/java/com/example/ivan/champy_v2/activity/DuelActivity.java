@@ -188,7 +188,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
 
     // get standard cards for duel activity
     private void getChallenges() {
-        DBHelper dbHelper = new DBHelper(this);
+        DBHelper dbHelper = DBHelper.getInstance(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("duel", null, null);
         final ContentValues cv = new ContentValues();

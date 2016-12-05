@@ -113,7 +113,7 @@ public class ChallengeController {
                     com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress data = response.body();
                     String inProgressId = data.getData().get_id();
 
-                    dbHelper = new DBHelper(context);
+                    dbHelper = DBHelper.getInstance(context);
                     db = dbHelper.getWritableDatabase();
                     cv = new ContentValues();
 
@@ -166,7 +166,7 @@ public class ChallengeController {
     }
 
     public void sendSingleInProgressForDuel(final String challenge, final String friend_id) {
-        dbHelper = new DBHelper(context);
+        dbHelper = DBHelper.getInstance(context);
         db = dbHelper.getWritableDatabase();
         cv = new ContentValues();
 
@@ -246,7 +246,7 @@ public class ChallengeController {
     }
 
     private void sendSingleInProgressForWakeUp(String challenge, final int alarmID, int minute, int hour) {
-        dbHelper = new DBHelper(context);
+        dbHelper = DBHelper.getInstance(context);
         db = dbHelper.getWritableDatabase();
         cv = new ContentValues();
 
@@ -363,7 +363,7 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    dbHelper = new DBHelper(context);
+                    dbHelper = DBHelper.getInstance(context);
                     db = dbHelper.getWritableDatabase();
                     cv = new ContentValues();
                     cv.put("updated", "true");
@@ -422,7 +422,7 @@ public class ChallengeController {
 
     public void refreshCardsForPendingDuel() {
         cv = new ContentValues();
-        dbHelper = new DBHelper(context);
+        dbHelper = DBHelper.getInstance(context);
         db = dbHelper.getWritableDatabase();
         final int clearCount = db.delete("pending_duel", null, null);
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
@@ -473,7 +473,7 @@ public class ChallengeController {
     }
 
     private void generateCardsForMainActivity() {
-        dbHelper = new DBHelper(context);
+        dbHelper = DBHelper.getInstance(context);
         db = dbHelper.getWritableDatabase();
         cv = new ContentValues();
         int clearCount = db.delete("myChallenges", null, null);
@@ -595,7 +595,7 @@ public class ChallengeController {
 
     // method for check is active challenge self / duel
     public boolean isActive(String description) {
-        DBHelper dbHelper = new DBHelper(context);
+        DBHelper dbHelper = DBHelper.getInstance(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
         boolean ok = false;
@@ -621,7 +621,7 @@ public class ChallengeController {
     // method for check is active challenge for wake up
     public boolean isActiveWakeUp(String time) {
         boolean ok = true;
-        DBHelper dbHelper = new DBHelper(context);
+        DBHelper dbHelper = DBHelper.getInstance(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
         if (c.moveToFirst()) {

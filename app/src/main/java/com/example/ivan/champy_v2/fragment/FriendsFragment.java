@@ -61,7 +61,7 @@ public class FriendsFragment extends Fragment {
         token = sessionManager.getToken();
         id = sessionManager.getUserId();
 
-        DBHelper dbHelper = new DBHelper(getContext());
+        DBHelper dbHelper = DBHelper.getInstance(getContext());
         db = dbHelper.getWritableDatabase();
     }
 
@@ -167,7 +167,7 @@ public class FriendsFragment extends Fragment {
     private void refreshFriendsView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         swipeRefreshLayout.setRefreshing(true);
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        final DBHelper dbHelper = new DBHelper(getContext());
+        final DBHelper dbHelper = DBHelper.getInstance(getContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("friends", null, null);
         final ContentValues cv = new ContentValues();

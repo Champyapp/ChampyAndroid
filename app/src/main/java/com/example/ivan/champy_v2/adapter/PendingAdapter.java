@@ -283,7 +283,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                     if (friend != null) {
                         sessionManager.setRefreshFriends("false");
                         sessionManager.setRefreshPending("false");
-                        DBHelper dbHelper = new DBHelper(context);
+                        DBHelper dbHelper = DBHelper.getInstance(context);
                         final SQLiteDatabase db = dbHelper.getWritableDatabase();
                         final ContentValues cv = new ContentValues();
 

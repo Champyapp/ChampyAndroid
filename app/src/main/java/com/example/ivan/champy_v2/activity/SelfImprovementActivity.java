@@ -166,7 +166,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
 
     // get standard self-improvement challenges
     private void getChallenges() {
-        DBHelper dbHelper = new DBHelper(this);
+        DBHelper dbHelper = DBHelper.getInstance(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("selfimprovement", null, null);
         final ContentValues cv = new ContentValues();

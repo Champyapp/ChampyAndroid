@@ -31,7 +31,7 @@ public class CHGetPendingFriends {
 
     public void getUserPending(final String userId, String token) {
         final ContentValues cv = new ContentValues();
-        DBHelper dbHelper = new DBHelper(context);
+        DBHelper dbHelper = DBHelper.getInstance(context);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("pending", null, null);
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
