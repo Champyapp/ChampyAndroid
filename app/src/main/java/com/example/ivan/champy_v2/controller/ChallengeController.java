@@ -203,6 +203,7 @@ public class ChallengeController {
         String description = "Wake Up";
 
         final String wakeUpName = "Wake up at "+ sHour +":"+ sMinute;
+        final String wakeUpTime = sHour + sMinute;
         final int intHour = Integer.parseInt(sHour); // this need for sending in progress method
         final int intMin  = Integer.parseInt(sMinute); // this need for sending in progress method
         final int alarmID = Integer.parseInt(sHour + sMinute); // our unique id for pending intent
@@ -221,7 +222,7 @@ public class ChallengeController {
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
         Call<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge> call = createChallenge
-                .createChallenge(wakeUpName, typeWake, description, Arrays.toString(details), duration, token);
+                .createChallenge(wakeUpName, typeWake, wakeUpTime, Arrays.toString(details), duration, token);
 
         call.enqueue(new Callback<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge>() {
             @Override
@@ -311,6 +312,7 @@ public class ChallengeController {
             public void onFailure(Throwable t) { }
 
         });
+
     }
 
 

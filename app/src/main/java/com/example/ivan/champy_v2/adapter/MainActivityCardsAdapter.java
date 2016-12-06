@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -180,7 +181,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                     public void onClick(View view) {
                         try {
                             if (currentCard.getType().equals("Wake Up")) {
-                                int i = Integer.parseInt(currentCard.getWakeUpTime());
+                                int i = Integer.parseInt(currentCard.getGoal());
                                 cc.give_up(itemInProgressId, i);
                             } else {
                                 cc.give_up(itemInProgressId, 0);
