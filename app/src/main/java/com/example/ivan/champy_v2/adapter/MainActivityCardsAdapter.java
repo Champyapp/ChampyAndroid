@@ -55,7 +55,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         final SelfImprovement_model currentCard = arrayList.get(position);
         ImageView cardImage = (ImageView)tempView.findViewById(R.id.cardImage);
         ImageView imageChallengeLogo = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
-        Typeface typeface = android.graphics.Typeface.createFromAsset(getContext().getAssets(), "fonts/bebasneue.ttf");
+        final Typeface typeface = android.graphics.Typeface.createFromAsset(getContext().getAssets(), "fonts/bebasneue.ttf");
         WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
@@ -66,12 +66,12 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         cardImage.getLayoutParams().height = y*50;
         if (y > 10) y = 10;
 
-        String itemProgress = currentCard.getProgress();
         String itemGoal = currentCard.getGoal();
-        String itemType = currentCard.getType();
-        String itemNeedsToCheck = currentCard.getNeedsToCheck();
+        final String itemProgress = currentCard.getProgress();
+        final String itemType = currentCard.getType();
+        final String itemNeedsToCheck = currentCard.getNeedsToCheck();
         final String itemInProgressId = currentCard.getId();
-        String[] challengeProgress = toArrayOfStrings(itemProgress);
+        final String[] challengeProgress = toArrayOfStrings(itemProgress);
 
         final TextView tvChallengeType = (TextView) tempView.findViewById(R.id.tvChallengeType);
         tvChallengeType.setText(currentCard.getType());
@@ -126,8 +126,8 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                 break;
         }
 
-        String userId = sessionManager.getUserId();
-        String token = sessionManager.getToken();
+        final String userId = sessionManager.getUserId();
+        final String token = sessionManager.getToken();
         final ChallengeController cc = new ChallengeController(getContext(), (Activity) getContext(), token, userId);
 
 
@@ -176,7 +176,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         buttonGiveUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                snackbar = Snackbar.make(v, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes", new View.OnClickListener() {
+                snackbar = Snackbar.make(v, getContext().getString(R.string.are_you_sure), Snackbar.LENGTH_LONG).setAction(getContext().getString(R.string.yes), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         try {

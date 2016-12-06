@@ -75,9 +75,32 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_settings);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.bringToFront();
         final CHSetupUI chSetupUI = new CHSetupUI();
         chSetupUI.setupUI(findViewById(R.id.settings_layout), this);
+
+        final ImageView background = (ImageView) findViewById(R.id.back_settings);
+        final ImageView userImageProfile = (ImageView) findViewById(R.id.img_profile);
+        background.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+        File fileBlur = new File(path, "blured2.jpg");
+        Uri uriBlur = Uri.fromFile(fileBlur);
+        Glide.with(this)
+                .load(uriBlur)
+                .bitmapTransform(new CropSquareTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(background);
+
+        File fileProfile = new File(path, "profile.jpg");
+        Uri uriProfile = Uri.fromFile(fileProfile);
+
+        Glide.with(this)
+                .load(uriProfile)
+                .bitmapTransform(new CropCircleTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .override(130, 130)
+                .into(userImageProfile);
 
         dbHelper = DBHelper.getInstance(getApplicationContext());
         offlineMode = new OfflineMode();
@@ -87,7 +110,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         token = sessionManager.getToken();
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+        final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
@@ -106,44 +129,20 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
 
         final Typeface typeface = Typeface.createFromAsset(SettingsActivity.this.getAssets(), "fonts/bebasneue.ttf");
-        final ImageView background = (ImageView) findViewById(R.id.back_settings);
-        final ImageView userImageProfile = (ImageView) findViewById(R.id.img_profile);
         final TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
         final ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
         final ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        background.setScaleType(ImageView.ScaleType.CENTER_CROP);
         drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-
-        File file = new File(path, "profile.jpg");
-        Uri url = Uri.fromFile(file);
         Glide.with(this)
-                .load(url)
+                .load(uriProfile)
                 .bitmapTransform(new CropCircleTransformation(this))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(drawerImageProfile);
 
         Glide.with(this)
-                .load(url)
-                .bitmapTransform(new CropCircleTransformation(this))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .override(130, 130)
-                .into(userImageProfile);
-
-
-
-        file = new File(path, "blured2.jpg");
-        url = Uri.fromFile(file);
-        Glide.with(this)
-                .load(url)
-                .bitmapTransform(new CropSquareTransformation(this))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(background);
-        Glide.with(this)
-                .load(url)
+                .load(uriBlur)
                 .bitmapTransform(new CropSquareTransformation(this))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
@@ -174,8 +173,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 //            background.setImageDrawable(CHLoadBlurredPhoto.Init(path));
 //            drawerBackground.setImageDrawable(CHLoadBlurredPhoto.Init(path));
 //        } catch (FileNotFoundException e) { e.printStackTrace(); }
-
-
         about.setOnClickListener(this);
         terms.setOnClickListener(this);
         delete.setOnClickListener(this);
@@ -218,7 +215,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             findViewById(R.id.view11).setVisibility(View.GONE);
         }
         else {
-            Log.d(TAG, "Status: Back");
             updateProfile(map);
             Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
             startActivity(intent);
@@ -276,8 +272,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             case R.id.tvName:
                 tvChangeName.setVisibility(View.INVISIBLE);
                 final TextView tvEnterYourName = (TextView) findViewById(R.id.tvEntedYourName);
-                final EditText etNewName = (EditText) findViewById(R.id.new_name);
                 tvEnterYourName.setVisibility(View.VISIBLE);
+                final EditText etNewName = (EditText) findViewById(R.id.new_name);
                 etNewName.setVisibility(View.VISIBLE);
                 etNewName.setText(name);
                 final ImageButton imageButtonAcceptName = (ImageButton) findViewById(R.id.imageButtonAcceptMaybe);
@@ -301,7 +297,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                             lineOfTheNed.setVisibility(View.GONE);
                             etNewName.setVisibility(View.GONE);
                         }
-                        etNewName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_warn, 0);
                     }
                 });
                 break;
