@@ -1,10 +1,8 @@
 package com.example.ivan.champy_v2.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,7 +10,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +18,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
@@ -55,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ImageView blurScreen;
     private DrawerLayout drawer;
     private Boolean isFabOpen = false;
-    private FloatingActionButton fabPlus, fabWakeUp, fabDuel, fabSelf;
+    private FloatingActionButton fabPlus, fabWakeUp, fabSelf, fabDuel;
     private Animation fab_open,fab_close,rotate_forward,rotate_backward;
 
 
@@ -89,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
                 blurScreen.setVisibility(View.INVISIBLE);
+                if (isFabOpen) closeFab();
 //                actionMenu.close(true);
             }
         };
@@ -167,9 +164,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         chBuildAnim.buildAnim();
 
         fabPlus   = (FloatingActionButton)findViewById(R.id.fabPlus);
-        fabWakeUp = (FloatingActionButton)findViewById(R.id.fabWakeUp);
-        fabDuel   = (FloatingActionButton)findViewById(R.id.fabDuel);
-        fabSelf   = (FloatingActionButton)findViewById(R.id.fabSelf);
+        fabWakeUp = (FloatingActionButton)findViewById(R.id.fabWake);
+        fabSelf = (FloatingActionButton)findViewById(R.id.fabSelf);
+        fabDuel = (FloatingActionButton)findViewById(R.id.fabDuel);
         fab_open  = AnimationUtils.loadAnimation(this, R.anim.fab_open);
         fab_close = AnimationUtils.loadAnimation(this, R.anim.fab_close);
 
@@ -177,11 +174,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         rotate_backward = AnimationUtils.loadAnimation(this, R.anim.rotate_backward);
 
         fabPlus.setOnClickListener(v -> animateFAB());
-
-        fabSelf.setOnClickListener(v -> new Intent(this, SelfImprovementActivity.class));
-        fabDuel.setOnClickListener(v -> new Intent(this, FriendsActivity.class));
-        fabWakeUp.setOnClickListener(v -> new Intent(this, WakeUpActivity.class));
-
+        fabSelf.setOnClickListener(v -> startActivity(new Intent(this, SelfImprovementActivity.class)));
+        fabDuel.setOnClickListener(v -> startActivity(new Intent(this, FriendsActivity.class)));
+        fabWakeUp.setOnClickListener(v -> startActivity(new Intent(this, WakeUpActivity.class)));
 
         ViewServer.get(this).addWindow(this);
     }
@@ -227,40 +222,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //
 //    }
 
-    private void animateFAB() {
-
-        if(isFabOpen) {
-            fabPlus.startAnimation(rotate_backward);
-
-            fabWakeUp.startAnimation(fab_close);
-            fabDuel.startAnimation(fab_close);
-            fabSelf.startAnimation(fab_close);
-
-            fabWakeUp.setClickable(false);
-            fabDuel.setClickable(false);
-            fabSelf.setClickable(false);
-
-            isFabOpen = false;
-        } else {
-            fabPlus.startAnimation(rotate_forward);
-
-            fabWakeUp.startAnimation(fab_open);
-            fabDuel.startAnimation(fab_open);
-            fabSelf.startAnimation(fab_open);
-
-            fabWakeUp.setClickable(true);
-            fabDuel.setClickable(true);
-            fabSelf.setClickable(true);
-
-            isFabOpen = true;
-        }
-    }
-
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         }
+        if (isFabOpen) closeFab();
 //        actionMenu.close(true);
         //cards.setVisibility(View.VISIBLE);
 //        blurScreen.setVisibility(View.INVISIBLE);
@@ -319,6 +286,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.sync_app, menu);
         return true;
+    }
+
+    private void animateFAB() {
+        if(isFabOpen) {
+            closeFab();
+        } else {
+            openFab();
+        }
+    }
+    private void closeFab() {
+        fabPlus.startAnimation(rotate_backward);
+        fabWakeUp.startAnimation(fab_close);
+        fabSelf.startAnimation(fab_close);
+        fabDuel.startAnimation(fab_close);
+        isFabOpen = false;
+    }
+    private void openFab() {
+        fabPlus.startAnimation(rotate_forward);
+        fabWakeUp.startAnimation(fab_open);
+        fabSelf.startAnimation(fab_open);
+        fabDuel.startAnimation(fab_open);
+        isFabOpen = true;
     }
 
 

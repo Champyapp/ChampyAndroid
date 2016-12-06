@@ -238,36 +238,36 @@
         app:elevation="6dp"
         app:pressedTranslationZ="12dp"
         app:backgroundTint="@color/colorTextAqua"
-        android:id="@+id/fabDuel"
+        android:id="@+id/fabSelf"
         android:src="@drawable/fab_self"
         android:scaleType="center"
         android:visibility="invisible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/fabSelf"
-        android:layout_alignLeft="@+id/fabSelf"
-        android:layout_alignStart="@+id/fabSelf" />
+        android:layout_above="@+id/fabDuel"
+        android:layout_alignLeft="@+id/fabDuel"
+        android:layout_alignStart="@+id/fabDuel" />
 
     <android.support.design.widget.FloatingActionButton
         app:elevation="6dp"
         app:pressedTranslationZ="12dp"
         app:backgroundTint="@color/colorTextAqua"
         android:background="@drawable/duel_yellow"
-        android:id="@+id/fabSelf"
+        android:id="@+id/fabDuel"
         android:src="@drawable/fab_duel"
         android:scaleType="center"
         android:visibility="invisible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/fabWakeUp"
-        android:layout_alignLeft="@+id/fabWakeUp"
-        android:layout_alignStart="@+id/fabWakeUp" />
+        android:layout_above="@+id/fabWake"
+        android:layout_alignLeft="@+id/fabWake"
+        android:layout_alignStart="@+id/fabWake" />
 
     <android.support.design.widget.FloatingActionButton
         app:elevation="6dp"
         app:pressedTranslationZ="12dp"
         app:backgroundTint="@color/colorTextAqua"
-        android:id="@+id/fabWakeUp"
+        android:id="@+id/fabWake"
         android:src="@drawable/fab_wake"
         android:visibility="invisible"
         android:scaleType="center"
