@@ -1,9 +1,7 @@
 package com.example.ivan.champy_v2.activity;
 
-import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -12,8 +10,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -24,6 +20,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.ivan.champy_v2.R;
+import com.example.ivan.champy_v2.helper.CHUploadPhoto;
 import com.example.ivan.champy_v2.interfaces.Update_user;
 import com.example.ivan.champy_v2.model.user.User;
 import com.example.ivan.champy_v2.utils.Blur;
@@ -52,9 +49,10 @@ public class PhotoActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST = 1888;
     private static final int SELECT_FILE = 1999;
     private static final int CROP_PIC = 1777;
+    private final String TAG = "PhotoActivity";
     private SessionManager sessionManager;
+    private CHUploadPhoto uploadPhoto;
     public Uri picUri;
-    public final String TAG = "myLogs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +87,8 @@ public class PhotoActivity extends AppCompatActivity {
 //                .into(imageView);
 
 
+        uploadPhoto = new CHUploadPhoto(getApplicationContext());
+
         tvChooseFromGallery.setOnClickListener(v -> Crop.pickImage(PhotoActivity.this));
 
         tvTakePicture.setOnClickListener(v -> {
@@ -108,7 +108,9 @@ public class PhotoActivity extends AppCompatActivity {
                 // get the cropped bitmap
                 Bitmap thePic = extras.getParcelable("data");
                 savePhoto(thePic);
-                Upload_photo(SaveFromCamera(thePic));
+//                Upload_photo(saveFromCamera(thePic));
+                uploadPhoto.uploadPhotoForAPI(saveFromCamera(thePic));
+
                 Intent intent = new Intent(PhotoActivity.this, SettingsActivity.class);
                 startActivity(intent);
             } else if (requestCode == CROP_PIC) {
@@ -173,7 +175,9 @@ public class PhotoActivity extends AppCompatActivity {
             try {
                 path = getPath(uri);
             } catch (URISyntaxException e) {e.printStackTrace();}
-            Upload_photo(path);
+
+            //Upload_photo(path);
+            uploadPhoto.uploadPhotoForAPI(path);
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),uri);
             savePhoto(bitmap);
             Intent intent = new Intent(PhotoActivity.this, SettingsActivity.class);
@@ -185,7 +189,7 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
 
-    private String SaveFromCamera(Bitmap finalBitmap) {
+    private String saveFromCamera(Bitmap finalBitmap) {
         String root = Environment.getExternalStorageDirectory().toString();
         File myDir = new File(root + "/android/data/com.azinecllc.champy/images");
         myDir.mkdirs();

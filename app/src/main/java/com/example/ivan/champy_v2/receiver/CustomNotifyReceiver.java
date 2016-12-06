@@ -25,7 +25,7 @@ public class CustomNotifyReceiver extends WakefulBroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         FacebookSdk.sdkInitialize(getApplicationContext());
-
+        Log.d(TAG, "onReceive: received new notification!");
         SessionManager sessionManager = new SessionManager(context);
         if (sessionManager.isUserLoggedIn()) {
             sendNotification();

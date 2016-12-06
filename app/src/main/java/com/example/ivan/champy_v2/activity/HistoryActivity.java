@@ -2,7 +2,6 @@ package com.example.ivan.champy_v2.activity;
 
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -25,13 +24,11 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.adapter.HistoryPagerAdapter;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
-import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
 import com.facebook.FacebookSdk;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import jp.wasabeef.glide.transformations.CropSquareTransformation;

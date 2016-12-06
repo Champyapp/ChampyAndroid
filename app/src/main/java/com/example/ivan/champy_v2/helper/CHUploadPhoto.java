@@ -35,7 +35,6 @@ public class CHUploadPhoto {
         String id = sessionManager.getUserId();
 
         File userPhotoFile = new File(path);
-
         RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), userPhotoFile);
 
         Update_user update_user = retrofit.create(Update_user.class);
@@ -43,12 +42,14 @@ public class CHUploadPhoto {
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
-                if (response.isSuccess()) { Log.d(TAG, "Status: Success photo_uploaded");}
-                else Log.d(TAG, "Status failed:" + response.code()); }
+                final String myLog = (response.isSuccess()) ? "Status: photo uploaded!" : "Status: " + response.code();
+                Log.i(TAG, "onResponse: " + myLog);
+            }
 
             @Override
             public void onFailure(Throwable t) {Log.d(TAG, "Status: vse hyunya: " + t ); }
         });
 
     }
+
 }

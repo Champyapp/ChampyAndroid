@@ -2,7 +2,6 @@ package com.example.ivan.champy_v2.fragment;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.adapter.OtherAdapter;
 import com.example.ivan.champy_v2.data.DBHelper;
@@ -32,12 +30,10 @@ import com.example.ivan.champy_v2.utils.SessionManager;
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.net.URISyntaxException;

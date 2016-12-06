@@ -22,12 +22,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.adapter.PendingDuelsAdapter;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
-import com.example.ivan.champy_v2.helper.CHLoadBlurredPhoto;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import jp.wasabeef.glide.transformations.CropSquareTransformation;

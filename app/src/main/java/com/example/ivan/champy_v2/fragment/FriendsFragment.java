@@ -1,7 +1,6 @@
 package com.example.ivan.champy_v2.fragment;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -18,7 +17,6 @@ import android.view.ViewGroup;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.adapter.FriendsAdapter;
 import com.example.ivan.champy_v2.data.DBHelper;
-import com.example.ivan.champy_v2.interfaces.CustomItemClickListener;
 import com.example.ivan.champy_v2.model.FriendModel;
 import com.example.ivan.champy_v2.model.friend.Datum;
 import com.example.ivan.champy_v2.model.friend.Friend_;

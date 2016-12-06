@@ -1,7 +1,5 @@
 package com.example.ivan.champy_v2.fragment;
 
-import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
@@ -10,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +15,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.ivan.champy_v2.controller.ChallengeController;
 import com.example.ivan.champy_v2.R;
+import com.example.ivan.champy_v2.controller.ChallengeController;
 import com.example.ivan.champy_v2.data.DBHelper;
 import com.example.ivan.champy_v2.helper.CHSetupUI;
 import com.example.ivan.champy_v2.utils.OfflineMode;

@@ -62,7 +62,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/send"
-            android:background="#339997"
+            android:background="@drawable/ab_gradient"
             android:layout_marginTop="40dp"
             android:textColor="@android:color/white" />
 
