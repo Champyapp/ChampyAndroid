@@ -220,7 +220,81 @@
         android:layout_alignParentEnd="true" />
 
     <!-- fab -->
-    <ImageButton
+    <!--<ImageButton-->
+        <!--android:layout_width="60dp"-->
+        <!--android:layout_height="60dp"-->
+        <!--android:id="@+id/fabPlus"-->
+        <!--android:background="@drawable/centerwithplus"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
+        <!--android:layout_marginRight="@dimen/activity_horizontal_margin"-->
+        <!--android:layout_marginBottom="@dimen/activity_vertical_margin"/>-->
+
+
+
+    <android.support.design.widget.FloatingActionButton
+        app:elevation="6dp"
+        app:pressedTranslationZ="12dp"
+        app:backgroundTint="@color/colorTextAqua"
+        android:id="@+id/fabDuel"
+        android:src="@drawable/fab_self"
+        android:scaleType="center"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/fabSelf"
+        android:layout_alignLeft="@+id/fabSelf"
+        android:layout_alignStart="@+id/fabSelf" />
+
+    <android.support.design.widget.FloatingActionButton
+        app:elevation="6dp"
+        app:pressedTranslationZ="12dp"
+        app:backgroundTint="@color/colorTextAqua"
+        android:background="@drawable/duel_yellow"
+        android:id="@+id/fabSelf"
+        android:src="@drawable/fab_duel"
+        android:scaleType="center"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/fabWakeUp"
+        android:layout_alignLeft="@+id/fabWakeUp"
+        android:layout_alignStart="@+id/fabWakeUp" />
+
+    <android.support.design.widget.FloatingActionButton
+        app:elevation="6dp"
+        app:pressedTranslationZ="12dp"
+        app:backgroundTint="@color/colorTextAqua"
+        android:id="@+id/fabWakeUp"
+        android:src="@drawable/fab_wake"
+        android:visibility="invisible"
+        android:scaleType="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/fabPlus"
+        android:layout_alignLeft="@+id/fabPlus"
+        android:layout_alignStart="@+id/fabPlus" />
+
+    <android.support.design.widget.FloatingActionButton
+        app:elevation="6dp"
+        app:pressedTranslationZ="12dp"
+        app:backgroundTint="@color/colorTextAqua"
+        android:src="@drawable/fab_plus"
+        android:id="@+id/fabPlus"
+        android:scaleType="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
+    <!-- fab -->
+    <!--<ImageButton
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:id="@+id/fabPlus"
@@ -230,7 +304,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+        android:layout_marginBottom="@dimen/activity_vertical_margin"/>-->
 
 
 </RelativeLayout>

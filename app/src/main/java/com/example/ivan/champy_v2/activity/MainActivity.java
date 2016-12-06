@@ -1,22 +1,23 @@
 package com.example.ivan.champy_v2.activity;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -33,13 +34,10 @@ import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.helper.CHDownloadImageTask;
 import com.example.ivan.champy_v2.helper.CHMakeResponsiveScore;
 import com.example.ivan.champy_v2.model.SelfImprovement_model;
-import com.example.ivan.champy_v2.utils.Blur;
 import com.example.ivan.champy_v2.utils.CustomPagerBase;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
 import com.facebook.FacebookSdk;
-import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
-import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import java.io.File;
 
@@ -47,18 +45,19 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import jp.wasabeef.glide.transformations.CropSquareTransformation;
 
 import static com.example.ivan.champy_v2.utils.Constants.path;
-import static java.lang.Math.round;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private long mLastClickTime = 0;
-    private SubActionButton buttonWakeUpChallenge, buttonDuelChallenge, buttonSelfImprovement;
     private MainActivityCardsAdapter adapter;
-    private FloatingActionMenu actionMenu;
     private SessionManager sessionManager;
     private RelativeLayout contentMain;
     private ImageView blurScreen;
     private DrawerLayout drawer;
+    private Boolean isFabOpen = false;
+    private FloatingActionButton fabPlus, fabWakeUp, fabDuel, fabSelf;
+    private Animation fab_open,fab_close,rotate_forward,rotate_backward;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
                 blurScreen.setVisibility(View.INVISIBLE);
-                actionMenu.close(true);
+//                actionMenu.close(true);
             }
         };
         drawer.setDrawerListener(drawerToggle);
@@ -104,10 +103,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ImageView drawerUserPhoto = (ImageView) headerLayout.findViewById(R.id.profile_image);
         TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
 
-        String name = sessionManager.getUserName();
-        drawerUserName.setText(name);
-        Typeface typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
-        drawerUserName.setTypeface(typeface);
 
         /********************************* Get photo and make bg **********************************/
         ImageView background = (ImageView) findViewById(R.id.main_background);
@@ -131,7 +126,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             chDownloadImageTask.execute(pathToPic);
         }
 
-
+        String name = sessionManager.getUserName();
+        drawerUserName.setText(name);
+        Typeface typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
+        drawerUserName.setTypeface(typeface);
 
         /******************************** Display 'Pending duels' menu ****************************/
         CHCheckPendingDuels checker = new CHCheckPendingDuels(this, navigationView);
@@ -144,31 +142,46 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         /*********************************** Display fab buttons **********************************/
-        final SubActionButton.Builder itemBuilder = new SubActionButton.Builder(MainActivity.this);
-        buttonWakeUpChallenge = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeupcolor)).build();
-        buttonDuelChallenge   = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.duel_yellow)).build();
-        buttonSelfImprovement = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.self_yellow)).build();
+//        final SubActionButton.Builder itemBuilder = new SubActionButton.Builder(MainActivity.this);
+//        buttonWakeUpChallenge = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeupcolor)).build();
+//        buttonDuelChallenge   = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.duel_yellow)).build();
+//        buttonSelfImprovement = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.self_yellow)).build();
 
-        ImageView fabPlus = (ImageButton) findViewById(R.id.fabPlus);
-        actionMenu = new FloatingActionMenu.Builder(this)
-                .addSubActionView(buttonWakeUpChallenge)
-                .addSubActionView(buttonDuelChallenge)
-                .addSubActionView(buttonSelfImprovement)
-                .setRadius(350).attachTo(fabPlus).build();
+//        ImageView fabPlus = (ImageButton) findViewById(R.id.fabPlus);
+//        actionMenu = new FloatingActionMenu.Builder(this) //.setStartAngle(-89).setEndAngle(-90).setRadius(220)
+//                .addSubActionView(buttonWakeUpChallenge)
+//                .addSubActionView(buttonDuelChallenge)
+//                .addSubActionView(buttonSelfImprovement)
+//                .attachTo(fabPlus).build();
 
-        int x = round(width / 100);
-        buttonWakeUpChallenge.getLayoutParams().height = x * 20;
-        buttonWakeUpChallenge.getLayoutParams().width  = x * 20;
-        buttonDuelChallenge  .getLayoutParams().height = x * 20;
-        buttonDuelChallenge  .getLayoutParams().width  = x * 20;
-        buttonSelfImprovement.getLayoutParams().height = x * 20;
-        buttonSelfImprovement.getLayoutParams().width  = x * 20;
+//        int x = round(width / 100);
+//        buttonWakeUpChallenge.getLayoutParams().height = x * 20;
+//        buttonWakeUpChallenge.getLayoutParams().width  = x * 20;
+//        buttonDuelChallenge  .getLayoutParams().height = x * 20;
+//        buttonDuelChallenge  .getLayoutParams().width  = x * 20;
+//        buttonSelfImprovement.getLayoutParams().height = x * 20;
+//        buttonSelfImprovement.getLayoutParams().width  = x * 20;
 
 
         CHBuildAnim chBuildAnim = new CHBuildAnim(this, sessionManager, typeface);
         chBuildAnim.buildAnim();
 
-        fabPlus.setOnClickListener(MainActivity.this);
+        fabPlus   = (FloatingActionButton)findViewById(R.id.fabPlus);
+        fabWakeUp = (FloatingActionButton)findViewById(R.id.fabWakeUp);
+        fabDuel   = (FloatingActionButton)findViewById(R.id.fabDuel);
+        fabSelf   = (FloatingActionButton)findViewById(R.id.fabSelf);
+        fab_open  = AnimationUtils.loadAnimation(this, R.anim.fab_open);
+        fab_close = AnimationUtils.loadAnimation(this, R.anim.fab_close);
+
+        rotate_forward = AnimationUtils.loadAnimation(this, R.anim.rotate_forward);
+        rotate_backward = AnimationUtils.loadAnimation(this, R.anim.rotate_backward);
+
+        fabPlus.setOnClickListener(v -> animateFAB());
+
+        fabSelf.setOnClickListener(v -> new Intent(this, SelfImprovementActivity.class));
+        fabDuel.setOnClickListener(v -> new Intent(this, FriendsActivity.class));
+        fabWakeUp.setOnClickListener(v -> new Intent(this, WakeUpActivity.class));
+
 
         ViewServer.get(this).addWindow(this);
     }
@@ -179,36 +192,68 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ViewServer.get(this).removeWindow(this);
     }
 
-    @Override
-    public void onClick(View v) {
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
-        mLastClickTime = SystemClock.elapsedRealtime();
-        if (adapter.dataCount() >= 5) {
-            Toast.makeText(this, "You have too much challenges", Toast.LENGTH_SHORT).show();
-            return;
-        }
+//    @Override
+//    public void onClick(View v) {
+//        Log.d(TAG, "onClick: click on fabPlus");
+////        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
+////        mLastClickTime = SystemClock.elapsedRealtime();
+////
+////        if (adapter.dataCount() >= 5) {
+////            Toast.makeText(this, "You have too much challenges", Toast.LENGTH_SHORT).show();
+////            return;
+////        }
+//        animateFAB();
+//
+////        actionMenu.toggle(true);
+////        if (actionMenu.isOpen()) {
+////            /************************************** Blur *****************************************/
+////
+////            // idea: set "blurred2.jpg" upper all view except button 'fab';
+//////            contentMain.buildDrawingCache();
+//////            Bitmap bm = contentMain.getDrawingCache();
+//////            Bitmap blurred = Blur.blurRenderScript(getApplicationContext(), bm, 25);
+//////            Drawable ob = new BitmapDrawable(getResources(), blurred);
+//////            blurScreen.setImageDrawable(ob);
+//////            blurScreen.setVisibility(View.VISIBLE);
+//////            contentMain.destroyDrawingCache();
+////
+////            /*********************************** Sub buttons **************************************/
+////            buttonSelfImprovement.setOnClickListener(v0 -> startActivity(new Intent(this, SelfImprovementActivity.class)));
+////            buttonDuelChallenge  .setOnClickListener(v1 -> startActivity(new Intent(this, FriendsActivity.class)));
+////            buttonWakeUpChallenge.setOnClickListener(v2 -> startActivity(new Intent(this, WakeUpActivity.class)));
+////        } else {
+////            blurScreen.setVisibility(View.INVISIBLE);
+////        }
+//
+//    }
 
-        actionMenu.toggle(true);
-        if (actionMenu.isOpen()) {
-            /************************************** Blur *****************************************/
+    private void animateFAB() {
 
-            // idea: set "blurred2.jpg" upper all view except button 'fab';
-            contentMain.buildDrawingCache();
-            Bitmap bm = contentMain.getDrawingCache();
-            Bitmap blurred = Blur.blurRenderScript(getApplicationContext(), bm, 25);
-            Drawable ob = new BitmapDrawable(getResources(), blurred);
-            blurScreen.setImageDrawable(ob);
-            blurScreen.setVisibility(View.VISIBLE);
-            contentMain.destroyDrawingCache();
+        if(isFabOpen) {
+            fabPlus.startAnimation(rotate_backward);
 
-            /*********************************** Sub buttons **************************************/
-            buttonSelfImprovement.setOnClickListener(v0 -> startActivity(new Intent(this, SelfImprovementActivity.class)));
-            buttonDuelChallenge  .setOnClickListener(v1 -> startActivity(new Intent(this, FriendsActivity.class)));
-            buttonWakeUpChallenge.setOnClickListener(v2 -> startActivity(new Intent(this, WakeUpActivity.class)));
+            fabWakeUp.startAnimation(fab_close);
+            fabDuel.startAnimation(fab_close);
+            fabSelf.startAnimation(fab_close);
+
+            fabWakeUp.setClickable(false);
+            fabDuel.setClickable(false);
+            fabSelf.setClickable(false);
+
+            isFabOpen = false;
         } else {
-            blurScreen.setVisibility(View.INVISIBLE);
-        }
+            fabPlus.startAnimation(rotate_forward);
 
+            fabWakeUp.startAnimation(fab_open);
+            fabDuel.startAnimation(fab_open);
+            fabSelf.startAnimation(fab_open);
+
+            fabWakeUp.setClickable(true);
+            fabDuel.setClickable(true);
+            fabSelf.setClickable(true);
+
+            isFabOpen = true;
+        }
     }
 
     @Override
@@ -216,9 +261,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         }
-        actionMenu.close(true);
+//        actionMenu.close(true);
         //cards.setVisibility(View.VISIBLE);
-        blurScreen.setVisibility(View.INVISIBLE);
+//        blurScreen.setVisibility(View.INVISIBLE);
 
     }
 
