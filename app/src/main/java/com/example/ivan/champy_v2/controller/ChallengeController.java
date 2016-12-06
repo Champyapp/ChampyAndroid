@@ -267,7 +267,7 @@ public class ChallengeController {
         c.setTime(date);
 
 
-        // if user picked time which biggest than current we replace alarm for a next day in same time
+        // if user picked time which biggest than current we replace item_alarm for a next day in same time
         if (Calendar.getInstance().getTimeInMillis() > c.getTimeInMillis()) c.add(Calendar.DAY_OF_YEAR, 1);
         // first we check if current time > than alarmClockTime and after that we set the time for new variable;
         final long userInputTime = c.getTimeInMillis(); // must be in millis
@@ -292,13 +292,13 @@ public class ChallengeController {
                     cv.put("updated", "false");
                     db.insert("updated", null, cv);
 
-                    /** Scheduling alarm **/
+                    /** Scheduling item_alarm **/
 
-                    // creating pending intent which will launch when our alarm clock must ring;
+                    // creating pending intent which will launch when our item_alarm clock must ring;
                     PendingIntent pi = PendingIntent.getBroadcast(firstActivity, alarmID, myIntent, 0);
-                    // creating alarm manager which has a permission 'alarm_service' for invoke our alarm clock
+                    // creating item_alarm manager which has a permission 'alarm_service' for invoke our item_alarm clock
                     AlarmManager aManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                    // setting repeating our alarm clock
+                    // setting repeating our item_alarm clock
                     aManager.setRepeating(AlarmManager.RTC_WAKEUP, userInputTime, 24*60*60*1000, pi);
 
                     /** Generate current card in DB and for MainActivity **/
@@ -397,7 +397,7 @@ public class ChallengeController {
                     if (response.isSuccess()) {
                         Data data = response.body().getData();
                         String type = data.getChallenge().getType();
-                        //if this is "wake up" challenge then stop alarm manager;
+                        //if this is "wake up" challenge then stop item_alarm manager;
                         if (type.equals(typeWake)) {
                             Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
                             PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, intentId, myIntent, 0);

@@ -24,7 +24,7 @@ import com.example.ivan.champy_v2.utils.SessionManager;
 import java.io.IOException;
 
 /**
- * This is Wake-Up activity when our alarm manager starts ring
+ * This is Wake-Up activity when our item_alarm manager starts ring
  */
 public class AlarmReceiverActivity extends Activity implements View.OnClickListener {
 
@@ -46,7 +46,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
 
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.alarm);
+        setContentView(R.layout.item_alarm);
         playSound(this, getAlarmUri());
         Glide.with(this).load(R.drawable.wakeupwhite).override(130, 130).into((ImageView) findViewById(R.id.imageViewWakeUpLogo));
         Glide.with(this).load(R.drawable.wakeuptext).override(200, 170).into((ImageView) findViewById(R.id.imageViewWakeUpText));
