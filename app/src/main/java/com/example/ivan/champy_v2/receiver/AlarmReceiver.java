@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.example.ivan.champy_v2.utils.SessionManager;
 import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -16,8 +17,12 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, Intent intent) {
-        FacebookSdk.sdkInitialize(getApplicationContext());
-
+        try {
+            FacebookSdk.sdkInitialize(getApplicationContext());
+        } catch (RuntimeException e) {
+            Log.e(TAG, "onReceive: govno ebanoe: " + e);
+            e.printStackTrace();
+        }
         final String inProgressId = intent.getStringExtra("inProgressId");
         final String alarmID      = intent.getStringExtra("alarmID");
 

@@ -20,8 +20,12 @@ import com.bumptech.glide.Glide;
 import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.controller.ChallengeController;
 import com.example.ivan.champy_v2.utils.SessionManager;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 
 import java.io.IOException;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * This is Wake-Up activity when our item_alarm manager starts ring
@@ -38,6 +42,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
 
         inProgressChallengeId = getIntent().getStringExtra("finalInProgressID");
         alarmID = getIntent().getStringExtra("finalAlarmID");
