@@ -20,7 +20,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         try {
             FacebookSdk.sdkInitialize(getApplicationContext());
         } catch (RuntimeException e) {
-            Log.e(TAG, "onReceive: govno ebanoe: " + e);
+            Log.e(TAG, "onReceive: I Hate Facebook: " + e);
             e.printStackTrace();
         }
         final String inProgressId = intent.getStringExtra("inProgressId");
