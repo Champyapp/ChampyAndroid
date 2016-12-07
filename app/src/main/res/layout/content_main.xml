@@ -38,31 +38,31 @@
     <!-- circles -->
     <ImageView
         android:id="@+id/imageView_challenges_animation"
+        android:background="@drawable/start_circle_00026"
         android:layout_width="90dp"
         android:layout_height="90dp"
-        android:background="@drawable/start_circle_00026"
-        android:layout_marginLeft="16dp"
         android:layout_below="@+id/welcomeUserName"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp" />
 
     <ImageView
         android:id="@+id/imageView_wins_animation"
+        android:background="@drawable/start_circle_00026"
         android:layout_width="90dp"
         android:layout_height="90dp"
-        android:background="@drawable/start_circle_00026"
         android:layout_below="@+id/welcomeUserName"
         android:layout_centerHorizontal="true" />
 
     <ImageView
         android:id="@+id/imageView_total_animation"
+        android:background="@drawable/start_circle_00026"
         android:layout_width="90dp"
         android:layout_height="90dp"
-        android:background="@drawable/start_circle_00026"
         android:layout_below="@+id/welcomeUserName"
-        android:layout_alignRight="@+id/fabPlus"
-        android:layout_alignEnd="@+id/fabPlus" />
+        android:layout_toRightOf="@+id/imageView_wins_animation"
+        android:layout_toEndOf="@+id/imageView_wins_animation"
+        android:layout_marginLeft="35dp"
+        android:layout_marginStart="35dp" />
 
     <!-- android:background="@drawable/score_animation" for anim-->
     <!-- Counters -->
@@ -198,14 +198,13 @@
 
     <!-- our cards -->
     <RelativeLayout
+        android:id="@+id/cards"
+        android:paddingTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/fabPlus"
+        android:layout_below="@+id/textViewWins"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:paddingTop="10dp"
-        android:id="@+id/cards"
-        android:layout_below="@+id/textViewWins"
         android:focusable="false">
     </RelativeLayout>
 
@@ -235,8 +234,6 @@
 
 
     <android.support.design.widget.FloatingActionButton
-        app:elevation="6dp"
-        app:pressedTranslationZ="12dp"
         app:backgroundTint="@color/colorTextAqua"
         android:id="@+id/fabSelf"
         android:src="@drawable/fab_self"
@@ -249,8 +246,6 @@
         android:layout_alignStart="@+id/fabDuel" />
 
     <android.support.design.widget.FloatingActionButton
-        app:elevation="6dp"
-        app:pressedTranslationZ="12dp"
         app:backgroundTint="@color/colorTextAqua"
         android:background="@drawable/duel_yellow"
         android:id="@+id/fabDuel"
@@ -264,8 +259,6 @@
         android:layout_alignStart="@+id/fabWake" />
 
     <android.support.design.widget.FloatingActionButton
-        app:elevation="6dp"
-        app:pressedTranslationZ="12dp"
         app:backgroundTint="@color/colorTextAqua"
         android:id="@+id/fabWake"
         android:src="@drawable/fab_wake"
@@ -278,8 +271,6 @@
         android:layout_alignStart="@+id/fabPlus" />
 
     <android.support.design.widget.FloatingActionButton
-        app:elevation="6dp"
-        app:pressedTranslationZ="12dp"
         app:backgroundTint="@color/colorTextAqua"
         android:src="@drawable/fab_plus"
         android:id="@+id/fabPlus"
@@ -292,19 +283,6 @@
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_marginBottom="@dimen/activity_vertical_margin" />
-
-    <!-- fab -->
-    <!--<ImageButton
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:id="@+id/fabPlus"
-        android:background="@drawable/centerwithplus"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"/>-->
 
 
 </RelativeLayout>
