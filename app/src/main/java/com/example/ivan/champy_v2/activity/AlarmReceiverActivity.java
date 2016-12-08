@@ -21,11 +21,8 @@ import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.controller.ChallengeController;
 import com.example.ivan.champy_v2.utils.SessionManager;
 import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
 
 import java.io.IOException;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * This is Wake-Up activity when our item_alarm manager starts ring

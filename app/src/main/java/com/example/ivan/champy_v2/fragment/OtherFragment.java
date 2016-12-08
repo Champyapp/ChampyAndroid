@@ -2,6 +2,7 @@ package com.example.ivan.champy_v2.fragment;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -59,14 +60,15 @@ public class OtherFragment extends Fragment {
     private static final String ARG_PAGE = "ARG_PAGE";
     private final String TAG = "OtherFragment";
     private int mPage;
-    private View gView;
+    private String checkRefresh;
     private List<FriendModel> friends;
     private Socket mSocket;
-    private String checkRefresh = "";
+    private View gView;
     private SwipeRefreshLayout gSwipeRefreshLayout;
     private CHCheckTableForExist checkTableForExist;
     private SessionManager sessionManager;
     private OfflineMode offlineMode;
+    private SQLiteDatabase db;
     private DBHelper dbHelper;
     private ContentValues cv;
 
@@ -83,7 +85,7 @@ public class OtherFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         Log.d(TAG, "onAttach: ");
-        checkRefresh = "true";
+        //checkRefresh = "true";
     }
 
     @Override
@@ -91,11 +93,37 @@ public class OtherFragment extends Fragment {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getContext());
         offlineMode = OfflineMode.getInstance();
-        dbHelper = DBHelper.getInstance(getContext());
         sessionManager = new SessionManager(getContext());
         cv = new ContentValues();
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        dbHelper = DBHelper.getInstance(getContext());
+        db = dbHelper.getWritableDatabase();
         checkTableForExist = new CHCheckTableForExist(db);
+
+        friends = new ArrayList<>();
+        Cursor c = db.query("mytable", null, null, null, null, null, null);
+        if (c.moveToFirst()) {
+            int nameColIndex = c.getColumnIndex("name");
+            int photoColIndex = c.getColumnIndex("photo");
+            int index = c.getColumnIndex("user_id");
+            int challenges = c.getColumnIndex("challenges");
+            int wins = c.getColumnIndex("wins");
+            int total = c.getColumnIndex("total");
+            int level = c.getColumnIndex("level");
+            int idColIndex = c.getColumnIndex("id");
+            do {
+                if (!checkTableForExist.isInOtherTable(c.getString(index)))
+                    friends.add(new FriendModel(
+                            c.getString(nameColIndex),
+                            c.getString(photoColIndex),
+                            c.getString(index),
+                            c.getString(challenges),
+                            c.getString(wins),
+                            c.getString(total),
+                            c.getString(level)));
+            } while (c.moveToNext());
+        }
+        c.close();
+
     }
 
     @Override
@@ -103,30 +131,7 @@ public class OtherFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_friends, container, false);
         Log.d(TAG, "onCreateView: ");
 
-        friends = new ArrayList<>();
-//        Cursor c = db.query("mytable", null, null, null, null, null, null);
-//        if (c.moveToFirst()) {
-//            int nameColIndex = c.getColumnIndex("name");
-//            int photoColIndex = c.getColumnIndex("photo");
-//            int index = c.getColumnIndex("user_id");
-//            int challenges = c.getColumnIndex("challenges");
-//            int wins = c.getColumnIndex("wins");
-//            int total = c.getColumnIndex("total");
-//            int level = c.getColumnIndex("level");
-//            int idColIndex = c.getColumnIndex("id");
-//            do {
-//                if (!checkTableForExist.isInOtherTable(c.getString(index)))
-//                    friends.add(new FriendModel(
-//                            c.getString(nameColIndex),
-//                            c.getString(photoColIndex),
-//                            c.getString(index),
-//                            c.getString(challenges),
-//                            c.getString(wins),
-//                            c.getString(total),
-//                            c.getString(level)));
-//            } while (c.moveToNext());
-//        }
-//        c.close();
+
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
         final OtherAdapter adapter = new OtherAdapter(friends, getContext(), getActivity());
 
@@ -306,7 +311,7 @@ public class OtherFragment extends Fragment {
                 });
                 request.executeAsync();
             });
-        } else { swipeRefreshLayout.setRefreshing(false); checkRefresh = "false"; }
+        } else { swipeRefreshLayout.setRefreshing(false); } //checkRefresh = "false"; }
 
     }
 

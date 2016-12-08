@@ -46,8 +46,6 @@ import static com.example.ivan.champy_v2.utils.Constants.path;
 
 public class SelfImprovementActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    public final String TAG = SelfImprovementActivity.class.getSimpleName();
-    private NavigationView navigationView;
     private SessionManager sessionManager;
     private DrawerLayout drawer;
     public View spinner;
@@ -60,7 +58,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         sessionManager = new SessionManager(getApplicationContext());
 
-        new getChallenges().execute();
+//        new getChallenges().execute();
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
@@ -73,7 +71,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         toggle.setDrawerIndicatorEnabled(true);
         toggle.syncState();
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -110,6 +108,8 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
             TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
             view.setText("+" + (count > 0 ? String.valueOf(count) : null));
         }
+
+        getChallenges();
 
     }
 

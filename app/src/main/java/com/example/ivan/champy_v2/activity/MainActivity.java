@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        new Handler().postDelayed(() -> {
+//        new Handler().postDelayed(() -> {
             switch (item.getItemId()) {
                 case R.id.friends:
                     Intent goToFriends = new Intent(MainActivity.this, FriendsActivity.class);
@@ -267,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     if (offlineMode.isConnectedToRemoteAPI(MainActivity.this)) { sessionManager.logout(MainActivity.this); }
                     break;
             }
-        }, 200);
+//        }, 200);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

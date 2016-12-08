@@ -53,9 +53,9 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         final View view = inflater.inflate(R.layout.item_card, container, false);
         dbHelper = DBHelper.getInstance(getContext());
         db = dbHelper.getWritableDatabase();
-        final Bundle args = this.getArguments();
+        final Bundle bundle = this.getArguments();
         c = db.query("selfimprovement", null, null, null, null, null, null);
-        position = args.getInt(ARG_PAGE);
+        position = bundle.getInt(ARG_PAGE);
         if (c.moveToFirst()) {
             int colchallenge_id = c.getColumnIndex("challenge_id");
             int coldescription = c.getColumnIndex("description");
