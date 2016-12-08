@@ -123,7 +123,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
             buttonPlus.setVisibility(View.VISIBLE);
         }
 
-        OfflineMode offlineMode = new OfflineMode();
+        OfflineMode offlineMode = OfflineMode.getInstance();
         offlineMode.isConnectedToRemoteAPI(getActivity());
         imageButtonAccept.setOnClickListener(this);
         buttonMinus.setOnClickListener(this);

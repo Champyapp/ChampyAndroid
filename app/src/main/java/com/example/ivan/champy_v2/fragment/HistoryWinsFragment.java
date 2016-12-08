@@ -30,7 +30,7 @@ public class HistoryWinsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        offlineMode = new OfflineMode();
+        offlineMode = OfflineMode.getInstance();
         winsArray = new ArrayList<>();
         adapter = new HistoryChallengeAdapter(winsArray, getContext());
 

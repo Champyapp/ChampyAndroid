@@ -94,7 +94,7 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
         });
 
         sessionManager = new SessionManager(context);
-        offlineMode = new OfflineMode();
+        offlineMode = OfflineMode.getInstance();
         token = sessionManager.getToken();
         id = sessionManager.getUserId();
 

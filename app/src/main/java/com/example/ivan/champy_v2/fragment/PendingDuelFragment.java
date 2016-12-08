@@ -148,7 +148,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         CHSetupUI chSetupUI= new CHSetupUI();
         chSetupUI.setupUI(view, getActivity());
 
-        offlineMode = new OfflineMode();
+        offlineMode = OfflineMode.getInstance();
         offlineMode.isConnectedToRemoteAPI(getActivity());
         btnAccept.setOnClickListener(this);
         btnCancel.setOnClickListener(this);

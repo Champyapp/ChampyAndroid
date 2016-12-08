@@ -30,7 +30,7 @@ public class HistoryInProgressFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        offlineMode = new OfflineMode();
+        offlineMode = OfflineMode.getInstance();
         all = new ArrayList<>();
         adapter = new HistoryChallengeAdapter(all, getContext());
     }

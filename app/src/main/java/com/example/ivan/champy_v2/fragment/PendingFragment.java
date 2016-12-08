@@ -161,7 +161,7 @@ public class PendingFragment extends Fragment {
 
         com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.champy_v2.interfaces.Friends.class);
 
-        OfflineMode offlineMode = new OfflineMode();
+        OfflineMode offlineMode = OfflineMode.getInstance();
         if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
             Call<com.example.ivan.champy_v2.model.friend.Friend> call = friends.getUserFriends(id, token);
             call.enqueue(new Callback<com.example.ivan.champy_v2.model.friend.Friend>() {

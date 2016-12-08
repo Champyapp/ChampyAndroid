@@ -114,7 +114,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
             view.setText("+" + (count > 0 ? String.valueOf(count) : null));
         }
 
-        offlineMode = new OfflineMode();
+        offlineMode = OfflineMode.getInstance();
         sessionManager = new SessionManager(this);
         String userName = sessionManager.getUserName();
         String userID = sessionManager.getUserId();

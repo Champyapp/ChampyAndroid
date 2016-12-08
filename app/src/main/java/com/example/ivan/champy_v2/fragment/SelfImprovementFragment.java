@@ -125,7 +125,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         final String userId = sessionManager.getUserId();
         cc = new ChallengeController(getContext(), getActivity(), token, userId);
 
-        OfflineMode offlineMode = new OfflineMode();
+        OfflineMode offlineMode = OfflineMode.getInstance();
         offlineMode.isConnectedToRemoteAPI(getActivity());
         buttonAccept.setOnClickListener(this);
         buttonMinus.setOnClickListener(this);

@@ -86,7 +86,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         initFacebookTokenTracker();
 
         ImageButton buttonLogin = (ImageButton)findViewById(R.id.login_button);
-        offlineMode = new OfflineMode();
+        offlineMode = OfflineMode.getInstance();
         buttonLogin.setOnClickListener(this);
 
         ViewServer.get(this).addWindow(this);

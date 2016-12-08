@@ -376,7 +376,7 @@ public class ChallengeController {
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
         Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> call = activeInProgress.surrender(id, token);
 
-        OfflineMode offlineMode = new OfflineMode();
+        OfflineMode offlineMode = OfflineMode.getInstance();
         if (offlineMode.isConnectedToRemoteAPI(firstActivity)) {
             call.enqueue(new Callback<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress>() {
                 @Override

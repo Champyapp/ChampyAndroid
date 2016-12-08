@@ -103,7 +103,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 .into(userImageProfile);
 
         dbHelper = DBHelper.getInstance(getApplicationContext());
-        offlineMode = new OfflineMode();
+        offlineMode = OfflineMode.getInstance();
         mDailyRemind = new DailyRemindController(getApplicationContext());
         sessionManager = new SessionManager(getApplicationContext());
         userID = sessionManager.getUserId();

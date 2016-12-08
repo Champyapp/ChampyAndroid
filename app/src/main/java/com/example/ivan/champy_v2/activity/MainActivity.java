@@ -263,7 +263,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     startActivity(Intent.createChooser(share, getString(R.string.how_would_you_like_to_share)));
                     break;
                 case R.id.nav_logout:
-                    OfflineMode offlineMode = new OfflineMode();
+                    OfflineMode offlineMode = OfflineMode.getInstance();
                     if (offlineMode.isConnectedToRemoteAPI(MainActivity.this)) { sessionManager.logout(MainActivity.this); }
                     break;
             }

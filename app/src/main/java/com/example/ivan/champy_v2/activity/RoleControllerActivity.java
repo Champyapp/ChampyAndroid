@@ -35,7 +35,7 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
         spinner = findViewById(R.id.loadingPanel);
 
         sessionManager = new SessionManager(getApplicationContext());
-        offlineMode = new OfflineMode();
+        offlineMode = OfflineMode.getInstance();
         String uId = sessionManager.getUserId();
         String uToken = sessionManager.getToken();
         cc = new ChallengeController(getApplicationContext(), this, uToken, uId);

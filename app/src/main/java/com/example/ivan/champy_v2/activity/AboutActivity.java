@@ -39,7 +39,6 @@ import static com.example.ivan.champy_v2.utils.Constants.path;
 public class AboutActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private SessionManager sessionManager;
-    private OfflineMode offlineMode;
     private DrawerLayout drawer;
     private WebView webView;
     private View spinner;
@@ -50,7 +49,6 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
-        offlineMode = new OfflineMode();
         sessionManager = new SessionManager(this);
 
         new ProgressTask().execute();
@@ -155,7 +153,8 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
                 startActivity(Intent.createChooser(share, getString(R.string.how_would_you_like_to_share)));
                 break;
             case R.id.nav_logout:
-                if (offlineMode.isConnectedToRemoteAPI(this)) sessionManager.logout(this);
+                OfflineMode offline = OfflineMode.getInstance();
+                if (offline.isConnectedToRemoteAPI(this)) sessionManager.logout(this);
                 break;
         }
         drawer.closeDrawer(GravityCompat.START);
@@ -171,11 +170,11 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
             spinner.setVisibility(View.VISIBLE);
         }
 
+        @SuppressLint("SetJavaScriptEnabled")
         @Override
         protected Void doInBackground(Void... arg0) {
 
             runOnUiThread(new Runnable() {
-                @SuppressLint("SetJavaScriptEnabled")
                 @Override
                 public void run() {
                     webView = (WebView) findViewById(R.id.webView);

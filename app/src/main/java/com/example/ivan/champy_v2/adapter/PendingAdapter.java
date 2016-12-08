@@ -98,7 +98,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         });
 
         sessionManager = new SessionManager(context);
-        offlineMode = new OfflineMode();
+        offlineMode = OfflineMode.getInstance();
         token = sessionManager.getToken();
         id = sessionManager.getUserId();
 

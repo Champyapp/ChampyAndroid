@@ -87,7 +87,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         });
 
         sessionManager = new SessionManager(context);
-        offlineMode = new OfflineMode();
+        offlineMode = OfflineMode.getInstance();
         token = sessionManager.getToken();
         id = sessionManager.getUserId();
         inProgressCounter = Integer.parseInt(sessionManager.getChampyOptions().get("challenges"));

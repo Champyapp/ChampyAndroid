@@ -8,7 +8,16 @@ import android.widget.Toast;
 
 public class OfflineMode {
 
+    private static OfflineMode instance = null;
 
+    private OfflineMode() {};
+
+    public static OfflineMode getInstance() {
+        if (instance == null) {
+            instance = new OfflineMode();
+        }
+        return instance;
+    }
 
     public boolean isConnectedToRemoteAPI(Activity activity) {
         if (isInternetAvailable(activity)) { return true; }

@@ -90,7 +90,7 @@ public class OtherFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getContext());
-        offlineMode = new OfflineMode();
+        offlineMode = OfflineMode.getInstance();
         dbHelper = DBHelper.getInstance(getContext());
         sessionManager = new SessionManager(getContext());
         cv = new ContentValues();

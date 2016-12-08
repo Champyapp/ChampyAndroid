@@ -153,7 +153,7 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
                 startActivity(Intent.createChooser(share, "How would you like to share?"));
                 break;
             case R.id.nav_logout:
-                OfflineMode offlineMode = new OfflineMode();
+                OfflineMode offlineMode = OfflineMode.getInstance();
                 if (offlineMode.isConnectedToRemoteAPI(this)) { sessionManager.logout(this); }
                 break;
         }
