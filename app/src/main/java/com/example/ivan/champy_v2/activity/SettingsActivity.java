@@ -169,10 +169,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         drawerUserName.setTypeface(typeface);
         tvNotifications.setTypeface(typeface);
 
-//        try {
-//            background.setImageDrawable(CHLoadBlurredPhoto.Init(path));
-//            drawerBackground.setImageDrawable(CHLoadBlurredPhoto.Init(path));
-//        } catch (FileNotFoundException e) { e.printStackTrace(); }
         about.setOnClickListener(this);
         terms.setOnClickListener(this);
         delete.setOnClickListener(this);

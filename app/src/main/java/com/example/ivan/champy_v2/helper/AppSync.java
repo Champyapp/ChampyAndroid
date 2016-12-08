@@ -35,9 +35,6 @@ public class AppSync {
 
     private final String TAG = "AppSync";
     private Context context;
-    private DBHelper dbHelper;
-    private ContentValues cv;
-    private SQLiteDatabase db;
     private SessionManager sessionManager;
     private String fbId, gcm, token, path, token_android;
 
@@ -59,10 +56,6 @@ public class AppSync {
         final String gcm = this.gcm;
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
-        cv = new ContentValues();
-        dbHelper = DBHelper.getInstance(context);
-        db = dbHelper.getWritableDatabase();
-
         NewUser newUser = retrofit.create(NewUser.class);
         Call<User> callGetUserInfo = newUser.getUserInfo(jwtString);
         callGetUserInfo.enqueue(new Callback<User>() {
@@ -83,8 +76,9 @@ public class AppSync {
                     String newChallengeReq = data.getProfileOptions().getNewChallengeRequests().toString();
                     String challengesForToday = data.getProfileOptions().getChallengesForToday().toString();
 
-                    sessionManager.setRefreshPending("false");
                     sessionManager.setRefreshFriends("true");
+                    sessionManager.setRefreshPending("false");
+                    sessionManager.setRefreshOthers("true");
                     sessionManager.createUserLoginSession(
                             user_name, email, facebookId, path_to_pic, jwtString, userId, pushN, newChallengeReq,
                             acceptedYour, challengeEnd, challengesForToday, "true", gcm, token_android

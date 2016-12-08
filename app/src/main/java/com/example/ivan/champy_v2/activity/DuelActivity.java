@@ -81,9 +81,19 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         File fileBlur = new File(path, "blured2.jpg");
         Uri uriProfile = Uri.fromFile(fileProfile);
         Uri uriBlur = Uri.fromFile(fileBlur);
-        Glide.with(this).load(friendsPhoto).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
-                .centerCrop().into((ImageView)findViewById(R.id.imageFriendsPhoto));
-        Glide.with(this).load(uriProfile).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(imageMyPhoto);
+
+        Glide.with(this)
+                .load(friendsPhoto)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .centerCrop()
+                .into((ImageView)findViewById(R.id.imageFriendsPhoto));
+
+        Glide.with(this)
+                .load(uriProfile)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(imageMyPhoto);
 
         final TextView tvIChallengeMyFriendTo = (TextView)findViewById(R.id.tvIChallengeMyFriendTo);
         final TextView textViewYouVsFriend = (TextView)findViewById(R.id.tvYouVsFriend);
@@ -107,10 +117,20 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
         ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
         drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        Glide.with(this).load(uriBlur).bitmapTransform(new CropSquareTransformation(this))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);
-        Glide.with(this).load(uriProfile).bitmapTransform(new CropCircleTransformation(this))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
+
+        Glide.with(this)
+                .load(uriBlur)
+                .bitmapTransform(new CropSquareTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(drawerBackground);
+
+        Glide.with(this)
+                .load(uriProfile)
+                .bitmapTransform(new CropCircleTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(drawerImageProfile);
 
         TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
         name = sessionManager.getUserName();
@@ -126,13 +146,6 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
             TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
             view.setText("+" + (count > 0 ? String.valueOf(count) : null));
         }
-
-//        try {
-//            drawerBackground.setImageDrawable(getPhotoForDrawerBackground(path));
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-
 
     }
 
@@ -193,7 +206,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         int clearCount = db.delete("duel", null, null);
         final ContentValues cv = new ContentValues();
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        String token = sessionManager.getToken();
+        final String token = sessionManager.getToken();
 
         com.example.ivan.champy_v2.interfaces.SelfImprovement selfImprovement = retrofit.create(com.example.ivan.champy_v2.interfaces.SelfImprovement.class);
 

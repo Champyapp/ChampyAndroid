@@ -60,7 +60,6 @@ public class OtherFragment extends Fragment {
     private static final String ARG_PAGE = "ARG_PAGE";
     private final String TAG = "OtherFragment";
     private int mPage;
-    private String checkRefresh;
     private List<FriendModel> friends;
     private Socket mSocket;
     private View gView;
@@ -139,16 +138,10 @@ public class OtherFragment extends Fragment {
         rvContacts.setAdapter(adapter);
 
         gSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
-        gSwipeRefreshLayout.setOnRefreshListener(() -> new refreshOtherView().doInBackground() );
+        gSwipeRefreshLayout.setOnRefreshListener(() -> new refreshOtherView().execute() );
         this.gView = view;
 
-//        Bundle friendRequestExtra = getActivity().getIntent().getExtras();
-//        if (friendRequestExtra != null) {
-//            //refreshOtherView(gSwipeRefreshLayout, gView);
-//            new refreshOtherView().doInBackground();
-//        }
-
-        if (checkRefresh.equals("true")) { new refreshOtherView().doInBackground(); }
+        if (sessionManager.getRefreshOthers().equals("true")) { new refreshOtherView().execute(); }
 
         return view;
 
@@ -270,7 +263,6 @@ public class OtherFragment extends Fragment {
                                             ));
                                         }
                                         swipeRefreshLayout.setRefreshing(false);
-                                        checkRefresh = "false";
                                     }
 //                                    else {
 //                                        // отображение всего у человека, который не установил champy
@@ -311,7 +303,10 @@ public class OtherFragment extends Fragment {
                 });
                 request.executeAsync();
             });
-        } else { swipeRefreshLayout.setRefreshing(false); } //checkRefresh = "false"; }
+        } else {
+            swipeRefreshLayout.setRefreshing(false);
+            sessionManager.setRefreshOthers("false");
+        }
 
     }
 

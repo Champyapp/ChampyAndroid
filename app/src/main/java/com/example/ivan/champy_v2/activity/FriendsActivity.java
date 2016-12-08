@@ -103,6 +103,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         if (bundle != null) {
             String friendRequest = bundle.getString("friend_request");
             if (friendRequest != null) {
+                sessionManager.setRefreshOthers("true");
                 switch (friendRequest) {
                     case "friend_request_confirmed": viewPager.setCurrentItem(0); break;
                     case "incoming_friend_request": viewPager.setCurrentItem(1); break;
@@ -116,12 +117,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         tabLayout.setupWithViewPager(viewPager);
         //setupCustomTabIcons();
 
-//        try {
-//            background.setImageDrawable(CHLoadBlurredPhoto.Init(path));
-//            drawerBackground.setImageDrawable(CHLoadBlurredPhoto.Init(path));
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
 
         String name = sessionManager.getUserName();
         drawerUserName.setText(name);

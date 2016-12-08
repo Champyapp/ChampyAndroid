@@ -91,6 +91,11 @@ public class SessionManager {
         editor.commit();
     }
 
+    public void setRefreshOthers(String refresh) {
+        editor.putString("otherRefresh", refresh);
+        editor.commit();
+    }
+
     public void togglePushNotification(String t) {
         editor.putString("pushN", t);
         editor.commit();
@@ -146,6 +151,10 @@ public class SessionManager {
 
     public String getRefreshFriends() {
         return pref.getString("friendsRefresh", "");
+    }
+
+    public String getRefreshOthers() {
+        return pref.getString("otherRefresh", "");
     }
 
     public String getTokenAndroid() {

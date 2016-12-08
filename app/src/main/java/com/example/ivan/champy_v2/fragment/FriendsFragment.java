@@ -105,8 +105,7 @@ public class FriendsFragment extends Fragment {
         gSwipeRefreshLayout.setOnRefreshListener(() -> refreshFriendsView(gSwipeRefreshLayout, gView));
         this.gView = view;
 
-        String checkRefresh = sessionManager.getRefreshFriends();
-        if (checkRefresh.equals("true")) {
+        if (sessionManager.getRefreshFriends().equals("true")) {
             refreshFriendsView(gSwipeRefreshLayout, gView);
             sessionManager.setRefreshFriends("false");
         }
