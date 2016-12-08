@@ -64,10 +64,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        int width = getWindowManager().getDefaultDisplay().getWidth();
-        CHMakeResponsiveScore chMakeResponsiveScore = new CHMakeResponsiveScore();
-        chMakeResponsiveScore.makeResponsiveScore(this, width);
-
         sessionManager = new SessionManager(getApplicationContext());
         adapter = new MainActivityCardsAdapter(this, SelfImprovement_model.generate(this), sessionManager);
         if (adapter.dataCount() > 0) {
@@ -222,6 +218,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 ////        }
 //
 //    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ViewServer.get(this).removeWindow(this);
+        System.gc();
+    }
 
     @Override
     public void onBackPressed() {

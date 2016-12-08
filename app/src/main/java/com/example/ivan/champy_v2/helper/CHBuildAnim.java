@@ -57,6 +57,10 @@ public class CHBuildAnim {
 //        ((AnimationDrawable) mImageViewFilling1.getBackground()).start();
 //        ((AnimationDrawable) mImageViewFilling2.getBackground()).start();
 
+        int width = activity.getWindowManager().getDefaultDisplay().getWidth();
+        CHMakeResponsiveScore chMakeResponsiveScore = new CHMakeResponsiveScore();
+        chMakeResponsiveScore.makeResponsiveScore(activity, width);
+
         final TextView tvChallengesCounter = (TextView)activity.findViewById(R.id.textViewChallengesCounter);
         final TextView tvWinsCounter       = (TextView)activity.findViewById(R.id.textViewWinsCounter);
         final TextView tvTotalCounter      = (TextView)activity.findViewById(R.id.textViewTotalCounter);
