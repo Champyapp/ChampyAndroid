@@ -87,11 +87,6 @@ public class ChallengeController {
                     String challengeId = response.body().getData().get_id();
                     sendSingleInProgressForSelf(challengeId);
                     Log.d(TAG, "createNewSelfImprovementChallenge Status: VSE OK");
-//                            + "\n CHALL_ID    = " + challengeId
-//                            + "\n TYPE_ID     = " + type_id
-//                            + "\n DESCRIPTION = " + description
-//                            + "\n DETAILS     = " + details
-//                            + "\n DURATION    = " + duration);
                 }
                 else Log.d(TAG, "createNewSelfImprovementChallenge Status: Failed " + response.message());
             }
@@ -105,7 +100,7 @@ public class ChallengeController {
     public void sendSingleInProgressForSelf(String challenge) {
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
-        Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> call = singleinprogress.start_single_in_progress(challenge, token);
+        Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> call = singleinprogress.startSingleInProgress(challenge, token);
         call.enqueue(new Callback<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress>() {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
@@ -135,26 +130,18 @@ public class ChallengeController {
 
 
     public void createNewDuelChallenge(final String description, int days, final String friend_id) {
-        final String type_id = "567d51c48322f85870fd931b";
         duration = "" + (days * 86400);
         details = description + " during this period: " + days + " days";
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
         Call<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge> call = createChallenge
-                .createChallenge("User_Challenge", type_id, description, details, duration, token);
+                .createChallenge("User_Challenge", typeDuel, description, details, duration, token);
         call.enqueue(new Callback<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge>() {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
                     sendSingleInProgressForDuel(challengeId, friend_id);
-//                    Log.d(TAG, "createNewDuelChallenge OnResponse: VSE OK"
-//                            + "\n CHALL_ID    = " + challengeId
-//                            + "\n TYPE_ID     = " + type_id
-//                            + "\n DESCRIPTION = " + description
-//                            + "\n DETAILS     = " + details
-//                            + "\n DURATION    = " + duration
-//                            + "\n recipientId = " + friend_id);
                 }
                 else Log.d(TAG, "createNewDuelChallenge OnResponse: Failed " + response.message());
             }
@@ -173,7 +160,7 @@ public class ChallengeController {
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
-        Call<com.example.ivan.champy_v2.model.duel.Duel> call = singleinprogress.Start_duel(friend_id, challenge, token);
+        Call<Duel> call = singleinprogress.startDuel(friend_id, challenge, token);
         call.enqueue(new Callback<Duel>() {
             @Override
             public void onResponse(Response<Duel> response, Retrofit retrofit) {
@@ -275,7 +262,7 @@ public class ChallengeController {
 
 
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
-        Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> call = singleinprogress.start_single_in_progress(challenge, token);
+        Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> call = singleinprogress.startSingleInProgress(challenge, token);
         call.enqueue(new Callback<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress>() {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
@@ -321,7 +308,7 @@ public class ChallengeController {
     public void joinToChallenge(final String inProgressId) {
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         SingleInProgress singleInProgress = retrofit.create(SingleInProgress.class);
-        Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> call = singleInProgress.Join(inProgressId, token);
+        Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> call = singleInProgress.join(inProgressId, token);
         call.enqueue(new Callback<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress>() {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
@@ -339,7 +326,7 @@ public class ChallengeController {
     public void rejectInviteForPendingDuel(String inProgressId) throws IOException {
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
-        Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> call = activeInProgress.Reject(inProgressId, token);
+        Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> call = activeInProgress.reject(inProgressId, token);
         call.enqueue(new Callback<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress>() {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
@@ -360,7 +347,7 @@ public class ChallengeController {
     public void doneForToday(final String inProgressId) throws IOException {
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
-        Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> call = activeInProgress.CheckChallenge(inProgressId, token);
+        Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> call = activeInProgress.checkChallenge(inProgressId, token);
         call.enqueue(new Callback<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress>() {
             @Override
             public void onResponse(Response<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
@@ -387,7 +374,7 @@ public class ChallengeController {
     public void give_up(final String id, final int intentId) throws IOException {
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
-        Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> call = activeInProgress.Surrender(id, token);
+        Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> call = activeInProgress.surrender(id, token);
 
         OfflineMode offlineMode = new OfflineMode();
         if (offlineMode.isConnectedToRemoteAPI(firstActivity)) {

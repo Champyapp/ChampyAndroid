@@ -14,44 +14,44 @@ public interface SingleInProgress {
 
     @FormUrlEncoded
     @POST("/v1/in-progress-challenges/single")
-    Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> start_single_in_progress(
+    Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> startSingleInProgress(
             @Field("challenge") String challenge,
             @Query("token") String token
     );
 
     @GET("/v1/in-progress-challenges/{id}/surrender")
-    Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> Surrender(
+    Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> surrender(
                     @Path("id") String id,
                     @Query("token") String token
     );
 
     @GET("/v1/in-progress-challenges/{id}/reject")
-    Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> Reject(
+    Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> reject(
             @Path("id") String id,
             @Query("token") String token
     );
 
     @GET("/v1/in-progress-challenges/{id}/join")
-    Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> Join (
+    Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> join(
             @Path("id") String id,
             @Query("token") String token
     );
 
     @GET("/v1/in-progress-challenges/{id}")
-    Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> get_challenge(
+    Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> getChallenges(
             @Path("id") String id,
             @Query("token") String token
     );
 
     @GET("/v1/in-progress-challenges/{id}/check")
-    Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> CheckChallenge(
+    Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> checkChallenge(
             @Path("id") String id,
             @Query("token") String token
     );
 
     @FormUrlEncoded
     @POST("/v1/in-progress-challenges/duel")
-    Call<Duel> Start_duel(
+    Call<Duel> startDuel(
             @Field("recipient") String recipient,
             @Field("challenge") String challenge,
             @Query("token") String token
