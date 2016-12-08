@@ -3,6 +3,7 @@ package com.example.ivan.champy_v2.activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -236,35 +237,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.friends:
-                Intent goToFriends = new Intent(this, FriendsActivity.class);
-                startActivity(goToFriends);
-                break;
-            case R.id.history:
-                Intent goToHistory = new Intent(this, HistoryActivity.class);
-                startActivity(goToHistory);
-                break;
-            case R.id.settings:
-                Intent goToSettings = new Intent(this, SettingsActivity.class);
-                startActivity(goToSettings);
-                break;
-            case R.id.pending_duels:
-                Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
-                startActivity(goToPendingDuel);
-                break;
-            case R.id.share:
-                String message = getString(R.string.share_text2);
-                Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType("text/plain");
-                share.putExtra(Intent.EXTRA_TEXT, message);
-                startActivity(Intent.createChooser(share, getString(R.string.how_would_you_like_to_share)));
-                break;
-            case R.id.nav_logout:
-                OfflineMode offlineMode = new OfflineMode();
-                if (offlineMode.isConnectedToRemoteAPI(this)) { sessionManager.logout(this); }
-                break;
-        }
+        new Handler().postDelayed(() -> {
+            switch (item.getItemId()) {
+                case R.id.friends:
+                    Intent goToFriends = new Intent(MainActivity.this, FriendsActivity.class);
+                    startActivity(goToFriends);
+                    break;
+                case R.id.history:
+                    Intent goToHistory = new Intent(MainActivity.this, HistoryActivity.class);
+                    startActivity(goToHistory);
+                    break;
+                case R.id.settings:
+                    Intent goToSettings = new Intent(MainActivity.this, SettingsActivity.class);
+                    startActivity(goToSettings);
+                    break;
+                case R.id.pending_duels:
+                    Intent goToPendingDuel = new Intent(MainActivity.this, PendingDuelActivity.class);
+                    startActivity(goToPendingDuel);
+                    break;
+                case R.id.share:
+                    String message = getString(R.string.share_text2);
+                    Intent share = new Intent(Intent.ACTION_SEND);
+                    share.setType("text/plain");
+                    share.putExtra(Intent.EXTRA_TEXT, message);
+                    startActivity(Intent.createChooser(share, getString(R.string.how_would_you_like_to_share)));
+                    break;
+                case R.id.nav_logout:
+                    OfflineMode offlineMode = new OfflineMode();
+                    if (offlineMode.isConnectedToRemoteAPI(MainActivity.this)) { sessionManager.logout(MainActivity.this); }
+                    break;
+            }
+        }, 200);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -287,6 +290,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getMenuInflater().inflate(R.menu.sync_app, menu);
         return true;
     }
+
 
     private void animateFAB() {
         if(isFabOpen) {

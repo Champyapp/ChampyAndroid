@@ -12,14 +12,17 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
+import retrofit2.mock.MockRetrofit;
+import retrofit2.mock.NetworkBehavior;
 
-import static com.example.ivan.champy_v2.utils.Constants.typeWake;
 import static junit.framework.Assert.assertEquals;
 
 
@@ -41,6 +44,25 @@ public class API_test {
     private final String id = "challenge_id";
 
     private final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+    private final NetworkBehavior behavior = NetworkBehavior.create();
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+
+
+    @Test
+    public void retrofitNullThrows() {
+        try {
+            new MockRetrofit.Builder(null);
+            assertEquals("OK", true, true);
+        } catch (NullPointerException e) {
+            assertEquals("Wrong", true, false);
+        }
+    }
+
+//    @Test
+//    public void retrofitPropagated() {
+//        MockRetrofit mockRetrofit = new MockRetrofit.Builder(retrofit).build();
+//        assertThat(mockRetrofit.retrofit()).isSameAs(retrofit);
+//    }
 
 
     @Test
