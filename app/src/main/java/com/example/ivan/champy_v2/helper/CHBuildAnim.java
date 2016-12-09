@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.ivan.champy_v2.R;
+import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
 
 /**
@@ -20,18 +21,18 @@ import com.example.ivan.champy_v2.utils.SessionManager;
  */
 public class CHBuildAnim {
 
-    private Activity activity;
-    private SessionManager sessionManager;
-    private Typeface typeface;
+    private static CHBuildAnim instance = null;
 
-    public CHBuildAnim(Activity activity, SessionManager sessionManager, Typeface typeface) {
-        this.activity = activity;
-        this.sessionManager = sessionManager;
-        this.typeface = typeface;
+    private CHBuildAnim() {};
+
+    public static CHBuildAnim getInstance() {
+        if (instance == null) {
+            instance = new CHBuildAnim();
+        }
+        return instance;
     }
 
-    public void buildAnim() {
-
+    public void buildAnim(Activity activity, SessionManager sessionManager, Typeface typeface) {
 //        WindowManager wm = (WindowManager)activity.getSystemService(Context.WINDOW_SERVICE);
 //        Display display = wm.getDefaultDisplay();
 //        Point size = new Point();
@@ -56,7 +57,6 @@ public class CHBuildAnim {
 //        ((AnimationDrawable) mImageViewFilling0.getBackground()).start();
 //        ((AnimationDrawable) mImageViewFilling1.getBackground()).start();
 //        ((AnimationDrawable) mImageViewFilling2.getBackground()).start();
-
         int width = activity.getWindowManager().getDefaultDisplay().getWidth();
         CHMakeResponsiveScore chMakeResponsiveScore = new CHMakeResponsiveScore();
         chMakeResponsiveScore.makeResponsiveScore(activity, width);

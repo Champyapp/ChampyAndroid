@@ -160,8 +160,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        buttonSelfImprovement.getLayoutParams().width  = x * 20;
 
 
-        CHBuildAnim chBuildAnim = new CHBuildAnim(this, sessionManager, typeface);
-        chBuildAnim.buildAnim();
+        CHBuildAnim chBuildAnim = CHBuildAnim.getInstance();
+        chBuildAnim.buildAnim(this, sessionManager, typeface);
 
         fabPlus   = (FloatingActionButton)findViewById(R.id.fabPlus);
         fabWakeUp = (FloatingActionButton)findViewById(R.id.fabWake);

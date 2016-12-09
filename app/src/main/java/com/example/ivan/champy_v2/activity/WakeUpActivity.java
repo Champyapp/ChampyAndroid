@@ -105,6 +105,9 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         Glide.with(this).load(R.drawable.wakeupwhite).override(110, 110).into((ImageView) findViewById(R.id.imageViewLogo));
         Glide.with(this).load(R.drawable.wakeuptext).override(180, 150).into((ImageView) findViewById(R.id.imageWakeUpChall));
 
+        sessionManager = new SessionManager(this);
+        offlineMode = OfflineMode.getInstance();
+
         CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView, sessionManager);
         int count = checker.getPendingCount();
         if (count == 0) {
@@ -113,9 +116,6 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
             TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
             view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
         }
-
-        offlineMode = OfflineMode.getInstance();
-        sessionManager = new SessionManager(this);
         String userName = sessionManager.getUserName();
         String userID = sessionManager.getUserId();
         String token = sessionManager.getToken();
