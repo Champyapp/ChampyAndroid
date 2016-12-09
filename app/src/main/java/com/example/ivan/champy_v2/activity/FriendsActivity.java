@@ -117,7 +117,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         tabLayout.setupWithViewPager(viewPager);
         //setupCustomTabIcons();
 
-
         String name = sessionManager.getUserName();
         drawerUserName.setText(name);
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");

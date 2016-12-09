@@ -60,7 +60,8 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
 
         spinner = findViewById(R.id.loadingPanel);
         spinner.setVisibility(View.VISIBLE);
-//        new getChallenges().execute();
+
+        new getChallenges().execute();
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
@@ -111,7 +112,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
             view.setText("+" + (count > 0 ? String.valueOf(count) : null));
         }
 
-        getChallenges();
+        //getChallenges();
 
     }
 
@@ -217,20 +218,14 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
     }
 
 
-//    private class getChallenges extends AsyncTask<Void,Void,Void> {
-//        @Override
-//        protected void onPreExecute() {
-////            spinner = findViewById(R.id.loadingPanel);
-////            spinner.setVisibility(View.VISIBLE);
-//        }
-//
-//        @Override
-//        protected Void doInBackground(Void... arg0) {
-////            getChallenges();
-//            return null;
-//        }
-//
-//    }
+    private class getChallenges extends AsyncTask<Void,Void,Void> {
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            getChallenges();
+            return null;
+        }
+
+    }
 
 
 }

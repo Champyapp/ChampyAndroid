@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Random;
 
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
@@ -60,8 +61,8 @@ public class PhotoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
 
         sessionManager = new SessionManager(getApplicationContext());
 
@@ -78,14 +79,15 @@ public class PhotoActivity extends AppCompatActivity {
         Glide.with(this).load(url).diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true).centerCrop().into((ImageView) findViewById(R.id.photo));
 
-//        Glide.with(this)
-//                .load(url)
-//                .asBitmap()
-//                .diskCacheStrategy(DiskCacheStrategy.NONE)
-//                .skipMemoryCache(true)
-//                .override(200, 20)
-//                .dontAnimate()
-//                .into(imageView);
+        Glide.with(this)
+                .load(url)
+                .asBitmap()
+                .transform(new CropCircleTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .override(100, 100)
+                .dontAnimate()
+                .into(imageView);
 
 
         uploadPhoto = new CHUploadPhoto(getApplicationContext());

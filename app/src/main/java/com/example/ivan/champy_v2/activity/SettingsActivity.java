@@ -38,6 +38,7 @@ import com.example.ivan.champy_v2.model.user.User;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
 import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 
 import java.io.File;
@@ -193,6 +194,19 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     protected void onStop() {
         super.onStop();
         ViewServer.get(this).removeWindow(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ViewServer.get(this).setFocusedWindow(this);
+        AppEventsLogger.activateApp(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        AppEventsLogger.deactivateApp(this);
     }
 
     @Override

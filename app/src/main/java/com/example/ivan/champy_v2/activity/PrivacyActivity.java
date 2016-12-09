@@ -25,6 +25,7 @@ import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
+import com.facebook.appevents.AppEventsLogger;
 
 import java.io.File;
 
@@ -94,6 +95,19 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
     protected void onStop() {
         super.onStop();
         ViewServer.get(this).removeWindow(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ViewServer.get(this).setFocusedWindow(this);
+        AppEventsLogger.activateApp(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        AppEventsLogger.deactivateApp(this);
     }
 
     @Override

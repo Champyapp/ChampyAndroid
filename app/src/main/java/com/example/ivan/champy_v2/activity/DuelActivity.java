@@ -58,6 +58,9 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_duel);
         sessionManager = new SessionManager(this);
 
+        spinner = findViewById(R.id.loadingPanel);
+        spinner.setVisibility(View.VISIBLE);
+
         new ProgressTask().execute();
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -252,22 +255,10 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
 
     private class ProgressTask extends AsyncTask<Void,Void,Void> {
         @Override
-        protected void onPreExecute() {
-            spinner = findViewById(R.id.loadingPanel);
-            spinner.setVisibility(View.VISIBLE);
-        }
-
-        @Override
         protected Void doInBackground(Void... arg0) {
             getChallenges();
             return null;
         }
-
-        @Override
-        protected void onPostExecute(Void result) {
-
-        }
-
     }
 
 }
