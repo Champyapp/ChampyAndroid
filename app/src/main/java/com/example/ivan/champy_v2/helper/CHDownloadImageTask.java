@@ -11,10 +11,8 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -31,9 +29,6 @@ import java.io.InputStream;
 import java.util.Random;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
-import jp.wasabeef.glide.transformations.CropSquareTransformation;
-
-import static com.example.ivan.champy_v2.utils.Constants.path;
 
 /** Class helper for download and blur user's photo.
  *  Use the compress method on the BitMap object to write image to the OutputStream ! */
