@@ -53,7 +53,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext());
+        //FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_self_improvement);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         sessionManager = new SessionManager(getApplicationContext());
@@ -61,7 +61,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         spinner = findViewById(R.id.loadingPanel);
         spinner.setVisibility(View.VISIBLE);
 
-        new getChallenges().execute();
+        //new getChallenges().execute();
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
@@ -88,13 +88,21 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
 
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
-        Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(this))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
+        Glide.with(this)
+                .load(url)
+                .bitmapTransform(new CropCircleTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(drawerImageProfile);
 
         File fileBlur = new File(path, "blured2.jpg");
         url = Uri.fromFile(fileBlur);
-        Glide.with(this).load(url).bitmapTransform(new CropSquareTransformation(this))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);
+        Glide.with(this)
+                .load(url)
+                .bitmapTransform(new CropSquareTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(drawerBackground);
 
         final Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         final TextView tvIChallengeMySelfTo = (TextView)findViewById(R.id.tvChallengeToMySelf);
@@ -103,7 +111,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         drawerUsername.setText(name);
         drawerUsername.setTypeface(typeface);
 
-        final CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView, sessionManager);
         int count = checker.getPendingCount();
         if (count == 0) {
             checker.hideItem();
@@ -112,8 +120,16 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
             view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
         }
 
-        //getChallenges();
+        getChallenges();
 
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //Glide.clear(findViewById(R.id.imageViewLogo));
+        //Glide.clear(findViewById(R.id.imageWakeUpChall));
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -218,14 +234,14 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
     }
 
 
-    private class getChallenges extends AsyncTask<Void,Void,Void> {
-        @Override
-        protected Void doInBackground(Void... arg0) {
-            getChallenges();
-            return null;
-        }
-
-    }
+//    private class getChallenges extends AsyncTask<Void,Void,Void> {
+//        @Override
+//        protected Void doInBackground(Void... arg0) {
+//            getChallenges();
+//            return null;
+//        }
+//
+//    }
 
 
 }

@@ -35,10 +35,10 @@ public class CustomPagerBase {
     private RelativeLayout rootView;
     private LayoutInflater inflater;
 
-    private static CustomPagerBase customPagerBase;
+    private static CustomPagerBase instance;
 
     public static CustomPagerBase getInstance() {
-        return customPagerBase;
+        return instance;
     }
 
     public CustomPagerBase(Activity activity, RelativeLayout rootView, MainActivityCardPagerAdapter pagerAdapter) {
@@ -50,7 +50,7 @@ public class CustomPagerBase {
         if (inflater == null) {
             inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
-        customPagerBase = this;
+        instance = this;
     }
 
     /**

@@ -103,7 +103,7 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         drawerUserName.setText(name);
         drawerUserName.setTypeface(typeface);
 
-        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView, sessionManager);
         int count = checker.getPendingCount();
         if (count == 0) {
             checker.hideItem();

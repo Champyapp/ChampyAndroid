@@ -46,7 +46,6 @@ import static com.example.ivan.champy_v2.utils.Constants.path;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private long mLastClickTime = 0;
     private MainActivityCardsAdapter adapter;
     private SessionManager sessionManager;
     private RelativeLayout contentMain;
@@ -104,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         background.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         // call here System.gc(); ?
+        // call here Runtime.getRuntime().gc(); ?
 
         File profile = new File(path, "profile.jpg");
         File blurred = new File(path, "blured2.jpg");
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerUserName.setTypeface(typeface);
 
         /******************************** Display 'Pending duels' menu ****************************/
-        CHCheckPendingDuels checker = new CHCheckPendingDuels(this, navigationView);
+        CHCheckPendingDuels checker = new CHCheckPendingDuels(this, navigationView, sessionManager);
         int count = checker.getPendingCount();
         if (count == 0) {
             checker.hideItem();
@@ -248,6 +248,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     break;
 
             }
+        finish();
 //        }, 200);
         drawer.closeDrawer(GravityCompat.START);
         return true;

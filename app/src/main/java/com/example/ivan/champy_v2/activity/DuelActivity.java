@@ -141,7 +141,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         drawerUserName.setTypeface(typeface);
 
 
-        final CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView, sessionManager);
         int count = checker.getPendingCount();
         if (count == 0) {
             checker.hideItem();

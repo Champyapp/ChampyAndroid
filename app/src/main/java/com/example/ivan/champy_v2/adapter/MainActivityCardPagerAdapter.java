@@ -25,4 +25,5 @@ public abstract class MainActivityCardPagerAdapter {
     public abstract View getView(int position, View convertView);
 
     public abstract int dataCount();
+
 }

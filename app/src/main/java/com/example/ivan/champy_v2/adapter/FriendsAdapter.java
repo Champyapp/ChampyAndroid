@@ -236,7 +236,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                     call.enqueue(new Callback<com.example.ivan.champy_v2.model.friend.Friend>() {
                         @Override
                         public void onResponse(Response<com.example.ivan.champy_v2.model.friend.Friend> response, Retrofit retrofit) {
-                            String myLog = (response.isSuccess()) ? "Status: Removed" : "Status: " + response.toString();
+                            final String myLog = (response.isSuccess()) ? "Status: Removed" : "Status: " + response.toString();
                             Log.d(TAG, "onResponse: " + myLog);
                         }
 

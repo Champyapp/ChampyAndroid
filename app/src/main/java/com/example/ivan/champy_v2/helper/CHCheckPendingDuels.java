@@ -18,11 +18,13 @@ import com.example.ivan.champy_v2.utils.SessionManager;
 public class CHCheckPendingDuels {
 
     private Context context;
+    private SessionManager sessionManager;
     private View view;
 
-    public CHCheckPendingDuels(Context context, View view) {
+    public CHCheckPendingDuels(Context context, View view, SessionManager sessionManager) {
         this.context = context;
         this.view = view;
+        this.sessionManager = sessionManager;
     }
 
     public int getPendingCount() {
@@ -36,8 +38,7 @@ public class CHCheckPendingDuels {
             } while (c.moveToNext());
         }
         c.close();
-        SessionManager sessionManager = new SessionManager(context);
-        sessionManager.set_duel_pending("" + countOfPendingDuel);
+        sessionManager.set_duel_pending(String.valueOf(countOfPendingDuel));
         return countOfPendingDuel;
     }
 

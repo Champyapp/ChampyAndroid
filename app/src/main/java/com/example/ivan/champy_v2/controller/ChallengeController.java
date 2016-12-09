@@ -187,7 +187,7 @@ public class ChallengeController {
 
     public void createNewWakeUpChallenge(int days, String sHour, String sMinute) {
         duration = "" + (days * 86400);
-        String description = "Wake Up";
+        //String description = "Wake Up";
 
         final String wakeUpName = "Wake up at "+ sHour +":"+ sMinute;
         final String wakeUpTime = sHour + sMinute;

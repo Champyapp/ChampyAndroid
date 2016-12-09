@@ -279,6 +279,11 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
 
     }
 
+    @Override
+    public boolean onFailedToRecycleView(ViewHolder holder) {
+        Log.d(TAG, "onFailedToRecycleView: ");
+        return super.onFailedToRecycleView(holder);
+    }
 
     @Override
     public int getItemCount() {
