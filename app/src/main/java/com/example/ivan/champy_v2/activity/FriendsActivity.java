@@ -75,6 +75,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         background.setScaleType(ImageView.ScaleType.CENTER_CROP);
         drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
+        // call here System.gc(); ?
         File fileProfile = new File(path, "profile.jpg");
         Uri uriProfile = Uri.fromFile(fileProfile);
         File fileBlur = new File(path, "blured2.jpg");
@@ -128,7 +129,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
             checker.hideItem();
         } else {
             TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+            view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
         }
 
         ViewServer.get(this).addWindow(this);

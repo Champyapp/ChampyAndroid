@@ -103,6 +103,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ImageView background = (ImageView) findViewById(R.id.main_background);
         background.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
+        // call here System.gc(); ?
+
         File profile = new File(path, "profile.jpg");
         File blurred = new File(path, "blured2.jpg");
         if (blurred.exists()) {
@@ -132,8 +134,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (count == 0) {
             checker.hideItem();
         } else {
-            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+            TextView duelCount = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+            duelCount.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
         }
 
         /*********************************** Display fab buttons **********************************/
@@ -202,7 +204,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onDestroy() {
         super.onDestroy();
         ViewServer.get(this).removeWindow(this);
-        System.gc();
     }
 
     @Override

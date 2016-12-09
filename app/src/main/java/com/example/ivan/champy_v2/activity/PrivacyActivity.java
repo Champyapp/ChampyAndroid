@@ -88,6 +88,15 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
         drawerUserName.setText(name);
         drawerUserName.setTypeface(typeface);
 
+        final CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+        int count = checker.getPendingCount();
+        if (count == 0) {
+            checker.hideItem();
+        } else {
+            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+            view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
+        }
+
         ViewServer.get(this).addWindow(this);
     }
 
@@ -510,15 +519,6 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar2);
             progressBar.setVisibility(View.INVISIBLE);
             textView.setVisibility(View.VISIBLE);
-
-            final CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
-            int count = checker.getPendingCount();
-            if (count == 0) {
-                checker.hideItem();
-            } else {
-                TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-                view.setText("+" + (count > 0 ? String.valueOf(count) : null));
-            }
         }
     }
 

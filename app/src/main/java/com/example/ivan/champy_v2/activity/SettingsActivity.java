@@ -183,8 +183,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         if (count == 0) {
             checker.hideItem();
         } else {
-            TextView pendingCount = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-            pendingCount.setText("+" + (count > 0 ? String.valueOf(count) : null));
+            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+            view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
         }
 
         ViewServer.get(this).addWindow(this);

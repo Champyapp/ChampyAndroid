@@ -101,7 +101,7 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
             checker.hideItem();
         } else {
             TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-            view.setText("+" + (count > 0 ? String.valueOf(count) : null));
+            view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
         }
 
         ViewServer.get(this).addWindow(this);

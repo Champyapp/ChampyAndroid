@@ -132,6 +132,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -215,5 +216,6 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
                 break;
         }
     }
+
 
 }

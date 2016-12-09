@@ -86,6 +86,16 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         drawerUserName.setText(name);
         drawerUserName.setTypeface(typeface);
 
+
+        final CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
+        int count = checker.getPendingCount();
+        if (count == 0) {
+            checker.hideItem();
+        } else {
+            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+            view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
+        }
+
         spinner.setVisibility(View.INVISIBLE);
     }
 
@@ -160,23 +170,9 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
                     viewPager.setPageMargin(20);
                     viewPager.setClipToPadding(false);
                     viewPager.setPadding(90, 0, 90, 0);
-
-                    final CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
-                    int count = checker.getPendingCount();
-                    if (count == 0) {
-                        checker.hideItem();
-                    } else {
-                        TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-                        view.setText("+" + (count > 0 ? String.valueOf(count) : null));
-                    }
-
                 }
             });
             return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
         }
 
     }
