@@ -35,6 +35,7 @@ import com.example.ivan.champy_v2.utils.CustomPagerBase;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
 import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 
 import java.io.File;
 
@@ -179,46 +180,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        AppEventsLogger.deactivateApp(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ViewServer.get(this).setFocusedWindow(this);
+        AppEventsLogger.activateApp(this);
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         ViewServer.get(this).removeWindow(this);
     }
-
-//    @Override
-//    public void onClick(View v) {
-//        Log.d(TAG, "onClick: click on fabPlus");
-////        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) return;
-////        mLastClickTime = SystemClock.elapsedRealtime();
-////
-////        if (adapter.dataCount() >= 5) {
-////            Toast.makeText(this, "You have too much challenges", Toast.LENGTH_SHORT).show();
-////            return;
-////        }
-//        animateFAB();
-//
-////        actionMenu.toggle(true);
-////        if (actionMenu.isOpen()) {
-////            /************************************** Blur *****************************************/
-////
-////            // idea: set "blurred2.jpg" upper all view except button 'fab';
-//////            contentMain.buildDrawingCache();
-//////            Bitmap bm = contentMain.getDrawingCache();
-//////            Bitmap blurred = Blur.blurRenderScript(getApplicationContext(), bm, 25);
-//////            Drawable ob = new BitmapDrawable(getResources(), blurred);
-//////            blurScreen.setImageDrawable(ob);
-//////            blurScreen.setVisibility(View.VISIBLE);
-//////            contentMain.destroyDrawingCache();
-////
-////            /*********************************** Sub buttons **************************************/
-////            buttonSelfImprovement.setOnClickListener(v0 -> startActivity(new Intent(this, SelfImprovementActivity.class)));
-////            buttonDuelChallenge  .setOnClickListener(v1 -> startActivity(new Intent(this, FriendsActivity.class)));
-////            buttonWakeUpChallenge.setOnClickListener(v2 -> startActivity(new Intent(this, WakeUpActivity.class)));
-////        } else {
-////            blurScreen.setVisibility(View.INVISIBLE);
-////        }
-//
-//    }
-
 
     @Override
     protected void onDestroy() {
@@ -231,12 +209,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (isFabOpen) {
+            closeFab();
         }
-        if (isFabOpen) closeFab();
-//        actionMenu.close(true);
-        //cards.setVisibility(View.VISIBLE);
-//        blurScreen.setVisibility(View.INVISIBLE);
-
     }
 
     @Override
@@ -270,6 +245,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     OfflineMode offlineMode = OfflineMode.getInstance();
                     if (offlineMode.isConnectedToRemoteAPI(MainActivity.this)) { sessionManager.logout(MainActivity.this); }
                     break;
+
             }
 //        }, 200);
         drawer.closeDrawer(GravityCompat.START);
@@ -296,6 +272,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+
     private void animateFAB() {
         if(isFabOpen) {
             closeFab();
@@ -303,6 +280,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             openFab();
         }
     }
+
     private void closeFab() {
         fabPlus.startAnimation(rotate_backward);
         fabWakeUp.startAnimation(fab_close);
@@ -310,6 +288,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fabDuel.startAnimation(fab_close);
         isFabOpen = false;
     }
+
     private void openFab() {
         fabPlus.startAnimation(rotate_forward);
         fabWakeUp.startAnimation(fab_open);

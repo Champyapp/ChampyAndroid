@@ -58,6 +58,8 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         sessionManager = new SessionManager(getApplicationContext());
 
+        spinner = findViewById(R.id.loadingPanel);
+        spinner.setVisibility(View.VISIBLE);
 //        new getChallenges().execute();
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -215,20 +217,20 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
     }
 
 
-    private class getChallenges extends AsyncTask<Void,Void,Void> {
-        @Override
-        protected void onPreExecute() {
-            spinner = findViewById(R.id.loadingPanel);
-            spinner.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected Void doInBackground(Void... arg0) {
-            getChallenges();
-            return null;
-        }
-
-    }
+//    private class getChallenges extends AsyncTask<Void,Void,Void> {
+//        @Override
+//        protected void onPreExecute() {
+////            spinner = findViewById(R.id.loadingPanel);
+////            spinner.setVisibility(View.VISIBLE);
+//        }
+//
+//        @Override
+//        protected Void doInBackground(Void... arg0) {
+////            getChallenges();
+//            return null;
+//        }
+//
+//    }
 
 
 }

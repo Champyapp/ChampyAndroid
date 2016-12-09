@@ -29,6 +29,7 @@ import com.example.ivan.champy_v2.R;
 import com.example.ivan.champy_v2.helper.CHCheckPendingDuels;
 import com.example.ivan.champy_v2.utils.OfflineMode;
 import com.example.ivan.champy_v2.utils.SessionManager;
+import com.facebook.appevents.AppEventsLogger;
 
 import java.io.File;
 
@@ -107,15 +108,30 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
     }
 
     @Override
-    public void onClick(View v) {
-        submitForm();
-    }
-
-    @Override
     protected void onStop() {
         super.onStop();
         ViewServer.get(this).removeWindow(this);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ViewServer.get(this).setFocusedWindow(this);
+        AppEventsLogger.activateApp(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        AppEventsLogger.deactivateApp(this);
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        submitForm();
+    }
+
 
     @Override
     public void onBackPressed() {
