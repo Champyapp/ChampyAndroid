@@ -8,10 +8,10 @@
     {
       "client_info": {
         "mobilesdk_app_id": "1:521501347799:android:324dc8baf2728d4b",
-        "client_id": "android:com.example.ivan.champy_v2",
+        "client_id": "android:com.azinecllc.champy",
         "client_type": 1,
         "android_client_info": {
-          "package_name": "com.example.ivan.champy_v2",
+          "package_name": "com.azinecllc.champy",
           "certificate_hash": []
         }
       },
