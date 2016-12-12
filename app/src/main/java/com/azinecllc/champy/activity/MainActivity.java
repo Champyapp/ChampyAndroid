@@ -103,33 +103,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         /********************************* Get photo and make bg **********************************/
         ImageView background = (ImageView) findViewById(R.id.main_background);
         background.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         // call here System.gc(); ?
         // call here Runtime.getRuntime().gc(); ?
 
-        String pathToPic = sessionManager.getPathToPic();
-        Log.d(TAG, "onCreate: sessionManager.getPathToPic: " + pathToPic);
-        if (pathToPic == null) {
-            pathToPic = getIntent().getExtras().getString("path_to_pic");
-            Log.d(TAG, "onCreate: getIntent().getExtras().getString('path_to_pick'): " + pathToPic);
-        }
-
-        Log.d(TAG, "onCreate: final path to pick: " + pathToPic);
-
-
         File blurred = new File(path, "blured2.jpg");
         if (blurred.exists()) {
-            Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(background);
-
+            Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(background);
+            Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);
             File profile = new File(path, "profile.jpg");
-            Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);
-            Glide.with(this).load(profile).bitmapTransform(new CropCircleTransformation(this))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
-            drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            Glide.with(this).load(profile).bitmapTransform(new CropCircleTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
         }
         else {
+            final String pathToPic = sessionManager.getPathToPic();
             CHDownloadImageTask chDownloadImageTask = new CHDownloadImageTask(getApplicationContext(), MainActivity.this);
             chDownloadImageTask.execute(pathToPic);
         }
@@ -238,7 +225,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     break;
 
             }
-        finish();
 //        }, 200);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -247,8 +233,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_settings) {
-            // TODO: create method generate without intents and call this method and after this call 'pager.prepare(0)'
-            // TODO: remove from this initialization with word "new" !
             final String token = sessionManager.getToken();
             final String userId = sessionManager.getUserId();
             ChallengeController cc = new ChallengeController(getApplicationContext(), this, token, userId);

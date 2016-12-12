@@ -10,7 +10,10 @@ import android.util.Log;
 import com.azinecllc.champy.activity.RoleControllerActivity;
 import com.facebook.login.LoginManager;
 
+import java.io.File;
 import java.util.HashMap;
+
+import static com.azinecllc.champy.utils.Constants.path;
 
 public class SessionManager {
 
@@ -120,6 +123,11 @@ public class SessionManager {
 //        DailyRemindController dailyRemind = new DailyRemindController(activity);
 //        dailyRemind.disableDailyNotificationReminder();
         // go to login activity
+
+        File blurred = new File(path, "blured2.jpg");
+        blurred.delete();
+        File profile = new File(path, "profile.jpg");
+        profile.delete();
         Intent intent = new Intent(activity, RoleControllerActivity.class);
         activity.startActivity(intent);
     }

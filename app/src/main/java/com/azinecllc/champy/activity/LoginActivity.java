@@ -59,6 +59,7 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 import static com.azinecllc.champy.utils.Constants.API_URL;
+import static com.azinecllc.champy.utils.Constants.path;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -262,8 +263,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     String challegeEnd = user.getProfileOptions().getChallengeEnd().toString();
 
                     SessionManager sessionManager = new SessionManager(getApplicationContext());
-                    sessionManager.setRefreshPending("false");
-                    sessionManager.setRefreshFriends("false");
+                    sessionManager.setRefreshPending("true");
+                    sessionManager.setRefreshFriends("true");
                     sessionManager.createUserLoginSession(
                             user_name, email, fb_id, path_to_pic,
                             jwtString, id, pushN, newChallReq, acceptedYour,
@@ -282,34 +283,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     dailyRemind.enableDailyNotificationReminder();
 
 
-                    String api_path = null;
-                    // if user has photo on facebook
+                    String api_photo_path = null;
                     if (user.getPhoto() != null) {
-                        // we make a path for 'file'
-                        String sdCardPath = "/data/data/com.azinecllc.champy/app_imageDir/";
-                        // also we make a new 'file'
-                        File profilePhoto = new File(sdCardPath, "profile.jpg");
-                        // if user's photo file is not exist (it's mean in ChampyApp and it's must be true)
-                        if (!profilePhoto.exists()) {
-                            // so, we make path for user's photo
+                        File profile = new File(path, "profile.jpg");
+                        if (!profile.exists()) {
                             com.azinecllc.champy.model.user.Photo photo = user.getPhoto();
-                            api_path = API_URL + photo.getLarge();
+                            api_photo_path = API_URL + photo.getLarge();
                         }
                     }
 
-                    Intent data = new Intent(LoginActivity.this, MainActivity.class);
-                    // if we could not do the above written code and api = null
-                    if (api_path == null) {
-                        // then we trying to take user's photo from facebook and push her to api
-                        data.putExtra("path_to_pic", path_to_pic);
+                    if (api_photo_path == null) {
                         sessionManager.change_avatar(path_to_pic);
                     } else {
-                        // else we get existence photo from file
-                        data.putExtra("path_to_pic", api_path);
-                        sessionManager.change_avatar(api_path);
+                        sessionManager.change_avatar(api_photo_path);
                     }
-
-                    //goToRoleControllerActivity.putExtra("name", user_name);
                     Intent goToRoleActivity = new Intent(LoginActivity.this, RoleControllerActivity.class);
                     startActivity(goToRoleActivity);
                 }
