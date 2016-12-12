@@ -86,6 +86,7 @@ public class AppSync {
                             data.getLevel().getNumber().toString()
                     );
 
+                    Log.d(TAG, "onResponse: path_to_pic: " + path_to_pic);
                     Log.d(TAG, "onResponse: challengesForToday: " + challengesForToday);
                     UpdatePushIdentifier pushIdentifier = new UpdatePushIdentifier();
                     pushIdentifier.updatePushIdentifier(sessionManager);
@@ -143,12 +144,8 @@ public class AppSync {
         jsonObject.put("facebookId", fb_id);
         jsonObject.put("AndroidOS", gcm);
         String string = jsonObject.toString();
-        return Jwts.builder()
-                .setHeaderParam("alg", "HS256")
-                .setHeaderParam("typ", "JWT")
-                .setPayload(string)
-                .signWith(SignatureAlgorithm.HS256, "secret")
-                .compact();
+        return Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT")
+                .setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
     }
 
 

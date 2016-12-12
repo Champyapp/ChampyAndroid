@@ -339,8 +339,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                                         @Override
                                         public void onResponse(Response<Delete> response, Retrofit retrofit) {
                                             if (response.isSuccess()) {
-                                                File file = new File(path, "blured2.jpg");
-                                                file.delete();
+                                                File blur = new File(path, "blured2.jpg");
+                                                blur.delete();
+                                                File profile = new File(path, "profile.jpg");
+                                                profile.delete();
 
                                                 SQLiteDatabase db = dbHelper.getWritableDatabase();
                                                 int clearCount = db.delete("pending", null, null);

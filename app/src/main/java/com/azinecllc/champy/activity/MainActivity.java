@@ -2,6 +2,7 @@ package com.azinecllc.champy.activity;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -118,10 +119,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         File blurred = new File(path, "blured2.jpg");
         if (blurred.exists()) {
+            Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(background);
+
             File profile = new File(path, "profile.jpg");
-            Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(background);
-            Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);
-            Glide.with(this).load(profile).bitmapTransform(new CropCircleTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
+            Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);
+            Glide.with(this).load(profile).bitmapTransform(new CropCircleTransformation(this))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
             drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
         }
         else {
@@ -129,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             chDownloadImageTask.execute(pathToPic);
         }
 
-        String name = sessionManager.getUserName();
+        final String name = sessionManager.getUserName();
         drawerUserName.setText(name);
         Typeface typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
         drawerUserName.setTypeface(typeface);
@@ -244,8 +249,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (item.getItemId() == R.id.action_settings) {
             // TODO: create method generate without intents and call this method and after this call 'pager.prepare(0)'
             // TODO: remove from this initialization with word "new" !
-            String token = sessionManager.getToken();
-            String userId = sessionManager.getUserId();
+            final String token = sessionManager.getToken();
+            final String userId = sessionManager.getUserId();
             ChallengeController cc = new ChallengeController(getApplicationContext(), this, token, userId);
             cc.refreshCardsForPendingDuel();
         }

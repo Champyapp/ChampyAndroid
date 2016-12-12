@@ -1,4 +1,4 @@
-//package com.example.ivan.helper;
+//package com.azinecllc.champy.helper;
 //
 //import android.content.res.Resources;
 //import android.graphics.Bitmap;

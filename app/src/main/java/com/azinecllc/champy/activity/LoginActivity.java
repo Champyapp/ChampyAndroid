@@ -297,7 +297,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         }
                     }
 
-                    Intent data = new Intent(LoginActivity.this, RoleControllerActivity.class);
+                    Intent data = new Intent(LoginActivity.this, MainActivity.class);
                     // if we could not do the above written code and api = null
                     if (api_path == null) {
                         // then we trying to take user's photo from facebook and push her to api
