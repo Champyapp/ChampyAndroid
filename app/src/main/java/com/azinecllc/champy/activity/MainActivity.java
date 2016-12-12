@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Boolean isFabOpen = false;
     private FloatingActionButton fabPlus, fabWakeUp, fabSelf, fabDuel;
     private Animation fab_open,fab_close,rotate_forward,rotate_backward;
+
+    public static final String TAG = "FuckingPhoto";
 
 
     @Override
@@ -103,22 +106,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // call here System.gc(); ?
         // call here Runtime.getRuntime().gc(); ?
 
-        File profile = new File(path, "profile.jpg");
+        String pathToPic = sessionManager.getPathToPic();
+        Log.d(TAG, "onCreate: sessionManager.getPathToPic: " + pathToPic);
+        if (pathToPic == null) {
+            pathToPic = getIntent().getExtras().getString("path_to_pic");
+            Log.d(TAG, "onCreate: getIntent().getExtras().getString('path_to_pick'): " + pathToPic);
+        }
+
+        Log.d(TAG, "onCreate: final path to pick: " + pathToPic);
+
+
         File blurred = new File(path, "blured2.jpg");
         if (blurred.exists()) {
-            Glide.with(this)
-                    .load(blurred)
-                    .bitmapTransform(new CropSquareTransformation(this))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(background);
+            File profile = new File(path, "profile.jpg");
+            Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(background);
             Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);
             Glide.with(this).load(profile).bitmapTransform(new CropCircleTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
             drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
         }
         else {
-            String pathToPic = sessionManager.getPathToPic();
-            if (pathToPic == null) pathToPic = getIntent().getExtras().getString("path_to_pic");
             CHDownloadImageTask chDownloadImageTask = new CHDownloadImageTask(getApplicationContext(), MainActivity.this);
             chDownloadImageTask.execute(pathToPic);
         }

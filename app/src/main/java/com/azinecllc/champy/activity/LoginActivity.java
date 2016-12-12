@@ -129,7 +129,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 AppSync sync = new AppSync(fb_id, json, path_to_pic, LoginActivity.this, token_android);
                                 sync.getUserProfile();
 
-
                                 registerUser(fb_id, name, user_email, json, token_android);
                             } catch (Exception e) {
                                 Log.e(TAG, "error: ", e);
@@ -242,7 +241,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         jsonObject.put("facebookId", fb_id);
         jsonObject.put("AndroidOS", gcm);
         String string = jsonObject.toString();
-        final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT").setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
+        final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT")
+                .setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
 
         NewUser newUser = retrofit.create(NewUser.class);
         Call<User> call = newUser.register(new LoginData(facebookId, name, email));
@@ -297,20 +297,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         }
                     }
 
-                    Intent goToRoleControllerActivity = new Intent(LoginActivity.this, RoleControllerActivity.class);
+                    Intent data = new Intent(LoginActivity.this, RoleControllerActivity.class);
                     // if we could not do the above written code and api = null
                     if (api_path == null) {
                         // then we trying to take user's photo from facebook and push her to api
-                        goToRoleControllerActivity.putExtra("path_to_pic", path_to_pic);
+                        data.putExtra("path_to_pic", path_to_pic);
                         sessionManager.change_avatar(path_to_pic);
                     } else {
                         // else we get existence photo from file
-                        goToRoleControllerActivity.putExtra("path_to_pic", api_path);
+                        data.putExtra("path_to_pic", api_path);
                         sessionManager.change_avatar(api_path);
                     }
 
-                    goToRoleControllerActivity.putExtra("name", user_name);
-                    startActivity(goToRoleControllerActivity);
+                    //goToRoleControllerActivity.putExtra("name", user_name);
+                    Intent goToRoleActivity = new Intent(LoginActivity.this, RoleControllerActivity.class);
+                    startActivity(goToRoleActivity);
                 }
             }
 

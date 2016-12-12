@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.azinecllc.champy.activity.MainActivity;
 import com.azinecllc.champy.activity.RoleControllerActivity;
 import com.azinecllc.champy.controller.DailyRemindController;
 import com.azinecllc.champy.interfaces.NewUser;
@@ -110,14 +111,15 @@ public class AppSync {
                         }
                     }
 
-                    Intent goToRoleActivity = new Intent(context, RoleControllerActivity.class);
+                    Intent extras = new Intent(context, MainActivity.class);
                     if (api_path == null) {
-                        goToRoleActivity.putExtra("path_to_pic", path_to_pic);
+                        extras.putExtra("path_to_pic", path_to_pic);
                         sessionManager.change_avatar(path_to_pic);
                     } else {
-                        goToRoleActivity.putExtra("path_to_pic", api_path);
+                        extras.putExtra("path_to_pic", api_path);
                         sessionManager.change_avatar(api_path);
                     }
+                    Intent goToRoleActivity = new Intent(context, RoleControllerActivity.class);
                     context.startActivity(goToRoleActivity);
 
 
