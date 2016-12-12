@@ -1,17 +1,16 @@
-import com.example.ivan.champy_v2.interfaces.ActiveInProgress;
-import com.example.ivan.champy_v2.interfaces.Friends;
-import com.example.ivan.champy_v2.interfaces.NewUser;
-import com.example.ivan.champy_v2.interfaces.SelfImprovement;
-import com.example.ivan.champy_v2.interfaces.SingleInProgress;
-import com.example.ivan.champy_v2.model.create_challenge.CreateChallenge;
-import com.example.ivan.champy_v2.model.duel.Duel;
-import com.example.ivan.champy_v2.model.friend.Friend;
-import com.example.ivan.champy_v2.model.user.User;
+import com.azinecllc.champy.interfaces.ActiveInProgress;
+import com.azinecllc.champy.interfaces.Friends;
+import com.azinecllc.champy.interfaces.NewUser;
+import com.azinecllc.champy.interfaces.SelfImprovement;
+import com.azinecllc.champy.interfaces.SingleInProgress;
+import com.azinecllc.champy.model.create_challenge.CreateChallenge;
+import com.azinecllc.champy.model.duel.Duel;
+import com.azinecllc.champy.model.friend.Friend;
+import com.azinecllc.champy.model.user.User;
 
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -114,10 +113,10 @@ public class API_test {
     @Test
     public void testGetChallenges() {
         SelfImprovement selfImprovement = retrofit.create(SelfImprovement.class);
-        Call<com.example.ivan.champy_v2.model.self.SelfImprovement> call = selfImprovement.getChallenges(token);
-        call.enqueue(new Callback<com.example.ivan.champy_v2.model.self.SelfImprovement>() {
+        Call<com.azinecllc.champy.model.self.SelfImprovement> call = selfImprovement.getChallenges(token);
+        call.enqueue(new Callback<com.azinecllc.champy.model.self.SelfImprovement>() {
             @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.self.SelfImprovement> response, Retrofit retrofit) {
+            public void onResponse(Response<com.azinecllc.champy.model.self.SelfImprovement> response, Retrofit retrofit) {
                 if (response.isSuccess()) assertEquals("OK", true, true);
                 else assertEquals("Wrong", true, false);
             }
@@ -132,12 +131,12 @@ public class API_test {
     @Test
     public void testGetInProgress() {
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
-        Call<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> call =
+        Call<com.azinecllc.champy.model.active_in_progress.ActiveInProgress> call =
                 activeInProgress.getActiveInProgress(id, "0", token);
 
-        call.enqueue(new Callback<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress>() {
+        call.enqueue(new Callback<com.azinecllc.champy.model.active_in_progress.ActiveInProgress>() {
             @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
+            public void onResponse(Response<com.azinecllc.champy.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) assertEquals("OK", true, true);
                 else assertEquals("Wrong", true, false);
             }
@@ -153,7 +152,7 @@ public class API_test {
 
     @Test
     public void testCreateNewSelfImprovementChallenge() {
-        com.example.ivan.champy_v2.interfaces.CreateChallenge createChallenge = retrofit.create(com.example.ivan.champy_v2.interfaces.CreateChallenge.class);
+        com.azinecllc.champy.interfaces.CreateChallenge createChallenge = retrofit.create(com.azinecllc.champy.interfaces.CreateChallenge.class);
         Call<CreateChallenge> call = createChallenge.createChallenge(name, typeSelf, description, details, duration, token);
         call.enqueue(new Callback<CreateChallenge>() {
             @Override
@@ -174,7 +173,7 @@ public class API_test {
 
     @Test
     public void testCreateNewDuelChallenge() {
-        com.example.ivan.champy_v2.interfaces.CreateChallenge createChallenge = retrofit.create(com.example.ivan.champy_v2.interfaces.CreateChallenge.class);
+        com.azinecllc.champy.interfaces.CreateChallenge createChallenge = retrofit.create(com.azinecllc.champy.interfaces.CreateChallenge.class);
         Call<CreateChallenge> call = createChallenge.createChallenge(name, typeDuel, description, details, duration, token);
         call.enqueue(new Callback<CreateChallenge>() {
             @Override
@@ -195,10 +194,10 @@ public class API_test {
 
     @Test
     public void testCreateNewWakeUpChallenge() {
-        com.example.ivan.champy_v2.interfaces.CreateChallenge createChallenge =
-                retrofit.create(com.example.ivan.champy_v2.interfaces.CreateChallenge.class);
+        com.azinecllc.champy.interfaces.CreateChallenge createChallenge =
+                retrofit.create(com.azinecllc.champy.interfaces.CreateChallenge.class);
 
-        Call<com.example.ivan.champy_v2.model.create_challenge.CreateChallenge> call =
+        Call<com.azinecllc.champy.model.create_challenge.CreateChallenge> call =
                 createChallenge.createChallenge(name, typeWake, description, details, duration, token);
 
         call.enqueue(new Callback<CreateChallenge>() {
@@ -224,11 +223,11 @@ public class API_test {
     @Test
     public void testSendSingleInProgressForDuel() {
         SingleInProgress singleInProgress = retrofit.create(SingleInProgress.class);
-        Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> call = singleInProgress.startSingleInProgress(inProgressID, token);
+        Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = singleInProgress.startSingleInProgress(inProgressID, token);
 
-        call.enqueue(new Callback<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress>() {
+        call.enqueue(new Callback<com.azinecllc.champy.model.single_in_progress.SingleInProgress>() {
             @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
+            public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     assertEquals("OK", true, true);
                 } else {
@@ -265,32 +264,15 @@ public class API_test {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     @Test
     public void testSendSingleInProgressForWakeUp() {
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
-        Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> call
+        Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call
                 = singleinprogress.startSingleInProgress(inProgressID, token);
 
-        call.enqueue(new Callback<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress>() {
+        call.enqueue(new Callback<com.azinecllc.champy.model.single_in_progress.SingleInProgress>() {
             @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
+            public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     assertEquals("OK", true, true);
                 } else {
@@ -310,10 +292,10 @@ public class API_test {
     @Test
     public void testJoinToChallenge() {
         SingleInProgress singleInProgress = retrofit.create(SingleInProgress.class);
-        Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> call = singleInProgress.join(inProgressID, token);
-        call.enqueue(new Callback<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress>() {
+        Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = singleInProgress.join(inProgressID, token);
+        call.enqueue(new Callback<com.azinecllc.champy.model.single_in_progress.SingleInProgress>() {
             @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
+            public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     assertEquals("OK", true, true);
                 } else {
@@ -331,10 +313,10 @@ public class API_test {
     @Test
     public void testRejectInviteForPendingDuel() throws IOException {
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
-        Call<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> call = activeInProgress.reject(inProgressID, token);
-        call.enqueue(new Callback<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress>() {
+        Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = activeInProgress.reject(inProgressID, token);
+        call.enqueue(new Callback<com.azinecllc.champy.model.single_in_progress.SingleInProgress>() {
             @Override
-            public void onResponse(Response<com.example.ivan.champy_v2.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
+            public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     assertEquals("OK", true, true);
                 } else {

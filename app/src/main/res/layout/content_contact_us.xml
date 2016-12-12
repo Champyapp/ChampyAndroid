@@ -7,7 +7,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/app_bar_contact_us"
     android:background="@drawable/champy_background"
-    tools:context="com.example.ivan.champy_v2.activity.ContactUsActivity">
+    tools:context="com.azinecllc.champy.activity.ContactUsActivity">
 
 
     <LinearLayout

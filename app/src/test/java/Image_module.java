@@ -4,9 +4,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 
-import com.example.ivan.champy_v2.BuildConfig;
-import com.example.ivan.champy_v2.activity.FriendsActivity;
-import com.example.ivan.champy_v2.helper.CHImageModule;
+import com.azinecllc.champy.champy_v2.BuildConfig;
+import com.azinecllc.champy.activity.FriendsActivity;
+import com.azinecllc.champy.helper.CHImageModule;
 
 import org.junit.Before;
 import org.junit.Test;
