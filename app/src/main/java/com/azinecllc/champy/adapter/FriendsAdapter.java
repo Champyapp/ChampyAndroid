@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.azinecllc.champy.champy_v2.R;
+import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.DuelActivity;
 import com.azinecllc.champy.interfaces.CustomItemClickListener;
 import com.azinecllc.champy.model.FriendModel;

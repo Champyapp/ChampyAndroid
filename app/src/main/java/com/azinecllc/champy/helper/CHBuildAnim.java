@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.azinecllc.champy.champy_v2.R;
+import com.azinecllc.champy.R;
 import com.azinecllc.champy.utils.SessionManager;
 
 /**

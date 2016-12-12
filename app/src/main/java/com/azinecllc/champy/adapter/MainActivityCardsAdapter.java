@@ -16,7 +16,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.azinecllc.champy.champy_v2.R;
+import com.azinecllc.champy.R;
 import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.model.SelfImprovement_model;

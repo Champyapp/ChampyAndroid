@@ -16,7 +16,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
-import com.azinecllc.champy.champy_v2.R;
+import com.azinecllc.champy.R;
 
 import java.io.File;
 import java.io.FileInputStream;

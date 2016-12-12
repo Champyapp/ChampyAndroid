@@ -20,7 +20,7 @@ import android.widget.TimePicker;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.azinecllc.champy.champy_v2.R;
+import com.azinecllc.champy.R;
 import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.helper.CHCheckPendingDuels;
 import com.azinecllc.champy.utils.OfflineMode;

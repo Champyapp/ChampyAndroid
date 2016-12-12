@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import com.azinecllc.champy.champy_v2.R;
+import com.azinecllc.champy.R;
 
 import static java.lang.Math.round;
 

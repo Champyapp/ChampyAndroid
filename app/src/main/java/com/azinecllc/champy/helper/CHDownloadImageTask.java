@@ -16,7 +16,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.azinecllc.champy.champy_v2.R;
+import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.MainActivity;
 import com.azinecllc.champy.utils.Blur;
 
@@ -101,7 +101,7 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
     protected void onPostExecute(Bitmap result) {
         // Do your staff here to save image
         saveToInternalStorage(result);
-        loadImageFromStorage("/data/data/com.example.ivan.champy_v2/app_imageDir/");
+        loadImageFromStorage("/data/data/com.azinecllc.champy/app_imageDir/");
     }
 
 

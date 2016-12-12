@@ -21,7 +21,7 @@ import android.widget.TextView;
 import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.azinecllc.champy.champy_v2.R;
+import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.HistoryPagerAdapter;
 import com.azinecllc.champy.helper.CHCheckPendingDuels;
 import com.azinecllc.champy.utils.OfflineMode;

@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.azinecllc.champy.champy_v2.R;
+import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.HistoryChallengeAdapter;
 import com.azinecllc.champy.model.HistoryChallenge;
 import com.azinecllc.champy.model.SelfImprovement_model;

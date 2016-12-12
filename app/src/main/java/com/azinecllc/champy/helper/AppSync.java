@@ -101,7 +101,7 @@ public class AppSync {
 
                     String api_path = null;
                     if (data.getPhoto() != null){
-                        String path = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+                        String path = "/data/data/com.azinecllc.champy/app_imageDir/";
                         File file = new File(path, "profile.jpg");
                         if (!file.exists()){
                             com.azinecllc.champy.model.user.Photo photo = data.getPhoto();

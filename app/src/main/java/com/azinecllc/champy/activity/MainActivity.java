@@ -22,7 +22,7 @@ import android.widget.TextView;
 import com.android.debug.hv.ViewServer;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.azinecllc.champy.champy_v2.R;
+import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.MainActivityCardsAdapter;
 import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.helper.CHBuildAnim;
@@ -106,13 +106,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         File profile = new File(path, "profile.jpg");
         File blurred = new File(path, "blured2.jpg");
         if (blurred.exists()) {
-            Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(background);
+            Glide.with(this)
+                    .load(blurred)
+                    .bitmapTransform(new CropSquareTransformation(this))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .into(background);
+            Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);
+            Glide.with(this).load(profile).bitmapTransform(new CropCircleTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
             drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);
-            Glide.with(this).load(profile).bitmapTransform(new CropCircleTransformation(this))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
         }
         else {
             String pathToPic = sessionManager.getPathToPic();
@@ -137,27 +139,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         /*********************************** Display fab buttons **********************************/
-//        final SubActionButton.Builder itemBuilder = new SubActionButton.Builder(MainActivity.this);
-//        buttonWakeUpChallenge = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.wakeupcolor)).build();
-//        buttonDuelChallenge   = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.duel_yellow)).build();
-//        buttonSelfImprovement = itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.self_yellow)).build();
-
-//        ImageView fabPlus = (ImageButton) findViewById(R.id.fabPlus);
-//        actionMenu = new FloatingActionMenu.Builder(this) //.setStartAngle(-89).setEndAngle(-90).setRadius(220)
-//                .addSubActionView(buttonWakeUpChallenge)
-//                .addSubActionView(buttonDuelChallenge)
-//                .addSubActionView(buttonSelfImprovement)
-//                .attachTo(fabPlus).build();
-
-//        int x = round(width / 100);
-//        buttonWakeUpChallenge.getLayoutParams().height = x * 20;
-//        buttonWakeUpChallenge.getLayoutParams().width  = x * 20;
-//        buttonDuelChallenge  .getLayoutParams().height = x * 20;
-//        buttonDuelChallenge  .getLayoutParams().width  = x * 20;
-//        buttonSelfImprovement.getLayoutParams().height = x * 20;
-//        buttonSelfImprovement.getLayoutParams().width  = x * 20;
-
-
         CHBuildAnim chBuildAnim = CHBuildAnim.getInstance();
         chBuildAnim.buildAnim(this, sessionManager, typeface);
 

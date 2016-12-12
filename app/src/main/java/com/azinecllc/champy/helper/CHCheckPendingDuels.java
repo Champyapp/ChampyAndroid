@@ -7,7 +7,7 @@ import android.support.design.widget.NavigationView;
 import android.view.Menu;
 import android.view.View;
 
-import com.azinecllc.champy.champy_v2.R;
+import com.azinecllc.champy.R;
 import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.utils.SessionManager;
 

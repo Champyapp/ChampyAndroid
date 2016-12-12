@@ -13,7 +13,7 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.azinecllc.champy.champy_v2.R;
+import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.FriendsActivity;
 import com.azinecllc.champy.activity.HistoryActivity;
 import com.azinecllc.champy.activity.PendingDuelActivity;

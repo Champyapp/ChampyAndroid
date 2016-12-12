@@ -16,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.debug.hv.ViewServer;
-import com.azinecllc.champy.champy_v2.R;
+import com.azinecllc.champy.R;
 import com.azinecllc.champy.controller.DailyRemindController;
 import com.azinecllc.champy.helper.AppSync;
 import com.azinecllc.champy.helper.UpdatePushIdentifier;
@@ -286,8 +286,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     // if user has photo on facebook
                     if (user.getPhoto() != null) {
                         // we make a path for 'file'
-                        @SuppressLint("SdCardPath")
-                        String sdCardPath = "/data/data/com.example.ivan.champy_v2/app_imageDir/";
+                        String sdCardPath = "/data/data/com.azinecllc.champy/app_imageDir/";
                         // also we make a new 'file'
                         File profilePhoto = new File(sdCardPath, "profile.jpg");
                         // if user's photo file is not exist (it's mean in ChampyApp and it's must be true)

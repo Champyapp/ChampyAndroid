@@ -11,7 +11,7 @@ import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
 import com.azinecllc.champy.activity.MainActivity;
-import com.azinecllc.champy.champy_v2.R;
+import com.azinecllc.champy.R;
 import com.azinecllc.champy.utils.SessionManager;
 import com.facebook.FacebookSdk;
 
