@@ -174,12 +174,8 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                     @Override
                     public void onClick(View view) {
                         try {
-                            if (currentCard.getType().equals("Wake Up")) {
-                                int i = Integer.parseInt(currentCard.getGoal());
-                                cc.give_up(itemInProgressId, i);
-                            } else {
-                                cc.give_up(itemInProgressId, 0);
-                            }
+                            int i = (itemType.equals("Wake Up")) ? Integer.parseInt(currentCard.getGoal()) : 0;
+                            cc.give_up(itemInProgressId, i);
                         } catch (IOException | NumberFormatException e) {
                             e.printStackTrace();
                         }
@@ -247,6 +243,22 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         String b = a.replace("]","");
         return b.split(", ");
     }
+
+//    try {
+//        Log.d(TAG, "getView: " + currentCard.getRecipient());
+//        Log.d(TAG, "getView: " + currentCard.getChallengeName());
+//        Log.d(TAG, "getView: " + currentCard.getGoal());
+//        Log.d(TAG, "getView: " + currentCard.getId());
+//        Log.d(TAG, "getView: " + currentCard.getName());
+//        Log.d(TAG, "getView: " + currentCard.getWakeUpTime());
+//        Log.d(TAG, "getView: " + currentCard.getType());
+//        Log.d(TAG, "getView: " + currentCard.getConstDuration());
+//        Log.d(TAG, "getView: " + currentCard.getDays());
+//        Log.d(TAG, "getView: " + currentCard.getProgress());
+//        Log.d(TAG, "getView: " + currentCard.getStatus());
+//        Log.d(TAG, "getView: " + currentCard.getVersus());
+//    } catch (Exception e) { e.printStackTrace(); }
+
 
 }
 

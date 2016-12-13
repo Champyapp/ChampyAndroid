@@ -353,6 +353,8 @@ public class ChallengeController {
 //                    cv.put("updated", "true");
 //                    db.update("updated",      cv, "challenge_id = ?", new String[]{inProgressId});
 //                    db.update("myChallenges", cv, "challenge_id = ?", new String[]{inProgressId});
+
+                    
                     generateCardsForMainActivity();
 
                     Log.d(TAG, "doneForToday onResponse: VSE OK");
@@ -515,12 +517,14 @@ public class ChallengeController {
                                 JSONObject json = new JSONObject(progress.get(j).toString());
                                 long at = json.getLong("at");
                                 stringSenderProgress[j] = String.valueOf(at);
+
+                                // TODO: 12/13/16 Relocate last check-in time for auto surrender here.
                             } catch (JSONException e) { e.printStackTrace(); }
                         }
 
                         cv.put("name", challType); // Self-Improvement / Duel / Wake Up
                         cv.put("versus", versus); // if this is duel than versus = recipient / sender name
-                        cv.put("wakeUpTime", challenge_detail); // our specific field for delete wakeUp (example: 1448);
+                        cv.put("wakeUpTime", challenge_detail); // our specific fimeld for delete wakeUp (example: 1448);
                         cv.put("challengeName", challenge_name); // default 'challenge'. this column only for wake up time
                         cv.put("description", challenge_description); // smoking free life or wake up at 14:48
                         cv.put("duration", challenge_duration); // duration of challenge
