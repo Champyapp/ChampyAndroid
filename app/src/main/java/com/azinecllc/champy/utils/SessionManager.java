@@ -17,6 +17,7 @@ import static com.azinecllc.champy.utils.Constants.path;
 
 public class SessionManager {
 
+    private static SessionManager instance = null;
     private static final String IS_USER_LOGIN = "IsUserLoggedIn"; // All Shared Preferences Keys
     private static final String TOKEN_ANDROID = "token_android"; // Google CloudM Token Android
     private static final String PREFER_NAME = "Champy_pref"; // SharedPreference file name
@@ -31,9 +32,16 @@ public class SessionManager {
 
     // Constructor
     @SuppressLint("CommitPrefEdits")
-    public SessionManager(Context context) {
+    private SessionManager(Context context) {
         pref = context.getSharedPreferences(PREFER_NAME, PRIVATE_MODE);
         editor = pref.edit();
+    }
+
+    public static SessionManager getInstance(Context context) {
+        if (instance == null) {
+            instance = new SessionManager(context);
+        }
+        return instance;
     }
 
     // Create login session

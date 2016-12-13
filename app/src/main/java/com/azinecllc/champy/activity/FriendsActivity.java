@@ -94,7 +94,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         FriendsActivityPagerAdapter adapterViewPager = new FriendsActivityPagerAdapter(getSupportFragmentManager(), getApplicationContext());
         viewPager.setAdapter(adapterViewPager);
 
-        sessionManager = new SessionManager(getApplicationContext());
+        sessionManager = SessionManager.getInstance(getApplicationContext());
         sessionManager.setRefreshFriends("true");
         sessionManager.setRefreshPending("true");
 
@@ -123,7 +123,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         drawerUserName.setTypeface(typeface);
 
-        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView, sessionManager);
+        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
         int count = checker.getPendingCount();
         if (count == 0) {
             checker.hideItem();

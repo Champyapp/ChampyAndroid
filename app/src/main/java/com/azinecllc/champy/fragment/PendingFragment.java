@@ -55,7 +55,7 @@ public class PendingFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: ");
-        SessionManager sessionManager = new SessionManager(getContext());
+        SessionManager sessionManager = SessionManager.getInstance(getContext());
         id = sessionManager.getUserId();
         token = sessionManager.getToken();
 
@@ -99,7 +99,7 @@ public class PendingFragment extends Fragment {
             Pending_friend friend = pendingFriends.get(position);
         });
 
-        SessionManager sessionManager = new SessionManager(getActivity());
+        SessionManager sessionManager = SessionManager.getInstance(getContext());
         String checkRefresh = sessionManager.getRefreshPending();
 
 

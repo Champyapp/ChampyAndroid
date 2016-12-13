@@ -46,7 +46,7 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
         setContentView(R.layout.activity_privacy);
 
         new LoadText().execute();
-        sessionManager = new SessionManager(this);
+        sessionManager = SessionManager.getInstance(getApplicationContext());
 
         TextView drawerUserName = (TextView)findViewById(R.id.textView1); // overloading, be care
         drawerUserName.setVisibility(View.INVISIBLE);
@@ -88,7 +88,7 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
         drawerUserName.setText(name);
         drawerUserName.setTypeface(typeface);
 
-        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView, sessionManager);
+        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
         int count = checker.getPendingCount();
         if (count == 0) {
             checker.hideItem();

@@ -66,8 +66,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        sessionManager = new SessionManager(getApplicationContext());
-        MainActivityCardsAdapter adapter = new MainActivityCardsAdapter(this, SelfImprovement_model.generate(this), sessionManager);
+        sessionManager = SessionManager.getInstance(getApplicationContext());
+        MainActivityCardsAdapter adapter = new MainActivityCardsAdapter(this, SelfImprovement_model.generate(this));
         if (adapter.dataCount() > 0) {
             RelativeLayout cards = (RelativeLayout) findViewById(R.id.cards);
             CustomPagerBase pager = new CustomPagerBase(MainActivity.this, cards, adapter);
@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerUserName.setTypeface(typeface);
 
         /******************************** Display 'Pending duels' menu ****************************/
-        CHCheckPendingDuels checker = new CHCheckPendingDuels(this, navigationView, sessionManager);
+        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
         int count = checker.getPendingCount();
         if (count == 0) {
             checker.hideItem();

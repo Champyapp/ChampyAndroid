@@ -108,10 +108,10 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         Glide.with(this).load(R.drawable.wakeupwhite).override(110, 110).into((ImageView) findViewById(R.id.imageViewLogo));
         Glide.with(this).load(R.drawable.wakeuptext) .override(180, 150).into((ImageView) findViewById(R.id.imageWakeUpChall));
 
-        sessionManager = new SessionManager(this);
+        sessionManager = SessionManager.getInstance(getApplicationContext());
         offlineMode = OfflineMode.getInstance();
 
-        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView, sessionManager);
+        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
         int count = checker.getPendingCount();
         if (count == 0) {
             checker.hideItem();

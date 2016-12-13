@@ -49,7 +49,7 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        sessionManager = new SessionManager(this);
+        sessionManager = SessionManager.getInstance(getApplicationContext());
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
@@ -103,7 +103,7 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         drawerUserName.setText(name);
         drawerUserName.setTypeface(typeface);
 
-        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView, sessionManager);
+        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
         int count = checker.getPendingCount();
         if (count == 0) {
             checker.hideItem();

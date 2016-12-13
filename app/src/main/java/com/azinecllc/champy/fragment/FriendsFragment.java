@@ -55,7 +55,7 @@ public class FriendsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: ");
-        sessionManager = new SessionManager(getActivity());
+        sessionManager = SessionManager.getInstance(getContext());
         token = sessionManager.getToken();
         id = sessionManager.getUserId();
 

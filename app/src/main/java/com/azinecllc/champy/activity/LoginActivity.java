@@ -262,7 +262,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     String acceptedYour = user.getProfileOptions().getAcceptedYourChallenge().toString();
                     String challegeEnd = user.getProfileOptions().getChallengeEnd().toString();
 
-                    SessionManager sessionManager = new SessionManager(getApplicationContext());
+                    SessionManager sessionManager = SessionManager.getInstance(getApplicationContext());
                     sessionManager.setRefreshPending("true");
                     sessionManager.setRefreshFriends("true");
                     sessionManager.createUserLoginSession(

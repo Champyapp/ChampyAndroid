@@ -62,7 +62,7 @@ public class PhotoActivity extends AppCompatActivity {
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
 
-        sessionManager = new SessionManager(getApplicationContext());
+        sessionManager = SessionManager.getInstance(getApplicationContext());
 
         Typeface typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
         TextView tvChooseFromGallery = (TextView)findViewById(R.id.tv_choose_from_gallery);

@@ -60,7 +60,7 @@ public class AppSync {
                 if (response.isSuccess()) {
                     Log.d(TAG, "getUserProfile onResponse: Success");
 
-                    sessionManager = new SessionManager(context);
+                    sessionManager = SessionManager.getInstance(context);
 
                     Data data = response.body().getData();
                     String user_name = data.getName();

@@ -25,7 +25,7 @@ public class CHLoadUserProgressBarInfo {
     }
 
     public void loadUserProgressBarInfo() {
-        SessionManager sessionManager = new SessionManager(context);
+        SessionManager sessionManager = SessionManager.getInstance(context);
         final String token = sessionManager.getToken();
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 

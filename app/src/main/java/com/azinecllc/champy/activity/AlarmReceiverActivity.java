@@ -63,7 +63,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
         window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        SessionManager sessionManager = new SessionManager(getApplicationContext());
+        SessionManager sessionManager = SessionManager.getInstance(getApplicationContext());
         final String token = sessionManager.getToken();
         final String userId = sessionManager.getUserId();
         cc = new ChallengeController(getApplicationContext(), AlarmReceiverActivity.this, token, userId);

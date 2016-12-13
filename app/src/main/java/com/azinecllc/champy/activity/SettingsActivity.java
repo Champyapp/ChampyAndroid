@@ -106,7 +106,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         dbHelper = DBHelper.getInstance(getApplicationContext());
         offlineMode = OfflineMode.getInstance();
         mDailyRemind = new DailyRemindController(getApplicationContext());
-        sessionManager = new SessionManager(getApplicationContext());
+        sessionManager = SessionManager.getInstance(getApplicationContext());
         userID = sessionManager.getUserId();
         token = sessionManager.getToken();
 
@@ -178,7 +178,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         contactUs.setOnClickListener(this);
         tvChangeName.setOnClickListener(this);
 
-        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView, sessionManager);
+        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
         int count = checker.getPendingCount();
         if (count == 0) {
             checker.hideItem();

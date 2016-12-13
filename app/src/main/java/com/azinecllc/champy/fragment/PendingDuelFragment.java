@@ -68,7 +68,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("PendingDuel", "onCreate: ");
-        sessionManager = new SessionManager(getContext());
+        sessionManager = SessionManager.getInstance(getContext());
         final String token = sessionManager.getToken();
         final String userId = sessionManager.getUserId();
         cc = new ChallengeController(getContext(), getActivity(), token, userId);

@@ -65,7 +65,7 @@ public class MyGcmListenerService extends GcmListenerService {
     @Override
     public void onMessageReceived(String from, Bundle data) {
 
-        sessionManager = new SessionManager(this);
+        sessionManager = SessionManager.getInstance(getApplicationContext());
         if (sessionManager.isUserLoggedIn()) {
             HashMap<String, String> user;
             user = sessionManager.getUserDetails();

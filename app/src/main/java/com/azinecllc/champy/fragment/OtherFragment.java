@@ -92,7 +92,7 @@ public class OtherFragment extends Fragment {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getContext());
         offlineMode = OfflineMode.getInstance();
-        sessionManager = new SessionManager(getContext());
+        sessionManager = SessionManager.getInstance(getContext());
     }
 
     @Override

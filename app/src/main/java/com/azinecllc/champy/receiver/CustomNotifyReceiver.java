@@ -34,7 +34,7 @@ public class CustomNotifyReceiver extends WakefulBroadcastReceiver {
         String notificationID2 = intent.getStringExtra("notificationID");
         Log.d(TAG, "onReceive: notificationID2: " + notificationID2);
 
-        SessionManager sessionManager = new SessionManager(context);
+        SessionManager sessionManager = SessionManager.getInstance(context);
         if (sessionManager.isUserLoggedIn()) {
             sendNotification();
         } else {

@@ -35,12 +35,10 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
     private final String TAG = "CardsAdapterMain";
     private ArrayList<SelfImprovement_model> arrayList;
     private Snackbar snackbar;
-    private SessionManager sessionManager;
 
-    public MainActivityCardsAdapter(Context context, ArrayList<SelfImprovement_model> mArrayList, SessionManager session) {
+    public MainActivityCardsAdapter(Context context, ArrayList<SelfImprovement_model> mArrayList) {
         super(context);
         this.arrayList = mArrayList;
-        this.sessionManager = session;
     }
 
     @Override
@@ -124,6 +122,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                 break;
         }
 
+        SessionManager sessionManager = SessionManager.getInstance(getContext());
         final String userId = sessionManager.getUserId();
         final String token = sessionManager.getToken();
         final ChallengeController cc = new ChallengeController(getContext(), (Activity) getContext(), token, userId);

@@ -78,7 +78,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         }
         c.close();
 
-        sessionManager = new SessionManager(getContext());
+        sessionManager = SessionManager.getInstance(getContext());
         String token = sessionManager.getToken();
         String userId = sessionManager.getUserId();
         cc = new ChallengeController(getContext(), getActivity(), token, userId);

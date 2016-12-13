@@ -47,7 +47,7 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        sessionManager = new SessionManager(this);
+        sessionManager = SessionManager.getInstance(getApplicationContext());
         tvTerms = (TextView)findViewById(R.id.textView_terms);
         tvTerms.setVisibility(View.INVISIBLE);
 
@@ -95,7 +95,7 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
         drawerUserName.setText(name);
         drawerUserName.setTypeface(typeface);
 
-        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView, sessionManager);
+        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
         int count = checker.getPendingCount();
         if (count == 0) {
             checker.hideItem();

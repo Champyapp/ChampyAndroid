@@ -56,7 +56,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_duel);
-        sessionManager = new SessionManager(this);
+        sessionManager = SessionManager.getInstance(getApplicationContext());
 
         spinner = findViewById(R.id.loadingPanel);
         spinner.setVisibility(View.VISIBLE);
@@ -141,7 +141,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         drawerUserName.setTypeface(typeface);
 
 
-        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView, sessionManager);
+        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
         int count = checker.getPendingCount();
         if (count == 0) {
             checker.hideItem();
@@ -232,7 +232,6 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
                         }
                     }
                     sessionManager.setSelfSize(data_size);
-                    SessionManager sessionManager = new SessionManager(getApplicationContext());
                     int size = sessionManager.getSelfSize();
                     DuelPagerAdapter pagerAdapter = new DuelPagerAdapter(getSupportFragmentManager());
                     final ViewPager viewPager = (ViewPager) findViewById(R.id.pager_duel);

@@ -18,18 +18,16 @@ import com.azinecllc.champy.utils.SessionManager;
 public class CHCheckPendingDuels {
 
     private Context context;
-    private SessionManager sessionManager;
     private View view;
 
-    public CHCheckPendingDuels(Context context, View view, SessionManager sessionManager) {
+    public CHCheckPendingDuels(Context context, View view) {
         this.context = context;
         this.view = view;
-        this.sessionManager = sessionManager;
     }
 
     public int getPendingCount() {
         DBHelper dbHelper = DBHelper.getInstance(context);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("pending_duel", null, null, null, null, null, null);
         int countOfPendingDuel = 0;
         if (c.moveToFirst()) {
@@ -38,6 +36,7 @@ public class CHCheckPendingDuels {
             } while (c.moveToNext());
         }
         c.close();
+        SessionManager sessionManager = SessionManager.getInstance(context);
         sessionManager.set_duel_pending(""+ countOfPendingDuel);
         return countOfPendingDuel;
     }

@@ -34,7 +34,7 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
         setContentView(R.layout.activity_role_controller);
         spinner = findViewById(R.id.loadingPanel);
 
-        sessionManager = new SessionManager(getApplicationContext());
+        sessionManager = SessionManager.getInstance(getApplicationContext());
         offlineMode = OfflineMode.getInstance();
         String uId = sessionManager.getUserId();
         String uToken = sessionManager.getToken();

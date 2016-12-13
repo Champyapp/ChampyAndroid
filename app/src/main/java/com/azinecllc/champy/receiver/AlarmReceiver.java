@@ -33,7 +33,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         alarmIntent.putExtra("finalAlarmID", alarmID);
         alarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        SessionManager sessionManager = new SessionManager(context);
+        SessionManager sessionManager = SessionManager.getInstance(context);
         if (sessionManager.isUserLoggedIn()) {
             context.startActivity(alarmIntent);
         } else {

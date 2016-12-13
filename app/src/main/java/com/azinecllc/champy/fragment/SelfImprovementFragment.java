@@ -80,7 +80,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
             }
         }
 
-        sessionManager = new SessionManager(getContext());
+        sessionManager = SessionManager.getInstance(getContext());
         size = sessionManager.getSelfSize();
         typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
         tvGoal = (TextView)view.findViewById(R.id.goal_text);

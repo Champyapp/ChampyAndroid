@@ -54,7 +54,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         //FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_self_improvement);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        sessionManager = new SessionManager(getApplicationContext());
+        sessionManager = SessionManager.getInstance(getApplicationContext());
 
         spinner = findViewById(R.id.loadingPanel);
         spinner.setVisibility(View.VISIBLE);
@@ -109,7 +109,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         drawerUsername.setText(name);
         drawerUsername.setTypeface(typeface);
 
-        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView, sessionManager);
+        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
         int count = checker.getPendingCount();
         if (count == 0) {
             checker.hideItem();

@@ -86,7 +86,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             }
         });
 
-        sessionManager = new SessionManager(context);
+        sessionManager = SessionManager.getInstance(context);
         offlineMode = OfflineMode.getInstance();
         token = sessionManager.getToken();
         id = sessionManager.getUserId();

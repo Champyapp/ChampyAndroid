@@ -45,7 +45,7 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pending__duel);
 
-        sessionManager = new SessionManager(this);
+        sessionManager = SessionManager.getInstance(this);
         new ProgressTask().execute();
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -87,7 +87,7 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         drawerUserName.setTypeface(typeface);
 
 
-        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView, sessionManager);
+        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
         int count = checker.getPendingCount();
         if (count == 0) {
             checker.hideItem();

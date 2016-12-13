@@ -62,7 +62,7 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
 
-        sessionManager = new SessionManager(this);
+        sessionManager = SessionManager.getInstance(getApplicationContext());
         File fileProfile = new File(path, "profile.jpg");
         File fileBlur = new File(path, "blured2.jpg");
         Uri uriProfile = Uri.fromFile(fileProfile);
@@ -95,7 +95,7 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         inputMessage.addTextChangedListener(new MyTextWatcher(inputMessage));
         buttonSend.setOnClickListener(this);
 
-        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView, sessionManager);
+        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
         int count = checker.getPendingCount();
         if (count == 0) {
             checker.hideItem();
