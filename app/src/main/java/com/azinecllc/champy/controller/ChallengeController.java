@@ -108,13 +108,13 @@ public class ChallengeController {
                     com.azinecllc.champy.model.single_in_progress.SingleInProgress data = response.body();
                     String inProgressId = data.getData().get_id();
 
-                    dbHelper = DBHelper.getInstance(context);
-                    db = dbHelper.getWritableDatabase();
-                    cv = new ContentValues();
-
-                    cv.put("challenge_id", inProgressId);
-                    cv.put("updated", "false");
-                    db.insert("updated", null, cv);
+//                    dbHelper = DBHelper.getInstance(context);
+//                    db = dbHelper.getWritableDatabase();
+//                    cv = new ContentValues();
+//
+//                    cv.put("challenge_id", inProgressId);
+//                    cv.put("updated", "false");
+//                    db.insert("updated", null, cv);
 
                     Log.d("sendSingleInProgress", "InProgressId: " + inProgressId);
                     generateCardsForMainActivity();
@@ -234,10 +234,6 @@ public class ChallengeController {
     }
 
     private void sendSingleInProgressForWakeUp(String challenge, final int alarmID, int minute, int hour) {
-        dbHelper = DBHelper.getInstance(context);
-        db = dbHelper.getWritableDatabase();
-        cv = new ContentValues();
-
         Calendar c = GregorianCalendar.getInstance();
         final long currentMidnight = unixTime - (c.get(Calendar.HOUR_OF_DAY)*60*60) - (c.get(Calendar.MINUTE)*60) - (c.get(Calendar.SECOND));
 //        Log.d(TAG, "\ncalendar hours    : " + c.get(Calendar.HOUR_OF_DAY) + " (in seconds: " + c.get(Calendar.HOUR_OF_DAY)*60*60 + ")"
@@ -268,16 +264,13 @@ public class ChallengeController {
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     com.azinecllc.champy.model.single_in_progress.SingleInProgress data = response.body();
-                    String inProgressId = data.getData().get_id();
+                    final String inProgressId = data.getData().get_id();
 
                     /** Creating intent for alarmReceiver and putting some data in local DB **/
 
                     Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
-                    myIntent.putExtra("inProgressId", inProgressId);
+                    myIntent.putExtra("inProgressID", inProgressId);
                     myIntent.putExtra("alarmID", String.valueOf(alarmID));
-                    cv.put("challenge_id", inProgressId);
-                    cv.put("updated", "false");
-                    db.insert("updated", null, cv);
 
                     /** Scheduling item_alarm **/
 
@@ -352,12 +345,12 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    dbHelper = DBHelper.getInstance(context);
-                    db = dbHelper.getWritableDatabase();
-                    cv = new ContentValues();
-                    cv.put("updated", "true");
-                    db.update("updated",      cv, "challenge_id = ?", new String[]{inProgressId});
-                    db.update("myChallenges", cv, "challenge_id = ?", new String[]{inProgressId});
+//                    dbHelper = DBHelper.getInstance(context);
+//                    db = dbHelper.getWritableDatabase();
+//                    cv = new ContentValues();
+//                    cv.put("updated", "true");
+//                    db.update("updated",      cv, "challenge_id = ?", new String[]{inProgressId});
+//                    db.update("myChallenges", cv, "challenge_id = ?", new String[]{inProgressId});
                     generateCardsForMainActivity();
 
                     Log.d(TAG, "doneForToday onResponse: VSE OK");

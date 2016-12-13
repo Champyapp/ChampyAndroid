@@ -64,8 +64,8 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         SessionManager sessionManager = new SessionManager(getApplicationContext());
-        String token = sessionManager.getToken();
-        String userId = sessionManager.getUserId();
+        final String token = sessionManager.getToken();
+        final String userId = sessionManager.getUserId();
         cc = new ChallengeController(getApplicationContext(), AlarmReceiverActivity.this, token, userId);
 
         ImageButton buttonWakeUpDoneForToday = (ImageButton) findViewById(R.id.buttonWakeUpDoneForToday);

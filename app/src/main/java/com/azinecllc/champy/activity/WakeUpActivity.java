@@ -116,9 +116,10 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
             TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
             view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
         }
-        String userName = sessionManager.getUserName();
-        String userID = sessionManager.getUserId();
-        String token = sessionManager.getToken();
+
+        final String userName = sessionManager.getUserName();
+        final String userID = sessionManager.getUserId();
+        final String token = sessionManager.getToken();
         cc = new ChallengeController(this, this, token, userID);
         drawerUserName.setText(userName);
         drawerUserName.setTypeface(typeface);
