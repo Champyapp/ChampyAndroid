@@ -201,8 +201,10 @@ public class ChallengeController {
         Log.d(TAG, "createNewWakeUpChallenge : current  midnight : " + currentMidnight);
 
 
-        final String[] details = new String[21];
-        for (int i = 0; i <= 20; i++) {
+        Log.d(TAG, "createNewWakeUpChallenge: days = " + days);
+
+        final String[] details = new String[days];
+        for (int i = 0; i < days; i++) {
             details[i] = String.valueOf(intMin * 60 + intHour * 60 * 60 + i* (24 * 60 * 60) + currentMidnight);
         }
 

@@ -64,40 +64,71 @@
                 android:textColor="@color/colorTextAqua"
                 android:textAlignment="center"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                android:paddingTop="10dp"
+                android:paddingTop="5dp"
                 android:layout_alignParentTop="true" />
 
             <TimePicker
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="300dp"
+                android:layout_height="200dp"
                 android:id="@+id/timePicker"
                 android:timePickerMode="spinner"
                 tools:targetApi="lollipop"
-                android:layout_centerInParent="true"
-                android:layout_centerVertical="true" />
+                android:layout_below="@+id/goal_text"
+                android:layout_centerHorizontal="true" />
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/everyday_for_next"
                 android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:id="@+id/tvEveryDayWakeUp"
-                android:layout_above="@+id/tvDays"
+                android:layout_below="@+id/timePicker"
                 android:layout_centerHorizontal="true" />
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/tvDays"
-                android:text="@string/_21_days"
+                android:id="@+id/etDays"
+                android:text="@string/twenty_one"
                 android:textSize="20sp"
                 android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:paddingBottom="10dp"
                 android:textColor="@color/colorTextAqua"
-                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/tvEveryDayWakeUp"
                 android:layout_centerHorizontal="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvDays"
+                android:text="@string/days"
+                android:textSize="20sp"
+                android:textAlignment="center"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/colorTextAqua"
+                android:layout_below="@+id/etDays"
+                android:layout_centerHorizontal="true"/>
+
+            <ImageButton
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/ic_plus"
+                android:id="@+id/imageButtonPlus"
+                android:visibility="visible"
+                android:layout_below="@+id/tvEveryDayWakeUp"
+                android:layout_toRightOf="@+id/tvEveryDayWakeUp"
+                android:layout_toEndOf="@+id/tvEveryDayWakeUp" />
+
+            <ImageButton
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/ic_minus"
+                android:id="@+id/imageButtonMinus"
+                android:visibility="visible"
+                android:layout_below="@+id/tvEveryDayWakeUp"
+                android:layout_toLeftOf="@+id/tvEveryDayWakeUp"
+                android:layout_toStartOf="@+id/tvEveryDayWakeUp" />
 
         </RelativeLayout>
 

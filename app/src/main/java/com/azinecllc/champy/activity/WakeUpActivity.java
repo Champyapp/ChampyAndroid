@@ -41,6 +41,8 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
     private ChallengeController cc;
     private DrawerLayout drawer;
     private Snackbar snackbar;
+    private TextView etDays;
+    private int daysCount, newDaysCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +67,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         final Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         final ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
         final ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
+        final TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
         drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         File file = new File(path, "profile.jpg");
@@ -87,23 +90,23 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
                 .skipMemoryCache(true)
                 .into(drawerBackground);
 
-        final TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        final TextView tvIChallMySelf = (TextView) findViewById(R.id.tvChallengeToMySelf);
+        final TextView tvIChallengeMySelf = (TextView) findViewById(R.id.tvChallengeToMySelf);
+        final ImageButton buttonAccept = (ImageButton) findViewById(R.id.imageButtonAccept);
+        final ImageButton buttonMinus = (ImageButton) findViewById(R.id.imageButtonMinus);
+        final ImageButton buttonPlus = (ImageButton) findViewById(R.id.imageButtonPlus);
         final TextView tvEveryDay = (TextView) findViewById(R.id.tvEveryDayWakeUp);
-        final TextView tvDuration = (TextView) findViewById(R.id.tvDays);
         final TextView tvGoal = (TextView) findViewById(R.id.goal_text);
+        etDays = (TextView) findViewById(R.id.etDays);
+        final TextView tvDays = (TextView) findViewById(R.id.tvDays);
 
-        alarmTimePicker = (TimePicker) findViewById(R.id.timePicker);
-        final ImageButton imageButton = (ImageButton) findViewById(R.id.imageButtonAccept);
-        imageButton.setOnClickListener(this);
-
-        tvIChallMySelf.setTypeface(typeface);
+        tvIChallengeMySelf.setTypeface(typeface);
         tvEveryDay.setTypeface(typeface);
-        tvDuration.setTypeface(typeface);
+        etDays.setTypeface(typeface);
+        tvDays.setTypeface(typeface);
         tvGoal.setTypeface(typeface);
 
         Glide.with(this).load(R.drawable.wakeupwhite).override(110, 110).into((ImageView) findViewById(R.id.imageViewLogo));
-        Glide.with(this).load(R.drawable.wakeuptext).override(180, 150).into((ImageView) findViewById(R.id.imageWakeUpChall));
+        Glide.with(this).load(R.drawable.wakeuptext) .override(180, 150).into((ImageView) findViewById(R.id.imageWakeUpChall));
 
         sessionManager = new SessionManager(this);
         offlineMode = OfflineMode.getInstance();
@@ -124,39 +127,65 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         drawerUserName.setText(userName);
         drawerUserName.setTypeface(typeface);
 
+        alarmTimePicker = (TimePicker) findViewById(R.id.timePicker);
+
+        buttonAccept.setOnClickListener(this);
+        buttonMinus.setOnClickListener(this);
+        buttonPlus.setOnClickListener(this);
+
     }
 
     @Override
     public void onClick(final View v) {
-        final int pickedHour = alarmTimePicker.getCurrentHour();
-        final int picketMin = alarmTimePicker.getCurrentMinute();
+        switch (v.getId()) {
+            case R.id.imageButtonAccept:
+                final int pickedHour = alarmTimePicker.getCurrentHour();
+                final int picketMin = alarmTimePicker.getCurrentMinute();
 
-        // this piece of code need only for check exist challenge
-        String sHour = "" + pickedHour;
-        String sMinute = "" + picketMin;
+                // this piece of code need only for check exist challenge
+                String sHour = "" + pickedHour;
+                String sMinute = "" + picketMin;
 
-        if (pickedHour < 10) sHour  = "0" + sHour;
-        if (picketMin < 10) sMinute = "0" + sMinute;
+                if (pickedHour < 10) sHour  = "0" + sHour;
+                if (picketMin < 10) sMinute = "0" + sMinute;
 
-        String finalSHour = sHour;
-        String finalSMinute = sMinute;
+                String finalSHour = sHour;
+                String finalSMinute = sMinute;
 
-        final boolean ok = cc.isActiveWakeUp(sHour + sMinute);
-        if (offlineMode.isConnectedToRemoteAPI(WakeUpActivity.this)) {
-            snackbar = Snackbar.make(v, R.string.are_you_sure, Snackbar.LENGTH_LONG).setAction(R.string.yes, new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (ok) {
-                        cc.createNewWakeUpChallenge(21, finalSHour, finalSMinute);
-                        snackbar = Snackbar.make(view, R.string.challenge_created, Snackbar.LENGTH_SHORT);
-                    } else {
-                        snackbar = Snackbar.make(view, R.string.cant_create_this_challenge, Snackbar.LENGTH_SHORT);
-                    }
+                final boolean ok = cc.isActiveWakeUp(sHour + sMinute);
+                if (offlineMode.isConnectedToRemoteAPI(WakeUpActivity.this)) {
+                    snackbar = Snackbar.make(v, R.string.are_you_sure, Snackbar.LENGTH_LONG).setAction(R.string.yes, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (ok) {
+                                cc.createNewWakeUpChallenge(Integer.parseInt(etDays.getText().toString()), finalSHour, finalSMinute);
+                                snackbar = Snackbar.make(view, R.string.challenge_created, Snackbar.LENGTH_SHORT);
+                            } else {
+                                snackbar = Snackbar.make(view, R.string.cant_create_this_challenge, Snackbar.LENGTH_SHORT);
+                            }
+                            snackbar.show();
+                        }
+                    });
                     snackbar.show();
                 }
-            });
-            snackbar.show();
+                break;
+            case R.id.imageButtonPlus:
+                daysCount = Integer.parseInt(etDays.getText().toString());
+                if (daysCount < 1000) {
+                    newDaysCount = daysCount + 1;
+                    etDays.setText(String.valueOf(newDaysCount));
+                }
+                break;
+
+            case R.id.imageButtonMinus:
+                daysCount = Integer.parseInt(etDays.getText().toString());
+                if (daysCount > 1) {
+                    newDaysCount = daysCount - 1;
+                    etDays.setText(String.valueOf(newDaysCount));
+                }
+                break;
         }
+
     }
 
     @Override
