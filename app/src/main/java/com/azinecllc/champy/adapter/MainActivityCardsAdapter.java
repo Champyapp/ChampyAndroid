@@ -65,7 +65,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         cardImage.getLayoutParams().height = y*50;
         if (y > 10) y = 10;
 
-        String itemGoal = currentCard.getGoal();
+        final String itemGoal = currentCard.getGoal();
         final String itemProgress = currentCard.getProgress();
         final String itemType = currentCard.getType();
         final String itemNeedsToCheck = currentCard.getNeedsToCheck();
@@ -111,8 +111,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         switch (itemType) {
             case "Wake Up":
                 imageChallengeLogo.setImageResource(R.drawable.wakeup_white);
-                itemGoal = currentCard.getChallengeName();
-                tvChallengeDescription.setText(itemGoal);
+                tvChallengeDescription.setText(currentCard.getChallengeName());
                 break;
             case "Duel":
                 imageChallengeLogo.setImageResource(R.drawable.duel_white);
@@ -139,41 +138,34 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                 myProgress = Long.parseLong(challengeProgress[challengeProgress.length - 1]); // our last checkIn in seconds
                 Date date = new Date(myProgress * 1000); // convert last checkIn in date format
                 progressMidNight = myProgress - (date.getHours() * 60 * 60) - (date.getMinutes() * 60) - (date.getSeconds());
-                Log.d(TAG, "getView: SenderProgress = " + myProgress);
-            } else {
-                Log.d(TAG, "getView: SenderProgress = empty :)");
             }
         } catch (RuntimeException e) { e.printStackTrace(); }
 
         if (myProgress != 0L && now > progressMidNight + oneDay) {
             // it's mean "self" and "duel"
-            DBHelper dbHelper = DBHelper.getInstance(getContext());
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
-            ContentValues cv = new ContentValues();
-            cv.put("updated", "false"); // was true
-            db.update("updated",      cv, "challenge_id = ?", new String[]{itemInProgressId});
-            db.update("myChallenges", cv, "challenge_id = ?", new String[]{itemInProgressId});
+//            DBHelper dbHelper = DBHelper.getInstance(getContext());
+//            SQLiteDatabase db = dbHelper.getWritableDatabase();
+//            ContentValues cv = new ContentValues();
+//            cv.put("updated", "false"); // was true
+//            db.update("updated",      cv, "challenge_id = ?", new String[]{itemInProgressId});
+//            db.update("myChallenges", cv, "challenge_id = ?", new String[]{itemInProgressId});
 
-            if (!itemType.equals("Wake Up")) {
-                tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
-                buttonShare.setVisibility(View.INVISIBLE);
-                buttonDone.setVisibility(View.VISIBLE);
-            }
+//            if (!itemType.equals("Wake Up")) {
+//                tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
+//                buttonShare.setVisibility(View.INVISIBLE);
+//                buttonDone.setVisibility(View.VISIBLE);
+//            }
             if (now > progressMidNight + oneDay + oneDay) {
                 try {
-                    if (itemType.equals("Wake Up")) {
-                        int i = Integer.parseInt(currentCard.getWakeUpTime());
-                        cc.give_up(itemInProgressId, i);
-                    } else {
-                        cc.give_up(itemInProgressId, 0);
-                    }
+                    int i = (itemType.equals("Wake Up")) ? Integer.parseInt(currentCard.getWakeUpTime()) : 0;
+                    cc.give_up(itemInProgressId, i);
                 } catch (IOException | NumberFormatException e) {
                     e.printStackTrace();
                 }
             }
         }
 
-        /******************************************************************************************/
+        /************************************* Clicks ********************************************/
 
         buttonGiveUp.setOnClickListener(new View.OnClickListener() {
             @Override
