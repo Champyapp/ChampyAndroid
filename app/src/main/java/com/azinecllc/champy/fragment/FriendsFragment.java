@@ -155,9 +155,6 @@ public class FriendsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         Log.d(TAG, "onDetach: ");
-        try {
-            db.close();
-        } catch (Exception e) { e.printStackTrace(); }
     }
 
 

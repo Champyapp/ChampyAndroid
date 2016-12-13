@@ -93,6 +93,13 @@ public class OtherFragment extends Fragment {
         FacebookSdk.sdkInitialize(getContext());
         offlineMode = OfflineMode.getInstance();
         sessionManager = new SessionManager(getContext());
+    }
+
+    @Override
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.fragment_friends, container, false);
+        Log.d(TAG, "onCreateView: ");
+
         cv = new ContentValues();
         dbHelper = DBHelper.getInstance(getContext());
         db = dbHelper.getWritableDatabase();
@@ -122,13 +129,6 @@ public class OtherFragment extends Fragment {
             } while (c.moveToNext());
         }
         c.close();
-
-    }
-
-    @Override
-    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_friends, container, false);
-        Log.d(TAG, "onCreateView: ");
 
 
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);

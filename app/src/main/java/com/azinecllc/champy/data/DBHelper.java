@@ -19,7 +19,7 @@ public class DBHelper extends SQLiteOpenHelper {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
-    public static DBHelper getInstance(Context context) {
+    public static synchronized DBHelper getInstance(Context context) {
         if (instance == null) {
             instance = new DBHelper(context.getApplicationContext());
         }

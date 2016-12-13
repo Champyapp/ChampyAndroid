@@ -10,7 +10,7 @@ public class Constants {
     public static final String azinecUrl = "http://www.azinec.com";
 
     public static final int oneDay = 86400;
-    public static final int drawerCloseTime = 200;
+    public static final int drawerCloseTime = 250;
 
     public static long unixTime = System.currentTimeMillis() / 1000L;
 

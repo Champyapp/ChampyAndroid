@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-//        new Handler().postDelayed(() -> {
+        new Handler().postDelayed(() -> {
             switch (item.getItemId()) {
                 case R.id.friends:
                     Intent goToFriends = new Intent(MainActivity.this, FriendsActivity.class);
@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     break;
 
             }
-//        }, 200);
+        }, drawerCloseTime);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
