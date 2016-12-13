@@ -97,27 +97,27 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
             view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
         }
 
-        ViewServer.get(this).addWindow(this);
+        //ViewServer.get(this).addWindow(this);
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        ViewServer.get(this).removeWindow(this);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        ViewServer.get(this).setFocusedWindow(this);
-        AppEventsLogger.activateApp(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        AppEventsLogger.deactivateApp(this);
-    }
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        ViewServer.get(this).removeWindow(this);
+//    }
+//
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        ViewServer.get(this).setFocusedWindow(this);
+//        AppEventsLogger.activateApp(this);
+//    }
+//
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//        AppEventsLogger.deactivateApp(this);
+//    }
 
     @Override
     public void onBackPressed() {

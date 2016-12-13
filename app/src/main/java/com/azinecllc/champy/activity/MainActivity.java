@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -42,13 +43,12 @@ import java.io.File;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import jp.wasabeef.glide.transformations.CropSquareTransformation;
 
+import static com.azinecllc.champy.utils.Constants.drawerCloseTime;
 import static com.azinecllc.champy.utils.Constants.path;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private MainActivityCardsAdapter adapter;
     private SessionManager sessionManager;
-    private RelativeLayout contentMain;
     private ImageView blurScreen;
     private DrawerLayout drawer;
     private Boolean isFabOpen = false;
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         sessionManager = new SessionManager(getApplicationContext());
-        adapter = new MainActivityCardsAdapter(this, SelfImprovement_model.generate(this), sessionManager);
+        MainActivityCardsAdapter adapter = new MainActivityCardsAdapter(this, SelfImprovement_model.generate(this), sessionManager);
         if (adapter.dataCount() > 0) {
             RelativeLayout cards = (RelativeLayout) findViewById(R.id.cards);
             CustomPagerBase pager = new CustomPagerBase(MainActivity.this, cards, adapter);
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         blurScreen = (ImageView) findViewById(R.id.blurScreen);
-        contentMain = (RelativeLayout) findViewById(R.id.content_main);
+        //RelativeLayout contentMain = (RelativeLayout) findViewById(R.id.content_main);
 
         // DRAWER
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -155,33 +155,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fabDuel.setOnClickListener(v -> startActivity(new Intent(this, FriendsActivity.class)));
         fabWakeUp.setOnClickListener(v -> startActivity(new Intent(this, WakeUpActivity.class)));
 
-        ViewServer.get(this).addWindow(this);
+        //ViewServer.get(this).addWindow(this);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        AppEventsLogger.deactivateApp(this);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        ViewServer.get(this).setFocusedWindow(this);
-        AppEventsLogger.activateApp(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        ViewServer.get(this).removeWindow(this);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ViewServer.get(this).removeWindow(this);
-    }
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//        AppEventsLogger.deactivateApp(this);
+//    }
+//
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        ViewServer.get(this).setFocusedWindow(this);
+//        AppEventsLogger.activateApp(this);
+//    }
+//
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        ViewServer.get(this).removeWindow(this);
+//    }
+//
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        ViewServer.get(this).removeWindow(this);
+//    }
 
     @Override
     public void onBackPressed() {
