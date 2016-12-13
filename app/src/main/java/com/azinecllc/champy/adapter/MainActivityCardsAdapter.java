@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -134,12 +135,15 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         long myProgress = 0;
         long progressMidNight = 0;
         try {
-            myProgress = Long.parseLong(challengeProgress[challengeProgress.length - 1]); // our last checkIn in seconds
-            Date date = new Date(myProgress * 1000); // convert last checkIn in date format
-            progressMidNight = myProgress - (date.getHours() * 60 * 60) - (date.getMinutes() * 60) - (date.getSeconds());
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-        }
+            if (!challengeProgress[challengeProgress.length-1].equals("")) {
+                myProgress = Long.parseLong(challengeProgress[challengeProgress.length - 1]); // our last checkIn in seconds
+                Date date = new Date(myProgress * 1000); // convert last checkIn in date format
+                progressMidNight = myProgress - (date.getHours() * 60 * 60) - (date.getMinutes() * 60) - (date.getSeconds());
+                Log.d(TAG, "getView: SenderProgress = " + myProgress);
+            } else {
+                Log.d(TAG, "getView: SenderProgress = empty :)");
+            }
+        } catch (RuntimeException e) { e.printStackTrace(); }
 
         if (myProgress != 0L && now > progressMidNight + oneDay) {
             // it's mean "self" and "duel"
@@ -168,8 +172,8 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                 }
             }
         }
-        /******************************************************************************************/
 
+        /******************************************************************************************/
 
         buttonGiveUp.setOnClickListener(new View.OnClickListener() {
             @Override
