@@ -3,6 +3,8 @@ package com.azinecllc.champy.champy_v2;
 import android.os.Build;
 import android.widget.TextView;
 
+import com.azinecllc.champy.BuildConfig;
+import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.MainActivity;
 
 import static org.junit.Assert.assertNotNull;

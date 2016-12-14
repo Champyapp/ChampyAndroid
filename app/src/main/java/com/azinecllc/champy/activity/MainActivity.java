@@ -55,9 +55,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FloatingActionButton fabPlus, fabWakeUp, fabSelf, fabDuel;
     private Animation fab_open,fab_close,rotate_forward,rotate_backward;
 
-    public static final String TAG = "FuckingPhoto";
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +62,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        Runtime rt = Runtime.getRuntime();
+        long maxMemory = rt.maxMemory();
+        Log.i("onCreate", "maxMemory:" + Long.toString(maxMemory));
 
         sessionManager = SessionManager.getInstance(getApplicationContext());
         MainActivityCardsAdapter adapter = new MainActivityCardsAdapter(this, SelfImprovement_model.generate(this));
@@ -155,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fabDuel.setOnClickListener(v -> startActivity(new Intent(this, FriendsActivity.class)));
         fabWakeUp.setOnClickListener(v -> startActivity(new Intent(this, WakeUpActivity.class)));
 
+
         //ViewServer.get(this).addWindow(this);
     }
 
@@ -194,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        new Handler().postDelayed(() -> {
+        //new Handler().postDelayed(() -> {
             switch (item.getItemId()) {
                 case R.id.friends:
                     Intent goToFriends = new Intent(MainActivity.this, FriendsActivity.class);
@@ -225,7 +227,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     break;
 
             }
-        }, drawerCloseTime);
+        //}, drawerCloseTime);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

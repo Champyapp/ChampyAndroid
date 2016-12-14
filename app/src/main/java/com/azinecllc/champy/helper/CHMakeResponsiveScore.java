@@ -10,6 +10,17 @@ import static java.lang.Math.round;
 
 public class CHMakeResponsiveScore {
 
+    private static CHMakeResponsiveScore instance = null;
+
+    private CHMakeResponsiveScore() {}
+
+    public static CHMakeResponsiveScore getInstance() {
+        if (instance == null) {
+            instance = new CHMakeResponsiveScore();
+        }
+        return instance;
+    }
+
 
     public void makeResponsiveScore(Activity activity, int width) {
         int x = round(width/100);
