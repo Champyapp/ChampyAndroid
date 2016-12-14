@@ -613,7 +613,7 @@ public class ChallengeController {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
         if (c.moveToFirst()) {
-            int colDescription = c.getColumnIndex("wakeUpTime");
+            int colDescription = c.getColumnIndex("description");
             int status = c.getColumnIndex("status");
             do {
                 try {
