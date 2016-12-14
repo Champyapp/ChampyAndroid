@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.SelfImprovementActivity"
-    android:background="@drawable/selfimprovementback"
     tools:showIn="@layout/app_bar_self_improvement"
+    android:background="@drawable/self_gradient"
     android:id="@+id/selfimprovement">
 
     <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/imageViewLogo"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
@@ -18,31 +18,35 @@
         android:layout_marginTop="24dp" />
 
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/self_improvement_challenge"
+        android:textAlignment="center"
+        android:textColor="@color/colorWhite"
+        android:textSize="16sp"
+        android:textAllCaps="true"
+        android:id="@+id/tvSIC"
+        android:layout_below="@id/imageViewLogo"
+        android:layout_marginTop="16dp" />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="I challenge myself to"
-        android:textAllCaps="true"
         android:id="@+id/tvChallengeToMySelf"
-        android:textColor="#ffffff"
         android:gravity="center_vertical|center_horizontal"
-        android:layout_below="@+id/imageWakeUpChall"
+        android:text="@string/i_challenge_myself_to"
+        android:textColor="@color/colorWhite"
+        android:textAllCaps="true"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_below="@+id/tvSIC"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="32dp" />
 
-    <ImageView
-        android:layout_width="125dp"
-        android:layout_height="25dp"
-        android:id="@+id/imageWakeUpChall"
-        android:layout_below="@+id/imageViewLogo"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/selfimprtext"
-        android:layout_marginTop="16dp" />
 
-    <include layout="@layout/progress_bar_fragment" />
+    <!--<include layout="@layout/progress_bar_fragment" />-->
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
@@ -55,8 +59,8 @@
         android:layout_marginBottom="8dp" />
 
     <ImageButton
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:id="@+id/imageButtonAccept"
         android:background="@drawable/accept"
         android:layout_alignParentBottom="true"

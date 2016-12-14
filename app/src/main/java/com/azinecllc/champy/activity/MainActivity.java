@@ -251,6 +251,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        System.gc();
+    }
 
     private void animateFAB() {
         if(isFabOpen) {

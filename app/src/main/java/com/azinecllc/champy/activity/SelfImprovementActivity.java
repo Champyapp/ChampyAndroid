@@ -46,23 +46,23 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
 
     private SessionManager sessionManager;
     private DrawerLayout drawer;
-    public View spinner;
+    //public View spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_self_improvement);
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         sessionManager = SessionManager.getInstance(getApplicationContext());
 
-        spinner = findViewById(R.id.loadingPanel);
-        spinner.setVisibility(View.VISIBLE);
+        //spinner = findViewById(R.id.loadingPanel);
+        //spinner.setVisibility(View.VISIBLE);
 
         //new getChallenges().execute();
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
@@ -73,15 +73,16 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
+        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
 
-        Glide.with(this).load(R.drawable.self_white).override(130, 130).into((ImageView) findViewById(R.id.imageViewLogo));
-        Glide.with(this).load(R.drawable.selfimprtext).override(280, 250).into((ImageView) findViewById(R.id.imageWakeUpChall));
+        //Glide.with(this).load(R.drawable.self_white).override(130, 130).into((ImageView) findViewById(R.id.imageViewLogo));
+        //Glide.with(this).load(R.drawable.selfimprtext).override(280, 250).into((ImageView) findViewById(R.id.imageWakeUpChall));
 
-        final ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        final ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
+        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
         final TextView drawerUsername = (TextView) headerLayout.findViewById(R.id.tvUserName);
+
         drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         File file = new File(path, "profile.jpg");
@@ -102,9 +103,11 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
                 .skipMemoryCache(true)
                 .into(drawerBackground);
 
-        final Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
+        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         final TextView tvIChallengeMySelfTo = (TextView)findViewById(R.id.tvChallengeToMySelf);
+        final TextView tvSIC = (TextView) findViewById(R.id.tvSIC);
         tvIChallengeMySelfTo.setTypeface(typeface);
+        tvSIC.setTypeface(typeface);
         String name = sessionManager.getUserName();
         drawerUsername.setText(name);
         drawerUsername.setTypeface(typeface);
@@ -214,14 +217,14 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
                     sessionManager.setSelfSize(data_size);
                     int size = sessionManager.getSelfSize();
                     SelfImprovementPagerAdapter pagerAdapter = new SelfImprovementPagerAdapter(getSupportFragmentManager());
-                    final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+                    ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
                     pagerAdapter.setCount(size);
                     viewPager.setAdapter(pagerAdapter);
                     viewPager.setOffscreenPageLimit(1);
                     viewPager.setPageMargin(20);
                     viewPager.setClipToPadding(false);
                     viewPager.setPadding(90, 0, 90, 0);
-                    spinner.setVisibility(View.INVISIBLE);
+                    //spinner.setVisibility(View.INVISIBLE);
                 }
             }
 

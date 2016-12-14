@@ -13,4 +13,9 @@
     <!--was #0f2d2d -->
     <color name="colorBlur">#0a3a41</color>
 
+    <color name="colorWhite">#FFF</color>
+    <color name="self_gradient_start">#a64f5d</color>
+    <color name="self_gradient_center">#f3a358</color>
+    <color name="self_gradient_end">#f8da99</color>
+
 </resources>
