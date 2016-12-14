@@ -102,6 +102,7 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         // Do your staff here to save image
         saveToInternalStorage(result);
         loadImageFromStorage("/data/data/com.azinecllc.champy/app_imageDir/");
+        activity.isFinishing(); // added this line for clean memory
     }
 
 

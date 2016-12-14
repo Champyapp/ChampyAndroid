@@ -150,7 +150,6 @@ public class FriendsFragment extends Fragment {
         mSocket.disconnect();
     }
 
-
     @Override
     public void onDetach() {
         super.onDetach();

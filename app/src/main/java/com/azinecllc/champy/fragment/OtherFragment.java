@@ -138,10 +138,12 @@ public class OtherFragment extends Fragment {
         rvContacts.setAdapter(adapter);
 
         gSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
-        gSwipeRefreshLayout.setOnRefreshListener(() -> new refreshOtherView().execute() );
+        gSwipeRefreshLayout.setOnRefreshListener(() -> refreshOtherView(gSwipeRefreshLayout, gView));
         this.gView = view;
 
-        if (sessionManager.getRefreshOthers().equals("true")) { new refreshOtherView().execute(); }
+        if (sessionManager.getRefreshOthers().equals("true")) {
+            refreshOtherView(gSwipeRefreshLayout, gView);
+        }
 
         return view;
 
@@ -184,15 +186,7 @@ public class OtherFragment extends Fragment {
         mSocket.off();
         mSocket.disconnect();
     }
-    
 
-    private class refreshOtherView extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... params) {
-            refreshOtherView(gSwipeRefreshLayout, gView);
-            return null;
-        }
-    }
 
     private void refreshOtherView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         // Проверка на оффлайн вкладке OTHERS

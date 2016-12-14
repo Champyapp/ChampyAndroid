@@ -2,9 +2,7 @@ package com.azinecllc.champy.activity;
 
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,9 +20,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.debug.hv.ViewServer;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.MainActivityCardsAdapter;
 import com.azinecllc.champy.controller.ChallengeController;
@@ -35,15 +30,15 @@ import com.azinecllc.champy.model.SelfImprovement_model;
 import com.azinecllc.champy.utils.CustomPagerBase;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
 
 import java.io.File;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import jp.wasabeef.glide.transformations.CropSquareTransformation;
 
-import static com.azinecllc.champy.utils.Constants.drawerCloseTime;
 import static com.azinecllc.champy.utils.Constants.path;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -111,10 +106,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         File blurred = new File(path, "blured2.jpg");
         if (blurred.exists()) {
-            Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(background);
-            Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);
+            Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(background);
+            Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);
             File profile = new File(path, "profile.jpg");
-            Glide.with(this).load(profile).bitmapTransform(new CropCircleTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
+            Glide.with(this).load(profile).bitmapTransform(new CropCircleTransformation(this))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
         }
         else {
             final String pathToPic = sessionManager.getPathToPic();
@@ -196,7 +194,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        //new Handler().postDelayed(() -> {
+//        new Handler().postDelayed(() -> {
+//        navDrawerHandler.postDelayed(mRunnable, drawerCloseTime);
             switch (item.getItemId()) {
                 case R.id.friends:
                     Intent goToFriends = new Intent(MainActivity.this, FriendsActivity.class);
@@ -225,12 +224,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     OfflineMode offlineMode = OfflineMode.getInstance();
                     if (offlineMode.isConnectedToRemoteAPI(MainActivity.this)) { sessionManager.logout(MainActivity.this); }
                     break;
-
             }
-        //}, drawerCloseTime);
+//        }, drawerCloseTime);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+//    public static final Handler navDrawerHandler = new Handler(msg -> true);
+//    public static final Runnable mRunnable = () -> { };
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

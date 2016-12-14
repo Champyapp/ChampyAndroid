@@ -145,6 +145,7 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         }
     }
 
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {

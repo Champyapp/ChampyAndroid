@@ -61,7 +61,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         spinner = findViewById(R.id.loadingPanel);
         spinner.setVisibility(View.VISIBLE);
 
-        new ProgressTask().execute();
+        //new ProgressTask().execute();
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         final Bundle extras = getIntent().getExtras();
@@ -149,6 +149,8 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
             TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
             view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
         }
+
+        getChallenges();
 
     }
 
@@ -252,12 +254,17 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    private class ProgressTask extends AsyncTask<Void,Void,Void> {
-        @Override
-        protected Void doInBackground(Void... arg0) {
-            getChallenges();
-            return null;
-        }
-    }
+//    private class ProgressTask extends AsyncTask<Void,Void,Void> {
+//        @Override
+//        protected Void doInBackground(Void... arg0) {
+//            getChallenges();
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Void aVoid) {
+//            super.onPostExecute(aVoid);
+//        }
+//    }
 
 }
