@@ -49,7 +49,7 @@ import static com.azinecllc.champy.utils.Constants.path;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private SessionManager sessionManager;
-    private ImageView blurScreen;
+    //private ImageView blurScreen;
     private DrawerLayout drawer;
     private Boolean isFabOpen = false;
     private FloatingActionButton fabPlus, fabWakeUp, fabSelf, fabDuel;
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             pager.preparePager(0);
         }
 
-        blurScreen = (ImageView) findViewById(R.id.blurScreen);
+        //blurScreen = (ImageView) findViewById(R.id.blurScreen);
         //RelativeLayout contentMain = (RelativeLayout) findViewById(R.id.content_main);
 
         // DRAWER
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
-                blurScreen.setVisibility(View.INVISIBLE);
+                //blurScreen.setVisibility(View.INVISIBLE);
                 if (isFabOpen) closeFab();
 //                actionMenu.close(true);
             }

@@ -7,50 +7,47 @@
     android:id="@+id/change_photo" >
 
 
+    <include layout="@layout/app_bar_photo" />
+
+
     <ImageView
+        android:id="@+id/photo"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
         android:layout_marginBottom="4dp"
-        android:id="@+id/photo"
-        android:layout_above="@+id/view2" />
-
-    <include layout="@layout/app_bar_photo"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/app_bar_photo" />
+        android:layout_alignParentTop="true" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#339997"
+        android:background="@color/colorTextAqua"
         android:id="@+id/view2"
         android:visibility="visible"
-        android:layout_above="@+id/tv_take_a_picture" />
+        android:layout_below="@id/photo" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/take_photo_from_camera"
         android:id="@+id/tv_take_a_picture"
-        android:layout_centerVertical="true"
-        android:layout_alignLeft="@+id/tv_choose_from_gallery"
-        android:layout_alignStart="@+id/tv_choose_from_gallery"
-        android:layout_marginBottom="16dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:textColor="#ffffff"
+        android:text="@string/take_photo_from_camera"
+        android:textColor="@android:color/white"
+        android:textAlignment="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"
         android:gravity="center_horizontal"
         android:clickable="true"
-        android:layout_marginTop="16dp" />
+        android:layout_below="@id/view2"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#339997"
         android:id="@+id/view1"
-        android:visibility="visible"
+        android:background="@color/colorTextAqua"
         android:layout_above="@+id/tv_choose_from_gallery"
         android:layout_alignLeft="@+id/tv_choose_from_gallery"
         android:layout_alignStart="@+id/tv_choose_from_gallery" />
@@ -58,26 +55,25 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/take_photo_from_gallery"
         android:id="@+id/tv_choose_from_gallery"
+        android:text="@string/take_photo_from_gallery"
+        android:textColor="@android:color/white"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:clickable="true"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:layout_below="@+id/tv_take_a_picture"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:gravity="center_horizontal"
-        android:textColor="#ffffff"
-        android:clickable="true"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp" />
+        android:layout_alignParentEnd="true" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#339997"
         android:id="@+id/view"
-        android:visibility="visible"
+        android:background="@color/colorTextAqua"
         android:layout_below="@+id/tv_choose_from_gallery"
         android:layout_alignLeft="@+id/tv_choose_from_gallery"
         android:layout_alignStart="@+id/tv_choose_from_gallery" />
