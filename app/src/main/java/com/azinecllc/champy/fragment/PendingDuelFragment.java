@@ -19,7 +19,6 @@ import android.widget.TextView;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.data.DBHelper;
-import com.azinecllc.champy.helper.CHSetupUI;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
 
@@ -145,8 +144,8 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         everyDayForTheNext.setTypeface(typeface);
 
 
-        CHSetupUI chSetupUI= new CHSetupUI();
-        chSetupUI.setupUI(view, getActivity());
+//        CHSetupUI chSetupUI= new CHSetupUI();
+//        chSetupUI.setupUI(view, getActivity());
 
         offlineMode = OfflineMode.getInstance();
         offlineMode.isConnectedToRemoteAPI(getActivity());
@@ -200,7 +199,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
                 snackbar = Snackbar.make(view, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes", vCancel -> {
                     try {
                         cc.rejectInviteForPendingDuel(challenge_id);
-                        snackbar = Snackbar.make(vCancel, getString(R.string.challenge_created), Snackbar.LENGTH_SHORT);
+                        snackbar = Snackbar.make(vCancel, getString(R.string.challenge_canceled), Snackbar.LENGTH_SHORT);
                         snackbar.show();
                     } catch (IOException | NullPointerException e) {
                         e.printStackTrace();

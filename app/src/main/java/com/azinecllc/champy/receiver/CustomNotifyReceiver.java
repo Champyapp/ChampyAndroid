@@ -24,7 +24,12 @@ public class CustomNotifyReceiver extends WakefulBroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        FacebookSdk.sdkInitialize(getApplicationContext());
+        try {
+            FacebookSdk.sdkInitialize(getApplicationContext());
+        } catch (RuntimeException e) {
+            Log.e(TAG, "onReceive: I Hate Facebook: " + e);
+            e.printStackTrace();
+        }
 
         Log.d(TAG, "onReceive: received new notification!");
 

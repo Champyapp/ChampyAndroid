@@ -95,10 +95,10 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         inputMessage.addTextChangedListener(new MyTextWatcher(inputMessage));
         buttonSend.setOnClickListener(this);
 
-        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
-        int count = checker.getPendingCount();
+        CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();
+        int count = checker.getPendingCount(getApplicationContext());
         if (count == 0) {
-            checker.hideItem();
+            checker.hideItem(navigationView);
         } else {
             TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
             view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));

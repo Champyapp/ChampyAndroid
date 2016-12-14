@@ -23,7 +23,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 /**
- * class for rendering photo and make blur.
+ * FOR TEST; class for rendering photo and make blur.
  */
 public class CHImageModule {
 

@@ -128,13 +128,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerUserName.setTypeface(typeface);
 
         /******************************** Display 'Pending duels' menu ****************************/
-        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
-        int count = checker.getPendingCount();
+        CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();
+        int count = checker.getPendingCount(getApplicationContext());
         if (count == 0) {
-            checker.hideItem();
+            checker.hideItem(navigationView);
         } else {
-            TextView duelCount = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-            duelCount.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
+            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+            view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
         }
 
         /*********************************** Display fab buttons **********************************/

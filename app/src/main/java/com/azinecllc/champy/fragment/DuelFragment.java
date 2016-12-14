@@ -18,7 +18,6 @@ import android.widget.TextView;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.data.DBHelper;
-import com.azinecllc.champy.helper.CHSetupUI;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
 
@@ -106,8 +105,8 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         ImageButton imageButtonAccept = (ImageButton) getActivity().findViewById(R.id.ok);
 
         viewPager = (ViewPager) getActivity().findViewById(R.id.pager_duel);
-        CHSetupUI chSetupUI = new CHSetupUI();
-        chSetupUI.setupUI(view, getActivity());
+//        CHSetupUI chSetupUI = new CHSetupUI();
+//        chSetupUI.setupUI(view, getActivity());
 
         if (position == size) {
             etGoal.setTypeface(typeface);

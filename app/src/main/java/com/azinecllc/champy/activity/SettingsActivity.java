@@ -23,22 +23,19 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.android.debug.hv.ViewServer;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.controller.DailyRemindController;
 import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.helper.CHCheckPendingDuels;
-import com.azinecllc.champy.helper.CHSetupUI;
 import com.azinecllc.champy.interfaces.Update_user;
 import com.azinecllc.champy.model.user.Delete;
 import com.azinecllc.champy.model.user.Profile_data;
 import com.azinecllc.champy.model.user.User;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 
 import java.io.File;
@@ -76,8 +73,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_settings);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        final CHSetupUI chSetupUI = new CHSetupUI();
-        chSetupUI.setupUI(findViewById(R.id.settings_layout), this);
+//        final CHSetupUI chSetupUI = new CHSetupUI();
+//        chSetupUI.setupUI(findViewById(R.id.settings_layout), this);
 
         final ImageView background = (ImageView) findViewById(R.id.back_settings);
         final ImageView userImageProfile = (ImageView) findViewById(R.id.img_profile);
@@ -178,10 +175,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         contactUs.setOnClickListener(this);
         tvChangeName.setOnClickListener(this);
 
-        CHCheckPendingDuels checker = new CHCheckPendingDuels(getApplicationContext(), navigationView);
-        int count = checker.getPendingCount();
+        CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();
+        int count = checker.getPendingCount(getApplicationContext());
         if (count == 0) {
-            checker.hideItem();
+            checker.hideItem(navigationView);
         } else {
             TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
             view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
