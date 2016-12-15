@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".activity.SelfImprovementActivity"
     tools:showIn="@layout/app_bar_self_improvement"
-    android:background="@drawable/self_gradient"
+    android:background="@drawable/gradient_self"
     android:id="@+id/selfimprovement">
 
     <ImageView

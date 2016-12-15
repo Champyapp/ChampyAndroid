@@ -3,12 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".activity.HistoryActivity"
     tools:showIn="@layout/app_bar_history"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:id="@+id/history_view">
 
     <ImageView
@@ -39,13 +38,10 @@
         android:id="@+id/viewpager_history"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#00000000"
         android:layout_below="@+id/sliding_tabs_history"
         android:layout_marginTop="8dp"
         android:visibility="visible"
         android:clickable="false">
-
-
 
     </android.support.v4.view.ViewPager>
 

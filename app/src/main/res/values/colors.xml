@@ -14,9 +14,9 @@
     <color name="colorBlur">#0a3a41</color>
 
     <color name="colorWhite">#FFF</color>
-    <color name="self_gradient_start">#ae637e</color>
-    <color name="self_gradient_center">#edaf7f</color>
-    <color name="self_gradient_end">#f9e2b2</color>
+    <color name="self_gradient_start">#ae6d86</color>
+    <color name="self_gradient_center">#f5b981</color>
+    <color name="self_gradient_end">#f9e2b1</color>
 
 
     <!--<color name="self_gradient_start">#a64f5d</color>-->

@@ -10,7 +10,7 @@
             android:title="@string/challenges" />
         <item
             android:id="@+id/friends"
-            android:icon="@drawable/icon_add_opponent"
+            android:icon="@drawable/nav_friends"
             android:title="@string/friends" />
         <item
             android:id="@+id/history"

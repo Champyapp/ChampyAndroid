@@ -175,11 +175,11 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
             Glide.with(context).load(R.drawable.wins).override(40, 40).into(imageViewWinsOpen);
             Glide.with(context).load(R.drawable.challenges).override(40, 40).into(imageViewChallengesOpen);
             Glide.with(context).load(R.drawable.total).override(40, 40).into(imageViewTotalOpen);
-            Glide.with(context).load(R.drawable.start_circle_00026).placeholder(R.drawable.icon_champy)
+            Glide.with(context).load(R.drawable.stat_circle_00027).placeholder(R.drawable.icon_champy)
                     .into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleChall));
-            Glide.with(context).load(R.drawable.start_circle_00026).placeholder(R.drawable.icon_champy)
+            Glide.with(context).load(R.drawable.stat_circle_00027).placeholder(R.drawable.icon_champy)
                     .into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleWins));
-            Glide.with(context).load(R.drawable.start_circle_00026).placeholder(R.drawable.icon_champy)
+            Glide.with(context).load(R.drawable.stat_circle_00027).placeholder(R.drawable.icon_champy)
                     .into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleTotal));
 
 

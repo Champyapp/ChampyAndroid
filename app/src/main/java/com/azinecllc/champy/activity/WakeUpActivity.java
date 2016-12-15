@@ -95,18 +95,20 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         final ImageButton buttonMinus = (ImageButton) findViewById(R.id.imageButtonMinus);
         final ImageButton buttonPlus = (ImageButton) findViewById(R.id.imageButtonPlus);
         final TextView tvEveryDay = (TextView) findViewById(R.id.tvEveryDayWakeUp);
+        final TextView tvWakeUp = (TextView) findViewById(R.id.tvWakeUpChallenge);
         final TextView tvGoal = (TextView) findViewById(R.id.goal_text);
-        etDays = (TextView) findViewById(R.id.etDays);
         final TextView tvDays = (TextView) findViewById(R.id.tvDays);
+        etDays = (TextView) findViewById(R.id.etDays);
 
         tvIChallengeMySelf.setTypeface(typeface);
         tvEveryDay.setTypeface(typeface);
+        tvWakeUp.setTypeface(typeface);
         etDays.setTypeface(typeface);
         tvDays.setTypeface(typeface);
         tvGoal.setTypeface(typeface);
 
-        Glide.with(this).load(R.drawable.wakeupwhite).override(110, 110).into((ImageView) findViewById(R.id.imageViewLogo));
-        Glide.with(this).load(R.drawable.wakeuptext) .override(180, 150).into((ImageView) findViewById(R.id.imageWakeUpChall));
+        //Glide.with(this).load(R.drawable.wakeupwhite).override(110, 110).into((ImageView) findViewById(R.id.imageViewLogo));
+        //Glide.with(this).load(R.drawable.wakeuptext) .override(180, 150).into((ImageView) findViewById(R.id.imageWakeUpChall));
 
         sessionManager = SessionManager.getInstance(getApplicationContext());
         offlineMode = OfflineMode.getInstance();

@@ -50,12 +50,14 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.item_alarm);
         playSound(this, getAlarmUri());
-        Glide.with(this).load(R.drawable.wakeupwhite).override(130, 130).into((ImageView) findViewById(R.id.imageViewWakeUpLogo));
-        Glide.with(this).load(R.drawable.wakeuptext).override(200, 170).into((ImageView) findViewById(R.id.imageViewWakeUpText));
+        //Glide.with(this).load(R.drawable.wakeupwhite).override(130, 130).into((ImageView) findViewById(R.id.imageViewWakeUpLogo));
+        //Glide.with(this).load(R.drawable.wakeuptext).override(200, 170).into((ImageView) findViewById(R.id.imageViewWakeUpText));
 
-        TextView textView = (TextView)findViewById(R.id.wakeup_text);
-        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
-        textView.setTypeface(typeface);
+        final TextView tvWakeUpChallenge = (TextView)findViewById(R.id.tvWakeUpChallenge);
+        final TextView tvWakeUp = (TextView)findViewById(R.id.wakeup_text);
+        final Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
+        tvWakeUpChallenge.setTypeface(typeface);
+        tvWakeUp.setTypeface(typeface);
 
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);

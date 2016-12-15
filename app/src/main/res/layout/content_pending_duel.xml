@@ -8,7 +8,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".activity.PendingDuelActivity"
     tools:showIn="@layout/app_bar_pending__duel"
-    android:background="@drawable/selfimprovementback"
+    android:background="@drawable/gradient_self"
     android:id="@+id/pending_duel">
 
     <ImageView
