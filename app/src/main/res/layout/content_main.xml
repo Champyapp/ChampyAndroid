@@ -240,7 +240,7 @@
 
     <android.support.design.widget.FloatingActionButton
         app:backgroundTint="@color/colorTextAqua"
-        android:background="@drawable/duel_yellow"
+        android:background="@drawable/ic_duel_yellow"
         android:id="@+id/fabDuel"
         android:src="@drawable/fab_duel"
         android:scaleType="center"

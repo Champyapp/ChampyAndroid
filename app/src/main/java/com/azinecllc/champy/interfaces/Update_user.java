@@ -22,9 +22,9 @@ public interface Update_user {
     @FormUrlEncoded
     @PUT("/v1/users/{id}")
     Call<User> update_user_name(
-                    @Path("id") String id,
-                    @Query("token") String token,
-                    @Field("name") String name
+            @Path("id") String id,
+            @Query("token") String token,
+            @Field("name") String name
     );
 
     @FormUrlEncoded
@@ -39,9 +39,9 @@ public interface Update_user {
     @Multipart
     @PUT("/v1/users/{id}/photo")
     Call<User> update_photo(
-       @Path("id") String id,
-       @Query("token") String token,
-       @Part("photo\"; filename=\"profile.jpeg\" ") RequestBody file
+            @Path("id") String id,
+            @Query("token") String token,
+            @Part("photo\"; filename=\"profile.jpeg\" ") RequestBody file
     );
 
     //@FormUrlEncoded

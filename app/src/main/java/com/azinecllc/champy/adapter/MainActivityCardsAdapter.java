@@ -1,14 +1,11 @@
 package com.azinecllc.champy.adapter;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +16,6 @@ import android.widget.TextView;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.controller.ChallengeController;
-import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.model.SelfImprovement_model;
 import com.azinecllc.champy.utils.SessionManager;
 
@@ -108,17 +104,17 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 
         switch (itemType) {
             case "Wake Up":
-                imageChallengeLogo.setImageResource(R.drawable.wakeup_white);
+                imageChallengeLogo.setImageResource(R.drawable.ic_wakeup_white);
                 tvChallengeDescription.setText(currentCard.getChallengeName());
                 break;
             case "Duel":
-                imageChallengeLogo.setImageResource(R.drawable.duel_white);
+                imageChallengeLogo.setImageResource(R.drawable.ic_duel_white);
                 TextView tvRecipientName = (TextView)tempView.findViewById(R.id.tvRecipientName);
                 tvRecipientName.setText("with " + currentCard.getVersus());
                 tvRecipientName.setTypeface(typeface);
                 break;
             case "Self-Improvement":
-                imageChallengeLogo.setImageResource(R.drawable.self_white);
+                imageChallengeLogo.setImageResource(R.drawable.ic_self_white);
                 break;
         }
 

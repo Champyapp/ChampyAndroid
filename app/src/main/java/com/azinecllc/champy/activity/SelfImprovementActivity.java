@@ -46,7 +46,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
 
     private SessionManager sessionManager;
     private DrawerLayout drawer;
-    //public View spinner;
+    public View spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +56,8 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         sessionManager = SessionManager.getInstance(getApplicationContext());
 
-        //spinner = findViewById(R.id.loadingPanel);
-        //spinner.setVisibility(View.VISIBLE);
+        spinner = findViewById(R.id.loadingPanel);
+        spinner.setVisibility(View.VISIBLE);
 
         //new getChallenges().execute();
 
@@ -76,7 +76,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //Glide.with(this).load(R.drawable.self_white).override(130, 130).into((ImageView) findViewById(R.id.imageViewLogo));
+        //Glide.with(this).load(R.drawable.ic_self_white).override(130, 130).into((ImageView) findViewById(R.id.imageViewLogo));
         //Glide.with(this).load(R.drawable.selfimprtext).override(280, 250).into((ImageView) findViewById(R.id.imageWakeUpChall));
 
         ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
@@ -224,7 +224,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
                     viewPager.setPageMargin(20);
                     viewPager.setClipToPadding(false);
                     viewPager.setPadding(90, 0, 90, 0);
-                    //spinner.setVisibility(View.INVISIBLE);
+                    spinner.setVisibility(View.INVISIBLE);
                 }
             }
 

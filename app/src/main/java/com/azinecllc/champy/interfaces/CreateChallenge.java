@@ -9,7 +9,7 @@ import retrofit.http.Query;
 public interface CreateChallenge {
 
     @FormUrlEncoded
-    @POST("/v1/ic_score_progress")
+    @POST("/v1/challenges")
     Call<com.azinecllc.champy.model.create_challenge.CreateChallenge> createChallenge(
             @Field("name") String name,
             @Field("type") String type_id,

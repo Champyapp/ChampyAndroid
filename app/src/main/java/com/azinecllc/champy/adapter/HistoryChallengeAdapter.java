@@ -61,15 +61,15 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         switch (itemRowType) {
             case "Duel":
                 nameTextView.setText(goal + " with " + versus);
-                Glide.with(mContext).load(R.drawable.duel_yellow).diskCacheStrategy(DiskCacheStrategy.ALL).override(80, 80).into(viewHolder.image);
+                Glide.with(mContext).load(R.drawable.ic_duel_yellow).diskCacheStrategy(DiskCacheStrategy.ALL).override(80, 80).into(viewHolder.image);
                 break;
             case "Wake Up":
                 nameTextView.setText(wakeUpTime);
-                Glide.with(mContext).load(R.drawable.wakeup_yellow).diskCacheStrategy(DiskCacheStrategy.ALL).override(80, 80).into(viewHolder.image);
+                Glide.with(mContext).load(R.drawable.ic_wakeup_yellow).diskCacheStrategy(DiskCacheStrategy.ALL).override(80, 80).into(viewHolder.image);
                 break;
             case "Self-Improvement":
                 nameTextView.setText(goal);
-                Glide.with(mContext).load(R.drawable.self_yellow).diskCacheStrategy(DiskCacheStrategy.ALL).override(80, 80).into(viewHolder.image);
+                Glide.with(mContext).load(R.drawable.ic_self_yellow).diskCacheStrategy(DiskCacheStrategy.ALL).override(80, 80).into(viewHolder.image);
                 break;
             default:
                 nameTextView.setText(R.string.lostInternetConnection);

@@ -63,7 +63,7 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         final TextView tvPendingDuels = (TextView) findViewById(R.id.tvChallengeToMySelf);
         tvPendingDuels.setTypeface(typeface);
 
-        Glide.with(this).load(R.drawable.duel_blue).override(130, 130).into((ImageView) findViewById(R.id.imageViewLogo));
+        Glide.with(this).load(R.drawable.ic_duel_blue).override(130, 130).into((ImageView) findViewById(R.id.imageViewLogo));
 
 
         final ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);

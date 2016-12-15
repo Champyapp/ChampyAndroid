@@ -6,8 +6,8 @@ import retrofit.http.Query;
 
 public interface SelfImprovement {
 
-    @GET("/v1/ic_score_progress")
+    @GET("/v1/challenges")
     Call<com.azinecllc.champy.model.self.SelfImprovement> getChallenges(
-         @Query("token") String token
+            @Query("token") String token
     );
 }

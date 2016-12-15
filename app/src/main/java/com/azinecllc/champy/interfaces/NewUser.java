@@ -31,8 +31,8 @@ public interface NewUser {
 
     @GET("/v1/users/{id}/token")
     Call<Token> getUserToken(
-      @Path("id") String id,
-      @Query(value = "AndroidOS", encoded = true) String token
+            @Path("id") String id,
+            @Query(value = "AndroidOS", encoded = true) String token
     );
 
 
