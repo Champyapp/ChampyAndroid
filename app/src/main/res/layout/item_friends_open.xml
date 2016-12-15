@@ -154,7 +154,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:id="@+id/imageButtonBlockUser"
-        android:background="@drawable/block"
+        android:background="@drawable/button_block"
         android:contentDescription="@string/button_block"
         android:layout_above="@+id/textViewChallengesCounter"
         android:layout_alignRight="@+id/imageViewBgForCircleChall"

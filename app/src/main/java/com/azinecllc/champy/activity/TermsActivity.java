@@ -185,7 +185,7 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
                     "    you create a Champy account. If you wish to create a Champy account and make use of the Service, please read these TermsActivity of Use.\n" +
                     "</p>\n" +
                     "<p lang=\"en-US\">\n" +
-                    "    You should also read the Champy PrivacyActivity Policy, which is incorporated by reference into this Agreement and available in the Service. If you do not accept\n" +
+                    "    You should also read the Champy PrivacyActivity Policy, which is incorporated by reference into this Agreement and available in the Service. If you do not button_accept\n" +
                     "    and agree to be bound by all of the terms of this Agreement, including the Champy PrivacyActivity Policy, do not use the Service. Please contact us with any\n" +
                     "    questions regarding this Agreement.\n" +
                     "</p>\n" +
@@ -197,14 +197,14 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
                     "        <ol type=\"a\">\n" +
                     "            <li>\n" +
                     "                <p lang=\"en-US\">\n" +
-                    "                    This Agreement is an electronic contract that establishes the legally binding terms you must accept to use the Service. This Agreement\n" +
-                    "                    includes the Company’s (i) PrivacyActivity Policy, (ii) and terms disclosed and agreed to by you if you purchase or accept additional features,\n" +
+                    "                    This Agreement is an electronic contract that establishes the legally binding terms you must button_accept to use the Service. This Agreement\n" +
+                    "                    includes the Company’s (i) PrivacyActivity Policy, (ii) and terms disclosed and agreed to by you if you purchase or button_accept additional features,\n" +
                     "                    products or services we offer on the Service, such as terms governing features, billing, free trials, discounts and promotions.\n" +
                     "                </p>\n" +
                     "            </li>\n" +
                     "            <li>\n" +
                     "                <p lang=\"en-US\">\n" +
-                    "                    By accessing or using the Service, you accept this Agreement and agree to the terms, conditions and notices contained or referenced herein\n" +
+                    "                    By accessing or using the Service, you button_accept this Agreement and agree to the terms, conditions and notices contained or referenced herein\n" +
                     "                    and consent to have this Agreement and all notices provided to you in electronic form. To withdraw this consent, you must cease using the\n" +
                     "                    Service and terminate your account. Please print a copy of this Agreement for your records. To receive a non- electronic copy of this\n" +
                     "                    Agreement, please contact us at <a href=\"mailto:iam@champyapp.com\">iam@champyapp.com</a> . This Agreement may be modified by the Company\n" +

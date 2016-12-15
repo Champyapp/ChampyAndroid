@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".activity.DuelActivity"
     tools:showIn="@layout/app_bar_duel"
+    android:background="@drawable/gradient_self"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_self"
     android:id="@+id/duel_back">
 
     <ImageView
@@ -29,6 +28,17 @@
         android:layout_toEndOf="@+id/imageMyPhoto"
         android:layout_toRightOf="@+id/imageMyPhoto"
         android:layout_alignBottom="@+id/imageMyPhoto" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/imageView19"
+        android:background="@drawable/gradient_self"
+        android:alpha="0.8"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true" />
 
     <ImageView
         android:layout_width="50dp"
@@ -78,7 +88,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:id="@+id/ok"
-        android:background="@drawable/accept"
+        android:background="@drawable/button_accept"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="8dp" />

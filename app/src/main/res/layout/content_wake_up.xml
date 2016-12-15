@@ -140,7 +140,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:id="@+id/imageButtonAccept"
-        android:background="@drawable/accept"
+        android:background="@drawable/button_accept"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="8dp" />

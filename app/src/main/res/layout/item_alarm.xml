@@ -54,7 +54,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginBottom="64dp"
         android:layout_marginLeft="64dp"
-        android:background="@drawable/block" />
+        android:background="@drawable/button_block" />
 
     <ImageButton
         android:layout_width="60dp"
@@ -65,7 +65,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginRight="64dp"
         android:layout_marginBottom="64dp"
-        android:background="@drawable/accept" />
+        android:background="@drawable/button_accept" />
 
 
 </RelativeLayout>
