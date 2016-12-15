@@ -7,17 +7,16 @@
     android:id="@+id/change_photo" >
 
 
-    <include layout="@layout/app_bar_photo" />
-
-
     <ImageView
         android:id="@+id/photo"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="75dp"
-        android:layout_marginBottom="4dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="15dp"
         android:layout_alignParentTop="true" />
+
+    <include layout="@layout/app_bar_photo" />
 
     <View
         android:layout_width="match_parent"

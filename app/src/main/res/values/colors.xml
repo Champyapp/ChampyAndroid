@@ -14,8 +14,17 @@
     <color name="colorBlur">#0a3a41</color>
 
     <color name="colorWhite">#FFF</color>
-    <color name="self_gradient_start">#a64f5d</color>
-    <color name="self_gradient_center">#f3a358</color>
-    <color name="self_gradient_end">#f8da99</color>
+    <color name="self_gradient_start">#ae637e</color>
+    <color name="self_gradient_center">#edaf7f</color>
+    <color name="self_gradient_end">#f9e2b2</color>
+
+
+    <!--<color name="self_gradient_start">#a64f5d</color>-->
+    <!--<color name="self_gradient_center">#f3a358</color>-->
+    <!--<color name="self_gradient_end">#f8da99</color>-->
+
+    <!--<color name="self_gradient_start">#943e60</color>-->
+    <!--<color name="self_gradient_center">#e59058</color>-->
+    <!--<color name="self_gradient_end">#f8da97</color>-->
 
 </resources>
