@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -283,7 +284,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 final EditText etNewName = (EditText) findViewById(R.id.new_name);
                 etNewName.setVisibility(View.VISIBLE);
                 etNewName.setText(name);
-                final ImageButton imageButtonAcceptName = (ImageButton) findViewById(R.id.imageButtonAcceptMaybe);
+                final Button imageButtonAcceptName = (Button) findViewById(R.id.imageButtonAcceptMaybe);
                 imageButtonAcceptName.setVisibility(View.VISIBLE);
                 final View lineOfTheNed = findViewById(R.id.view11);
                 lineOfTheNed.setVisibility(View.VISIBLE);

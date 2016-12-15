@@ -5,7 +5,7 @@
     style="@style/AppTheme.NoActionBar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/champy_background"
+    android:background="@drawable/gradient_champy"
     tools:context=".activity.LoginActivity">
 
     <ImageView

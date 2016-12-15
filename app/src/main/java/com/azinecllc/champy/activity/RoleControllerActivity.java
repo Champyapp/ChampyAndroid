@@ -60,6 +60,12 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//        Runtime.getRuntime().runFinalization();
+//        Runtime.getRuntime().gc();
+    }
 
     private void checkIfLoggedInAndMakeRedirect() {
         if (offlineMode.isConnectedToRemoteAPI(this)) {

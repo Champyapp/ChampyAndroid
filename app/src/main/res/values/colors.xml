@@ -6,6 +6,7 @@
     <color name="black_overlay">#66000000</color>
     <color name="colorHint">#d7d7d7</color>
     <color name="colorTextAqua">#339997</color>
+    <color name="colorWhite">#FFF</color>
 
     <color name="color_preloader_start">#000000</color>
     <color name="color_preloader_center">#000000</color>
@@ -13,10 +14,15 @@
     <!--was #0f2d2d -->
     <color name="colorBlur">#0a3a41</color>
 
-    <color name="colorWhite">#FFF</color>
+    <!-- Self gradient -->
     <color name="self_gradient_start">#ae6d86</color>
     <color name="self_gradient_center">#f5b981</color>
     <color name="self_gradient_end">#f9e2b1</color>
+
+    <!-- Champy gradient -->
+    <color name="champy_gradient_start">#338083</color>
+    <color name="champy_gradient_center">#346972</color>
+    <color name="champy_gradient_end">#365060</color>
 
 
     <!--<color name="self_gradient_start">#a64f5d</color>-->
