@@ -110,7 +110,7 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:id="@+id/buttonGiveUp"
-        android:background="@drawable/icon_give_up"
+        android:background="@drawable/button_ic_give_up"
         android:layout_alignBottom="@+id/cardImage"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -132,7 +132,7 @@
     <Button
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:background="@drawable/icon_done_for_today"
+        android:background="@drawable/button_ic_done"
         android:visibility="invisible"
         android:id="@+id/buttonDoneForToday"
         android:layout_alignRight="@+id/cardImage"

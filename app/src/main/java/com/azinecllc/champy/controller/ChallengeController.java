@@ -484,7 +484,7 @@ public class ChallengeController {
                         String challenge_status      = datum.getStatus();            // active or not
                         String challenge_id          = datum.get_id();               // im progress id
                         String challenge_type        = challenge.getType();          // 567d51c48322f85870fd931a / b / c
-                        String challenge_name        = challenge.getName();          // wake up (time / self / duel
+                        String challenge_name        = challenge.getName();          // wake up (time / self / button_duel
                         //String challenge_updated     = isUpdated(challenge_id);      // bool check method;
                         String challenge_duration = "";
                         String constDuration = "";
@@ -523,7 +523,7 @@ public class ChallengeController {
                         }
 
                         cv.put("name", challType); // Self-Improvement / Duel / Wake Up
-                        cv.put("versus", versus); // if this is duel than versus = recipient / sender name
+                        cv.put("versus", versus); // if this is button_duel than versus = recipient / sender name
                         cv.put("wakeUpTime", challenge_detail); // our specific fimeld for delete wakeUp (example: 1448);
                         cv.put("challengeName", challenge_name); // default 'challenge'. this column only for wake up time
                         cv.put("description", challenge_description); // smoking free life or wake up at 14:48
@@ -534,7 +534,7 @@ public class ChallengeController {
                         cv.put("myProgress", Arrays.toString(stringSenderProgress)); // last update time in millis
                         cv.put("constDuration", constDuration); // our constant value of challenge duration
                         cv.put("needsToCheck", needsToCheck); // method for check challenge for "needToCheck"
-                        db.insert("myChallenges", null, cv); // db when we store all challenges and information about them
+                        db.insert("myChallenges", null, cv); // db when we store all ic_score_progress and information about them
                     }
                     Intent intent = new Intent(firstActivity, MainActivity.class);
                     firstActivity.startActivity(intent);
@@ -581,7 +581,7 @@ public class ChallengeController {
 //        return lastUpdate;
 //    }
 
-    // method for check is active challenge self / duel
+    // method for check is active challenge self / button_duel
     public boolean isActive(String description) {
         DBHelper dbHelper = DBHelper.getInstance(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();

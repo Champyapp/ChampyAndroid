@@ -69,7 +69,7 @@
 
         <ImageButton
             android:id="@+id/btn_cancel"
-            android:background="@drawable/icon_give_up"
+            android:background="@drawable/button_ic_give_up"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_alignTop="@+id/btn_accept"
@@ -80,7 +80,7 @@
 
         <ImageButton
             android:id="@+id/btn_accept"
-            android:background="@drawable/icon_done_for_today"
+            android:background="@drawable/button_ic_done"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_marginTop="42dp"

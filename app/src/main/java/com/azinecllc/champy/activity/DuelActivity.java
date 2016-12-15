@@ -204,11 +204,11 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    // get standard cards for duel activity
+    // get standard cards for button_duel activity
     private void getChallenges() {
         DBHelper dbHelper = DBHelper.getInstance(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int clearCount = db.delete("duel", null, null);
+        int clearCount = db.delete("button_duel", null, null);
         final ContentValues cv = new ContentValues();
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         final String token = sessionManager.getToken();
@@ -224,12 +224,12 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
                     int data_size = 0;
                     for (int i = 0; i < data.size(); i++) {
                         com.azinecllc.champy.model.self.Datum datum = data.get(i);
-                        if (datum.getType().getName().equals("duel") && !datum.getName().equals("User_Challenge")) {
+                        if (datum.getType().getName().equals("button_duel") && !datum.getName().equals("User_Challenge")) {
                             cv.put("name", datum.getName());
                             cv.put("description", datum.getDescription());
                             cv.put("duration", datum.getDuration());
                             cv.put("challenge_id", datum.get_id());
-                            db.insert("duel", null, cv);
+                            db.insert("button_duel", null, cv);
                             data_size++;
                         }
                     }

@@ -344,7 +344,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                                                 SQLiteDatabase db = dbHelper.getWritableDatabase();
                                                 int clearCount = db.delete("pending", null, null);
                                                 clearCount = db.delete("pending_duel", null, null);
-                                                clearCount = db.delete("duel", null, null);
+                                                clearCount = db.delete("button_duel", null, null);
                                                 clearCount = db.delete("friends", null, null);
                                                 clearCount = db.delete("updated", null, null);
                                                 clearCount = db.delete("myChallenges", null, null);

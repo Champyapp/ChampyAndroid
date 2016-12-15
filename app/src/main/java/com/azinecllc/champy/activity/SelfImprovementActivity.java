@@ -184,7 +184,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         }
     }
 
-    // get standard self-improvement challenges
+    // get standard self-improvement ic_score_progress
     private void getChallenges() {
         DBHelper dbHelper = DBHelper.getInstance(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();

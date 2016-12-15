@@ -46,7 +46,7 @@
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:id="@+id/imageRetry"
-        android:src="@drawable/refresh"
+        android:src="@drawable/button_refresh"
         android:visibility="invisible"
         android:layout_below="@+id/tvLostInternetConnection"
         android:layout_centerHorizontal="true"

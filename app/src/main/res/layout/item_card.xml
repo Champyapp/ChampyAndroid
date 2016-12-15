@@ -90,7 +90,7 @@
         <ImageButton
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:background="@drawable/ic_minus"
+            android:background="@drawable/button_minus"
             android:id="@+id/imageButtonMinus"
             android:visibility="invisible"
             android:layout_alignTop="@+id/et_days"
@@ -100,7 +100,7 @@
         <ImageButton
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:background="@drawable/ic_plus"
+            android:background="@drawable/button_plus"
             android:id="@+id/imageButtonPlus"
             android:visibility="invisible"
             android:layout_alignTop="@+id/et_days"

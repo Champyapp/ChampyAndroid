@@ -63,7 +63,7 @@
         android:layout_marginRight="16dp"
         android:contentDescription="@string/backgroundforcircle" />
 
-    <!--    text "wins/total/inProgress"    -->
+    <!--    text "ic_score_wins/ic_score_total/inProgress"    -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -117,7 +117,7 @@
         android:layout_width="15dp"
         android:layout_height="15dp"
         android:id="@+id/imageViewBgChallenges"
-        android:src="@drawable/challenges"
+        android:src="@drawable/ic_score_progress"
         android:layout_alignLeft="@+id/imageViewBgForCircleChall"
         android:layout_alignStart="@+id/imageViewBgForCircleChall"
         android:layout_alignRight="@+id/imageViewBgForCircleChall"
@@ -129,7 +129,7 @@
         android:layout_width="15dp"
         android:layout_height="15dp"
         android:id="@+id/imageViewBgWins"
-        android:src="@drawable/wins"
+        android:src="@drawable/ic_score_wins"
         android:layout_above="@+id/textViewChallenges"
         android:layout_marginBottom="8dp"
         android:layout_alignLeft="@+id/imageViewBgForCircleWins"
@@ -141,7 +141,7 @@
         android:layout_width="15dp"
         android:layout_height="15dp"
         android:id="@+id/imageViewBgTotal"
-        android:src="@drawable/total"
+        android:src="@drawable/ic_score_total"
         android:layout_alignTop="@+id/imageViewBgWins"
         android:layout_alignLeft="@+id/imageViewBgForCircleTotal"
         android:layout_alignStart="@+id/imageViewBgForCircleTotal"
@@ -165,7 +165,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:id="@+id/imageButtonAddUser"
-        android:background="@drawable/centerwithplus"
+        android:background="@drawable/button_pluss"
         android:contentDescription="@string/button_add"
         android:layout_alignLeft="@+id/imageViewBgForCircleTotal"
         android:layout_alignStart="@+id/imageViewBgForCircleTotal"

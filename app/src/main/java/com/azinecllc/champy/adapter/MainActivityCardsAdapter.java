@@ -141,7 +141,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         } catch (RuntimeException e) { e.printStackTrace(); }
 
         if (myProgress != 0L && now > progressMidNight + oneDay) {
-            // it's mean "self" and "duel"
+            // it's mean "self" and "button_duel"
 //            DBHelper dbHelper = DBHelper.getInstance(getContext());
 //            SQLiteDatabase db = dbHelper.getWritableDatabase();
 //            ContentValues cv = new ContentValues();

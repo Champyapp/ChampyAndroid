@@ -56,7 +56,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         DBHelper dbHelper = DBHelper.getInstance(getContext());
         db = dbHelper.getWritableDatabase();
         final Bundle args = this.getArguments();
-        c = db.query("duel", null, null, null, null, null, null);
+        c = db.query("button_duel", null, null, null, null, null, null);
         position = args.getInt(ARG_PAGE);
         if (c.moveToFirst()) {
             int idColIndex = c.getColumnIndex("id");
@@ -159,7 +159,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
                             }
 
                         } else {
-                            c = db.query("duel", null, null, null, null, null, null);
+                            c = db.query("button_duel", null, null, null, null, null, null);
                             if (c.moveToFirst()) {
                                 int colchallenge_id = c.getColumnIndex("challenge_id");
                                 int coldescription = c.getColumnIndex("description");
@@ -184,7 +184,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
                             try {
                                 if (!cc.isActive(description)) {
                                     cc.sendSingleInProgressForDuel(challenge_id, friend_id);
-                                    snackbar = Snackbar.make(view, "Sent duel request", Snackbar.LENGTH_SHORT);
+                                    snackbar = Snackbar.make(view, "Sent button_duel request", Snackbar.LENGTH_SHORT);
                                 } else {
                                     snackbar = Snackbar.make(view, R.string.cant_create_this_challenge, Snackbar.LENGTH_SHORT);
                                 }

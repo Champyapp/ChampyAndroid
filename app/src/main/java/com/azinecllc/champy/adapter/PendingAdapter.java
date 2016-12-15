@@ -172,9 +172,9 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         // при нажатии нужно переобъявлять view, поэтому делаем это.
         // отвечает за вид в развернутом состоянии
         if (selected.contains(position)) {
-            Glide.with(context).load(R.drawable.wins).override(40, 40).into(imageViewWinsOpen);
-            Glide.with(context).load(R.drawable.challenges).override(40, 40).into(imageViewChallengesOpen);
-            Glide.with(context).load(R.drawable.total).override(40, 40).into(imageViewTotalOpen);
+            Glide.with(context).load(R.drawable.ic_score_wins).override(40, 40).into(imageViewWinsOpen);
+            Glide.with(context).load(R.drawable.ic_score_progress).override(40, 40).into(imageViewChallengesOpen);
+            Glide.with(context).load(R.drawable.ic_score_total).override(40, 40).into(imageViewTotalOpen);
             Glide.with(context).load(R.drawable.stat_circle_00027).placeholder(R.drawable.icon_champy)
                     .into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleChall));
             Glide.with(context).load(R.drawable.stat_circle_00027).placeholder(R.drawable.icon_champy)
@@ -218,9 +218,9 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
             viewHolder.itemView.findViewById(R.id.row_friends_list_close).setVisibility(View.GONE);
         }
         else {
-            Glide.with(context).load(R.drawable.wins).override(40, 40).into(imageViewWins);
-            Glide.with(context).load(R.drawable.challenges).override(40, 40).into(imageViewChallenges);
-            Glide.with(context).load(R.drawable.total).override(40, 40).into(imageViewTotal);
+            Glide.with(context).load(R.drawable.ic_score_wins).override(40, 40).into(imageViewWins);
+            Glide.with(context).load(R.drawable.ic_score_progress).override(40, 40).into(imageViewChallenges);
+            Glide.with(context).load(R.drawable.ic_score_total).override(40, 40).into(imageViewTotal);
 
             Glide.with(context)
                     .load(contact.getPicture())

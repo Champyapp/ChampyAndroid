@@ -90,7 +90,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         offlineMode = OfflineMode.getInstance();
         token = sessionManager.getToken();
         id = sessionManager.getUserId();
-        inProgressCounter = Integer.parseInt(sessionManager.getChampyOptions().get("challenges"));
+        inProgressCounter = Integer.parseInt(sessionManager.getChampyOptions().get("ic_score_progress"));
 
         return viewHolder;
     }
@@ -162,9 +162,9 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         // response for view in open state
         if (selected.contains(position)) {
 
-            Glide.with(context).load(R.drawable.wins).override(40, 40).into(imageViewWinsOpen);
-            Glide.with(context).load(R.drawable.challenges).override(40, 40).into(imageViewChallengesOpen);
-            Glide.with(context).load(R.drawable.total).override(40, 40).into(imageViewTotalOpen);
+            Glide.with(context).load(R.drawable.ic_score_wins).override(40, 40).into(imageViewWinsOpen);
+            Glide.with(context).load(R.drawable.ic_score_progress).override(40, 40).into(imageViewChallengesOpen);
+            Glide.with(context).load(R.drawable.ic_score_total).override(40, 40).into(imageViewTotalOpen);
             Glide.with(context).load(R.drawable.stat_circle_00027).placeholder(R.drawable.icon_champy)
                     .into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleChall));
             Glide.with(context).load(R.drawable.stat_circle_00027).placeholder(R.drawable.icon_champy)
@@ -196,9 +196,9 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             viewHolder.itemView.findViewById(R.id.row_friends_list_close).setVisibility(View.GONE);
         }
         else {
-            Glide.with(context).load(R.drawable.wins).override(40, 40).into(imageViewWins);
-            Glide.with(context).load(R.drawable.challenges).override(40, 40).into(imageViewChallenges);
-            Glide.with(context).load(R.drawable.total).override(40, 40).into(imageViewTotal);
+            Glide.with(context).load(R.drawable.ic_score_wins).override(40, 40).into(imageViewWins);
+            Glide.with(context).load(R.drawable.ic_score_progress).override(40, 40).into(imageViewChallenges);
+            Glide.with(context).load(R.drawable.ic_score_total).override(40, 40).into(imageViewTotal);
 
             Glide.with(context)
                     .load(contact.getPicture())
@@ -252,7 +252,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         });
 
         ImageButton imageButtonAdd = viewHolder.add;
-        imageButtonAdd.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.duel));
+        imageButtonAdd.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.button_duel));
         imageButtonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -263,7 +263,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                     intent.putExtra("id", contact.getID());
                     context.startActivity(intent);
                 } else {
-                    Toast.makeText(context, "You have too much challenges", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "You have too much ic_score_progress", Toast.LENGTH_SHORT).show();
                 }
             }
         });

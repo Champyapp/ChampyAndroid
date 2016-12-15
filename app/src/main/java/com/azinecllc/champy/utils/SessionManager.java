@@ -70,9 +70,9 @@ public class SessionManager {
     }
 
     public void setChampyOptions(String challenges, String wins, String total, String level) {
-        editor.putString("challenges", challenges);
-        editor.putString("wins",  wins);
-        editor.putString("total", total);
+        editor.putString("ic_score_progress", challenges);
+        editor.putString("ic_score_wins",  wins);
+        editor.putString("ic_score_total", total);
         editor.putString("level", level);
         editor.commit();
     }
@@ -211,9 +211,9 @@ public class SessionManager {
 
     public HashMap<String, String> getChampyOptions() {
         HashMap<String, String> champy = new HashMap<>();
-        champy.put("challenges", pref.getString("challenges", ""));
-        champy.put("wins",       pref.getString("wins",       ""));
-        champy.put("total",      pref.getString("total",      ""));
+        champy.put("ic_score_progress", pref.getString("ic_score_progress", ""));
+        champy.put("ic_score_wins",       pref.getString("ic_score_wins",       ""));
+        champy.put("ic_score_total",      pref.getString("ic_score_total",      ""));
         champy.put("level",      pref.getString("level",      ""));
         return champy;
     }

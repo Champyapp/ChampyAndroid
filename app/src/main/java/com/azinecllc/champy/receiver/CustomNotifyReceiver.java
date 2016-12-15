@@ -58,7 +58,7 @@ public class CustomNotifyReceiver extends WakefulBroadcastReceiver {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext())
                 .setContentIntent(pendingIntent)
-                .setSmallIcon(R.drawable.challenge)
+                .setSmallIcon(R.drawable.ic_score_total)
                 .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
                 .setLights(Color.GREEN, 1000, 1500)
                 .setContentTitle("Champy")

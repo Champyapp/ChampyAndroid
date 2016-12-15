@@ -199,7 +199,7 @@ public class MyGcmListenerService extends GcmListenerService {
                         String challenge_status      = datum.getStatus();            // active or not
                         String challenge_id          = datum.get_id();               // im progress id
                         String challenge_type        = challenge.getType();          // 567d51c48322f85870fd931a / b / c
-                        String challenge_name        = challenge.getName();          // wake up (time / self / duel
+                        String challenge_name        = challenge.getName();          // wake up (time / self / button_duel
                         String challenge_updated     = isUpdated(challenge_id);      // bool check method;
                         String challenge_duration = "";
                         String constDuration = "";
@@ -239,7 +239,7 @@ public class MyGcmListenerService extends GcmListenerService {
                         }
 
                         cv.put("name", challType); // Self-Improvement / Duel / Wake Up
-                        cv.put("versus", versus); // if this is duel than versus = recipient / sender name
+                        cv.put("versus", versus); // if this is button_duel than versus = recipient / sender name
                         cv.put("wakeUpTime", challenge_detail); // our specific field for delete wakeUp (example: 1448);
                         cv.put("challengeName", challenge_name); // default 'challenge'. this column only for wake up time
                         cv.put("description", challenge_description); // smoking free life or wake up at 14:48
@@ -250,7 +250,7 @@ public class MyGcmListenerService extends GcmListenerService {
                         cv.put("myProgress", Arrays.toString(stringSenderProgress)); // last update time in millis
                         cv.put("constDuration", constDuration); // our constant value of challenge duration
                         cv.put("needsToCheck", needsToCheck); // method for check challenge for "needToCheck"
-                        db.insert("myChallenges", null, cv); // db when we store all challenges and information about them
+                        db.insert("myChallenges", null, cv); // db when we store all ic_score_progress and information about them
 
 
                     }
@@ -316,7 +316,7 @@ public class MyGcmListenerService extends GcmListenerService {
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent, PendingIntent.FLAG_ONE_SHOT);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.friends)
+                .setSmallIcon(R.drawable.nav_friends)
                 .setContentTitle("Champy")
                 .setContentText(message)
                 .setAutoCancel(true)
@@ -335,11 +335,11 @@ public class MyGcmListenerService extends GcmListenerService {
 //        },
 //        challengeAccepted : {
 //            title : 'Challenge accepted',
-//                    body : '%s accepted your challenge request. Let the duel begins.'
+//                    body : '%s accepted your challenge request. Let the button_duel begins.'
 //        },
 //        challengesForToday : {
 //            title : 'Challenges for today',
-//                    body : 'Hey. You have some challenges for today. Don\'t forget to complete them.'
+//                    body : 'Hey. You have some ic_score_progress for today. Don\'t forget to complete them.'
 //        },
 //        friendRequest : {
 //            title : 'Incoming Friend Request',
@@ -355,7 +355,7 @@ public class MyGcmListenerService extends GcmListenerService {
 //        },
 //        submitForApprove : {
 //            title : 'Submit for approve',
-//                    body : '%s completed his/her part of the duel for today. Please, approve it.'
+//                    body : '%s completed his/her part of the button_duel for today. Please, approve it.'
 //        },
 //        approved : {
 //            title : 'Approved',
@@ -363,7 +363,7 @@ public class MyGcmListenerService extends GcmListenerService {
 //        },
 //        win : {
 //            title : 'Win',
-//                    body : 'Congratulations! You just won the duel against %s'
+//                    body : 'Congratulations! You just won the button_duel against %s'
 //        },
 //    };
 

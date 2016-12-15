@@ -68,9 +68,9 @@ public class CHBuildAnim {
         tvWinsCounter.setTypeface(typeface);
         tvTotalCounter.setTypeface(typeface);
 
-        String challenges = sessionManager.getChampyOptions().get("challenges");
-        String wins       = sessionManager.getChampyOptions().get("wins");
-        String total      = sessionManager.getChampyOptions().get("total");
+        String challenges = sessionManager.getChampyOptions().get("ic_score_progress");
+        String wins       = sessionManager.getChampyOptions().get("ic_score_wins");
+        String total      = sessionManager.getChampyOptions().get("ic_score_total");
         String userName   = sessionManager.getUserName();
 
         int challengesInteger = Integer.parseInt(challenges);
@@ -153,15 +153,15 @@ public class CHBuildAnim {
         welcomeUserName.startAnimation(alphaAnimation);
         welcomeUserName.setTypeface(typeface);
 
-        Uri uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/challenges");
+        Uri uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/ic_score_progress");
         Glide.with(activity).load(uri).into(imageViewChallengesLogo);
         imageViewChallengesLogo.startAnimation(alphaAnimation);
 
-        uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/wins");
+        uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/ic_score_wins");
         Glide.with(activity).load(uri).into(imageViewWinsLogo);
         imageViewWinsLogo.startAnimation(alphaAnimation);
 
-        uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/total");
+        uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/ic_score_total");
         Glide.with(activity).load(uri).into(imageViewTotalLogo);
         imageViewTotalLogo.startAnimation(alphaAnimation);
 

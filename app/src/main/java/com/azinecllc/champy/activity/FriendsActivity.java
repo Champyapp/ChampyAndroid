@@ -489,9 +489,9 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 //                                                    cv.put("user_id", data.get_id());
 //                                                    cv.put("name", name);
 //                                                    cv.put("photo", photo);
-//                                                    cv.put("challenges", "" + data.getAllChallengesCount());
-//                                                    cv.put("wins", "" + data.getSuccessChallenges());
-//                                                    cv.put("total", "" + data.getInProgressChallenges());
+//                                                    cv.put("ic_score_progress", "" + data.getAllChallengesCount());
+//                                                    cv.put("ic_score_wins", "" + data.getSuccessChallenges());
+//                                                    cv.put("ic_score_total", "" + data.getInProgressChallenges());
 //                                                    cv.put("level", "" + data.getLevel().getNumber());
 //
 //                                                    // отображаем друзей в списке
@@ -523,9 +523,9 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 ////                                                }
 ////                                                cv.put("name", user_name);
 ////                                                cv.put("photo", photo);
-////                                                cv.put("challenges", "0");
-////                                                cv.put("wins", "0");
-////                                                cv.put("total", "0");
+////                                                cv.put("ic_score_progress", "0");
+////                                                cv.put("ic_score_wins", "0");
+////                                                cv.put("ic_score_total", "0");
 ////                                                cv.put("level", "0");
 ////                                                newFriends.add(new FriendModel(user_name, photo, null, "0", "0", "0", "0"));
 ////                                                db.insert("mytable", null, cv);

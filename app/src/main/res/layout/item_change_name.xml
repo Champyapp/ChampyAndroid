@@ -33,6 +33,6 @@
         android:id="@+id/imageButtonAcceptMaybe"
         android:layout_below="@+id/new_name"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/accept1" />
+        android:background="@drawable/button_accept" />
 
 </RelativeLayout>

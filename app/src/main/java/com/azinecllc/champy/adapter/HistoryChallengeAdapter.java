@@ -83,7 +83,7 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
 //                nameTextView.setText(R.string.inProgress);
 //                break;
 //            case "finished":
-//                nameTextView.setText(R.string.wins);
+//                nameTextView.setText(R.string.ic_score_wins);
 //                break;
 //            case "failed":
 //                nameTextView.setText(R.string.failed);
@@ -102,8 +102,8 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         }
         nameTextView.setTypeface(typeFace);
 
-        Glide.with(mContext).load(R.drawable.challenges).override(40, 40).into(viewHolder.wins);
-        Glide.with(mContext).load(R.drawable.total) .override(40, 40).into(viewHolder.total);
+        Glide.with(mContext).load(R.drawable.ic_score_progress).override(40, 40).into(viewHolder.wins);
+        Glide.with(mContext).load(R.drawable.ic_score_total) .override(40, 40).into(viewHolder.total);
 
     }
 

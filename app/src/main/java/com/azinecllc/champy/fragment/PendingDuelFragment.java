@@ -71,7 +71,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         final String token = sessionManager.getToken();
         final String userId = sessionManager.getUserId();
         cc = new ChallengeController(getContext(), getActivity(), token, userId);
-        inProgressCount = Integer.parseInt(sessionManager.getChampyOptions().get("challenges"));
+        inProgressCount = Integer.parseInt(sessionManager.getChampyOptions().get("ic_score_progress"));
     }
 
     @Nullable
