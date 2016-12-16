@@ -78,7 +78,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         // call here System.gc(); ?
         File fileProfile = new File(path, "profile.jpg");
         Uri uriProfile = Uri.fromFile(fileProfile);
-        File fileBlur = new File(path, "blured2.png");
+        File fileBlur = new File(path, "blurred.png");
         Uri uriBlur = Uri.fromFile(fileBlur);
 
         Glide.with(this).load(uriBlur).bitmapTransform(new CropSquareTransformation(this))

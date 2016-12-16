@@ -94,7 +94,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
                 .skipMemoryCache(true)
                 .into(drawerImageProfile);
 
-        File fileBlur = new File(path, "blured2.png");
+        File fileBlur = new File(path, "blurred.png");
         url = Uri.fromFile(fileBlur);
         Glide.with(this)
                 .load(url)

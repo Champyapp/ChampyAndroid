@@ -76,7 +76,7 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
         Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(this))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
 
-        file = new File(path, "blured2.png");
+        file = new File(path, "blurred.png");
         url = Uri.fromFile(file);
         Glide.with(this).load(url).bitmapTransform(new CropSquareTransformation(this))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBG);

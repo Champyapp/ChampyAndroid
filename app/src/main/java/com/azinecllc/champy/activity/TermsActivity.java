@@ -80,7 +80,7 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
                 .skipMemoryCache(true)
                 .into(drawerImageProfile);
 
-        file = new File(path, "blured2.png");
+        file = new File(path, "blurred.png");
         url = Uri.fromFile(file);
 
         Glide.with(this)

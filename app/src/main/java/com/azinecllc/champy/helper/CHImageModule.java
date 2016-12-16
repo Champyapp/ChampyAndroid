@@ -75,7 +75,7 @@ public class CHImageModule {
 
 
     public Drawable Init(String path, Activity activity) throws FileNotFoundException {
-        File file = new File(path, "blured2.png");
+        File file = new File(path, "blurred.png");
         Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
         Drawable dr = new BitmapDrawable(context.getResources(), bitmap);
         dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);

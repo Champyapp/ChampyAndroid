@@ -80,7 +80,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
                 .skipMemoryCache(true)
                 .into(drawerImageProfile);
 
-        file = new File(path, "blured2.png");
+        file = new File(path, "blurred.png");
         url = Uri.fromFile(file);
 
         Glide.with(this)

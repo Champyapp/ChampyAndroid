@@ -64,7 +64,7 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
 
         sessionManager = SessionManager.getInstance(getApplicationContext());
         File fileProfile = new File(path, "profile.jpg");
-        File fileBlur = new File(path, "blured2.png");
+        File fileBlur = new File(path, "blurred.png");
         Uri uriProfile = Uri.fromFile(fileProfile);
         Uri uriBlur = Uri.fromFile(fileBlur);
         String name = sessionManager.getUserName();

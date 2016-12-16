@@ -81,7 +81,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         final ImageView userImageProfile = (ImageView) findViewById(R.id.img_profile);
         background.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-        File fileBlur = new File(path, "blured2.png");
+        File fileBlur = new File(path, "blurred.png");
         Uri uriBlur = Uri.fromFile(fileBlur);
         Glide.with(this)
                 .load(uriBlur)
