@@ -6,19 +6,19 @@
     <group>
         <item
             android:id="@+id/challenges"
-            android:icon="@drawable/nav_challenges"
+            android:icon="@mipmap/nav_challenges"
             android:title="@string/challenges" />
         <item
             android:id="@+id/friends"
-            android:icon="@drawable/nav_friends"
+            android:icon="@mipmap/nav_friends"
             android:title="@string/friends" />
         <item
             android:id="@+id/history"
-            android:icon="@drawable/nav_history"
+            android:icon="@mipmap/nav_history"
             android:title="@string/history" />
         <item
             android:id="@+id/settings"
-            android:icon="@drawable/nav_settings"
+            android:icon="@mipmap/nav_settings"
             android:title="@string/settings" />
     </group>
 
@@ -31,12 +31,12 @@
 
     <item
         android:id="@+id/share"
-        android:icon="@drawable/nav_share"
+        android:icon="@mipmap/nav_share"
         android:title="@string/share" />
 
     <item
         android:id="@+id/nav_logout"
-        android:icon="@drawable/nav_logout"
+        android:icon="@mipmap/nav_logout"
         android:title="@string/logout" />
 
 

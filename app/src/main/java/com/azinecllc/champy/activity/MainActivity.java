@@ -58,10 +58,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Runtime rt = Runtime.getRuntime();
-        long maxMemory = rt.maxMemory();
-        Log.i("onCreate", "maxMemory:" + Long.toString(maxMemory));
-
         sessionManager = SessionManager.getInstance(getApplicationContext());
         MainActivityCardsAdapter adapter = new MainActivityCardsAdapter(this, SelfImprovement_model.generate(this));
         if (adapter.dataCount() > 0) {

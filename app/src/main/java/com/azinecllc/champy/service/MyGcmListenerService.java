@@ -316,7 +316,7 @@ public class MyGcmListenerService extends GcmListenerService {
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent, PendingIntent.FLAG_ONE_SHOT);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.nav_friends)
+                .setSmallIcon(R.mipmap.nav_friends)
                 .setContentTitle("Champy")
                 .setContentText(message)
                 .setAutoCancel(true)
