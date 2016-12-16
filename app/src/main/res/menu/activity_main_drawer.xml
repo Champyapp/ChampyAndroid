@@ -6,7 +6,7 @@
     <group>
         <item
             android:id="@+id/challenges"
-            android:icon="@drawable/ic_score_total"
+            android:icon="@drawable/nav_challenges"
             android:title="@string/challenges" />
         <item
             android:id="@+id/friends"
