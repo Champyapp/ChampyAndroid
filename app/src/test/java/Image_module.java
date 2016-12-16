@@ -47,7 +47,7 @@ public class Image_module {
     @Test
     public void test_Image_module_rounded_corners() {
         imagemodule = new CHImageModule(context);
-        String filePath = RuntimeEnvironment.application.getPackageResourcePath() + "/src/test/res/blured2.jpg";
+        String filePath = RuntimeEnvironment.application.getPackageResourcePath() + "/src/test/res/blured2.png";
         Bitmap bitmap = BitmapFactory.decodeFile(filePath);
         assertNotNull(imagemodule.getRoundedCornerBitmap(bitmap, 15));
     }
@@ -55,7 +55,7 @@ public class Image_module {
     @Test
     public void test_Image_module_get_resized_bitmap() {
         imagemodule = new CHImageModule(context);
-        String filePath = RuntimeEnvironment.application.getPackageResourcePath() + "/src/test/res/blured2.jpg";
+        String filePath = RuntimeEnvironment.application.getPackageResourcePath() + "/src/test/res/blured2.png";
         Bitmap bitmap = BitmapFactory.decodeFile(filePath);
         assertNotNull(imagemodule.getResizedBitmap(bitmap, 150, 150));
 

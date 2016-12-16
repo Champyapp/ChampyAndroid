@@ -71,7 +71,7 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
         navigationView.setNavigationItemSelectedListener(this);
 
         File filePhoto = new File(path, "profile.jpg");
-        File fileBlur = new File(path, "blured2.jpg");
+        File fileBlur = new File(path, "blured2.png");
         Uri profile = Uri.fromFile(filePhoto);
         Uri blurred = Uri.fromFile(fileBlur);
 

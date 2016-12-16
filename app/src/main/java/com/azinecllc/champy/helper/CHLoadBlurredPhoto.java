@@ -15,7 +15,7 @@
 //public class CHLoadBlurredPhoto {
 //
 //    public static Drawable Init(String path) throws FileNotFoundException {
-//        File file = new File(path, "blured2.jpg");
+//        File file = new File(path, "blured2.png");
 //        Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
 //        Drawable dr = new BitmapDrawable(Resources.getSystem(), bitmap);
 //        dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);

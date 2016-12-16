@@ -77,7 +77,7 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(this))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
 
-        file = new File (path, "blured2.jpg");
+        file = new File (path, "blured2.png");
         url = Uri.fromFile(file);
         Glide.with(this).load(url).bitmapTransform(new CropSquareTransformation(this))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);

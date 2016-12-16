@@ -132,7 +132,7 @@ public class SessionManager {
 //        dailyRemind.disableDailyNotificationReminder();
         // go to login activity
 
-        File blurred = new File(path, "blured2.jpg");
+        File blurred = new File(path, "blured2.png");
         blurred.delete();
         File profile = new File(path, "profile.jpg");
         profile.delete();

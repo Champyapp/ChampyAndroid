@@ -81,7 +81,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         final ImageView userImageProfile = (ImageView) findViewById(R.id.img_profile);
         background.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-        File fileBlur = new File(path, "blured2.jpg");
+        File fileBlur = new File(path, "blured2.png");
         Uri uriBlur = Uri.fromFile(fileBlur);
         Glide.with(this)
                 .load(uriBlur)
@@ -218,7 +218,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             tvEnterYourName.setVisibility(View.GONE);
             final EditText etNewName = (EditText)findViewById(R.id.new_name);
             etNewName.setVisibility(View.GONE);
-            ImageButton imageButtonAccept = (ImageButton)findViewById(R.id.imageButtonAcceptMaybe);
+            Button imageButtonAccept = (Button)findViewById(R.id.imageButtonAcceptMaybe);
             imageButtonAccept.setVisibility(View.GONE);
             findViewById(R.id.view11).setVisibility(View.GONE);
         }
@@ -337,7 +337,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                                         @Override
                                         public void onResponse(Response<Delete> response, Retrofit retrofit) {
                                             if (response.isSuccess()) {
-                                                File blur = new File(path, "blured2.jpg");
+                                                File blur = new File(path, "blurred.png");
                                                 blur.delete();
                                                 File profile = new File(path, "profile.jpg");
                                                 profile.delete();

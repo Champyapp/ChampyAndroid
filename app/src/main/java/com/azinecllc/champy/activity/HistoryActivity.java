@@ -75,7 +75,7 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         Glide.with(this).load(uriProfile).bitmapTransform(new CropCircleTransformation(this))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
 
-        File fileBlur = new File(path, "blured2.jpg");
+        File fileBlur = new File(path, "blured2.png");
         Uri uriBlur = Uri.fromFile(fileBlur);
         Glide.with(this).load(uriBlur).bitmapTransform(new CropSquareTransformation(this))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(background);

@@ -213,7 +213,7 @@ public class PhotoActivity extends AppCompatActivity {
 
     public void savePhoto (Bitmap photo) {
         File profileImage = new File(path, "profile.jpg");
-        File profileBlured = new File(path, "blured2.jpg");
+        File profileBlured = new File(path, "blurred.png");
         Uri uri = Uri.fromFile(profileImage);
 
         Bitmap blured = Blur.blurRenderScript(getApplicationContext(), photo, 10);

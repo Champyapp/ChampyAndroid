@@ -81,7 +81,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         imageMyPhoto.getLayoutParams().height = x; // because we need a square
 
         File fileProfile = new File(path, "profile.jpg");
-        File fileBlur = new File(path, "blured2.jpg");
+        File fileBlur = new File(path, "blured2.png");
         Uri uriProfile = Uri.fromFile(fileProfile);
         Uri uriBlur = Uri.fromFile(fileBlur);
 

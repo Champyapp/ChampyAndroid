@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // call here System.gc(); ?
         // call here Runtime.getRuntime().gc(); ?
 
-        File blurred = new File(path, "blured2.jpg");
+        File blurred = new File(path, "blurred.png");
         if (blurred.exists()) {
             Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this))
                     .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(background);

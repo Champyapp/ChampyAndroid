@@ -117,7 +117,7 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
                     .skipMemoryCache(true)
                     .into((ImageView)activity.findViewById(R.id.profile_image));
 
-            File file = new File(path, "blured2.jpg");
+            File file = new File(path, "blurred.png");
             if (file.exists()) {
                 return;
             } else {
