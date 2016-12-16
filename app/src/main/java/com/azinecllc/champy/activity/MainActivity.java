@@ -155,31 +155,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //ViewServer.get(this).addWindow(this);
     }
 
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        AppEventsLogger.deactivateApp(this);
-//    }
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        ViewServer.get(this).setFocusedWindow(this);
-//        AppEventsLogger.activateApp(this);
-//    }
-//
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        ViewServer.get(this).removeWindow(this);
-//    }
-//
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        ViewServer.get(this).removeWindow(this);
-//    }
-
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -226,9 +201,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-//    public static final Handler navDrawerHandler = new Handler(msg -> true);
-//    public static final Runnable mRunnable = () -> { };
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -175,7 +175,11 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
         return true;
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        this.isFinishing();
+    }
 
     private class ProgressTask extends AsyncTask<Void,Void,Void> {
         @Override
@@ -213,9 +217,4 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
 
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-    }
 }

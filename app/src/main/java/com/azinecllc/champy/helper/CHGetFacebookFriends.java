@@ -92,9 +92,9 @@ public class CHGetFacebookFriends {
                                     cv.put("name", name);
                                     cv.put("photo", photo);
                                     cv.put("user_id", data.get_id());
-                                    cv.put("ic_score_progress", data.getAllChallengesCount());
-                                    cv.put("ic_score_wins", data.getSuccessChallenges());
-                                    cv.put("ic_score_total", data.getInProgressChallenges());
+                                    cv.put("challenges", data.getAllChallengesCount());
+                                    cv.put("wins", data.getSuccessChallenges());
+                                    cv.put("total", data.getInProgressChallenges());
                                     cv.put("level", data.getLevel().getNumber());
 
                                     if (!checkTableForExist.isInOtherTable(data.get_id())) {

@@ -90,7 +90,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         offlineMode = OfflineMode.getInstance();
         token = sessionManager.getToken();
         id = sessionManager.getUserId();
-        inProgressCounter = Integer.parseInt(sessionManager.getChampyOptions().get("ic_score_progress"));
+        inProgressCounter = Integer.parseInt(sessionManager.getChampyOptions().get("challenges"));
 
         return viewHolder;
     }

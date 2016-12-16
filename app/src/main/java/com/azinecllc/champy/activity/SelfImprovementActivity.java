@@ -129,6 +129,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        this.isFinishing();
         //Glide.clear(findViewById(R.id.imageViewLogo));
         //Glide.clear(findViewById(R.id.imageWakeUpChall));
     }
@@ -172,6 +173,8 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 
     @Override
     public void onBackPressed() {

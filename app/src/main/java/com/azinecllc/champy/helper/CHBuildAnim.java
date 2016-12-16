@@ -69,9 +69,9 @@ public class CHBuildAnim {
         tvWinsCounter.setTypeface(typeface);
         tvTotalCounter.setTypeface(typeface);
 
-        String challenges = sessionManager.getChampyOptions().get("ic_score_progress");
-        String wins       = sessionManager.getChampyOptions().get("ic_score_wins");
-        String total      = sessionManager.getChampyOptions().get("ic_score_total");
+        String challenges = sessionManager.getChampyOptions().get("challenges");
+        String wins       = sessionManager.getChampyOptions().get("wins");
+        String total      = sessionManager.getChampyOptions().get("total");
         String userName   = sessionManager.getUserName();
 
         int challengesInteger = Integer.parseInt(challenges);
