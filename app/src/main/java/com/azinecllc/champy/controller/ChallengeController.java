@@ -9,8 +9,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.MainActivity;
+import com.azinecllc.champy.activity.SettingsActivity;
 import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.helper.CHLoadUserProgressBarInfo;
 import com.azinecllc.champy.interfaces.ActiveInProgress;
@@ -86,13 +89,15 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
                     sendSingleInProgressForSelf(challengeId);
-                    Log.d(TAG, "createNewSelfImprovementChallenge Status: VSE OK");
+                } else {
+                    Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
-                else Log.d(TAG, "createNewSelfImprovementChallenge Status: Failed " + response.message());
             }
 
             @Override
-            public void onFailure(Throwable t) {}
+            public void onFailure(Throwable t) {
+                Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+            }
         });
 
     }
@@ -116,14 +121,16 @@ public class ChallengeController {
 //                    cv.put("updated", "false");
 //                    db.insert("updated", null, cv);
 
-                    Log.d("sendSingleInProgress", "InProgressId: " + inProgressId);
                     generateCardsForMainActivity();
+                } else {
+                    Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
-                else { Log.d("sendSingleInProgress", "Status: FAILED: " + response.code() + response.message()); }
             }
 
             @Override
-            public void onFailure(Throwable t) { }
+            public void onFailure(Throwable t) {
+                Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+            }
         });
     }
 
@@ -142,12 +149,15 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
                     sendSingleInProgressForDuel(challengeId, friend_id);
+                } else {
+                    Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
-                else Log.d(TAG, "createNewDuelChallenge OnResponse: Failed " + response.message());
             }
 
             @Override
-            public void onFailure(Throwable t) { }
+            public void onFailure(Throwable t) {
+                Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+            }
         });
 
     }
@@ -172,14 +182,15 @@ public class ChallengeController {
                     db.insert("updated", null, cv);
 
                     refreshCardsForPendingDuel();
-
-                    Log.d("startDuelInProgress", "Status: VSE OK");
+                } else {
+                    Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
-                else Log.d("startDuelInProgress", "Status: FAILED " + response.code() + response.message());
             }
 
             @Override
-            public void onFailure(Throwable t) { }
+            public void onFailure(Throwable t) {
+                Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+            }
         });
     }
 
@@ -226,11 +237,14 @@ public class ChallengeController {
 //                            + "\n DESCRIPTION = " + description
 //                            + "\n DETAILS     = " + stringIntentId // change for myDetails
 //                            + "\n DURATION    = " + duration + " (21 day in seconds)");
-                } else Log.d(TAG, "createNewWakeUpChallenge Status: Failed");
+                } else {
+                    Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
             public void onFailure(Throwable t) {
+                Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -286,12 +300,15 @@ public class ChallengeController {
                     /** Generate current card in DB and for MainActivity **/
                     generateCardsForMainActivity();
 
+                } else {
+                    Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
-                else Log.d("sendSingleInProgress", "Status: FAILED: " + response.code());
             }
 
             @Override
-            public void onFailure(Throwable t) { }
+            public void onFailure(Throwable t) {
+                Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+            }
 
         });
 
@@ -308,13 +325,16 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    Log.d("JoinToChallenge", "onResponse: VSE OK");
                     refreshCardsForPendingDuel();
-                } else Log.d("JoinToChallenge", "onResponse: WTF" + " | ERROR = " + response.code());
+                } else {
+                    Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
-            public void onFailure(Throwable t) { }
+            public void onFailure(Throwable t) {
+                Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+            }
         });
     }
 
@@ -327,12 +347,15 @@ public class ChallengeController {
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()){
                     refreshCardsForPendingDuel();
-                    Log.d(TAG, "RejectInviteForDuel onResponse: VSE OK");
-                } else Log.d(TAG, "RejectInviteForDuel onResponse: FAILED" + " | ERROR: " + response.code() + " " + response.message());
+                } else {
+                    Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
-            public void onFailure(Throwable t) { }
+            public void onFailure(Throwable t) {
+                Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+            }
         });
     }
 
@@ -357,14 +380,15 @@ public class ChallengeController {
                     
                     generateCardsForMainActivity();
 
-                    Log.d(TAG, "doneForToday onResponse: VSE OK");
                 } else {
-                    Log.d(TAG, "doneForToday onResponse: FAILED " + response.code() + response.message() + response.body());
+                    Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
-            public void onFailure(Throwable t) { }
+            public void onFailure(Throwable t) {
+                Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+            }
         });
     }
 
@@ -387,16 +411,17 @@ public class ChallengeController {
                             PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, intentId, myIntent, 0);
                             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                             alarmManager.cancel(pendingIntent);
-                            Log.d("GiveUp", "AlarmManager status: stopped " + alarmManager);
                         }
-                        Log.d(TAG, "GiveUp onResponse: VSE OK");
                         generateCardsForMainActivity();
+                    } else {
+                        Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
                     }
-                    else Log.d(TAG, "GiveUp onResponse: FAILED: " + response.code());
                 }
 
                 @Override
-                public void onFailure(Throwable t) { }
+                public void onFailure(Throwable t) {
+                    Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                }
             });
 
         }
@@ -447,14 +472,15 @@ public class ChallengeController {
                     }
                     generateCardsForMainActivity();
 
-                    Log.d(TAG, "RefreshPendingDuels onResponse: VSE OK");
                 } else {
-                    Log.d(TAG, "RefreshPendingDuels onResponse: FAILED: " + response.code());
+                    Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
-            public void onFailure(Throwable t) { }
+            public void onFailure(Throwable t) {
+                Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+            }
         });
     }
 
@@ -598,7 +624,6 @@ public class ChallengeController {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Log.d(TAG, "isActive: vse xyunja: " + e.getMessage());
                 }
             } while (c.moveToNext());
         }
@@ -625,7 +650,6 @@ public class ChallengeController {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Log.d(TAG, "isActiveWakeUp: vse xyunja: " + e.getMessage());
                 }
             } while (c.moveToNext());
         }

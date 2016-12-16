@@ -24,10 +24,7 @@ import com.azinecllc.champy.utils.SessionManager;
 public class DuelFragment extends Fragment implements View.OnClickListener {
 
     private static final String ARG_PAGE = "ARG_PAGE";
-    private int position;
-    private int size;
-    private int days = 21;
-    private int o = 0;
+    private int position, size, days = 21, o = 0;
     private String name, duration, description, challenge_id, friend_id;
     private SessionManager sessionManager;
     private ChallengeController cc;
@@ -59,7 +56,6 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         c = db.query("duel", null, null, null, null, null, null);
         position = args.getInt(ARG_PAGE);
         if (c.moveToFirst()) {
-            int idColIndex      = c.getColumnIndex("id");
             int nameColIndex    = c.getColumnIndex("name");
             int coldescription  = c.getColumnIndex("description");
             int colduration     = c.getColumnIndex("duration");
@@ -68,10 +64,10 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
                 o++;
                 if (o > position + 1) break;
                 if (o == position + 1) {
-                    challenge_id = c.getString(colchallenge_id);
-                    description  = c.getString(coldescription);
-                    duration     = c.getString(colduration);
                     name         = c.getString(nameColIndex);
+                    duration     = c.getString(colduration);
+                    description  = c.getString(coldescription);
+                    challenge_id = c.getString(colchallenge_id);
                 }
             } while (c.moveToNext());
         }
@@ -146,7 +142,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
                             duration = etDays.getText().toString();
                             try {
                                 days = Integer.parseInt(duration);
-                                if (!cc.isActive(description) && !description.isEmpty() && !description.startsWith(" ")) {
+                                if (!cc.isActive(description) && !description.isEmpty()) {
                                     cc.createNewDuelChallenge(description, days, friend_id);
                                     snackbar = Snackbar.make(view, R.string.challenge_created, Snackbar.LENGTH_SHORT);
                                     snackbar.show();

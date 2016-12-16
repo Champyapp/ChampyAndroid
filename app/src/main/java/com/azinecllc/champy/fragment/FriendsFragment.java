@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.FriendsAdapter;
@@ -230,7 +231,9 @@ public class FriendsFragment extends Fragment {
                 }
 
                 @Override
-                public void onFailure(Throwable t) { }
+                public void onFailure(Throwable t) {
+                    Toast.makeText(getContext(), R.string.service_not_available, Toast.LENGTH_LONG).show();
+                }
             });
         } else {
             swipeRefreshLayout.setRefreshing(false);

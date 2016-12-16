@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
+import android.support.annotation.UiThread;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -142,7 +143,9 @@ public class OtherFragment extends Fragment {
         gSwipeRefreshLayout.setOnRefreshListener(() -> refreshOtherView(gSwipeRefreshLayout, gView));
         this.gView = view;
 
-        if (sessionManager.getRefreshOthers().equals("true")) { refreshOtherView(gSwipeRefreshLayout, gView); }
+        if (sessionManager.getRefreshOthers().equals("true")) {
+            refreshOtherView(gSwipeRefreshLayout, gView);
+        }
 
         return view;
 
@@ -187,11 +190,11 @@ public class OtherFragment extends Fragment {
         if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
             swipeRefreshLayout.setRefreshing(true);
             swipeRefreshLayout.post(() -> {
-                final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-                final NewUser newUser = retrofit.create(NewUser.class);
+                Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+                NewUser newUser = retrofit.create(NewUser.class);
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
                 StrictMode.setThreadPolicy(policy);
-                final SQLiteDatabase db = dbHelper.getWritableDatabase();
+                SQLiteDatabase db = dbHelper.getWritableDatabase();
                 int clearCount = db.delete("mytable", null, null);
                 final List<FriendModel> newFriends = new ArrayList<>();
                 final GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(), (array, response) -> {
@@ -283,7 +286,9 @@ public class OtherFragment extends Fragment {
                                 }
 
                                 @Override
-                                public void onFailure(Throwable t) { }
+                                public void onFailure(Throwable t) {
+                                    Toast.makeText(getContext(), R.string.service_not_available, Toast.LENGTH_LONG).show();
+                                }
                             });
                         } catch (JSONException e) { e.printStackTrace(); }
                     }
@@ -325,6 +330,7 @@ public class OtherFragment extends Fragment {
             Log.d(TAG, "Sockets: modifiedRelationship");
         }
     };
+
 
 
 }

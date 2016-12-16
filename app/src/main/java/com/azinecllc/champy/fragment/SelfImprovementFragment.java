@@ -147,15 +147,15 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                             description = etGoal.getText().toString();
                             duration = etDays.getText().toString();
                             try {
-                                days = Integer.parseInt(duration);
-                                if (!cc.isActive(description) && !description.isEmpty() && !description.startsWith(" ")) {
-                                    cc.createNewSelfImprovementChallenge(description, days);
-                                    snackbar = Snackbar.make(view, R.string.challenge_created, Snackbar.LENGTH_SHORT);
-                                    snackbar.show();
-                                } else {
-                                    snackbar = Snackbar.make(view, R.string.cant_create_this_challenge, Snackbar.LENGTH_SHORT);
-                                    snackbar.show();
-                                }
+                            days = Integer.parseInt(duration);
+                            if (!cc.isActive(description) && !description.isEmpty()) {
+                                cc.createNewSelfImprovementChallenge(description, days);
+                                snackbar = Snackbar.make(view, R.string.challenge_created, Snackbar.LENGTH_SHORT);
+                                snackbar.show();
+                            } else {
+                                snackbar = Snackbar.make(view, R.string.cant_create_this_challenge, Snackbar.LENGTH_SHORT);
+                                snackbar.show();
+                            }
                             } catch (NullPointerException | NumberFormatException e) {
                                 e.printStackTrace();
                             }

@@ -23,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.controller.DailyRemindController;
@@ -290,7 +291,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
                 imageButtonAcceptName.setOnClickListener(v1 -> {
                     String checkName = etNewName.getText().toString();
-                    if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this) && !checkName.isEmpty() && !checkName.startsWith(" ")) {
+                    if (offlineMode.isConnectedToRemoteAPI(this) && !checkName.isEmpty()) {
                         String newName = etNewName.getText().toString().trim();
                         sessionManager.change_name(newName);
                         setNewName(newName);
@@ -329,7 +330,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
                                     @Override
                                     public void onFailure(Throwable t) {
-                                        Log.d(TAG, "onFailureSurrenderAllChallenges: vse hyinja");
+                                        Toast.makeText(SettingsActivity.this, R.string.service_not_available, Toast.LENGTH_LONG).show();
                                     }
                                 });
 
@@ -346,7 +347,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                                             SQLiteDatabase db = dbHelper.getWritableDatabase();
                                             int clearCount = db.delete("pending", null, null);
                                             clearCount = db.delete("pending_duel", null, null);
-                                            clearCount = db.delete("button_duel", null, null);
+                                            clearCount = db.delete("duel", null, null);
                                             clearCount = db.delete("friends", null, null);
                                             clearCount = db.delete("updated", null, null);
                                             clearCount = db.delete("myChallenges", null, null);
@@ -356,7 +357,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
                                     @Override
                                     public void onFailure(Throwable t) {
-                                        Log.d(TAG, "onFailureDeleteUser: vse hyinja");
+                                        Toast.makeText(SettingsActivity.this, R.string.service_not_available, Toast.LENGTH_LONG).show();
                                     }
                                 });
 
@@ -487,12 +488,16 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
-                if (response.isSuccess()) recreate();
-                else Log.d(TAG , "SetNewName: vse hyinya");
+                if (response.isSuccess()) {
+                    recreate();
+                } else {
+                    Toast.makeText(SettingsActivity.this, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                }
+
             }
             @Override
             public void onFailure(Throwable t) {
-                Log.d(TAG , "SetNewName: " + t);
+                Toast.makeText(SettingsActivity.this, R.string.service_not_available, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -514,12 +519,13 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
-                String myLog = (response.isSuccess()) ? " Success" : " Denied";
-                Log.d(TAG, "Status: updatedProfile " + myLog);
+                if (!response.isSuccess()) {
+                    Toast.makeText(SettingsActivity.this, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                }
             }
             @Override
             public void onFailure(Throwable t) {
-                Log.d(TAG, "VSE huynya");
+                Toast.makeText(SettingsActivity.this, R.string.service_not_available, Toast.LENGTH_LONG).show();
             }
         });
     }
