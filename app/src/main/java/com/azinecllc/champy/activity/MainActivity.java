@@ -19,6 +19,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.MainActivityCardsAdapter;
@@ -102,13 +103,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         File blurred = new File(path, "blurred.png");
         if (blurred.exists()) {
-            Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(background);
-            Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);
             File profile = new File(path, "profile.jpg");
-            Glide.with(this).load(profile).bitmapTransform(new CropCircleTransformation(this))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
+            Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(background);
+            Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);
+            Glide.with(this).load(profile).bitmapTransform(new CropCircleTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
         }
         else {
             final String pathToPic = sessionManager.getPathToPic();
@@ -145,11 +143,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         rotate_forward = AnimationUtils.loadAnimation(this, R.anim.rotate_forward);
         rotate_backward = AnimationUtils.loadAnimation(this, R.anim.rotate_backward);
 
-        fabPlus.setOnClickListener(v -> animateFAB());
-        fabSelf.setOnClickListener(v -> startActivity(new Intent(this, SelfImprovementActivity.class)));
-        fabDuel.setOnClickListener(v -> startActivity(new Intent(this, FriendsActivity.class)));
-        fabWakeUp.setOnClickListener(v -> startActivity(new Intent(this, WakeUpActivity.class)));
-
+        if (adapter.dataCount() < 10) {
+            fabPlus.setOnClickListener(v -> animateFAB());
+            fabSelf.setOnClickListener(v -> startActivity(new Intent(this, SelfImprovementActivity.class)));
+            fabDuel.setOnClickListener(v -> startActivity(new Intent(this, FriendsActivity.class)));
+            fabWakeUp.setOnClickListener(v -> startActivity(new Intent(this, WakeUpActivity.class)));
+        } else {
+            Toast.makeText(this, R.string.you_have_too_much_challenges, Toast.LENGTH_LONG).show();
+        }
 
         //ViewServer.get(this).addWindow(this);
     }

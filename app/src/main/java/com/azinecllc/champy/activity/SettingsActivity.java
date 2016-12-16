@@ -61,7 +61,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private OfflineMode offlineMode;
     private DBHelper dbHelper;
     private DailyRemindController mDailyRemind;
-    private NavigationView navigationView;
     private DrawerLayout drawer;
     private SessionManager sessionManager;
     HashMap<String, String> map = new HashMap<>();
@@ -101,17 +100,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 .override(130, 130)
                 .into(userImageProfile);
 
-
-        // Result - зберігає фотку і не міняє її вообще ніколи
-        // skipMemoryCache - ігнориться =/
-
-        // Source - теж саме..
-        // skipMemoryCache - ігнориться =/
-
-        // All - теж саме -_-
-
-        // None - ніхера не робить
-
         dbHelper = DBHelper.getInstance(getApplicationContext());
         offlineMode = OfflineMode.getInstance();
         mDailyRemind = new DailyRemindController(getApplicationContext());
@@ -129,7 +117,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
         user = sessionManager.getUserDetails();
@@ -300,85 +288,86 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 final View lineOfTheNed = findViewById(R.id.view11);
                 lineOfTheNed.setVisibility(View.VISIBLE);
 
-                imageButtonAcceptName.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String checkName = etNewName.getText().toString();
-                        if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this) && !checkName.isEmpty() && !checkName.startsWith(" ")) {
-                            String newName = etNewName.getText().toString().trim();
-                            sessionManager.change_name(newName);
-                            setNewName(newName);
+                imageButtonAcceptName.setOnClickListener(v1 -> {
+                    String checkName = etNewName.getText().toString();
+                    if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this) && !checkName.isEmpty() && !checkName.startsWith(" ")) {
+                        String newName = etNewName.getText().toString().trim();
+                        sessionManager.change_name(newName);
+                        setNewName(newName);
 
-                            tvName.setText(etNewName.getText().toString());
-                            imageButtonAcceptName.setVisibility(View.GONE);
-                            tvChangeName.setVisibility(View.VISIBLE);
-                            tvEnterYourName.setVisibility(View.GONE);
-                            lineOfTheNed.setVisibility(View.GONE);
-                            etNewName.setVisibility(View.GONE);
-                        }
+                        tvName.setText(etNewName.getText().toString());
+                        imageButtonAcceptName.setVisibility(View.GONE);
+                        tvChangeName.setVisibility(View.VISIBLE);
+                        tvEnterYourName.setVisibility(View.GONE);
+                        lineOfTheNed.setVisibility(View.GONE);
+                        etNewName.setVisibility(View.GONE);
                     }
                 });
                 break;
+            case R.id.avatar:
+                if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
+                    updateProfile(map);
+                    intent = new Intent(SettingsActivity.this, PhotoActivity.class);
+                    startActivity(intent);
+                }
+                break;
             case R.id.delete_acc:
-                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case DialogInterface.BUTTON_POSITIVE:
-                                if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
-                                    Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-                                    final Update_user update_user = retrofit.create(Update_user.class);
+                DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
+                    switch (which) {
+                        case DialogInterface.BUTTON_POSITIVE:
+                            if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
+                                Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+                                final Update_user update_user = retrofit.create(Update_user.class);
 
-                                    Call<User> callSurrenderAllChallenges = update_user.surrenderAllChallenge(token);
-                                    callSurrenderAllChallenges.enqueue(new Callback<User>() {
-                                        @Override
-                                        public void onResponse(Response<User> response, Retrofit retrofit) {
-                                            String myLog = (response.isSuccess()) ? " vse ok" : response.message();
-                                            Log.d(TAG, "onResponse: surrenderAll: " + myLog);
-                                        }
+                                Call<User> callSurrenderAllChallenges = update_user.surrenderAllChallenge(token);
+                                callSurrenderAllChallenges.enqueue(new Callback<User>() {
+                                    @Override
+                                    public void onResponse(Response<User> response, Retrofit retrofit) {
+                                        String myLog = (response.isSuccess()) ? " vse ok" : response.message();
+                                        Log.d(TAG, "onResponse: surrenderAll: " + myLog);
+                                    }
 
-                                        @Override
-                                        public void onFailure(Throwable t) {
-                                            Log.d(TAG, "onFailureSurrenderAllChallenges: vse hyinja");
-                                        }
-                                    });
+                                    @Override
+                                    public void onFailure(Throwable t) {
+                                        Log.d(TAG, "onFailureSurrenderAllChallenges: vse hyinja");
+                                    }
+                                });
 
-                                    Call<Delete> callForDeleteUser = update_user.delete_user(userID, token);
-                                    callForDeleteUser.enqueue(new Callback<Delete>() {
-                                        @Override
-                                        public void onResponse(Response<Delete> response, Retrofit retrofit) {
-                                            if (response.isSuccess()) {
-                                                File blur = new File(path, "blurred.png");
-                                                blur.delete();
-                                                File profile = new File(path, "profile.jpg");
-                                                profile.delete();
+                                Call<Delete> callForDeleteUser = update_user.delete_user(userID, token);
+                                callForDeleteUser.enqueue(new Callback<Delete>() {
+                                    @Override
+                                    public void onResponse(Response<Delete> response, Retrofit retrofit) {
+                                        if (response.isSuccess()) {
+                                            File blur = new File(path, "blurred.png");
+                                            blur.delete();
+                                            File profile = new File(path, "profile.jpg");
+                                            profile.delete();
 
-                                                SQLiteDatabase db = dbHelper.getWritableDatabase();
-                                                int clearCount = db.delete("pending", null, null);
-                                                clearCount = db.delete("pending_duel", null, null);
-                                                clearCount = db.delete("button_duel", null, null);
-                                                clearCount = db.delete("friends", null, null);
-                                                clearCount = db.delete("updated", null, null);
-                                                clearCount = db.delete("myChallenges", null, null);
-                                                Log.d(TAG, "onResponseDeleteUser: Vse ok");
-                                            } else Log.d(TAG, "onResponseDeleteUser: failed " + response.message());
-                                        }
+                                            SQLiteDatabase db = dbHelper.getWritableDatabase();
+                                            int clearCount = db.delete("pending", null, null);
+                                            clearCount = db.delete("pending_duel", null, null);
+                                            clearCount = db.delete("button_duel", null, null);
+                                            clearCount = db.delete("friends", null, null);
+                                            clearCount = db.delete("updated", null, null);
+                                            clearCount = db.delete("myChallenges", null, null);
+                                            Log.d(TAG, "onResponseDeleteUser: Vse ok");
+                                        } else Log.d(TAG, "onResponseDeleteUser: failed " + response.message());
+                                    }
 
-                                        @Override
-                                        public void onFailure(Throwable t) {
-                                            Log.d(TAG, "onFailureDeleteUser: vse hyinja");
-                                        }
-                                    });
+                                    @Override
+                                    public void onFailure(Throwable t) {
+                                        Log.d(TAG, "onFailureDeleteUser: vse hyinja");
+                                    }
+                                });
 
-                                    sessionManager.logout(SettingsActivity.this);
-                                    LoginManager.getInstance().logOut();
-                                    Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
-                                    startActivity(intent);
-                                }
-                                break;
-                            case DialogInterface.BUTTON_NEGATIVE:
-                                break;
-                        }
+                                sessionManager.logout(SettingsActivity.this);
+                                LoginManager.getInstance().logOut();
+                                Intent intent1 = new Intent(SettingsActivity.this, LoginActivity.class);
+                                startActivity(intent1);
+                            }
+                            break;
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            break;
                     }
                 };
 
@@ -410,13 +399,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 intent = new Intent(SettingsActivity.this, ContactUsActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.avatar:
-                if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
-                    updateProfile(map);
-                    intent = new Intent(SettingsActivity.this, PhotoActivity.class);
-                    startActivity(intent);
-                }
-                break;
 
         }
     }
@@ -444,69 +426,54 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         if (pushN.equals("true")) switchForPushNotif.setChecked(true);
         else switchForPushNotif.setChecked(false);
 
-        switchForPushNotif.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.d(TAG, "Push Notifications: " + isChecked);
-                if (isChecked) map.put("pushNotifications", "true");
-                else map.put("pushNotifications", "false");
-            }
+        switchForPushNotif.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Log.d(TAG, "Push Notifications: " + isChecked);
+            if (isChecked) map.put("pushNotifications", "true");
+            else map.put("pushNotifications", "false");
         });
 
         Switch switchorNewChallRequests = (Switch) findViewById(R.id.switchNewChallengeRequest);
         if (newChallengeReq.equals("true")) switchorNewChallRequests.setChecked(true);
         else switchorNewChallRequests.setChecked(false);
 
-        switchorNewChallRequests.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.d(TAG, "New Challenge Request: " + isChecked);
-                if (isChecked) map.put("newChallengeRequests", "true");
-                else map.put("newChallengeRequests", "false");
-            }
+        switchorNewChallRequests.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Log.d(TAG, "New Challenge Request: " + isChecked);
+            if (isChecked) map.put("newChallengeRequests", "true");
+            else map.put("newChallengeRequests", "false");
         });
 
         Switch switchForAcceptedYourChall = (Switch) findViewById(R.id.switchAcceptedYourChallenge);
         if (acceptedYour.equals("true")) switchForAcceptedYourChall.setChecked(true);
         else switchForAcceptedYourChall.setChecked(false);
 
-        switchForAcceptedYourChall.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.d(TAG, "Accepted Your Challenge: " + isChecked);
-                if (isChecked) map.put("acceptedYourChallenge", "true");
-                else map.put("acceptedYourChallenge", "false");
-            }
+        switchForAcceptedYourChall.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Log.d(TAG, "Accepted Your Challenge: " + isChecked);
+            if (isChecked) map.put("acceptedYourChallenge", "true");
+            else map.put("acceptedYourChallenge", "false");
         });
 
         Switch switchForChallengesEnd = (Switch) findViewById(R.id.switchChallengeEnd);
         if (challengeEnd.equals("true")) switchForChallengesEnd.setChecked(true);
         else switchForChallengesEnd.setChecked(false);
 
-        switchForChallengesEnd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.d(TAG, "Challenge End: " + isChecked);
-                if (isChecked) map.put("challengeEnd", "true");
-                else map.put("challengeEnd", "false");
-            }
+        switchForChallengesEnd.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Log.d(TAG, "Challenge End: " + isChecked);
+            if (isChecked) map.put("challengeEnd", "true");
+            else map.put("challengeEnd", "false");
         });
 
         Switch switchChallengesForToday = (Switch) findViewById(R.id.switchChallengesForToday);
         if (challengesForToday.equals("true")) switchChallengesForToday.setChecked(true);
         else switchChallengesForToday.setChecked(false);
 
-        switchChallengesForToday.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.d(TAG, "ChallengesForToday: " + isChecked);
-                if (isChecked) {
-                    map.put("challengesForToday", "true");
-                    mDailyRemind.enableDailyNotificationReminder();
-                } else {
-                    map.put("challengesForToday", "false");
-                    mDailyRemind.disableDailyNotificationReminder();
-                }
+        switchChallengesForToday.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Log.d(TAG, "ChallengesForToday: " + isChecked);
+            if (isChecked) {
+                map.put("challengesForToday", "true");
+                mDailyRemind.enableDailyNotificationReminder();
+            } else {
+                map.put("challengesForToday", "false");
+                mDailyRemind.disableDailyNotificationReminder();
             }
         });
 

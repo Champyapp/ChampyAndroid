@@ -41,7 +41,6 @@ public class HistoryInProgressFragment extends Fragment {
 
         self_improvement = SelfImprovement_model.generate(getContext());
 
-
         for (int i = 0; i < self_improvement.size(); i++) {
             SelfImprovement_model item = self_improvement.get(i);
             String challengeName = item.getChallengeName();

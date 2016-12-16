@@ -253,7 +253,6 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
                         @Override
                         public void onResponse(Response<com.azinecllc.champy.model.friend.Friend> response, Retrofit retrofit1) {
                             if (response.isSuccess()) {
-                                Log.d(TAG, "Status: Sent Friend Request");
                                 cv.put("name", mContacts.get(position).getName());
                                 cv.put("photo", mContacts.get(position).getPicture());
                                 cv.put("user_id", mContacts.get(position).getID());
@@ -262,7 +261,7 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
                                 cv.put("successChallenges", mContacts.get(position).getmWins());
                                 cv.put("allChallengesCount", mContacts.get(position).getmTotal());
                                 db.insert("pending", null, cv);
-                            } else Log.d(TAG, "Status: " + response.toString());
+                            }
                         }
 
                         @Override
@@ -277,11 +276,6 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
 
     }
 
-    @Override
-    public boolean onFailedToRecycleView(ViewHolder holder) {
-        Log.d(TAG, "onFailedToRecycleView: ");
-        return super.onFailedToRecycleView(holder);
-    }
 
     @Override
     public int getItemCount() {

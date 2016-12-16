@@ -71,7 +71,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         final String token = sessionManager.getToken();
         final String userId = sessionManager.getUserId();
         cc = new ChallengeController(getContext(), getActivity(), token, userId);
-        inProgressCount = Integer.parseInt(sessionManager.getChampyOptions().get("ic_score_progress"));
+        inProgressCount = Integer.parseInt(sessionManager.getChampyOptions().get("challenges"));
     }
 
     @Nullable
@@ -85,22 +85,22 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         position = args.getInt(ARG_PAGE);
 
         if (c.moveToFirst()) {
-            int idColIndex = c.getColumnIndex("id");
-            int versusColIndex = c.getColumnIndex("versus");
-            int coldescription = c.getColumnIndex("description");
-            int colduration = c.getColumnIndex("duration");
+            int idColIndex      = c.getColumnIndex("id");
+            int versusColIndex  = c.getColumnIndex("versus");
+            int coldescription  = c.getColumnIndex("description");
+            int colduration     = c.getColumnIndex("duration");
             int colchallenge_id = c.getColumnIndex("challenge_id");
-            int colrecipient = c.getColumnIndex("recipient");
+            int colrecipient    = c.getColumnIndex("recipient");
             o = 0;
             do {
                 o++;
                 if (o > position + 1) break;
                 if (o == position + 1) {
-                    versus = c.getString(versusColIndex);
-                    description = c.getString(coldescription);
-                    duration = c.getString(colduration);
+                    versus       = c.getString(versusColIndex);
+                    description  = c.getString(coldescription);
+                    duration     = c.getString(colduration);
                     challenge_id = c.getString(colchallenge_id);
-                    recipient = c.getString(colrecipient);
+                    recipient    = c.getString(colrecipient);
                 }
             } while (c.moveToNext());
         }
@@ -161,9 +161,9 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         position = viewPager.getCurrentItem();
         c = db.query("pending_duel", null, null, null, null, null, null);
         if (c.moveToFirst()) {
-            int coldescription = c.getColumnIndex("description");
+            int coldescription  = c.getColumnIndex("description");
             int colchallenge_id = c.getColumnIndex("challenge_id");
-            int colrecipient = c.getColumnIndex("recipient");
+            int colrecipient    = c.getColumnIndex("recipient");
             o = 0;
             do {
                 o++;

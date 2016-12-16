@@ -208,5 +208,7 @@
     <string name="share_text2">Check out Champy - it helps you improve and compete with your friends!</string>
     <string name="plus">+</string>
     <string name="challenge_canceled">Challenge canceled</string>
+    <string name="sent_duel_request">Sent duel request</string>
+    <string name="you_have_too_much_challenges">You have too much challenges</string>
 
 </resources>

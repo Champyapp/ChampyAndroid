@@ -35,9 +35,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 + "photo text,"
                 + "user_id text,"
                 + "fb_id text,"
-                + "ic_score_progress text,"
-                + "ic_score_wins text,"
-                + "ic_score_total text,"
+                + "challenges text,"
+                + "wins text,"
+                + "total text,"
                 + "level text"
                 + ");");
 
@@ -67,7 +67,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 + "level text DEFAULT '0'"
                 + ");");
 
-        // table for store cards for self-improvement ic_score_progress
+        // table for store cards for self-improvement challenges
         db.execSQL("create table selfimprovement("
                 + "id integer primary key autoincrement,"
                 + "name text,"
@@ -77,8 +77,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 + "status text"
                 + ");");
 
-        // table for store cards for button_duel ic_score_progress
-        db.execSQL("create table button_duel("
+        // table for store cards for duel challenges
+        db.execSQL("create table duel("
                 + "id integer primary key autoincrement,"
                 + "name text,"
                 + "description text,"
@@ -98,7 +98,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 + ");");
 
 
-        // table for store MY(!) in progress ic_score_progress and other data
+        // table for store MY(!) in progress challenges and other data
         db.execSQL("create table myChallenges("
                 + "id integer primary key autoincrement,"
                 + "name text,"

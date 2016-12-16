@@ -51,27 +51,27 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.item_card, container, false);
-        Bundle extras = getActivity().getIntent().getExtras();
-        friend_id = (extras == null) ? null : extras.getString("id");
         DBHelper dbHelper = DBHelper.getInstance(getContext());
+        Bundle extras = getActivity().getIntent().getExtras();
+        Bundle args = this.getArguments();
         db = dbHelper.getWritableDatabase();
-        final Bundle args = this.getArguments();
-        c = db.query("button_duel", null, null, null, null, null, null);
+        friend_id = (extras == null) ? null : extras.getString("id");
+        c = db.query("duel", null, null, null, null, null, null);
         position = args.getInt(ARG_PAGE);
         if (c.moveToFirst()) {
-            int idColIndex = c.getColumnIndex("id");
-            int nameColIndex = c.getColumnIndex("name");
-            int coldescription = c.getColumnIndex("description");
-            int colduration = c.getColumnIndex("duration");
+            int idColIndex      = c.getColumnIndex("id");
+            int nameColIndex    = c.getColumnIndex("name");
+            int coldescription  = c.getColumnIndex("description");
+            int colduration     = c.getColumnIndex("duration");
             int colchallenge_id = c.getColumnIndex("challenge_id");
             do {
                 o++;
                 if (o > position + 1) break;
                 if (o == position + 1) {
                     challenge_id = c.getString(colchallenge_id);
-                    description = c.getString(coldescription);
-                    duration = c.getString(colduration);
-                    name = c.getString(nameColIndex);
+                    description  = c.getString(coldescription);
+                    duration     = c.getString(colduration);
+                    name         = c.getString(nameColIndex);
                 }
             } while (c.moveToNext());
         }
@@ -159,22 +159,22 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
                             }
 
                         } else {
-                            c = db.query("button_duel", null, null, null, null, null, null);
+                            c = db.query("duel", null, null, null, null, null, null);
                             if (c.moveToFirst()) {
+                                int idColIndex      = c.getColumnIndex("id");
+                                int nameColIndex    = c.getColumnIndex("name");
+                                int colduration     = c.getColumnIndex("duration");
+                                int coldescription  = c.getColumnIndex("description");
                                 int colchallenge_id = c.getColumnIndex("challenge_id");
-                                int coldescription = c.getColumnIndex("description");
-                                int colduration = c.getColumnIndex("duration");
-                                int nameColIndex = c.getColumnIndex("name");
-                                int idColIndex = c.getColumnIndex("id");
                                 o = 0;
                                 do {
                                     o++;
                                     if (o > position + 1) break;
                                     if (o == position + 1) {
+                                        name         = c.getString(nameColIndex);
+                                        duration     = c.getString(colduration);
+                                        description  = c.getString(coldescription);
                                         challenge_id = c.getString(colchallenge_id);
-                                        description = c.getString(coldescription);
-                                        duration = c.getString(colduration);
-                                        name = c.getString(nameColIndex);
                                         break;
                                     }
                                 } while (c.moveToNext());
@@ -184,7 +184,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
                             try {
                                 if (!cc.isActive(description)) {
                                     cc.sendSingleInProgressForDuel(challenge_id, friend_id);
-                                    snackbar = Snackbar.make(view, "Sent button_duel request", Snackbar.LENGTH_SHORT);
+                                    snackbar = Snackbar.make(view, R.string.sent_duel_request, Snackbar.LENGTH_SHORT);
                                 } else {
                                     snackbar = Snackbar.make(view, R.string.cant_create_this_challenge, Snackbar.LENGTH_SHORT);
                                 }

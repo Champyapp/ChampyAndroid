@@ -109,14 +109,14 @@ public class OtherFragment extends Fragment {
         friends = new ArrayList<>();
         Cursor c = db.query("mytable", null, null, null, null, null, null);
         if (c.moveToFirst()) {
-            int nameColIndex = c.getColumnIndex("name");
+            int nameColIndex  = c.getColumnIndex("name");
             int photoColIndex = c.getColumnIndex("photo");
-            int index = c.getColumnIndex("user_id");
-            int challenges = c.getColumnIndex("ic_score_progress");
-            int wins = c.getColumnIndex("ic_score_wins");
-            int total = c.getColumnIndex("ic_score_total");
-            int level = c.getColumnIndex("level");
-            int idColIndex = c.getColumnIndex("id");
+            int index         = c.getColumnIndex("user_id");
+            int challenges    = c.getColumnIndex("challenges");
+            int wins          = c.getColumnIndex("wins");
+            int total         = c.getColumnIndex("total");
+            int level         = c.getColumnIndex("level");
+            int idColIndex    = c.getColumnIndex("id");
             do {
                 if (!checkTableForExist.isInOtherTable(c.getString(index)))
                     friends.add(new FriendModel(
@@ -148,11 +148,6 @@ public class OtherFragment extends Fragment {
 
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.d(TAG, "onActivityCreated: ");
-    }
 
     @Override
     public void onStart() {
@@ -233,13 +228,13 @@ public class OtherFragment extends Fragment {
                                         }
 
                                         String name = data.getName();
-                                        cv.put("user_id", data.get_id());
-                                        cv.put("name", name);
-                                        cv.put("photo", photo);
-                                        cv.put("ic_score_progress", "" + data.getAllChallengesCount());
-                                        cv.put("ic_score_wins", "" + data.getSuccessChallenges());
-                                        cv.put("ic_score_total", "" + data.getInProgressChallenges());
-                                        cv.put("level", "" + data.getLevel().getNumber());
+                                        cv.put("user_id",    data.get_id());
+                                        cv.put("name",       name);
+                                        cv.put("photo",      photo);
+                                        cv.put("total",      "" + data.getAllChallengesCount());
+                                        cv.put("wins",       "" + data.getSuccessChallenges());
+                                        cv.put("challenges", "" + data.getInProgressChallenges());
+                                        cv.put("level",      "" + data.getLevel().getNumber());
 
                                         // отображаем друзей в списке
                                         if (!checkTableForExist.isInOtherTable(data.get_id())) {

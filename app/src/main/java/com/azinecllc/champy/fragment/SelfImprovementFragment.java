@@ -56,22 +56,21 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         c = db.query("selfimprovement", null, null, null, null, null, null);
         position = bundle.getInt(ARG_PAGE);
         if (c.moveToFirst()) {
-            int colchallenge_id = c.getColumnIndex("challenge_id");
-            int coldescription = c.getColumnIndex("description");
-            int colduration = c.getColumnIndex("duration");
-            int nameColIndex = c.getColumnIndex("name");
             int colstatus = c.getColumnIndex("status");
-            int idColIndex = c.getColumnIndex("id");
+            int nameColIndex = c.getColumnIndex("name");
+            int colduration = c.getColumnIndex("duration");
+            int coldescription = c.getColumnIndex("description");
+            int colchallenge_id = c.getColumnIndex("challenge_id");
             try {
                 do {
                     o++;
                     if (o > position + 1) break;
                     if (o == position + 1) {
-                        challenge_id = c.getString(colchallenge_id);
-                        description = c.getString(coldescription);
-                        duration = c.getString(colduration);
-                        name = c.getString(nameColIndex);
                         status = c.getString(colstatus);
+                        name = c.getString(nameColIndex);
+                        duration = c.getString(colduration);
+                        description = c.getString(coldescription);
+                        challenge_id = c.getString(colchallenge_id);
                     }
                 } while (c.moveToNext());
             } finally {
@@ -163,22 +162,22 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                         } else {
                             c = db.query("selfimprovement", null, null, null, null, null, null);
                             if (c.moveToFirst()) {
-                                int colchallenge_id = c.getColumnIndex("challenge_id");
-                                int coldescription = c.getColumnIndex("description");
-                                int colduration = c.getColumnIndex("duration");
-                                int colstatus = c.getColumnIndex("status");
                                 int colname = c.getColumnIndex("name");
+                                int colstatus = c.getColumnIndex("status");
+                                int colduration = c.getColumnIndex("duration");
+                                int coldescription = c.getColumnIndex("description");
+                                int colchallenge_id = c.getColumnIndex("challenge_id");
                                 o = 0;
                                 try {
                                     do {
                                         o++;
                                         if (o > position + 1) break;
                                         if (o == position + 1) {
-                                            challenge_id = c.getString(colchallenge_id);
-                                            description = c.getString(coldescription);
-                                            duration = c.getString(colduration);
-                                            status = c.getString(colstatus);
                                             name = c.getString(colname);
+                                            status = c.getString(colstatus);
+                                            duration = c.getString(colduration);
+                                            description = c.getString(coldescription);
+                                            challenge_id = c.getString(colchallenge_id);
                                         }
                                     } while (c.moveToNext());
                                 } finally {

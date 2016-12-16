@@ -70,22 +70,22 @@ public class FriendsFragment extends Fragment {
         final List<FriendModel> friends = new ArrayList<>();
         Cursor c = db.query("friends", null, null, null, null, null, null);
         if (c.moveToFirst()) {
-            int inProgressChallengesCountIndex = c.getColumnIndex("inProgressChallengesCount");
-            int allChallengesCount = c.getColumnIndex("allChallengesCount");
-            int successChallenges = c.getColumnIndex("successChallenges");
-            int photoColIndex = c.getColumnIndex("photo");
-            int nameColIndex = c.getColumnIndex("name");
-            int level = c.getColumnIndex("level");
-            int index = c.getColumnIndex("user_id");
-            int idColIndex = c.getColumnIndex("id");
+            int idColIndex      = c.getColumnIndex("id");
+            int nameColIndex    = c.getColumnIndex("name");
+            int photoColIndex   = c.getColumnIndex("photo");
+            int index           = c.getColumnIndex("user_id");
+            int winsCount       = c.getColumnIndex("successChallenges");
+            int allCount        = c.getColumnIndex("allChallengesCount");
+            int inProgressCount = c.getColumnIndex("inProgressChallengesCount");
+            int level           = c.getColumnIndex("level");
             do {
                 friends.add(new FriendModel(
                         c.getString(nameColIndex),
                         API_URL + c.getString(photoColIndex),
                         c.getString(index),
-                        c.getString(inProgressChallengesCountIndex),
-                        c.getString(successChallenges),
-                        c.getString(allChallengesCount),
+                        c.getString(inProgressCount),
+                        c.getString(winsCount),
+                        c.getString(allCount),
                         c.getString(level)));
             } while (c.moveToNext());
         }
@@ -114,18 +114,13 @@ public class FriendsFragment extends Fragment {
 
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.d(TAG, "onActivityCreated: ");
-    }
 
     @Override
     public void onStart() {
         super.onStart();
         Log.d(TAG, "onStart: ");
         try {
-            mSocket = IO.socket("http://46.101.213.24:3007");
+            mSocket = IO.socket(API_URL);
             Log.d(TAG, "onStart: Sockets are connected!");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
@@ -150,20 +145,14 @@ public class FriendsFragment extends Fragment {
         mSocket.disconnect();
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.d(TAG, "onDetach: ");
-    }
-
 
     private void refreshFriendsView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         swipeRefreshLayout.setRefreshing(true);
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         final DBHelper dbHelper = DBHelper.getInstance(getContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int clearCount = db.delete("friends", null, null);
-        final ContentValues cv = new ContentValues();
+        final ContentValues cv  = new ContentValues();
+        int clearCount          = db.delete("friends", null, null);
 
         final com.azinecllc.champy.interfaces.Friends friends = retrofit.create(com.azinecllc.champy.interfaces.Friends.class);
 
@@ -209,22 +198,22 @@ public class FriendsFragment extends Fragment {
                         final List<FriendModel> newfriends = new ArrayList<>();
                         Cursor c = db.query("friends", null, null, null, null, null, null);
                         if (c.moveToFirst()) {
-                            int inProgressChallengesCountIndex = c.getColumnIndex("inProgressChallengesCount");
-                            int allChallengesCount = c.getColumnIndex("allChallengesCount");
-                            int successChallenges = c.getColumnIndex("successChallenges");
+                            int nameColIndex  = c.getColumnIndex("name");
                             int photoColIndex = c.getColumnIndex("photo");
-                            int nameColIndex = c.getColumnIndex("name");
-                            int idColIndex = c.getColumnIndex("id");
-                            int index = c.getColumnIndex("user_id");
-                            int level = c.getColumnIndex("level");
+                            int idColIndex    = c.getColumnIndex("id");
+                            int index         = c.getColumnIndex("user_id");
+                            int winsCount     = c.getColumnIndex("successChallenges");
+                            int allCount      = c.getColumnIndex("allChallengesCount");
+                            int inProgress    = c.getColumnIndex("inProgressChallengesCount");
+                            int level         = c.getColumnIndex("level");
                             do {
                                 newfriends.add(new FriendModel(
                                         c.getString(nameColIndex),
                                         API_URL + c.getString(photoColIndex),
                                         c.getString(index),
-                                        "" + c.getString(inProgressChallengesCountIndex),
-                                        "" + c.getString(successChallenges),
-                                        "" + c.getString(allChallengesCount),
+                                        "" + c.getString(inProgress),
+                                        "" + c.getString(winsCount),
+                                        "" + c.getString(allCount),
                                         "0"));
                             } while (c.moveToNext());
                         }

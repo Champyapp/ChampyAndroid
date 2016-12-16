@@ -73,7 +73,6 @@ public class PhotoActivity extends AppCompatActivity {
 
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
-
         Glide.with(this).load(url).diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true).centerCrop().into((ImageView) findViewById(R.id.photo));
 
@@ -87,14 +86,15 @@ public class PhotoActivity extends AppCompatActivity {
                 .dontAnimate()
                 .into(imageView);
 
-
         uploadPhoto = new CHUploadPhoto(getApplicationContext());
 
-        tvChooseFromGallery.setOnClickListener(v -> Crop.pickImage(PhotoActivity.this));
+        tvChooseFromGallery.setOnClickListener(v -> {
+            Crop.pickImage(PhotoActivity.this);
+        });
 
         tvTakePicture.setOnClickListener(v -> {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            File f=new File(path, "test.jpg");
+            File f = new File(path, "profile.jpg");
             picUri = Uri.fromFile(f);
             startActivityForResult(intent, CAMERA_REQUEST);
         });

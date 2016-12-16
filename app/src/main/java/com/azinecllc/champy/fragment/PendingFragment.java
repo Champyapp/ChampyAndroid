@@ -71,24 +71,22 @@ public class PendingFragment extends Fragment {
 
         Cursor c = db.query("pending", null, null, null, null, null, null);
         if (c.moveToFirst()) {
-            int idColIndex = c.getColumnIndex("id");
             int nameColIndex = c.getColumnIndex("name");
             int photoColIndex = c.getColumnIndex("photo");
             int index = c.getColumnIndex("user_id");
             int owner = c.getColumnIndex("owner");
-            int inProgressChallengesCountIndex = c.getColumnIndex("inProgressChallengesCount");
-            int successChallenges = c.getColumnIndex("successChallenges");
-            int allChallengesCount = c.getColumnIndex("allChallengesCount");
-
+            int winsCount = c.getColumnIndex("successChallenges");
+            int allCount = c.getColumnIndex("allChallengesCount");
+            int inProgress = c.getColumnIndex("inProgressChallengesCount");
             do {
                 pendingFriends.add(new Pending_friend(
                         c.getString(nameColIndex),
                         API_URL + c.getString(photoColIndex),
                         c.getString(index),
                         c.getString(owner),
-                        c.getString(successChallenges),
-                        c.getString(allChallengesCount),
-                        c.getString(inProgressChallengesCountIndex)
+                        c.getString(winsCount),
+                        c.getString(allCount),
+                        c.getString(inProgress)
                 ));
             } while (c.moveToNext());
         }
@@ -156,8 +154,8 @@ public class PendingFragment extends Fragment {
     private void refreshPendingView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         swipeRefreshLayout.setRefreshing(true);
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        int clearCount = db.delete("pending", null, null);
-        final ContentValues cv = new ContentValues();
+        final ContentValues cv  = new ContentValues();
+        int clearCount          = db.delete("pending", null, null);
 
         com.azinecllc.champy.interfaces.Friends friends = retrofit.create(com.azinecllc.champy.interfaces.Friends.class);
 
@@ -207,23 +205,23 @@ public class PendingFragment extends Fragment {
                         final List<Pending_friend> newfriends = new ArrayList<>();
                         Cursor c = db.query("pending", null, null, null, null, null, null);
                         if (c.moveToFirst()) {
-                            int idColIndex = c.getColumnIndex("id");
-                            int nameColIndex = c.getColumnIndex("name");
+                            int idColIndex    = c.getColumnIndex("id");
+                            int nameColIndex  = c.getColumnIndex("name");
                             int photoColIndex = c.getColumnIndex("photo");
-                            int index = c.getColumnIndex("user_id");
-                            int owner = c.getColumnIndex("owner");
-                            int inProgressChallengesCountIndex = c.getColumnIndex("inProgressChallengesCount");
-                            int successChallenges = c.getColumnIndex("successChallenges");
-                            int allChallengesCount = c.getColumnIndex("allChallengesCount");
+                            int index         = c.getColumnIndex("user_id");
+                            int owner         = c.getColumnIndex("owner");
+                            int winsCount     = c.getColumnIndex("successChallenges");
+                            int allCount      = c.getColumnIndex("allChallengesCount");
+                            int inProgress    = c.getColumnIndex("inProgressChallengesCount");
                             do {
                                 newfriends.add(new Pending_friend(
                                         c.getString(nameColIndex),
                                         API_URL + c.getString(photoColIndex),
                                         c.getString(index),
                                         c.getString(owner),
-                                        "" + c.getString(successChallenges),
-                                        "" + c.getString(allChallengesCount),
-                                        "" + c.getString(inProgressChallengesCountIndex)
+                                        "" + c.getString(winsCount),
+                                        "" + c.getString(allCount),
+                                        "" + c.getString(inProgress)
                                 ));
                             } while (c.moveToNext());
                         }

@@ -509,8 +509,7 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
                     "    <br/>\n" +
                     "    <u>iam@champyapp.com</u>\n" +
                     "</p>";
-            String result = (Html.fromHtml(text)).toString();
-            return result;
+            return (Html.fromHtml(text)).toString();
         }
 
         protected void onPostExecute(String result) {

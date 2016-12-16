@@ -176,7 +176,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                     .load(contact.getPicture())
                     .asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
+                    .skipMemoryCache(false)
                     .transform(new CropCircleTransformation(context))
                     .placeholder(R.drawable.icon_champy)
                     .override(80, 80)
@@ -204,7 +204,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                     .load(contact.getPicture())
                     .asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
+                    .skipMemoryCache(false)
                     .transform(new CropCircleTransformation(context))
                     .placeholder(R.drawable.icon_champy)
                     .override(80, 80)
@@ -256,14 +256,14 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         imageButtonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (offlineMode.isConnectedToRemoteAPI(activity) && inProgressCounter < 5) {
+                if (offlineMode.isConnectedToRemoteAPI(activity) && inProgressCounter < 10) {
                     Intent intent = new Intent(context, DuelActivity.class);
                     intent.putExtra("photo", contact.getPicture());
                     intent.putExtra("name", contact.getName());
                     intent.putExtra("id", contact.getID());
                     context.startActivity(intent);
                 } else {
-                    Toast.makeText(context, "You have too much ic_score_progress", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.you_have_too_much_challenges, Toast.LENGTH_SHORT).show();
                 }
             }
         });
