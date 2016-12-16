@@ -44,7 +44,7 @@ public class PendingFragment extends Fragment {
 
     private static final String ARG_PAGE = "ARG_PAGE";
     private final String TAG = "PendingFragment";
-    private String id = "", token = "";
+    private String id, token;
     private SwipeRefreshLayout swipeRefreshLayout;
     private SQLiteDatabase db;
     private View gView;
@@ -52,10 +52,18 @@ public class PendingFragment extends Fragment {
     public int mPage;
     private Socket mSocket;
 
+    public static PendingFragment newInstance(int page) {
+        Bundle args = new Bundle();
+        args.putInt(ARG_PAGE, page);
+        PendingFragment fragment = new PendingFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate: ");
         SessionManager sessionManager = SessionManager.getInstance(getContext());
         id = sessionManager.getUserId();
         token = sessionManager.getToken();
@@ -66,19 +74,18 @@ public class PendingFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-        Log.d(TAG, "onCreateView: ");
         final View view = inflater.inflate(R.layout.fragment_friends, container, false);
         final List<Pending_friend> pendingFriends = new ArrayList<>();
 
         Cursor c = db.query("pending", null, null, null, null, null, null);
         if (c.moveToFirst()) {
-            int nameColIndex = c.getColumnIndex("name");
+            int nameColIndex  = c.getColumnIndex("name");
             int photoColIndex = c.getColumnIndex("photo");
-            int index = c.getColumnIndex("user_id");
-            int owner = c.getColumnIndex("owner");
-            int winsCount = c.getColumnIndex("successChallenges");
-            int allCount = c.getColumnIndex("allChallengesCount");
-            int inProgress = c.getColumnIndex("inProgressChallengesCount");
+            int index         = c.getColumnIndex("user_id");
+            int owner         = c.getColumnIndex("owner");
+            int winsCount     = c.getColumnIndex("successChallenges");
+            int allCount      = c.getColumnIndex("allChallengesCount");
+            int inProgress    = c.getColumnIndex("inProgressChallengesCount");
             do {
                 pendingFriends.add(new Pending_friend(
                         c.getString(nameColIndex),
@@ -151,6 +158,13 @@ public class PendingFragment extends Fragment {
         mSocket.disconnect();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        Runtime.getRuntime().runFinalization();
+        Runtime.getRuntime().gc();
+    }
 
     private void refreshPendingView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         swipeRefreshLayout.setRefreshing(true);
@@ -238,7 +252,6 @@ public class PendingFragment extends Fragment {
                         rvContacts.setAdapter(adapter);
                         swipeRefreshLayout.setRefreshing(false);
                     }
-                    Log.d(TAG, "refreshPendingView: finish refreshing");
                 }
 
                 @Override
@@ -293,12 +306,5 @@ public class PendingFragment extends Fragment {
         }
     };
 
-    public static PendingFragment newInstance(int page) {
-        Bundle args = new Bundle();
-        args.putInt(ARG_PAGE, page);
-        PendingFragment fragment = new PendingFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
 }

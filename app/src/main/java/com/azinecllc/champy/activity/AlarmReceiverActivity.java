@@ -79,6 +79,13 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Runtime.getRuntime().runFinalization();
+        Runtime.getRuntime().gc();
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.buttonWakeUpDoneForToday:

@@ -52,16 +52,6 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         return fragment;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,6 +62,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         cc = new ChallengeController(getContext(), getActivity(), token, userId);
         inProgressCount = Integer.parseInt(sessionManager.getChampyOptions().get("challenges"));
     }
+
 
     @Nullable
     @Override
@@ -211,5 +202,11 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
     }
 
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
 
+        Runtime.getRuntime().runFinalization();
+        Runtime.getRuntime().gc();
+    }
 }

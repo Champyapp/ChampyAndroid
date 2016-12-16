@@ -81,14 +81,6 @@ public class OtherFragment extends Fragment {
         return fragment;
     }
 
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Log.d(TAG, "onAttach: ");
-        //checkRefresh = "true";
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,7 +92,6 @@ public class OtherFragment extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_friends, container, false);
-        Log.d(TAG, "onCreateView: ");
 
         cv = new ContentValues();
         dbHelper = DBHelper.getInstance(getContext());
@@ -155,8 +146,6 @@ public class OtherFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        Log.d(TAG, "onStart: ");
-
         try {
             mSocket = IO.socket(API_URL);
             Log.d(TAG, "onStart: Sockets are connected");
@@ -184,6 +173,13 @@ public class OtherFragment extends Fragment {
         mSocket.disconnect();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        Runtime.getRuntime().runFinalization();
+        Runtime.getRuntime().gc();
+    }
 
     private void refreshOtherView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         // Проверка на оффлайн вкладке OTHERS

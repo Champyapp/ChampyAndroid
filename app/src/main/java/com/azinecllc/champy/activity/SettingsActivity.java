@@ -188,24 +188,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         //ViewServer.get(this).addWindow(this);
     }
 
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        ViewServer.get(this).removeWindow(this);
-//    }
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        ViewServer.get(this).setFocusedWindow(this);
-//        AppEventsLogger.activateApp(this);
-//    }
-//
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        AppEventsLogger.deactivateApp(this);
-//    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Runtime.getRuntime().runFinalization();
+        Runtime.getRuntime().gc();
+    }
 
     @Override
     public void onBackPressed() {
@@ -330,7 +318,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
                                     @Override
                                     public void onFailure(Throwable t) {
-                                        Toast.makeText(SettingsActivity.this, R.string.service_not_available, Toast.LENGTH_LONG).show();
                                     }
                                 });
 
@@ -357,7 +344,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
                                     @Override
                                     public void onFailure(Throwable t) {
-                                        Toast.makeText(SettingsActivity.this, R.string.service_not_available, Toast.LENGTH_LONG).show();
                                     }
                                 });
 

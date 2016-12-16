@@ -172,6 +172,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 case R.id.friends:
                     Intent goToFriends = new Intent(MainActivity.this, FriendsActivity.class);
                     startActivity(goToFriends);
+                    finish();
                     break;
                 case R.id.history:
                     Intent goToHistory = new Intent(MainActivity.this, HistoryActivity.class);
@@ -219,12 +220,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        System.gc();
+        Runtime.getRuntime().runFinalization();
+        Runtime.getRuntime().gc();
     }
+
 
     private void animateFAB() {
         if(isFabOpen) {

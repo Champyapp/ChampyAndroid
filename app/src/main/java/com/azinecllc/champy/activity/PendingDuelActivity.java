@@ -100,6 +100,13 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Runtime.getRuntime().runFinalization();
+        Runtime.getRuntime().gc();
+    }
+
+    @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -149,6 +156,7 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
     }
 
 
+    // TODO: 12/16/16 REMOVE
     private class ProgressTask extends AsyncTask<Void,Void,Void> {
         @Override
         protected void onPreExecute() {

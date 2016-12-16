@@ -179,6 +179,8 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
     protected void onDestroy() {
         super.onDestroy();
         this.isFinishing();
+        Runtime.getRuntime().runFinalization();
+        Runtime.getRuntime().gc();
     }
 
     private class ProgressTask extends AsyncTask<Void,Void,Void> {

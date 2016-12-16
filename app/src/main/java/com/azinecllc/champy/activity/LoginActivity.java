@@ -193,6 +193,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onDestroy() {
         super.onDestroy();
 //        spinner.setVisibility(View.INVISIBLE);
+        Runtime.getRuntime().runFinalization();
+        Runtime.getRuntime().gc();
         ViewServer.get(this).removeWindow(this);
     }
 

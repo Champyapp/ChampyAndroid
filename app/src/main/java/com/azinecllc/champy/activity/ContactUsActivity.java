@@ -107,31 +107,10 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         //ViewServer.get(this).addWindow(this);
     }
 
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        ViewServer.get(this).removeWindow(this);
-//    }
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        ViewServer.get(this).setFocusedWindow(this);
-//        AppEventsLogger.activateApp(this);
-//    }
-//
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        AppEventsLogger.deactivateApp(this);
-//    }
-
-
     @Override
     public void onClick(View v) {
         submitForm();
     }
-
 
     @Override
     public void onBackPressed() {
@@ -140,6 +119,13 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Runtime.getRuntime().runFinalization();
+        Runtime.getRuntime().gc();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

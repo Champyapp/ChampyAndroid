@@ -70,6 +70,14 @@ public class HistoryFailedFragment extends Fragment {
         return view;
     }
 
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Runtime.getRuntime().runFinalization();
+        Runtime.getRuntime().gc();
+    }
+
     private void refreshOtherView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
             swipeRefreshLayout.setRefreshing(true);

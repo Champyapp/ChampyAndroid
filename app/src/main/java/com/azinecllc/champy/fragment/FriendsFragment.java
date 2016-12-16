@@ -55,7 +55,6 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate: ");
         sessionManager = SessionManager.getInstance(getContext());
         token = sessionManager.getToken();
         id = sessionManager.getUserId();
@@ -66,7 +65,6 @@ public class FriendsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)  {
-        Log.d(TAG, "onCreateView: ");
         final View view = inflater.inflate(R.layout.fragment_friends, container, false);
         final List<FriendModel> friends = new ArrayList<>();
         Cursor c = db.query("friends", null, null, null, null, null, null);
@@ -119,7 +117,6 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        Log.d(TAG, "onStart: ");
         try {
             mSocket = IO.socket(API_URL);
             Log.d(TAG, "onStart: Sockets are connected!");
@@ -146,6 +143,14 @@ public class FriendsFragment extends Fragment {
         mSocket.disconnect();
     }
 
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        
+        Runtime.getRuntime().runFinalization();
+        Runtime.getRuntime().gc();
+    }
 
     private void refreshFriendsView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         swipeRefreshLayout.setRefreshing(true);

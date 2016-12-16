@@ -171,7 +171,10 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
     protected void onDestroy() {
         super.onDestroy();
         this.isFinishing();
+        Runtime.getRuntime().runFinalization();
+        Runtime.getRuntime().gc();
     }
+
 
     private class LoadText extends AsyncTask<String, Void, String> {
 

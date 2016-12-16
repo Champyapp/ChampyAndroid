@@ -130,8 +130,8 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
     protected void onDestroy() {
         super.onDestroy();
         this.isFinishing();
-        //Glide.clear(findViewById(R.id.imageViewLogo));
-        //Glide.clear(findViewById(R.id.imageWakeUpChall));
+        Runtime.getRuntime().runFinalization();
+        Runtime.getRuntime().gc();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -175,7 +175,6 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
     }
 
 
-
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -186,6 +185,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
             super.onBackPressed();
         }
     }
+
 
     // get standard self-improvement ic_score_progress
     private void getChallenges() {

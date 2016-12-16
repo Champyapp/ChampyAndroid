@@ -148,6 +148,14 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
     }
 
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        Runtime.getRuntime().runFinalization();
+        Runtime.getRuntime().gc();
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -155,18 +163,22 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
             case R.id.challenges:
                 Intent goToMainActivity = new Intent(this, MainActivity.class);
                 startActivity(goToMainActivity);
+                finish();
                 break;
             case R.id.history:
                 Intent goToHistory = new Intent(this, HistoryActivity.class);
                 startActivity(goToHistory);
+                finish();
                 break;
             case R.id.settings:
                 Intent goToSettings = new Intent(this, SettingsActivity.class);
                 startActivity(goToSettings);
+                finish();
                 break;
             case R.id.pending_duels:
                 Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
                 startActivity(goToPendingDuel);
+                finish();
                 break;
             case R.id.share:
                 String message = getString(R.string.share_text2);
@@ -178,6 +190,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
             case R.id.nav_logout:
                 OfflineMode offlineMode = OfflineMode.getInstance();
                 if (offlineMode.isConnectedToRemoteAPI(this)) sessionManager.logout(this);
+                finish();
                 break;
         }
         drawer.closeDrawer(GravityCompat.START);

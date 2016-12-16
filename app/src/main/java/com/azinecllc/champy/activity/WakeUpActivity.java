@@ -138,6 +138,13 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Runtime.getRuntime().runFinalization();
+        Runtime.getRuntime().gc();
+    }
+
+    @Override
     public void onClick(final View v) {
         switch (v.getId()) {
             case R.id.imageButtonAccept:

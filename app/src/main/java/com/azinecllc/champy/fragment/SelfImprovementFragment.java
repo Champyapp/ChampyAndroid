@@ -221,4 +221,11 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
     }
 
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        Runtime.getRuntime().runFinalization();
+        Runtime.getRuntime().gc();
+    }
 }
