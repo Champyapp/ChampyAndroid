@@ -101,6 +101,17 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 .override(130, 130)
                 .into(userImageProfile);
 
+
+        // Result - зберігає фотку і не міняє її вообще ніколи
+        // skipMemoryCache - ігнориться =/
+
+        // Source - теж саме..
+        // skipMemoryCache - ігнориться =/
+
+        // All - теж саме -_-
+
+        // None - ніхера не робить
+
         dbHelper = DBHelper.getInstance(getApplicationContext());
         offlineMode = OfflineMode.getInstance();
         mDailyRemind = new DailyRemindController(getApplicationContext());

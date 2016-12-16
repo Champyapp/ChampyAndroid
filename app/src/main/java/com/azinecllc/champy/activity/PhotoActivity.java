@@ -284,29 +284,29 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
 
-    public void Upload_photo(String path) {
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        String token = sessionManager.getToken();
-        String id = sessionManager.getUserId();
-
-        File photoFile = new File(path);
-        RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), photoFile);
-
-        Update_user update_user = retrofit.create(Update_user.class);
-        Call<User> call = update_user.update_photo(id, token, requestBody);
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Response<User> response, Retrofit retrofit) {
-                String myLog = (response.isSuccess()) ? "Status: photo uploaded!" : "Status: " + response.code();
-                Log.i(TAG, "onResponse: " + myLog);
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                Log.d(TAG, "Status: "+t);
-            }
-        });
-    }
+//    public void Upload_photo(String path) {
+//        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+//        String token = sessionManager.getToken();
+//        String id = sessionManager.getUserId();
+//
+//        File photoFile = new File(path);
+//        RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), photoFile);
+//
+//        Update_user update_user = retrofit.create(Update_user.class);
+//        Call<User> call = update_user.update_photo(id, token, requestBody);
+//        call.enqueue(new Callback<User>() {
+//            @Override
+//            public void onResponse(Response<User> response, Retrofit retrofit) {
+//                String myLog = (response.isSuccess()) ? "Status: photo uploaded!" : "Status: " + response.code();
+//                Log.i(TAG, "onResponse: " + myLog);
+//            }
+//
+//            @Override
+//            public void onFailure(Throwable t) {
+//                Log.d(TAG, "Status: "+t);
+//            }
+//        });
+//    }
 
 
 }

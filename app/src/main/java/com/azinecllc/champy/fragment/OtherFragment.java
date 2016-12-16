@@ -28,6 +28,7 @@ import com.azinecllc.champy.model.user.Data;
 import com.azinecllc.champy.model.user.User;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
+import com.bumptech.glide.Glide;
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
@@ -141,9 +142,7 @@ public class OtherFragment extends Fragment {
         gSwipeRefreshLayout.setOnRefreshListener(() -> refreshOtherView(gSwipeRefreshLayout, gView));
         this.gView = view;
 
-        if (sessionManager.getRefreshOthers().equals("true")) {
-            refreshOtherView(gSwipeRefreshLayout, gView);
-        }
+        if (sessionManager.getRefreshOthers().equals("true")) { refreshOtherView(gSwipeRefreshLayout, gView); }
 
         return view;
 
@@ -161,7 +160,7 @@ public class OtherFragment extends Fragment {
         Log.d(TAG, "onStart: ");
 
         try {
-            mSocket = IO.socket("http://46.101.213.24:3007");
+            mSocket = IO.socket(API_URL);
             Log.d(TAG, "onStart: Sockets are connected");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
@@ -200,7 +199,6 @@ public class OtherFragment extends Fragment {
                 final SQLiteDatabase db = dbHelper.getWritableDatabase();
                 int clearCount = db.delete("mytable", null, null);
                 final List<FriendModel> newFriends = new ArrayList<>();
-
                 final GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(), (array, response) -> {
                     if (array.length() == 0) {
                         Toast.makeText(getContext(), R.string.noOneHasInstalledChampy, Toast.LENGTH_SHORT).show();
