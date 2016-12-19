@@ -38,14 +38,10 @@ import static com.azinecllc.champy.utils.Constants.API_URL;
 
 public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> {
 
-    private final String TAG = OtherAdapter.class.getSimpleName();
-    private SessionManager sessionManager;
     private List<FriendModel> mContacts;
-    private OfflineMode offlineMode;
     private Retrofit retrofit;
     private SQLiteDatabase db;
     private ContentValues cv;
-    private String token, id;
     private Activity activity;
     private Typeface typeFace;
     private Context context;
@@ -53,10 +49,11 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
 
 
     // Pass in the contact array into the constructor
-    public OtherAdapter(List<FriendModel> contacts, Context context, Activity activity) {
+    public OtherAdapter(List<FriendModel> contacts, Context context, Activity activity, Retrofit retrofit) {
         mContacts = contacts;
         this.context = context;
         this.activity = activity;
+        this.retrofit = retrofit;
     }
 
     @Override
@@ -72,8 +69,8 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
 
         // Return a new holder instance
         final ViewHolder viewHolder = new ViewHolder(contactView);
-        viewHolder.simple.setVisibility(View.VISIBLE);
-        viewHolder.info.setVisibility(View.GONE);
+        viewHolder.closeView.setVisibility(View.VISIBLE);
+        viewHolder.openView.setVisibility(View.GONE);
 
         // click on same contact
         contactView.setOnClickListener(v -> {
@@ -89,17 +86,6 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
                 selected.clear();
             }
         });
-
-        sessionManager = SessionManager.getInstance(context);
-        offlineMode = OfflineMode.getInstance();
-        token = sessionManager.getToken();
-        id = sessionManager.getUserId();
-
-        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        DBHelper dbHelper = DBHelper.getInstance(context);
-        db = dbHelper.getWritableDatabase();
-        cv = new ContentValues();
-
 
         return viewHolder;
     }
@@ -125,9 +111,9 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
         TextView counterInProgressClose = (TextView)viewHolder.itemView.findViewById(R.id.counterInProgress);
         TextView counterTotalClose = (TextView)viewHolder.itemView.findViewById(R.id.counterTotal);
         TextView counterWinsClose = (TextView)viewHolder.itemView.findViewById(R.id.counterWins);
-        // response for info by counters in close view
-        counterInProgressClose.setText(contact.getmTotal());
-        counterTotalClose.setText(contact.getmChallenges());
+        // response for openView by counters in close view
+        counterInProgressClose.setText(contact.getmChallenges());
+        counterTotalClose.setText(contact.getmTotal());
         counterWinsClose.setText(contact.getmWins());
         // response for typeface for counters in close view
         counterInProgressClose.setTypeface(typeFace);
@@ -138,30 +124,31 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
          * below open view
          */
 
-        // response for user info and icons in open view
+        // Initialisation view elements
         ImageView imageViewUserAvatar = (ImageView) viewHolder.itemView.findViewById(R.id.imageViewUserAvatar);
         ImageView imageViewChallengesOpen = viewHolder.mchallenges;
         ImageView imageViewTotalOpen = viewHolder.mtotal;
         ImageView imageViewWinsOpen = viewHolder.mwins;
-        TextView tvUserName2 = (TextView) viewHolder.itemView.findViewById(R.id.textViewChallengesCounter);
-        tvUserName2.setText(contact.getName());
-        tvUserName2.setTypeface(typeFace);
-        // response for icons in open view
-        TextView tvChallenges = (TextView) viewHolder.itemView.findViewById(R.id.textViewChallenges);
-        TextView tvTotal = (TextView) viewHolder.itemView.findViewById(R.id.textViewTotal);
-        TextView tvWins = (TextView) viewHolder.itemView.findViewById(R.id.textViewWins);
-        tvChallenges.setTypeface(typeFace);
-        tvTotal.setTypeface(typeFace);
-        tvWins.setTypeface(typeFace);
-        // response for counters in open view
+        // Initialisation counters in open view
         TextView counterInProgressOpen = (TextView) viewHolder.itemView.findViewById(R.id.info_inProgress);
         TextView counterTotalOpen = (TextView) viewHolder.itemView.findViewById(R.id.info_total);
         TextView counterWinsOpen = (TextView) viewHolder.itemView.findViewById(R.id.info_wins);
-        // response for info by counters in close view
-        counterInProgressOpen.setText(contact.getmTotal());
-        counterTotalOpen.setText(contact.getmChallenges());
+        // Setting value for counters in open view
+        counterInProgressOpen.setText(contact.getmChallenges());
+        counterTotalOpen.setText(contact.getmTotal());
         counterWinsOpen.setText(contact.getmWins());
-        // response for typeface for counters in close view
+        // Initialisation text above counters
+        TextView tvChallenges = (TextView) viewHolder.itemView.findViewById(R.id.textViewChallenges);
+        TextView tvTotal = (TextView) viewHolder.itemView.findViewById(R.id.textViewTotal);
+        TextView tvWins = (TextView) viewHolder.itemView.findViewById(R.id.textViewWins);
+        // Initialisation User name and setting it
+        TextView tvUserName2 = (TextView) viewHolder.itemView.findViewById(R.id.textViewChallengesCounter);
+        tvUserName2.setText(contact.getName());
+        // typeface for our view
+        tvUserName2.setTypeface(typeFace);
+        tvChallenges.setTypeface(typeFace);
+        tvTotal.setTypeface(typeFace);
+        tvWins.setTypeface(typeFace);
         counterInProgressOpen.setTypeface(typeFace);
         counterTotalOpen.setTypeface(typeFace);
         counterWinsOpen.setTypeface(typeFace);
@@ -192,16 +179,6 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
                     .dontAnimate()
                     .into(imageViewUserAvatar);
 
-//            Glide.with(context)
-//                    .load(contact.getPicture())
-//                    .asBitmap()
-//                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                    .transform(new CropCircleTransformation(context))
-//                    .placeholder(R.drawable.icon_champy)
-//                    .override(80, 80)
-//                    .dontAnimate()
-//                    .into(imageViewUserAvatar);
-
             // made our "open-view" is visible and 'close-view' invisible
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.VISIBLE);
             viewHolder.itemView.findViewById(R.id.row_friends_list_close).setVisibility(View.GONE);
@@ -222,17 +199,6 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
                     .dontAnimate()
                     .into(imageViewFriendPicture);
 
-//            Glide.with(context)
-//                    .load(contact.getPicture())
-//                    .asBitmap()
-//                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                    .transform(new CropCircleTransformation(context))
-//                    .placeholder(R.drawable.icon_champy)
-//                    .override(80, 80)
-//                    .dontAnimate()
-//                    .into(imageViewFriendPicture);
-
-
             // made our "close-view" is visible and 'open-view' invisible
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.GONE);
             viewHolder.itemView.findViewById(R.id.row_friends_list_close).setVisibility(View.VISIBLE);
@@ -241,11 +207,19 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
 
         // button add user
         viewHolder.add.setOnClickListener(v -> {
+            SessionManager session = SessionManager.getInstance(context);
+            OfflineMode offlineMode = OfflineMode.getInstance();
+            final String token = session.getToken();
+            final String id = session.getUserId();
+
+            DBHelper dbHelper = DBHelper.getInstance(context);
+            db = dbHelper.getWritableDatabase();
+            cv = new ContentValues();
             if (offlineMode.isConnectedToRemoteAPI(activity)) {
                 String friend = mContacts.get(position).getID();
                 if (friend != null) {
                     //щоб воно не обновляло (і дублювало) лист друзів після додавання когось, то має бути false
-                    sessionManager.setRefreshPending("false");
+                    session.setRefreshPending("false");
                     Friends friends = retrofit.create(Friends.class);
                     Call<com.azinecllc.champy.model.friend.Friend> call = friends.sendFriendRequest(id, friend, token);
                     call.enqueue(new Callback<com.azinecllc.champy.model.friend.Friend>() {
@@ -296,8 +270,8 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
         ImageView mwins;
         ImageView mtotal;
 
-        RelativeLayout simple;
-        public RelativeLayout info;
+        RelativeLayout closeView;
+        RelativeLayout openView;
 
         ImageView dop;
 
@@ -316,8 +290,8 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
             mwins = (ImageView) itemView.findViewById(R.id.imageViewBgWins);
             mtotal = (ImageView) itemView.findViewById(R.id.imageViewBgTotal);
 
-            simple = (RelativeLayout)itemView.findViewById(R.id.row_friends_list_close);
-            info = (RelativeLayout)itemView.findViewById(R.id.row_friends_list_open);
+            closeView = (RelativeLayout)itemView.findViewById(R.id.row_friends_list_close);
+            openView = (RelativeLayout)itemView.findViewById(R.id.row_friends_list_open);
 
             block = (ImageButton)itemView.findViewById(R.id.imageButtonBlockUser);
             block.setVisibility(View.INVISIBLE);

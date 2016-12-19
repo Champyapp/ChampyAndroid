@@ -54,6 +54,7 @@ import static com.azinecllc.champy.utils.Constants.API_URL;
  */
 public class OtherFragment extends Fragment {
 
+    private Retrofit retrofit;
     private static final String ARG_PAGE = "ARG_PAGE";
     private final String TAG = "OtherFragment";
     private int mPage;
@@ -82,16 +83,16 @@ public class OtherFragment extends Fragment {
         FacebookSdk.sdkInitialize(getContext());
         offlineMode = OfflineMode.getInstance();
         sessionManager = SessionManager.getInstance(getContext());
+        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        cv = new ContentValues();
+        dbHelper = DBHelper.getInstance(getContext());
+        db = dbHelper.getWritableDatabase();
+        checkTableForExist = new CHCheckTableForExist(db);
     }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_friends, container, false);
-
-        cv = new ContentValues();
-        dbHelper = DBHelper.getInstance(getContext());
-        db = dbHelper.getWritableDatabase();
-        checkTableForExist = new CHCheckTableForExist(db);
 
         friends = new ArrayList<>();
         Cursor c = db.query("mytable", null, null, null, null, null, null);
@@ -120,7 +121,7 @@ public class OtherFragment extends Fragment {
 
 
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-        final OtherAdapter adapter = new OtherAdapter(friends, getContext(), getActivity());
+        final OtherAdapter adapter = new OtherAdapter(friends, getContext(), getActivity(), retrofit);
 
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         rvContacts.setAdapter(adapter);
@@ -181,7 +182,6 @@ public class OtherFragment extends Fragment {
         if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
             swipeRefreshLayout.setRefreshing(true);
             swipeRefreshLayout.post(() -> {
-                Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
                 NewUser newUser = retrofit.create(NewUser.class);
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
                 StrictMode.setThreadPolicy(policy);
@@ -237,9 +237,9 @@ public class OtherFragment extends Fragment {
                                                     name,
                                                     photo,
                                                     data.get_id(),
-                                                    "" + data.getAllChallengesCount(),
-                                                    "" + data.getSuccessChallenges(),
                                                     "" + data.getInProgressChallenges(),
+                                                    "" + data.getSuccessChallenges(),
+                                                    "" + data.getAllChallengesCount(),
                                                     "" + data.getLevel().getNumber()
                                             ));
                                         }
@@ -271,7 +271,7 @@ public class OtherFragment extends Fragment {
 //                                    }
 
                                     RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-                                    OtherAdapter otherAdapter = new OtherAdapter(newFriends, getContext(), getActivity());
+                                    OtherAdapter otherAdapter = new OtherAdapter(newFriends, getContext(), getActivity(), retrofit);
                                     rvContacts.setAdapter(otherAdapter);
                                     gSwipeRefreshLayout.setRefreshing(false);
                                 }

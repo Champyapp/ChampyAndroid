@@ -127,7 +127,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         TextView counterInProgressClose = (TextView)viewHolder.itemView.findViewById(R.id.counterInProgress);
         TextView counterTotalClose = (TextView)viewHolder.itemView.findViewById(R.id.counterTotal);
         TextView counterWinsClose = (TextView)viewHolder.itemView.findViewById(R.id.counterWins);
-        // response for info by counters in close view
+        // response for openView by counters in close view
         counterInProgressClose.setText(contact.getmChallenges());
         counterWinsClose.setText(contact.getmWins());
         counterTotalClose.setText(contact.getmTotal());
@@ -140,7 +140,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
          * below open view
          */
 
-        // response for user info and icons in open view
+        // response for user openView and icons in open view
         ImageView imageViewUserAvatar = (ImageView) viewHolder.itemView.findViewById(R.id.imageViewUserAvatar);
         ImageView imageViewChallengesOpen = viewHolder.mChallenges;
         ImageView imageViewTotalOpen = viewHolder.mTotal;
@@ -159,7 +159,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         TextView counterInProgressOpen = (TextView) viewHolder.itemView.findViewById(R.id.info_inProgress);
         TextView counterTotalOpen = (TextView) viewHolder.itemView.findViewById(R.id.info_total);
         TextView counterWinsOpen = (TextView) viewHolder.itemView.findViewById(R.id.info_wins);
-        // response for info by counters in close view
+        // response for openView by counters in close view
         counterInProgressOpen.setText(contact.getmChallenges());
         counterTotalOpen.setText(contact.getmTotal());
         counterWinsOpen.setText(contact.getmWins());
