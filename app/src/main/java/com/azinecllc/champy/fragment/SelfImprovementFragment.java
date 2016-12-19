@@ -45,7 +45,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         return fragment;
     }
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
@@ -131,7 +130,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 
         return view;
     }
-
 
     @Override
     public void onClick(View view) {
@@ -220,12 +218,12 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         }
     }
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
     }
+
+
 }

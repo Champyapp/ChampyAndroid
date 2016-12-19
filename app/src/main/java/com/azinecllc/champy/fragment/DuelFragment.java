@@ -214,8 +214,9 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
     }
+
+
 }

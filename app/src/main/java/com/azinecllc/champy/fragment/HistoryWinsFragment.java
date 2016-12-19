@@ -74,10 +74,10 @@ public class HistoryWinsFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
     }
+
 
     private void refreshOtherView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         if (offlineMode.isConnectedToRemoteAPI(getActivity())) {

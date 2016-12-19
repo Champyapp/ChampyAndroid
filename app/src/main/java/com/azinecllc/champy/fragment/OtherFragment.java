@@ -1,14 +1,10 @@
 package com.azinecllc.champy.fragment;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.annotation.Nullable;
-import android.support.annotation.UiThread;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,7 +25,6 @@ import com.azinecllc.champy.model.user.Data;
 import com.azinecllc.champy.model.user.User;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
-import com.bumptech.glide.Glide;
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
@@ -142,7 +137,6 @@ public class OtherFragment extends Fragment {
 
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
@@ -180,6 +174,7 @@ public class OtherFragment extends Fragment {
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
     }
+
 
     private void refreshOtherView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         // Проверка на оффлайн вкладке OTHERS
@@ -297,6 +292,7 @@ public class OtherFragment extends Fragment {
         }
 
     }
+
 
 
 

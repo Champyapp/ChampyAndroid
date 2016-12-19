@@ -1,6 +1,5 @@
 package com.azinecllc.champy.fragment;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
@@ -9,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +50,6 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         return fragment;
     }
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +59,6 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         cc = new ChallengeController(getContext(), getActivity(), token, userId);
         inProgressCount = Integer.parseInt(sessionManager.getChampyOptions().get("challenges"));
     }
-
 
     @Nullable
     @Override
@@ -145,7 +141,6 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         return view;
     }
 
-
     @Override
     public void onClick(View view) {
         position = viewPager.getCurrentItem();
@@ -201,12 +196,12 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
 
     }
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
     }
+
+
 }

@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -113,7 +112,6 @@ public class FriendsFragment extends Fragment {
 
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
@@ -143,14 +141,13 @@ public class FriendsFragment extends Fragment {
         mSocket.disconnect();
     }
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();
-        
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
     }
+
 
     private void refreshFriendsView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         swipeRefreshLayout.setRefreshing(true);

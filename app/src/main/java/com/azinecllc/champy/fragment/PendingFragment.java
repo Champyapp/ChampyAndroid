@@ -44,13 +44,11 @@ public class PendingFragment extends Fragment {
 
     private static final String ARG_PAGE = "ARG_PAGE";
     private final String TAG = "PendingFragment";
-    private String id, token;
     private SwipeRefreshLayout swipeRefreshLayout;
     private SQLiteDatabase db;
-    private View gView;
-
-    public int mPage;
+    private String id, token;
     private Socket mSocket;
+    private View gView;
 
     public static PendingFragment newInstance(int page) {
         Bundle args = new Bundle();
@@ -59,7 +57,6 @@ public class PendingFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -161,10 +158,10 @@ public class PendingFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
     }
+
 
     private void refreshPendingView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         swipeRefreshLayout.setRefreshing(true);
@@ -263,6 +260,7 @@ public class PendingFragment extends Fragment {
             swipeRefreshLayout.setRefreshing(false);
         }
     }
+
 
 
     private Emitter.Listener onConnect = new Emitter.Listener() {

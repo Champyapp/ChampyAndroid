@@ -2,8 +2,9 @@ package com.azinecllc.champy.helper;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import android.widget.Toast;
 
+import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.MainActivity;
 import com.azinecllc.champy.activity.RoleControllerActivity;
 import com.azinecllc.champy.controller.DailyRemindController;
@@ -29,7 +30,6 @@ import static com.azinecllc.champy.utils.Constants.API_URL;
 
 public class AppSync {
 
-    private final String TAG = "AppSync";
     private Context context;
     private SessionManager sessionManager;
     private String fbId, gcm, token, path, token_android;
@@ -58,10 +58,8 @@ public class AppSync {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    Log.d(TAG, "getUserProfile onResponse: Success");
 
                     sessionManager = SessionManager.getInstance(context);
-
                     Data data = response.body().getData();
                     String user_name = data.getName();
                     String userId = data.get_id();
@@ -86,8 +84,6 @@ public class AppSync {
                             data.getLevel().getNumber().toString()
                     );
 
-                    Log.d(TAG, "onResponse: path_to_pic: " + path_to_pic);
-                    Log.d(TAG, "onResponse: challengesForToday: " + challengesForToday);
                     UpdatePushIdentifier pushIdentifier = new UpdatePushIdentifier();
                     pushIdentifier.updatePushIdentifier(sessionManager);
 
@@ -108,7 +104,6 @@ public class AppSync {
                         if (!file.exists()){
                             com.azinecllc.champy.model.user.Photo photo = data.getPhoto();
                             api_path = API_URL + photo.getLarge();
-                            Log.i("AppSync", "GetUserPhoto: " + api_path);
                         }
                     }
 
@@ -124,15 +119,14 @@ public class AppSync {
                     context.startActivity(goToRoleActivity);
 
 
-                } else {
-                    Log.i(TAG, "getUserProfile onResponse: Failed " + response.message());
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Log.d(TAG, "VSE huynya");
+                Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_SHORT).show();
             }
+
         });
 
 
@@ -144,26 +138,14 @@ public class AppSync {
         jsonObject.put("facebookId", fb_id);
         jsonObject.put("AndroidOS", gcm);
         String string = jsonObject.toString();
-        return Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT")
-                .setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
+        return Jwts.builder()
+                .setHeaderParam("alg", "HS256")
+                .setHeaderParam("typ", "JWT")
+                .setPayload(string)
+                .signWith(SignatureAlgorithm.HS256, "secret")
+                .compact();
     }
 
-
-//    private String getDailyRemind() {
-//        Cursor c = db.query("updated", null, null, null, null, null, null);
-//        String dailyNotification = "true";
-//
-//        if (c.moveToFirst()) {
-//            int dailyNotifInt = c.getColumnIndex("dailyRemind");
-//            do {
-//                if (c.getString(dailyNotifInt).equals("false")) {
-//                    dailyNotification = "false";
-//                }
-//            } while (c.moveToNext());
-//        }
-//        c.close();
-//        return dailyNotification;
-//    }
 
 
 }
