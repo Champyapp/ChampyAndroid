@@ -68,26 +68,27 @@
                 android:textColor="@color/colorTextAqua"
                 android:textAlignment="center"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                android:paddingTop="5dp"
-                android:layout_alignParentTop="true" />
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="10dp" />
 
             <TimePicker
-                android:layout_width="300dp"
-                android:layout_height="200dp"
-                android:id="@+id/timePicker"
-                android:timePickerMode="spinner"
                 tools:targetApi="lollipop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/timePicker"
                 android:layout_below="@+id/goal_text"
-                android:layout_centerHorizontal="true" />
+                android:layout_above="@+id/tvEveryDayWakeUp"
+                android:layout_centerHorizontal="true"
+                android:timePickerMode="spinner" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/tvEveryDayWakeUp"
                 android:text="@string/everyday_for_next"
                 android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:id="@+id/tvEveryDayWakeUp"
-                android:layout_below="@+id/timePicker"
+                android:layout_above="@+id/etDays"
                 android:layout_centerHorizontal="true" />
 
             <TextView
@@ -98,7 +99,7 @@
                 android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/colorTextAqua"
-                android:layout_below="@+id/tvEveryDayWakeUp"
+                android:layout_above="@+id/tvDays"
                 android:layout_centerHorizontal="true" />
 
             <TextView
@@ -109,7 +110,8 @@
                 android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/colorTextAqua"
-                android:layout_below="@+id/etDays"
+                android:paddingBottom="8dp"
+                android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"/>
 
             <ImageButton
@@ -131,6 +133,7 @@
                 android:layout_below="@+id/tvEveryDayWakeUp"
                 android:layout_toLeftOf="@+id/tvEveryDayWakeUp"
                 android:layout_toStartOf="@+id/tvEveryDayWakeUp" />
+
 
         </RelativeLayout>
 

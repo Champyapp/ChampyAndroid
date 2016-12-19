@@ -6,9 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.azinecllc.champy.R;
@@ -61,39 +59,32 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         switch (itemRowType) {
             case "Duel":
                 nameTextView.setText(goal + " with " + versus);
-                Glide.with(mContext).load(R.drawable.ic_duel_yellow).diskCacheStrategy(DiskCacheStrategy.ALL).override(80, 80).into(viewHolder.image);
+                Glide.with(mContext).load(R.drawable.ic_duel_yellow).diskCacheStrategy(DiskCacheStrategy.ALL).override(80, 80).into(viewHolder.pic);
                 break;
             case "Wake Up":
                 nameTextView.setText(wakeUpTime);
-                Glide.with(mContext).load(R.drawable.ic_wakeup_yellow).diskCacheStrategy(DiskCacheStrategy.ALL).override(80, 80).into(viewHolder.image);
+                Glide.with(mContext).load(R.drawable.ic_wakeup_yellow).diskCacheStrategy(DiskCacheStrategy.ALL).override(80, 80).into(viewHolder.pic);
                 break;
             case "Self-Improvement":
                 nameTextView.setText(goal);
-                Glide.with(mContext).load(R.drawable.ic_self_yellow).diskCacheStrategy(DiskCacheStrategy.ALL).override(80, 80).into(viewHolder.image);
+                Glide.with(mContext).load(R.drawable.ic_self_yellow).diskCacheStrategy(DiskCacheStrategy.ALL).override(80, 80).into(viewHolder.pic);
                 break;
             default:
                 nameTextView.setText(R.string.lostInternetConnection);
-                Glide.with(mContext).load(R.drawable.icon_champy).override(80, 80).into(viewHolder.image);
+                Glide.with(mContext).load(R.drawable.icon_champy).override(80, 80).into(viewHolder.pic);
                 break;
         }
 
         TextView challengeType = (TextView) viewHolder.itemView.findViewById(R.id.counterWins);
-
         switch (itemRowType) {
-            case "Self-Improvement":
-                challengeType.setText(mContext.getString(R.string.self_improvement)); //"Self-Improvement";
-                break;
-            case "Duel":
-                challengeType.setText(mContext.getString(R.string.duel_challenge)); //"Duel challenge");
-                break;
-            case "Wake Up":
-                challengeType.setText(mContext.getString(R.string.wake_up_challenge)); //"Wake Up challenge");
-
+            case "Self-Improvement": challengeType.setText(mContext.getString(R.string.self_improvement));  break;
+            case "Duel":             challengeType.setText(mContext.getString(R.string.duel_challenge));    break;
+            case "Wake Up":          challengeType.setText(mContext.getString(R.string.wake_up_challenge)); break;
         }
         challengeType.setTypeface(typeFace);
 
-        Glide.with(mContext).load(R.drawable.ic_score_progress).override(40, 40).into(viewHolder.wins);
-        Glide.with(mContext).load(R.drawable.ic_score_total) .override(40, 40).into(viewHolder.total);
+        //Glide.with(mContext).load(R.drawable.ic_score_progress).override(40, 40).into(viewHolder.wins);
+        //Glide.with(mContext).load(R.drawable.ic_score_total) .override(40, 40).into(viewHolder.total);
 
     }
 
@@ -104,22 +95,13 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView nameTextView;
-        public TextView level;
-        public ImageView image;
-        public ImageView challenges;
-        public ImageView wins;
-        public ImageView total;
-        public ImageButton add;
-        public RelativeLayout info;
+        private TextView nameTextView;
+        private ImageView pic;
 
         ViewHolder(View itemView) {
             super(itemView);
-
             nameTextView = (TextView) itemView.findViewById(R.id.challengeNameInHistory);
-            image = (ImageView) itemView.findViewById(R.id.picture);
-            wins = (ImageView) itemView.findViewById(R.id.imageView_wins_logo);
-            total = (ImageView) itemView.findViewById(R.id.imageView_total_logo);
+            pic = (ImageView) itemView.findViewById(R.id.picture);
 
         }
     }
