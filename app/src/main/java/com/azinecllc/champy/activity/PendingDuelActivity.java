@@ -101,6 +101,7 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
 
     @Override
     protected void onDestroy() {
+        this.isFinishing();
         super.onDestroy();
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();

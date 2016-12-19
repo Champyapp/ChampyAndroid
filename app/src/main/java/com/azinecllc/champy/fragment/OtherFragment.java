@@ -65,6 +65,7 @@ public class OtherFragment extends Fragment {
     private CHCheckTableForExist checkTableForExist;
     private SessionManager sessionManager;
     private OfflineMode offlineMode;
+    private OtherAdapter adapter;
     private SQLiteDatabase db;
     private DBHelper dbHelper;
     private ContentValues cv;
@@ -120,8 +121,8 @@ public class OtherFragment extends Fragment {
         c.close();
 
 
-        final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-        final OtherAdapter adapter = new OtherAdapter(friends, getContext(), getActivity(), retrofit);
+        RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
+        adapter = new OtherAdapter(friends, getContext(), getActivity(), retrofit);
 
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         rvContacts.setAdapter(adapter);
@@ -217,7 +218,9 @@ public class OtherFragment extends Fragment {
                                             try {
                                                 URL profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
                                                 photo = profile_pic.toString();
-                                            } catch (Exception e) { e.printStackTrace(); }
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
                                         }
 
                                         String name = data.getName();
@@ -232,17 +235,15 @@ public class OtherFragment extends Fragment {
                                         // отображаем друзей в списке
                                         if (!checkTableForExist.isInOtherTable(data.get_id())) {
                                             db.insert("mytable", null, cv);
-                                            friends.add(new FriendModel(
-                                                    name,
-                                                    photo,
-                                                    data.get_id(),
-                                                    "" + data.getInProgressChallenges(),
-                                                    "" + data.getSuccessChallenges(),
-                                                    "" + data.getAllChallengesCount(),
-                                                    "" + data.getLevel().getNumber()
+                                            friends.add(new FriendModel(name, photo, data.get_id(),
+                                                    data.getInProgressChallenges().toString(),
+                                                    data.getSuccessChallenges().toString(),
+                                                    data.getAllChallengesCount().toString(),
+                                                    data.getLevel().getNumber().toString()
                                             ));
                                         }
                                         swipeRefreshLayout.setRefreshing(false);
+
                                     }
 //                                    else {
 //                                        // отображение всего у человека, который не установил champy
@@ -270,8 +271,8 @@ public class OtherFragment extends Fragment {
 //                                    }
 
                                     RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-                                    OtherAdapter otherAdapter = new OtherAdapter(friends, getContext(), getActivity(), retrofit);
-                                    rvContacts.setAdapter(otherAdapter);
+                                    adapter = new OtherAdapter(friends, getContext(), getActivity(), retrofit);
+                                    rvContacts.setAdapter(adapter);
                                     gSwipeRefreshLayout.setRefreshing(false);
                                 }
 
@@ -285,6 +286,8 @@ public class OtherFragment extends Fragment {
                 });
                 request.executeAsync();
             });
+            Runtime.getRuntime().runFinalization();
+            Runtime.getRuntime().gc();
         } else {
             swipeRefreshLayout.setRefreshing(false);
             sessionManager.setRefreshOthers("false");
