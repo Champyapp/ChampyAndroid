@@ -118,20 +118,20 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         /**
          * below close view
          */
-        // response for icons in close view
+        // Initialisation view elements for close state
         ImageView imageViewFriendPicture = viewHolder.friendImage;
         ImageView imageViewChallenges = viewHolder.challenges;
         ImageView imageViewTotal = viewHolder.total;
         ImageView imageViewWins = viewHolder.wins;
-        // response for counters in close view
+        // Initialisation counters
         TextView counterInProgressClose = (TextView)viewHolder.itemView.findViewById(R.id.counterInProgress);
         TextView counterTotalClose = (TextView)viewHolder.itemView.findViewById(R.id.counterTotal);
         TextView counterWinsClose = (TextView)viewHolder.itemView.findViewById(R.id.counterWins);
-        // response for openView by counters in close view
+        // Setting value for counters
         counterInProgressClose.setText(contact.getmChallenges());
         counterWinsClose.setText(contact.getmWins());
         counterTotalClose.setText(contact.getmTotal());
-        // response for typeface for counters in close view
+        // Setting typeface for counters
         counterInProgressClose.setTypeface(typeFace);
         counterWinsClose.setTypeface(typeFace);
         counterTotalClose.setTypeface(typeFace);
@@ -140,22 +140,16 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
          * below open view
          */
 
-        // response for user openView and icons in open view
+        // Initialisation views elements for open state
         ImageView imageViewUserAvatar = (ImageView) viewHolder.itemView.findViewById(R.id.imageViewUserAvatar);
         ImageView imageViewChallengesOpen = viewHolder.mChallenges;
         ImageView imageViewTotalOpen = viewHolder.mTotal;
         ImageView imageViewWinsOpen = viewHolder.mWins;
-        TextView tvUserName2 = (TextView) viewHolder.itemView.findViewById(R.id.textViewChallengesCounter);
-        tvUserName2.setText(contact.getName());
-        tvUserName2.setTypeface(typeFace);
-        // response for icons in open view
+        // Initialisation simple text
         TextView tvChallenges = (TextView) viewHolder.itemView.findViewById(R.id.textViewChallenges);
         TextView tvTotal = (TextView) viewHolder.itemView.findViewById(R.id.textViewTotal);
         TextView tvWins = (TextView) viewHolder.itemView.findViewById(R.id.textViewWins);
-        tvChallenges.setTypeface(typeFace);
-        tvTotal.setTypeface(typeFace);
-        tvWins.setTypeface(typeFace);
-        // response for counters in open view
+        // Initialisation counter
         TextView counterInProgressOpen = (TextView) viewHolder.itemView.findViewById(R.id.info_inProgress);
         TextView counterTotalOpen = (TextView) viewHolder.itemView.findViewById(R.id.info_total);
         TextView counterWinsOpen = (TextView) viewHolder.itemView.findViewById(R.id.info_wins);
@@ -163,7 +157,15 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         counterInProgressOpen.setText(contact.getmChallenges());
         counterTotalOpen.setText(contact.getmTotal());
         counterWinsOpen.setText(contact.getmWins());
-        // response for typeface for counters in close view
+        // User name init, set view & typeface
+        TextView tvUserName2 = (TextView) viewHolder.itemView.findViewById(R.id.textViewChallengesCounter);
+        tvUserName2.setText(contact.getName());
+        tvUserName2.setTypeface(typeFace);
+        // typeface for text views
+        tvChallenges.setTypeface(typeFace);
+        tvTotal.setTypeface(typeFace);
+        tvWins.setTypeface(typeFace);
+        // typeface for counters
         counterInProgressOpen.setTypeface(typeFace);
         counterTotalOpen.setTypeface(typeFace);
         counterWinsOpen.setTypeface(typeFace);
@@ -193,23 +195,13 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                     .override(80, 80)
                     .dontAnimate()
                     .into(imageViewUserAvatar);
-//            Glide.with(context)
-//                    .load(contact.getPicture())
-//                    .asBitmap()
-//                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                    .transform(new CropCircleTransformation(context))
-//                    .placeholder(R.drawable.icon_champy)
-//                    .override(80, 80)
-//                    .into(imageViewUserAvatar);
+
 
             // response for visible of button 'add' (owner = myself);
             if (contact.getOwner().equals("true")) {
-                // если я приглашаю в друзья, то кнопка "add" толжна отсутствовать!
-                Log.d(TAG, "Owner: true");
                 viewHolder.add.setVisibility(View.GONE);
                 viewHolder.block.setVisibility(View.VISIBLE);
             } else {
-                Log.d(TAG, "Owner: false");
                 viewHolder.add.setVisibility(View.VISIBLE);
                 viewHolder.block.setVisibility(View.VISIBLE);
             }
@@ -232,14 +224,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                     .override(80, 80)
                     .dontAnimate()
                     .into(imageViewFriendPicture);
-//            Glide.with(context)
-//                    .load(contact.getPicture())
-//                    .asBitmap()
-//                    .transform(new CropCircleTransformation(context))
-//                    .placeholder(R.drawable.icon_champy)
-//                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                    .override(80, 80)
-//                    .into(imageViewFriendPicture);
+
             // made our "close-view" is visible and 'open-view' invisible
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.GONE);
             viewHolder.itemView.findViewById(R.id.row_friends_list_close).setVisibility(View.VISIBLE);
@@ -249,14 +234,14 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
             @Override
             public void onClick(View v) {
                 if (offlineMode.isConnectedToRemoteAPI(activity)) {
-                    String friend = mContacts.get(position).getID();
+                    final String friend = mContacts.get(position).getID();
                     com.azinecllc.champy.interfaces.Friends friends = retrofit.create(com.azinecllc.champy.interfaces.Friends.class);
                     Call<com.azinecllc.champy.model.friend.Friend> call = friends.removeFriend(id, friend, token);
                     call.enqueue(new Callback<com.azinecllc.champy.model.friend.Friend>() {
                         @Override
                         public void onResponse(Response<com.azinecllc.champy.model.friend.Friend> response, Retrofit retrofit) {
-                            String myLog = (response.isSuccess()) ? "Status: Removed" : "Status: " + response.toString();
-                            Log.d(TAG, "onResponse: " + myLog);
+                            //final String myLog = (response.isSuccess()) ? "Status: Removed" : "Status: " + response.toString();
+                            //Log.d(TAG, "onResponse: " + myLog);
                         }
 
                         @Override
@@ -281,16 +266,16 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                     if (friend != null) {
                         sessionManager.setRefreshFriends("false");
                         sessionManager.setRefreshPending("false");
-                        DBHelper dbHelper = DBHelper.getInstance(context);
-                        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-                        final ContentValues cv = new ContentValues();
-
                         com.azinecllc.champy.interfaces.Friends friends = retrofit.create(Friends.class);
                         Call<com.azinecllc.champy.model.friend.Friend> call = friends.acceptFriendRequest(id, friend, token);
                         call.enqueue(new Callback<com.azinecllc.champy.model.friend.Friend>() {
                             @Override
                             public void onResponse(Response<com.azinecllc.champy.model.friend.Friend> response, Retrofit retrofit) {
                                 if (response.isSuccess()) {
+                                    DBHelper dbHelper = DBHelper.getInstance(context);
+                                    SQLiteDatabase db = dbHelper.getWritableDatabase();
+                                    ContentValues cv  = new ContentValues();
+
                                     cv.put("name", mContacts.get(position).getName());
                                     cv.put("photo", mContacts.get(position).getPicture());
                                     cv.put("user_id", mContacts.get(position).getID());

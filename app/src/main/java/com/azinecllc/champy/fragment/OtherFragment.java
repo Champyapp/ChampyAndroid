@@ -171,7 +171,6 @@ public class OtherFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
     }
@@ -187,7 +186,7 @@ public class OtherFragment extends Fragment {
                 StrictMode.setThreadPolicy(policy);
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
                 int clearCount = db.delete("mytable", null, null);
-                final List<FriendModel> newFriends = new ArrayList<>();
+                friends.clear();
                 final GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(), (array, response) -> {
                     if (array.length() == 0) {
                         Toast.makeText(getContext(), R.string.noOneHasInstalledChampy, Toast.LENGTH_SHORT).show();
@@ -233,7 +232,7 @@ public class OtherFragment extends Fragment {
                                         // отображаем друзей в списке
                                         if (!checkTableForExist.isInOtherTable(data.get_id())) {
                                             db.insert("mytable", null, cv);
-                                            newFriends.add(new FriendModel(
+                                            friends.add(new FriendModel(
                                                     name,
                                                     photo,
                                                     data.get_id(),
@@ -271,7 +270,7 @@ public class OtherFragment extends Fragment {
 //                                    }
 
                                     RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-                                    OtherAdapter otherAdapter = new OtherAdapter(newFriends, getContext(), getActivity(), retrofit);
+                                    OtherAdapter otherAdapter = new OtherAdapter(friends, getContext(), getActivity(), retrofit);
                                     rvContacts.setAdapter(otherAdapter);
                                     gSwipeRefreshLayout.setRefreshing(false);
                                 }

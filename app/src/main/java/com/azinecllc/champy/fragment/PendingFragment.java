@@ -240,11 +240,8 @@ public class PendingFragment extends Fragment {
                         c.close();
 
                         RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-                        final PendingAdapter adapter = new PendingAdapter(newfriends, getContext(), getActivity(), new CustomItemClickListener() {
-                            @Override
-                            public void onItemClick(View view, int position) {
-                                Pending_friend friend = newfriends.get(position);
-                            }
+                        final PendingAdapter adapter = new PendingAdapter(newfriends, getContext(), getActivity(), (view1, position) -> {
+                            Pending_friend friend = newfriends.get(position);
                         });
                         rvContacts.setAdapter(adapter);
                         swipeRefreshLayout.setRefreshing(false);

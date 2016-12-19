@@ -37,7 +37,6 @@ import retrofit.Retrofit;
 
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
 
-    private final String TAG = FriendsAdapter.class.getSimpleName();
     private List<FriendModel> mContacts;
     private SessionManager sessionManager;
     private OfflineMode offlineMode;
@@ -107,20 +106,21 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         /**
          * below close view
          */
-        // response for icons in close view
+
+        // Initialisation circle image views & photo
         ImageView imageViewFriendPicture = viewHolder.friendImage;
         ImageView imageViewChallenges = viewHolder.challenges;
         ImageView imageViewTotal = viewHolder.total;
         ImageView imageViewWins = viewHolder.wins;
-        // response for counters in close view
+        // Initialisation counters
         TextView counterInProgressClose = (TextView)viewHolder.itemView.findViewById(R.id.counterInProgress);
         TextView counterTotalClose = (TextView)viewHolder.itemView.findViewById(R.id.counterTotal);
         TextView counterWinsClose = (TextView)viewHolder.itemView.findViewById(R.id.counterWins);
-        // response for openView by counters in close view
+        // Setting value for counters
         counterInProgressClose.setText(contact.getmChallenges());
         counterWinsClose.setText(contact.getmWins());
         counterTotalClose.setText(contact.getmTotal());
-        // response for typeface for counters in close view
+        // Setting typeface for counters;
         counterInProgressClose.setTypeface(typeFace);
         counterWinsClose.setTypeface(typeFace);
         counterTotalClose.setTypeface(typeFace);
@@ -129,30 +129,32 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
          * below open view
          */
 
-        // response for user openView and icons in open view
+        // Initialisation circle image views & photo
         ImageView imageViewUserAvatar = (ImageView) viewHolder.itemView.findViewById(R.id.imageViewUserAvatar);
         ImageView imageViewChallengesOpen = viewHolder.mchallenges;
         ImageView imageViewTotalOpen = viewHolder.mtotal;
         ImageView imageViewWinsOpen = viewHolder.mwins;
-        TextView tvUserName2 = (TextView) viewHolder.itemView.findViewById(R.id.textViewChallengesCounter);
-        tvUserName2.setText(contact.getName());
-        tvUserName2.setTypeface(typeFace);
-        // response for icons in open view
+        // Initialisation text views
         TextView tvChallenges = (TextView) viewHolder.itemView.findViewById(R.id.textViewChallenges);
         TextView tvTotal = (TextView) viewHolder.itemView.findViewById(R.id.textViewTotal);
         TextView tvWins = (TextView) viewHolder.itemView.findViewById(R.id.textViewWins);
-        tvChallenges.setTypeface(typeFace);
-        tvTotal.setTypeface(typeFace);
-        tvWins.setTypeface(typeFace);
-        // response for counters in open view
+        // Initialisation open counter
         TextView counterInProgressOpen = (TextView) viewHolder.itemView.findViewById(R.id.info_inProgress);
         TextView counterTotalOpen = (TextView) viewHolder.itemView.findViewById(R.id.info_total);
         TextView counterWinsOpen = (TextView) viewHolder.itemView.findViewById(R.id.info_wins);
-        // response for openView by counters in close view
+        // Setting value for open counter
         counterInProgressOpen.setText(contact.getmChallenges());
         counterTotalOpen.setText(contact.getmTotal());
         counterWinsOpen.setText(contact.getmWins());
-        // response for typeface for counters in close view
+        // User name initialisation, setting value & typeface
+        TextView tvUserName2 = (TextView) viewHolder.itemView.findViewById(R.id.textViewChallengesCounter);
+        tvUserName2.setText(contact.getName());
+        tvUserName2.setTypeface(typeFace);
+        // Setting typeface for simple text
+        tvChallenges.setTypeface(typeFace);
+        tvTotal.setTypeface(typeFace);
+        tvWins.setTypeface(typeFace);
+        // Setting typeface for open counters
         counterInProgressOpen.setTypeface(typeFace);
         counterTotalOpen.setTypeface(typeFace);
         counterWinsOpen.setTypeface(typeFace);
@@ -236,8 +238,8 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                     call.enqueue(new Callback<com.azinecllc.champy.model.friend.Friend>() {
                         @Override
                         public void onResponse(Response<com.azinecllc.champy.model.friend.Friend> response, Retrofit retrofit) {
-                            final String myLog = (response.isSuccess()) ? "Status: Removed" : "Status: " + response.toString();
-                            Log.d(TAG, "onResponse: " + myLog);
+                            //final String myLog = (response.isSuccess()) ? "Status: Removed" : "Status: " + response.toString();
+                            //Log.d(TAG, "onResponse: " + myLog);
                         }
 
                         @Override
