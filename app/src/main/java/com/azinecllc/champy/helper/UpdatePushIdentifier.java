@@ -23,9 +23,9 @@ public class UpdatePushIdentifier {
 
     public void updatePushIdentifier(SessionManager sessionManager) {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        String userID = sessionManager.getUserId();
-        String androidToken = sessionManager.getTokenAndroid();
-        String token = sessionManager.getToken();
+        final String userID = sessionManager.getUserId();
+        final String androidToken = sessionManager.getTokenAndroid();
+        final String token = sessionManager.getToken();
         Update_user update_user = retrofit.create(Update_user.class);
         Call<User> call = update_user.update_gcm(userID, token, androidToken, "none");
         call.enqueue(new Callback<User>() {

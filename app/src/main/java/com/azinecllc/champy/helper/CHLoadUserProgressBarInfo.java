@@ -43,7 +43,7 @@ public class CHLoadUserProgressBarInfo {
                             data.getSuccessChallenges().toString(),
                             data.getAllChallengesCount().toString(),
                             data.getLevel().getNumber().toString());
-                } else Log.d("LoadUserProgressBar", "onResponse: failed! " + response.message());
+                }
             }
 
             @Override

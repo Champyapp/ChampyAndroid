@@ -139,7 +139,7 @@ public class CHBuildAnim {
         textViewTotal.startAnimation(alphaAnimation);
         textViewTotal.setTypeface(typeface);
 
-        welcomeUserName.setText(String.format("%s", R.string.welcome + userName));
+        welcomeUserName.setText(String.format("%s", activity.getString(R.string.welcome) + userName));
         welcomeUserName.startAnimation(alphaAnimation);
         welcomeUserName.setTypeface(typeface);
 

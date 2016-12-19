@@ -31,8 +31,8 @@ public class CHUploadPhoto {
     public void uploadPhotoForAPI(String path) {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         SessionManager sessionManager = SessionManager.getInstance(context);
-        String token = sessionManager.getToken();
-        String id = sessionManager.getUserId();
+        final String token = sessionManager.getToken();
+        final String id = sessionManager.getUserId();
 
         File userPhotoFile = new File(path);
         RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), userPhotoFile);

@@ -44,15 +44,15 @@ public class CHGetFacebookFriends {
     // OTHER TABLE. method which get friends and their data
     public void getUserFacebookFriends(final String gcm) {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        final NewUser newUser = retrofit.create(NewUser.class);
+        NewUser newUser = retrofit.create(NewUser.class);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         DBHelper dbHelper = DBHelper.getInstance(context);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("mytable", null, null);
-        final ContentValues cv = new ContentValues();
-        final CHCheckTableForExist checkTableForExist = new CHCheckTableForExist(db);
-        final GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONArrayCallback() {
+        ContentValues cv = new ContentValues();
+        CHCheckTableForExist checkTableForExist = new CHCheckTableForExist(db);
+        GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONArrayCallback() {
             @Override
             public void onCompleted(JSONArray array, GraphResponse response) {
                 for (int i = 0; i < array.length(); i++) {
