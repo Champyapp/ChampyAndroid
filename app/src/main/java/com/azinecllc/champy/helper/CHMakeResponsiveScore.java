@@ -27,34 +27,46 @@ public class CHMakeResponsiveScore {
 
         //-------------------------- Circles ---------------------------//
         ImageView imageView = (ImageView)activity.findViewById(R.id.imageView_challenges_animation);
-        imageView.getLayoutParams().width = x*25;
+        imageView.getLayoutParams().width  = x*25;
         imageView.getLayoutParams().height = x*25;
 
         imageView = (ImageView)activity.findViewById(R.id.imageView_wins_animation);
-        imageView.getLayoutParams().width = x*25;
+        imageView.getLayoutParams().width  = x*25;
         imageView.getLayoutParams().height = x*25;
 
         imageView = (ImageView)activity.findViewById(R.id.imageView_total_animation);
-        imageView.getLayoutParams().width = x*25;
+        imageView.getLayoutParams().width  = x*25;
         imageView.getLayoutParams().height = x*25;
 
         //---------------------------- Logo -----------------------------//
         imageView = (ImageView)activity.findViewById(R.id.imageView_wins_logo);
-        imageView.getLayoutParams().width = x*5;
+        imageView.getLayoutParams().width  = x*5;
         imageView.getLayoutParams().height = x*5;
 
         imageView = (ImageView)activity.findViewById(R.id.imageView_total_logo);
-        imageView.getLayoutParams().width = x*5;
+        imageView.getLayoutParams().width  = x*5;
         imageView.getLayoutParams().height = x*5;
 
         imageView = (ImageView)activity.findViewById(R.id.imageView_challenges_logo);
-        imageView.getLayoutParams().width = x*5;
+        imageView.getLayoutParams().width  = x*5;
         imageView.getLayoutParams().height = x*5;
 
         //---------------------------- Fab -----------------------------//
         ImageButton fab = (ImageButton)activity.findViewById(R.id.fabPlus);
-        fab.getLayoutParams().width = x*20;
+        fab.getLayoutParams().width  = x*20;
         fab.getLayoutParams().height = x*20;
+
+//        ImageButton fabSelf = (ImageButton)activity.findViewById(R.id.fabSelf);
+//        fabSelf.getLayoutParams().width  = x*20;
+//        fabSelf.getLayoutParams().height = x*20;
+//
+//        ImageButton fabDuel = (ImageButton)activity.findViewById(R.id.fabDuel);
+//        fabDuel.getLayoutParams().width  = x*20;
+//        fabDuel.getLayoutParams().height = x*20;
+//
+//        ImageButton fabWake = (ImageButton)activity.findViewById(R.id.fabWake);
+//        fabWake.getLayoutParams().width  = x*20;
+//        fabWake.getLayoutParams().height = x*20;
 
         /*imageView = (ImageView)findViewById(R.id.profile_image);
         imageView.getLayoutParams().width = x*25;
@@ -80,6 +92,7 @@ public class CHMakeResponsiveScore {
 //        textViewChallenges.setTextSize(y);
 //        textViewWins.setTextSize(y);
 //        textViewTotal.setTextSize(y);
+
 
     }
 

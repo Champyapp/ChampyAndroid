@@ -11,10 +11,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.model.HistoryChallenge;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.List;
 
@@ -55,7 +55,7 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         String versus = itemRow.getVersus();
         String goal = itemRow.getGoal();
 
-        tvPoint.setText(constDuration + " days");
+        tvPoint.setText(String.format("%s", constDuration + " days")); //constDuration + " days");
         tvPoint.setTypeface(typeFace);
 
         switch (itemRowType) {
@@ -77,30 +77,20 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
                 break;
         }
 
-        nameTextView = (TextView) viewHolder.itemView.findViewById(R.id.counterWins);
-//        switch (itemRow.getStatus()) {
-//            case "started":
-//                nameTextView.setText(R.string.inProgress);
-//                break;
-//            case "finished":
-//                nameTextView.setText(R.string.ic_score_wins);
-//                break;
-//            case "failed":
-//                nameTextView.setText(R.string.failed);
-//                break;
-//        }
+        TextView challengeType = (TextView) viewHolder.itemView.findViewById(R.id.counterWins);
+//
         switch (itemRowType) {
             case "Self-Improvement":
-                nameTextView.setText("Self-Improvement");
+                challengeType.setText(mContext.getString(R.string.self_improvement)); //"Self-Improvement";
                 break;
             case "Duel":
-                nameTextView.setText("Duel challenge");
+                challengeType.setText(mContext.getString(R.string.duel_challenge)); //"Duel challenge");
                 break;
             case "Wake Up":
-                nameTextView.setText("Wake Up challenge");
+                challengeType.setText(mContext.getString(R.string.wake_up_challenge)); //"Wake Up challenge");
 
         }
-        nameTextView.setTypeface(typeFace);
+        challengeType.setTypeface(typeFace);
 
         Glide.with(mContext).load(R.drawable.ic_score_progress).override(40, 40).into(viewHolder.wins);
         Glide.with(mContext).load(R.drawable.ic_score_total) .override(40, 40).into(viewHolder.total);
@@ -127,7 +117,6 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
             super(itemView);
 
             nameTextView = (TextView) itemView.findViewById(R.id.challengeNameInHistory);
-            //level = (TextView) itemView.findViewById(R.id.level);
             image = (ImageView) itemView.findViewById(R.id.picture);
             wins = (ImageView) itemView.findViewById(R.id.imageView_wins_logo);
             total = (ImageView) itemView.findViewById(R.id.imageView_total_logo);

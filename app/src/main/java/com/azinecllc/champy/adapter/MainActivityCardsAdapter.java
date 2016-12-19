@@ -28,7 +28,6 @@ import static com.azinecllc.champy.utils.Constants.oneDay;
 
 public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 
-    private final String TAG = "CardsAdapterMain";
     private ArrayList<SelfImprovement_model> arrayList;
     private Snackbar snackbar;
 
@@ -110,7 +109,8 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
             case "Duel":
                 imageChallengeLogo.setImageResource(R.drawable.ic_duel_white);
                 TextView tvRecipientName = (TextView)tempView.findViewById(R.id.tvRecipientName);
-                tvRecipientName.setText("with " + currentCard.getVersus());
+                //tvRecipientName.setText("with " + currentCard.getVersus());
+                tvRecipientName.setText(String.format("%s", "with " + currentCard.getVersus()));
                 tvRecipientName.setTypeface(typeface);
                 break;
             case "Self-Improvement":
@@ -128,16 +128,13 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         long now = Calendar.getInstance().getTimeInMillis() / 1000;
         long myProgress = 0;
         long progressMidNight = 0;
-        try {
-            if (!challengeProgress[challengeProgress.length-1].equals("")) {
-                myProgress = Long.parseLong(challengeProgress[challengeProgress.length - 1]); // our last checkIn in seconds
-                Date date = new Date(myProgress * 1000); // convert last checkIn in date format
-                progressMidNight = myProgress - (date.getHours() * 60 * 60) - (date.getMinutes() * 60) - (date.getSeconds());
-            }
-        } catch (RuntimeException e) { e.printStackTrace(); }
+        if (!challengeProgress[challengeProgress.length-1].equals("")) {
+            myProgress = Long.parseLong(challengeProgress[challengeProgress.length - 1]); // our last checkIn in seconds
+            Date date = new Date(myProgress * 1000); // convert last checkIn in date format
+            progressMidNight = myProgress - (date.getHours() * 60 * 60) - (date.getMinutes() * 60) - (date.getSeconds());
+        }
 
         if (myProgress != 0L && now > progressMidNight + oneDay) {
-            // it's mean "self" and "button_duel"
 //            DBHelper dbHelper = DBHelper.getInstance(getContext());
 //            SQLiteDatabase db = dbHelper.getWritableDatabase();
 //            ContentValues cv = new ContentValues();

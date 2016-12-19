@@ -15,8 +15,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.interfaces.CustomItemClickListener;
@@ -24,6 +22,8 @@ import com.azinecllc.champy.interfaces.Friends;
 import com.azinecllc.champy.model.Pending_friend;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
