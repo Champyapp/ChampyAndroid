@@ -20,14 +20,12 @@ import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.debug.hv.ViewServer;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.helper.CHCheckPendingDuels;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
-import com.facebook.appevents.AppEventsLogger;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.io.File;
 
@@ -104,27 +102,6 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
         //ViewServer.get(this).addWindow(this);
     }
 
-
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        ViewServer.get(this).removeWindow(this);
-//    }
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        ViewServer.get(this).setFocusedWindow(this);
-//        AppEventsLogger.activateApp(this);
-//    }
-//
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        AppEventsLogger.deactivateApp(this);
-//    }
-
-
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -133,7 +110,6 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
             super.onBackPressed();
         }
     }
-
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -183,6 +159,7 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
         Runtime.getRuntime().gc();
     }
 
+
     private class ProgressTask extends AsyncTask<Void,Void,Void> {
         @Override
         protected void onPreExecute(){
@@ -218,5 +195,6 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
         protected void onPostExecute(Void result) { }
 
     }
+
 
 }

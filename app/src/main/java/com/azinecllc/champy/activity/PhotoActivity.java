@@ -11,22 +11,17 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.helper.CHUploadPhoto;
-import com.azinecllc.champy.interfaces.Update_user;
-import com.azinecllc.champy.model.user.User;
 import com.azinecllc.champy.utils.Blur;
 import com.azinecllc.champy.utils.SessionManager;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.soundcloud.android.crop.Crop;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.RequestBody;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -35,13 +30,7 @@ import java.net.URISyntaxException;
 import java.util.Random;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.GsonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
 
-import static com.azinecllc.champy.utils.Constants.API_URL;
 import static com.azinecllc.champy.utils.Constants.path;
 
 public class PhotoActivity extends AppCompatActivity {
@@ -136,14 +125,12 @@ public class PhotoActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
     }
-
 
     @Nullable
     private String getPath(Uri uri) throws URISyntaxException {

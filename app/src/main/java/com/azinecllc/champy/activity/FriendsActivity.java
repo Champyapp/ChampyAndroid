@@ -189,8 +189,10 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                 break;
             case R.id.nav_logout:
                 OfflineMode offlineMode = OfflineMode.getInstance();
-                if (offlineMode.isConnectedToRemoteAPI(this)) sessionManager.logout(this);
-                finish();
+                if (offlineMode.isConnectedToRemoteAPI(this)) {
+                    sessionManager.logout(this);
+                    finish();
+                }
                 break;
         }
         drawer.closeDrawer(GravityCompat.START);

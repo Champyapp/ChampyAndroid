@@ -36,7 +36,6 @@ import static com.azinecllc.champy.utils.Constants.path;
 
 public class PrivacyActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private NavigationView navigationView;
     private SessionManager sessionManager;
     private DrawerLayout drawer;
 
@@ -63,7 +62,7 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
         toggle.setDrawerIndicatorEnabled(true);
         toggle.syncState();
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
         final ImageView drawerUserPhoto = (ImageView) headerLayout.findViewById(R.id.profile_image);
@@ -99,25 +98,6 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
 
         //ViewServer.get(this).addWindow(this);
     }
-
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        ViewServer.get(this).removeWindow(this);
-//    }
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        ViewServer.get(this).setFocusedWindow(this);
-//        AppEventsLogger.activateApp(this);
-//    }
-//
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        AppEventsLogger.deactivateApp(this);
-//    }
 
     @Override
     public void onBackPressed() {

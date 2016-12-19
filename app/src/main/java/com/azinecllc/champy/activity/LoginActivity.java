@@ -231,14 +231,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-//    private void getUserData(final String fb_id, final String path_to_pic, String gcm, String token_android) throws JSONException {
-//        AppSync sync = new AppSync(fb_id, gcm, path_to_pic, this, token_android);
-//        //sync.getToken(fb_id, gcm);
-//        sync.getUserProfile();
-//    }
-
-
-    private void registerUser(String facebookId, String name, String email, final String gcm, String token_android) throws JSONException {
+    private void registerUser(String fbID, String name, String email, String gcm, String token_android) throws JSONException {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("facebookId", fb_id);
@@ -248,7 +241,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
 
         NewUser newUser = retrofit.create(NewUser.class);
-        Call<User> call = newUser.register(new LoginData(facebookId, name, email));
+        Call<User> call = newUser.register(new LoginData(fbID, name, email));
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {

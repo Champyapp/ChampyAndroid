@@ -10,7 +10,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,9 +44,8 @@ import static com.azinecllc.champy.utils.Constants.path;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private SessionManager sessionManager;
-    //private ImageView blurScreen;
-    private DrawerLayout drawer;
     private Boolean isFabOpen = false;
+    private DrawerLayout drawer;
     private FloatingActionButton fabPlus, fabWakeUp, fabSelf, fabDuel;
     private Animation fab_open,fab_close,rotate_forward,rotate_backward;
 
@@ -236,6 +234,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+
     private void closeFab() {
         fabPlus.startAnimation(rotate_backward);
         fabWakeUp.startAnimation(fab_close);
@@ -243,6 +242,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fabDuel.startAnimation(fab_close);
         isFabOpen = false;
     }
+
 
     private void openFab() {
         fabPlus.startAnimation(rotate_forward);

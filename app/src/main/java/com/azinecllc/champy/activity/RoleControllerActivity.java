@@ -67,6 +67,7 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
         Runtime.getRuntime().gc();
     }
 
+
     private void checkIfLoggedInAndMakeRedirect() {
         if (offlineMode.isConnectedToRemoteAPI(this)) {
             if (sessionManager.isUserLoggedIn()) {
@@ -86,10 +87,8 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
 
             spinner = findViewById(R.id.loadingPanel);
             spinner.setVisibility(View.INVISIBLE);
-            //findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
         }
 
-        //spinner.setVisibility(View.INVISIBLE);
 
     }
 
