@@ -72,7 +72,6 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         Uri uriProfile = Uri.fromFile(fileProfile);
         Glide.with(this).load(uriProfile).bitmapTransform(new CropCircleTransformation(this))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
-
         File fileBlur = new File(path, "blurred.png");
         Uri uriBlur = Uri.fromFile(fileBlur);
         Glide.with(this).load(uriBlur).bitmapTransform(new CropSquareTransformation(this))
@@ -97,7 +96,7 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
 
 
 
-        String name = sessionManager.getUserName();
+        final String name = sessionManager.getUserName();
         drawerUserName.setText(name);
         drawerUserName.setTypeface(typeface);
 
@@ -130,7 +129,6 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
             super.onBackPressed();
         }
     }
-
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -168,5 +166,6 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 
 }

@@ -78,7 +78,7 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         }
 
         TextView challengeType = (TextView) viewHolder.itemView.findViewById(R.id.counterWins);
-//
+
         switch (itemRowType) {
             case "Self-Improvement":
                 challengeType.setText(mContext.getString(R.string.self_improvement)); //"Self-Improvement";

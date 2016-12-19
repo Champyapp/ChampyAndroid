@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/tvWakeUpChallenge"
         android:textAllCaps="true"
-        android:text="@string/wake_up_challenge"
+        android:text="@string/wake_up_n_challenge"
         android:textAlignment="center"
         android:textColor="@color/colorWhite"
         android:textAppearance="?android:attr/textAppearanceLarge"

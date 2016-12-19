@@ -227,10 +227,10 @@ public class OtherFragment extends Fragment {
                                         cv.put("user_id",    data.get_id());
                                         cv.put("name",       name);
                                         cv.put("photo",      photo);
-                                        cv.put("total",      "" + data.getAllChallengesCount());
-                                        cv.put("wins",       "" + data.getSuccessChallenges());
-                                        cv.put("challenges", "" + data.getInProgressChallenges());
-                                        cv.put("level",      "" + data.getLevel().getNumber());
+                                        cv.put("total",      data.getAllChallengesCount().toString());
+                                        cv.put("wins",       data.getSuccessChallenges().toString());
+                                        cv.put("challenges", data.getInProgressChallenges().toString());
+                                        cv.put("level",      data.getLevel().getNumber().toString());
 
                                         // отображаем друзей в списке
                                         if (!checkTableForExist.isInOtherTable(data.get_id())) {
