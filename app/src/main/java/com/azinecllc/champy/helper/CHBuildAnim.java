@@ -32,6 +32,7 @@ public class CHBuildAnim {
         return instance;
     }
 
+
     public void buildAnim(Activity activity, SessionManager sessionManager, Typeface typeface) {
 //        WindowManager wm = (WindowManager)activity.getSystemService(Context.WINDOW_SERVICE);
 //        Display display = wm.getDefaultDisplay();
@@ -69,10 +70,10 @@ public class CHBuildAnim {
         tvWinsCounter.setTypeface(typeface);
         tvTotalCounter.setTypeface(typeface);
 
-        String challenges = sessionManager.getChampyOptions().get("challenges");
-        String wins       = sessionManager.getChampyOptions().get("wins");
-        String total      = sessionManager.getChampyOptions().get("total");
-        String userName   = sessionManager.getUserName();
+        String challenges     = sessionManager.getChampyOptions().get("challenges");
+        String wins           = sessionManager.getChampyOptions().get("wins");
+        String total          = sessionManager.getChampyOptions().get("total");
+        String userName       = sessionManager.getUserName();
 
         int challengesInteger = Integer.parseInt(challenges);
         int winsInteger       = Integer.parseInt(wins);
@@ -81,11 +82,7 @@ public class CHBuildAnim {
         // animator for In progress
         ValueAnimator animatorInProgress = new ValueAnimator();
         animatorInProgress.setObjectValues(0, challengesInteger);
-        animatorInProgress.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            public void onAnimationUpdate(ValueAnimator animation) {
-                tvChallengesCounter.setText(String.valueOf(animation.getAnimatedValue()));
-            }
-        });
+        animatorInProgress.addUpdateListener(animation -> tvChallengesCounter.setText(String.valueOf(animation.getAnimatedValue())));
         animatorInProgress.setEvaluator(new TypeEvaluator<Integer>() {
             public Integer evaluate(float fraction, Integer startValue, Integer endValue) {
                 return Math.round(startValue + (endValue - startValue) * fraction);
@@ -97,11 +94,7 @@ public class CHBuildAnim {
         // animator for Wins
         ValueAnimator animatorWins = new ValueAnimator();
         animatorWins.setObjectValues(0, winsInteger);
-        animatorWins.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            public void onAnimationUpdate(ValueAnimator animation) {
-                tvWinsCounter.setText(String.valueOf(animation.getAnimatedValue()));
-            }
-        });
+        animatorWins.addUpdateListener(animation -> tvWinsCounter.setText(String.valueOf(animation.getAnimatedValue())));
         animatorWins.setEvaluator(new TypeEvaluator<Integer>() {
             public Integer evaluate(float fraction, Integer startValue, Integer endValue) {
                 return Math.round(startValue + (endValue - startValue) * fraction);
@@ -114,11 +107,7 @@ public class CHBuildAnim {
         // animator for Total
         ValueAnimator animatorTotal = new ValueAnimator();
         animatorTotal.setObjectValues(0, totalInteger);
-        animatorTotal.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            public void onAnimationUpdate(ValueAnimator animation) {
-                tvTotalCounter.setText(String.valueOf(animation.getAnimatedValue()));
-            }
-        });
+        animatorTotal.addUpdateListener(animation -> tvTotalCounter.setText(String.valueOf(animation.getAnimatedValue())));
         animatorTotal.setEvaluator(new TypeEvaluator<Integer>() {
             public Integer evaluate(float fraction, Integer startValue, Integer endValue) {
                 return Math.round(startValue + (endValue - startValue) * fraction);
@@ -150,21 +139,20 @@ public class CHBuildAnim {
         textViewTotal.startAnimation(alphaAnimation);
         textViewTotal.setTypeface(typeface);
 
-        welcomeUserName.setText(activity.getString(R.string.welcome) + userName);
+        welcomeUserName.setText(String.format("%s", R.string.welcome + userName));
         welcomeUserName.startAnimation(alphaAnimation);
         welcomeUserName.setTypeface(typeface);
 
-        Uri uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/ic_score_progress");
+        Uri uri = Uri.parse("android.resource://com.azinecllc.champy/drawable/ic_score_progress");
         Glide.with(activity).load(uri).into(imageViewChallengesLogo);
-        //Glide.with(this).load(profile).bitmapTransform(new CropCircleTransformation(this))
-        //                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
+        //Glide.with(this).load(profile).bitmapTransform(new CropCircleTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
         imageViewChallengesLogo.startAnimation(alphaAnimation);
 
-        uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/ic_score_wins");
+        uri = Uri.parse("android.resource://com.azinecllc.champy/drawable/ic_score_wins");
         Glide.with(activity).load(uri).into(imageViewWinsLogo);
         imageViewWinsLogo.startAnimation(alphaAnimation);
 
-        uri = Uri.parse("android.resource://com.example.ivan.champy_v2/drawable/ic_score_total");
+        uri = Uri.parse("android.resource://com.azinecllc.champy/drawable/ic_score_total");
         Glide.with(activity).load(uri).into(imageViewTotalLogo);
         imageViewTotalLogo.startAnimation(alphaAnimation);
 

@@ -101,6 +101,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 
         Bundle bundle = this.getIntent().getExtras();
 
+
         if (bundle != null) {
             String friendRequest = bundle.getString("friend_request");
             if (friendRequest != null) {
@@ -135,7 +136,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         //ViewServer.get(this).addWindow(this);
     }
 
-
     @Override
     public void onBackPressed()  {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -146,7 +146,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
             super.onBackPressed();
         }
     }
-
 
     @Override
     protected void onDestroy() {
