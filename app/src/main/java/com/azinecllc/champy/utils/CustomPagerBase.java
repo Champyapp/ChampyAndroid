@@ -181,7 +181,9 @@ public class CustomPagerBase {
 
                             // if when we pick-up our finger from the screen and X <> 100 then return card to default;
                             else {
-                                moveCentralItemToDefault();
+                                if (currentItem != null) {
+                                    moveCentralItemToDefault();
+                                }
                                 // if we have right and left cards then return they (central position)
                                 if (previousItem != null && nextItem != null) {
                                     movePreviousItemToDefault(previousItem);

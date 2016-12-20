@@ -209,9 +209,7 @@ public class ChallengeController {
         Calendar c = GregorianCalendar.getInstance();
         final long currentMidnight = unixTime - (c.get(Calendar.HOUR_OF_DAY)*60*60) - (c.get(Calendar.MINUTE)*60) - (c.get(Calendar.SECOND));
 
-        Log.d(TAG, "createNewWakeUpChallenge : current  midnight : " + currentMidnight);
-
-
+        Log.d(TAG, "createNewWakeUpChallenge: current  midnight : " + currentMidnight);
         Log.d(TAG, "createNewWakeUpChallenge: days = " + days);
 
         final String[] details = new String[days];

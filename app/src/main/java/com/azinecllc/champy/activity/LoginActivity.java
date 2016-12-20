@@ -260,6 +260,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     SessionManager sessionManager = SessionManager.getInstance(getApplicationContext());
                     sessionManager.setRefreshPending("true");
                     sessionManager.setRefreshFriends("true");
+                    sessionManager.setRefreshOthers ("true");
                     sessionManager.createUserLoginSession(
                             user_name, email, fb_id, path_to_pic,
                             jwtString, id, pushN, newChallReq, acceptedYour,
@@ -292,15 +293,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     } else {
                         sessionManager.change_avatar(api_photo_path);
                     }
+
                     Intent goToRoleActivity = new Intent(LoginActivity.this, RoleControllerActivity.class);
                     startActivity(goToRoleActivity);
                 }
             }
 
             @Override
-            public void onFailure(Throwable t) {
-                Log.d(TAG, "VSE huynya");
-            }
+            public void onFailure(Throwable t) {}
         });
 
     }

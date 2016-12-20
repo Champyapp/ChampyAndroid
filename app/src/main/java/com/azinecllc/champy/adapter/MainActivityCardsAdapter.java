@@ -109,7 +109,6 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
             case "Duel":
                 imageChallengeLogo.setImageResource(R.drawable.ic_duel_white);
                 TextView tvRecipientName = (TextView)tempView.findViewById(R.id.tvRecipientName);
-                //tvRecipientName.setText("with " + currentCard.getVersus());
                 tvRecipientName.setText(String.format("%s", "with " + currentCard.getVersus()));
                 tvRecipientName.setTypeface(typeface);
                 break;

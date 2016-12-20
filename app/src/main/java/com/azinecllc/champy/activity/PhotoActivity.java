@@ -1,11 +1,14 @@
 package com.azinecllc.champy.activity;
 
+import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -32,9 +35,11 @@ import java.util.Random;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 import static com.azinecllc.champy.utils.Constants.path;
+import static java.security.AccessController.getContext;
 
 public class PhotoActivity extends AppCompatActivity {
 
+    private static final int CHAMPY_PERMISSIONS = 228;
     private static final int CAMERA_REQUEST = 1888;
     private static final int SELECT_FILE = 1999;
     private static final int CROP_PIC = 1777;
@@ -53,10 +58,10 @@ public class PhotoActivity extends AppCompatActivity {
 
         sessionManager = SessionManager.getInstance(getApplicationContext());
 
-        Typeface typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
-        TextView tvChooseFromGallery = (TextView)findViewById(R.id.tv_choose_from_gallery);
-        TextView tvTakePicture = (TextView)findViewById(R.id.tv_take_a_picture);
-        ImageView imageView = (ImageView)findViewById(R.id.photo);
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
+        TextView tvChooseFromGallery = (TextView) findViewById(R.id.tv_choose_from_gallery);
+        TextView tvTakePicture = (TextView) findViewById(R.id.tv_take_a_picture);
+        ImageView imageView = (ImageView) findViewById(R.id.photo);
         tvChooseFromGallery.setTypeface(typeface);
         tvTakePicture.setTypeface(typeface);
 
@@ -77,18 +82,48 @@ public class PhotoActivity extends AppCompatActivity {
 
         uploadPhoto = new CHUploadPhoto(getApplicationContext());
 
-        tvChooseFromGallery.setOnClickListener(v -> {
-            Crop.pickImage(PhotoActivity.this);
-        });
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            checkSelfPermission(Manifest.permission.CAMERA);
+//            checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+//            checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+//        }
 
-        tvTakePicture.setOnClickListener(v -> {
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            File f = new File(path, "profile.jpg");
-            picUri = Uri.fromFile(f);
-            startActivityForResult(intent, CAMERA_REQUEST);
-        });
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            if (checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+//                requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, CHAMPY_PERMISSIONS);
+//
+//                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+//                // app-defined int constant
+//
+//                return;
+//            }
+//        }
 
+
+        if (checkWriteExternalPermission()) {
+
+            tvChooseFromGallery.setOnClickListener(v -> {
+                Crop.pickImage(PhotoActivity.this);
+            });
+
+            tvTakePicture.setOnClickListener(v -> {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                File f = new File(path, "profile.jpg");
+                picUri = Uri.fromFile(f);
+                startActivityForResult(intent, CAMERA_REQUEST);
+            });
+
+        } else {
+            Toast.makeText(this, "woo-hoo", Toast.LENGTH_SHORT).show();
+        }
     }
+
+    private boolean checkWriteExternalPermission() {
+        String permission = "android.permission.WRITE_EXTERNAL_STORAGE";
+        int res = this.checkCallingOrSelfPermission(permission);
+        return (res == PackageManager.PERMISSION_GRANTED);
+    }
+
 
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
