@@ -1,6 +1,5 @@
 package com.azinecllc.champy.activity;
 
-import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,6 +13,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,10 +35,10 @@ import java.util.Random;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 import static com.azinecllc.champy.utils.Constants.path;
-import static java.security.AccessController.getContext;
 
-public class PhotoActivity extends AppCompatActivity {
+public class PhotoActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String WRITE_EXTERNAL_STORAGE = "android.permission.WRITE_EXTERNAL_STORAGE";
     private static final int CHAMPY_PERMISSIONS = 228;
     private static final int CAMERA_REQUEST = 1888;
     private static final int SELECT_FILE = 1999;
@@ -82,45 +82,33 @@ public class PhotoActivity extends AppCompatActivity {
 
         uploadPhoto = new CHUploadPhoto(getApplicationContext());
 
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            checkSelfPermission(Manifest.permission.CAMERA);
-//            checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-//            checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
-//        }
+        tvChooseFromGallery.setOnClickListener(this);
+        tvTakePicture.setOnClickListener(this);
 
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            if (checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-//                requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, CHAMPY_PERMISSIONS);
-//
-//                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-//                // app-defined int constant
-//
-//                return;
-//            }
-//        }
+    }
 
-
+    @Override
+    public void onClick(View v) {
         if (checkWriteExternalPermission()) {
-
-            tvChooseFromGallery.setOnClickListener(v -> {
-                Crop.pickImage(PhotoActivity.this);
-            });
-
-            tvTakePicture.setOnClickListener(v -> {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                File f = new File(path, "profile.jpg");
-                picUri = Uri.fromFile(f);
-                startActivityForResult(intent, CAMERA_REQUEST);
-            });
-
+            switch (v.getId()) {
+                case R.id.tv_choose_from_gallery: Crop.pickImage(PhotoActivity.this); break;
+                case R.id.tv_take_a_picture:
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    File f = new File(path, "profile.jpg");
+                    picUri = Uri.fromFile(f);
+                    startActivityForResult(intent, CAMERA_REQUEST);
+                    break;
+            }
         } else {
-            Toast.makeText(this, "woo-hoo", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No Permission Granted", Toast.LENGTH_LONG).show();
+
+            startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                    Uri.fromParts("package", getPackageName(), null)));
         }
     }
 
     private boolean checkWriteExternalPermission() {
-        String permission = "android.permission.WRITE_EXTERNAL_STORAGE";
-        int res = this.checkCallingOrSelfPermission(permission);
+        int res = this.checkCallingOrSelfPermission(WRITE_EXTERNAL_STORAGE);
         return (res == PackageManager.PERMISSION_GRANTED);
     }
 
