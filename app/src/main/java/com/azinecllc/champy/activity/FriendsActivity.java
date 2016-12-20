@@ -150,7 +150,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
     }

@@ -44,19 +44,20 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pending__duel);
-
         sessionManager = SessionManager.getInstance(this);
-        new ProgressTask().execute();
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        spinner = findViewById(R.id.loadingPanel);
+        spinner.setVisibility(View.VISIBLE);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         setSupportActionBar(toolbar);
         toggle.syncState();
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
-        final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
+        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
 
         final Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
@@ -65,10 +66,9 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
 
         Glide.with(this).load(R.drawable.ic_duel_blue).override(130, 130).into((ImageView) findViewById(R.id.imageViewLogo));
 
-
-        final ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        final ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
-        final TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
+        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
         drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         File file = new File(path, "profile.jpg");
@@ -82,10 +82,19 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         Glide.with(this).load(url).bitmapTransform(new CropSquareTransformation(this))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);
 
+        size = Integer.parseInt(sessionManager.get_duel_pending());
+        PendingDuelsAdapter pagerAdapter = new PendingDuelsAdapter(getSupportFragmentManager());
+        ViewPager viewPager = (ViewPager) findViewById(R.id.pager_pending_duel);
+        pagerAdapter.setCount(size);
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.setOffscreenPageLimit(1);
+        viewPager.setPageMargin(20);
+        viewPager.setClipToPadding(false);
+        viewPager.setPadding(90, 0, 90, 0);
+
         String name = sessionManager.getUserName();
         drawerUserName.setText(name);
         drawerUserName.setTypeface(typeface);
-
 
         CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();
         int count = checker.getPendingCount(getApplicationContext());
@@ -101,7 +110,6 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
 
     @Override
     protected void onDestroy() {
-        this.isFinishing();
         super.onDestroy();
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
@@ -112,9 +120,10 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            super.onBackPressed();
             Intent intent = new Intent(PendingDuelActivity.this, MainActivity.class);
             startActivity(intent);
-            super.onBackPressed();
+            finish();
         }
     }
 
@@ -125,18 +134,22 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
             case R.id.challenges:
                 Intent goToChallenges = new Intent(this, MainActivity.class);
                 startActivity(goToChallenges);
+                finish();
                 break;
             case R.id.friends:
                 Intent goToFriends = new Intent(this, FriendsActivity.class);
                 startActivity(goToFriends);
+                finish();
                 break;
             case R.id.history:
                 Intent goToHistory = new Intent(this, HistoryActivity.class);
                 startActivity(goToHistory);
+                finish();
                 break;
             case R.id.settings:
                 Intent goToSettings = new Intent(this, SettingsActivity.class);
                 startActivity(goToSettings);
+                finish();
                 break;
             case R.id.share:
                 String message = getString(R.string.share_text2);
@@ -149,40 +162,12 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
                 OfflineMode offlineMode = OfflineMode.getInstance();
                 if (offlineMode.isConnectedToRemoteAPI(this)) {
                     sessionManager.logout(this);
+                    finish();
                 }
                 break;
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    // TODO: 12/16/16 REMOVE
-    private class ProgressTask extends AsyncTask<Void,Void,Void> {
-        @Override
-        protected void onPreExecute() {
-            spinner = findViewById(R.id.loadingPanel);
-            spinner.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected Void doInBackground(Void... arg0) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    size = Integer.parseInt(sessionManager.get_duel_pending());
-                    PendingDuelsAdapter pagerAdapter = new PendingDuelsAdapter(getSupportFragmentManager());
-                    ViewPager viewPager = (ViewPager) findViewById(R.id.pager_pending_duel);
-                    pagerAdapter.setCount(size);
-                    viewPager.setAdapter(pagerAdapter);
-                    viewPager.setOffscreenPageLimit(1);
-                    viewPager.setPageMargin(20);
-                    viewPager.setClipToPadding(false);
-                    viewPager.setPadding(90, 0, 90, 0);
-                }
-            });
-            return null;
-        }
-
     }
 
 }

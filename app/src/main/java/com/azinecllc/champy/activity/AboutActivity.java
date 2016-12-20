@@ -118,22 +118,27 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
             case R.id.challenges:
                 Intent goToChallenges = new Intent(this, MainActivity.class);
                 startActivity(goToChallenges);
+                finish();
                 break;
             case R.id.friends:
                 Intent goToFriends = new Intent(this, FriendsActivity.class);
                 startActivity(goToFriends);
+                finish();
                 break;
             case R.id.pending_duels:
                 Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
                 startActivity(goToPendingDuel);
+                finish();
                 break;
             case R.id.history:
                 Intent goToHistory = new Intent(this, HistoryActivity.class);
                 startActivity(goToHistory);
+                finish();
                 break;
             case R.id.settings:
                 Intent goToSettings = new Intent(this, SettingsActivity.class);
                 startActivity(goToSettings);
+                finish();
                 break;
             case R.id.share:
                 String message = getString(R.string.share_text2);
@@ -144,7 +149,10 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
                 break;
             case R.id.nav_logout:
                 OfflineMode offline = OfflineMode.getInstance();
-                if (offline.isConnectedToRemoteAPI(this)) sessionManager.logout(this);
+                if (offline.isConnectedToRemoteAPI(this)) {
+                    sessionManager.logout(this);
+                    finish();
+                }
                 break;
         }
         drawer.closeDrawer(GravityCompat.START);

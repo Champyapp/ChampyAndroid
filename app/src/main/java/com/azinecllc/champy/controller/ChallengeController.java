@@ -575,6 +575,9 @@ public class ChallengeController {
         CHLoadUserProgressBarInfo loadData = new CHLoadUserProgressBarInfo(context);
         loadData.loadUserProgressBarInfo();
 
+        Runtime.getRuntime().runFinalization();
+        Runtime.getRuntime().gc();
+
     }
 
     //

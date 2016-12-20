@@ -212,6 +212,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             updateProfile(map);
             Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
             startActivity(intent);
+            finish();
             super.onBackPressed();
         }
     }
@@ -223,21 +224,25 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 updateProfile(map);
                 Intent goToChallenges = new Intent(SettingsActivity.this, MainActivity.class);
                 startActivity(goToChallenges);
+                finish();
                 break;
             case R.id.friends:
                 updateProfile(map);
                 Intent goToFriends = new Intent(SettingsActivity.this, FriendsActivity.class);
                 startActivity(goToFriends);
+                finish();
                 break;
             case R.id.history:
                 updateProfile(map);
                 Intent goToHistory = new Intent(SettingsActivity.this, HistoryActivity.class);
                 startActivity(goToHistory);
+                finish();
                 break;
             case R.id.pending_duels:
                 updateProfile(map);
                 Intent goToPendingDuel = new Intent(SettingsActivity.this, PendingDuelActivity.class);
                 startActivity(goToPendingDuel);
+                finish();
                 break;
             case R.id.share:
                 updateProfile(map);
@@ -252,6 +257,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     updateProfile(map);
                     LoginManager.getInstance().logOut();
                     sessionManager.logout(SettingsActivity.this);
+                    finish();
                 }
                 break;
         }
