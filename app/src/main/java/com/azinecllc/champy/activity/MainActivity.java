@@ -143,9 +143,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (adapter.dataCount() < 10) {
             fabPlus.setOnClickListener(v -> animateFAB());
-            fabSelf.setOnClickListener(v -> startActivity(new Intent(this, SelfImprovementActivity.class)));
-            fabDuel.setOnClickListener(v -> startActivity(new Intent(this, FriendsActivity.class)));
-            fabWakeUp.setOnClickListener(v -> startActivity(new Intent(this, WakeUpActivity.class)));
+            fabSelf.setOnClickListener(v -> {
+                startActivity(new Intent(this, SelfImprovementActivity.class));
+                finish();
+            });
+            fabDuel.setOnClickListener(v -> {
+                startActivity(new Intent(this, FriendsActivity.class));
+                finish();
+            });
+            fabWakeUp.setOnClickListener(v -> {
+                startActivity(new Intent(this, WakeUpActivity.class));
+                finish();
+            });
         } else {
             Toast.makeText(this, R.string.you_have_too_much_challenges, Toast.LENGTH_LONG).show();
         }
@@ -193,7 +202,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     break;
                 case R.id.nav_logout:
                     OfflineMode offlineMode = OfflineMode.getInstance();
-                    if (offlineMode.isConnectedToRemoteAPI(MainActivity.this)) { sessionManager.logout(MainActivity.this); }
+                    if (offlineMode.isConnectedToRemoteAPI(MainActivity.this)) {
+                        sessionManager.logout(MainActivity.this);
+                        finish();
+                    }
                     break;
             }
 //        }, drawerCloseTime);
@@ -208,6 +220,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             final String userId = sessionManager.getUserId();
             ChallengeController cc = new ChallengeController(getApplicationContext(), this, token, userId);
             cc.refreshCardsForPendingDuel();
+            Runtime.getRuntime().runFinalization();
+            Runtime.getRuntime().gc();
         }
         return super.onOptionsItemSelected(item);
     }
