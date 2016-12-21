@@ -109,7 +109,6 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
             view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
         }
 
-        //ViewServer.get(this).addWindow(this);
     }
 
     @Override
