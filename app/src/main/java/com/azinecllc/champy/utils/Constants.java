@@ -9,6 +9,8 @@ public class Constants {
     public static final String typeWake = "567d51c48322f85870fd931c";
     public static final String azinecUrl = "http://www.azinec.com";
 
+    public static final String update = "0";
+
     public static final int oneDay = 86400;
     public static final int drawerCloseTime = 250;
 
