@@ -221,6 +221,23 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
     @Override
     public void onDestroy() {
         super.onDestroy();
+        name = null;
+        status = null;
+        duration = null;
+        description = null;
+        challenge_id = null;
+        etDays.destroyDrawingCache();
+        tvDays.destroyDrawingCache();
+        etGoal.destroyDrawingCache();
+        tvGoal.destroyDrawingCache();
+        etDays = null;
+        tvDays = null;
+        etGoal = null;
+        tvGoal = null;
+        typeface = null;
+        c = null;
+        viewPager.destroyDrawingCache();
+
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
     }

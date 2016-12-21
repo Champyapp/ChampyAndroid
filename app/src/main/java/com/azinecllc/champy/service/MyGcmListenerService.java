@@ -118,6 +118,7 @@ public class MyGcmListenerService extends GcmListenerService {
 
                 refreshPendingDuels();
                 generateCardsForMainActivity(sessionManager.getToken(), sessionManager.getUserId());
+
                 notifyChallenges(historyIntent, message);
                 break;
         }
@@ -205,8 +206,17 @@ public class MyGcmListenerService extends GcmListenerService {
                         String constDuration = "";
                         List<Object> progress;
                         String needsToCheck;
-                        String challType = (challenge_type.equals(typeSelf)) ? "Self-Improvement" : (challenge_type.equals(typeDuel)) ? "Duel" : "Wake Up";
-                        String versus = (challenge_type.equals(typeDuel)) ? (userId.equals(sender.get_id()) ? recipient.getName() : sender.getName()) : "notDuel";
+                        String challType = (challenge_type.equals(typeSelf))
+                                ? "Self-Improvement"
+                                : (challenge_type.equals(typeDuel))
+                                                        ? "Duel"
+                                                        : "Wake Up";
+
+                        String versus = (challenge_type.equals(typeDuel))
+                                ? (userId.equals(sender.get_id())
+                                            ? recipient.getName()
+                                            : sender.getName())
+                                : "notDuel";
 
                         if (userId.equals(sender.get_id())) {
                             progress = datum.getSenderProgress();

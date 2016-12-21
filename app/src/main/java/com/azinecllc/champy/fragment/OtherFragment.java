@@ -3,6 +3,7 @@ package com.azinecllc.champy.fragment;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
@@ -25,6 +26,7 @@ import com.azinecllc.champy.model.user.Data;
 import com.azinecllc.champy.model.user.User;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
+import com.bumptech.glide.Glide;
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
@@ -54,10 +56,11 @@ import static com.azinecllc.champy.utils.Constants.API_URL;
  */
 public class OtherFragment extends Fragment {
 
-    private Retrofit retrofit;
+    //2.48 //2.22 //1.39 //1.63
     private static final String ARG_PAGE = "ARG_PAGE";
     private final String TAG = "OtherFragment";
     private int mPage;
+    private Retrofit retrofit;
     private List<FriendModel> friends;
     private Socket mSocket;
     private View gView;
@@ -132,6 +135,7 @@ public class OtherFragment extends Fragment {
         this.gView = view;
 
         if (sessionManager.getRefreshOthers().equals("true")) {
+//            new loadOtherFromAsync().doInBackground();
             refreshOtherView(gSwipeRefreshLayout, gView);
         }
 
@@ -172,8 +176,30 @@ public class OtherFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Glide.clear(gView);
+        cv.clear();
+        friends.clear();
+        gView.destroyDrawingCache();
+        gSwipeRefreshLayout.destroyDrawingCache();
+        cv = null;
+        gView = null;
+        adapter = null;
+        friends = null;
+        mSocket = null;
+        retrofit = null;
+        checkTableForExist = null;
+        gSwipeRefreshLayout = null;
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
+    }
+
+
+    private class loadOtherFromAsync extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            refreshOtherView(gSwipeRefreshLayout, gView);
+            return null;
+        }
     }
 
 
@@ -294,8 +320,6 @@ public class OtherFragment extends Fragment {
         }
 
     }
-
-
 
 
     private Emitter.Listener onConnect = new Emitter.Listener() {

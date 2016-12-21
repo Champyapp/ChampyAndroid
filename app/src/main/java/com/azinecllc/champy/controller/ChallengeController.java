@@ -509,13 +509,16 @@ public class ChallengeController {
                         String challenge_id          = datum.get_id();               // im progress id
                         String challenge_type        = challenge.getType();          // 567d51c48322f85870fd931a / b / c
                         String challenge_name        = challenge.getName();          // wake up (time / self / button_duel
-                        //String challenge_updated     = isUpdated(challenge_id);      // bool check method;
-                        String challenge_duration = "";
-                        String constDuration = "";
+                        String challenge_duration    = "";
+                        String constDuration         = "";
                         List<Object> progress;
                         String needsToCheck;
-                        String challType = (challenge_type.equals(typeSelf)) ? "Self-Improvement" : (challenge_type.equals(typeDuel)) ? "Duel" : "Wake Up";
-                        String versus = (challenge_type.equals(typeDuel)) ? (userId.equals(sender.get_id()) ? recipient.getName() : sender.getName()) : "notDuel";
+                        String challType = (challenge_type.equals(typeSelf)) ? "Self-Improvement"
+                                         : (challenge_type.equals(typeDuel)) ? "Duel" : "Wake Up";
+                        String versus    = (challenge_type.equals(typeDuel))
+                                         ? (userId.equals(sender.get_id())   ? recipient.getName()
+                                         : sender.getName()) : "notDuel";
+
 
                         if (userId.equals(sender.get_id())) {
                             progress = datum.getSenderProgress();
@@ -535,30 +538,30 @@ public class ChallengeController {
                             constDuration = String.valueOf(constDays);
                         }
 
-                        String stringSenderProgress[] = new String[progress.size()];
+                        String prog[] = new String[progress.size()];
                         for (int j = 0; j < progress.size(); j++) {
                             try {
                                 JSONObject json = new JSONObject(progress.get(j).toString());
                                 long at = json.getLong("at");
-                                stringSenderProgress[j] = String.valueOf(at);
-
+                                prog[j] = String.valueOf(at);
                                 // TODO: 12/13/16 Relocate last check-in time for auto surrender here.
                             } catch (JSONException e) { e.printStackTrace(); }
                         }
 
-                        cv.put("name", challType); // Self-Improvement / Duel / Wake Up
-                        cv.put("versus", versus); // if this is button_duel than versus = recipient / sender name
-                        cv.put("wakeUpTime", challenge_detail); // our specific fimeld for delete wakeUp (example: 1448);
-                        cv.put("challengeName", challenge_name); // default 'challenge'. this column only for wake up time
-                        cv.put("description", challenge_description); // smoking free life or wake up at 14:48
-                        cv.put("duration", challenge_duration); // duration of challenge
-                        cv.put("challenge_id", challenge_id); // in progress id
-                        cv.put("status", challenge_status); // active or not
-                        //cv.put("updated", challenge_updated); // true or false (need to delete)
-                        cv.put("myProgress", Arrays.toString(stringSenderProgress)); // last update time in millis
-                        cv.put("constDuration", constDuration); // our constant value of challenge duration
-                        cv.put("needsToCheck", needsToCheck); // method for check challenge for "needToCheck"
-                        db.insert("myChallenges", null, cv); // db when we store all ic_score_progress and information about them
+
+
+                        cv.put("name",          challType);             // Self-Improvement / Duel / Wake Up
+                        cv.put("versus",        versus);                // if this is button_duel than versus = recipient / sender name
+                        cv.put("wakeUpTime",    challenge_detail);      // our specific time id for delete wakeUp (example: 1448);
+                        cv.put("challengeName", challenge_name);        // default 'challenge'. this column only for wake up time
+                        cv.put("description",   challenge_description); // smoking free life or wake up at 14:48
+                        cv.put("duration",      challenge_duration);    // duration of challenge
+                        cv.put("challenge_id",  challenge_id);          // in progress id
+                        cv.put("status",        challenge_status);      // active or not
+                        cv.put("myProgress",    Arrays.toString(prog)); // last update time in millis
+                        cv.put("constDuration", constDuration);         // our constant value of challenge duration
+                        cv.put("needsToCheck",  needsToCheck);          // method for check challenge for "needToCheck"
+                        db.insert("myChallenges", null, cv);            // db when we store all ic_score_progress and information about them
                     }
                     Intent intent = new Intent(firstActivity, MainActivity.class);
                     firstActivity.startActivity(intent);
@@ -578,35 +581,6 @@ public class ChallengeController {
 
     }
 
-    //
-//    // method which returns our last update information (true or false);
-//    private String isUpdated(String challenge_id) {
-//        DBHelper dbHelper = new DBHelper(context);
-//        SQLiteDatabase db = dbHelper.getWritableDatabase();
-//        Cursor c = db.query("updated", null, null, null, null, null, null);
-//        String lastUpdate = "false";
-//        if (c.moveToFirst()) {
-//            int colchallenge_id = c.getColumnIndex("challenge_id");
-//            do {
-//                // в методе "sendSingleForDuel мы засовываем challenge_id в колонку "challenge_id" в
-//                // таблице "updated", а тут мы ее проверяем. если она есть, то вернуть true для
-//                // дуелей, если её здесь нету, то возвращаем "false" - это для wake-up и
-//                // self-improvement челенджей. Соответственно данные про update time для дуелей
-//                // находятся в таблице "updated", а для отсального в таблице "myChallenges".
-//                try {
-//                    if (c.getString(colchallenge_id).equals(challenge_id)) {
-//                        lastUpdate = c.getString(c.getColumnIndex("updated"));
-//                        return lastUpdate;
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    Log.d(TAG, "isUpdated: vse xyuinja: " + e.getMessage());
-//                }
-//            } while (c.moveToNext());
-//        }
-//        c.close();
-//        return lastUpdate;
-//    }
 
     // method for check is active challenge self / button_duel
     public boolean isActive(String description) {
