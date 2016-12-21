@@ -164,7 +164,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
                                 o = 0;
                                 do {
                                     o++;
-                                    if (o > position + 1) break;
+                                    if (o > position  + 1) break;
                                     if (o == position + 1) {
                                         name         = c.getString(nameColIndex);
                                         duration     = c.getString(colduration);

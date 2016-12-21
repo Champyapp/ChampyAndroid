@@ -118,15 +118,15 @@ public class ChallengeController {
 
 
 
-    public void createNewDuelChallenge(final String description, int days, final String friend_id) {
-        final String duration = "" + (days * 86400);
-        final String details = description + " during this period: " + days + " days";
+    public void createNewDuelChallenge(final String name, int days, final String friend_id) {
+        final String duration = String.valueOf(days * 86400);
+        final String details = name + " during this period: " + days + " days";
 
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
         Call<com.azinecllc.champy.model.create_challenge.CreateChallenge> call = createChallenge
-                .createChallenge("User_Challenge", typeDuel, description, details, duration, token);
+                .createChallenge(name, typeDuel, name, details, duration, token);
 
         call.enqueue(new Callback<com.azinecllc.champy.model.create_challenge.CreateChallenge>() {
             @Override
@@ -160,6 +160,7 @@ public class ChallengeController {
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
                     Duel duel         = response.body();
                     String progressID = duel.getData().getId();
+                    //String createdBy  = duel.getData().getCreated()
 
                     cv.put("challenge_id", progressID);
                     cv.put("updated", "false");

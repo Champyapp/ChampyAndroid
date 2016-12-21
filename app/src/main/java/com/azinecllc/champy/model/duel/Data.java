@@ -7,17 +7,22 @@ import java.util.Map;
 
 public class Data {
 
-    private String _id;
     private Sender sender;
     private Recipient recipient;
     private Challenge challenge;
+
+    private String _id;
+    private String status;
+    private String createdBy;
+
     private Integer created;
     private Integer updated;
+
     private Boolean senderSuccess;
     private Boolean recipientSuccess;
+
     private List<Object> recipientProgress = new ArrayList<Object>();
     private List<Object> senderProgress = new ArrayList<Object>();
-    private String status;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**

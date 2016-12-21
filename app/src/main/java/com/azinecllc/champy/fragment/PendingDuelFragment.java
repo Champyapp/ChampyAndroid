@@ -112,7 +112,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
 
 
         if (recipient.equals("true")) {
-            tvUserVsUser.setText("from " + versus);
+            tvUserVsUser.setText(String.format("%s", "from " + versus)); //"from " + versus);
             btnAccept.setVisibility(View.VISIBLE);
             btnCancel.setVisibility(View.VISIBLE);
         } else {
@@ -122,7 +122,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
 
         if (duration != null && !duration.isEmpty()) days = Integer.parseInt(duration) / 86400;
 
-        tvDays.setText(days + " days");
+        tvDays.setText(String.format("%s", days + " days")); //days + " days");
         tvGoal.setText(description);
         tvDays.setTypeface(typeface);
         tvGoal.setTypeface(typeface);

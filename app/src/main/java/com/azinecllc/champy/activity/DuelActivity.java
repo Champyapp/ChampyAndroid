@@ -13,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -221,9 +222,11 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         DBHelper dbHelper = DBHelper.getInstance(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         int clearCount = db.delete("duel", null, null);
-        final ContentValues cv = new ContentValues();
+        final ContentValues cv  = new ContentValues();
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        final String token = sessionManager.getToken();
+        final String token      = sessionManager.getToken();
+        final String userID     = sessionManager.getUserId();
+        Log.d("TAG", "getChallenges: userID == " + userID);
 
         com.azinecllc.champy.interfaces.SelfImprovement selfImprovement = retrofit.create(com.azinecllc.champy.interfaces.SelfImprovement.class);
 
@@ -236,10 +239,15 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
                     int data_size = 0;
                     for (int i = 0; i < data.size(); i++) {
                         com.azinecllc.champy.model.self.Datum datum = data.get(i);
-                        if (datum.getType().getName().equals("duel") && !datum.getName().equals("User_Challenge")) {
-                            cv.put("name", datum.getName());
-                            cv.put("description", datum.getDescription());
-                            cv.put("duration", datum.getDuration());
+                        if (datum.getType().getName().equals("duel") /*&& !datum.getCreatedBy().equals(userID)*/) {
+//                            if (datum.getCreatedBy().contentEquals(userID)) {
+//                                Log.d("TAG", "onResponse: vse ok");
+//                            } else {
+//                                Log.d("TAG", "onResponse: vse xyinja");
+//                            }
+                            cv.put("name",         datum.getName());
+                            cv.put("description",  datum.getDescription());
+                            cv.put("duration",     datum.getDuration());
                             cv.put("challenge_id", datum.get_id());
                             db.insert("duel", null, cv);
                             data_size++;
