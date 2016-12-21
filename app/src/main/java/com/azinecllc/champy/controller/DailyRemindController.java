@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.azinecllc.champy.receiver.CustomNotifyReceiver;
 
@@ -22,15 +23,15 @@ public class DailyRemindController {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 11);
         calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.SECOND, 59);
 
         if (Calendar.getInstance().getTimeInMillis() > calendar.getTimeInMillis()) {
             calendar.add(Calendar.DAY_OF_YEAR, 1);
         }
 
         Intent notifyIntent = new Intent(context, CustomNotifyReceiver.class);
-        notifyIntent.putExtra("notificationID", "228");
-
+        //notifyIntent.putExtra("notificationID", 228);
+        Log.d("DailyReminder", "enabled daily remind at: " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE));
         PendingIntent pi = PendingIntent.getBroadcast(context, 228, notifyIntent, PendingIntent.FLAG_ONE_SHOT);
 
         AlarmManager manager = (AlarmManager)context.getSystemService(ALARM_SERVICE);

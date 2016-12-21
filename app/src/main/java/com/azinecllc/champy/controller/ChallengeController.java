@@ -250,23 +250,12 @@ public class ChallengeController {
     private void sendSingleInProgressForWakeUp(String challenge, final int alarmID, int minute, int hour) {
         Calendar c = GregorianCalendar.getInstance();
         final long currentMidnight = unixTime - (c.get(Calendar.HOUR_OF_DAY)*60*60) - (c.get(Calendar.MINUTE)*60) - (c.get(Calendar.SECOND));
-//        Log.d(TAG, "\ncalendar hours    : " + c.get(Calendar.HOUR_OF_DAY) + " (in seconds: " + c.get(Calendar.HOUR_OF_DAY)*60*60 + ")"
-//                 + "\ncalendar minutes  : " + c.get(Calendar.MINUTE) + "   (in seconds: " + + c.get(Calendar.MINUTE)*60 +")"
-//                 + "\ncalendar seconds  : " + c.get(Calendar.SECOND)
-//                 + "\ncurrent  midnight : " + currentMidnight
-//        );
 
-        // create date
         Date date = new Date();
-        // set time for date from user's input time;
         date.setTime(((minute * 60) + (hour * 60 * 60) + currentMidnight) * 1000);
-        // set date for calendar. now our calendar has a right time for ring
         c.setTime(date);
 
-
-        // if user picked time which biggest than current we replace item_alarm for a next day in same time
         if (Calendar.getInstance().getTimeInMillis() > c.getTimeInMillis()) c.add(Calendar.DAY_OF_YEAR, 1);
-        // first we check if current time > than alarmClockTime and after that we set the time for new variable;
         final long userInputTime = c.getTimeInMillis(); // must be in millis
         Log.d(TAG, "Final Time for ring: " + userInputTime);
 
@@ -280,22 +269,15 @@ public class ChallengeController {
                     com.azinecllc.champy.model.single_in_progress.SingleInProgress data = response.body();
                     final String inProgressId = data.getData().get_id();
 
-                    /** Creating intent for alarmReceiver and putting some data in local DB **/
-
                     Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
                     myIntent.putExtra("inProgressID", inProgressId);
                     myIntent.putExtra("alarmID", String.valueOf(alarmID));
 
-                    /** Scheduling item_alarm **/
 
-                    // creating pending intent which will launch when our item_alarm clock must ring;
                     PendingIntent pi = PendingIntent.getBroadcast(firstActivity, alarmID, myIntent, 0);
-                    // creating item_alarm manager which has a permission 'alarm_service' for invoke our item_alarm clock
                     AlarmManager aManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                    // setting repeating our item_alarm clock
                     aManager.setRepeating(AlarmManager.RTC_WAKEUP, userInputTime, 24*60*60*1000, pi);
 
-                    /** Generate current card in DB and for MainActivity **/
                     generateCardsForMainActivity();
 
                 } else {

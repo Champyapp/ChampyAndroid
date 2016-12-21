@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.azinecllc.champy.activity.MainActivity;
 import com.azinecllc.champy.R;
+import com.azinecllc.champy.controller.DailyRemindController;
 import com.azinecllc.champy.utils.SessionManager;
 import com.facebook.FacebookSdk;
 
@@ -26,22 +27,19 @@ public class CustomNotifyReceiver extends WakefulBroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         try {
             FacebookSdk.sdkInitialize(getApplicationContext());
+            Log.d(TAG, "onReceive: received new notification");
         } catch (RuntimeException e) {
             Log.e(TAG, "onReceive: I Hate Facebook: " + e);
             e.printStackTrace();
         }
 
-        Log.d(TAG, "onReceive: received new notification!");
-
-        String notificationID = intent.getExtras().toString();
-        Log.d(TAG, "onReceive: notificationID: " + notificationID);
-
-        String notificationID2 = intent.getStringExtra("notificationID");
-        Log.d(TAG, "onReceive: notificationID2: " + notificationID2);
 
         SessionManager sessionManager = SessionManager.getInstance(context);
         if (sessionManager.isUserLoggedIn()) {
             sendNotification();
+            Log.d(TAG, "onReceive: send notification");
+            DailyRemindController daily = new DailyRemindController(context);
+            daily.enableDailyNotificationReminder();
         } else {
             Log.d(TAG, "onReceive: not logged in");
         }
