@@ -19,7 +19,6 @@ import com.azinecllc.champy.utils.SessionManager;
 
 public class RoleControllerActivity extends AppCompatActivity implements View.OnClickListener {
 
-    public final String TAG = RoleControllerActivity.class.getSimpleName();
     private SessionManager sessionManager;
     private ChallengeController cc;
     private OfflineMode offlineMode;
@@ -36,9 +35,6 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
 
         sessionManager = SessionManager.getInstance(getApplicationContext());
         offlineMode = OfflineMode.getInstance();
-        String uId = sessionManager.getUserId();
-        String uToken = sessionManager.getToken();
-        cc = new ChallengeController(getApplicationContext(), this, uToken, uId);
 
         typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
         TextView tvChampy = (TextView)findViewById(R.id.tvChampy);
@@ -60,17 +56,12 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Runtime.getRuntime().runFinalization();
-        Runtime.getRuntime().gc();
-    }
-
-
     private void checkIfLoggedInAndMakeRedirect() {
         if (offlineMode.isConnectedToRemoteAPI(this)) {
             if (sessionManager.isUserLoggedIn()) {
+                final String uId = sessionManager.getUserId();
+                final String uToken = sessionManager.getToken();
+                cc = new ChallengeController(getApplicationContext(), this, uToken, uId);
                 cc.refreshCardsForPendingDuel();
             } else {
                 Intent goToActivity = new Intent(this, LoginActivity.class);
@@ -90,6 +81,24 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
         }
 
 
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//        typeface = null;
+//        if(lostInternet != null) {
+//            lostInternet.destroyDrawingCache();
+//            lostInternet = null;
+//        }
+//        imageReload.destroyDrawingCache();
+//        imageReload = null;
+//        spinner.destroyDrawingCache();
+//        spinner = null;
+//        cc = null;
+        Runtime.getRuntime().runFinalization();
+        Runtime.getRuntime().gc();
     }
 
 

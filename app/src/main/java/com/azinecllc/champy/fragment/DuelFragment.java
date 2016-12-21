@@ -91,7 +91,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
 
         if (duration != null && !duration.isEmpty()) days = Integer.parseInt(duration) / 86400;
 
-        tvDays.setText(days + " days");
+        tvDays.setText(String.format("%s", days + " days")); //days + " days");
         tvGoal.setText(description);
         tvDays.setTypeface(typeface);
         tvGoal.setTypeface(typeface);

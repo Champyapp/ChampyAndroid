@@ -155,7 +155,7 @@ public class FriendsFragment extends Fragment {
         final DBHelper dbHelper = DBHelper.getInstance(getContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final ContentValues cv  = new ContentValues();
-        int clearCount          = db.delete("friends", null, null);
+        int   clearCount        = db.delete("friends", null, null);
 
         final com.azinecllc.champy.interfaces.Friends friends = retrofit.create(com.azinecllc.champy.interfaces.Friends.class);
 

@@ -194,13 +194,13 @@ public class OtherFragment extends Fragment {
     }
 
 
-    private class loadOtherFromAsync extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... params) {
-            refreshOtherView(gSwipeRefreshLayout, gView);
-            return null;
-        }
-    }
+//    private class loadOtherFromAsync extends AsyncTask<Void, Void, Void> {
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//            refreshOtherView(gSwipeRefreshLayout, gView);
+//            return null;
+//        }
+//    }
 
 
     private void refreshOtherView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {

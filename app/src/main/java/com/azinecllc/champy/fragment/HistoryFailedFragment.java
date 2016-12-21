@@ -72,6 +72,16 @@ public class HistoryFailedFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        arr.clear();
+        arr = null;
+        adapter = null;
+        gView.destroyDrawingCache();
+        gView = null;
+        rvContacts.destroyDrawingCache();
+        rvContacts = null;
+        gSwipeRefreshLayout.destroyDrawingCache();
+        gSwipeRefreshLayout = null;
+
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
     }
