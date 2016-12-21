@@ -93,7 +93,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         sessionManager = SessionManager.getInstance(getApplicationContext());
         sessionManager.setRefreshFriends("true");
         sessionManager.setRefreshPending("true");
-        //sessionManager.setRefreshOthers("true");
 
 
         Bundle bundle = this.getIntent().getExtras();
@@ -128,7 +127,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
             view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
         }
 
-        //ViewServer.get(this).addWindow(this);
     }
 
     @Override

@@ -70,14 +70,29 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
 
         File fileProfile = new File(path, "profile.jpg");
         Uri uriProfile = Uri.fromFile(fileProfile);
-        Glide.with(this).load(uriProfile).bitmapTransform(new CropCircleTransformation(this))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
+
+        Glide.with(this)
+                .load(uriProfile)
+                .bitmapTransform(new CropCircleTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(drawerImageProfile);
+
         File fileBlur = new File(path, "blurred.png");
         Uri uriBlur = Uri.fromFile(fileBlur);
-        Glide.with(this).load(uriBlur).bitmapTransform(new CropSquareTransformation(this))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(background);
-        Glide.with(this).load(uriBlur).bitmapTransform(new CropSquareTransformation(this))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);
+
+        Glide.with(this)
+                .load(uriBlur)
+                .bitmapTransform(new CropSquareTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(background);
+        Glide.with(this)
+                .load(uriBlur)
+                .bitmapTransform(new CropSquareTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(drawerBackground);
 
 
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
