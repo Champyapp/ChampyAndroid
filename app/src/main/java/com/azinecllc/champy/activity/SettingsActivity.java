@@ -1,7 +1,9 @@
 package com.azinecllc.champy.activity;
 
-import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -30,10 +32,13 @@ import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.controller.DailyRemindController;
 import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.helper.CHCheckPendingDuels;
+import com.azinecllc.champy.interfaces.SingleInProgress;
 import com.azinecllc.champy.interfaces.Update_user;
+import com.azinecllc.champy.model.single_in_progress.Data;
 import com.azinecllc.champy.model.user.Delete;
 import com.azinecllc.champy.model.user.Profile_data;
 import com.azinecllc.champy.model.user.User;
+import com.azinecllc.champy.receiver.AlarmReceiver;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
 import com.bumptech.glide.Glide;
@@ -42,6 +47,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -54,6 +60,7 @@ import retrofit.Retrofit;
 
 import static com.azinecllc.champy.utils.Constants.API_URL;
 import static com.azinecllc.champy.utils.Constants.path;
+import static com.azinecllc.champy.utils.Constants.typeWake;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
 
@@ -306,29 +313,14 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 }
                 break;
             case R.id.delete_acc:
-                DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
-                    switch (which) {
-                        case DialogInterface.BUTTON_POSITIVE:
-                            if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
-
-                                surrenderAllChallenges();
-
-
-                            }
-                            break;
-                        case DialogInterface.BUTTON_NEGATIVE:
-                            Log.d(TAG, "onClick: negative button");
-                            break;
-                    }
-                };
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
-                builder.setTitle(R.string.areYouSure)
-                        .setMessage(R.string.youWantToDeleteYourAcc)
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.yes, dialogClickListener)
-                        .setNegativeButton(R.string.no, dialogClickListener)
-                        .show();
+                Log.d(TAG, "onClick: in progress: " + sessionManager.getChampyOptions().get("challenges"));
+                if (!sessionManager.getChampyOptions().get("challenges").equals("0")) {
+                    Log.d(TAG, "onClick: in progress != null. start surrenderAll dialog");
+                    surrenderAllChallengesDialog();
+                } else {
+                    Log.d(TAG, "onClick: in progress = null. start deleteAcc dialog");
+                    deleteAccountDialog();
+                }
                 break;
             case R.id.about:
                 updateProfile(map);
@@ -481,65 +473,135 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
-    private void surrenderAllChallenges() {
-        ChallengeController cc = new ChallengeController(this, this, token, userID);
+    private void surrenderAllChallengesDialog() {
+        DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
+                        SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+                        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
+                        if (c.moveToFirst()) {
+                            int colchallenge_id = c.getColumnIndex("challenge_id");
 
-        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-        if (c.moveToFirst()) {
-            int colchallenge_id = c.getColumnIndex("challenge_id");
+                            do {
+                                String challenge_id = c.getString(colchallenge_id);
+                                try {
+                                    giveUp(challenge_id, 0);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            } while (c.moveToNext());
+                        }
+                        c.close();
 
-            do {
-                String challenge_id = c.getString(colchallenge_id);
-                try {
-                    cc.give_up(challenge_id, 0);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } while (c.moveToNext());
-        }
+                        if (sessionManager.getChampyOptions().get("challenges").equals("0")) {
+                            deleteAccountDialog();
+                        }
+                    }
+                    break;
+                case DialogInterface.BUTTON_NEGATIVE:
+                    Log.d(TAG, "onClick: negative button");
+                    break;
+            }
+        };
 
-        c.close();
+        AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
+        builder.setTitle(R.string.areYouSure)
+                .setMessage("If you continue you will lose all your challenges")
+                .setCancelable(false)
+                .setPositiveButton("Continue", dialogClickListener)
+                .setNegativeButton("Cancel", dialogClickListener)
+                .show();
 
-//        if (c.isNull(c.getColumnIndex("challenge_id"))) {
-//            Log.d(TAG, "surrenderAllChallenges: is null");
-//        } else {
-//            Log.d(TAG, "surrenderAllChallenges: null :) ");
-//        }
+    }
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        final Update_user update_user = retrofit.create(Update_user.class);
 
-        Call<Delete> callForDeleteUser = update_user.delete_user(userID, token);
-        callForDeleteUser.enqueue(new Callback<Delete>() {
+    private void deleteAccountDialog() {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
-            public void onResponse(Response<Delete> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    File profile = new File(path, "profile.jpg");
-                    profile.delete();
-                    File blurred = new File(path, "blurred.png");
-                    blurred.delete();
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+                        final Update_user update_user = retrofit.create(Update_user.class);
 
-                    SQLiteDatabase db = dbHelper.getWritableDatabase();
-                    db.delete("pending", null, null);
-                    db.delete("pending_duel", null, null);
-                    db.delete("duel", null, null);
-                    db.delete("friends", null, null);
-                    db.delete("updated", null, null);
-                    db.delete("myChallenges", null, null);
+                        Call<Delete> callForDeleteUser = update_user.delete_user(userID, token);
+                        callForDeleteUser.enqueue(new Callback<Delete>() {
+                            @Override
+                            public void onResponse(Response<Delete> response, Retrofit retrofit) {
+                                if (response.isSuccess()) {
+                                    File profile = new File(path, "profile.jpg");
+                                    profile.delete();
+                                    File blurred = new File(path, "blurred.png");
+                                    blurred.delete();
+
+                                    SQLiteDatabase db = dbHelper.getWritableDatabase();
+                                    db.delete("pending", null, null);
+                                    db.delete("pending_duel", null, null);
+                                    db.delete("duel", null, null);
+                                    db.delete("friends", null, null);
+                                    db.delete("updated", null, null);
+                                    db.delete("myChallenges", null, null);
+
+                                    sessionManager.logout(SettingsActivity.this);
+                                    LoginManager.getInstance().logOut();
+                                    Intent intent1 = new Intent(SettingsActivity.this, RoleControllerActivity.class);
+                                    startActivity(intent1);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Throwable t) {
+                            }
+                        });
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
+        builder.setTitle(R.string.areYouSure)
+                .setMessage(R.string.youWantToDeleteYourAcc)
+                .setCancelable(false)
+                .setPositiveButton(R.string.yes, dialogClickListener)
+                .setNegativeButton(R.string.no, dialogClickListener)
+                .show();
+    }
+
+
+    private void giveUp(final String id, final int alarmID) throws IOException {
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
+        Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = activeInProgress.surrender(id, token);
+
+        call.enqueue(new Callback<com.azinecllc.champy.model.single_in_progress.SingleInProgress>() {
+            @Override
+            public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    Data data = response.body().getData();
+                    String type = data.getChallenge().getType();
+
+//                    if (type.equals(typeWake)) {
+//                        //if this is "wake up" challenge then stop alarm manager;
+//                        Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
+//                        PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, alarmID, myIntent, 0);
+//                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+//                        alarmManager.cancel(pendingIntent);
+//                    }
+
+
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
+                Toast.makeText(SettingsActivity.this, R.string.service_not_available, Toast.LENGTH_LONG).show();
             }
         });
-
-        sessionManager.logout(SettingsActivity.this);
-        LoginManager.getInstance().logOut();
-        Intent intent1 = new Intent(SettingsActivity.this, RoleControllerActivity.class);
-        startActivity(intent1);
 
     }
 
