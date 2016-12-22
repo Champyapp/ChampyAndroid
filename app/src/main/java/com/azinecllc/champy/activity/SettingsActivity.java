@@ -315,40 +315,23 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                                 Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
                                 final Update_user update_user = retrofit.create(Update_user.class);
 
-                                Call<User> callSurrenderAllChallenges = update_user.surrenderAllChallenge(token);
-                                callSurrenderAllChallenges.enqueue(new Callback<User>() {
-                                    @Override
-                                    public void onResponse(Response<User> response, Retrofit retrofit) {
-                                        String myLog = (response.isSuccess()) ? " vse ok" : response.message();
-                                        Log.d(TAG, "onResponse: surrenderAll: " + myLog);
+//                                Call<User> callSurrenderAllChallenges = update_user.surrenderAllChallenge(token);
+//                                callSurrenderAllChallenges.enqueue(new Callback<User>() {
+//                                    @Override
+//                                    public void onResponse(Response<User> response, Retrofit retrofit) {
+//                                        String myLog = (response.isSuccess()) ? " vse ok" : response.message();
+//                                        Log.d(TAG, "onResponse: surrenderAll: " + myLog);
+//
+//
+//
+//                                    }
+//
+//                                    @Override
+//                                    public void onFailure(Throwable t) {
+//                                    }
+//                                });
 
-                                        ChallengeController cc = new ChallengeController(
-                                                getApplicationContext(), (Activity) getApplicationContext(), token, userID);
-
-                                        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-                                        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-                                        if (c.moveToFirst()) {
-                                            int colchallenge_id   = c.getColumnIndex("challenge_id");
-                                            try {
-                                                do {
-                                                    String challenge_id = c.getString(colchallenge_id);
-                                                    try {
-                                                        cc.give_up(challenge_id, 0);
-                                                    } catch (Exception e) {
-                                                        e.printStackTrace();
-                                                        Log.e(TAG, "onResponse: WakeUp error, wrong alarmID");
-                                                    }
-                                                } while (c.moveToNext());
-                                            } finally { c.close(); }
-                                        }
-
-                                    }
-
-                                    @Override
-                                    public void onFailure(Throwable t) {
-                                    }
-                                });
+                                // TODO: 12/22/16 surrender all;
 
                                 Call<Delete> callForDeleteUser = update_user.delete_user(userID, token);
                                 callForDeleteUser.enqueue(new Callback<Delete>() {
@@ -384,6 +367,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                             }
                             break;
                         case DialogInterface.BUTTON_NEGATIVE:
+                            Log.d(TAG, "onClick: negative button");
+                            surrenderAllChallenges();
                             break;
                     }
                 };
@@ -418,6 +403,34 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 break;
 
         }
+    }
+
+
+    public void updateProfile(HashMap<String, String> map) {
+        sessionManager.toggleChallengeEnd(map.get("challengeEnd"));
+        sessionManager.togglePushNotification(map.get("pushNotifications"));
+        sessionManager.toggleChallengesForToday(map.get("challengesForToday"));
+        sessionManager.toggleNewChallengeRequest(map.get("newChallengeRequests"));
+        sessionManager.toggleAcceptYourChallenge(map.get("acceptedYourChallenge"));
+
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+
+        Update_user update_user = retrofit.create(Update_user.class);
+        Profile_data profile_data = new Profile_data(map);
+        Call<User> call = update_user.update_profile_options(userID, token, profile_data);
+
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Response<User> response, Retrofit retrofit) {
+                if (!response.isSuccess()) {
+                    Toast.makeText(SettingsActivity.this, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                }
+            }
+            @Override
+            public void onFailure(Throwable t) {
+                Toast.makeText(SettingsActivity.this, R.string.service_not_available, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
 
@@ -519,32 +532,41 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
-    public void updateProfile(HashMap<String, String> map) {
-        sessionManager.toggleChallengeEnd(map.get("challengeEnd"));
-        sessionManager.togglePushNotification(map.get("pushNotifications"));
-        sessionManager.toggleChallengesForToday(map.get("challengesForToday"));
-        sessionManager.toggleNewChallengeRequest(map.get("newChallengeRequests"));
-        sessionManager.toggleAcceptYourChallenge(map.get("acceptedYourChallenge"));
+    private void surrenderAllChallenges() {
+        Log.d(TAG, "surrenderAllChallenges: i'm inside surrenderAllChallenge method");
+        ChallengeController cc = new ChallengeController(this, this, token, userID);
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        Log.d(TAG, "surrenderAllChallenges: cc init is done");
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Log.d(TAG, "surrenderAllChallenges: SQLiteDatabase init is done");
 
-        Update_user update_user = retrofit.create(Update_user.class);
-        Profile_data profile_data = new Profile_data(map);
-        Call<User> call = update_user.update_profile_options(userID, token, profile_data);
-
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Response<User> response, Retrofit retrofit) {
-                if (!response.isSuccess()) {
-                    Toast.makeText(SettingsActivity.this, R.string.service_not_available, Toast.LENGTH_LONG).show();
-                }
+        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
+        Log.d(TAG, "surrenderAllChallenges: Cursor init is done");
+        if (c.moveToFirst()) {
+            Log.d(TAG, "surrenderAllChallenges: c.move toFirst");
+            int colchallenge_id = c.getColumnIndex("challenge_id");
+            Log.d(TAG, "surrenderAllChallenges: colchallenge_id: " + colchallenge_id);
+            try {
+                do {
+                    String challenge_id = c.getString(colchallenge_id);
+                    Log.d(TAG, "surrenderAllChallenges: OUR IN_PROGRESS_ID: " + challenge_id);
+                    try {
+                        cc.give_up(challenge_id, 0);
+                        Log.i(TAG, "onResponse: custom surrender is done");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.i(TAG, "onResponse: surrender Wake-Up error! wrong alarmID");
+                    }
+                } while (c.moveToNext());
+            } finally {
+                c.close();
+                Log.d(TAG, "surrenderAllChallenges: finally c.close is done");
             }
-            @Override
-            public void onFailure(Throwable t) {
-                Toast.makeText(SettingsActivity.this, R.string.service_not_available, Toast.LENGTH_LONG).show();
-            }
-        });
+        }
     }
+
+
+
 
 
 }
