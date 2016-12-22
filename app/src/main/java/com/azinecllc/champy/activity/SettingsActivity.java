@@ -75,8 +75,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_settings);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-//        final CHSetupUI chSetupUI = new CHSetupUI();
-//        chSetupUI.setupUI(findViewById(R.id.settings_layout), this);
 
         final ImageView background = (ImageView) findViewById(R.id.back_settings);
         final ImageView userImageProfile = (ImageView) findViewById(R.id.img_profile);
@@ -312,63 +310,14 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     switch (which) {
                         case DialogInterface.BUTTON_POSITIVE:
                             if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
-                                Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-                                final Update_user update_user = retrofit.create(Update_user.class);
 
-//                                Call<User> callSurrenderAllChallenges = update_user.surrenderAllChallenge(token);
-//                                callSurrenderAllChallenges.enqueue(new Callback<User>() {
-//                                    @Override
-//                                    public void onResponse(Response<User> response, Retrofit retrofit) {
-//                                        String myLog = (response.isSuccess()) ? " vse ok" : response.message();
-//                                        Log.d(TAG, "onResponse: surrenderAll: " + myLog);
-//
-//
-//
-//                                    }
-//
-//                                    @Override
-//                                    public void onFailure(Throwable t) {
-//                                    }
-//                                });
+                                surrenderAllChallenges();
 
-                                // TODO: 12/22/16 surrender all;
 
-                                Call<Delete> callForDeleteUser = update_user.delete_user(userID, token);
-                                callForDeleteUser.enqueue(new Callback<Delete>() {
-                                    @Override
-                                    public void onResponse(Response<Delete> response, Retrofit retrofit) {
-                                        if (response.isSuccess()) {
-                                            deleteFile("profile.jpg");
-                                            deleteFile("blurred.png");
-                                            //File blur = new File(path, "blurred.png");
-                                            //blur.delete();
-                                            //File profile = new File(path, "profile.jpg");
-                                            //profile.delete();
-
-                                            SQLiteDatabase db = dbHelper.getWritableDatabase();
-                                            db.delete("pending", null, null);
-                                            db.delete("pending_duel", null, null);
-                                            db.delete("duel", null, null);
-                                            db.delete("friends", null, null);
-                                            db.delete("updated", null, null);
-                                            db.delete("myChallenges", null, null);
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onFailure(Throwable t) {
-                                    }
-                                });
-
-                                sessionManager.logout(SettingsActivity.this);
-                                LoginManager.getInstance().logOut();
-                                Intent intent1 = new Intent(SettingsActivity.this, LoginActivity.class);
-                                startActivity(intent1);
                             }
                             break;
                         case DialogInterface.BUTTON_NEGATIVE:
                             Log.d(TAG, "onClick: negative button");
-                            surrenderAllChallenges();
                             break;
                     }
                 };
@@ -533,36 +482,65 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
 
     private void surrenderAllChallenges() {
-        Log.d(TAG, "surrenderAllChallenges: i'm inside surrenderAllChallenge method");
         ChallengeController cc = new ChallengeController(this, this, token, userID);
 
-        Log.d(TAG, "surrenderAllChallenges: cc init is done");
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Log.d(TAG, "surrenderAllChallenges: SQLiteDatabase init is done");
 
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-        Log.d(TAG, "surrenderAllChallenges: Cursor init is done");
         if (c.moveToFirst()) {
-            Log.d(TAG, "surrenderAllChallenges: c.move toFirst");
             int colchallenge_id = c.getColumnIndex("challenge_id");
-            Log.d(TAG, "surrenderAllChallenges: colchallenge_id: " + colchallenge_id);
-            try {
-                do {
-                    String challenge_id = c.getString(colchallenge_id);
-                    Log.d(TAG, "surrenderAllChallenges: OUR IN_PROGRESS_ID: " + challenge_id);
-                    try {
-                        cc.give_up(challenge_id, 0);
-                        Log.i(TAG, "onResponse: custom surrender is done");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Log.i(TAG, "onResponse: surrender Wake-Up error! wrong alarmID");
-                    }
-                } while (c.moveToNext());
-            } finally {
-                c.close();
-                Log.d(TAG, "surrenderAllChallenges: finally c.close is done");
-            }
+
+            do {
+                String challenge_id = c.getString(colchallenge_id);
+                try {
+                    cc.give_up(challenge_id, 0);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } while (c.moveToNext());
         }
+
+        c.close();
+
+//        if (c.isNull(c.getColumnIndex("challenge_id"))) {
+//            Log.d(TAG, "surrenderAllChallenges: is null");
+//        } else {
+//            Log.d(TAG, "surrenderAllChallenges: null :) ");
+//        }
+
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        final Update_user update_user = retrofit.create(Update_user.class);
+
+        Call<Delete> callForDeleteUser = update_user.delete_user(userID, token);
+        callForDeleteUser.enqueue(new Callback<Delete>() {
+            @Override
+            public void onResponse(Response<Delete> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    File profile = new File(path, "profile.jpg");
+                    profile.delete();
+                    File blurred = new File(path, "blurred.png");
+                    blurred.delete();
+
+                    SQLiteDatabase db = dbHelper.getWritableDatabase();
+                    db.delete("pending", null, null);
+                    db.delete("pending_duel", null, null);
+                    db.delete("duel", null, null);
+                    db.delete("friends", null, null);
+                    db.delete("updated", null, null);
+                    db.delete("myChallenges", null, null);
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+            }
+        });
+
+        sessionManager.logout(SettingsActivity.this);
+        LoginManager.getInstance().logOut();
+        Intent intent1 = new Intent(SettingsActivity.this, RoleControllerActivity.class);
+        startActivity(intent1);
+
     }
 
 

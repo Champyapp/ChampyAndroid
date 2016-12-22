@@ -180,7 +180,7 @@ public class OtherFragment extends Fragment {
         cv.clear();
         friends.clear();
         gView.destroyDrawingCache();
-        gSwipeRefreshLayout.destroyDrawingCache();
+//        gSwipeRefreshLayout.destroyDrawingCache();
         cv = null;
         gView = null;
         adapter = null;
@@ -188,7 +188,7 @@ public class OtherFragment extends Fragment {
         mSocket = null;
         retrofit = null;
         checkTableForExist = null;
-        gSwipeRefreshLayout = null;
+//        gSwipeRefreshLayout = null;
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
     }

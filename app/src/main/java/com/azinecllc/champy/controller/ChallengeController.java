@@ -199,6 +199,8 @@ public class ChallengeController {
             );
         }
 
+        Log.d("TAG", "createNewWakeUpChallenge: array of details: " + Arrays.toString(details));
+
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
         Call<com.azinecllc.champy.model.create_challenge.CreateChallenge> call = createChallenge
                 .createChallenge(wakeUpName, typeWake, wakeUpTime, Arrays.toString(details), duration, token);
