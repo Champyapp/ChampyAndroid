@@ -477,6 +477,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private void surrenderAllChallengesDialog() {
         Log.d(TAG, "surrenderAllChallengesDialog: method surrenderAll start.");
         DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
+            boolean canDeleteAcc = false;
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
                     Log.d(TAG, "surrenderAllChallengesDialog: method surrenderAll positive button.");
@@ -497,18 +498,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                                 String challenge_id = c.getString(colchallenge_id);
                                 try {
                                     cc.give_up(challenge_id, 0, null);
-                                    Log.d(TAG, "surrenderAllChallengesDialog: in progress count: "
-                                            + sessionManager.getChampyOptions().get("challenges"));
-                                    if (sessionManager.getChampyOptions().get("challenges").equals("0")) {
-                                        Log.d(TAG, "surrenderAllChallengesDialog: in progress = 0!!!!!!!!!!!!!!!!");
-                                        dialog.cancel();
-                                        deleteAccountDialog();
-                                    }
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
                             } while (c.moveToNext());
                         }
+                        canDeleteAcc = true;
                         c.close();
                     }
                     break;
@@ -516,6 +511,14 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     Log.d(TAG, "onClick: negative button");
                     break;
             }
+
+            Log.d(TAG, "surrenderAllChallengesDialog: ~in progress count: " + sessionManager.getChampyOptions().get("challenges"));
+            if (canDeleteAcc) {
+                Log.d(TAG, "surrenderAllChallengesDialog: in progress = 0!!!!!");
+                dialog.cancel();
+                deleteAccountDialog();
+            }
+
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
