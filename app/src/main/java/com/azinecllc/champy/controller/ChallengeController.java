@@ -104,7 +104,7 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    generateCardsForMainActivity();
+                    generateCardsForMainActivity(new Intent(firstActivity, MainActivity.class));
                 }
             }
 
@@ -163,7 +163,7 @@ public class ChallengeController {
                     db.insert("updated", null, cv);
                     //////////////////////////////////////////////////
 
-                    refreshCardsForPendingDuel();
+                    refreshCardsForPendingDuel(new Intent(firstActivity, MainActivity.class));
                 }
             }
 
@@ -258,7 +258,7 @@ public class ChallengeController {
                     aManager.setRepeating(AlarmManager.RTC_WAKEUP, userInputTime, 24*60*60*1000, pi);
 
 
-                    generateCardsForMainActivity();
+                    generateCardsForMainActivity(new Intent(firstActivity, MainActivity.class));
 
                 }
             }
@@ -283,7 +283,7 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    refreshCardsForPendingDuel();
+                    refreshCardsForPendingDuel(new Intent(firstActivity, MainActivity.class));
                 }
             }
 
@@ -302,7 +302,7 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()){
-                    refreshCardsForPendingDuel();
+                    refreshCardsForPendingDuel(new Intent(firstActivity, MainActivity.class));
                 }
             }
 
@@ -324,7 +324,7 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    generateCardsForMainActivity();
+                    generateCardsForMainActivity(new Intent(firstActivity, MainActivity.class));
                 }
             }
 
@@ -335,7 +335,7 @@ public class ChallengeController {
         });
     }
 
-    public void give_up(final String id, final int alarmID) throws IOException {
+    public void give_up(final String id, final int alarmID, Intent intent) throws IOException {
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
         Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = activeInProgress.surrender(id, token);
 
@@ -354,7 +354,7 @@ public class ChallengeController {
                         alarmManager.cancel(pendingIntent);
                     }
 
-                    generateCardsForMainActivity();
+                    generateCardsForMainActivity(intent);
 
                 }
             }
@@ -370,7 +370,7 @@ public class ChallengeController {
 
 
 
-    public void refreshCardsForPendingDuel() {
+    public void refreshCardsForPendingDuel(Intent intent) {
         ContentValues cv  = new ContentValues();
         DBHelper dbHelper = DBHelper.getInstance(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -410,7 +410,7 @@ public class ChallengeController {
                         }
                     }
 
-                    generateCardsForMainActivity();
+                    generateCardsForMainActivity(intent);
 
                 }
             }
@@ -422,7 +422,7 @@ public class ChallengeController {
         });
     }
 
-    private void generateCardsForMainActivity() {
+    private void generateCardsForMainActivity(Intent intent) {
         DBHelper dbHelper = DBHelper.getInstance(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -503,8 +503,10 @@ public class ChallengeController {
                         cv.put("needsToCheck",  needsToCheck);          // method for check challenge for "needToCheck"
                         db.insert("myChallenges", null, cv);            // db when we store all ic_score_progress and information about them
                     }
-                    Intent intent = new Intent(firstActivity, MainActivity.class);
-                    firstActivity.startActivity(intent);
+                    //Intent intent = new Intent(firstActivity, MainActivity.class);
+                    if (intent != null) {
+                        firstActivity.startActivity(intent);
+                    }
                 }
             }
 

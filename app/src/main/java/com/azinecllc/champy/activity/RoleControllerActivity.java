@@ -62,10 +62,9 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
                 final String uId = sessionManager.getUserId();
                 final String uToken = sessionManager.getToken();
                 cc = new ChallengeController(getApplicationContext(), this, uToken, uId);
-                cc.refreshCardsForPendingDuel();
+                cc.refreshCardsForPendingDuel(new Intent(this, MainActivity.class));
             } else {
-                Intent goToActivity = new Intent(this, LoginActivity.class);
-                startActivity(goToActivity);
+                startActivity(new Intent(this, LoginActivity.class));
             }
         } else {
             lostInternet = (TextView)findViewById(R.id.tvLostInternetConnection);

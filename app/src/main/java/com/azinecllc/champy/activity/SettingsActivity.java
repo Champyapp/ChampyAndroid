@@ -34,6 +34,7 @@ import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.helper.CHCheckPendingDuels;
 import com.azinecllc.champy.interfaces.SingleInProgress;
 import com.azinecllc.champy.interfaces.Update_user;
+import com.azinecllc.champy.model.single_in_progress.Challenge;
 import com.azinecllc.champy.model.single_in_progress.Data;
 import com.azinecllc.champy.model.user.Delete;
 import com.azinecllc.champy.model.user.Profile_data;
@@ -315,10 +316,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             case R.id.delete_acc:
                 Log.d(TAG, "onClick: in progress: " + sessionManager.getChampyOptions().get("challenges"));
                 if (!sessionManager.getChampyOptions().get("challenges").equals("0")) {
-                    Log.d(TAG, "onClick: in progress != null. start surrenderAll dialog");
+                    Log.d(TAG, "onClick: in progress != 0. start surrenderAll dialog");
                     surrenderAllChallengesDialog();
                 } else {
-                    Log.d(TAG, "onClick: in progress = null. start deleteAcc dialog");
+                    Log.d(TAG, "onClick: in progress = 0. start deleteAcc dialog");
                     deleteAccountDialog();
                 }
                 break;
@@ -474,11 +475,19 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
 
     private void surrenderAllChallengesDialog() {
+        Log.d(TAG, "surrenderAllChallengesDialog: method surrenderAll start.");
         DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
+                    Log.d(TAG, "surrenderAllChallengesDialog: method surrenderAll positive button.");
                     if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
                         SQLiteDatabase db = dbHelper.getWritableDatabase();
+                        ChallengeController cc = new ChallengeController(
+                                getApplicationContext(),
+                                SettingsActivity.this,
+                                token,
+                                userID
+                        );
 
                         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
                         if (c.moveToFirst()) {
@@ -487,17 +496,20 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                             do {
                                 String challenge_id = c.getString(colchallenge_id);
                                 try {
-                                    giveUp(challenge_id, 0);
+                                    cc.give_up(challenge_id, 0, null);
+                                    Log.d(TAG, "surrenderAllChallengesDialog: in progress count: "
+                                            + sessionManager.getChampyOptions().get("challenges"));
+                                    if (sessionManager.getChampyOptions().get("challenges").equals("0")) {
+                                        Log.d(TAG, "surrenderAllChallengesDialog: in progress = 0!!!!!!!!!!!!!!!!");
+                                        dialog.cancel();
+                                        deleteAccountDialog();
+                                    }
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
                             } while (c.moveToNext());
                         }
                         c.close();
-
-                        if (sessionManager.getChampyOptions().get("challenges").equals("0")) {
-                            deleteAccountDialog();
-                        }
                     }
                     break;
                 case DialogInterface.BUTTON_NEGATIVE:
@@ -518,6 +530,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
 
     private void deleteAccountDialog() {
+        Log.d(TAG, "deleteAccountDialog: deleteAcc method!");
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -573,7 +586,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
-    private void giveUp(final String id, final int alarmID) throws IOException {
+    private void give_up(final String id, final int alarmID) throws IOException {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
         Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = activeInProgress.surrender(id, token);
@@ -584,15 +597,13 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 if (response.isSuccess()) {
                     Data data = response.body().getData();
                     String type = data.getChallenge().getType();
-
 //                    if (type.equals(typeWake)) {
 //                        //if this is "wake up" challenge then stop alarm manager;
-//                        Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
-//                        PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, alarmID, myIntent, 0);
-//                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+//                        Intent myIntent = new Intent(SettingsActivity.this, AlarmReceiver.class);
+//                        PendingIntent pendingIntent = PendingIntent.getBroadcast(SettingsActivity.this, alarmID, myIntent, 0);
+//                        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
 //                        alarmManager.cancel(pendingIntent);
 //                    }
-
 
                 }
             }

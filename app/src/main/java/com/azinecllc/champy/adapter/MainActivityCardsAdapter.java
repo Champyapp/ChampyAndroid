@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.azinecllc.champy.R;
+import com.azinecllc.champy.activity.MainActivity;
 import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.model.SelfImprovement_model;
 import com.azinecllc.champy.utils.SessionManager;
@@ -149,7 +150,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
             if (now > progressMidNight + oneDay + oneDay) {
                 try {
                     int i = (itemType.equals("Wake Up")) ? Integer.parseInt(currentCard.getWakeUpTime()) : 0;
-                    cc.give_up(itemInProgressId, i);
+                    cc.give_up(itemInProgressId, i, new Intent(getContext(), MainActivity.class));
                 } catch (IOException | NumberFormatException e) {
                     e.printStackTrace();
                 }
@@ -166,7 +167,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                     public void onClick(View view) {
                         try {
                             int i = (itemType.equals("Wake Up")) ? Integer.parseInt(currentCard.getGoal()) : 0;
-                            cc.give_up(itemInProgressId, i);
+                            cc.give_up(itemInProgressId, i, new Intent(getContext(), MainActivity.class));
                         } catch (IOException | NumberFormatException e) {
                             e.printStackTrace();
                         }

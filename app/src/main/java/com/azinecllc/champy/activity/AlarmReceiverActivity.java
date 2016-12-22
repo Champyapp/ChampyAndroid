@@ -2,6 +2,7 @@ package com.azinecllc.champy.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -99,7 +100,11 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
             case R.id.buttonWakeUpSurrender:
                 mMediaPlayer.stop();
                 try {
-                    cc.give_up(inProgressChallengeId, Integer.parseInt(alarmID));
+                    cc.give_up(
+                            inProgressChallengeId,
+                            Integer.parseInt(alarmID),
+                            new Intent(this, MainActivity.class)
+                    );
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

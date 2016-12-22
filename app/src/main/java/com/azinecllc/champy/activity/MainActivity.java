@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             final String token = sessionManager.getToken();
             final String userId = sessionManager.getUserId();
             ChallengeController cc = new ChallengeController(getApplicationContext(), this, token, userId);
-            cc.refreshCardsForPendingDuel();
+            cc.refreshCardsForPendingDuel(new Intent(this, MainActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
