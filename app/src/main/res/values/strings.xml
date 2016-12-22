@@ -214,5 +214,6 @@
     <string name="service_not_available">Service Not Available Try Again Later</string>
     <string name="self_improvement">Self-Improvement</string>
     <string name="duel_challenge">Duel challenge</string>
+    <string name="i_challenge_my_friend_to">I challenge my friend to</string>
 
 </resources>

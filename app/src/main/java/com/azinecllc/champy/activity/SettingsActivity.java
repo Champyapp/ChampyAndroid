@@ -1,8 +1,10 @@
 package com.azinecllc.champy.activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -24,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.azinecllc.champy.R;
+import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.controller.DailyRemindController;
 import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.helper.CHCheckPendingDuels;
@@ -318,6 +321,28 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                                     public void onResponse(Response<User> response, Retrofit retrofit) {
                                         String myLog = (response.isSuccess()) ? " vse ok" : response.message();
                                         Log.d(TAG, "onResponse: surrenderAll: " + myLog);
+
+                                        ChallengeController cc = new ChallengeController(
+                                                getApplicationContext(), (Activity) getApplicationContext(), token, userID);
+
+                                        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+                                        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
+                                        if (c.moveToFirst()) {
+                                            int colchallenge_id   = c.getColumnIndex("challenge_id");
+                                            try {
+                                                do {
+                                                    String challenge_id = c.getString(colchallenge_id);
+                                                    try {
+                                                        cc.give_up(challenge_id, 0);
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                        Log.e(TAG, "onResponse: WakeUp error, wrong alarmID");
+                                                    }
+                                                } while (c.moveToNext());
+                                            } finally { c.close(); }
+                                        }
+
                                     }
 
                                     @Override
@@ -330,20 +355,21 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                                     @Override
                                     public void onResponse(Response<Delete> response, Retrofit retrofit) {
                                         if (response.isSuccess()) {
-                                            File blur = new File(path, "blurred.png");
-                                            blur.delete();
-                                            File profile = new File(path, "profile.jpg");
-                                            profile.delete();
+                                            deleteFile("profile.jpg");
+                                            deleteFile("blurred.png");
+                                            //File blur = new File(path, "blurred.png");
+                                            //blur.delete();
+                                            //File profile = new File(path, "profile.jpg");
+                                            //profile.delete();
 
                                             SQLiteDatabase db = dbHelper.getWritableDatabase();
-                                            int clearCount = db.delete("pending", null, null);
-                                            clearCount = db.delete("pending_duel", null, null);
-                                            clearCount = db.delete("duel", null, null);
-                                            clearCount = db.delete("friends", null, null);
-                                            clearCount = db.delete("updated", null, null);
-                                            clearCount = db.delete("myChallenges", null, null);
-                                            Log.d(TAG, "onResponseDeleteUser: Vse ok");
-                                        } else Log.d(TAG, "onResponseDeleteUser: failed " + response.message());
+                                            db.delete("pending", null, null);
+                                            db.delete("pending_duel", null, null);
+                                            db.delete("duel", null, null);
+                                            db.delete("friends", null, null);
+                                            db.delete("updated", null, null);
+                                            db.delete("myChallenges", null, null);
+                                        }
                                     }
 
                                     @Override

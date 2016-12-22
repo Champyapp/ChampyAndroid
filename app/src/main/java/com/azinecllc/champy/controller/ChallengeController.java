@@ -60,11 +60,13 @@ public class ChallengeController {
     private Retrofit retrofit;
 
 
+
     public ChallengeController(Context mContext, Activity activity, String uToken, String uID) {
         context = mContext;
         firstActivity = activity;
         token = uToken;
         userId = uID;
+        this.retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
     }
 
 
@@ -73,7 +75,6 @@ public class ChallengeController {
         final String duration = "" + (days * 86400);
         final String details = description + " during this period: " + days + " days";
 
-        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
         Call<com.azinecllc.champy.model.create_challenge.CreateChallenge> call = createChallenge
                 .createChallenge("User_Challenge", typeSelf, description, details, duration, token);
@@ -96,8 +97,6 @@ public class ChallengeController {
     }
 
     public void sendSingleInProgressForSelf(String challenge) {
-        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
 
         Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = singleinprogress.startSingleInProgress(challenge, token);
@@ -122,8 +121,6 @@ public class ChallengeController {
         final String duration = String.valueOf(days * 86400);
         final String details = name + " during this period: " + days + " days";
 
-        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
         Call<com.azinecllc.champy.model.create_challenge.CreateChallenge> call = createChallenge
                 .createChallenge(name, typeDuel, name, details, duration, token);
@@ -146,7 +143,6 @@ public class ChallengeController {
     }
 
     public void sendSingleInProgressForDuel(final String challenge, final String friend_id) {
-        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
         Call<Duel> call = singleinprogress.startDuel(friend_id, challenge, token);
@@ -203,7 +199,6 @@ public class ChallengeController {
             );
         }
 
-        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
         Call<com.azinecllc.champy.model.create_challenge.CreateChallenge> call = createChallenge
                 .createChallenge(wakeUpName, typeWake, wakeUpTime, Arrays.toString(details), duration, token);
@@ -279,8 +274,6 @@ public class ChallengeController {
 
 
     public void joinToChallenge(final String inProgressId) {
-        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-
         SingleInProgress singleInProgress = retrofit.create(SingleInProgress.class);
 
         Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = singleInProgress.join(inProgressId, token);
@@ -300,8 +293,6 @@ public class ChallengeController {
     }
 
     public void rejectInviteForPendingDuel(String inProgressId) throws IOException {
-        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
 
         Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = activeInProgress.reject(inProgressId, token);
@@ -324,8 +315,6 @@ public class ChallengeController {
 
 
     public void doneForToday(final String inProgressId) throws IOException {
-        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
 
         Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = activeInProgress.checkChallenge(inProgressId, token);
@@ -345,8 +334,6 @@ public class ChallengeController {
     }
 
     public void give_up(final String id, final int alarmID) throws IOException {
-        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
         Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = activeInProgress.surrender(id, token);
 
@@ -385,7 +372,7 @@ public class ChallengeController {
         ContentValues cv  = new ContentValues();
         DBHelper dbHelper = DBHelper.getInstance(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final int clearCount = db.delete("pending_duel", null, null);
+        db.delete("pending_duel", null, null);
 
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
@@ -437,7 +424,7 @@ public class ChallengeController {
         DBHelper dbHelper = DBHelper.getInstance(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        int clearCount = db.delete("myChallenges", null, null);
+        db.delete("myChallenges", null, null);
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
         Call<com.azinecllc.champy.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userId, update, token);
@@ -530,6 +517,9 @@ public class ChallengeController {
         Runtime.getRuntime().gc();
 
     }
+
+
+
 
 
     // method for check is active challenge self / button_duel
