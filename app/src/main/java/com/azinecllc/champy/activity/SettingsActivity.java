@@ -75,6 +75,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private SessionManager sessionManager;
     HashMap<String, String> map = new HashMap<>();
     HashMap<String, String> user = new HashMap<>();
+    Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -307,19 +308,14 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 });
                 break;
             case R.id.avatar:
-                if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
-                    updateProfile(map);
-                    intent = new Intent(SettingsActivity.this, PhotoActivity.class);
-                    startActivity(intent);
-                }
+                updateProfile(map);
+                intent = new Intent(SettingsActivity.this, PhotoActivity.class);
+                startActivity(intent);
                 break;
             case R.id.delete_acc:
-                Log.d(TAG, "onClick: in progress: " + sessionManager.getChampyOptions().get("challenges"));
                 if (!sessionManager.getChampyOptions().get("challenges").equals("0")) {
-                    Log.d(TAG, "onClick: in progress != 0. start surrenderAll dialog");
                     surrenderAllChallengesDialog();
                 } else {
-                    Log.d(TAG, "onClick: in progress = 0. start deleteAcc dialog");
                     deleteAccountDialog();
                 }
                 break;
@@ -348,14 +344,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
-    public void updateProfile(HashMap<String, String> map) {
+    private void updateProfile(HashMap<String, String> map) {
         sessionManager.toggleChallengeEnd(map.get("challengeEnd"));
         sessionManager.togglePushNotification(map.get("pushNotifications"));
         sessionManager.toggleChallengesForToday(map.get("challengesForToday"));
         sessionManager.toggleNewChallengeRequest(map.get("newChallengeRequests"));
         sessionManager.toggleAcceptYourChallenge(map.get("acceptedYourChallenge"));
-
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
         Update_user update_user = retrofit.create(Update_user.class);
         Profile_data profile_data = new Profile_data(map);
@@ -453,7 +447,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
 
     private void setNewName(String newName) {
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         Update_user update_user = retrofit.create(Update_user.class);
         Call<User> call = update_user.update_user_name(userID, token, newName);
         call.enqueue(new Callback<User>() {
@@ -475,12 +468,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
 
     private void surrenderAllChallengesDialog() {
-        Log.d(TAG, "surrenderAllChallengesDialog: method surrenderAll start.");
         DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
             boolean canDeleteAcc = false;
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
-                    Log.d(TAG, "surrenderAllChallengesDialog: method surrenderAll positive button.");
                     if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
                         SQLiteDatabase db = dbHelper.getWritableDatabase();
                         ChallengeController cc = new ChallengeController(
@@ -508,13 +499,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     }
                     break;
                 case DialogInterface.BUTTON_NEGATIVE:
-                    Log.d(TAG, "onClick: negative button");
                     break;
             }
 
-            Log.d(TAG, "surrenderAllChallengesDialog: ~in progress count: " + sessionManager.getChampyOptions().get("challenges"));
             if (canDeleteAcc) {
-                Log.d(TAG, "surrenderAllChallengesDialog: in progress = 0!!!!!");
                 dialog.cancel();
                 deleteAccountDialog();
             }
@@ -533,13 +521,11 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
 
     private void deleteAccountDialog() {
-        Log.d(TAG, "deleteAccountDialog: deleteAcc method!");
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
                         final Update_user update_user = retrofit.create(Update_user.class);
 
                         Call<Delete> callForDeleteUser = update_user.delete_user(userID, token);
@@ -568,8 +554,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                             }
 
                             @Override
-                            public void onFailure(Throwable t) {
-                            }
+                            public void onFailure(Throwable t) {}
                         });
                         break;
 
@@ -587,39 +572,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 .setNegativeButton(R.string.no, dialogClickListener)
                 .show();
     }
-
-
-    private void give_up(final String id, final int alarmID) throws IOException {
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
-        Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = activeInProgress.surrender(id, token);
-
-        call.enqueue(new Callback<com.azinecllc.champy.model.single_in_progress.SingleInProgress>() {
-            @Override
-            public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    Data data = response.body().getData();
-                    String type = data.getChallenge().getType();
-//                    if (type.equals(typeWake)) {
-//                        //if this is "wake up" challenge then stop alarm manager;
-//                        Intent myIntent = new Intent(SettingsActivity.this, AlarmReceiver.class);
-//                        PendingIntent pendingIntent = PendingIntent.getBroadcast(SettingsActivity.this, alarmID, myIntent, 0);
-//                        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-//                        alarmManager.cancel(pendingIntent);
-//                    }
-
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                Toast.makeText(SettingsActivity.this, R.string.service_not_available, Toast.LENGTH_LONG).show();
-            }
-        });
-
-    }
-
-
 
 
 

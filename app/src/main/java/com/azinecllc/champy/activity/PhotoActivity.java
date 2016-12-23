@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.helper.CHUploadPhoto;
 import com.azinecllc.champy.utils.Blur;
+import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -66,8 +67,12 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
 
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
-        Glide.with(this).load(url).diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true).centerCrop().into((ImageView) findViewById(R.id.photo));
+        Glide.with(this)
+                .load(url)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .centerCrop()
+                .into((ImageView)findViewById(R.id.photo));
 
         Glide.with(this)
                 .load(url)
@@ -80,7 +85,6 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
                 .into(imageView);
 
         uploadPhoto = new CHUploadPhoto(getApplicationContext());
-
         tvChooseFromGallery.setOnClickListener(this);
         tvTakePicture.setOnClickListener(this);
 
@@ -88,21 +92,23 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        if (checkWriteExternalPermission()) {
-            switch (v.getId()) {
-                case R.id.tv_choose_from_gallery: Crop.pickImage(PhotoActivity.this); break;
-                case R.id.tv_take_a_picture:
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    File f = new File(path, "profile.jpg");
-                    picUri = Uri.fromFile(f);
-                    startActivityForResult(intent, CAMERA_REQUEST);
-                    break;
+        OfflineMode offlineMode = OfflineMode.getInstance();
+        if (offlineMode.isConnectedToRemoteAPI(this)) {
+            if (checkWriteExternalPermission()) {
+                switch (v.getId()) {
+                    case R.id.tv_choose_from_gallery: Crop.pickImage(PhotoActivity.this); break;
+                    case R.id.tv_take_a_picture:
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        File f = new File(path, "profile.jpg");
+                        picUri = Uri.fromFile(f);
+                        startActivityForResult(intent, CAMERA_REQUEST);
+                        break;
+                }
+            } else {
+                Toast.makeText(this, "No Permission Granted", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.fromParts("package", getPackageName(), null)));
             }
-        } else {
-            Toast.makeText(this, "No Permission Granted", Toast.LENGTH_LONG).show();
-
-            startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                    Uri.fromParts("package", getPackageName(), null)));
         }
     }
 
@@ -300,30 +306,6 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-
-//    public void Upload_photo(String path) {
-//        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-//        String token = sessionManager.getToken();
-//        String id = sessionManager.getUserId();
-//
-//        File photoFile = new File(path);
-//        RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), photoFile);
-//
-//        Update_user update_user = retrofit.create(Update_user.class);
-//        Call<User> call = update_user.update_photo(id, token, requestBody);
-//        call.enqueue(new Callback<User>() {
-//            @Override
-//            public void onResponse(Response<User> response, Retrofit retrofit) {
-//                String myLog = (response.isSuccess()) ? "Status: photo uploaded!" : "Status: " + response.code();
-//                Log.i(TAG, "onResponse: " + myLog);
-//            }
-//
-//            @Override
-//            public void onFailure(Throwable t) {
-//                Log.d(TAG, "Status: "+t);
-//            }
-//        });
-//    }
 
 
 }
