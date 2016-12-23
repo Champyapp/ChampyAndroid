@@ -32,6 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -199,7 +200,6 @@ public class ChallengeController {
             );
         }
 
-        Log.d("TAG", "createNewWakeUpChallenge: array of details: " + Arrays.toString(details));
 
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
         Call<com.azinecllc.champy.model.create_challenge.CreateChallenge> call = createChallenge
@@ -210,7 +210,7 @@ public class ChallengeController {
             public void onResponse(Response<com.azinecllc.champy.model.create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
-                    sendSingleInProgressForWakeUp(challengeId, alarmID, intMin, intHour);
+                    sendSingleInProgressForWakeUp(challengeId, alarmID, intMin, intHour, details);
                 }
             }
 
@@ -221,7 +221,7 @@ public class ChallengeController {
         });
     }
 
-    private void sendSingleInProgressForWakeUp(String challenge, final int alarmID, int minute, int hour) {
+    private void sendSingleInProgressForWakeUp(String challenge, final int alarmID, int min, int hour, String[] det) {
         // TODO: 12/21/16 get current midnight from create new wake-up challenge method;
         Calendar c = GregorianCalendar.getInstance();
         final long currentMidnight = unixTime - (c.get(Calendar.HOUR_OF_DAY) * 60 * 60)
@@ -230,7 +230,7 @@ public class ChallengeController {
 
 
         Date date = new Date(); // create date
-        date.setTime(((minute * 60) + (hour * 60 * 60) + currentMidnight) * 1000); // set time for date from user's input time;
+        date.setTime(((min * 60) + (hour * 60 * 60) + currentMidnight) * 1000); // set time for date from user's input time;
         c.setTime(date); // set date for calendar. now our calendar has a right time for ring
 
 
@@ -251,6 +251,7 @@ public class ChallengeController {
                     Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
                     myIntent.putExtra("inProgressID", inProgressId);
                     myIntent.putExtra("alarmID", String.valueOf(alarmID));
+                    myIntent.putExtra("details", Arrays.toString(det));
 
 
                     PendingIntent pi = PendingIntent.getBroadcast(firstActivity, alarmID, myIntent, 0);

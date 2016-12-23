@@ -22,6 +22,7 @@ import com.azinecllc.champy.utils.SessionManager;
 import com.facebook.FacebookSdk;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * This is Wake-Up activity when our item_alarm manager starts ring
@@ -31,7 +32,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
     public final String TAG = "AlarmReceiverActivity";
     private MediaPlayer mMediaPlayer;
     private ChallengeController cc;
-    private String inProgressChallengeId, alarmID;
+    private String inProgressChallengeId, alarmID, details;
     public Context context;
     public Activity activity;
 
@@ -40,17 +41,21 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
 
-        inProgressChallengeId = getIntent().getStringExtra("finalInProgressID");
         alarmID = getIntent().getStringExtra("finalAlarmID");
+        details = getIntent().getStringExtra("finalDetails");
+        inProgressChallengeId = getIntent().getStringExtra("finalInProgressID");
 
-        Log.d(TAG, "AlarmReceiverActivity:" + "\ninProgressChallengeId: " + inProgressChallengeId + "\nalarmID: " + alarmID);
+        Log.d(TAG, "AlarmReceiverActivity:"
+                + "\nalarmID: " + alarmID
+                + "\ndetails: " + details
+                + "\ninProgressChallengeId: " + inProgressChallengeId);
+
+        getFirstItemFromAlarmMassive(details);
 
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.item_alarm);
         playSound(this, getAlarmUri());
-        //Glide.with(this).load(R.drawable.wakeupwhite).override(130, 130).into((ImageView) findViewById(R.id.imageViewWakeUpLogo));
-        //Glide.with(this).load(R.drawable.wakeuptext).override(200, 170).into((ImageView) findViewById(R.id.imageViewWakeUpText));
 
         final TextView tvWakeUpChallenge = (TextView)findViewById(R.id.tvWakeUpChallenge);
         final TextView tvWakeUp = (TextView)findViewById(R.id.wakeup_text);
@@ -77,6 +82,20 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
 
     }
 
+    private int getFirstItemFromAlarmMassive(String arrayDetails) {
+        String details = toArrayOfStrings(arrayDetails);
+        Log.d(TAG, "getFirstItemFromAlarmMassive: details after convert: " + details);
+
+
+
+        return 1;
+    }
+
+    private String toArrayOfStrings(String details) {
+        String a = details.replace("[", "");
+        return a.replace("]","");
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -100,11 +119,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
             case R.id.buttonWakeUpSurrender:
                 mMediaPlayer.stop();
                 try {
-                    cc.give_up(
-                            inProgressChallengeId,
-                            Integer.parseInt(alarmID),
-                            new Intent(this, MainActivity.class)
-                    );
+                    cc.give_up(inProgressChallengeId, Integer.parseInt(alarmID), new Intent(this, MainActivity.class));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
