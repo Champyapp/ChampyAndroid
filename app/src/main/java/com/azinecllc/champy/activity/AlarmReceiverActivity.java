@@ -3,6 +3,8 @@ package com.azinecllc.champy.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.controller.ChallengeController;
+import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.utils.SessionManager;
 import com.facebook.FacebookSdk;
 
@@ -83,18 +86,27 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
     }
 
     private int getFirstItemFromAlarmMassive(String arrayDetails) {
-        String details = toArrayOfStrings(arrayDetails);
-        Log.d(TAG, "getFirstItemFromAlarmMassive: details after convert: " + details);
+
+        String[] details = arrayDetails.replace("[", "").replace("]", "").split(", ");
+        Log.d(TAG, "splitted arrays with for wake-up : " + details[0]);
+
+        String[] detailMinusFirst = Arrays.copyOfRange(details, 1, details.length);
+        Log.d(TAG, "new array without first element  : " + Arrays.toString(detailMinusFirst));
 
 
+//        int firstElement = Integer.parseInt(String.valueOf(details.length() - details.length() + 1));
+//        Log.d(TAG, "getFirstItemFromAlarmMassive: first element: " + firstElement);
+        //Log.d(TAG, "getFirstItemFromAlarmMassive: integer array o_O: " + Integer.valueOf(Arrays.toString(details)));
+
+        //int firstElement = Integer.parseInt(String.valueOf(details.length() - details.length() + 1)); //[details.length() - details.length()+1];
+        //Log.d(TAG, "getFirstItemFromAlarmMassive: first element == " + firstElement);
 
         return 1;
     }
 
-    private String toArrayOfStrings(String details) {
-        String a = details.replace("[", "");
-        return a.replace("]","");
-    }
+//    private String[] toArrayOfStrings(String details) {
+//        return details.replace("[", "").replace("]", "").split(", ");
+//    }
 
     @Override
     protected void onDestroy() {
