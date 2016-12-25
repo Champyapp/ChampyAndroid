@@ -42,7 +42,6 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
     private DrawerLayout drawer;
     private Snackbar snackbar;
     private TextView etDays;
-    private int daysCount, newDaysCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,14 +151,14 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
                 final int picketMin = alarmTimePicker.getCurrentMinute();
 
                 // this piece of code need only for check exist challenge
-                String sHour = "" + pickedHour;
-                String sMinute = "" + picketMin;
+                String sHour   = String.format("%s", pickedHour); //"" + pickedHour;
+                String sMinute = String.format("%s", picketMin);  // "" + picketMin;
 
                 if (pickedHour < 10) sHour  = "0" + sHour;
                 if (picketMin < 10) sMinute = "0" + sMinute;
 
-                String finalSHour = sHour;
-                String finalSMinute = sMinute;
+                String fHour = sHour;
+                String fMin = sMinute;
 
                 final boolean ok = cc.isActiveWakeUp(sHour + sMinute);
                 if (offlineMode.isConnectedToRemoteAPI(WakeUpActivity.this)) {
@@ -167,7 +166,7 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
                         @Override
                         public void onClick(View view) {
                             if (ok) {
-                                cc.createNewWakeUpChallenge(Integer.parseInt(etDays.getText().toString()), finalSHour, finalSMinute);
+                                cc.createNewWakeUpChallenge(Integer.parseInt(etDays.getText().toString()), fHour, fMin);
                                 snackbar = Snackbar.make(view, R.string.challenge_created, Snackbar.LENGTH_SHORT);
                             } else {
                                 snackbar = Snackbar.make(view, R.string.cant_create_this_challenge, Snackbar.LENGTH_SHORT);
@@ -179,7 +178,8 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
                 }
                 break;
             case R.id.imageButtonPlus:
-                daysCount = Integer.parseInt(etDays.getText().toString());
+                int daysCount = Integer.parseInt(etDays.getText().toString());
+                int newDaysCount;
                 if (daysCount < 1000) {
                     newDaysCount = daysCount + 1;
                     etDays.setText(String.valueOf(newDaysCount));

@@ -124,8 +124,8 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
 
         int now = (int) (System.currentTimeMillis() / 1000);
 
-        for (int i = 0; i <= details.length; i++) {
-
+        for (int i = 0; i <= details.length - 1; i++) {
+            // here details in seconds, but need in millis;
             if (now < Integer.parseInt(details[i])) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 PendingIntent operation = PendingIntent.getBroadcast(getApplicationContext(), Integer.parseInt(alarmID), intent, 0);

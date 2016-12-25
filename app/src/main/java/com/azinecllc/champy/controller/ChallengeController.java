@@ -180,12 +180,12 @@ public class ChallengeController {
 
 
     public void createNewWakeUpChallenge(int days, String sHour, String sMinute) {
-        final String duration   = String.format("%s", days * oneDay); // + (days * 86400);
+        final String duration   = String.format("%s", days * oneDay);
         final String wakeUpName = "Wake up at " + sHour + ":" + sMinute;
         final String wakeUpTime = sHour + sMinute;
-        final int intHour = Integer.parseInt(sHour);           // for sending in progress method
-        final int intMin  = Integer.parseInt(sMinute);         // for sending in progress method
-        final int alarmID = Integer.parseInt(sHour + sMinute); // unique  id for pending  intent
+        final int intHour = Integer.parseInt(sHour);
+        final int intMin  = Integer.parseInt(sMinute);
+        final int alarmID = Integer.parseInt(wakeUpTime);
 
         Calendar c = GregorianCalendar.getInstance();
         final long currentMidnight = unixTime
@@ -203,7 +203,6 @@ public class ChallengeController {
             );
         }
 
-
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
         Call<com.azinecllc.champy.model.create_challenge.CreateChallenge> call = createChallenge
                 .createChallenge(wakeUpName, typeWake, wakeUpTime, Arrays.toString(details), duration, token);
@@ -213,7 +212,7 @@ public class ChallengeController {
             public void onResponse(Response<com.azinecllc.champy.model.create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
-                    sendSingleInProgressForWakeUp(challengeId, alarmID, intMin, intHour, details, currentMidnight);
+                    sendSingleInProgressForWakeUp(challengeId, alarmID, intMin, intHour, details);
                 }
             }
 
@@ -224,19 +223,33 @@ public class ChallengeController {
         });
     }
 
-    private void sendSingleInProgressForWakeUp(String chall, int alarmID, int min, int hour, String[] det, long mn) {
-//        Calendar c = GregorianCalendar.getInstance();
-//        final long currentMidnight = unixTime - (c.get(Calendar.HOUR_OF_DAY) * 60 * 60)
-//                                              - (c.get(Calendar.MINUTE) * 60)
-//                                              - (c.get(Calendar.SECOND));
+    private void sendSingleInProgressForWakeUp(String chall, int alarmID, int min, int hour, String[] det) {
+        Calendar c = GregorianCalendar.getInstance();
+        final long currentMidnight = unixTime
+                - (c.get(Calendar.HOUR_OF_DAY) * 60 * 60)
+                - (c.get(Calendar.MINUTE) * 60)
+                - (c.get(Calendar.SECOND));
+        Log.d(TAG, "sendSingleInProgressForWakeUp: currentMidnight: " + currentMidnight);
 
-//        Date date = new Date();
-//        date.setTime( ((min  * 60) + (hour * 60 * 60) + mn) * 1000);
-//        c.setTime(date); // set date for calendar. now our calendar has a right time for ring
+        Date date = new Date();
+        date.setTime(
+                ( (min  * 60)
+                + (hour * 60 * 60)
+                + currentMidnight)
+                * 1000);
+        c.setTime(date); // set date for calendar. now our calendar has a right time for ring
+        Log.d(TAG, "sendSingleInProgressForWakeUp: date for ring: " + c.getTime());
 
 
-//        if (Calendar.getInstance().getTimeInMillis() > c.getTimeInMillis()) c.add(Calendar.DAY_OF_YEAR, 1);
-        //final long userInputTime = c.getTimeInMillis(); // must be in millis
+        if (Calendar.getInstance().getTimeInMillis() > c.getTimeInMillis()) {
+            Log.d(TAG, "sendSingleInProgressForWakeUp: now > input. need to add one day");
+            Log.d(TAG, "sendSingleInProgressForWakeUp: " + System.currentTimeMillis() + " > " + c.getTimeInMillis());
+            c.add(Calendar.DAY_OF_YEAR, 1);
+            Log.d(TAG, "sendSingleInProgressForWakeUp: new date for ring: " + c.getTime());
+        }
+
+        final long userInputTime = c.getTimeInMillis(); // must be in millis
+        Log.d(TAG, "sendSingleInProgressForWakeUp: time for ring: " + userInputTime);
 
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
         Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = singleinprogress.startSingleInProgress(chall, token);
@@ -254,10 +267,8 @@ public class ChallengeController {
 
 
                     PendingIntent pi = PendingIntent.getBroadcast(firstActivity, alarmID, myIntent, 0);
-
                     AlarmManager aManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-
-                    aManager.setRepeating(AlarmManager.RTC_WAKEUP, Long.parseLong(det[0]), 24*60*60*1000, pi);
+                    aManager.setRepeating(AlarmManager.RTC_WAKEUP, userInputTime, 24*60*60*1000, pi);
 
 
                     generateCardsForMainActivity(new Intent(firstActivity, MainActivity.class));
