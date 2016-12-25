@@ -5,16 +5,12 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -24,13 +20,10 @@ import android.widget.TextView;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.controller.ChallengeController;
-import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.utils.SessionManager;
 import com.facebook.FacebookSdk;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Date;
 
 /**
  * This is Wake-Up activity when our item_alarm manager starts ring
@@ -40,7 +33,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
     public final String TAG = "AlarmReceiverActivity";
     private MediaPlayer mMediaPlayer;
     private ChallengeController cc;
-    private String inProgressChallengeId, alarmID, details;
+    private String progressID, alarmID, details;
     public Context context;
     public Activity activity;
 
@@ -51,12 +44,9 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
 
         alarmID = getIntent().getStringExtra("finalAlarmID");
         details = getIntent().getStringExtra("finalDetails");
-        inProgressChallengeId = getIntent().getStringExtra("finalInProgressID");
+        progressID = getIntent().getStringExtra("finalInProgressID");
 
-        Log.d(TAG,
-                "\nalarmID: " + alarmID
-              + "\ndetails: " + details
-              + "\nprogressID: " + inProgressChallengeId);
+        Log.d(TAG, "\nalarmID: "+alarmID+"\ndetails: "+details+"\nprogressID: "+progressID);
 
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -80,11 +70,11 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
         final String userId = sessionManager.getUserId();
         cc = new ChallengeController(getApplicationContext(), AlarmReceiverActivity.this, token, userId);
 
-        ImageButton buttonWakeUpDoneForToday = (ImageButton) findViewById(R.id.buttonWakeUpDoneForToday);
-        ImageButton buttonWakeUpSurrender = (ImageButton) findViewById(R.id.buttonWakeUpSurrender);
+        ImageButton buttonDoneForToday = (ImageButton) findViewById(R.id.buttonWakeUpDoneForToday);
+        ImageButton buttonSurrender    = (ImageButton) findViewById(R.id.buttonWakeUpSurrender);
 
-        buttonWakeUpDoneForToday.setOnClickListener(this);
-        buttonWakeUpSurrender.setOnClickListener(this);
+        buttonDoneForToday.setOnClickListener(this);
+        buttonSurrender.setOnClickListener(this);
 
     }
 
@@ -102,7 +92,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
             case R.id.buttonWakeUpDoneForToday:
                 mMediaPlayer.stop();
                 try {
-                    cc.doneForToday(inProgressChallengeId);
+                    cc.doneForToday(progressID);
                     setNewAlarmClock(details);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -113,7 +103,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
             case R.id.buttonWakeUpSurrender:
                 mMediaPlayer.stop();
                 try {
-                    cc.give_up(inProgressChallengeId, Integer.parseInt(alarmID), new Intent(this, MainActivity.class));
+                    cc.give_up(progressID, Integer.parseInt(alarmID), new Intent(this, MainActivity.class));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -127,44 +117,18 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
         String[] details = arrayDetails.replace("[", "").replace("]", "").split(", ");
 
         int now = (int) (System.currentTimeMillis() / 1000);
-        int timeForNextRing = 0;
 
         for (int i = 0; i <= details.length; i++) {
-            Log.d(TAG, "i: " + i + "\nnow: " + now  + "\ndetails[i]: " + Integer.valueOf(details[i]));
 
-            if (now > Integer.valueOf(details[i])) {
-                Log.d(TAG, "now > details[i].");
-                Log.d(TAG, now + " > " + details[i]);
-
-                String[] detailMinusFirst = Arrays.copyOfRange(details, 1, details.length);
-                Log.d(TAG, "deleting first element...");
-                timeForNextRing = Integer.valueOf(detailMinusFirst[0]);
-            } else {
-                Log.d(TAG, "Vse ok: now < details[i]. can set alarm manager");
-            }
-
-            if (now < timeForNextRing) {
-                Log.d(TAG, "~~~~~THE WIN~~~~~");
-                Log.d(TAG, "now < timeForNextRing");
-                Log.d(TAG, now + " < " + timeForNextRing);
+            if (now < Integer.parseInt(details[i])) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                PendingIntent operation = PendingIntent.getBroadcast(getApplicationContext(), 228, intent, 0);
+                PendingIntent operation = PendingIntent.getBroadcast(getApplicationContext(), Integer.parseInt(alarmID), intent, 0);
                 AlarmManager aManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-                Log.d(TAG, "setting alarm for next day at: " + timeForNextRing);
-                aManager.setRepeating(AlarmManager.RTC_WAKEUP, timeForNextRing, 24 * 60 * 60 * 1000, operation);
+                aManager.setRepeating(AlarmManager.RTC_WAKEUP, Integer.parseInt(details[i]), 24 * 60 * 60 * 1000, operation);
                 break;
-
-            } else {
-                Log.d(TAG, "i++\n\n");
             }
 
         }
-
-//        if (System.currentTimeMillis() > Integer.valueOf(details[0])) {
-//            Log.d(TAG, "setNewAlarmClock: now > details[0]. need to set alarm for next time");
-//        } else {
-//            Log.d(TAG, "setNewAlarmClock: now < details[0]. wtf");
-//        }
 
     }
 

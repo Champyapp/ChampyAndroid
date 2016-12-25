@@ -65,7 +65,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         final String itemType = currentCard.getType();
         final String itemNeedsToCheck = currentCard.getNeedsToCheck();
         final String itemInProgressId = currentCard.getId();
-        final String[] challengeProgress = toArrayOfStrings(itemProgress);
+        final String[] challengeProgress = itemProgress.replace("[", "").replace("]", "").split(", ");
 
         final TextView tvChallengeType = (TextView) tempView.findViewById(R.id.tvChallengeType);
         tvChallengeType.setText(currentCard.getType());
@@ -113,7 +113,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
             buttonShare.setVisibility(View.INVISIBLE);
             tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
         } else {
-            tvDuration.setText("" + currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo));
+            tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
             buttonShare.setVisibility(View.VISIBLE);
             buttonDone.setVisibility(View.INVISIBLE);
             tvEveryDayForTheNext.setVisibility(View.VISIBLE);
@@ -123,6 +123,11 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
             case "Wake Up":
                 imageChallengeLogo.setImageResource(R.drawable.ic_wakeup_white);
                 tvChallengeDescription.setText(currentCard.getChallengeName());
+
+                tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
+                buttonShare.setVisibility(View.VISIBLE);
+                buttonDone.setVisibility(View.INVISIBLE);
+                tvEveryDayForTheNext.setVisibility(View.VISIBLE);
                 break;
             case "Duel":
                 imageChallengeLogo.setImageResource(R.drawable.ic_duel_white);
@@ -152,18 +157,12 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         }
 
         if (myProgress != 0L && now > progressMidNight + oneDay) {
-//            DBHelper dbHelper = DBHelper.getInstance(getContext());
-//            SQLiteDatabase db = dbHelper.getWritableDatabase();
-//            ContentValues cv = new ContentValues();
-//            cv.put("updated", "false"); // was true
-//            db.update("updated",      cv, "challenge_id = ?", new String[]{itemInProgressId});
-//            db.update("myChallenges", cv, "challenge_id = ?", new String[]{itemInProgressId});
 
-//            if (!itemType.equals("Wake Up")) {
-//                tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
-//                buttonShare.setVisibility(View.INVISIBLE);
-//                buttonDone.setVisibility(View.VISIBLE);
-//            }
+            if (!itemType.equals("Wake Up")) {
+                tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
+                buttonShare.setVisibility(View.INVISIBLE);
+                buttonDone.setVisibility(View.VISIBLE);
+            }
             if (now > progressMidNight + oneDay + oneDay) {
                 try {
                     int i = (itemType.equals("Wake Up")) ? Integer.parseInt(currentCard.getWakeUpTime()) : 0;

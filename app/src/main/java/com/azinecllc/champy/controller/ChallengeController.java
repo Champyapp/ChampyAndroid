@@ -55,6 +55,7 @@ import static java.lang.Math.round;
 
 public class ChallengeController {
 
+    private static final String TAG = "ChallengeController";
     private String token, userId;
     private Context context;
     private Activity firstActivity;
@@ -211,6 +212,9 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
                     sendSingleInProgressForWakeUp(challengeId, alarmID, intMin, intHour, details);
+                    Log.d(TAG, "createNewWakeUpChallenge: isSuccess");
+                } else {
+                    Log.d(TAG, "createNewWakeUpChallenge: Failed: " + response.message());
                 }
             }
 
@@ -244,6 +248,7 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
+                    Log.d(TAG, "SendSingleInProgress Wake-Up is Success");
                     com.azinecllc.champy.model.single_in_progress.SingleInProgress data = response.body();
                     final String inProgressId = data.getData().get_id();
 
@@ -261,6 +266,8 @@ public class ChallengeController {
 
                     generateCardsForMainActivity(new Intent(firstActivity, MainActivity.class));
 
+                } else {
+                    Log.d(TAG, "onResponse: SendSingleInProgress Wake-Up Failed: " + response.message());
                 }
             }
 
