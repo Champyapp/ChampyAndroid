@@ -91,21 +91,21 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         tvDuration.setTypeface(typeface);
         tvDuration.setTextSize(y*2);
 
-        try {
-            String TAG = "INFO ABOUT CARD:";
-            Log.d(TAG, "getView: " + currentCard.getRecipient());
-            Log.d(TAG, "getView: " + currentCard.getChallengeName());
-            Log.d(TAG, "getView: " + currentCard.getGoal());
-            Log.d(TAG, "getView: " + currentCard.getId());
-            Log.d(TAG, "getView: " + currentCard.getName());
-            Log.d(TAG, "getView: " + currentCard.getWakeUpTime());
-            Log.d(TAG, "getView: " + currentCard.getType());
-            Log.d(TAG, "getView: " + currentCard.getConstDuration());
-            Log.d(TAG, "getView: " + currentCard.getDays());
-            Log.d(TAG, "getView: " + currentCard.getProgress());
-            Log.d(TAG, "getView: " + currentCard.getStatus());
-            Log.d(TAG, "getView: " + currentCard.getVersus());
-        } catch (Exception e) { e.printStackTrace(); }
+//        try {
+//            String TAG = "INFO ABOUT CARD:";
+//            Log.d(TAG, "getView: " + currentCard.getRecipient());
+//            Log.d(TAG, "getView: " + currentCard.getChallengeName());
+//            Log.d(TAG, "getView: " + currentCard.getGoal());
+//            Log.d(TAG, "getView: " + currentCard.getId());
+//            Log.d(TAG, "getView: " + currentCard.getName());
+//            Log.d(TAG, "getView: " + currentCard.getWakeUpTime());
+//            Log.d(TAG, "getView: " + currentCard.getType());
+//            Log.d(TAG, "getView: " + currentCard.getConstDuration());
+//            Log.d(TAG, "getView: " + currentCard.getDays());
+//            Log.d(TAG, "getView: " + currentCard.getProgress());
+//            Log.d(TAG, "getView: " + currentCard.getStatus());
+//            Log.d(TAG, "getView: " + currentCard.getVersus());
+//        } catch (Exception e) { e.printStackTrace(); }
 
         if (itemNeedsToCheck.equals("true")) {
             tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
