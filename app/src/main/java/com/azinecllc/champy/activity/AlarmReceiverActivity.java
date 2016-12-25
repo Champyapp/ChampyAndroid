@@ -90,7 +90,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.buttonWakeUpDoneForToday:
-                mMediaPlayer.stop();
+                if (mMediaPlayer.isPlaying()) { mMediaPlayer.stop(); }
                 try {
                     cc.doneForToday(progressID);
                     setNewAlarmClock(details);
@@ -101,7 +101,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
                 break;
 
             case R.id.buttonWakeUpSurrender:
-                mMediaPlayer.stop();
+                if (mMediaPlayer.isPlaying()) { mMediaPlayer.stop(); }
                 try {
                     cc.give_up(progressID, Integer.parseInt(alarmID), new Intent(this, MainActivity.class));
                 } catch (IOException e) {
@@ -113,6 +113,12 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
         }
     }
 
+    /**
+     * Method for compare current time with array of alarm time.
+     * @param arrayDetails - this is our array with time for ring in seconds
+     * @value details - cleaned up our array from '[1, 2, 3]' to '1, 2, 3'
+     * @value now     - current time on the device in seconds
+     */
     private void setNewAlarmClock(String arrayDetails) {
         String[] details = arrayDetails.replace("[", "").replace("]", "").split(", ");
 
