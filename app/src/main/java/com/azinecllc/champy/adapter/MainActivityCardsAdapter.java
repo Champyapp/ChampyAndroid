@@ -215,19 +215,24 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                 String message;
                 switch (currentCard.getType()) {
                     case "Self-Improvement":
-                        message = getContext().getString(R.string.share_text) + currentCard.getType()
-                                + " challenge '" + currentCard.getGoal() + "'" + getContext().getString(R.string.champyapp_link);
+                        message = getContext().getString(R.string.share_text)
+                                + currentCard.getType() + " challenge '"
+                                + currentCard.getGoal() + "'" + getContext().getString(R.string.champyapp_link);
                         break;
                     case "Duel":
-                        message = getContext().getString(R.string.share_text) + currentCard.getType()
-                                + " challenge '" + currentCard.getGoal() + "'" + getContext().getString(R.string.champyapp_link);
+                        message = getContext().getString(R.string.share_text)
+                                + currentCard.getType() + " challenge '"
+                                + currentCard.getGoal() + "' with "
+                                + currentCard.getVersus() + getContext().getString(R.string.champyapp_link);
                         break;
                     case "Wake Up":
-                        message = getContext().getString(R.string.share_text) + " "
-                                + currentCard.getChallengeName() + " challenge" + getContext().getString(R.string.champyapp_link);
+                        message = getContext().getString(R.string.share_text)
+                                + currentCard.getChallengeName()
+                                + " challenge" + getContext().getString(R.string.champyapp_link);
                         break;
                     default:
-                        message = getContext().getString(R.string.share_text) + getContext().getString(R.string.champyapp_link);
+                        message = getContext().getString(R.string.share_text)
+                                + getContext().getString(R.string.champyapp_link);
 
                 }
                 Intent share = new Intent(Intent.ACTION_SEND);

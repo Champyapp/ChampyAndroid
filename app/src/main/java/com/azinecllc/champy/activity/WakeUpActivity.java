@@ -160,12 +160,12 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
                 String fHour = sHour;
                 String fMin = sMinute;
 
-                final boolean ok = cc.isActiveWakeUp(sHour + sMinute);
+                final boolean isActive = cc.isActive(sHour + sMinute);
                 if (offlineMode.isConnectedToRemoteAPI(WakeUpActivity.this)) {
                     snackbar = Snackbar.make(v, R.string.are_you_sure, Snackbar.LENGTH_LONG).setAction(R.string.yes, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            if (ok) {
+                            if (!isActive) {
                                 cc.createNewWakeUpChallenge(Integer.parseInt(etDays.getText().toString()), fHour, fMin);
                                 snackbar = Snackbar.make(view, R.string.challenge_created, Snackbar.LENGTH_SHORT);
                             } else {

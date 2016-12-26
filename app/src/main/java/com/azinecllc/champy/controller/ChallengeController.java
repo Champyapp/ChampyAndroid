@@ -542,9 +542,17 @@ public class ChallengeController {
     }
 
 
+
     /**
-     * Method for compare current time with array of alarm time.
-     * @param arrayDetails - this is our array with time for ring in seconds
+     * Method for compare current time with 'i-element' in array of alarm time.
+     * @param arrayDetails - this is our array with time for ring in seconds. When user has select
+     *                     time and count of days for Wake-Up challenge then we get this data and
+     *                     convert time in UnixTime and multiply for N-days. After this operation
+     *                     we had an array with time for ring. We had named it 'description' but
+     *                     only for Wake-Up (be care with it). In this method we put in our array
+     *                     in 'for' to compare current time with ours elements inside array
+     *
+     *
      * @value details - cleaned up our array from '[1, 2, 3]' to '1, 2, 3'
      * @value now     - current time on the device in seconds
      */
@@ -569,8 +577,21 @@ public class ChallengeController {
     }
 
 
-    // method for check is active challenge self / button_duel
+    /**
+     * @param description - this is 'description' of challenges like 'No TV' or 'Wake Up at 9:00'.
+     *                    To start we should to connect DataBase which was named 'myDB', next
+     *                    need to select table 'myChallenges' and set Cursor at needed row, in our
+     *                    situation this is 'description'. After that we can check row for existing
+     *                    name. We use 'do-while' for check all description which has active.
+     *                    P.S.: value of Wake-Up challenge has generated in 'createWakeUpChallenge'.
+     *                    When user has picked time for Wake-Up challenge then we get hours & minutes
+     *                    from time picker and put together like one value 12:45 = 1245. It's easy
+     *                    way to avoid so much if-statements for only one type of challenges.
+     * @return - if we have some description in our DataBase then we return true. It's means
+     *           like is 'Yes, this challenge is exist. In any other situation we return 'false'
+     */
     public boolean isActive(String description) {
+        // method for check is active challenge
         DBHelper dbHelper = DBHelper.getInstance(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
@@ -593,30 +614,37 @@ public class ChallengeController {
         return ok;
     }
 
-    // method for check is active challenge for wake up
-    public boolean isActiveWakeUp(String time) {
-        boolean ok = true;
-        DBHelper dbHelper = DBHelper.getInstance(context);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-        if (c.moveToFirst()) {
-            int colDescription = c.getColumnIndex("description");
-            int status = c.getColumnIndex("status");
-            do {
-                try {
-                    if (c.getString(status).equals("started")) {
-                        if (c.getString(colDescription).equals(time)) {
-                            ok = false;
-                            break;
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } while (c.moveToNext());
-        }
-        c.close();
-        return ok;
-    }
+//    /**
+//     * This is specific method for check only 'Wake-Up' challenge by alarm time.
+//     * @param time - this is unique value from method 'createWakeUpChallenge'. When user pick up time
+//     *               for Wake-Up challenge we separately take 'hour' and 'minutes' we need to
+//     *               ring with our alarm manager. We get this from our DataBase: myDB, table: myChallenges, row: description.
+//     * @return
+//     */
+//    public boolean isActiveWakeUp(String time) {
+//        // method for check is active challenge for wake up
+//        boolean ok = true;
+//        DBHelper dbHelper = DBHelper.getInstance(context);
+//        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+//        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
+//        if (c.moveToFirst()) {
+//            int colDescription = c.getColumnIndex("description");
+//            int status = c.getColumnIndex("status");
+//            do {
+//                try {
+//                    if (c.getString(status).equals("started")) {
+//                        if (c.getString(colDescription).equals(time)) {
+//                            ok = false;
+//                            break;
+//                        }
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            } while (c.moveToNext());
+//        }
+//        c.close();
+//        return ok;
+//    }
 
 }
