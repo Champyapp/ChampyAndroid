@@ -42,7 +42,7 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
     private WebView webView;
     private View spinner;
 
-    @SuppressLint({"SetJavaScriptEnabled", "SetTextI18n"})
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

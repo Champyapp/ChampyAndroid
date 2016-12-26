@@ -427,7 +427,9 @@ public class ChallengeController {
                         }
                     }
 
-                    generateCardsForMainActivity(intent);
+                    if (intent != null) {
+                        generateCardsForMainActivity(intent);
+                    }
 
                 }
             }

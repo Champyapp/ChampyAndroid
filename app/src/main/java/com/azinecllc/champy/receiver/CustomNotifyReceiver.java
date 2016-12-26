@@ -41,7 +41,7 @@ public class CustomNotifyReceiver extends WakefulBroadcastReceiver {
             DailyRemindController daily = new DailyRemindController(context);
             daily.enableDailyNotificationReminder();
         } else {
-            Log.d(TAG, "onReceive: not logged in");
+            Log.d(TAG, "onReceive: can't send notification: not logged in");
         }
 
     }

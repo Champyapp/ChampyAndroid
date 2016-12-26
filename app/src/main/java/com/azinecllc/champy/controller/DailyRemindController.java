@@ -25,12 +25,11 @@ public class DailyRemindController {
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 59);
 
-        if (Calendar.getInstance().getTimeInMillis() > calendar.getTimeInMillis()) {
+        if (System.currentTimeMillis() > calendar.getTimeInMillis()) {
             calendar.add(Calendar.DAY_OF_YEAR, 1);
         }
 
         Intent notifyIntent = new Intent(context, CustomNotifyReceiver.class);
-        //notifyIntent.putExtra("notificationID", 228);
         Log.d("DailyReminder", "enabled daily remind at: " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE));
         PendingIntent pi = PendingIntent.getBroadcast(context, 1337, notifyIntent, PendingIntent.FLAG_ONE_SHOT);
 

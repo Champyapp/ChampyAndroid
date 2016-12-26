@@ -99,17 +99,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // call here System.gc(); ?
         // call here Runtime.getRuntime().gc(); ?
 
-        File blurred = new File(path, "blurred.png");
-        if (blurred.exists()) {
-            File profile = new File(path, "profile.jpg");
-            Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(background);
-            Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);
-            Glide.with(this).load(profile).bitmapTransform(new CropCircleTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
-        }
-        else {
+        if (getIntent().getBooleanExtra("new_session", true)) {
             final String pathToPic = sessionManager.getPathToPic();
             CHDownloadImageTask chDownloadImageTask = new CHDownloadImageTask(getApplicationContext(), MainActivity.this);
             chDownloadImageTask.execute(pathToPic);
+        } else {
+            File blurred = new File(path, "blurred.png");
+            if (blurred.exists()) {
+                File profile = new File(path, "profile.jpg");
+                Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(background);
+                Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);
+                Glide.with(this).load(profile).bitmapTransform(new CropCircleTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
+            } else {
+                final String pathToPic = sessionManager.getPathToPic();
+                CHDownloadImageTask chDownloadImageTask = new CHDownloadImageTask(getApplicationContext(), MainActivity.this);
+                chDownloadImageTask.execute(pathToPic);
+            }
         }
 
         final String name = sessionManager.getUserName();
