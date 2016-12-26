@@ -19,8 +19,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true" />
 
-    <include layout="@layout/item_blur"
-        android:id="nav_blur"/>
+    <include layout="@layout/item_blur" />
 
     <TextView
         android:layout_width="wrap_content"
