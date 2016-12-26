@@ -112,32 +112,26 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+
     private boolean checkWriteExternalPermission() {
         int res = this.checkCallingOrSelfPermission(WRITE_EXTERNAL_STORAGE);
         return (res == PackageManager.PERMISSION_GRANTED);
     }
 
 
-
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK){
+        if (resultCode == RESULT_OK) {
             if (requestCode == CAMERA_REQUEST ) {
                 Bundle extras = data.getExtras();
-                // get the cropped bitmap
-                Bitmap thePic = extras.getParcelable("data");
+                Bitmap thePic = extras.getParcelable("data"); // get the cropped bitmap
                 savePhoto(thePic);
-//                Upload_photo(saveFromCamera(thePic));
                 uploadPhoto.uploadPhotoForAPI(saveFromCamera(thePic));
-
-                Intent intent = new Intent(PhotoActivity.this, SettingsActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(this, SettingsActivity.class));
             } else if (requestCode == CROP_PIC) {
                 Bundle extras = data.getExtras();
-                // get the cropped bitmap
-                Bitmap thePic = extras.getParcelable("data");
+                Bitmap thePic = extras.getParcelable("data"); // get the cropped bitmap
                 savePhoto(thePic);
-                Intent intent = new Intent(PhotoActivity.this, SettingsActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(this, SettingsActivity.class));
             } else if (requestCode == Crop.REQUEST_PICK) {
                 beginCrop(data.getData());
             } else if (requestCode == Crop.REQUEST_CROP) {
@@ -150,6 +144,7 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
                 Uri selectedImageUri = data.getData();
                 performCrop(selectedImageUri);
             }
+
         }
     }
 
@@ -239,7 +234,7 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
         File profileBlurred = new File(path, "blurred.png");
         Uri uri = Uri.fromFile(profileImage);
 
-        Bitmap blurred = Blur.blurRenderScript(getApplicationContext(), photo, 10);
+        Bitmap blurred = Blur.blurRenderScript(getApplicationContext(), photo, 15);
 
         sessionManager.change_avatar(uri.toString());
 

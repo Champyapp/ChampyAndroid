@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -65,18 +66,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             pager.preparePager(0);
         }
 
-        //blurScreen = (ImageView) findViewById(R.id.blurScreen);
-        //RelativeLayout contentMain = (RelativeLayout) findViewById(R.id.content_main);
-
         // DRAWER
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
-                //blurScreen.setVisibility(View.INVISIBLE);
                 if (isFabOpen) closeFab();
-//                actionMenu.close(true);
             }
         };
         drawer.setDrawerListener(drawerToggle);
@@ -96,25 +92,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         background.setScaleType(ImageView.ScaleType.CENTER_CROP);
         drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-        // call here System.gc(); ?
-        // call here Runtime.getRuntime().gc(); ?
 
-        if (getIntent().getBooleanExtra("new_session", true)) {
+        File blurred = new File(path, "blurred.png");
+
+        if (blurred.exists()) {
+            File profile = new File(path, "profile.jpg");
+            Glide.with(this).load(profile).bitmapTransform(new CropCircleTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
+            Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(background);
+            Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);
+        } else {
             final String pathToPic = sessionManager.getPathToPic();
             CHDownloadImageTask chDownloadImageTask = new CHDownloadImageTask(getApplicationContext(), MainActivity.this);
             chDownloadImageTask.execute(pathToPic);
-        } else {
-            File blurred = new File(path, "blurred.png");
-            if (blurred.exists()) {
-                File profile = new File(path, "profile.jpg");
-                Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(background);
-                Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);
-                Glide.with(this).load(profile).bitmapTransform(new CropCircleTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
-            } else {
-                final String pathToPic = sessionManager.getPathToPic();
-                CHDownloadImageTask chDownloadImageTask = new CHDownloadImageTask(getApplicationContext(), MainActivity.this);
-                chDownloadImageTask.execute(pathToPic);
-            }
         }
 
         final String name = sessionManager.getUserName();
@@ -184,19 +173,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 case R.id.friends:
                     Intent goToFriends = new Intent(MainActivity.this, FriendsActivity.class);
                     startActivity(goToFriends);
+                    startActivity(new Intent(this, FriendsActivity.class));
                     finish();
                     break;
                 case R.id.history:
                     Intent goToHistory = new Intent(MainActivity.this, HistoryActivity.class);
                     startActivity(goToHistory);
+                    finish();
                     break;
                 case R.id.settings:
                     Intent goToSettings = new Intent(MainActivity.this, SettingsActivity.class);
                     startActivity(goToSettings);
+                    finish();
                     break;
                 case R.id.pending_duels:
                     Intent goToPendingDuel = new Intent(MainActivity.this, PendingDuelActivity.class);
                     startActivity(goToPendingDuel);
+                    finish();
                     break;
                 case R.id.share:
                     String message = getString(R.string.share_text2);

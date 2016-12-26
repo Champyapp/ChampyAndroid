@@ -108,8 +108,8 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
     private void loadImageFromStorage(String path) {
         try {
-            File f = new File(path, "profile.jpg");
-            Uri uri = Uri.fromFile(f);
+            File profile = new File(path, "profile.jpg");
+            Uri uri = Uri.fromFile(profile);
             Glide.with(context)
                     .load(uri)
                     .bitmapTransform(new CropCircleTransformation(context))
@@ -117,15 +117,15 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
                     .skipMemoryCache(true)
                     .into((ImageView)activity.findViewById(R.id.profile_image));
 
-            File file = new File(path, "blurred.png");
-            if (file.exists()) {
+            File blurred = new File(path, "blurred.png");
+            if (blurred.exists()) {
                 return;
             } else {
-                file.createNewFile();
+                blurred.createNewFile();
 
                 /*********************************** Make Blur ************************************/
-                Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-                Bitmap bitmap = Blur.blurRenderScript(context, b, 10);
+                Bitmap b = BitmapFactory.decodeStream(new FileInputStream(profile));
+                Bitmap bitmap = Blur.blurRenderScript(context, b, 15);
                 Drawable dr = new BitmapDrawable(context.getResources(), bitmap);
                 dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
 
@@ -139,7 +139,9 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
                 drawerBackground.setImageDrawable(dr);
 
                 ImageView blurItem = (ImageView)activity.findViewById(R.id.item_blur);
-                blurItem.setVisibility(View.INVISIBLE);
+                blurItem.setVisibility(View.VISIBLE);
+                blurItem.setAlpha(0.35f);
+
 
                 /******************** Write image to OutputStream and close it ********************/
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -147,7 +149,7 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
                 bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos);
                 byte[] bitmapData = bos.toByteArray();
 
-                FileOutputStream fos = new FileOutputStream(file);
+                FileOutputStream fos = new FileOutputStream(blurred);
                 fos.write(bitmapData);
                 fos.flush();
                 fos.close();
