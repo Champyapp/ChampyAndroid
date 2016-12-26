@@ -132,9 +132,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         chBuildAnim.buildAnim(this, sessionManager, typeface);
 
         fabPlus   = (FloatingActionButton)findViewById(R.id.fabPlus);
+        fabSelf   = (FloatingActionButton)findViewById(R.id.fabSelf);
+        fabDuel   = (FloatingActionButton)findViewById(R.id.fabDuel);
         fabWakeUp = (FloatingActionButton)findViewById(R.id.fabWake);
-        fabSelf = (FloatingActionButton)findViewById(R.id.fabSelf);
-        fabDuel = (FloatingActionButton)findViewById(R.id.fabDuel);
         fab_open  = AnimationUtils.loadAnimation(this, R.anim.fab_open);
         fab_close = AnimationUtils.loadAnimation(this, R.anim.fab_close);
 

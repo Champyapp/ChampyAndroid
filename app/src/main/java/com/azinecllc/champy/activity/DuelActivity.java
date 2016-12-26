@@ -221,12 +221,10 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
     private void getChallenges() {
         DBHelper dbHelper = DBHelper.getInstance(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int clearCount = db.delete("duel", null, null);
+        db.delete("duel", null, null);
         final ContentValues cv  = new ContentValues();
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         final String token      = sessionManager.getToken();
-        final String userID     = sessionManager.getUserId();
-        Log.d("TAG", "getChallenges: userID == " + userID);
 
         com.azinecllc.champy.interfaces.SelfImprovement selfImprovement = retrofit.create(com.azinecllc.champy.interfaces.SelfImprovement.class);
 
@@ -274,17 +272,5 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-//    private class ProgressTask extends AsyncTask<Void,Void,Void> {
-//        @Override
-//        protected Void doInBackground(Void... arg0) {
-//            getChallenges();
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Void aVoid) {
-//            super.onPostExecute(aVoid);
-//        }
-//    }
 
 }

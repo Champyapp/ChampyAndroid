@@ -25,6 +25,8 @@ import com.facebook.FacebookSdk;
 
 import java.io.IOException;
 
+import static com.azinecllc.champy.utils.Constants.unixTime;
+
 /**
  * This is Wake-Up activity when our item_alarm manager starts ring
  */
@@ -92,8 +94,8 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
             case R.id.buttonWakeUpDoneForToday:
                 if (mMediaPlayer.isPlaying()) { mMediaPlayer.stop(); }
                 try {
-                    cc.doneForToday(progressID);
-                    setNewAlarmClock(details);
+                    cc.doneForToday(progressID, details, alarmID);
+                    //setNewAlarmClock(details);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -113,30 +115,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
         }
     }
 
-    /**
-     * Method for compare current time with array of alarm time.
-     * @param arrayDetails - this is our array with time for ring in seconds
-     * @value details - cleaned up our array from '[1, 2, 3]' to '1, 2, 3'
-     * @value now     - current time on the device in seconds
-     */
-    private void setNewAlarmClock(String arrayDetails) {
-        String[] details = arrayDetails.replace("[", "").replace("]", "").split(", ");
 
-        int now = (int) (System.currentTimeMillis() / 1000);
-
-        for (int i = 0; i <= details.length - 1; i++) {
-            // here details in seconds, but need in millis;
-            if (now < Integer.parseInt(details[i])) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                PendingIntent operation = PendingIntent.getBroadcast(getApplicationContext(), Integer.parseInt(alarmID), intent, 0);
-                AlarmManager aManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-                aManager.setRepeating(AlarmManager.RTC_WAKEUP, Integer.parseInt(details[i]), 24 * 60 * 60 * 1000, operation);
-                break;
-            }
-
-        }
-
-    }
 
 
     private void playSound(Context context, Uri alert) {

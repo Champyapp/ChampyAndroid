@@ -112,7 +112,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
 
 
         if (recipient.equals("true")) {
-            tvUserVsUser.setText(String.format("%s", "from " + versus)); //"from " + versus);
+            tvUserVsUser.setText(String.format("%s", "from " + versus));
             btnAccept.setVisibility(View.VISIBLE);
             btnCancel.setVisibility(View.VISIBLE);
         } else {
@@ -122,16 +122,12 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
 
         if (duration != null && !duration.isEmpty()) days = Integer.parseInt(duration) / 86400;
 
-        tvDays.setText(String.format("%s", days + " days")); //days + " days");
+        tvDays.setText(String.format("%s", days + " days"));
         tvGoal.setText(description);
         tvDays.setTypeface(typeface);
         tvGoal.setTypeface(typeface);
         tvUserVsUser.setTypeface(typeface);
         everyDayForTheNext.setTypeface(typeface);
-
-
-//        CHSetupUI chSetupUI= new CHSetupUI();
-//        chSetupUI.setupUI(view, getActivity());
 
         offlineMode = OfflineMode.getInstance();
         offlineMode.isConnectedToRemoteAPI(getActivity());
@@ -166,7 +162,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
             case R.id.btn_accept:
                 snackbar = Snackbar.make(view, getString(R.string.are_you_sure), Snackbar.LENGTH_LONG).setAction(getString(R.string.yes), vAccept -> {
                     try {
-                        if (!cc.isActive(description) && recipient.equals("true") && inProgressCount < 5) {
+                        if (!cc.isActive(description) && recipient.equals("true") && inProgressCount < 10) {
                             cc.joinToChallenge(challenge_id);
                             snackbar = Snackbar.make(vAccept, getString(R.string.challenge_created), Snackbar.LENGTH_SHORT);
                         } else {
@@ -181,7 +177,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
                 break;
 
             case R.id.btn_cancel:
-                snackbar = Snackbar.make(view, "Are you sure?", Snackbar.LENGTH_LONG).setAction("Yes", vCancel -> {
+                snackbar = Snackbar.make(view, R.string.are_you_sure, Snackbar.LENGTH_LONG).setAction(R.string.yes, vCancel -> {
                     try {
                         cc.rejectInviteForPendingDuel(challenge_id);
                         snackbar = Snackbar.make(vCancel, getString(R.string.challenge_canceled), Snackbar.LENGTH_SHORT);

@@ -236,18 +236,18 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
 
     public void savePhoto (Bitmap photo) {
         File profileImage = new File(path, "profile.jpg");
-        File profileBlured = new File(path, "blurred.png");
+        File profileBlurred = new File(path, "blurred.png");
         Uri uri = Uri.fromFile(profileImage);
 
-        Bitmap blured = Blur.blurRenderScript(getApplicationContext(), photo, 10);
+        Bitmap blurred = Blur.blurRenderScript(getApplicationContext(), photo, 10);
 
         sessionManager.change_avatar(uri.toString());
 
         FileOutputStream out = null;
         try {
-            out = new FileOutputStream(profileBlured);
-            blured.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
-            // PNG is a lossless format, the compression factor (100) is ignored
+            out = new FileOutputStream(profileBlurred);
+            blurred.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+            // PNG is a loss less format, the compression factor (100) is ignored
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -263,7 +263,7 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
         try {
             out = new FileOutputStream(profileImage);
             photo.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
-            // PNG is a lossless format, the compression factor (100) is ignored
+            // PNG is a loss less format, the compression factor (100) is ignored
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

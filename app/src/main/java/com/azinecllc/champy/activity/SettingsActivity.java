@@ -376,7 +376,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         String challengeEnd = user.get("challengeEnd");
         String newChallengeReq = user.get("newChallReq");
         String challengesForToday = user.get("challengesForToday");
-        Log.d(TAG, "initSwitches: challengesForToday: " + challengesForToday);
 
         map.put("joinedChampy", "true");
         map.put("friendRequests", "true");

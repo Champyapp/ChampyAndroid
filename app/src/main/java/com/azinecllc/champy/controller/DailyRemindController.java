@@ -32,7 +32,7 @@ public class DailyRemindController {
         Intent notifyIntent = new Intent(context, CustomNotifyReceiver.class);
         //notifyIntent.putExtra("notificationID", 228);
         Log.d("DailyReminder", "enabled daily remind at: " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE));
-        PendingIntent pi = PendingIntent.getBroadcast(context, 228, notifyIntent, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pi = PendingIntent.getBroadcast(context, 1337, notifyIntent, PendingIntent.FLAG_ONE_SHOT);
 
         AlarmManager manager = (AlarmManager)context.getSystemService(ALARM_SERVICE);
         manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 24*60*60*1000, pi);
@@ -41,7 +41,7 @@ public class DailyRemindController {
 
     public void disableDailyNotificationReminder() {
         Intent alarmIntent = new Intent(context, CustomNotifyReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 228, alarmIntent, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1337, alarmIntent, PendingIntent.FLAG_ONE_SHOT);
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
     }

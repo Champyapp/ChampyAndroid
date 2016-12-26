@@ -52,7 +52,7 @@ public class CustomNotifyReceiver extends WakefulBroadcastReceiver {
         Intent notifyIntent = new Intent(getApplicationContext(), MainActivity.class);
         notifyIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 228, notifyIntent, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 1337, notifyIntent, PendingIntent.FLAG_ONE_SHOT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext())
                 .setContentIntent(pendingIntent)
@@ -63,7 +63,7 @@ public class CustomNotifyReceiver extends WakefulBroadcastReceiver {
                 .setContentText("Time to improve yourself")
                 .setAutoCancel(true).setWhen(System.currentTimeMillis());
 
-        notificationManager.notify(228, builder.build());
+        notificationManager.notify(1337, builder.build());
     }
 
 

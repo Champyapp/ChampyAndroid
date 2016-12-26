@@ -74,7 +74,7 @@ public class ChallengeController {
 
 
 
-    public void createNewSelfImprovementChallenge(final String description, int days) {
+    public void createNewSelfImprovementChallenge(String description, int days) {
         final String duration = "" + (days * 86400);
         final String details = description + " during this period: " + days + " days";
 
@@ -120,7 +120,7 @@ public class ChallengeController {
 
 
 
-    public void createNewDuelChallenge(final String name, int days, final String friend_id) {
+    public void createNewDuelChallenge(String name, int days, String friend_id) {
         final String duration = String.valueOf(days * 86400);
         final String details = name + " during this period: " + days + " days";
 
@@ -145,7 +145,7 @@ public class ChallengeController {
 
     }
 
-    public void sendSingleInProgressForDuel(final String challenge, final String friend_id) {
+    public void sendSingleInProgressForDuel(String challenge, String friend_id) {
 
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
         Call<Duel> call = singleinprogress.startDuel(friend_id, challenge, token);
@@ -196,10 +196,10 @@ public class ChallengeController {
         final String[] details = new String[days];
         for (int i = 0; i < days; i++) {
             details[i] = String.valueOf(
-                      (intMin  * 60)
+                    currentMidnight
+                    + (intMin  * 60)
                     + (intHour * 60 * 60)
                     + (i * (24 * 60 * 60))
-                    + currentMidnight
             );
         }
 
@@ -241,7 +241,7 @@ public class ChallengeController {
         Log.d(TAG, "sendSingleInProgressForWakeUp: date for ring: " + c.getTime());
 
 
-        if (Calendar.getInstance().getTimeInMillis() > c.getTimeInMillis()) {
+        if (unixTime > c.getTimeInMillis()) {
             Log.d(TAG, "sendSingleInProgressForWakeUp: now > input. need to add one day");
             Log.d(TAG, "sendSingleInProgressForWakeUp: " + System.currentTimeMillis() + " > " + c.getTimeInMillis());
             c.add(Calendar.DAY_OF_YEAR, 1);
@@ -287,7 +287,7 @@ public class ChallengeController {
 
 
 
-    public void joinToChallenge(final String inProgressId) {
+    public void joinToChallenge(String inProgressId) {
         SingleInProgress singleInProgress = retrofit.create(SingleInProgress.class);
 
         Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = singleInProgress.join(inProgressId, token);
@@ -328,7 +328,7 @@ public class ChallengeController {
 
 
 
-    public void doneForToday(final String inProgressId) throws IOException {
+    public void doneForToday(String inProgressId, String details, String alarmID) throws IOException {
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
 
         Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = activeInProgress.checkChallenge(inProgressId, token);
@@ -336,6 +336,11 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
+                    String type = response.body().getData().getChallenge().getType();
+                    if (type.equals("Wake Up")) {
+                        setNewAlarmClock(details, alarmID);
+                    }
+
                     generateCardsForMainActivity(new Intent(firstActivity, MainActivity.class));
                 }
             }
@@ -347,7 +352,7 @@ public class ChallengeController {
         });
     }
 
-    public void give_up(final String id, final int alarmID, Intent intent) throws IOException {
+    public void give_up(String id, int alarmID, Intent intent) throws IOException {
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
         Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = activeInProgress.surrender(id, token);
 
@@ -535,7 +540,31 @@ public class ChallengeController {
     }
 
 
+    /**
+     * Method for compare current time with array of alarm time.
+     * @param arrayDetails - this is our array with time for ring in seconds
+     * @value details - cleaned up our array from '[1, 2, 3]' to '1, 2, 3'
+     * @value now     - current time on the device in seconds
+     */
+    private void setNewAlarmClock(String arrayDetails, String alarmID) {
+        String[] details = arrayDetails.replace("[", "").replace("]", "").split(", ");
 
+        //int now = (int) (System.currentTimeMillis() / 1000);
+
+        for (int i = 0; i <= details.length - 1; i++) {
+            // here details in seconds, but need in millis;
+            Log.d(TAG, "setNewAlarmClock: details: " + details[i]);
+            if (unixTime < Integer.parseInt(details[i])) {
+                Intent intent = new Intent(context, MainActivity.class);
+                PendingIntent operation = PendingIntent.getBroadcast(context, Integer.parseInt(alarmID), intent, 0);
+                AlarmManager aManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+                aManager.setRepeating(AlarmManager.RTC_WAKEUP, Integer.parseInt(details[i]), 24 * 60 * 60 * 1000, operation);
+                break;
+            }
+
+        }
+
+    }
 
 
     // method for check is active challenge self / button_duel
