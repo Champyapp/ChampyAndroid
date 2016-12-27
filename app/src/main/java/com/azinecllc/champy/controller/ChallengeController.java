@@ -73,7 +73,16 @@ public class ChallengeController {
     }
 
 
-
+    /**
+     * Method for create new Self-Improvement challenge and send call to API with Retrofit2.
+     * We create new challenge and try to send it 'in progress'. This is only for custom cards.
+     * @param description - this is value of challenge description. We get it from EditText in
+     *                    SelfImprovementFragment.class Of course we check if this value
+     *                    isActive or isEmpty
+     * @param days - this is count of duration by challenge. Like with 'description': we get value
+     *             from EditText and pass value here. After that we convert current value of days
+     *             to UnixTime because API works only with it and push it up.
+     */
     public void createNewSelfImprovementChallenge(String description, int days) {
         final String duration = "" + (days * 86400);
         final String details = description + " during this period: " + days + " days";
@@ -99,6 +108,16 @@ public class ChallengeController {
 
     }
 
+    /**
+     * Method which get data from 'createNewSelfImprovementChallenge' and sending it 'in
+     * progress' if this is custom cards. In others case we just try to send standard card with
+     * standard values 'in progress'.
+     * @param challenge - this is value of challenge description. In case when we send standard
+     *                  card we only check for 'isActive', count of day and other value is constant.
+     *                  If this challenge is not active then we can send. In case when we continue
+     *                  logic operation from 'create new sic' we just provide any exist description
+     *                  from this method.
+     */
     public void sendSingleInProgressForSelf(String challenge) {
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
 
@@ -542,16 +561,16 @@ public class ChallengeController {
     }
 
 
-
     /**
      * Method for compare current time with 'i-element' in array of alarm time.
-     * @param arrayDetails - this is our array with time for ring in seconds. When user has select
-     *                     time and count of days for Wake-Up challenge then we get this data and
-     *                     convert time in UnixTime and multiply for N-days. After this operation
-     *                     we had an array with time for ring. We had named it 'description' but
-     *                     only for Wake-Up (be care with it). In this method we put in our array
-     *                     in 'for' to compare current time with ours elements inside array
-     *
+     * @param arrayDetails - this is our array with time for alarm in seconds. When user has
+     *                     selected time and count of days for Wake-Up challenge then we take this
+     *                     data and convert this time in UnixTime and multiply for N-days.
+     *                     After this operation we have an array with time for alarm. We had
+     *                     named it 'description' but only for Wake-Up (be care with it). In this
+     *                     method we put in our array 'for' to compare current time with elements
+     *                     inside array. If current time is more than 'i[0]' then we get next 'i'
+     *                     and do it while current time will be smaller than i[n];
      *
      * @value details - cleaned up our array from '[1, 2, 3]' to '1, 2, 3'
      * @value now     - current time on the device in seconds
