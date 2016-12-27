@@ -1,7 +1,6 @@
 package com.azinecllc.champy.helper;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.azinecllc.champy.interfaces.NewUser;
 import com.azinecllc.champy.model.user.Data;

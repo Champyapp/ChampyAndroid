@@ -1,9 +1,6 @@
 package com.azinecllc.champy.activity;
 
-import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -32,14 +29,10 @@ import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.controller.DailyRemindController;
 import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.helper.CHCheckPendingDuels;
-import com.azinecllc.champy.interfaces.SingleInProgress;
 import com.azinecllc.champy.interfaces.Update_user;
-import com.azinecllc.champy.model.single_in_progress.Challenge;
-import com.azinecllc.champy.model.single_in_progress.Data;
 import com.azinecllc.champy.model.user.Delete;
 import com.azinecllc.champy.model.user.Profile_data;
 import com.azinecllc.champy.model.user.User;
-import com.azinecllc.champy.receiver.AlarmReceiver;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
 import com.bumptech.glide.Glide;
@@ -48,7 +41,6 @@ import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -61,7 +53,6 @@ import retrofit.Retrofit;
 
 import static com.azinecllc.champy.utils.Constants.API_URL;
 import static com.azinecllc.champy.utils.Constants.path;
-import static com.azinecllc.champy.utils.Constants.typeWake;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
 

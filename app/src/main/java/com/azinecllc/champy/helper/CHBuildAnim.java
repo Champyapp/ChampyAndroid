@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.utils.SessionManager;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 /**
  * this is class helper for create animation, set right size of circles, count, alpha of animation,

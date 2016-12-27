@@ -1,4 +1,4 @@
-package com.azinecllc.champy.champy_v2;
+package com.azinecllc.champy;
 
 import org.junit.Test;
 

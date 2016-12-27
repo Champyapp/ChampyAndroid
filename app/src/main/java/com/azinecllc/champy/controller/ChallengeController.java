@@ -26,13 +26,11 @@ import com.azinecllc.champy.model.duel.Duel;
 import com.azinecllc.champy.model.single_in_progress.Data;
 import com.azinecllc.champy.receiver.AlarmReceiver;
 import com.azinecllc.champy.utils.Constants;
-import com.azinecllc.champy.utils.OfflineMode;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -621,7 +619,7 @@ public class ChallengeController {
      * @value details - cleaned up our array from '[1, 2, 3]' to '1, 2, 3'
      * @value now     - current time on the device in seconds
      */
-    private void setNewAlarmClock(String arrayDetails, String alarmID) {
+    public void setNewAlarmClock(String arrayDetails, String alarmID) {
         String[] details = arrayDetails.replace("[", "").replace("]", "").split(", ");
 
         //int now = (int) (System.currentTimeMillis() / 1000);

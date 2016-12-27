@@ -30,7 +30,7 @@ public class CHImageModule {
 
     private final Context context;
 
-    public CHImageModule(Context context){
+    public CHImageModule(Context context) {
         this.context = context;
     }
 

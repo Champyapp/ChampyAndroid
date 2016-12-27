@@ -68,9 +68,9 @@ public class CHMakeResponsiveScore {
 //        fabWake.getLayoutParams().width  = x*20;
 //        fabWake.getLayoutParams().height = x*20;
 
-        /*imageView = (ImageView)findViewById(R.id.profile_image);
-        imageView.getLayoutParams().width = x*25;
-        imageView.getLayoutParams().height = x*25;*/
+//        imageView = (ImageView)findViewById(R.id.profile_image);
+//        imageView.getLayoutParams().width = x*25;
+//        imageView.getLayoutParams().height = x*25;
 
         //--------------------------- Score ----------------------------//
 //        Float y = x*(float)5;

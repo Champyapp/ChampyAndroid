@@ -1,4 +1,4 @@
-package com.azinecllc.champy.champy_v2.SelfImprovement;
+package com.azinecllc.champy.SelfImprovement;
 
 import com.azinecllc.champy.interfaces.SingleInProgress;
 import com.azinecllc.champy.model.create_challenge.CreateChallenge;

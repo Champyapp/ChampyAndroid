@@ -1,8 +1,6 @@
 package com.azinecllc.champy.activity;
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -24,8 +22,6 @@ import com.azinecllc.champy.utils.SessionManager;
 import com.facebook.FacebookSdk;
 
 import java.io.IOException;
-
-import static com.azinecllc.champy.utils.Constants.unixTime;
 
 /**
  * This is Wake-Up activity when our item_alarm manager starts ring
