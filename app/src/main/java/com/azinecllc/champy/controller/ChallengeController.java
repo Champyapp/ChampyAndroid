@@ -109,19 +109,20 @@ public class ChallengeController {
     }
 
     /**
-     * Method which get data from 'createNewSelfImprovementChallenge' and sending it 'in
-     * progress' if this is custom cards. In others case we just try to send standard card with
+     * Method which get data from 'createNewSelfImprovementChallenge' in case if this is custom card
+     * and sending it 'in progress'. In others case we just try to send ID from standard card with
      * standard values 'in progress'.
-     * @param challenge - this is value of challenge description. In case when we send standard
-     *                  card we only check for 'isActive', count of day and other value is constant.
-     *                  If this challenge is not active then we can send. In case when we continue
-     *                  logic operation from 'create new sic' we just provide any exist description
-     *                  from this method.
+     * @param inProgressID - this is unique challenge ID. In case when we create standard challenge
+     *                     we just put in unique inProgressID after this we can make call to API
+     *                     for create this challenge. In other case when we create custom card we
+     *                     need to create new self-improvement challenge with user description and
+     *                     count of days for challenge. After this operation we can get 'inProgressID'
+     *                     and with that we can sent it to API
      */
-    public void sendSingleInProgressForSelf(String challenge) {
+    public void sendSingleInProgressForSelf(String inProgressID) {
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
 
-        Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = singleinprogress.startSingleInProgress(challenge, token);
+        Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = singleinprogress.startSingleInProgress(inProgressID, token);
         call.enqueue(new Callback<com.azinecllc.champy.model.single_in_progress.SingleInProgress>() {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
@@ -139,13 +140,24 @@ public class ChallengeController {
 
 
 
-    public void createNewDuelChallenge(String name, int days, String friend_id) {
+    /**
+     * Method for create new Duel challenge and make call to API with Retrofit2.
+     * We create new challenge and try to sent it 'in progress'. This is only for custom cards.
+     * @param description - this is value of challenge description. We get it from EditText in
+     *                    DuelFragment.class, before sending we check if this value isActive or Empty
+     * @param days - this is count of duration by challenge. Like with 'description': we get value
+     *             from EditText and pass value here. After that we convert current value of days
+     *             to UnixTime because API works only with it and push it up.
+     * @param friend_id - this is userID with whom we want to make a duel. this is ID has generated
+     *                  when user create his account. (this is friend from Facebook)
+     */
+    public void createNewDuelChallenge(String description, int days, String friend_id) {
         final String duration = String.valueOf(days * 86400);
-        final String details = name + " during this period: " + days + " days";
+        final String details = description + " during this period: " + days + " days";
 
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
         Call<com.azinecllc.champy.model.create_challenge.CreateChallenge> call = createChallenge
-                .createChallenge(name, typeDuel, name, details, duration, token);
+                .createChallenge(description, typeDuel, description, details, duration, token);
 
         call.enqueue(new Callback<com.azinecllc.champy.model.create_challenge.CreateChallenge>() {
             @Override
@@ -164,10 +176,21 @@ public class ChallengeController {
 
     }
 
-    public void sendSingleInProgressForDuel(String challenge, String friend_id) {
+    /**
+     * Method which get data from 'createNewDuelChallenge' in case if this is custom card and sending
+     * it 'in progress'. In others case we just try to send ID from standard card with standard values.
+     * @param inProgressID - this is unique challenge ID. in case when we create standard cahllenge
+     *                     we just put in unique inProgressID after this we can make call to API
+     *                     for create this challenge. In others case when we create custom card we
+     *                     need to create new 'Duel challenge' with description, count of days and
+     *                     friends id. After this operation we can get 'inProgressID' and make call.
+     * @param friend_id - this is userID with whom we want to make a duel. this is ID has generated
+     *                  when user create his account. (this is friend from Facebook)
+     */
+    public void sendSingleInProgressForDuel(String inProgressID, String friend_id) {
 
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
-        Call<Duel> call = singleinprogress.startDuel(friend_id, challenge, token);
+        Call<Duel> call = singleinprogress.startDuel(friend_id, inProgressID, token);
         call.enqueue(new Callback<Duel>() {
             @Override
             public void onResponse(Response<Duel> response, Retrofit retrofit) {
@@ -198,6 +221,17 @@ public class ChallengeController {
 
 
 
+    /**
+     * Method for create new Wake-Up challenge, send this challenge to API after check, and transmit
+     * needed values to method 'sendSingleInProgressForWakeUp'. We get data from TimePicker and calculate
+     * current Midnight, create calendar we needed time for ring and create an array with time for ring
+     * @param days - this is custom value of challenge duration which user has chosen. This is simple
+     *             integer which we use like a range for array. Also we convert this count in UnixTime
+     *             for APi
+     * @param sHour - we get this value from time picker and convert from 1:8 to 01:08 if value lower
+     *              than 10. Also we use this value for alarmID and calendar.
+     * @param sMinute - all description is equal to @sHour
+     */
     public void createNewWakeUpChallenge(int days, String sHour, String sMinute) {
         final String duration   = String.format("%s", days * oneDay);
         final String wakeUpName = "Wake up at " + sHour + ":" + sMinute;
@@ -242,7 +276,19 @@ public class ChallengeController {
         });
     }
 
-    private void sendSingleInProgressForWakeUp(String chall, int alarmID, int min, int hour, String[] det) {
+    /**
+     * Private Method for send Wake-Up challenge 'in progress'. Here we get data from our method
+     * 'createNewWakeUpChallenge', create AlarmManager for daily ring, convert time for API, and
+     * sending extras for AlarmReceiver. After that all operation we generate cards for MainActivity.
+     * @param inProgressID - our unique 'ID' for create new challenge, we get this value from
+     *                     'createNewWakeUpChallenge' and transit here.
+     * @param alarmID - values from time picker: minutes and hour. To start we get this, convert to
+     *                normal view (means from 1:8 to 01:08) and put inside alarmManager like ID.
+     * @param min - minutes from time picker. We transmit this from last method.
+     * @param hour - hours from time picker. We transmit this from last method.
+     * @param det - an array with time for alarm (in seconds). Size of array has generated by day count.
+     */
+    private void sendSingleInProgressForWakeUp(String inProgressID, int alarmID, int min, int hour, String[] det) {
         Calendar c = GregorianCalendar.getInstance();
         final long currentMidnight = unixTime
                 - (c.get(Calendar.HOUR_OF_DAY) * 60 * 60)
@@ -271,7 +317,7 @@ public class ChallengeController {
         Log.d(TAG, "sendSingleInProgressForWakeUp: time for ring: " + userInputTime);
 
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
-        Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = singleinprogress.startSingleInProgress(chall, token);
+        Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = singleinprogress.startSingleInProgress(inProgressID, token);
         call.enqueue(new Callback<com.azinecllc.champy.model.single_in_progress.SingleInProgress>() {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
