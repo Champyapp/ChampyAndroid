@@ -223,7 +223,9 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
             finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
             out.flush();
             out.close();
-        } catch (Exception e) {e.printStackTrace();}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return (Uri.fromFile(file).getPath());
     }

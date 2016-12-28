@@ -30,11 +30,8 @@ import java.util.List;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import retrofit.Call;
 import retrofit.Callback;
-import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
-
-import static com.azinecllc.champy.utils.Constants.API_URL;
 
 public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> {
 

@@ -91,7 +91,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
                 if (mMediaPlayer.isPlaying()) { mMediaPlayer.stop(); }
                 try {
                     cc.doneForToday(progressID, details, alarmID);
-                    //setNewAlarmClock(details);
+                    finish();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -102,6 +102,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
                 if (mMediaPlayer.isPlaying()) { mMediaPlayer.stop(); }
                 try {
                     cc.give_up(progressID, Integer.parseInt(alarmID), new Intent(this, MainActivity.class));
+                    finish();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

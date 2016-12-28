@@ -248,10 +248,9 @@ public class ChallengeController {
         for (int i = 0; i < days; i++) {
             details[i] = String.valueOf(
                     currentMidnight
-                    + (intMin  * 60)
-                    + (intHour * 60 * 60)
-                    + (i * (24 * 60 * 60))
-            );
+                            + (intMin  * 60)
+                            + (intHour * 60 * 60)
+                            + (i * (24 * 60 * 60)));
         }
 
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
@@ -292,17 +291,10 @@ public class ChallengeController {
                 - (c.get(Calendar.HOUR_OF_DAY) * 60 * 60)
                 - (c.get(Calendar.MINUTE) * 60)
                 - (c.get(Calendar.SECOND));
-        Log.d(TAG, "sendSingleInProgressForWakeUp: currentMidnight: " + currentMidnight);
 
         Date date = new Date();
-        date.setTime(
-                ( (min  * 60)
-                + (hour * 60 * 60)
-                + currentMidnight)
-                * 1000);
+        date.setTime(((min  * 60) + (hour * 60 * 60) + currentMidnight) * 1000);
         c.setTime(date); // set date for calendar. now our calendar has a right time for ring
-        Log.d(TAG, "sendSingleInProgressForWakeUp: date for ring: " + c.getTime());
-
 
         if (unixTime > c.getTimeInMillis()) {
             Log.d(TAG, "sendSingleInProgressForWakeUp: now > input. need to add one day");

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +14,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.DuelActivity;
 import com.azinecllc.champy.interfaces.CustomItemClickListener;
@@ -24,6 +21,8 @@ import com.azinecllc.champy.model.FriendModel;
 import com.azinecllc.champy.utils.Constants;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
