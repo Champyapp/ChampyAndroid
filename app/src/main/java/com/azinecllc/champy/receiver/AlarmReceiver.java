@@ -17,7 +17,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
     @Override
     public void onReceive(final Context context, Intent intent) {
         try {
-            FacebookSdk.sdkInitialize(getApplicationContext());
+            FacebookSdk.sdkInitialize(context);
         } catch (RuntimeException e) {
             Log.e(TAG, "onReceive: I Hate Facebook: " + e);
             e.printStackTrace();

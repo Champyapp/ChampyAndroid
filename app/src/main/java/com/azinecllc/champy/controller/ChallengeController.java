@@ -54,21 +54,23 @@ import static java.lang.Math.round;
 
 public class ChallengeController {
 
+    private static final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
     private static final String TAG = "ChallengeController";
-    private String token, userId;
+    private String token, userID;
+    private Activity activity;
     private Context context;
-    private Activity firstActivity;
-    private Retrofit retrofit;
-
+    //private Retrofit retrofit;
 
 
     public ChallengeController(Context mContext, Activity activity, String uToken, String uID) {
-        context = mContext;
-        firstActivity = activity;
-        token = uToken;
-        userId = uID;
-        this.retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        this.activity = activity;
+        this.context = mContext;
+        this.token = uToken;
+        this.userID = uID;
+        //this.retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
     }
+
+    public ChallengeController() {}
 
 
     /**
@@ -87,7 +89,14 @@ public class ChallengeController {
 
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
         Call<com.azinecllc.champy.model.create_challenge.CreateChallenge> call = createChallenge
-                .createChallenge("User_Challenge", typeSelf, description, details, duration, token);
+                .createChallenge(
+                        "User_Challenge",
+                        typeSelf,
+                        description,
+                        details,
+                        duration,
+                        token
+                );
 
         call.enqueue(new Callback<com.azinecllc.champy.model.create_challenge.CreateChallenge>() {
             @Override
@@ -100,7 +109,7 @@ public class ChallengeController {
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
             }
         });
 
@@ -125,13 +134,13 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    generateCardsForMainActivity(new Intent(firstActivity, MainActivity.class));
+                    generateCardsForMainActivity(new Intent(activity, MainActivity.class));
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -168,7 +177,7 @@ public class ChallengeController {
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
             }
         });
 
@@ -206,13 +215,13 @@ public class ChallengeController {
                     db.insert("updated", null, cv);
                     //////////////////////////////////////////////////
 
-                    refreshCardsForPendingDuel(new Intent(firstActivity, MainActivity.class));
+                    refreshCardsForPendingDuel(new Intent(activity, MainActivity.class));
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -268,7 +277,7 @@ public class ChallengeController {
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -315,24 +324,24 @@ public class ChallengeController {
                     com.azinecllc.champy.model.single_in_progress.SingleInProgress data = response.body();
                     final String inProgressId = data.getData().get_id();
 
-                    Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
+                    Intent myIntent = new Intent(activity, AlarmReceiver.class);
                     myIntent.putExtra("inProgressID", inProgressId);
                     myIntent.putExtra("alarmID", String.valueOf(alarmID));
                     myIntent.putExtra("details", Arrays.toString(det));
 
 
-                    PendingIntent pi = PendingIntent.getBroadcast(firstActivity, alarmID, myIntent, 0);
+                    PendingIntent pi = PendingIntent.getBroadcast(activity, alarmID, myIntent, 0);
                     AlarmManager aManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                     aManager.setRepeating(AlarmManager.RTC_WAKEUP, userInputTime, 24*60*60*1000, pi);
 
 
-                    generateCardsForMainActivity(new Intent(firstActivity, MainActivity.class));
+                    generateCardsForMainActivity(new Intent(activity, MainActivity.class));
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
             }
 
         });
@@ -350,13 +359,13 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    refreshCardsForPendingDuel(new Intent(firstActivity, MainActivity.class));
+                    refreshCardsForPendingDuel(new Intent(activity, MainActivity.class));
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -369,13 +378,13 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()){
-                    refreshCardsForPendingDuel(new Intent(firstActivity, MainActivity.class));
+                    refreshCardsForPendingDuel(new Intent(activity, MainActivity.class));
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -396,13 +405,13 @@ public class ChallengeController {
                         setNewAlarmClock(details, alarmID);
                     }
 
-                    generateCardsForMainActivity(new Intent(firstActivity, MainActivity.class));
+                    generateCardsForMainActivity(new Intent(activity, MainActivity.class));
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -420,20 +429,20 @@ public class ChallengeController {
 
                     if (type.equals(typeWake)) {
                         //if this is "wake up" challenge then stop alarm manager;
-                        Intent myIntent = new Intent(firstActivity, AlarmReceiver.class);
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast(firstActivity, alarmID, myIntent, 0);
+                        Intent myIntent = new Intent(activity, AlarmReceiver.class);
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(activity, alarmID, myIntent, 0);
                         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                         alarmManager.cancel(pendingIntent);
                     }
 
-                    generateCardsForMainActivity(intent);
+                    if (intent != null) { generateCardsForMainActivity(intent); }
 
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
             }
         });
 
@@ -448,11 +457,9 @@ public class ChallengeController {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.delete("pending_duel", null, null);
 
-        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
 
-        Call<com.azinecllc.champy.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userId, update, token);
+        Call<com.azinecllc.champy.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userID, update, token);
         call1.enqueue(new Callback<com.azinecllc.champy.model.active_in_progress.ActiveInProgress>() {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
@@ -470,8 +477,8 @@ public class ChallengeController {
                             String inProgressId = datum.get_id();
                             String challengeDescription = challenge.getDescription();
                             int challengeDuration = challenge.getDuration();
-                            String versus = (userId.equals(recipient.getId())) ? sender.getName() : recipient.getName();
-                            String mRecipient = (userId.equals(recipient.getId())) ? "true" : "false";
+                            String versus = (userID.equals(recipient.getId())) ? sender.getName() : recipient.getName();
+                            String mRecipient = (userID.equals(recipient.getId())) ? "true" : "false";
 
                             cv.put("versus",       versus);
                             cv.put("recipient",    mRecipient);
@@ -491,7 +498,7 @@ public class ChallengeController {
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(firstActivity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -501,9 +508,9 @@ public class ChallengeController {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
         db.delete("myChallenges", null, null);
-        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        //retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
-        Call<com.azinecllc.champy.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userId, update, token);
+        Call<com.azinecllc.champy.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userID, update, token);
         call1.enqueue(new Callback<com.azinecllc.champy.model.active_in_progress.ActiveInProgress>() {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
@@ -530,11 +537,11 @@ public class ChallengeController {
                         String challType = (challenge_type.equals(typeSelf)) ? "Self-Improvement"
                                          : (challenge_type.equals(typeDuel)) ? "Duel" : "Wake Up";
                         String versus    = (challenge_type.equals(typeDuel))
-                                         ? (userId.equals(sender.get_id())   ? recipient.getName()
+                                         ? (userID.equals(sender.get_id())   ? recipient.getName()
                                          : sender.getName()) : "notDuel";
 
 
-                        if (userId.equals(sender.get_id())) {
+                        if (userID.equals(sender.get_id())) {
                             progress = datum.getSenderProgress();
                             needsToCheck = datum.getNeedsToCheckSender();
                             cv.put("recipient", "false");
@@ -552,13 +559,54 @@ public class ChallengeController {
                             constDuration = String.valueOf(constDays);
                         }
 
+                        long progressMidnight = 0;
                         String prog[] = new String[progress.size()];
                         for (int j = 0; j < progress.size(); j++) {
                             try {
                                 JSONObject json = new JSONObject(progress.get(j).toString());
                                 long at = json.getLong("at");
                                 prog[j] = String.valueOf(at);
-                                // TODO: 12/13/16 Relocate last check-in time for auto surrender here.
+                                long myProgress = Long.parseLong(prog[j]);
+
+                                if (challenge_status.equals("started")) {
+                                    if (myProgress != 0) {
+                                        Date date = new Date(myProgress * 1000);
+                                        progressMidnight = myProgress
+                                                - (date.getHours() * 60 * 60)
+                                                - (date.getMinutes() * 60)
+                                                - (date.getSeconds());
+                                    }
+                                    if (myProgress != 0 && unixTime > progressMidnight + oneDay + oneDay) {
+                                        try {
+                                            // also i can try put in real intent; think about it again.
+                                            int alarmID = (challenge_type.equals("Wake Up")) ? Integer.parseInt(challenge_description) : 0;
+                                            give_up(challenge_id, alarmID, null);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+
+                                /**
+                                 * if (myProgress != 0L && now > progressMidNight + oneDay) {
+
+                                     if (!itemType.equals("Wake Up")) {
+                                        tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
+                                        buttonShare.setVisibility(View.INVISIBLE);
+                                        buttonDone.setVisibility(View.VISIBLE);
+                                     }
+
+                                     if (now > progressMidNight + oneDay + oneDay) {
+                                         try {
+                                            int i = (itemType.equals("Wake Up")) ? Integer.parseInt(currentCard.getWakeUpTime()) : 0;
+                                            cc.give_up(itemInProgressId, i, new Intent(getContext(), MainActivity.class));
+                                         } catch (IOException | NumberFormatException e) {
+                                            e.printStackTrace();
+                                         }
+                                     }
+                                 }
+                                 */
+                                Log.i(TAG, "onResponse: last check in: " + prog[j]);
                             } catch (JSONException e) { e.printStackTrace(); }
                         }
 
@@ -575,12 +623,14 @@ public class ChallengeController {
                         cv.put("myProgress",    Arrays.toString(prog)); // last update time in millis
                         cv.put("constDuration", constDuration);         // our constant value of challenge duration
                         cv.put("needsToCheck",  needsToCheck);          // method for check challenge for "needToCheck"
-                        db.insert("myChallenges", null, cv);            // db when we store all ic_score_progress and information about them
+                        db.insert("myChallenges", null, cv);            // db when we store all in progress and information about them
+
                     }
-                    //Intent intent = new Intent(firstActivity, MainActivity.class);
+
                     if (intent != null) {
-                        firstActivity.startActivity(intent);
+                        activity.startActivity(intent);
                     }
+
                 }
             }
 
@@ -669,37 +719,5 @@ public class ChallengeController {
         return ok;
     }
 
-//    /**
-//     * This is specific method for check only 'Wake-Up' challenge by alarm time.
-//     * @param time - this is unique value from method 'createWakeUpChallenge'. When user pick up time
-//     *               for Wake-Up challenge we separately take 'hour' and 'minutes' we need to
-//     *               ring with our alarm manager. We get this from our DataBase: myDB, table: myChallenges, row: description.
-//     * @return
-//     */
-//    public boolean isActiveWakeUp(String time) {
-//        // method for check is active challenge for wake up
-//        boolean ok = true;
-//        DBHelper dbHelper = DBHelper.getInstance(context);
-//        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-//        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-//        if (c.moveToFirst()) {
-//            int colDescription = c.getColumnIndex("description");
-//            int status = c.getColumnIndex("status");
-//            do {
-//                try {
-//                    if (c.getString(status).equals("started")) {
-//                        if (c.getString(colDescription).equals(time)) {
-//                            ok = false;
-//                            break;
-//                        }
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            } while (c.moveToNext());
-//        }
-//        c.close();
-//        return ok;
-//    }
 
 }

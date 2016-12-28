@@ -18,6 +18,7 @@ import com.azinecllc.champy.activity.FriendsActivity;
 import com.azinecllc.champy.activity.HistoryActivity;
 import com.azinecllc.champy.activity.PendingDuelActivity;
 import com.azinecllc.champy.activity.RoleControllerActivity;
+import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.helper.CHLoadUserProgressBarInfo;
 import com.azinecllc.champy.interfaces.ActiveInProgress;
@@ -116,8 +117,9 @@ public class MyGcmListenerService extends GcmListenerService {
                 historyIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 historyIntent.putExtra("win_request", "true");
 
-                refreshPendingDuels();
-                generateCardsForMainActivity(sessionManager.getToken(), sessionManager.getUserId());
+                ChallengeController cc = new ChallengeController();
+                cc.refreshCardsForPendingDuel(historyIntent);
+                //generateCardsForMainActivity(sessionManager.getToken(), sessionManager.getUserId());
 
                 notifyChallenges(historyIntent, message);
                 break;

@@ -28,8 +28,7 @@ public class DailyRemindController {
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 59);
 
-        System.out.println("System.currentTimeMillis: " + System.currentTimeMillis()
-                       + "\ncalender.currentInMillis: " + calendar.getTimeInMillis());
+        System.out.println("System.currentTimeMillis: " + System.currentTimeMillis() + "\ncalender.currentInMillis: " + calendar.getTimeInMillis());
         if (System.currentTimeMillis() > calendar.getTimeInMillis()) {
             System.out.println("System time > Needed time for remind");
             calendar.add(Calendar.DAY_OF_YEAR, 1);
@@ -39,7 +38,7 @@ public class DailyRemindController {
         PendingIntent pi = PendingIntent.getBroadcast(context, 1337, notifyIntent, PendingIntent.FLAG_ONE_SHOT);
 
         AlarmManager manager = (AlarmManager)context.getSystemService(ALARM_SERVICE);
-        manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 24*60*60*1000, pi);
+        manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pi);
     }
 
 

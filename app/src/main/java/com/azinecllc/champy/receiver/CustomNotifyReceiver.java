@@ -3,6 +3,7 @@ package com.azinecllc.champy.receiver;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -19,7 +20,7 @@ import com.facebook.FacebookSdk;
 import static android.content.Context.NOTIFICATION_SERVICE;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class CustomNotifyReceiver extends WakefulBroadcastReceiver {
+public class CustomNotifyReceiver extends BroadcastReceiver {
 
     public final String TAG = "CustomNotifyReceiver";
 
@@ -36,10 +37,10 @@ public class CustomNotifyReceiver extends WakefulBroadcastReceiver {
 
         SessionManager sessionManager = SessionManager.getInstance(context);
         if (sessionManager.isUserLoggedIn()) {
-            sendNotification();
+            sendNotification(context);
             Log.d(TAG, "onReceive: send notification");
-            DailyRemindController daily = new DailyRemindController(context);
-            daily.enableDailyNotificationReminder();
+//            DailyRemindController daily = new DailyRemindController(context);
+//            daily.enableDailyNotificationReminder();
         } else {
             Log.d(TAG, "onReceive: can't send notification: not logged in");
         }
@@ -47,14 +48,14 @@ public class CustomNotifyReceiver extends WakefulBroadcastReceiver {
     }
 
 
-    private void sendNotification() {
-        NotificationManager notificationManager = (NotificationManager)getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
-        Intent notifyIntent = new Intent(getApplicationContext(), MainActivity.class);
+    private void sendNotification(Context context) {
+        NotificationManager notificationManager = (NotificationManager)context.getSystemService(NOTIFICATION_SERVICE);
+        Intent notifyIntent = new Intent(context, MainActivity.class);
         notifyIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 1337, notifyIntent, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 1337, notifyIntent, PendingIntent.FLAG_ONE_SHOT);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext())
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(R.drawable.ic_score_total)
                 .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
