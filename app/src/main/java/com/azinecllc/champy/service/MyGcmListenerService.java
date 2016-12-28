@@ -89,6 +89,7 @@ public class MyGcmListenerService extends GcmListenerService {
         Log.d(TAG, title);
         Intent friendsIntent = new Intent(this, FriendsActivity.class);
         friendsIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        ChallengeController cc;
         switch (title) {
             case "Friend Request Confirmed":
                 friendsIntent.putExtra("friend_request", "friend_request_confirmed");
@@ -104,7 +105,8 @@ public class MyGcmListenerService extends GcmListenerService {
                 break;
             case "Challenge request":
                 Intent goToPendingDuels = new Intent(MyGcmListenerService.this, PendingDuelActivity.class);
-                refreshPendingDuels();
+                cc  = new ChallengeController();
+                cc.refreshCardsForPendingDuel(goToPendingDuels);
                 notifyChallenges(goToPendingDuels, message);
                 break;
             case "Challenge accepted":
@@ -116,8 +118,7 @@ public class MyGcmListenerService extends GcmListenerService {
                 Intent historyIntent = new Intent(this, HistoryActivity.class);
                 historyIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 historyIntent.putExtra("win_request", "true");
-
-                ChallengeController cc = new ChallengeController();
+                cc = new ChallengeController();
                 cc.refreshCardsForPendingDuel(historyIntent);
                 //generateCardsForMainActivity(sessionManager.getToken(), sessionManager.getUserId());
 

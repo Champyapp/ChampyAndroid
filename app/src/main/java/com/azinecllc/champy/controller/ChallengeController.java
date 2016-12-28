@@ -516,7 +516,9 @@ public class ChallengeController {
             public void onResponse(Response<com.azinecllc.champy.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     List<Datum> data = response.body().getData();
-
+                    // idea: create boolean isLastInData and make it false;
+                    // then: check this bool if he is real last;
+                    // final: if 'true' - in surrender method create new Intent for update challenges
                     for (int i = 0; i < data.size(); i++) {
                         com.azinecllc.champy.model.active_in_progress.Datum datum = data.get(i);
 
@@ -559,7 +561,8 @@ public class ChallengeController {
                             constDuration = String.valueOf(constDays);
                         }
 
-                        long progressMidnight = 0;
+                        /********************** last check-in & auto surrender ********************/
+
                         String prog[] = new String[progress.size()];
                         for (int j = 0; j < progress.size(); j++) {
                             try {
@@ -569,6 +572,8 @@ public class ChallengeController {
                                 long myProgress = Long.parseLong(prog[j]);
 
                                 if (challenge_status.equals("started")) {
+                                    long progressMidnight = 0;
+
                                     if (myProgress != 0) {
                                         Date date = new Date(myProgress * 1000);
                                         progressMidnight = myProgress
@@ -576,10 +581,12 @@ public class ChallengeController {
                                                 - (date.getMinutes() * 60)
                                                 - (date.getSeconds());
                                     }
+
                                     if (myProgress != 0 && unixTime > progressMidnight + oneDay + oneDay) {
                                         try {
                                             // also i can try put in real intent; think about it again.
                                             int alarmID = (challenge_type.equals("Wake Up")) ? Integer.parseInt(challenge_description) : 0;
+                                            //((data.lastIndexOf(null))
                                             give_up(challenge_id, alarmID, null);
                                         } catch (Exception e) {
                                             e.printStackTrace();
@@ -587,25 +594,6 @@ public class ChallengeController {
                                     }
                                 }
 
-                                /**
-                                 * if (myProgress != 0L && now > progressMidNight + oneDay) {
-
-                                     if (!itemType.equals("Wake Up")) {
-                                        tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
-                                        buttonShare.setVisibility(View.INVISIBLE);
-                                        buttonDone.setVisibility(View.VISIBLE);
-                                     }
-
-                                     if (now > progressMidNight + oneDay + oneDay) {
-                                         try {
-                                            int i = (itemType.equals("Wake Up")) ? Integer.parseInt(currentCard.getWakeUpTime()) : 0;
-                                            cc.give_up(itemInProgressId, i, new Intent(getContext(), MainActivity.class));
-                                         } catch (IOException | NumberFormatException e) {
-                                            e.printStackTrace();
-                                         }
-                                     }
-                                 }
-                                 */
                                 Log.i(TAG, "onResponse: last check in: " + prog[j]);
                             } catch (JSONException e) { e.printStackTrace(); }
                         }
@@ -661,7 +649,7 @@ public class ChallengeController {
      * @value details - cleaned up our array from '[1, 2, 3]' to '1, 2, 3'
      * @value now     - current time on the device in seconds
      */
-    public void setNewAlarmClock(String arrayDetails, String alarmID) {
+    private void setNewAlarmClock(String arrayDetails, String alarmID) {
         String[] details = arrayDetails.replace("[", "").replace("]", "").split(", ");
 
         //int now = (int) (System.currentTimeMillis() / 1000);
