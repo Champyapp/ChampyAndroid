@@ -9,8 +9,11 @@ import android.util.Log;
 import com.azinecllc.champy.receiver.CustomNotifyReceiver;
 
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import static android.content.Context.ALARM_SERVICE;
+import static com.azinecllc.champy.utils.Constants.unixTime;
 
 public class DailyRemindController {
 
@@ -25,12 +28,14 @@ public class DailyRemindController {
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 59);
 
+        System.out.println("System.currentTimeMillis: " + System.currentTimeMillis()
+                       + "\ncalender.currentInMillis: " + calendar.getTimeInMillis());
         if (System.currentTimeMillis() > calendar.getTimeInMillis()) {
+            System.out.println("System time > Needed time for remind");
             calendar.add(Calendar.DAY_OF_YEAR, 1);
         }
 
         Intent notifyIntent = new Intent(context, CustomNotifyReceiver.class);
-        Log.d("DailyReminder", "enabled daily remind at: " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE));
         PendingIntent pi = PendingIntent.getBroadcast(context, 1337, notifyIntent, PendingIntent.FLAG_ONE_SHOT);
 
         AlarmManager manager = (AlarmManager)context.getSystemService(ALARM_SERVICE);
