@@ -26,11 +26,6 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         final String alarmID      = intent.getStringExtra("alarmID");
         final String details      = intent.getStringExtra("details");
 
-//        Log.d(TAG, "onReceive: AlarmReceiver:"
-//                + "\ninProgressId: " + inProgressId
-//                + "\nalarmID     : " + alarmID
-//                + "\ndetails     : " + details);
-
         Intent alarmIntent = new Intent();
         alarmIntent.setClassName("com.azinecllc.champy", "com.azinecllc.champy.activity.AlarmReceiverActivity");
         alarmIntent.putExtra("finalInProgressID", inProgressId);

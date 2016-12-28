@@ -42,7 +42,7 @@ import retrofit.Retrofit;
 import static com.azinecllc.champy.utils.Constants.API_URL;
 import static com.azinecllc.champy.utils.Constants.path;
 
-public class SelfImprovementActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class SelfImpActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private SessionManager sessionManager;
     private DrawerLayout drawer;
@@ -188,7 +188,7 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            Intent intent = new Intent(SelfImprovementActivity.this, MainActivity.class);
+            Intent intent = new Intent(SelfImpActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
             super.onBackPressed();

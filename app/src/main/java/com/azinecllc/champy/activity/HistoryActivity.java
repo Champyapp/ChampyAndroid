@@ -105,7 +105,7 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs_history);
         tabLayout.setupWithViewPager(viewPager);
 
-        // this out method for open "ic_score_wins" when you click on notification about win request
+        // this out method for open "in progress" when you click on notification about win request
         String extras = this.getIntent().getStringExtra("win_request");
         if (extras != null && "true".equals(extras)) { viewPager.setCurrentItem(1); }
 

@@ -54,10 +54,15 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 
         ImageView background = (ImageView) findViewById(R.id.friends_background);
         background.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
         File fileBlur = new File(path, "blurred.png");
         Uri uriBlur = Uri.fromFile(fileBlur);
-        Glide.with(this).load(uriBlur).bitmapTransform(new CropSquareTransformation(this))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(background);
+        Glide.with(this)
+                .load(uriBlur)
+                .bitmapTransform(new CropSquareTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(background);
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
@@ -74,17 +79,26 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         navigationView.setNavigationItemSelectedListener(this);
 
         ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
-        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        ImageView drawerBackground   = (ImageView) headerLayout.findViewById(R.id.slide_background);
+        TextView drawerUserName      = (TextView)  headerLayout.findViewById(R.id.tvUserName);
         drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         File fileProfile = new File(path, "profile.jpg");
         Uri uriProfile = Uri.fromFile(fileProfile);
 
-        Glide.with(this).load(uriBlur).bitmapTransform(new CropSquareTransformation(this))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);
-        Glide.with(this).load(uriProfile).bitmapTransform(new CropCircleTransformation(this))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerImageProfile);
+        Glide.with(this)
+                .load(uriBlur)
+                .bitmapTransform(new CropSquareTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(drawerBackground);
+
+        Glide.with(this)
+                .load(uriProfile)
+                .bitmapTransform(new CropCircleTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(drawerImageProfile);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setOffscreenPageLimit(2);

@@ -25,6 +25,7 @@ import com.azinecllc.champy.model.active_in_progress.Sender;
 import com.azinecllc.champy.model.duel.Duel;
 import com.azinecllc.champy.model.single_in_progress.Data;
 import com.azinecllc.champy.receiver.AlarmReceiver;
+import com.azinecllc.champy.service.AlarmService;
 import com.azinecllc.champy.utils.Constants;
 
 import org.json.JSONException;
@@ -506,7 +507,7 @@ public class ChallengeController {
     private void generateCardsForMainActivity(Intent intent) {
         DBHelper dbHelper = DBHelper.getInstance(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues cv = new ContentValues();
+        ContentValues cv  = new ContentValues();
         db.delete("myChallenges", null, null);
         //retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
@@ -580,6 +581,7 @@ public class ChallengeController {
                                                 - (date.getHours() * 60 * 60)
                                                 - (date.getMinutes() * 60)
                                                 - (date.getSeconds());
+                                        // TODO: 12/29/16 check midnight
                                     }
 
                                     if (myProgress != 0 && unixTime > progressMidnight + oneDay + oneDay) {
@@ -588,9 +590,7 @@ public class ChallengeController {
                                             int alarmID = (challenge_type.equals("Wake Up")) ? Integer.parseInt(challenge_description) : 0;
                                             //((data.lastIndexOf(null))
                                             give_up(challenge_id, alarmID, null);
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
+                                        } catch (Exception e) { e.printStackTrace(); }
                                     }
                                 }
 

@@ -41,13 +41,14 @@ import jp.wasabeef.glide.transformations.CropSquareTransformation;
 
 import static com.azinecllc.champy.utils.Constants.path;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private SessionManager sessionManager;
     private Boolean isFabOpen = false;
     private DrawerLayout drawer;
-    private FloatingActionButton fabPlus, fabWakeUp, fabSelf, fabDuel;
+    private FloatingActionButton fabPlus, fabWake, fabSelf, fabDuel;
     private Animation fab_open,fab_close,rotate_forward,rotate_backward;
+    private MainActivityCardsAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         sessionManager = SessionManager.getInstance(getApplicationContext());
-        MainActivityCardsAdapter adapter = new MainActivityCardsAdapter(this, SelfImprovement_model.generate(this));
+        adapter = new MainActivityCardsAdapter(this, SelfImprovement_model.generate(this));
         if (adapter.dataCount() > 0) {
             RelativeLayout cards = (RelativeLayout) findViewById(R.id.cards);
             CustomPagerBase pager = new CustomPagerBase(MainActivity.this, cards, adapter);
@@ -86,14 +87,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
 
 
-        /********************************* Get photo and make bg **********************************/
+        // GET PHOTO AND MAKE BLUR
         ImageView background = (ImageView) findViewById(R.id.main_background);
         background.setScaleType(ImageView.ScaleType.CENTER_CROP);
         drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-
         File blurred = new File(path, "blurred.png");
-
         if (blurred.exists()) {
             File profile = new File(path, "profile.jpg");
             Glide.with(this).load(profile).bitmapTransform(new CropCircleTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
@@ -105,12 +104,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             chDownloadImageTask.execute(pathToPic);
         }
 
+        // USER NAME
         final String name = sessionManager.getUserName();
         drawerUserName.setText(name);
         Typeface typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
         drawerUserName.setTypeface(typeface);
 
-        /******************************** Display 'Pending duels' menu ****************************/
+        // PENDING DUEL MENU IN DRAWER
         CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();
         int count = checker.getPendingCount(getApplicationContext());
         if (count == 0) {
@@ -120,39 +120,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
         }
 
-        /*********************************** Display fab buttons **********************************/
+        // ANIM
         CHBuildAnim chBuildAnim = CHBuildAnim.getInstance();
         chBuildAnim.buildAnim(this, sessionManager, typeface);
 
+        // BUTTONS
         fabPlus   = (FloatingActionButton)findViewById(R.id.fabPlus);
         fabSelf   = (FloatingActionButton)findViewById(R.id.fabSelf);
         fabDuel   = (FloatingActionButton)findViewById(R.id.fabDuel);
-        fabWakeUp = (FloatingActionButton)findViewById(R.id.fabWake);
+        fabWake   = (FloatingActionButton)findViewById(R.id.fabWake);
         fab_open  = AnimationUtils.loadAnimation(this, R.anim.fab_open);
         fab_close = AnimationUtils.loadAnimation(this, R.anim.fab_close);
-
-        rotate_forward = AnimationUtils.loadAnimation(this, R.anim.rotate_forward);
+        rotate_forward  = AnimationUtils.loadAnimation(this, R.anim.rotate_forward);
         rotate_backward = AnimationUtils.loadAnimation(this, R.anim.rotate_backward);
+        fabPlus.setOnClickListener(v -> animateFAB());
+        fabSelf.setOnClickListener(this);
+        fabDuel.setOnClickListener(this);
+        fabWake.setOnClickListener(this);
 
+    }
+
+    @Override
+    public void onClick(View v) {
         if (adapter.dataCount() < 10) {
-            fabPlus.setOnClickListener(v -> animateFAB());
-            fabSelf.setOnClickListener(v -> {
-                startActivity(new Intent(this, SelfImprovementActivity.class));
-                finish();
-            });
-            fabDuel.setOnClickListener(v -> {
-                startActivity(new Intent(this, FriendsActivity.class));
-                finish();
-            });
-            fabWakeUp.setOnClickListener(v -> {
-                startActivity(new Intent(this, WakeUpActivity.class));
-                finish();
-            });
+            switch (v.getId()) {
+                case R.id.fabSelf: startActivity(new Intent(this, SelfImpActivity.class)); finish(); break;
+                case R.id.fabDuel: startActivity(new Intent(this, FriendsActivity.class)); finish(); break;
+                case R.id.fabWake: startActivity(new Intent(this, WakeUpActivity .class)); finish(); break;
+            }
         } else {
             Toast.makeText(this, R.string.you_have_too_much_challenges, Toast.LENGTH_LONG).show();
         }
-
-        //ViewServer.get(this).addWindow(this);
     }
 
     @Override
@@ -246,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void closeFab() {
         fabPlus.startAnimation(rotate_backward);
-        fabWakeUp.startAnimation(fab_close);
+        fabWake.startAnimation(fab_close);
         fabSelf.startAnimation(fab_close);
         fabDuel.startAnimation(fab_close);
         isFabOpen = false;
@@ -255,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void openFab() {
         fabPlus.startAnimation(rotate_forward);
-        fabWakeUp.startAnimation(fab_open);
+        fabWake.startAnimation(fab_open);
         fabSelf.startAnimation(fab_open);
         fabDuel.startAnimation(fab_open);
         isFabOpen = true;
