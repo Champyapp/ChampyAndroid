@@ -8,8 +8,12 @@ import com.azinecllc.champy.activity.MainActivity;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import static java.lang.Math.round;
 import static org.junit.Assert.*;
@@ -18,20 +22,19 @@ import static org.mockito.Mockito.mock;
 /**
  * Created by SashaKhyzhun on 12/27/16.
  */
+@RunWith (RobolectricTestRunner.class)
+@Config  (manifest = Config.NONE)
 public class CHMakeResponsiveScoreTest2 {
 
     //@InjectView(R.id.imageView_challenges_animation) ImageView circleInProgress;
 
     private CHMakeResponsiveScore makeResponsiveScore;
     private MainActivity mainActivity;
-    @Mock
-    MainActivity mockMainActivity;
 
     @Before
     public void setup() throws Exception {
         makeResponsiveScore = CHMakeResponsiveScore.getInstance();
-        mainActivity        = new MainActivity();
-        mockMainActivity    = mock(MainActivity.class);
+        mainActivity        = Robolectric.buildActivity(MainActivity.class).get();
     }
 
     @Test
@@ -50,9 +53,8 @@ public class CHMakeResponsiveScoreTest2 {
         //int width = mainActivity.getWindowManager().getDefaultDisplay().getWidth();
         //int x = round(width / 100);
 
-        ImageView circleInProgress = (ImageView)mockMainActivity.findViewById(R.id.imageView_challenges_animation);
-        System.out.println(circleInProgress);
-
+        ImageView circleInProgress = (ImageView)mainActivity.findViewById(R.id.imageView_challenges_animation);
+        assertNull(circleInProgress);
     }
 
 }
