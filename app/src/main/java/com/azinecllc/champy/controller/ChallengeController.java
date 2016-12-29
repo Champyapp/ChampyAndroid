@@ -24,8 +24,7 @@ import com.azinecllc.champy.model.active_in_progress.Recipient;
 import com.azinecllc.champy.model.active_in_progress.Sender;
 import com.azinecllc.champy.model.duel.Duel;
 import com.azinecllc.champy.model.single_in_progress.Data;
-import com.azinecllc.champy.receiver.AlarmReceiver;
-import com.azinecllc.champy.service.AlarmService;
+import com.azinecllc.champy.receiver.CustomAlarmReceiver;
 import com.azinecllc.champy.utils.Constants;
 
 import org.json.JSONException;
@@ -286,7 +285,7 @@ public class ChallengeController {
     /**
      * Private Method for send Wake-Up challenge 'in progress'. Here we get data from our method
      * 'createNewWakeUpChallenge', create AlarmManager for daily ring, convert time for API, and
-     * sending extras for AlarmReceiver. After that all operation we generate cards for MainActivity.
+     * sending extras for CustomAlarmReceiver. Next we generate cards for MainActivity.
      * @param inProgressID - our unique 'ID' for create new challenge, we get this value from
      *                     'createNewWakeUpChallenge' and transit here.
      * @param alarmID - values from time picker: minutes and hour. To start we get this, convert to
@@ -325,7 +324,7 @@ public class ChallengeController {
                     com.azinecllc.champy.model.single_in_progress.SingleInProgress data = response.body();
                     final String inProgressId = data.getData().get_id();
 
-                    Intent myIntent = new Intent(activity, AlarmReceiver.class);
+                    Intent myIntent = new Intent(activity, CustomAlarmReceiver.class);
                     myIntent.putExtra("inProgressID", inProgressId);
                     myIntent.putExtra("alarmID", String.valueOf(alarmID));
                     myIntent.putExtra("details", Arrays.toString(det));
@@ -430,7 +429,7 @@ public class ChallengeController {
 
                     if (type.equals(typeWake)) {
                         //if this is "wake up" challenge then stop alarm manager;
-                        Intent myIntent = new Intent(activity, AlarmReceiver.class);
+                        Intent myIntent = new Intent(activity, CustomAlarmReceiver.class);
                         PendingIntent pendingIntent = PendingIntent.getBroadcast(activity, alarmID, myIntent, 0);
                         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                         alarmManager.cancel(pendingIntent);

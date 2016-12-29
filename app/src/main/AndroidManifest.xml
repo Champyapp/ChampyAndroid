@@ -114,7 +114,7 @@
 
 
         <!-- RECEIVERS -->
-        <receiver android:name="com.azinecllc.champy.receiver.AlarmReceiver">
+        <receiver android:name="com.azinecllc.champy.receiver.CustomAlarmReceiver">
             <!--added android:enabled="false" for reboot situation -->
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

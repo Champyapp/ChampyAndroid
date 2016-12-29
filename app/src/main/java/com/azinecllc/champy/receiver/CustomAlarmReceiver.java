@@ -10,9 +10,9 @@ import com.facebook.FacebookSdk;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class AlarmReceiver extends WakefulBroadcastReceiver {
+public class CustomAlarmReceiver extends WakefulBroadcastReceiver {
 
-    public final String TAG = "AlarmReceiver";
+    public final String TAG = "CustomAlarmReceiver";
 
     @Override
     public void onReceive(final Context context, Intent intent) {
