@@ -14,7 +14,7 @@ public class CHWindowView {
     private static Point screenSize;
 
     public static int getWindowWidth(Context context){
-        if(screenSize == null){
+        if(screenSize == null) {
             WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
             Display display = wm.getDefaultDisplay();
             screenSize = new Point();
