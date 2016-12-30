@@ -91,23 +91,21 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
                 if (mMediaPlayer.isPlaying()) { mMediaPlayer.stop(); }
                 try {
                     cc.doneForToday(progressID, details, alarmID);
-                    //finish();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                //finish();
+                finish();
                 break;
 
             case R.id.buttonWakeUpSurrender:
                 if (mMediaPlayer.isPlaying()) { mMediaPlayer.stop(); }
                 try {
                     cc.give_up(progressID, Integer.parseInt(alarmID), new Intent(this, MainActivity.class));
-                    //finish();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 // so, we take 0 updates and then this challenge will auto surrender.
-                //finish();
+                finish();
                 break;
         }
     }

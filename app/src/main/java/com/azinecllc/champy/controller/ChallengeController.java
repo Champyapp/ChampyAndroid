@@ -665,23 +665,29 @@ public class ChallengeController {
         //int now = (int) (System.currentTimeMillis() / 1000);
         Log.i(TAG, "setNewAlarmClock: details.length: " + details.length);
         Log.i(TAG, "setNewAlarmClock: Arrays.details: " + Arrays.toString(details));
-        Log.i(TAG, "setNewAlarmClock: arrayDetails: "   + arrayDetails);
 
-        /*for (int i = 0; i <= details.length - 1; i++) {
-            Log.i(TAG, "setNewAlarmClock: details[i]: " + details[i]);
-            Log.i(TAG, "setNewAlarmClock: Arrays.details: " + Arrays.toString(details));
+        for (int i = 0; i <= details.length - 1; i++) {
+            Log.i(TAG, "setNewAlarmClock: i=" + i + " details[i]: " + details[i]);
             // here details in seconds, but need in millis;
             if (System.currentTimeMillis() / 1000 < Integer.parseInt(details[i])) {
-                Log.i(TAG, "Woo-hoo. now < details[i]. Setting new alarm.");
+                Log.i(TAG, "\n\nWoo-hoo. now < details[i]. Setting new alarm.");
                 Log.i(TAG, System.currentTimeMillis() / 100 + " < " + Integer.parseInt(details[i]));
+
+                // TODO: 12/30/16 розібратись з підходящим і-елементом умноженим на 1000
+                // TODO: бо воно його чого толі ділить, толі обрізає і множить
+                Log.i(TAG, "\nsetNewAlarmClock: detail[i]: " + Integer.parseInt(details[i]));
+                Log.i(TAG, "setNewAlarmClock: at " + Integer.parseInt(details[i]) * 1000);
                 Intent intent = new Intent(context, MainActivity.class);
                 PendingIntent operation = PendingIntent.getBroadcast(context, Integer.parseInt(alarmID), intent, 0);
                 AlarmManager aManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-                aManager.setRepeating(AlarmManager.RTC_WAKEUP, Integer.parseInt(details[i]), 24 * 60 * 60 * 1000, operation);
+                aManager.setRepeating(AlarmManager.RTC_WAKEUP, Integer.parseInt(details[i]) * 1000, 24 * 60 * 60 * 1000, operation);
                 break;
             }
 
-        }*/
+            Log.i(TAG, "setNewAlarmClock: i++");
+
+
+        }
 
     }
 
