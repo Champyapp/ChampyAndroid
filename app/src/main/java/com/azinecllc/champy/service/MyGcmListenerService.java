@@ -90,6 +90,8 @@ public class MyGcmListenerService extends GcmListenerService {
         Intent friendsIntent = new Intent(this, FriendsActivity.class);
         friendsIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         ChallengeController cc;
+        // TODO: 12/30/16 RELOCATE TO SPLASH ACTIVITY;
+
         switch (title) {
             case "Friend Request Confirmed":
                 friendsIntent.putExtra("friend_request", "friend_request_confirmed");
@@ -232,10 +234,9 @@ public class MyGcmListenerService extends GcmListenerService {
                         }
 
                         if (datum.getEnd() != null) {
-                            int end = datum.getEnd();
-                            int begin = datum.getBegin();
-                            int days = round((end - Constants.unixTime) / 86400);
-                            int constDays = round((end - begin) / 86400);
+                            int constDays = round((datum.getEnd() - datum.getBegin()) / 86400);
+                            int duration = datum.getChallenge().getDuration();
+                            int days = (duration - (progress.size() * Constants.oneDay)) / Constants.oneDay;
                             challenge_duration = String.valueOf(days);
                             constDuration = String.valueOf(constDays);
                         }

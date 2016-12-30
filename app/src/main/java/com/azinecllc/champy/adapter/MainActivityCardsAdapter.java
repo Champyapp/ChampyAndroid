@@ -173,7 +173,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
             @Override
             public void onClick(View v) {
                 try {
-                    cc.doneForToday(itemInProgressId, details, itemGoal);
+                    cc.doneForToday(itemInProgressId, currentCard.getWakeUpTime(), itemGoal);
                     buttonDone.setVisibility(View.INVISIBLE);
                     buttonShare.setVisibility(View.VISIBLE);
                     snackbar = Snackbar.make(v, "Well done!", Snackbar.LENGTH_SHORT);

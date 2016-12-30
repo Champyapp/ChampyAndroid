@@ -49,7 +49,7 @@ public class ChallengeControllerTest {
         int hour  = random.nextInt(24);
 
         Calendar c = GregorianCalendar.getInstance();
-        final long currentMidnight = unixTime
+        final long currentMidnight = System.currentTimeMillis() / 1000
                 - (c.get(Calendar.HOUR_OF_DAY) * 60 * 60)
                 - (c.get(Calendar.MINUTE) * 60)
                 - (c.get(Calendar.SECOND));

@@ -305,7 +305,7 @@ public class ChallengeController {
                 - (c.get(Calendar.HOUR_OF_DAY) * 60 * 60)
                 - (c.get(Calendar.MINUTE) * 60)
                 - (c.get(Calendar.SECOND));
-        Log.d(TAG, "sendSingleInProgressForWakeUp: carentMidnight: " + currentMidnight);
+        Log.d(TAG, "sendSingleInProgressForWakeUp: currentMidnight: " + currentMidnight);
 
         Date date = new Date();
         date.setTime(((min  * 60) + (hour * 60 * 60) + currentMidnight) * 1000);
@@ -407,7 +407,9 @@ public class ChallengeController {
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String type = response.body().getData().getChallenge().getType();
-                    if (type.equals("Wake Up")) {
+                    Log.d(TAG, "onResponse: doneForToday is SUCCESS");
+                    if (type.equals(typeWake)) {
+                        Log.d(TAG, "onResponse: Type equals Wake Up");
                         setNewAlarmClock(details, alarmID);
                     }
 
@@ -514,7 +516,6 @@ public class ChallengeController {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues cv  = new ContentValues();
         db.delete("myChallenges", null, null);
-        //retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
         Call<com.azinecllc.champy.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userID, update, token);
         call1.enqueue(new Callback<com.azinecllc.champy.model.active_in_progress.ActiveInProgress>() {
@@ -528,31 +529,31 @@ public class ChallengeController {
                     for (int i = 0; i < data.size(); i++) {
                         com.azinecllc.champy.model.active_in_progress.Datum datum = data.get(i);
 
-                        Challenge challenge          = datum.getChallenge();
-                        Recipient recipient          = datum.getRecipient();
-                        Sender sender                = datum.getSender();
+                        Challenge challenge     = datum.getChallenge();
+                        Recipient recipient     = datum.getRecipient();
+                        Sender sender           = datum.getSender();
 
-                        String challenge_description = challenge.getDescription();   // no smoking
-                        String challenge_detail      = challenge.getDetails();       // no smoking + " during this period"
-                        String challenge_type        = challenge.getType();          // 567d51c48322f85870fd931a / b / c
-                        String challenge_name        = challenge.getName();          // wake up (time / self / button_duel
-                        String challenge_status      = datum.getStatus();            // active or not
-                        String challenge_id          = datum.get_id();               // im progress id
-                        String isRecipient           = (userID.equals(sender.getID())) ? "false" : "true";
-                        List<Object> progress        = (userID.equals(sender.getID()))
-                                                     ? datum.getSenderProgress()
-                                                     : datum.getRecipientProgress();
-                        String needsToCheck          = (userID.equals(sender.getID()))
-                                                     ? datum.getNeedsToCheckSender()
-                                                     : datum.getNeedsToCheckRecipient();
-                        String challType             = (challenge_type.equals(typeSelf))
-                                                     ? "Self-Improvement"
-                                                     : (challenge_type.equals(typeDuel)) ? "Duel" : "Wake Up";
-                        String versus                = (challenge_type.equals(typeDuel))
-                                                     ? (userID.equals(sender.getID()) ? recipient.getName()
-                                                     : sender.getName()) : "notDuel";
-                        String challenge_duration    = "";
-                        String constDuration         = "";
+                        String challenge_desc   = challenge.getDescription();   // no tv
+                        String challenge_detail = challenge.getDetails();       // ... + " during.."
+                        String challenge_type   = challenge.getType();          // ....a / b / c
+                        String challenge_name   = challenge.getName();          // wake up
+                        String challenge_status = datum.getStatus();            // active or not
+                        String challenge_id     = datum.get_id();               // im progress id
+                        String isRecipient      = (userID.equals(sender.getID())) ? "false" : "true";
+                        List<Object> progress   = (userID.equals(sender.getID()))
+                                                ? datum.getSenderProgress()
+                                                : datum.getRecipientProgress();
+                        String needsToCheck     = (userID.equals(sender.getID()))
+                                                ? datum.getNeedsToCheckSender()
+                                                : datum.getNeedsToCheckRecipient();
+                        String challType        = (challenge_type.equals(typeSelf))
+                                                ? "Self-Improvement"
+                                                : (challenge_type.equals(typeDuel)) ? "Duel" : "Wake Up";
+                        String versus           = (challenge_type.equals(typeDuel))
+                                                ? (userID.equals(sender.getID()) ? recipient.getName()
+                                                : sender.getName()) : "notDuel";
+                        String challenge_dur    = "";
+                        String constDuration    = "";
 
 
                         //if (userID.equals(sender.getID())) {
@@ -567,9 +568,9 @@ public class ChallengeController {
 
                         if (datum.getEnd() != null) {
                             int constDays = round((datum.getEnd() - datum.getBegin()) / 86400);
-                            int duration = datum.getChallenge().getDuration();
-                            int days = (duration - (progress.size() * Constants.oneDay)) / Constants.oneDay;
-                            challenge_duration = String.valueOf(days);
+                            int duration  = datum.getChallenge().getDuration();
+                            int days      = (duration - (progress.size() * oneDay)) / oneDay;
+                            challenge_dur = String.valueOf(days);
                             constDuration = String.valueOf(constDays);
                         }
 
@@ -586,19 +587,19 @@ public class ChallengeController {
                                 if (challenge_status.equals("started") && myProgress != 0) {
 
                                     Date date = new Date(myProgress * 1000);
+                                    long now = System.currentTimeMillis() / 1000;
                                     long progressMidnight = myProgress
-                                            - (date.getHours() * 60 * 60)
-                                            - (date.getMinutes() * 60)
+                                            - (date.getHours()  * 60 * 60)
+                                            - (date.getMinutes()* 60)
                                             - (date.getSeconds());
 
-                                    if (unixTime > progressMidnight + oneDay) {
+                                    if (now > progressMidnight + oneDay) {
                                         needsToCheck = (userID.equals(sender.getID()))
                                                 ? datum.getNeedsToCheckSender()
                                                 : datum.getNeedsToCheckRecipient();
-                                        if (unixTime > progressMidnight + twoDays) {
+                                        if (now > progressMidnight + twoDays) {
                                             try {
-                                                int alarmID = (challenge_type.equals("Wake Up"))
-                                                        ? Integer.parseInt(challenge_description) : 0;
+                                                int alarmID = (challenge_type.equals("Wake Up")) ? Integer.parseInt(challenge_desc) : 0;
                                                 give_up(challenge_id, alarmID, null);
                                             } catch (Exception e) {e.printStackTrace();}
                                         }
@@ -612,8 +613,8 @@ public class ChallengeController {
                         cv.put("versus",        versus);                // if this is button_duel than versus = recipient / sender name
                         cv.put("wakeUpTime",    challenge_detail);      // our specific time id for delete wakeUp (example: 1448);
                         cv.put("challengeName", challenge_name);        // default 'challenge'. this column only for wake up time
-                        cv.put("description",   challenge_description); // smoking free life or wake up at 14:48
-                        cv.put("duration",      challenge_duration);    // duration of challenge
+                        cv.put("description",   challenge_desc);        // smoking free life or wake up at 14:48
+                        cv.put("duration",      challenge_dur);         // duration of challenge
                         cv.put("challenge_id",  challenge_id);          // in progress id
                         cv.put("status",        challenge_status);      // active or not
                         cv.put("recipient",     isRecipient);           // i'm recipient? true / false
@@ -662,14 +663,17 @@ public class ChallengeController {
         String[] details = arrayDetails.replace("[", "").replace("]", "").split(", ");
 
         //int now = (int) (System.currentTimeMillis() / 1000);
-        System.out.println("setNewAlarmClock: details.length: " + details.length);
-        System.out.println("setNewAlarmClock: Arrays.details: " + Arrays.toString(details));
+        Log.i(TAG, "setNewAlarmClock: details.length: " + details.length);
+        Log.i(TAG, "setNewAlarmClock: Arrays.details: " + Arrays.toString(details));
+        Log.i(TAG, "setNewAlarmClock: arrayDetails: "   + arrayDetails);
 
-        for (int i = 0; i <= details.length - 1; i++) {
-            System.out.println("setNewAlarmClock: details[i]: " + details[i]);
-            System.out.println("setNewAlarmClock: Arrays.details: " + Arrays.toString(details));
+        /*for (int i = 0; i <= details.length - 1; i++) {
+            Log.i(TAG, "setNewAlarmClock: details[i]: " + details[i]);
+            Log.i(TAG, "setNewAlarmClock: Arrays.details: " + Arrays.toString(details));
             // here details in seconds, but need in millis;
-            if (unixTime < Integer.parseInt(details[i])) {
+            if (System.currentTimeMillis() / 1000 < Integer.parseInt(details[i])) {
+                Log.i(TAG, "Woo-hoo. now < details[i]. Setting new alarm.");
+                Log.i(TAG, System.currentTimeMillis() / 100 + " < " + Integer.parseInt(details[i]));
                 Intent intent = new Intent(context, MainActivity.class);
                 PendingIntent operation = PendingIntent.getBroadcast(context, Integer.parseInt(alarmID), intent, 0);
                 AlarmManager aManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
@@ -677,7 +681,7 @@ public class ChallengeController {
                 break;
             }
 
-        }
+        }*/
 
     }
 
