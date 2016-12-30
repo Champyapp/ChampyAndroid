@@ -12,6 +12,7 @@ public class Constants {
     public static final String update = "0";
 
     public static final int oneDay = 86400;
+    public static final int twoDays = 172800;
     public static final int drawerCloseTime = 250;
 
     public static long unixTime = System.currentTimeMillis() / 1000L;

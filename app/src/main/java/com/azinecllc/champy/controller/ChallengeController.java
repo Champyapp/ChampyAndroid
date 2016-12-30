@@ -45,6 +45,7 @@ import retrofit.Retrofit;
 
 import static com.azinecllc.champy.utils.Constants.API_URL;
 import static com.azinecllc.champy.utils.Constants.oneDay;
+import static com.azinecllc.champy.utils.Constants.twoDays;
 import static com.azinecllc.champy.utils.Constants.typeDuel;
 import static com.azinecllc.champy.utils.Constants.typeSelf;
 import static com.azinecllc.champy.utils.Constants.typeWake;
@@ -248,10 +249,12 @@ public class ChallengeController {
         final int alarmID = Integer.parseInt(wakeUpTime);
 
         Calendar c = GregorianCalendar.getInstance();
-        final long currentMidnight = unixTime
+        Log.d(TAG, "createNewWakeUpChallenge: calendar: " + c);
+        final long currentMidnight = System.currentTimeMillis() / 1000
                 - (c.get(Calendar.HOUR_OF_DAY) * 60 * 60)
                 - (c.get(Calendar.MINUTE) * 60)
                 - (c.get(Calendar.SECOND));
+        Log.d(TAG, "currentMidnight: " + currentMidnight);
 
         final String[] details = new String[days];
         for (int i = 0; i < days; i++) {
@@ -261,6 +264,8 @@ public class ChallengeController {
                             + (intHour * 60 * 60)
                             + (i * (24 * 60 * 60)));
         }
+
+        Log.d(TAG, "details: " + Arrays.toString(details));
 
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
         Call<com.azinecllc.champy.model.create_challenge.CreateChallenge> call = createChallenge
@@ -296,16 +301,17 @@ public class ChallengeController {
      */
     private void sendSingleInProgressForWakeUp(String inProgressID, int alarmID, int min, int hour, String[] det) {
         Calendar c = GregorianCalendar.getInstance();
-        final long currentMidnight = unixTime
+        final long currentMidnight = System.currentTimeMillis() / 1000
                 - (c.get(Calendar.HOUR_OF_DAY) * 60 * 60)
                 - (c.get(Calendar.MINUTE) * 60)
                 - (c.get(Calendar.SECOND));
+        Log.d(TAG, "sendSingleInProgressForWakeUp: carentMidnight: " + currentMidnight);
 
         Date date = new Date();
         date.setTime(((min  * 60) + (hour * 60 * 60) + currentMidnight) * 1000);
         c.setTime(date); // set date for calendar. now our calendar has a right time for ring
 
-        if (unixTime > c.getTimeInMillis()) {
+        if (System.currentTimeMillis() > c.getTimeInMillis()) {
             Log.d(TAG, "sendSingleInProgressForWakeUp: now > input. need to add one day");
             Log.d(TAG, "sendSingleInProgressForWakeUp: " + System.currentTimeMillis() + " > " + c.getTimeInMillis());
             c.add(Calendar.DAY_OF_YEAR, 1);
@@ -532,8 +538,6 @@ public class ChallengeController {
                         String challenge_name        = challenge.getName();          // wake up (time / self / button_duel
                         String challenge_status      = datum.getStatus();            // active or not
                         String challenge_id          = datum.get_id();               // im progress id
-                        String challenge_duration    = "";
-                        String constDuration         = "";
                         String isRecipient           = (userID.equals(sender.getID())) ? "false" : "true";
                         List<Object> progress        = (userID.equals(sender.getID()))
                                                      ? datum.getSenderProgress()
@@ -547,6 +551,8 @@ public class ChallengeController {
                         String versus                = (challenge_type.equals(typeDuel))
                                                      ? (userID.equals(sender.getID()) ? recipient.getName()
                                                      : sender.getName()) : "notDuel";
+                        String challenge_duration    = "";
+                        String constDuration         = "";
 
 
                         //if (userID.equals(sender.getID())) {
@@ -577,35 +583,27 @@ public class ChallengeController {
                                 prog[j] = String.valueOf(at);
                                 long myProgress = Long.parseLong(prog[j]);
 
-                                if (challenge_status.equals("started")) {
-                                    long progressMidnight = 0;
+                                if (challenge_status.equals("started") && myProgress != 0) {
 
-                                    //if (myProgress != 0) {
-                                        Date date = new Date(myProgress * 1000);
-                                        progressMidnight = myProgress
-                                                - (date.getHours() * 60 * 60)
-                                                - (date.getMinutes() * 60)
-                                                - (date.getSeconds());
-                                        // TODO: 12/29/16 check midnight
-                                    //}
+                                    Date date = new Date(myProgress * 1000);
+                                    long progressMidnight = myProgress
+                                            - (date.getHours() * 60 * 60)
+                                            - (date.getMinutes() * 60)
+                                            - (date.getSeconds());
 
-                                    if (myProgress != 0 && unixTime > progressMidnight + oneDay) {
+                                    if (unixTime > progressMidnight + oneDay) {
                                         needsToCheck = (userID.equals(sender.getID()))
                                                 ? datum.getNeedsToCheckSender()
                                                 : datum.getNeedsToCheckRecipient();
-                                    }
-
-                                    if (myProgress != 0 && unixTime > progressMidnight + oneDay + oneDay) {
-                                        try {
-                                            // also i can try put in real intent; think about it again.
-                                            int alarmID = (challenge_type.equals("Wake Up")) ? Integer.parseInt(challenge_description) : 0;
-                                            //((data.lastIndexOf(null))
-                                            give_up(challenge_id, alarmID, null);
-                                        } catch (Exception e) { e.printStackTrace(); }
+                                        if (unixTime > progressMidnight + twoDays) {
+                                            try {
+                                                int alarmID = (challenge_type.equals("Wake Up"))
+                                                        ? Integer.parseInt(challenge_description) : 0;
+                                                give_up(challenge_id, alarmID, null);
+                                            } catch (Exception e) {e.printStackTrace();}
+                                        }
                                     }
                                 }
-
-                                Log.i(TAG, "onResponse: last check in: " + prog[j]);
                             } catch (JSONException e) { e.printStackTrace(); }
                         }
 
@@ -664,10 +662,13 @@ public class ChallengeController {
         String[] details = arrayDetails.replace("[", "").replace("]", "").split(", ");
 
         //int now = (int) (System.currentTimeMillis() / 1000);
+        System.out.println("setNewAlarmClock: details.length: " + details.length);
+        System.out.println("setNewAlarmClock: Arrays.details: " + Arrays.toString(details));
 
         for (int i = 0; i <= details.length - 1; i++) {
+            System.out.println("setNewAlarmClock: details[i]: " + details[i]);
+            System.out.println("setNewAlarmClock: Arrays.details: " + Arrays.toString(details));
             // here details in seconds, but need in millis;
-            Log.d(TAG, "setNewAlarmClock: details: " + details[i]);
             if (unixTime < Integer.parseInt(details[i])) {
                 Intent intent = new Intent(context, MainActivity.class);
                 PendingIntent operation = PendingIntent.getBroadcast(context, Integer.parseInt(alarmID), intent, 0);
