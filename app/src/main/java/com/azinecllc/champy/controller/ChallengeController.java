@@ -534,24 +534,30 @@ public class ChallengeController {
                         String challenge_id          = datum.get_id();               // im progress id
                         String challenge_duration    = "";
                         String constDuration         = "";
-                        List<Object> progress;
-                        String needsToCheck;
-                        String challType = (challenge_type.equals(typeSelf)) ? "Self-Improvement"
-                                         : (challenge_type.equals(typeDuel)) ? "Duel" : "Wake Up";
-                        String versus    = (challenge_type.equals(typeDuel))
-                                         ? (userID.equals(sender.get_id())   ? recipient.getName()
-                                         : sender.getName()) : "notDuel";
+                        String isRecipient           = (userID.equals(sender.getID())) ? "false" : "true";
+                        List<Object> progress        = (userID.equals(sender.getID()))
+                                                     ? datum.getSenderProgress()
+                                                     : datum.getRecipientProgress();
+                        String needsToCheck          = (userID.equals(sender.getID()))
+                                                     ? datum.getNeedsToCheckSender()
+                                                     : datum.getNeedsToCheckRecipient();
+                        String challType             = (challenge_type.equals(typeSelf))
+                                                     ? "Self-Improvement"
+                                                     : (challenge_type.equals(typeDuel)) ? "Duel" : "Wake Up";
+                        String versus                = (challenge_type.equals(typeDuel))
+                                                     ? (userID.equals(sender.getID()) ? recipient.getName()
+                                                     : sender.getName()) : "notDuel";
 
 
-                        if (userID.equals(sender.get_id())) {
-                            progress = datum.getSenderProgress();
-                            needsToCheck = datum.getNeedsToCheckSender();
-                            cv.put("recipient", "false");
-                        } else {
-                            progress = datum.getRecipientProgress();
-                            needsToCheck = datum.getNeedsToCheckRecipient();
-                            cv.put("recipient", "true");
-                        }
+                        //if (userID.equals(sender.getID())) {
+                            //progress = datum.getSenderProgress();
+                            //needsToCheck = datum.getNeedsToCheckSender();
+                            //cv.put("recipient", "false");
+                        //} else {
+                            //progress = datum.getRecipientProgress();
+                            //needsToCheck = datum.getNeedsToCheckRecipient();
+                            //cv.put("recipient", "true");
+                        //}
 
                         if (datum.getEnd() != null) {
                             int constDays = round((datum.getEnd() - datum.getBegin()) / 86400);
@@ -574,13 +580,19 @@ public class ChallengeController {
                                 if (challenge_status.equals("started")) {
                                     long progressMidnight = 0;
 
-                                    if (myProgress != 0) {
+                                    //if (myProgress != 0) {
                                         Date date = new Date(myProgress * 1000);
                                         progressMidnight = myProgress
                                                 - (date.getHours() * 60 * 60)
                                                 - (date.getMinutes() * 60)
                                                 - (date.getSeconds());
                                         // TODO: 12/29/16 check midnight
+                                    //}
+
+                                    if (myProgress != 0 && unixTime > progressMidnight + oneDay) {
+                                        needsToCheck = (userID.equals(sender.getID()))
+                                                ? datum.getNeedsToCheckSender()
+                                                : datum.getNeedsToCheckRecipient();
                                     }
 
                                     if (myProgress != 0 && unixTime > progressMidnight + oneDay + oneDay) {
@@ -598,7 +610,6 @@ public class ChallengeController {
                         }
 
 
-
                         cv.put("name",          challType);             // Self-Improvement / Duel / Wake Up
                         cv.put("versus",        versus);                // if this is button_duel than versus = recipient / sender name
                         cv.put("wakeUpTime",    challenge_detail);      // our specific time id for delete wakeUp (example: 1448);
@@ -607,6 +618,7 @@ public class ChallengeController {
                         cv.put("duration",      challenge_duration);    // duration of challenge
                         cv.put("challenge_id",  challenge_id);          // in progress id
                         cv.put("status",        challenge_status);      // active or not
+                        cv.put("recipient",     isRecipient);           // i'm recipient? true / false
                         cv.put("myProgress",    Arrays.toString(prog)); // last update time in millis
                         cv.put("constDuration", constDuration);         // our constant value of challenge duration
                         cv.put("needsToCheck",  needsToCheck);          // method for check challenge for "needToCheck"

@@ -152,7 +152,7 @@ public class Sender {
      * @return
      *     The Id
      */
-    public String get_id() {
+    public String getID() {
         return _id;
     }
 

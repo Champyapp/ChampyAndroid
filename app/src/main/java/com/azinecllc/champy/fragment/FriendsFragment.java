@@ -303,7 +303,7 @@ public class FriendsFragment extends Fragment {
 //
 //                        if (datum.getFriend() != null) {
 //                            if (datum.getStatus().toString().equals("true")) {
-//                                if (datum.getOwner().get_id().equals(id)) {
+//                                if (datum.getOwner().getID().equals(id)) {
 //
 //                                    Friend_ friend = datum.getFriend();
 //                                    cv.put("name", friend.getName());
@@ -318,7 +318,7 @@ public class FriendsFragment extends Fragment {
 //
 //                                    if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
 //                                    else cv.put("photo", "");
-//                                    cv.put("user_id", friend.get_id());
+//                                    cv.put("user_id", friend.getID());
 //                                    db.insert("friends", null, cv);
 //                                }
 //                            }

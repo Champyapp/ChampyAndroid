@@ -216,12 +216,12 @@ public class MyGcmListenerService extends GcmListenerService {
                                                         : "Wake Up";
 
                         String versus = (challenge_type.equals(typeDuel))
-                                ? (userId.equals(sender.get_id())
+                                ? (userId.equals(sender.getID())
                                             ? recipient.getName()
                                             : sender.getName())
                                 : "notDuel";
 
-                        if (userId.equals(sender.get_id())) {
+                        if (userId.equals(sender.getID())) {
                             progress = datum.getSenderProgress();
                             needsToCheck = datum.getNeedsToCheckSender();
                             cv.put("recipient", "false");

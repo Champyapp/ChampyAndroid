@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -92,21 +93,22 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         tvDuration.setTypeface(typeface);
         tvDuration.setTextSize(y*2);
 
-//        try {
-//            String TAG = "INFO ABOUT CARD:";
-//            Log.d(TAG, "getView: " + currentCard.getRecipient());      // false;
-//            Log.d(TAG, "getView: " + currentCard.getChallengeName());  // Wake up at 08:55
-//            Log.d(TAG, "getView: " + currentCard.getGoal());           // 0855
-//            Log.d(TAG, "getView: " + currentCard.getId());             // 58605a9645af8ed13f56b8c1
-//            Log.d(TAG, "getView: " + currentCard.getName());           // null
-//            Log.d(TAG, "getView: " + currentCard.getWakeUpTime());     // [1482735221, 1482821621]
-//            Log.d(TAG, "getView: " + currentCard.getType());           // Wake Up
-//            Log.d(TAG, "getView: " + currentCard.getConstDuration());  // 2 days
-//            Log.d(TAG, "getView: " + currentCard.getDays());           // 1-2 (current)
-//            Log.d(TAG, "getView: " + currentCard.getProgress());       // [UnixTime]
-//            Log.d(TAG, "getView: " + currentCard.getStatus());         // started
-//            Log.d(TAG, "getView: " + currentCard.getVersus());         // not duel
-//        } catch (Exception e) { e.printStackTrace(); }
+        try {
+            String TAG = "INFO ABOUT CARD:";
+            Log.d(TAG, "getView: " + currentCard.getRecipient());      // false;
+            Log.d(TAG, "getView: " + currentCard.getChallengeName());  // Wake up at 08:55
+            Log.d(TAG, "getView: " + currentCard.getGoal());           // 0855
+            Log.d(TAG, "getView: " + currentCard.getId());             // 58605a9645af8ed13f56b8c1
+            Log.d(TAG, "getView: " + currentCard.getName());           // null
+            Log.d(TAG, "getView: " + currentCard.getWakeUpTime());     // [1482735221, 1482821621]
+            Log.d(TAG, "getView: " + currentCard.getType());           // Wake Up
+            Log.d(TAG, "getView: " + currentCard.getConstDuration());  // 2 days
+            Log.d(TAG, "getView: " + currentCard.getDays());           // 1-2 (current)
+            Log.d(TAG, "getView: " + currentCard.getProgress());       // [UnixTime]
+            Log.d(TAG, "getView: " + currentCard.getStatus());         // started
+            Log.d(TAG, "getView: " + currentCard.getVersus());         // not duel
+            Log.d(TAG, "getView: " + currentCard.getNeedsToCheck());   // true / false
+        } catch (Exception e) { e.printStackTrace(); }
 
         if (itemNeedsToCheck.equals("true")) {
             tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
@@ -124,10 +126,12 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
             case "Wake Up":
                 imageChallengeLogo.setImageResource(R.drawable.ic_wakeup_white);
                 tvChallengeDescription.setText(currentCard.getChallengeName());
-                //tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
-                //buttonShare.setVisibility(View.VISIBLE);
-                //buttonDone.setVisibility(View.INVISIBLE);
-                //tvEveryDayForTheNext.setVisibility(View.VISIBLE);
+                //~~~~~~~~~~
+                tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
+                buttonShare.setVisibility(View.VISIBLE);
+                buttonDone.setVisibility(View.INVISIBLE);
+                tvEveryDayForTheNext.setVisibility(View.VISIBLE);
+                //~~~~~~~~~~
                 break;
             case "Duel":
                 imageChallengeLogo.setImageResource(R.drawable.ic_duel_white);

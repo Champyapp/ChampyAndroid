@@ -267,7 +267,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 //                                                    }
 //
 //                                                    String name = data.getName();
-//                                                    cv.put("user_id", data.get_id());
+//                                                    cv.put("user_id", data.getID());
 //                                                    cv.put("name", name);
 //                                                    cv.put("photo", photo);
 //                                                    cv.put("ic_score_progress", "" + data.getAllChallengesCount());
@@ -276,12 +276,12 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 //                                                    cv.put("level", "" + data.getLevel().getNumber());
 //
 //                                                    // отображаем друзей в списке
-//                                                    if (!checkTableForExist.isInOtherTable(data.get_id())) {
+//                                                    if (!checkTableForExist.isInOtherTable(data.getID())) {
 //                                                        db.insert("mytable", null, cv);
 //                                                        newFriends.add(new FriendModel(
 //                                                                name,
 //                                                                photo,
-//                                                                data.get_id(),
+//                                                                data.getID(),
 //                                                                "" + data.getAllChallengesCount(),
 //                                                                "" + data.getSuccessChallenges(),
 //                                                                "" + data.getInProgressChallenges(),
@@ -399,7 +399,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 //
 //                            if (datum.getStatus().toString().equals("true")) {
 //
-//                                if (datum.getOwner().get_id().equals(id)) {
+//                                if (datum.getOwner().getID().equals(id)) {
 //                                    Friend_ friend = datum.getFriend();
 //                                    cv.put("name", friend.getName());
 //                                    if (friend.getPhoto() != null)
@@ -413,7 +413,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 //                                    if (friend.getPhoto() != null)
 //                                         cv.put("photo", friend.getPhoto().getMedium());
 //                                    else cv.put("photo", "");
-//                                    cv.put("user_id", friend.get_id());
+//                                    cv.put("user_id", friend.getID());
 //                                    db.insert("friends", null, cv);
 //                                }
 //                            }
@@ -503,7 +503,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 //                        Datum datum = data.get(i);
 //                        if ((datum.getFriend() != null) && (datum.getOwner() != null )) {
 //                            if (datum.getStatus().toString().equals("false")) {
-//                                if (datum.getOwner().get_id().equals(id)) {
+//                                if (datum.getOwner().getID().equals(id)) {
 //                                    Friend_ friend = datum.getFriend();
 //                                    cv.put("name", friend.getName());
 //                                    if (friend.getPhoto() != null)
@@ -518,7 +518,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 //                                    if (friend.getPhoto() != null)
 //                                         cv.put("photo", friend.getPhoto().getMedium());
 //                                    else cv.put("photo", "");
-//                                    cv.put("user_id", friend.get_id());
+//                                    cv.put("user_id", friend.getID());
 //                                    cv.put("owner", "true");
 //                                    db.insert("pending", null, cv);
 //                                }
