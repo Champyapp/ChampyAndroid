@@ -338,7 +338,7 @@ public class ChallengeController {
 
                     PendingIntent pi = PendingIntent.getBroadcast(activity, alarmID, myIntent, 0);
                     AlarmManager aManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                    aManager.setRepeating(AlarmManager.RTC_WAKEUP, userInputTime, 24*60*60*1000, pi);
+                    aManager.set(AlarmManager.RTC_WAKEUP, userInputTime, pi);
 
 
                     generateCardsForMainActivity(new Intent(activity, MainActivity.class));
@@ -407,9 +407,7 @@ public class ChallengeController {
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String type = response.body().getData().getChallenge().getType();
-                    Log.d(TAG, "onResponse: doneForToday is SUCCESS");
                     if (type.equals(typeWake)) {
-                        Log.d(TAG, "onResponse: Type equals Wake Up");
                         setNewAlarmClock(details, alarmID);
                     }
 
@@ -662,30 +660,31 @@ public class ChallengeController {
     private void setNewAlarmClock(String arrayDetails, String alarmID) {
         String[] details = arrayDetails.replace("[", "").replace("]", "").split(", ");
 
-        //int now = (int) (System.currentTimeMillis() / 1000);
-        Log.i(TAG, "setNewAlarmClock: details.length: " + details.length);
-        Log.i(TAG, "setNewAlarmClock: Arrays.details: " + Arrays.toString(details));
+        long now = System.currentTimeMillis() / 1000;
 
+        Log.i(TAG, "~~~~~~~~~~~~~~~ START ~~~~~~~~~~~~~~~");
+        Log.i(TAG, "details.length = " + details.length);
+        Log.i(TAG, "details.full   = " + Arrays.toString(details));
+        Log.i(TAG, "~~~~~~~~~~~~~ START IF ~~~~~~~~~~~~~~");
         for (int i = 0; i <= details.length - 1; i++) {
-            Log.i(TAG, "setNewAlarmClock: i=" + i + " details[i]: " + details[i]);
-            // here details in seconds, but need in millis;
-            if (System.currentTimeMillis() / 1000 < Integer.parseInt(details[i])) {
-                Log.i(TAG, "\n\nWoo-hoo. now < details[i]. Setting new alarm.");
-                Log.i(TAG, System.currentTimeMillis() / 100 + " < " + Integer.parseInt(details[i]));
+            Log.d(TAG, "i = " + i + " | d[i]: " + details[i]);
 
-                // TODO: 12/30/16 розібратись з підходящим і-елементом умноженим на 1000
-                // TODO: бо воно його чого толі ділить, толі обрізає і множить
-                Log.i(TAG, "\nsetNewAlarmClock: detail[i]: " + Integer.parseInt(details[i]));
-                Log.i(TAG, "setNewAlarmClock: at " + Integer.parseInt(details[i]) * 1000);
+            if (now < Integer.parseInt(details[i])) {
+                Log.i(TAG, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                Log.i(TAG, "Woo-hoo");
+                Log.i(TAG, "now < d[i]");
+                Log.i(TAG, now + " < " + Integer.parseInt(details[i]));
+                Log.i(TAG, "next alarm will be at: " + Long.parseLong(details[i]) * 1000);
+                Log.i(TAG, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
                 Intent intent = new Intent(context, MainActivity.class);
                 PendingIntent operation = PendingIntent.getBroadcast(context, Integer.parseInt(alarmID), intent, 0);
                 AlarmManager aManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-                aManager.setRepeating(AlarmManager.RTC_WAKEUP, Integer.parseInt(details[i]) * 1000, 24 * 60 * 60 * 1000, operation);
+                aManager.set(AlarmManager.RTC_WAKEUP, Long.parseLong(details[i]) * 1000, operation);
                 break;
             }
 
-            Log.i(TAG, "setNewAlarmClock: i++");
-
+            Log.i(TAG, "i-element < needed time");
+            Log.i(TAG, "i++");
 
         }
 
