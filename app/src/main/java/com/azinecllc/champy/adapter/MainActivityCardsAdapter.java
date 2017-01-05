@@ -28,6 +28,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import static com.azinecllc.champy.utils.Constants.oneDay;
+import static com.azinecllc.champy.utils.Constants.twoDays;
 
 public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 
@@ -93,22 +94,22 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         tvDuration.setTypeface(typeface);
         tvDuration.setTextSize(y*2);
 
-//        try {
-//            String TAG = "INFO ABOUT CARD:";
-//            Log.d(TAG, "getView: " + currentCard.getRecipient());      // false;
-//            Log.d(TAG, "getView: " + currentCard.getChallengeName());  // Wake up at 08:55
-//            Log.d(TAG, "getView: " + currentCard.getGoal());           // 0855
-//            Log.d(TAG, "getView: " + currentCard.getId());             // 58605a9645af8ed13f56b8c1
-//            Log.d(TAG, "getView: " + currentCard.getName());           // null
-//            Log.d(TAG, "getView: " + currentCard.getWakeUpTime());     // [1482735221, 1482821621]
-//            Log.d(TAG, "getView: " + currentCard.getType());           // Wake Up
-//            Log.d(TAG, "getView: " + currentCard.getConstDuration());  // 2 days
-//            Log.d(TAG, "getView: " + currentCard.getDays());           // 1-2 (current)
-//            Log.d(TAG, "getView: " + currentCard.getProgress());       // [UnixTime]
-//            Log.d(TAG, "getView: " + currentCard.getStatus());         // started
-//            Log.d(TAG, "getView: " + currentCard.getVersus());         // not duel
-//            Log.d(TAG, "getView: " + currentCard.getNeedsToCheck());   // true / false
-//        } catch (Exception e) { e.printStackTrace(); }
+        try {
+            String TAG = "INFO ABOUT CARD:";
+            Log.d(TAG, "getRecipient: "     + currentCard.getRecipient());      // false;
+            Log.d(TAG, "getChallengeName: " + currentCard.getChallengeName());  // Wake up at 08:55
+            Log.d(TAG, "getGoal: "          + currentCard.getGoal());           // 0855
+            Log.d(TAG, "getId: "            + currentCard.getId());             // 58605a9645af8ed13f56b8c1
+            Log.d(TAG, "getName: "          + currentCard.getName());           // null
+            Log.d(TAG, "getWakeUpTime: "    + currentCard.getWakeUpTime());     // [1482735221, 1482821621]
+            Log.d(TAG, "getType: "          + currentCard.getType());           // Wake Up
+            Log.d(TAG, "getConstDuration: " + currentCard.getConstDuration());  // 2 days
+            Log.d(TAG, "getDays: "          + currentCard.getDays());           // 1-2 (current)
+            Log.d(TAG, "getProgress: "      + currentCard.getProgress());       // [UnixTime]
+            Log.d(TAG, "getStatus: "        + currentCard.getStatus());         // started
+            Log.d(TAG, "getVersus: "        + currentCard.getVersus());         // not duel
+            Log.d(TAG, "getNeedsToCheck: "  + currentCard.getNeedsToCheck());   // true / false
+        } catch (Exception e) { e.printStackTrace(); }
 
         if (itemNeedsToCheck.equals("true")) {
             tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
@@ -127,10 +128,10 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                 imageChallengeLogo.setImageResource(R.drawable.ic_wakeup_white);
                 tvChallengeDescription.setText(currentCard.getChallengeName());
                 //~~~~~~~~~~
-                tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
-                buttonShare.setVisibility(View.VISIBLE);
-                buttonDone.setVisibility(View.INVISIBLE);
-                tvEveryDayForTheNext.setVisibility(View.VISIBLE);
+//                tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
+//                buttonShare.setVisibility(View.VISIBLE);
+//                buttonDone.setVisibility(View.INVISIBLE);
+//                tvEveryDayForTheNext.setVisibility(View.VISIBLE);
                 //~~~~~~~~~~
                 break;
             case "Duel":
@@ -149,7 +150,39 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         final String token = sessionManager.getToken();
         final ChallengeController cc = new ChallengeController(getContext(), (Activity) getContext(), token, userId);
 
+        /*************************** last check-in time for auto surrender ************************/
+//        long now = System.currentTimeMillis() / 1000;
+//        long myProgress = 0;
+//        long progressMidNight = 0;
+//        if (!challengeProgress[challengeProgress.length-1].equals("")) {
+//            myProgress = Long.parseLong(challengeProgress[challengeProgress.length - 1]); // our last checkIn in seconds
+//            Date date = new Date(myProgress * 1000); // convert last checkIn in date format
+//            progressMidNight = myProgress
+//                    - (date.getHours()  * 60 * 60)
+//                    - (date.getMinutes()* 60)
+//                    - (date.getSeconds());
+//        }
+//
+//        if (myProgress != 0L && now > progressMidNight + oneDay) {
+//            //if (!itemType.equals("Wake Up")) {
+//            //    tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
+//            //    buttonShare.setVisibility(View.INVISIBLE);
+//            //    buttonDone.setVisibility(View.VISIBLE);
+//            //}
+//            tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
+//            buttonShare.setVisibility(View.INVISIBLE);
+//            buttonDone.setVisibility(View.VISIBLE);
+//            if (now > progressMidNight + twoDays) {
+//                try {
+//                    int i = (itemType.equals("Wake Up")) ? Integer.parseInt(currentCard.getWakeUpTime()) : 0;
+//                    cc.give_up(itemInProgressId, i, null);
+//                } catch (IOException | NumberFormatException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
 
+        /************************************* Clicks ********************************************/
 
         buttonGiveUp.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -407,11 +407,14 @@ public class ChallengeController {
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String type = response.body().getData().getChallenge().getType();
+                    Log.i(TAG, "onResponse: Done for today is success");
                     if (type.equals(typeWake)) {
                         setNewAlarmClock(details, alarmID);
                     }
 
                     generateCardsForMainActivity(new Intent(activity, MainActivity.class));
+                } else {
+                    Log.i(TAG, "onResponse: Done for today failed: " + response.message() + " " + response.code());
                 }
             }
 
@@ -537,32 +540,41 @@ public class ChallengeController {
                         String challenge_name   = challenge.getName();          // wake up
                         String challenge_status = datum.getStatus();            // active or not
                         String challenge_id     = datum.get_id();               // im progress id
-                        String isRecipient      = (userID.equals(sender.getID())) ? "false" : "true";
-                        List<Object> progress   = (userID.equals(sender.getID()))
-                                                ? datum.getSenderProgress()
-                                                : datum.getRecipientProgress();
-                        String needsToCheck     = (userID.equals(sender.getID()))
-                                                ? datum.getNeedsToCheckSender()
-                                                : datum.getNeedsToCheckRecipient();
-                        String challType        = (challenge_type.equals(typeSelf))
-                                                ? "Self-Improvement"
+                        String challType        = (challenge_type.equals(typeSelf)) ? "Self-Improvement"
                                                 : (challenge_type.equals(typeDuel)) ? "Duel" : "Wake Up";
-                        String versus           = (challenge_type.equals(typeDuel))
-                                                ? (userID.equals(sender.getID()) ? recipient.getName()
-                                                : sender.getName()) : "notDuel";
                         String challenge_dur    = "";
                         String constDuration    = "";
+                        List<Object> progress;
+                        String needsToCheck;
+                        String isRecipient;
+                        String versus;
 
+                        //String isRecipient      = (userID.equals(sender.getID())) ? "false" : "true";
+                        //List<Object> progress   = (userID.equals(sender.getID()))
+                        //                           ? datum.getSenderProgress()
+                        //                           : datum.getRecipientProgress();
+                        //String needsToCheck     = (userID.equals(sender.getID()))
+                        //                           ? datum.getNeedsToCheckSender()
+                        //                           : datum.getNeedsToCheckRecipient();
+                        //String versus           = (challenge_type.equals(typeDuel))
+                        //                           ? (userID.equals(sender.getID())
+                        //                                            ? recipient.getName()
+                        //                                            : sender.getName())
+                        //                           : "notDuel";
 
-                        //if (userID.equals(sender.getID())) {
-                            //progress = datum.getSenderProgress();
-                            //needsToCheck = datum.getNeedsToCheckSender();
-                            //cv.put("recipient", "false");
-                        //} else {
-                            //progress = datum.getRecipientProgress();
-                            //needsToCheck = datum.getNeedsToCheckRecipient();
-                            //cv.put("recipient", "true");
-                        //}
+                        if (userID.equals(sender.getID())) {
+                            progress = datum.getSenderProgress();
+                            needsToCheck = datum.getNeedsToCheckSender();
+                            cv.put("recipient", "false");
+                            versus = (challenge_type.equals(typeDuel)) ? sender.getName() : "notDuel";
+                            isRecipient = "false";
+                        } else {
+                            progress = datum.getRecipientProgress();
+                            needsToCheck = datum.getNeedsToCheckRecipient();
+                            cv.put("recipient", "true");
+                            versus = (challenge_type.equals(typeDuel)) ? recipient.getName() : "notDuel";
+                            isRecipient = "true";
+                        }
 
                         if (datum.getEnd() != null) {
                             int constDays = round((datum.getEnd() - datum.getBegin()) / 86400);
@@ -580,28 +592,33 @@ public class ChallengeController {
                                 JSONObject json = new JSONObject(progress.get(j).toString());
                                 long at = json.getLong("at");
                                 prog[j] = String.valueOf(at);
-                                long myProgress = Long.parseLong(prog[j]);
+                                long lastCheck = Long.parseLong(prog[prog.length - 1]);
 
-                                if (challenge_status.equals("started") && myProgress != 0) {
 
-                                    Date date = new Date(myProgress * 1000);
+                                // idea: винески окремим блоком if, бо тут воно буде брати j = 0;
+                                Log.d(TAG, "onResponse: lastCheck: " + lastCheck);
+                                if (challenge_status.equals("started") && lastCheck != 0) {
+
+                                    Date date = new Date(lastCheck * 1000);
                                     long now = System.currentTimeMillis() / 1000;
-                                    long progressMidnight = myProgress
+                                    long progressMidnight = lastCheck
                                             - (date.getHours()  * 60 * 60)
                                             - (date.getMinutes()* 60)
                                             - (date.getSeconds());
 
-                                    if (now > progressMidnight + oneDay) {
-                                        needsToCheck = (userID.equals(sender.getID()))
-                                                ? datum.getNeedsToCheckSender()
-                                                : datum.getNeedsToCheckRecipient();
+                                    Log.d(TAG, "onResponse: ProgressMidnight: " + progressMidnight);
+                                    //if (now > progressMidnight + oneDay) {
+                                    //    needsToCheck = (userID.equals(sender.getID()))
+                                    //            ? datum.getNeedsToCheckSender()
+                                    //            : datum.getNeedsToCheckRecipient();
                                         if (now > progressMidnight + twoDays) {
                                             try {
-                                                int alarmID = (challenge_type.equals("Wake Up")) ? Integer.parseInt(challenge_desc) : 0;
+                                                int alarmID = (challenge_type.equals("Wake Up"))
+                                                        ? Integer.parseInt(challenge_desc) : 0;
                                                 give_up(challenge_id, alarmID, null);
                                             } catch (Exception e) {e.printStackTrace();}
                                         }
-                                    }
+                                    //}
                                 }
                             } catch (JSONException e) { e.printStackTrace(); }
                         }
