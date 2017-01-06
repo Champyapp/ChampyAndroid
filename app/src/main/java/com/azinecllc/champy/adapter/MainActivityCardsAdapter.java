@@ -151,27 +151,27 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         final ChallengeController cc = new ChallengeController(getContext(), (Activity) getContext(), token, userId);
 
         /*************************** last check-in time for auto surrender ************************/
-//        long now = System.currentTimeMillis() / 1000;
-//        long myProgress = 0;
-//        long progressMidNight = 0;
-//        if (!challengeProgress[challengeProgress.length-1].equals("")) {
-//            myProgress = Long.parseLong(challengeProgress[challengeProgress.length - 1]); // our last checkIn in seconds
-//            Date date = new Date(myProgress * 1000); // convert last checkIn in date format
-//            progressMidNight = myProgress
-//                    - (date.getHours()  * 60 * 60)
-//                    - (date.getMinutes()* 60)
-//                    - (date.getSeconds());
-//        }
+        long now = System.currentTimeMillis() / 1000;
+        long myProgress = 0;
+        long progressMidNight = 0;
+        if (!challengeProgress[challengeProgress.length-1].equals("")) {
+            myProgress = Long.parseLong(challengeProgress[challengeProgress.length - 1]); // our last checkIn in seconds
+            Date date = new Date(myProgress * 1000); // convert last checkIn in date format
+            progressMidNight = myProgress
+                    - (date.getHours()  * 60 * 60)
+                    - (date.getMinutes()* 60)
+                    - (date.getSeconds());
+        }
 //
-//        if (myProgress != 0L && now > progressMidNight + oneDay) {
-//            //if (!itemType.equals("Wake Up")) {
+        if (myProgress != 0L && now > progressMidNight + oneDay) {
+            //if (!itemType.equals("Wake Up")) {
 //            //    tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
 //            //    buttonShare.setVisibility(View.INVISIBLE);
 //            //    buttonDone.setVisibility(View.VISIBLE);
 //            //}
-//            tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
-//            buttonShare.setVisibility(View.INVISIBLE);
-//            buttonDone.setVisibility(View.VISIBLE);
+            tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
+            buttonShare.setVisibility(View.INVISIBLE);
+            buttonDone.setVisibility(View.VISIBLE);
 //            if (now > progressMidNight + twoDays) {
 //                try {
 //                    int i = (itemType.equals("Wake Up")) ? Integer.parseInt(currentCard.getWakeUpTime()) : 0;
@@ -180,7 +180,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 //                    e.printStackTrace();
 //                }
 //            }
-//        }
+        }
 
         /************************************* Clicks ********************************************/
 

@@ -211,10 +211,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_settings) {
-            final String token = sessionManager.getToken();
-            final String userId = sessionManager.getUserId();
-            ChallengeController cc = new ChallengeController(getApplicationContext(), this, token, userId);
-            cc.refreshCardsForPendingDuel(new Intent(this, MainActivity.class));
+//            final String token = sessionManager.getToken();
+//            final String userId = sessionManager.getUserId();
+//            ChallengeController cc = new ChallengeController(getApplicationContext(), this, token, userId);
+//            cc.refreshCardsForPendingDuel(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, RoleControllerActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }

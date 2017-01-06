@@ -587,40 +587,44 @@ public class ChallengeController {
                         /********************** last check-in & auto surrender ********************/
 
                         String prog[] = new String[progress.size()];
+                        long lastCheck = 0;
+                        Log.d(TAG, "onResponse: progress[] before parsing: " + Arrays.toString(prog));
+                        Log.d(TAG, "onResponse: lastCheck  before parsing: " + lastCheck);
                         for (int j = 0; j < progress.size(); j++) {
                             try {
                                 JSONObject json = new JSONObject(progress.get(j).toString());
                                 long at = json.getLong("at");
                                 prog[j] = String.valueOf(at);
-                                long lastCheck = Long.parseLong(prog[prog.length - 1]);
 
-
-                                // idea: винески окремим блоком if, бо тут воно буде брати j = 0;
-                                Log.d(TAG, "onResponse: lastCheck: " + lastCheck);
-                                if (challenge_status.equals("started") && lastCheck != 0) {
-
-                                    Date date = new Date(lastCheck * 1000);
-                                    long now = System.currentTimeMillis() / 1000;
-                                    long progressMidnight = lastCheck
-                                            - (date.getHours()  * 60 * 60)
-                                            - (date.getMinutes()* 60)
-                                            - (date.getSeconds());
-
-                                    Log.d(TAG, "onResponse: ProgressMidnight: " + progressMidnight);
-                                    //if (now > progressMidnight + oneDay) {
-                                    //    needsToCheck = (userID.equals(sender.getID()))
-                                    //            ? datum.getNeedsToCheckSender()
-                                    //            : datum.getNeedsToCheckRecipient();
-                                        if (now > progressMidnight + twoDays) {
-                                            try {
-                                                int alarmID = (challenge_type.equals("Wake Up"))
-                                                        ? Integer.parseInt(challenge_desc) : 0;
-                                                give_up(challenge_id, alarmID, null);
-                                            } catch (Exception e) {e.printStackTrace();}
-                                        }
-                                    //}
-                                }
+                                Log.d(TAG, "onResponse: progress[]: " + Arrays.toString(prog));
+                                Log.d(TAG, "onResponse: lastCheck : " + lastCheck);
                             } catch (JSONException e) { e.printStackTrace(); }
+                        }
+
+                        lastCheck = Long.parseLong(prog[prog.length-1]);
+
+                        // idea: винески окремим блоком if, бо тут воно буде брати j = 0;
+                        if (challenge_status.equals("started") && lastCheck != 0) {
+
+                            Date date = new Date(lastCheck * 1000);
+                            long now = System.currentTimeMillis() / 1000;
+                            long lastCheckMidnight = lastCheck
+                                    - (date.getHours()  * 60 * 60)
+                                    - (date.getMinutes()* 60)
+                                    - (date.getSeconds());
+
+                            Log.d(TAG, "onResponse: lastCheckMidnight: " + lastCheckMidnight);
+                            //if (now > progressMidnight + oneDay) {
+                            //    needsToCheck = (userID.equals(sender.getID()))
+                            //            ? datum.getNeedsToCheckSender()
+                            //            : datum.getNeedsToCheckRecipient();
+                            if (now > lastCheckMidnight + twoDays) {
+                                try {
+                                    int alarmID = (challenge_type.equals("Wake Up")) ? Integer.parseInt(challenge_desc) : 0;
+                                    give_up(challenge_id, alarmID, null);
+                                } catch (Exception e) {e.printStackTrace();}
+                            }
+                            //}
                         }
 
 
