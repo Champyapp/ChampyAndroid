@@ -595,16 +595,13 @@ public class ChallengeController {
                                     JSONObject json = new JSONObject(progress.get(j).toString());
                                     long at = json.getLong("at");
                                     prog[j] = String.valueOf(at);
-                                    Log.d(TAG, "onResponse: progress[]: " + Arrays.toString(prog));
-                                    Log.d(TAG, "onResponse: lastCheck : " + lastCheck);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                                    Log.d(TAG, "\nonResponse: progress[]: " + Arrays.toString(prog));
+                                } catch (JSONException e) { e.printStackTrace(); }
                             }
-                            try {
+
+                            if (prog.length != 0) {
                                 lastCheck = Long.parseLong(prog[prog.length - 1]);
-                            } catch (ArrayIndexOutOfBoundsException e) {
-                                e.printStackTrace();
+                                Log.d(TAG, "onResponse: lastCheck : " + lastCheck);
                             }
 
                             if (lastCheck != 0) {
@@ -614,17 +611,12 @@ public class ChallengeController {
                                         - (date.getHours()  * 60 * 60)
                                         - (date.getMinutes()* 60)
                                         - (date.getSeconds());
-                                //if (now > progressMidnight + oneDay) {
-                                //    needsToCheck = (userID.equals(sender.getID()))
-                                //            ? datum.getNeedsToCheckSender()
-                                //            : datum.getNeedsToCheckRecipient();
                                 if (now > lastCheckMidnight + twoDays) {
                                     try {
-                                        int alarmID = (challenge_type.equals("Wake Up")) ? Integer.parseInt(challenge_desc) : 0;
-                                        give_up(challenge_id, alarmID, null);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
+                                        int alarmID = (challenge_type.equals("Wake Up"))
+                                                ? Integer.parseInt(challenge_desc) : 0;
+                                        give_up(challenge_id, alarmID, new Intent(context, MainActivity.class));
+                                    } catch (Exception e) { e.printStackTrace(); }
                                 }
                             }
                         }
@@ -647,6 +639,7 @@ public class ChallengeController {
 
                     if (intent != null) {
                         activity.startActivity(intent);
+                        // progressBar.loadUserProgressBarInfo(); mb?
                     }
 
                 }
@@ -656,8 +649,8 @@ public class ChallengeController {
             public void onFailure(Throwable t) { }
         });
 
-        CHLoadUserProgressBarInfo loadData = new CHLoadUserProgressBarInfo(context);
-        loadData.loadUserProgressBarInfo();
+        CHLoadUserProgressBarInfo progressBar = new CHLoadUserProgressBarInfo(context);
+        progressBar.loadUserProgressBarInfo();
 
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();

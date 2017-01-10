@@ -8,17 +8,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
 import com.azinecllc.champy.activity.MainActivity;
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.controller.DailyRemindController;
 import com.azinecllc.champy.utils.SessionManager;
 import com.facebook.FacebookSdk;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class CustomNotifyReceiver extends BroadcastReceiver {
 
@@ -27,7 +24,7 @@ public class CustomNotifyReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         try {
-            FacebookSdk.sdkInitialize(getApplicationContext());
+            FacebookSdk.sdkInitialize(context);
             Log.d(TAG, "onReceive: received new notification");
         } catch (RuntimeException e) {
             Log.e(TAG, "onReceive: I Hate Facebook: " + e);

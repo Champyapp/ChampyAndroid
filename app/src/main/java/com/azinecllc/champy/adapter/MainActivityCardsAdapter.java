@@ -128,10 +128,10 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                 imageChallengeLogo.setImageResource(R.drawable.ic_wakeup_white);
                 tvChallengeDescription.setText(currentCard.getChallengeName());
                 //~~~~~~~~~~
-//                tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
-//                buttonShare.setVisibility(View.VISIBLE);
-//                buttonDone.setVisibility(View.INVISIBLE);
-//                tvEveryDayForTheNext.setVisibility(View.VISIBLE);
+                //tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
+                //buttonShare.setVisibility(View.VISIBLE);
+                //buttonDone.setVisibility(View.INVISIBLE);
+                //tvEveryDayForTheNext.setVisibility(View.VISIBLE);
                 //~~~~~~~~~~
                 break;
             case "Duel":

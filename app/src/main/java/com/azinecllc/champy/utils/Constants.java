@@ -4,7 +4,7 @@ public class Constants {
 
     public static final String path = "/data/data/com.azinecllc.champy/app_imageDir/";
 
-    public static final String API_URL   = "http://46.101.213.24:3006";
+    public static final String API_URL   = "http://46.101.213.24:3007";
   //public static final String API_PROD  = "http://46.101.213.24:3007"; // production
   //public static final String API_DEV   = "http://46.101.213.24:3006"; // development
   //public static final String API_STAGE = "http://46.101.213.24:3005"; // stage
