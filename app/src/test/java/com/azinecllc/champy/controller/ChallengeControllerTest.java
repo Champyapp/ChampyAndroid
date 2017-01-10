@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.azinecllc.champy.data.DBHelper;
 
-import org.bouncycastle.crypto.prng.RandomGenerator;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -15,7 +14,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Random;
 
-import static com.azinecllc.champy.utils.Constants.unixTime;
 import static org.mockito.Mockito.mock;
 
 /**

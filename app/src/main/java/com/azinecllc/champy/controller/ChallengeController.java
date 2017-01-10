@@ -25,7 +25,6 @@ import com.azinecllc.champy.model.active_in_progress.Sender;
 import com.azinecllc.champy.model.duel.Duel;
 import com.azinecllc.champy.model.single_in_progress.Data;
 import com.azinecllc.champy.receiver.CustomAlarmReceiver;
-import com.azinecllc.champy.utils.Constants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,7 +48,6 @@ import static com.azinecllc.champy.utils.Constants.twoDays;
 import static com.azinecllc.champy.utils.Constants.typeDuel;
 import static com.azinecllc.champy.utils.Constants.typeSelf;
 import static com.azinecllc.champy.utils.Constants.typeWake;
-import static com.azinecllc.champy.utils.Constants.unixTime;
 import static com.azinecllc.champy.utils.Constants.update;
 import static java.lang.Math.round;
 
@@ -586,47 +584,50 @@ public class ChallengeController {
 
                         /********************** last check-in & auto surrender ********************/
 
-                        String prog[] = new String[progress.size()];
                         long lastCheck = 0;
-                        Log.d(TAG, "onResponse: progress[] before parsing: " + Arrays.toString(prog));
-                        Log.d(TAG, "onResponse: lastCheck  before parsing: " + lastCheck);
-                        for (int j = 0; j < progress.size(); j++) {
-                            try {
-                                JSONObject json = new JSONObject(progress.get(j).toString());
-                                long at = json.getLong("at");
-                                prog[j] = String.valueOf(at);
+                        String prog[] = new String[progress.size()];
 
-                                Log.d(TAG, "onResponse: progress[]: " + Arrays.toString(prog));
-                                Log.d(TAG, "onResponse: lastCheck : " + lastCheck);
-                            } catch (JSONException e) { e.printStackTrace(); }
-                        }
-
-                        lastCheck = Long.parseLong(prog[prog.length-1]);
-
-                        // idea: винески окремим блоком if, бо тут воно буде брати j = 0;
-                        if (challenge_status.equals("started") && lastCheck != 0) {
-
-                            Date date = new Date(lastCheck * 1000);
-                            long now = System.currentTimeMillis() / 1000;
-                            long lastCheckMidnight = lastCheck
-                                    - (date.getHours()  * 60 * 60)
-                                    - (date.getMinutes()* 60)
-                                    - (date.getSeconds());
-
-                            Log.d(TAG, "onResponse: lastCheckMidnight: " + lastCheckMidnight);
-                            //if (now > progressMidnight + oneDay) {
-                            //    needsToCheck = (userID.equals(sender.getID()))
-                            //            ? datum.getNeedsToCheckSender()
-                            //            : datum.getNeedsToCheckRecipient();
-                            if (now > lastCheckMidnight + twoDays) {
+                        if (challenge_status.equals("started")) {
+                            Log.d(TAG, "onResponse: progress[] before parsing: " + Arrays.toString(prog));
+                            Log.d(TAG, "onResponse: lastCheck  before parsing: " + lastCheck);
+                            for (int j = 0; j < progress.size(); j++) {
                                 try {
-                                    int alarmID = (challenge_type.equals("Wake Up")) ? Integer.parseInt(challenge_desc) : 0;
-                                    give_up(challenge_id, alarmID, null);
-                                } catch (Exception e) {e.printStackTrace();}
+                                    JSONObject json = new JSONObject(progress.get(j).toString());
+                                    long at = json.getLong("at");
+                                    prog[j] = String.valueOf(at);
+                                    Log.d(TAG, "onResponse: progress[]: " + Arrays.toString(prog));
+                                    Log.d(TAG, "onResponse: lastCheck : " + lastCheck);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
-                            //}
-                        }
+                            try {
+                                lastCheck = Long.parseLong(prog[prog.length - 1]);
+                            } catch (ArrayIndexOutOfBoundsException e) {
+                                e.printStackTrace();
+                            }
 
+                            if (lastCheck != 0) {
+                                Date date = new Date(lastCheck * 1000);
+                                long now = System.currentTimeMillis() / 1000;
+                                long lastCheckMidnight = lastCheck
+                                        - (date.getHours()  * 60 * 60)
+                                        - (date.getMinutes()* 60)
+                                        - (date.getSeconds());
+                                //if (now > progressMidnight + oneDay) {
+                                //    needsToCheck = (userID.equals(sender.getID()))
+                                //            ? datum.getNeedsToCheckSender()
+                                //            : datum.getNeedsToCheckRecipient();
+                                if (now > lastCheckMidnight + twoDays) {
+                                    try {
+                                        int alarmID = (challenge_type.equals("Wake Up")) ? Integer.parseInt(challenge_desc) : 0;
+                                        give_up(challenge_id, alarmID, null);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        }
 
                         cv.put("name",          challType);             // Self-Improvement / Duel / Wake Up
                         cv.put("versus",        versus);                // if this is button_duel than versus = recipient / sender name

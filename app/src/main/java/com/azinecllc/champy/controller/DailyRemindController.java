@@ -4,16 +4,12 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.azinecllc.champy.receiver.CustomNotifyReceiver;
 
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 import static android.content.Context.ALARM_SERVICE;
-import static com.azinecllc.champy.utils.Constants.unixTime;
 
 public class DailyRemindController {
 
