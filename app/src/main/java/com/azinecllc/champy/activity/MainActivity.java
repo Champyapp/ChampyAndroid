@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Boolean isFabOpen = false;
     private DrawerLayout drawer;
     private FloatingActionButton fabPlus, fabWake, fabSelf, fabDuel;
-    private Animation fab_open,fab_close,rotate_forward,rotate_backward;
+    private Animation fab_open, fab_close, rotate_forward, rotate_backward;
     private MainActivityCardsAdapter adapter;
 
     @Override

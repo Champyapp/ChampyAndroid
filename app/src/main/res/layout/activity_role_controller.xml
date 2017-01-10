@@ -10,7 +10,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:id="@+id/Champy_image"
-        android:background="@drawable/icon_champy"
+        android:background="@drawable/ic_champy_circle"
         android:contentDescription="@string/champy"
         android:layout_marginTop="50dp"
         android:layout_centerHorizontal="true"

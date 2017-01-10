@@ -46,32 +46,34 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
     @Override
     public void onBindViewHolder(final HistoryChallengeAdapter.ViewHolder viewHolder, int position) {
         HistoryChallenge itemRow = mContacts.get(position);
-        TextView nameTextView = viewHolder.nameTextView;
-        String constDuration = itemRow.getConstDuration();
-        String wakeUpTime = itemRow.getChallengeName();
-        String itemRowType = itemRow.getType();
-        String versus = itemRow.getVersus();
-        String goal = itemRow.getGoal();
+        TextView nameTextView    = viewHolder.nameTextView;
+
+        String constDuration  = itemRow.getConstDuration();
+        String wakeUpTime     = itemRow.getChallengeName();
+        String itemRowType    = itemRow.getType();
+        String versus         = itemRow.getVersus();
+        String goal           = itemRow.getGoal();
 
         tvPoint.setText(String.format("%s", constDuration + " days")); //constDuration + " days");
         tvPoint.setTypeface(typeFace);
 
         switch (itemRowType) {
+            // removed .diskCacheStrategy(DiskCacheStrategy.ALL)
             case "Duel":
                 nameTextView.setText(goal + " with " + versus);
-                Glide.with(mContext).load(R.drawable.ic_duel_yellow).diskCacheStrategy(DiskCacheStrategy.ALL).override(80, 80).into(viewHolder.pic);
+                Glide.with(mContext).load(R.drawable.ic_duel_yellow).override(80, 80).into(viewHolder.pic);
                 break;
             case "Wake Up":
                 nameTextView.setText(wakeUpTime);
-                Glide.with(mContext).load(R.drawable.ic_wakeup_yellow).diskCacheStrategy(DiskCacheStrategy.ALL).override(80, 80).into(viewHolder.pic);
+                Glide.with(mContext).load(R.drawable.ic_wakeup_yellow).override(80, 80).into(viewHolder.pic);
                 break;
             case "Self-Improvement":
                 nameTextView.setText(goal);
-                Glide.with(mContext).load(R.drawable.ic_self_yellow).diskCacheStrategy(DiskCacheStrategy.ALL).override(80, 80).into(viewHolder.pic);
+                Glide.with(mContext).load(R.drawable.ic_self_yellow).override(80, 80).into(viewHolder.pic);
                 break;
             default:
                 nameTextView.setText(R.string.lostInternetConnection);
-                Glide.with(mContext).load(R.drawable.icon_champy).override(80, 80).into(viewHolder.pic);
+                Glide.with(mContext).load(R.drawable.ic_champy_circle).override(80, 80).into(viewHolder.pic);
                 break;
         }
 
@@ -83,7 +85,7 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         }
         challengeType.setTypeface(typeFace);
 
-        //Glide.with(mContext).load(R.drawable.ic_score_progress).override(40, 40).into(viewHolder.wins);
+        //Glide.with(mContext).load(R.drawable.ic_score_prog).override(40, 40).into(viewHolder.wins);
         //Glide.with(mContext).load(R.drawable.ic_score_total) .override(40, 40).into(viewHolder.total);
 
     }

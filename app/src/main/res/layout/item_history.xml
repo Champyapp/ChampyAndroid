@@ -82,7 +82,7 @@
         android:layout_width="15dp"
         android:layout_height="15dp"
         android:id="@+id/imageView_wins_logo"
-        android:src="@drawable/ic_score_progress"
+        android:src="@drawable/ic_score_prog"
         android:layout_above="@+id/view"
         android:layout_toStartOf="@+id/counterWins"
         android:contentDescription="@string/challengestatus"

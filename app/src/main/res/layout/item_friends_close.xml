@@ -38,7 +38,7 @@
         android:layout_height="15dp"
         android:id="@+id/imageView_challenges_logo"
         android:layout_above="@+id/view"
-        android:src="@drawable/ic_score_progress"
+        android:src="@drawable/ic_score_prog"
         android:layout_toLeftOf="@+id/counterInProgress"
         android:layout_toStartOf="@+id/counterInProgress"
         android:layout_marginRight="8dp"

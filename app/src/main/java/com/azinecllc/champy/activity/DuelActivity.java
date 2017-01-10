@@ -66,7 +66,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         final Bundle extras = getIntent().getExtras();
         String friendsPhoto, name;
         if(extras == null) {
-            Uri uri = Uri.parse("android.resource://com.azinecllc.champy/drawable/icon_champy");
+            Uri uri = Uri.parse("android.resource://com.azinecllc.champy/drawable/ic_champy_circle");
             friendsPhoto = uri.toString();
             name = "Your friend";
         } else {

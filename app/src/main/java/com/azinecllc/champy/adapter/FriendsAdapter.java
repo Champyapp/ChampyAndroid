@@ -107,22 +107,25 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
          */
 
         // Initialisation circle image views & photo
-        ImageView imageViewFriendPicture = viewHolder.friendImage;
-        ImageView imageViewChallenges = viewHolder.challenges;
-        ImageView imageViewTotal = viewHolder.total;
-        ImageView imageViewWins = viewHolder.wins;
+        ImageView ivFriendPicture = viewHolder.friendImage;
+        ImageView imageViewInProg = viewHolder.challenges;
+        ImageView imageViewTotal  = viewHolder.total;
+        ImageView imageViewWins   = viewHolder.wins;
+
         // Initialisation counters
-        TextView counterInProgressClose = (TextView)viewHolder.itemView.findViewById(R.id.counterInProgress);
-        TextView counterTotalClose = (TextView)viewHolder.itemView.findViewById(R.id.counterTotal);
-        TextView counterWinsClose = (TextView)viewHolder.itemView.findViewById(R.id.counterWins);
+        TextView counterInProgClose = (TextView)viewHolder.itemView.findViewById(R.id.counterInProgress);
+        TextView counterTotalClose  = (TextView)viewHolder.itemView.findViewById(R.id.counterTotal);
+        TextView counterWinsClose   = (TextView)viewHolder.itemView.findViewById(R.id.counterWins);
+
         // Setting value for counters
-        counterInProgressClose.setText(contact.getmChallenges());
-        counterWinsClose.setText(contact.getmWins());
+        counterInProgClose.setText(contact.getmChallenges());
         counterTotalClose.setText(contact.getmTotal());
+        counterWinsClose.setText(contact.getmWins());
+
         // Setting typeface for counters;
-        counterInProgressClose.setTypeface(typeFace);
-        counterWinsClose.setTypeface(typeFace);
+        counterInProgClose.setTypeface(typeFace);
         counterTotalClose.setTypeface(typeFace);
+        counterWinsClose.setTypeface(typeFace);
 
         /**
          * below open view
@@ -130,29 +133,35 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
         // Initialisation circle image views & photo
         ImageView imageViewUserAvatar = (ImageView) viewHolder.itemView.findViewById(R.id.imageViewUserAvatar);
-        ImageView imageViewChallengesOpen = viewHolder.mchallenges;
-        ImageView imageViewTotalOpen = viewHolder.mtotal;
-        ImageView imageViewWinsOpen = viewHolder.mwins;
+        ImageView imageViewInProgOpen = viewHolder.mchallenges;
+        ImageView imageViewTotalOpen  = viewHolder.mtotal;
+        ImageView imageViewWinsOpen   = viewHolder.mwins;
+
         // Initialisation text views
         TextView tvChallenges = (TextView) viewHolder.itemView.findViewById(R.id.textViewChallenges);
-        TextView tvTotal = (TextView) viewHolder.itemView.findViewById(R.id.textViewTotal);
-        TextView tvWins = (TextView) viewHolder.itemView.findViewById(R.id.textViewWins);
+        TextView tvTotal      = (TextView) viewHolder.itemView.findViewById(R.id.textViewTotal);
+        TextView tvWins       = (TextView) viewHolder.itemView.findViewById(R.id.textViewWins);
+
         // Initialisation open counter
         TextView counterInProgressOpen = (TextView) viewHolder.itemView.findViewById(R.id.info_inProgress);
-        TextView counterTotalOpen = (TextView) viewHolder.itemView.findViewById(R.id.info_total);
-        TextView counterWinsOpen = (TextView) viewHolder.itemView.findViewById(R.id.info_wins);
+        TextView counterTotalOpen      = (TextView) viewHolder.itemView.findViewById(R.id.info_total);
+        TextView counterWinsOpen       = (TextView) viewHolder.itemView.findViewById(R.id.info_wins);
+
         // Setting value for open counter
         counterInProgressOpen.setText(contact.getmChallenges());
         counterTotalOpen.setText(contact.getmTotal());
         counterWinsOpen.setText(contact.getmWins());
+
         // User name initialisation, setting value & typeface
         TextView tvUserName2 = (TextView) viewHolder.itemView.findViewById(R.id.textViewChallengesCounter);
         tvUserName2.setText(contact.getName());
         tvUserName2.setTypeface(typeFace);
+
         // Setting typeface for simple text
         tvChallenges.setTypeface(typeFace);
         tvTotal.setTypeface(typeFace);
         tvWins.setTypeface(typeFace);
+
         // Setting typeface for open counters
         counterInProgressOpen.setTypeface(typeFace);
         counterTotalOpen.setTypeface(typeFace);
@@ -163,14 +172,21 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         // response for view in open state
         if (selected.contains(position)) {
 
-            Glide.with(context).load(R.drawable.ic_score_wins).override(40, 40).into(imageViewWinsOpen);
-            Glide.with(context).load(R.drawable.ic_score_progress).override(40, 40).into(imageViewChallengesOpen);
+            Glide.with(context).load(R.drawable.ic_score_wins) .override(40, 40).into(imageViewWinsOpen);
+            Glide.with(context).load(R.drawable.ic_score_prog) .override(40, 40).into(imageViewInProgOpen);
             Glide.with(context).load(R.drawable.ic_score_total).override(40, 40).into(imageViewTotalOpen);
-            Glide.with(context).load(R.drawable.stat_circle_00027).placeholder(R.drawable.icon_champy)
+
+            Glide.with(context)
+                    .load(R.drawable.stat_circle_00027)
+                    .placeholder(R.drawable.ic_champy_circle)
                     .into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleChall));
-            Glide.with(context).load(R.drawable.stat_circle_00027).placeholder(R.drawable.icon_champy)
+            Glide.with(context)
+                    .load(R.drawable.stat_circle_00027)
+                    .placeholder(R.drawable.ic_champy_circle)
                     .into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleWins));
-            Glide.with(context).load(R.drawable.stat_circle_00027).placeholder(R.drawable.icon_champy)
+            Glide.with(context)
+                    .load(R.drawable.stat_circle_00027)
+                    .placeholder(R.drawable.ic_champy_circle)
                     .into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleTotal));
 
             Glide.with(context)
@@ -179,7 +195,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(false)
                     .transform(new CropCircleTransformation(context))
-                    .placeholder(R.drawable.icon_champy)
+                    .placeholder(R.drawable.ic_champy_circle)
                     .override(80, 80)
                     .dontAnimate()
                     .into(imageViewUserAvatar);
@@ -189,7 +205,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 //                    .asBitmap()
 //                    .diskCacheStrategy(DiskCacheStrategy.ALL)
 //                    .transform(new CropCircleTransformation(context))
-//                    .placeholder(R.drawable.icon_champy)
+//                    .placeholder(R.drawable.ic_champy_circle)
 //                    .override(80, 80)
 //                    .into(imageViewUserAvatar);
             // made our "open-view" is visible and 'close-view' invisible
@@ -197,8 +213,8 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             viewHolder.itemView.findViewById(R.id.row_friends_list_close).setVisibility(View.GONE);
         }
         else {
-            Glide.with(context).load(R.drawable.ic_score_wins).override(40, 40).into(imageViewWins);
-            Glide.with(context).load(R.drawable.ic_score_progress).override(40, 40).into(imageViewChallenges);
+            Glide.with(context).load(R.drawable.ic_score_wins) .override(40, 40).into(imageViewWins);
+            Glide.with(context).load(R.drawable.ic_score_prog) .override(40, 40).into(imageViewInProg);
             Glide.with(context).load(R.drawable.ic_score_total).override(40, 40).into(imageViewTotal);
 
             Glide.with(context)
@@ -207,15 +223,15 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(false)
                     .transform(new CropCircleTransformation(context))
-                    .placeholder(R.drawable.icon_champy)
+                    .placeholder(R.drawable.ic_champy_circle)
                     .override(80, 80)
                     .dontAnimate()
-                    .into(imageViewFriendPicture);
+                    .into(ivFriendPicture);
 //            Glide.with(context)
 //                    .load(contact.getPicture())
 //                    .asBitmap()
 //                    .transform(new CropCircleTransformation(context))
-//                    .placeholder(R.drawable.icon_champy)
+//                    .placeholder(R.drawable.ic_champy_circle)
 //                    .diskCacheStrategy(DiskCacheStrategy.ALL)
 //                    .override(80, 80)
 //                    .into(imageViewFriendPicture);
@@ -307,22 +323,23 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             // to access the context from any ViewHolder instance.
             super(itemView);
 
-            nameTextView = (TextView) itemView.findViewById(R.id.userName);
-            friendImage = (ImageView) itemView.findViewById(R.id.picture);
-            challenges = (ImageView) itemView.findViewById(R.id.imageView_challenges_logo);
-            wins = (ImageView) itemView.findViewById(R.id.imageView_wins_logo);
-            total = (ImageView) itemView.findViewById(R.id.imageView_total_logo);
-            dop = (ImageView) itemView.findViewById(R.id.imageViewUserAvatar);
+            nameTextView = (TextView)  itemView.findViewById(R.id.userName);
+            friendImage  = (ImageView) itemView.findViewById(R.id.picture);
+            challenges   = (ImageView) itemView.findViewById(R.id.imageView_challenges_logo);
+            wins         = (ImageView) itemView.findViewById(R.id.imageView_wins_logo);
+            total        = (ImageView) itemView.findViewById(R.id.imageView_total_logo);
+            dop          = (ImageView) itemView.findViewById(R.id.imageViewUserAvatar);
 
-            mchallenges = (ImageView) itemView.findViewById(R.id.imageViewBgChallenges);
-            mwins = (ImageView) itemView.findViewById(R.id.imageViewBgWins);
-            mtotal = (ImageView) itemView.findViewById(R.id.imageViewBgTotal);
+            mchallenges  = (ImageView) itemView.findViewById(R.id.imageViewBgChallenges);
+            mwins        = (ImageView) itemView.findViewById(R.id.imageViewBgWins);
+            mtotal       = (ImageView) itemView.findViewById(R.id.imageViewBgTotal);
 
-            simple = (RelativeLayout)itemView.findViewById(R.id.row_friends_list_close);
-            info = (RelativeLayout)itemView.findViewById(R.id.row_friends_list_open);
+            block        = (ImageButton) itemView.findViewById(R.id.imageButtonBlockUser);
+            add          = (ImageButton) itemView.findViewById(R.id.imageButtonAddUser);
 
-            block = (ImageButton)itemView.findViewById(R.id.imageButtonBlockUser);
-            add = (ImageButton)itemView.findViewById(R.id.imageButtonAddUser);
+            simple       = (RelativeLayout) itemView.findViewById(R.id.row_friends_list_close);
+            info         = (RelativeLayout) itemView.findViewById(R.id.row_friends_list_open);
+
         }
 
     }

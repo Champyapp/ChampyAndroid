@@ -142,7 +142,7 @@ public class CHBuildAnim {
         welcomeUserName.startAnimation(alphaAnimation);
         welcomeUserName.setTypeface(typeface);
 
-        Uri uri = Uri.parse("android.resource://com.azinecllc.champy/drawable/ic_score_progress");
+        Uri uri = Uri.parse("android.resource://com.azinecllc.champy/drawable/ic_score_prog");
         Glide.with(activity).load(uri).into(imageViewChallengesLogo);
         //Glide.with(this).load(profile).bitmapTransform(new CropCircleTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
         imageViewChallengesLogo.startAnimation(alphaAnimation);

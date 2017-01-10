@@ -117,7 +117,7 @@
         android:layout_width="15dp"
         android:layout_height="15dp"
         android:id="@+id/imageViewBgChallenges"
-        android:src="@drawable/ic_score_progress"
+        android:src="@drawable/ic_score_prog"
         android:layout_alignLeft="@+id/imageViewBgForCircleChall"
         android:layout_alignStart="@+id/imageViewBgForCircleChall"
         android:layout_alignRight="@+id/imageViewBgForCircleChall"

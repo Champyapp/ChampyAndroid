@@ -270,7 +270,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 //                                                    cv.put("user_id", data.getID());
 //                                                    cv.put("name", name);
 //                                                    cv.put("photo", photo);
-//                                                    cv.put("ic_score_progress", "" + data.getAllChallengesCount());
+//                                                    cv.put("ic_score_prog", "" + data.getAllChallengesCount());
 //                                                    cv.put("ic_score_wins", "" + data.getSuccessChallenges());
 //                                                    cv.put("ic_score_total", "" + data.getInProgressChallenges());
 //                                                    cv.put("level", "" + data.getLevel().getNumber());
@@ -304,7 +304,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 ////                                                }
 ////                                                cv.put("name", user_name);
 ////                                                cv.put("photo", photo);
-////                                                cv.put("ic_score_progress", "0");
+////                                                cv.put("ic_score_prog", "0");
 ////                                                cv.put("ic_score_wins", "0");
 ////                                                cv.put("ic_score_total", "0");
 ////                                                cv.put("level", "0");

@@ -29,7 +29,7 @@ public class AlarmService extends IntentService {
 
         NotificationCompat.Builder alarmNotificationBuilder = new NotificationCompat.Builder(this)
                 .setContentTitle("Alarm")
-                .setSmallIcon(R.drawable.icon_champy)
+                .setSmallIcon(R.drawable.ic_champy_circle)
                 .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
                 .setContentText(msg);

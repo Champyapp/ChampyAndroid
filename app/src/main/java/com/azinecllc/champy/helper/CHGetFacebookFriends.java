@@ -114,7 +114,7 @@ public class CHGetFacebookFriends {
 //                                    } catch (MalformedURLException e) { e.printStackTrace(); }
 //                                    cv.put("name", user_name);
 //                                    cv.put("photo", photo);
-//                                    cv.put("ic_score_progress", "0");
+//                                    cv.put("ic_score_prog", "0");
 //                                    cv.put("ic_score_wins", "0");
 //                                    cv.put("ic_score_total", "0");
 //                                    cv.put("level", "0");
