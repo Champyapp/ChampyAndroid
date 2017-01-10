@@ -22,7 +22,6 @@ import android.widget.Toast;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.MainActivityCardsAdapter;
-import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.helper.CHBuildAnim;
 import com.azinecllc.champy.helper.CHCheckPendingDuels;
 import com.azinecllc.champy.helper.CHDownloadImageTask;
@@ -95,9 +94,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         File blurred = new File(path, "blurred.png");
         if (blurred.exists()) {
             File profile = new File(path, "profile.jpg");
-            Glide.with(this).load(profile).bitmapTransform(new CropCircleTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
-            Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(background);
-            Glide.with(this).load(blurred).bitmapTransform(new CropSquareTransformation(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);
+            Glide.with(this)
+                    .load(profile)
+                    .bitmapTransform(new CropCircleTransformation(this))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .into(drawerUserPhoto);
+            Glide.with(this)
+                    .load(blurred)
+                    .bitmapTransform(new CropSquareTransformation(this))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .into(background);
+            Glide.with(this)
+                    .load(blurred)
+                    .bitmapTransform(new CropSquareTransformation(this))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .into(drawerBackground);
         } else {
             final String pathToPic = sessionManager.getPathToPic();
             CHDownloadImageTask chDownloadImageTask = new CHDownloadImageTask(getApplicationContext(), MainActivity.this);
@@ -144,9 +158,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onClick(View v) {
         if (adapter.dataCount() < 10) {
             switch (v.getId()) {
-                case R.id.fabSelf: startActivity(new Intent(this, SelfImpActivity.class)); finish(); break;
-                case R.id.fabDuel: startActivity(new Intent(this, FriendsActivity.class)); finish(); break;
-                case R.id.fabWake: startActivity(new Intent(this, WakeUpActivity .class)); finish(); break;
+                case R.id.fabSelf:
+                    startActivity(new Intent(this, SelfImprovementActivity.class));
+                    finish();
+                    break;
+                case R.id.fabDuel:
+                    startActivity(new Intent(this, FriendsActivity.class));
+                    finish();
+                    break;
+                case R.id.fabWake:
+                    startActivity(new Intent(this, WakeUpActivity.class));
+                    finish();
+                    break;
             }
         } else {
             Toast.makeText(this, R.string.you_have_too_much_challenges, Toast.LENGTH_LONG).show();

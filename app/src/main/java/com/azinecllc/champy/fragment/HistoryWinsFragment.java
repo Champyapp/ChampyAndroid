@@ -19,13 +19,10 @@ import java.util.ArrayList;
 
 public class HistoryWinsFragment extends Fragment {
 
-    private ArrayList<SelfImprovement_model> self_improvement;
     private ArrayList<HistoryChallenge> winsArray;
     private SwipeRefreshLayout gSwipeRefreshLayout;
     private HistoryChallengeAdapter adapter;
-    private RecyclerView rvContacts;
     private OfflineMode offlineMode;
-    private View gView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,15 +30,37 @@ public class HistoryWinsFragment extends Fragment {
         offlineMode = OfflineMode.getInstance();
         winsArray = new ArrayList<>();
         adapter = new HistoryChallengeAdapter(winsArray, getContext());
-
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_history, container, false);
 
-        self_improvement = SelfImprovement_model.generateWins(getContext());
+        loadHistoryWins(view);
+
+        gSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
+        gSwipeRefreshLayout.setOnRefreshListener(() -> {
+            if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
+                gSwipeRefreshLayout.setRefreshing(true);
+                winsArray.clear();
+                loadHistoryWins(view);
+                gSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+        return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Runtime.getRuntime().runFinalization();
+        Runtime.getRuntime().gc();
+    }
+
+
+    private void loadHistoryWins(View view) {
+        ArrayList<SelfImprovement_model> self_improvement = SelfImprovement_model.generateWins(getContext());
 
         for (int i = 0; i < self_improvement.size(); i++) {
             SelfImprovement_model item = self_improvement.get(i);
@@ -60,56 +79,43 @@ public class HistoryWinsFragment extends Fragment {
             ));
         }
 
-        gSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
-        gSwipeRefreshLayout.setOnRefreshListener(() -> refreshOtherView(gSwipeRefreshLayout, gView));
-        this.gView = view;
-
-        rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
+        RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
         rvContacts.setAdapter(adapter);
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
-        return view;
     }
 
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Runtime.getRuntime().runFinalization();
-        Runtime.getRuntime().gc();
-    }
-
-
-    private void refreshOtherView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
-        if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
-            swipeRefreshLayout.setRefreshing(true);
-            swipeRefreshLayout.post(() -> {
-                winsArray = new ArrayList<>();
-                for (int i = 0; i < self_improvement.size(); i++) {
-                    SelfImprovement_model item = self_improvement.get(i);
-                    String description = item.getGoal();
-                    String duration = item.getDays();
-                    String status = item.getStatus();
-                    String type = item.getType();
-                    String goal = item.getGoal();
-                    String challengeName = item.getChallengeName();
-                    String versus = item.getVersus();
-                    String recipient = item.getRecipient();
-                    String constDuration = item.getConstDuration();
-
-                    winsArray.add(new HistoryChallenge(
-                            type, false, description, duration, status, goal, challengeName, versus, recipient, constDuration
-                    ));
-                }
-
-                adapter = new HistoryChallengeAdapter(winsArray, getContext());
-                rvContacts.setAdapter(adapter);
-                rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
-
-                swipeRefreshLayout.setRefreshing(false);
-            });
-        } else {
-            swipeRefreshLayout.setRefreshing(false);
-        }
-    }
+//    private void refreshOtherView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
+//        if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
+//            swipeRefreshLayout.setRefreshing(true);
+//            swipeRefreshLayout.post(() -> {
+//                winsArray = new ArrayList<>();
+//                for (int i = 0; i < self_improvement.size(); i++) {
+//                    SelfImprovement_model item = self_improvement.get(i);
+//                    String description = item.getGoal();
+//                    String duration = item.getDays();
+//                    String status = item.getStatus();
+//                    String type = item.getType();
+//                    String goal = item.getGoal();
+//                    String challengeName = item.getChallengeName();
+//                    String versus = item.getVersus();
+//                    String recipient = item.getRecipient();
+//                    String constDuration = item.getConstDuration();
+//
+//                    winsArray.add(new HistoryChallenge(
+//                            type, false, description, duration, status, goal, challengeName, versus, recipient, constDuration
+//                    ));
+//                }
+//
+//                adapter = new HistoryChallengeAdapter(winsArray, getContext());
+//                rvContacts.setAdapter(adapter);
+//                rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
+//
+//                swipeRefreshLayout.setRefreshing(false);
+//            });
+//        } else {
+//            swipeRefreshLayout.setRefreshing(false);
+//        }
+//    }
 
 }

@@ -67,7 +67,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         final String itemType = currentCard.getType();
         final String itemNeedsToCheck = currentCard.getNeedsToCheck();
         final String itemInProgressId = currentCard.getId();
-        final String[] challengeProgress = itemProgress.replace("[", "").replace("]", "").split(", ");
+        final String[] challengeProgress = itemProgress.replace("[", "").replace("]", "").split(" ");
         String details = Arrays.toString(challengeProgress);
 
         final TextView tvChallengeType = (TextView) tempView.findViewById(R.id.tvChallengeType);

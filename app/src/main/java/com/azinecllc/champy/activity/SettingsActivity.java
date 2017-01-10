@@ -59,11 +59,11 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private final String TAG = "SettingsActivity";
     private TextView tvChangeName, tvName;
     private String name, userID, token;
-    private OfflineMode offlineMode;
+    private OfflineMode offline;
     private DBHelper dbHelper;
-    private DailyRemindController mDailyRemind;
+    private DailyRemindController reminder;
     private DrawerLayout drawer;
-    private SessionManager sessionManager;
+    private SessionManager session;
     HashMap<String, String> map = new HashMap<>();
     HashMap<String, String> user = new HashMap<>();
     Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
@@ -73,11 +73,11 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_settings);
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final ImageView background = (ImageView) findViewById(R.id.back_settings);
-        final ImageView userImageProfile = (ImageView) findViewById(R.id.img_profile);
+        ImageView background = (ImageView) findViewById(R.id.back_settings);
+        ImageView userImageProfile = (ImageView) findViewById(R.id.img_profile);
         background.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         File fileBlur = new File(path, "blurred.png");
@@ -101,14 +101,14 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 .into(userImageProfile);
 
         dbHelper = DBHelper.getInstance(getApplicationContext());
-        offlineMode = OfflineMode.getInstance();
-        mDailyRemind = new DailyRemindController(getApplicationContext());
-        sessionManager = SessionManager.getInstance(getApplicationContext());
-        userID = sessionManager.getUserId();
-        token = sessionManager.getToken();
+        offline  = OfflineMode.getInstance();
+        reminder = new DailyRemindController(getApplicationContext());
+        session  = SessionManager.getInstance(getApplicationContext());
+        userID   = session.getUserId();
+        token    = session.getToken();
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
@@ -117,19 +117,18 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        Typeface typeface = Typeface.createFromAsset(SettingsActivity.this.getAssets(), "fonts/bebasneue.ttf");
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
+        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
-        user = sessionManager.getUserDetails();
+        user = session.getUserDetails();
         name = user.get("name");
 
         initSwitches();
 
-
-        final Typeface typeface = Typeface.createFromAsset(SettingsActivity.this.getAssets(), "fonts/bebasneue.ttf");
-        final TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        final ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
-        final ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        TextView  drawerUserName     = (TextView)  headerLayout.findViewById(R.id.tvUserName);
+        ImageView drawerBackground   = (ImageView) headerLayout.findViewById(R.id.slide_background);
+        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
         drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         Glide.with(this)
@@ -146,15 +145,15 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 .skipMemoryCache(true)
                 .into(drawerBackground);
 
-        final TextView terms = (TextView)findViewById(R.id.terms);
-        final TextView about = (TextView)findViewById(R.id.about);
-        final TextView avatar = (TextView)findViewById(R.id.avatar);
-        final TextView privacy = (TextView)findViewById(R.id.privacy);
-        final TextView tvLegal = (TextView)findViewById(R.id.tvLegal);
-        final TextView delete = (TextView)findViewById(R.id.delete_acc);
-        final TextView tvGeneral = (TextView)findViewById(R.id.tvGeneral);
-        final TextView contactUs = (TextView)findViewById(R.id.contact_us);
-        final TextView tvNotifications = (TextView)findViewById(R.id.tvNotifications);
+        TextView terms     = (TextView)findViewById(R.id.terms);
+        TextView about     = (TextView)findViewById(R.id.about);
+        TextView avatar    = (TextView)findViewById(R.id.avatar);
+        TextView privacy   = (TextView)findViewById(R.id.privacy);
+        TextView tvLegal   = (TextView)findViewById(R.id.tvLegal);
+        TextView delete    = (TextView)findViewById(R.id.delete_acc);
+        TextView tvGeneral = (TextView)findViewById(R.id.tvGeneral);
+        TextView contactUs = (TextView)findViewById(R.id.contact_us);
+        TextView tvNotif   = (TextView)findViewById(R.id.tvNotifications);
 
         tvName = (TextView)findViewById(R.id.tvUserName);
         tvChangeName = (TextView)findViewById(R.id.tvName);
@@ -163,9 +162,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
         tvName.setTypeface(typeface);
         tvLegal.setTypeface(typeface);
+        tvNotif.setTypeface(typeface);
         tvGeneral.setTypeface(typeface);
         drawerUserName.setTypeface(typeface);
-        tvNotifications.setTypeface(typeface);
 
         about.setOnClickListener(this);
         terms.setOnClickListener(this);
@@ -184,7 +183,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
         }
 
-        //ViewServer.get(this).addWindow(this);
     }
 
     @Override
@@ -254,10 +252,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 startActivity(Intent.createChooser(share, getString(R.string.how_would_you_like_to_share)));
                 break;
             case R.id.nav_logout:
-                if (offlineMode.isConnectedToRemoteAPI(this)) {
+                if (offline.isConnectedToRemoteAPI(this)) {
                     updateProfile(map);
                     LoginManager.getInstance().logOut();
-                    sessionManager.logout(SettingsActivity.this);
+                    session.logout(SettingsActivity.this);
                     finish();
                 }
                 break;
@@ -272,21 +270,24 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         switch (v.getId()) {
             case R.id.tvName:
                 tvChangeName.setVisibility(View.INVISIBLE);
-                final TextView tvEnterYourName = (TextView) findViewById(R.id.tvEntedYourName);
+                TextView tvEnterYourName = (TextView) findViewById(R.id.tvEntedYourName);
                 tvEnterYourName.setVisibility(View.VISIBLE);
-                final EditText etNewName = (EditText) findViewById(R.id.new_name);
+
+                EditText etNewName = (EditText) findViewById(R.id.new_name);
                 etNewName.setVisibility(View.VISIBLE);
                 etNewName.setText(name);
-                final Button imageButtonAcceptName = (Button) findViewById(R.id.imageButtonAcceptMaybe);
+
+                Button imageButtonAcceptName = (Button) findViewById(R.id.imageButtonAcceptMaybe);
                 imageButtonAcceptName.setVisibility(View.VISIBLE);
-                final View lineOfTheNed = findViewById(R.id.view11);
+
+                View lineOfTheNed = findViewById(R.id.view11);
                 lineOfTheNed.setVisibility(View.VISIBLE);
 
                 imageButtonAcceptName.setOnClickListener(v1 -> {
                     String checkName = etNewName.getText().toString();
-                    if (offlineMode.isConnectedToRemoteAPI(this) && !checkName.isEmpty()) {
+                    if (offline.isConnectedToRemoteAPI(this) && !checkName.isEmpty()) {
                         String newName = etNewName.getText().toString().trim();
-                        sessionManager.change_name(newName);
+                        session.change_name(newName);
                         setNewName(newName);
 
                         tvName.setText(etNewName.getText().toString());
@@ -304,7 +305,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 startActivity(intent);
                 break;
             case R.id.delete_acc:
-                if (!sessionManager.getChampyOptions().get("challenges").equals("0")) {
+                if (!session.getChampyOptions().get("challenges").equals("0")) {
                     surrenderAllChallengesDialog();
                 } else {
                     deleteAccountDialog();
@@ -336,11 +337,11 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
 
     private void updateProfile(HashMap<String, String> map) {
-        sessionManager.toggleChallengeEnd(map.get("challengeEnd"));
-        sessionManager.togglePushNotification(map.get("pushNotifications"));
-        sessionManager.toggleChallengesForToday(map.get("challengesForToday"));
-        sessionManager.toggleNewChallengeRequest(map.get("newChallengeRequests"));
-        sessionManager.toggleAcceptYourChallenge(map.get("acceptedYourChallenge"));
+        session.toggleChallengeEnd(map.get("challengeEnd"));
+        session.togglePushNotification(map.get("pushNotifications"));
+        session.toggleChallengesForToday(map.get("challengesForToday"));
+        session.toggleNewChallengeRequest(map.get("newChallengeRequests"));
+        session.toggleAcceptYourChallenge(map.get("acceptedYourChallenge"));
 
         Update_user update_user = retrofit.create(Update_user.class);
         Profile_data profile_data = new Profile_data(map);
@@ -362,28 +363,27 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
 
     private void initSwitches() {
-        String pushN = user.get("pushN");
-        String acceptedYour = user.get("acceptedYour");
-        String challengeEnd = user.get("challengeEnd");
+        String pushNotify      = user.get("pushN");
+        String acceptedYour    = user.get("acceptedYour");
+        String challengeEnd    = user.get("challengeEnd");
         String newChallengeReq = user.get("newChallReq");
-        String challengesForToday = user.get("challengesForToday");
+        String challForToday   = user.get("challengesForToday");
 
-        map.put("joinedChampy", "true");
-        map.put("friendRequests", "true");
+        map.put("joinedChampy",          "true");
+        map.put("friendRequests",        "true");
         map.put("challengeConfirmation", "true");
-        map.put("challengeEnd", challengeEnd);
-        map.put("reminderTime", "12"); // was 17
-        map.put("challengesForToday", challengesForToday);
+        map.put("challengeEnd",          challengeEnd);
+        map.put("reminderTime",          "12"); // was 17
+        map.put("challengesForToday",    challForToday);
         map.put("acceptedYourChallenge", acceptedYour);
-        map.put("newChallengeRequests", newChallengeReq);
-        map.put("pushNotifications", pushN);
+        map.put("newChallengeRequests",  newChallengeReq);
+        map.put("pushNotifications",     pushNotify);
 
         Switch switchForPushNotif = (Switch) findViewById(R.id.switchPushNotifications);
-        if (pushN.equals("true")) switchForPushNotif.setChecked(true);
+        if (pushNotify.equals("true")) switchForPushNotif.setChecked(true);
         else switchForPushNotif.setChecked(false);
 
         switchForPushNotif.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            Log.d(TAG, "Push Notifications: " + isChecked);
             if (isChecked) map.put("pushNotifications", "true");
             else map.put("pushNotifications", "false");
         });
@@ -393,7 +393,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         else switchorNewChallRequests.setChecked(false);
 
         switchorNewChallRequests.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            Log.d(TAG, "New Challenge Request: " + isChecked);
             if (isChecked) map.put("newChallengeRequests", "true");
             else map.put("newChallengeRequests", "false");
         });
@@ -403,7 +402,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         else switchForAcceptedYourChall.setChecked(false);
 
         switchForAcceptedYourChall.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            Log.d(TAG, "Accepted Your Challenge: " + isChecked);
             if (isChecked) map.put("acceptedYourChallenge", "true");
             else map.put("acceptedYourChallenge", "false");
         });
@@ -413,23 +411,21 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         else switchForChallengesEnd.setChecked(false);
 
         switchForChallengesEnd.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            Log.d(TAG, "Challenge End: " + isChecked);
             if (isChecked) map.put("challengeEnd", "true");
             else map.put("challengeEnd", "false");
         });
 
         Switch switchChallengesForToday = (Switch) findViewById(R.id.switchChallengesForToday);
-        if (challengesForToday.equals("true")) switchChallengesForToday.setChecked(true);
+        if (challForToday.equals("true")) switchChallengesForToday.setChecked(true);
         else switchChallengesForToday.setChecked(false);
 
         switchChallengesForToday.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            Log.d(TAG, "ChallengesForToday: " + isChecked);
             if (isChecked) {
                 map.put("challengesForToday", "true");
-                mDailyRemind.enableDailyNotificationReminder();
+                reminder.enableDailyNotificationReminder();
             } else {
                 map.put("challengesForToday", "false");
-                mDailyRemind.disableDailyNotificationReminder();
+                reminder.disableDailyNotificationReminder();
             }
         });
 
@@ -462,7 +458,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             boolean canDeleteAcc = false;
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
-                    if (offlineMode.isConnectedToRemoteAPI(SettingsActivity.this)) {
+                    if (offline.isConnectedToRemoteAPI(SettingsActivity.this)) {
                         SQLiteDatabase db = dbHelper.getWritableDatabase();
                         ChallengeController cc = new ChallengeController(
                                 getApplicationContext(),
@@ -474,7 +470,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
                         if (c.moveToFirst()) {
                             int colchallenge_id = c.getColumnIndex("challenge_id");
-
                             do {
                                 String challenge_id = c.getString(colchallenge_id);
                                 try {
@@ -514,6 +509,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                Intent role = new Intent(SettingsActivity.this, RoleControllerActivity.class);
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
                         final Update_user update_user = retrofit.create(Update_user.class);
@@ -536,10 +532,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                                     db.delete("updated", null, null);
                                     db.delete("myChallenges", null, null);
 
-                                    sessionManager.logout(SettingsActivity.this);
+                                    session.logout(SettingsActivity.this);
                                     LoginManager.getInstance().logOut();
-                                    Intent intent1 = new Intent(SettingsActivity.this, RoleControllerActivity.class);
-                                    startActivity(intent1);
+                                    startActivity(role);
                                 }
                             }
 
@@ -549,6 +544,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
+                        startActivity(role);
                         break;
                 }
             }

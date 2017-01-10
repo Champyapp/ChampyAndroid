@@ -23,12 +23,9 @@ public class HistoryInProgressFragment extends Fragment {
 
     private SwipeRefreshLayout gSwipeRefreshLayout;
     private OfflineMode offlineMode;
-    private ArrayList<SelfImprovement_model> self_improvement;
     private ArrayList<HistoryChallenge> all;
     private HistoryChallengeAdapter adapter;
-    private RecyclerView rvContacts;
-    private View gView;
-    private String token, uID;
+    //private ChallengeController cc;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,9 +33,9 @@ public class HistoryInProgressFragment extends Fragment {
         offlineMode = OfflineMode.getInstance();
         all = new ArrayList<>();
         adapter = new HistoryChallengeAdapter(all, getContext());
-        SessionManager sessionManager = SessionManager.getInstance(getContext());
-        token = sessionManager.getToken();
-        uID   = sessionManager.getUserId();
+        //SessionManager s = SessionManager.getInstance(getContext());
+        //cc = new ChallengeController(getContext(), getActivity(), s.getToken(), s.getUserId());
+
     }
 
     @Override
@@ -52,12 +49,12 @@ public class HistoryInProgressFragment extends Fragment {
             if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
                 all.clear();
                 //rvContacts.getLayoutManager().removeAllViews();
+                //cc.refreshCardsForPendingDuel(null);
                 gSwipeRefreshLayout.setRefreshing(true);
                 loadInProgressHistory(view);
                 gSwipeRefreshLayout.setRefreshing(false);
             }
         });
-        this.gView = view;
 
 
         return view;
@@ -72,7 +69,7 @@ public class HistoryInProgressFragment extends Fragment {
 
 
     private void loadInProgressHistory(View view) {
-        self_improvement = SelfImprovement_model.generate(getContext());
+        ArrayList<SelfImprovement_model> self_improvement = SelfImprovement_model.generate(getContext());
         for (int i = 0; i < self_improvement.size(); i++) {
             SelfImprovement_model item = self_improvement.get(i);
             String challengeName = item.getChallengeName();
@@ -90,7 +87,7 @@ public class HistoryInProgressFragment extends Fragment {
             ));
         }
 
-        rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
+        RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
         rvContacts.setAdapter(adapter);
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
 

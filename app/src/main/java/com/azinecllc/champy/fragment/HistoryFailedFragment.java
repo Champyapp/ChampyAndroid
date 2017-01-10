@@ -21,11 +21,8 @@ public class HistoryFailedFragment extends Fragment {
 
     private SwipeRefreshLayout gSwipeRefreshLayout;
     private OfflineMode offlineMode;
-    private ArrayList<SelfImprovement_model> self_improvement;
     private ArrayList<HistoryChallenge> arr;
     private HistoryChallengeAdapter adapter;
-    private RecyclerView rvContacts;
-    private View gView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,11 +33,47 @@ public class HistoryFailedFragment extends Fragment {
 
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_history, container, false);
 
-        self_improvement = SelfImprovement_model.generateFailed(getContext());
+        loadHistoryFailed(view);
+
+        gSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
+        gSwipeRefreshLayout.setOnRefreshListener(() -> {
+            if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
+                gSwipeRefreshLayout.setRefreshing(true);
+                arr.clear();
+                loadHistoryFailed(view);
+                gSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+        return view;
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //arr.clear();
+        //arr = null;
+        //adapter = null;
+        //gView.destroyDrawingCache();
+        //gView = null;
+        //rvContacts.destroyDrawingCache();
+        //rvContacts = null;
+        //gSwipeRefreshLayout.destroyDrawingCache();
+        //gSwipeRefreshLayout = null;
+        Runtime.getRuntime().runFinalization();
+        Runtime.getRuntime().gc();
+    }
+
+
+    private void loadHistoryFailed(View view) {
+
+        ArrayList<SelfImprovement_model> self_improvement = SelfImprovement_model.generateFailed(getContext());
 
         for (int i = 0; i < self_improvement.size(); i++) {
             SelfImprovement_model item = self_improvement.get(i);
@@ -59,65 +92,43 @@ public class HistoryFailedFragment extends Fragment {
             ));
         }
 
-        gSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
-        gSwipeRefreshLayout.setOnRefreshListener(() -> refreshOtherView(gSwipeRefreshLayout, gView));
-        this.gView = view;
-
-        rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
+        RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
         rvContacts.setAdapter(adapter);
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
-        return view;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        arr.clear();
-        arr = null;
-        adapter = null;
-        gView.destroyDrawingCache();
-        gView = null;
-        rvContacts.destroyDrawingCache();
-        rvContacts = null;
-        gSwipeRefreshLayout.destroyDrawingCache();
-        gSwipeRefreshLayout = null;
-
-        Runtime.getRuntime().runFinalization();
-        Runtime.getRuntime().gc();
     }
 
 
-    private void refreshOtherView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
-        if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
-            swipeRefreshLayout.setRefreshing(true);
-            swipeRefreshLayout.post(() -> {
-
-                arr = new ArrayList<>();
-                for (int i = 0; i < self_improvement.size(); i++) {
-                    SelfImprovement_model item = self_improvement.get(i);
-                    String challengeName = item.getChallengeName();
-                    String constDuration = item.getConstDuration();
-                    String recipient = item.getRecipient();
-                    String description = item.getGoal();
-                    String duration = item.getDays();
-                    String versus = item.getVersus();
-                    String status = item.getStatus();
-                    String type = item.getType();
-                    String goal = item.getGoal();
-
-                    arr.add(new HistoryChallenge(
-                            type, false, description, duration, status, goal, challengeName, versus, recipient, constDuration
-                    ));
-                }
-
-                rvContacts.setAdapter(adapter);
-                rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
-                swipeRefreshLayout.setRefreshing(false);
-            });
-        } else {
-            swipeRefreshLayout.setRefreshing(false);
-        }
-    }
+//    private void refreshOtherView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
+//        if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
+//            swipeRefreshLayout.setRefreshing(true);
+//            swipeRefreshLayout.post(() -> {
+//
+//                arr = new ArrayList<>();
+//                for (int i = 0; i < self_improvement.size(); i++) {
+//                    SelfImprovement_model item = self_improvement.get(i);
+//                    String challengeName = item.getChallengeName();
+//                    String constDuration = item.getConstDuration();
+//                    String recipient = item.getRecipient();
+//                    String description = item.getGoal();
+//                    String duration = item.getDays();
+//                    String versus = item.getVersus();
+//                    String status = item.getStatus();
+//                    String type = item.getType();
+//                    String goal = item.getGoal();
+//
+//                    arr.add(new HistoryChallenge(
+//                            type, false, description, duration, status, goal, challengeName, versus, recipient, constDuration
+//                    ));
+//                }
+//
+//                rvContacts.setAdapter(adapter);
+//                rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
+//                swipeRefreshLayout.setRefreshing(false);
+//            });
+//        } else {
+//            swipeRefreshLayout.setRefreshing(false);
+//        }
+//    }
 
 
 }

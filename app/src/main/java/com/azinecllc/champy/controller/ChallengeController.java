@@ -496,9 +496,9 @@ public class ChallengeController {
                         }
                     }
 
-                    if (intent != null) {
+                    //if (intent != null) {
                         generateCardsForMainActivity(intent);
-                    }
+                    //}
 
                 }
             }
@@ -564,13 +564,13 @@ public class ChallengeController {
                             progress = datum.getSenderProgress();
                             needsToCheck = datum.getNeedsToCheckSender();
                             cv.put("recipient", "false");
-                            versus = (challenge_type.equals(typeDuel)) ? sender.getName() : "notDuel";
+                            versus = (challenge_type.equals(typeDuel)) ? recipient.getName() : "notDuel";
                             isRecipient = "false";
                         } else {
                             progress = datum.getRecipientProgress();
                             needsToCheck = datum.getNeedsToCheckRecipient();
                             cv.put("recipient", "true");
-                            versus = (challenge_type.equals(typeDuel)) ? recipient.getName() : "notDuel";
+                            versus = (challenge_type.equals(typeDuel)) ? sender.getName() : "notDuel";
                             isRecipient = "true";
                         }
 
@@ -622,7 +622,7 @@ public class ChallengeController {
                         }
 
                         cv.put("name",          challType);             // Self-Improvement / Duel / Wake Up
-                        cv.put("versus",        versus);                // if this is button_duel than versus = recipient / sender name
+                        cv.put("versus",        versus);                // if this is duel than versus = recipient / sender name
                         cv.put("wakeUpTime",    challenge_detail);      // our specific time id for delete wakeUp (example: 1448);
                         cv.put("challengeName", challenge_name);        // default 'challenge'. this column only for wake up time
                         cv.put("description",   challenge_desc);        // smoking free life or wake up at 14:48
