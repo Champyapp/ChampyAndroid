@@ -505,7 +505,7 @@ public class ChallengeController {
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                Toast.makeText(context, context.getString(R.string.service_not_available), Toast.LENGTH_LONG).show();
             }
         });
     }
