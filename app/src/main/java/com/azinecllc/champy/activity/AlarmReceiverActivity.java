@@ -44,15 +44,15 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
         details = getIntent().getStringExtra("finalDetails");
         progressID = getIntent().getStringExtra("finalInProgressID");
 
-        Log.d(TAG, "\nalarmID: "+alarmID+"\ndetails: "+details+"\nprogressID: "+progressID);
+        Log.d(TAG, "\nalarmID: " + alarmID + "\ndetails: " + details + "\nprogressID: " + progressID);
 
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.item_alarm);
         playSound(this, getAlarmUri());
 
-        final TextView tvWakeUpChallenge = (TextView)findViewById(R.id.tvWakeUpChallenge);
-        final TextView tvWakeUp = (TextView)findViewById(R.id.wakeup_text);
+        final TextView tvWakeUpChallenge = (TextView) findViewById(R.id.tvWakeUpChallenge);
+        final TextView tvWakeUp = (TextView) findViewById(R.id.wakeup_text);
         final Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         tvWakeUpChallenge.setTypeface(typeface);
         tvWakeUp.setTypeface(typeface);
@@ -69,7 +69,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
         cc = new ChallengeController(getApplicationContext(), AlarmReceiverActivity.this, token, userId);
 
         ImageButton buttonDoneForToday = (ImageButton) findViewById(R.id.buttonWakeUpDoneForToday);
-        ImageButton buttonSurrender    = (ImageButton) findViewById(R.id.buttonWakeUpSurrender);
+        ImageButton buttonSurrender = (ImageButton) findViewById(R.id.buttonWakeUpSurrender);
 
         buttonDoneForToday.setOnClickListener(this);
         buttonSurrender.setOnClickListener(this);
@@ -88,7 +88,9 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.buttonWakeUpDoneForToday:
-                if (mMediaPlayer.isPlaying()) { mMediaPlayer.stop(); }
+                if (mMediaPlayer.isPlaying()) {
+                    mMediaPlayer.stop();
+                }
                 try {
                     cc.doneForToday(progressID, details, alarmID);
                 } catch (IOException e) {
@@ -98,7 +100,9 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
                 break;
 
             case R.id.buttonWakeUpSurrender:
-                if (mMediaPlayer.isPlaying()) { mMediaPlayer.stop(); }
+                if (mMediaPlayer.isPlaying()) {
+                    mMediaPlayer.stop();
+                }
                 try {
                     cc.give_up(progressID, Integer.parseInt(alarmID), new Intent(this, MainActivity.class));
                 } catch (IOException e) {
@@ -111,14 +115,12 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
     }
 
 
-
-
     private void playSound(Context context, Uri alert) {
         mMediaPlayer = new MediaPlayer();
         mMediaPlayer.setLooping(true);
         try {
             mMediaPlayer.setDataSource(context, alert);
-            final AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+            final AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
             if (audioManager.getStreamVolume(AudioManager.STREAM_ALARM) != 0) {
                 mMediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
                 mMediaPlayer.prepare();
@@ -131,15 +133,24 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
 
 
     private Uri getAlarmUri() {
+//        Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+//        if (alert == null) {
+//            alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//            if (alert == null) {
+//                alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+//            }
+//        }
+//        return alert;
         Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         if (alert == null) {
-            alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            alert = RingtoneManager.getActualDefaultRingtoneUri(getApplicationContext(), RingtoneManager.TYPE_RINGTONE);
             if (alert == null) {
-                alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+                alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             }
         }
         return alert;
     }
 
-
 }
+
+

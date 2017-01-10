@@ -55,7 +55,6 @@ import static com.azinecllc.champy.utils.Constants.API_URL;
  */
 public class OtherFragment extends Fragment {
 
-    //2.48 //2.22 //1.39 //1.63
     private static final String ARG_PAGE = "ARG_PAGE";
     private final String TAG = "OtherFragment";
     private int mPage;
@@ -269,6 +268,12 @@ public class OtherFragment extends Fragment {
                                         }
                                         swipeRefreshLayout.setRefreshing(false);
 
+                                        RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
+                                        //adapter = new OtherAdapter(friends, getContext(), getActivity(), retrofit);
+                                        //rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
+                                        rvContacts.setAdapter(adapter);
+                                        gSwipeRefreshLayout.setRefreshing(false);
+
                                     }
 //                                    else {
 //                                        // отображение всего у человека, который не установил champy
@@ -295,10 +300,7 @@ public class OtherFragment extends Fragment {
 //                                        gSwipeRefreshLayout.setRefreshing(false);
 //                                    }
 
-                                    RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-                                    adapter = new OtherAdapter(friends, getContext(), getActivity(), retrofit);
-                                    rvContacts.setAdapter(adapter);
-                                    gSwipeRefreshLayout.setRefreshing(false);
+
                                 }
 
                                 @Override

@@ -1,13 +1,11 @@
 package com.azinecllc.champy.service;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
@@ -19,39 +17,17 @@ import com.azinecllc.champy.activity.HistoryActivity;
 import com.azinecllc.champy.activity.PendingDuelActivity;
 import com.azinecllc.champy.activity.RoleControllerActivity;
 import com.azinecllc.champy.controller.ChallengeController;
-import com.azinecllc.champy.data.DBHelper;
-import com.azinecllc.champy.helper.CHLoadUserProgressBarInfo;
-import com.azinecllc.champy.interfaces.ActiveInProgress;
-import com.azinecllc.champy.model.active_in_progress.Challenge;
-import com.azinecllc.champy.model.active_in_progress.Datum;
-import com.azinecllc.champy.model.active_in_progress.Recipient;
-import com.azinecllc.champy.model.active_in_progress.Sender;
-import com.azinecllc.champy.utils.Constants;
 import com.azinecllc.champy.utils.SessionManager;
 import com.google.android.gms.gcm.GcmListenerService;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.GsonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
-
-import static com.azinecllc.champy.utils.Constants.API_URL;
-import static com.azinecllc.champy.utils.Constants.typeDuel;
-import static com.azinecllc.champy.utils.Constants.typeSelf;
 import static java.lang.Math.round;
 
 public class MyGcmListenerService extends GcmListenerService {
 
     private final String TAG = "MyGcmListenerService";
-    private SessionManager sessionManager;
+    private SessionManager session;
 
     /**
      * Called when message is received.
@@ -65,10 +41,10 @@ public class MyGcmListenerService extends GcmListenerService {
     @Override
     public void onMessageReceived(String from, Bundle data) {
 
-        sessionManager = SessionManager.getInstance(getApplicationContext());
-        if (sessionManager.isUserLoggedIn()) {
+        session = SessionManager.getInstance(getApplicationContext());
+        if (session.isUserLoggedIn()) {
             HashMap<String, String> user;
-            user = sessionManager.getUserDetails();
+            user = session.getUserDetails();
 
             String name = user.get("name");
             String message = data.getString("gcm.notification.body");
@@ -105,7 +81,9 @@ public class MyGcmListenerService extends GcmListenerService {
                 break;
             case "Challenge request":
                 Intent goToPendingDuels = new Intent(MyGcmListenerService.this, PendingDuelActivity.class);
-                cc  = new ChallengeController();
+                cc = new ChallengeController(getApplicationContext(),
+                        (Activity)getApplicationContext(), session.getToken(), session.getUserId()
+                );
                 cc.refreshCardsForPendingDuel(goToPendingDuels);
                 notifyChallenges(goToPendingDuels, message);
                 break;
@@ -118,10 +96,10 @@ public class MyGcmListenerService extends GcmListenerService {
                 Intent historyIntent = new Intent(this, HistoryActivity.class);
                 historyIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 historyIntent.putExtra("win_request", "true");
-                cc = new ChallengeController();
+                cc = new ChallengeController(getApplicationContext(),
+                        (Activity)getApplicationContext(), session.getToken(), session.getUserId()
+                );
                 cc.refreshCardsForPendingDuel(historyIntent);
-                //generateCardsForMainActivity(sessionManager.getToken(), sessionManager.getUserId());
-
                 notifyChallenges(historyIntent, message);
                 break;
         }
