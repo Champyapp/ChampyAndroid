@@ -65,6 +65,9 @@ public class FriendsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)  {
         final View view = inflater.inflate(R.layout.fragment_friends, container, false);
+        //View spinner = (View)view.findViewById(R.id.loadingPanel);
+        //spinner.setVisibility(View.VISIBLE);
+
         final List<FriendModel> friends = new ArrayList<>();
         Cursor c = db.query("friends", null, null, null, null, null, null);
         if (c.moveToFirst()) {
@@ -107,6 +110,8 @@ public class FriendsFragment extends Fragment {
             refreshFriendsView(gSwipeRefreshLayout, gView);
             sessionManager.setRefreshFriends("false");
         }
+
+
 
         return view;
 

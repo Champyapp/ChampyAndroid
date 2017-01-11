@@ -49,6 +49,8 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_friends);
+        //spinner = (View)findViewById(R.id.loadingPanel);
+        //spinner.setVisibility(View.VISIBLE);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -144,6 +146,17 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // TODO: 1/11/17 Check on low devices
+        View spinner = (View)findViewById(R.id.loadingPanel);
+        if (spinner.getVisibility() == View.VISIBLE) {
+            spinner.setVisibility(View.INVISIBLE);
+        }
+    }
+
     @Override
     public void onBackPressed()  {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -155,6 +168,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
             super.onBackPressed();
         }
     }
+
 
     @Override
     protected void onDestroy() {

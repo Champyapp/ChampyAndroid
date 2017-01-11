@@ -46,11 +46,11 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
 
 
     // Pass in the contact array into the constructor
-    public OtherAdapter(List<FriendModel> contacts, Context context, Activity activity, Retrofit retrofit) {
+    public OtherAdapter(List<FriendModel> contacts, Context c, Activity a, Retrofit r) {
         mContacts = contacts;
-        this.context = context;
-        this.activity = activity;
-        this.retrofit = retrofit;
+        this.context = c;
+        this.activity = a;
+        this.retrofit = r;
     }
 
     @Override
@@ -242,12 +242,12 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
                         @Override
                         public void onResponse(Response<com.azinecllc.champy.model.friend.Friend> response, Retrofit retrofit1) {
                             if (response.isSuccess()) {
-                                cv.put("name", mContacts.get(position).getName());
-                                cv.put("photo", mContacts.get(position).getPicture());
+                                cv.put("name",    mContacts.get(position).getName());
+                                cv.put("photo",   mContacts.get(position).getPicture());
                                 cv.put("user_id", mContacts.get(position).getID());
-                                cv.put("level", mContacts.get(position).getmLevel());
+                                cv.put("level",   mContacts.get(position).getmLevel());
                                 cv.put("inProgressChallengesCount", mContacts.get(position).getmChallenges());
-                                cv.put("successChallenges", mContacts.get(position).getmWins());
+                                cv.put("successChallenges",  mContacts.get(position).getmWins());
                                 cv.put("allChallengesCount", mContacts.get(position).getmTotal());
                                 db.insert("pending", null, cv);
                             }
@@ -295,7 +295,7 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
         ViewHolder(View itemView) {
             super(itemView);
 
-            nameTextView = (TextView) itemView.findViewById(R.id.userName);
+            nameTextView = (TextView)  itemView.findViewById(R.id.userName);
             friendImage  = (ImageView) itemView.findViewById(R.id.picture);
             challenges   = (ImageView) itemView.findViewById(R.id.imageView_challenges_logo);
             wins         = (ImageView) itemView.findViewById(R.id.imageView_wins_logo);

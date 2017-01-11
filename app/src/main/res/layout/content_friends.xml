@@ -21,6 +21,7 @@
     <include layout="@layout/item_blur" />
 
 
+
     <android.support.design.widget.TabLayout
         android:id="@+id/sliding_tabs"
         android:layout_width="fill_parent"
@@ -38,12 +39,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#00000000"
-        android:layout_below="@+id/sliding_tabs"
-        android:layout_marginTop="8dp"
         android:visibility="visible"
-        android:clickable="false">
+        android:clickable="false"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/sliding_tabs">
 
     </android.support.v4.view.ViewPager>
 
+    <include layout="@layout/progress_bar_fragment" />
 
 </RelativeLayout>
