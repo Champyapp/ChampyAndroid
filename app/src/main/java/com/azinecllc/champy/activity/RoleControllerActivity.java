@@ -37,7 +37,7 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
         sessionManager = SessionManager.getInstance(getApplicationContext());
         offlineMode = OfflineMode.getInstance();
 
-        typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
+        typeface = Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
         TextView tvChampy = (TextView)findViewById(R.id.tvChampy);
         tvChampy.setTypeface(typeface);
 
