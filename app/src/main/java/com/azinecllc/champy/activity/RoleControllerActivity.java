@@ -57,6 +57,7 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
         }
     }
 
+
     private void checkIfLoggedInAndMakeRedirect() {
         if (offlineMode.isConnectedToRemoteAPI(this)) {
             if (sessionManager.isUserLoggedIn()) {

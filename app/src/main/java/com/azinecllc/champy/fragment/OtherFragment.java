@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.OtherAdapter;
 import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.helper.CHCheckTableForExist;
+import com.azinecllc.champy.helper.WrapContentLinearLayoutManager;
 import com.azinecllc.champy.interfaces.NewUser;
 import com.azinecllc.champy.model.FriendModel;
 import com.azinecllc.champy.model.user.Data;
@@ -55,11 +57,12 @@ import static com.azinecllc.champy.utils.Constants.API_URL;
 /**
  * Класс отвечает за OTHER в разделе FriendsActivity
  */
-public class OtherFragment extends Fragment {
+public class OtherFragment extends Fragment /*implements View.OnTouchListener*/ {
 
     private static final String ARG_PAGE = "ARG_PAGE";
     private final String TAG = "OtherFragment";
     private int mPage;
+    private boolean isRefreshing;
     private SwipeRefreshLayout gSwipeRefreshLayout;
     private CHCheckTableForExist checkTableForExist;
     private SessionManager sessionManager;
@@ -130,11 +133,13 @@ public class OtherFragment extends Fragment {
 
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         rvContacts.setAdapter(adapter);
+        //rvContacts.setOnTouchListener(this);
 
         gSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
         gSwipeRefreshLayout.setOnRefreshListener(() -> {
             refreshOtherView(gSwipeRefreshLayout, gView);
         });
+
         this.gView = view;
 
         if (sessionManager.getRefreshOthers().equals("true")) {
@@ -207,25 +212,24 @@ public class OtherFragment extends Fragment {
 
 
     private void refreshOtherView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
-        // Проверка на оффлайн вкладке OTHERS
-        gSwipeRefreshLayout.setRefreshing(true);
-        rvContacts.setNestedScrollingEnabled(false);
         if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
+            swipeRefreshLayout.setRefreshing(true);
             swipeRefreshLayout.post(new Runnable() {
                 @Override
                 public void run() {
+                    friends.clear();
                     NewUser newUser = retrofit.create(NewUser.class);
                     StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
                     StrictMode.setThreadPolicy(policy);
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
                     db.delete("mytable", null, null);
-                    friends.clear();
                     GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken
                             .getCurrentAccessToken(), new GraphRequest.GraphJSONArrayCallback() {
                         @Override
                         public void onCompleted(JSONArray array, GraphResponse response) {
                             if (array.length() == 0) {
                                 Toast.makeText(getContext(), R.string.noOneHasInstalledChampy, Toast.LENGTH_LONG).show();
+                                swipeRefreshLayout.setRefreshing(false);
                                 return;
                             }
                             for (int i = 0; i < array.length(); i++) {
@@ -241,7 +245,7 @@ public class OtherFragment extends Fragment {
                                     Call<User> call = newUser.getUserInfo(jwtString);
                                     call.enqueue(new Callback<User>() {
                                         @Override
-                                        public void onResponse(Response<User> response, Retrofit retrofit1) {
+                                        public void onResponse(Response<User> response, Retrofit r) {
                                             if (response.isSuccess()) {
                                                 Data data = response.body().getData();
                                                 String photo = null;
@@ -280,11 +284,10 @@ public class OtherFragment extends Fragment {
                                                     ));
                                                 }
 
-                                                //RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-                                                adapter = new OtherAdapter(friends, getContext(), getActivity(), retrofit);
                                                 rvContacts.setAdapter(adapter);
-
+                                                swipeRefreshLayout.setRefreshing(false);
                                             }
+
                                         }
 
                                         @Override
@@ -301,8 +304,9 @@ public class OtherFragment extends Fragment {
                 }
             });
         }
-        rvContacts.setNestedScrollingEnabled(true);
-        gSwipeRefreshLayout.setRefreshing(false);
+        //rvContacts.setNestedScrollingEnabled(true);
+
+        swipeRefreshLayout.setRefreshing(false);
         sessionManager.setRefreshOthers("false");
     }
 
@@ -335,5 +339,13 @@ public class OtherFragment extends Fragment {
     };
 
 
+//    @Override
+//    public boolean onTouch(View v, MotionEvent event) {
+//        if (!isRefreshing) {
+//            return false;
+//        } else {
+//            return true;
+//        }
+//    }
 
 }
