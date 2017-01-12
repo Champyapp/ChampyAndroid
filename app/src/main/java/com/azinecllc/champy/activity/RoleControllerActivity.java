@@ -14,6 +14,8 @@ import com.azinecllc.champy.controller.DailyRemindController;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
 
+import io.jsonwebtoken.lang.RuntimeEnvironment;
+
 /**
  * Splash screen with GenerateCards method
  */
@@ -37,7 +39,7 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
         sessionManager = SessionManager.getInstance(getApplicationContext());
         offlineMode = OfflineMode.getInstance();
 
-        typeface = Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
+        typeface = Typeface.createFromAsset(getAssets(), "assets/fonts/bebasneue.ttf");
         TextView tvChampy = (TextView)findViewById(R.id.tvChampy);
         tvChampy.setTypeface(typeface);
 
