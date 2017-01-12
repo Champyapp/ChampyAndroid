@@ -11,7 +11,7 @@
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:id="@+id/Champy_image"
+        android:id="@+id/imageViewChampy"
         android:background="@drawable/ic_champy_circle"
         android:layout_marginBottom="61dp"
         android:contentDescription="@string/champy"

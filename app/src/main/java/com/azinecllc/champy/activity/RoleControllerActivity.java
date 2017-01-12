@@ -76,10 +76,10 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
             }
         } else {
             lostInternet = (TextView)findViewById(R.id.tvLostInternetConnection);
-            imageReload = (ImageView)findViewById(R.id.imageRetry);
+            lostInternet.setVisibility(View.VISIBLE);
             lostInternet.setTypeface(typeface);
 
-            lostInternet.setVisibility(View.VISIBLE);
+            imageReload = (ImageView)findViewById(R.id.imageRetry);
             imageReload.setVisibility(View.VISIBLE);
             imageReload.setOnClickListener(this);
 

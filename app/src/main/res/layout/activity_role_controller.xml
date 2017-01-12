@@ -9,7 +9,7 @@
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:id="@+id/Champy_image"
+        android:id="@+id/imageViewChampy"
         android:background="@drawable/ic_champy_circle"
         android:contentDescription="@string/champy"
         android:layout_marginTop="50dp"
@@ -27,7 +27,7 @@
         android:textAllCaps="true"
         android:textAlignment="center"
         android:layout_marginTop="25dp"
-        android:layout_below="@+id/Champy_image"
+        android:layout_below="@+id/imageViewChampy"
         android:layout_centerHorizontal="true" />
 
     <TextView
