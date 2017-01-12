@@ -39,7 +39,7 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name="com.azinecllc.champy.activity.TestRoleActivity"
+        <activity android:name="com.azinecllc.champy.activity.RoleControllerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <intent-filter>
