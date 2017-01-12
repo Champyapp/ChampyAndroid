@@ -13,7 +13,7 @@
         android:layout_height="100dp"
         android:id="@+id/imageViewChampy"
         android:background="@drawable/ic_champy_circle"
-        android:layout_marginBottom="61dp"
+        android:layout_marginBottom="60dp"
         android:contentDescription="@string/champy"
         android:layout_above="@+id/login_text"
         android:layout_centerHorizontal="true" />
@@ -39,7 +39,7 @@
         android:id="@+id/login_button"
         android:scaleX="0.8"
         android:scaleY="0.5"
-        android:background="@drawable/facebook"
+        android:background="@drawable/button_facebook"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:contentDescription="@string/com_facebook_loginview_logged_in_as" />

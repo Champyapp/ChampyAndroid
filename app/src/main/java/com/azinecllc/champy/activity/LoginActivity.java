@@ -64,21 +64,22 @@ import static com.azinecllc.champy.utils.Constants.path;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     public final String TAG = "LoginActivity";
-    private AccessTokenTracker mTokenTracker;
-    private ProfileTracker mProfileTracker;
-    private CallbackManager mCallbackManager;
+    public View spinner;
+
     private String user_email, path_to_pic, name, fb_id;
+    private AccessTokenTracker mTokenTracker;
+    private CallbackManager mCallbackManager;
+    private ProfileTracker mProfileTracker;
     private OfflineMode offlineMode;
 
-    public View spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
-        getFacebookHashKey(); // mast be above "setContentView"
-
+        getFacebookHashKey(); // must be above "setContentView"
         setContentView(R.layout.activity_login);
+
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
         TextView loginText = (TextView)findViewById(R.id.login_text);
         spinner = findViewById(R.id.loadingPanel);

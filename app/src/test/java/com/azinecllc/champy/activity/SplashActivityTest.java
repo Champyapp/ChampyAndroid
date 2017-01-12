@@ -64,7 +64,7 @@ public class SplashActivityTest {
         assertEquals(R.id.imageViewChampy, champyLogo.getId());
 
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams)champyLogo.getLayoutParams();
-        assertEquals(50, lp.topMargin);
+        assertEquals(60, lp.topMargin);
     }
 
 

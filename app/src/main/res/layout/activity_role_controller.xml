@@ -12,7 +12,7 @@
         android:id="@+id/imageViewChampy"
         android:background="@drawable/ic_champy_circle"
         android:contentDescription="@string/champy"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="60dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
         android:layout_centerVertical="true" />
