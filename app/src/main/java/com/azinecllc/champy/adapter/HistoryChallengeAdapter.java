@@ -85,9 +85,6 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         }
         challengeType.setTypeface(typeFace);
 
-        //Glide.with(mContext).load(R.drawable.ic_score_prog).override(40, 40).into(viewHolder.wins);
-        //Glide.with(mContext).load(R.drawable.ic_score_total) .override(40, 40).into(viewHolder.total);
-
     }
 
     @Override

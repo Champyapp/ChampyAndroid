@@ -14,8 +14,6 @@ import com.azinecllc.champy.controller.DailyRemindController;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
 
-import io.jsonwebtoken.lang.RuntimeEnvironment;
-
 /**
  * Splash screen with GenerateCards method
  */

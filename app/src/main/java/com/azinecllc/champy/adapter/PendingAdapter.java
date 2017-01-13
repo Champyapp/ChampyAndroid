@@ -38,7 +38,6 @@ import static com.azinecllc.champy.utils.Constants.API_URL;
 
 public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHolder> {
 
-    private final String TAG = PendingAdapter.class.getSimpleName();
     private List<Pending_friend> mContacts;
     private String token, id;
     private Context context;

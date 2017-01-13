@@ -68,7 +68,6 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         final String itemNeedsToCheck = currentCard.getNeedsToCheck();
         final String itemInProgressId = currentCard.getId();
         final String[] challengeProgress = itemProgress.replace("[", "").replace("]", "").split(" ");
-        String details = Arrays.toString(challengeProgress);
 
         final TextView tvChallengeType = (TextView) tempView.findViewById(R.id.tvChallengeType);
         tvChallengeType.setText(currentCard.getType());
@@ -94,22 +93,22 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         tvDuration.setTypeface(typeface);
         tvDuration.setTextSize(y*2);
 
-        try {
-            String TAG = "INFO ABOUT CARD:";
-            Log.d(TAG, "getRecipient: "     + currentCard.getRecipient());      // false;
-            Log.d(TAG, "getChallengeName: " + currentCard.getChallengeName());  // Wake up at 08:55
-            Log.d(TAG, "getGoal: "          + currentCard.getGoal());           // 0855
-            Log.d(TAG, "getId: "            + currentCard.getId());             // 58605a9645af8ed13f56b8c1
-            Log.d(TAG, "getName: "          + currentCard.getName());           // null
-            Log.d(TAG, "getWakeUpTime: "    + currentCard.getWakeUpTime());     // [1482735221, 1482821621]
-            Log.d(TAG, "getType: "          + currentCard.getType());           // Wake Up
-            Log.d(TAG, "getConstDuration: " + currentCard.getConstDuration());  // 2 days
-            Log.d(TAG, "getDays: "          + currentCard.getDays());           // 1-2 (current)
-            Log.d(TAG, "getProgress: "      + currentCard.getProgress());       // [UnixTime]
-            Log.d(TAG, "getStatus: "        + currentCard.getStatus());         // started
-            Log.d(TAG, "getVersus: "        + currentCard.getVersus());         // not duel
-            Log.d(TAG, "getNeedsToCheck: "  + currentCard.getNeedsToCheck());   // true / false
-        } catch (Exception e) { e.printStackTrace(); }
+//        try {
+//            String TAG = "INFO ABOUT CARD:";
+//            Log.d(TAG, "getRecipient: "     + currentCard.getRecipient());      // false;
+//            Log.d(TAG, "getChallengeName: " + currentCard.getChallengeName());  // Wake up at 08:55
+//            Log.d(TAG, "getGoal: "          + currentCard.getGoal());           // 0855
+//            Log.d(TAG, "getId: "            + currentCard.getId());             // 58605a9645af8ed13f56b8c1
+//            Log.d(TAG, "getName: "          + currentCard.getName());           // null
+//            Log.d(TAG, "getWakeUpTime: "    + currentCard.getWakeUpTime());     // [1482735221, 1482821621]
+//            Log.d(TAG, "getType: "          + currentCard.getType());           // Wake Up
+//            Log.d(TAG, "getConstDuration: " + currentCard.getConstDuration());  // 2 days
+//            Log.d(TAG, "getDays: "          + currentCard.getDays());           // 1-2 (current)
+//            Log.d(TAG, "getProgress: "      + currentCard.getProgress());       // [UnixTime]
+//            Log.d(TAG, "getStatus: "        + currentCard.getStatus());         // started
+//            Log.d(TAG, "getVersus: "        + currentCard.getVersus());         // not duel
+//            Log.d(TAG, "getNeedsToCheck: "  + currentCard.getNeedsToCheck());   // true / false
+//        } catch (Exception e) { e.printStackTrace(); }
 
         if (itemNeedsToCheck.equals("true")) {
             tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
@@ -162,7 +161,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                     - (date.getMinutes()* 60)
                     - (date.getSeconds());
         }
-//
+
         if (myProgress != 0L && now > progressMidNight + oneDay) {
             //if (!itemType.equals("Wake Up")) {
 //            //    tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
@@ -258,29 +257,6 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
     public int dataCount() {
         return arrayList.size();
     }
-
-
-//    private String[] toArrayOfStrings(String arg) {
-//        String a = arg.replace("[", "");
-//        String b = a.replace("]","");
-//        return b.split(", ");
-//    }
-
-//    try {
-//        Log.d(TAG, "getView: " + currentCard.getRecipient());
-//        Log.d(TAG, "getView: " + currentCard.getChallengeName());
-//        Log.d(TAG, "getView: " + currentCard.getGoal());
-//        Log.d(TAG, "getView: " + currentCard.getId());
-//        Log.d(TAG, "getView: " + currentCard.getName());
-//        Log.d(TAG, "getView: " + currentCard.getWakeUpTime());
-//        Log.d(TAG, "getView: " + currentCard.getType());
-//        Log.d(TAG, "getView: " + currentCard.getConstDuration());
-//        Log.d(TAG, "getView: " + currentCard.getDays());
-//        Log.d(TAG, "getView: " + currentCard.getProgress());
-//        Log.d(TAG, "getView: " + currentCard.getStatus());
-//        Log.d(TAG, "getView: " + currentCard.getVersus());
-//    } catch (Exception e) { e.printStackTrace(); }
-
 
 }
 

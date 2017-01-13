@@ -411,6 +411,7 @@ public class ChallengeController {
                     }
 
                     generateCardsForMainActivity(new Intent(activity, MainActivity.class));
+
                 } else {
                     Log.i(TAG, "onResponse: Done for today failed: " + response.message() + " " + response.code());
                 }
