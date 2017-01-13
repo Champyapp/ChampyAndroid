@@ -57,12 +57,9 @@ import static com.azinecllc.champy.utils.Constants.API_URL;
 /**
  * Класс отвечает за OTHER в разделе FriendsActivity
  */
-public class OtherFragment extends Fragment /*implements View.OnTouchListener*/ {
+public class OtherFragment extends Fragment {
 
     private static final String ARG_PAGE = "ARG_PAGE";
-    private final String TAG = "OtherFragment";
-    private int mPage;
-    private boolean isRefreshing;
     private SwipeRefreshLayout gSwipeRefreshLayout;
     private CHCheckTableForExist checkTableForExist;
     private SessionManager sessionManager;
@@ -133,7 +130,6 @@ public class OtherFragment extends Fragment /*implements View.OnTouchListener*/ 
 
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         rvContacts.setAdapter(adapter);
-        //rvContacts.setOnTouchListener(this);
 
         gSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
         gSwipeRefreshLayout.setOnRefreshListener(() -> {
@@ -143,7 +139,6 @@ public class OtherFragment extends Fragment /*implements View.OnTouchListener*/ 
         this.gView = view;
 
         if (sessionManager.getRefreshOthers().equals("true")) {
-//            new loadOtherFromAsync().doInBackground();
             refreshOtherView(gSwipeRefreshLayout, gView);
         }
 
@@ -156,7 +151,6 @@ public class OtherFragment extends Fragment /*implements View.OnTouchListener*/ 
         super.onStart();
         try {
             mSocket = IO.socket(API_URL);
-            Log.d(TAG, "onStart: Sockets are connected");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -176,7 +170,6 @@ public class OtherFragment extends Fragment /*implements View.OnTouchListener*/ 
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(TAG, "onStop: Sockets off & disconnect");
         mSocket.off();
         mSocket.disconnect();
     }
@@ -196,19 +189,10 @@ public class OtherFragment extends Fragment /*implements View.OnTouchListener*/ 
         mSocket = null;
         retrofit = null;
         checkTableForExist = null;
-//        gSwipeRefreshLayout = null;
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
     }
 
-
-//    private class loadOtherFromAsync extends AsyncTask<Void, Void, Void> {
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//            refreshOtherView(gSwipeRefreshLayout, gView);
-//            return null;
-//        }
-//    }
 
 
     private void refreshOtherView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
@@ -304,7 +288,6 @@ public class OtherFragment extends Fragment /*implements View.OnTouchListener*/ 
                 }
             });
         }
-        //rvContacts.setNestedScrollingEnabled(true);
 
         swipeRefreshLayout.setRefreshing(false);
         sessionManager.setRefreshOthers("false");
@@ -315,14 +298,13 @@ public class OtherFragment extends Fragment /*implements View.OnTouchListener*/ 
         @Override
         public void call(final Object... args) {
             mSocket.emit("ready", sessionManager.getToken());
-            Log.d(TAG, "Sockets: connecting...");
         }
     };
 
     private Emitter.Listener onConnected = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            Log.d(TAG, "Sockets: connected!");
+            Log.d("Sockets", "Sockets: connected!");
         }
     };
 
@@ -334,18 +316,8 @@ public class OtherFragment extends Fragment /*implements View.OnTouchListener*/ 
                 public void run() {
                     refreshOtherView(gSwipeRefreshLayout, gView);
                 }});
-            Log.d(TAG, "Sockets: modifiedRelationship");
         }
     };
 
-
-//    @Override
-//    public boolean onTouch(View v, MotionEvent event) {
-//        if (!isRefreshing) {
-//            return false;
-//        } else {
-//            return true;
-//        }
-//    }
 
 }

@@ -77,17 +77,17 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         String token = sessionManager.getToken();
         String userId = sessionManager.getUserId();
         cc = new ChallengeController(getContext(), getActivity(), token, userId);
-        size = sessionManager.getSelfSize();
+
         Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
-        TextView tvGoal = (TextView) view.findViewById(R.id.goal_text);
-        TextView tvDays = (TextView) view.findViewById(R.id.days_text);
+        View line = view.findViewById(R.id.line);
         etGoal = (EditText)view.findViewById(R.id.et_goal);
         etDays = (TextView)view.findViewById(R.id.et_days);
-        View line = view.findViewById(R.id.line);
-        TextView tvEveryDay = (TextView)view.findViewById(R.id.tvEveryDaySelf);
-        TextView textDays   = (TextView)view.findViewById(R.id.textDays);
-        ImageButton buttonPlus = (ImageButton) view.findViewById(R.id.imageButtonPlus);
-        ImageButton buttonMinus = (ImageButton) view.findViewById(R.id.imageButtonMinus);
+        TextView tvGoal = (TextView) view.findViewById(R.id.goal_text);
+        TextView tvDays = (TextView) view.findViewById(R.id.days_text);
+        TextView tvEvery = (TextView) view.findViewById(R.id.tvEveryDaySelf);
+        TextView textDays = (TextView) view.findViewById(R.id.textDays);
+        ImageButton btnPlus = (ImageButton) view.findViewById(R.id.imageButtonPlus);
+        ImageButton btnMinus = (ImageButton) view.findViewById(R.id.imageButtonMinus);
 
         if (duration != null && !duration.isEmpty()) days = Integer.parseInt(duration) / 86400;
 
@@ -95,14 +95,12 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         tvGoal.setText(description);
         tvDays.setTypeface(typeface);
         tvGoal.setTypeface(typeface);
-        tvEveryDay.setTypeface(typeface);
+        tvEvery.setTypeface(typeface);
         textDays.setTypeface(typeface);
         textDays.setVisibility(View.INVISIBLE);
         ImageButton imageButtonAccept = (ImageButton) getActivity().findViewById(R.id.ok);
 
         viewPager = (ViewPager) getActivity().findViewById(R.id.pager_duel);
-//        CHSetupUI chSetupUI = new CHSetupUI();
-//        chSetupUI.setupUI(view, getActivity());
 
         if (position == size) {
             etGoal.setTypeface(typeface);
@@ -114,15 +112,15 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
             tvGoal.setVisibility(View.INVISIBLE);
             line.setVisibility(View.INVISIBLE);
             textDays.setVisibility(View.VISIBLE);
-            buttonMinus.setVisibility(View.VISIBLE);
-            buttonPlus.setVisibility(View.VISIBLE);
+            btnMinus.setVisibility(View.VISIBLE);
+            btnPlus.setVisibility(View.VISIBLE);
         }
 
         OfflineMode offlineMode = OfflineMode.getInstance();
         offlineMode.isConnectedToRemoteAPI(getActivity());
         imageButtonAccept.setOnClickListener(this);
-        buttonMinus.setOnClickListener(this);
-        buttonPlus.setOnClickListener(this);
+        btnMinus.setOnClickListener(this);
+        btnPlus.setOnClickListener(this);
 
         return view;
     }

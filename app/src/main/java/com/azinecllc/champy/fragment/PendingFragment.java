@@ -43,7 +43,6 @@ import static com.azinecllc.champy.utils.Constants.API_URL;
 public class PendingFragment extends Fragment {
 
     private static final String ARG_PAGE = "ARG_PAGE";
-    private final String TAG = "PendingFragment";
     private SwipeRefreshLayout swipeRefreshLayout;
     private SQLiteDatabase db;
     private String id, token;
@@ -127,7 +126,6 @@ public class PendingFragment extends Fragment {
         super.onStart();
         try {
             mSocket = IO.socket(API_URL);
-            Log.d(TAG, "onStart: Sockets are connected!");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -150,7 +148,6 @@ public class PendingFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(TAG, "onStop: Sockets off & disconnect");
         mSocket.off();
         mSocket.disconnect();
     }
@@ -167,7 +164,7 @@ public class PendingFragment extends Fragment {
         swipeRefreshLayout.setRefreshing(true);
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         final ContentValues cv  = new ContentValues();
-        int clearCount          = db.delete("pending", null, null);
+        db.delete("pending", null, null);
 
         com.azinecllc.champy.interfaces.Friends friends = retrofit.create(com.azinecllc.champy.interfaces.Friends.class);
 
@@ -264,14 +261,13 @@ public class PendingFragment extends Fragment {
         @Override
         public void call(final Object... args) {
             mSocket.emit("ready", token);
-            Log.d(TAG, "Sockets: connecting...");
         }
     };
 
     private Emitter.Listener onConnected = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            Log.d(TAG, "Sockets: connected!");
+            Log.d("Sockets", "Sockets: connected!");
         }
     };
 
@@ -285,7 +281,6 @@ public class PendingFragment extends Fragment {
                     refreshPendingView(swipeRefreshLayout, gView);
                 }
             });
-            Log.d(TAG, "Sockets: modifiedRelationship");
         }
     };
 

@@ -102,8 +102,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 
         ImageButton buttonAccept = (ImageButton) getActivity().findViewById(R.id.imageButtonAccept);
         viewPager = (ViewPager) getActivity().findViewById(R.id.pager);
-//        CHSetupUI chSetupUI = new CHSetupUI();
-//        chSetupUI.setupUI(view, getActivity());
 
         if (position == size) {
             etGoal.setTypeface(typeface);

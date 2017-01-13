@@ -41,7 +41,6 @@ import static com.azinecllc.champy.utils.Constants.API_URL;
 
 public class FriendsFragment extends Fragment {
 
-    private final String TAG = "FriendsFragment";
     private static final String ARG_PAGE = "ARG_PAGE";
     private String id, token;
     private View gView;
@@ -65,8 +64,6 @@ public class FriendsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)  {
         final View view = inflater.inflate(R.layout.fragment_friends, container, false);
-        //View spinner = (View)view.findViewById(R.id.loadingPanel);
-        //spinner.setVisibility(View.VISIBLE);
 
         final List<FriendModel> friends = new ArrayList<>();
         Cursor c = db.query("friends", null, null, null, null, null, null);
@@ -122,7 +119,6 @@ public class FriendsFragment extends Fragment {
         super.onStart();
         try {
             mSocket = IO.socket(API_URL);
-            Log.d(TAG, "onStart: Sockets are connected!");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -141,7 +137,6 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(TAG, "onStop: Sockets off & disconnect");
         mSocket.off();
         mSocket.disconnect();
     }
@@ -252,14 +247,13 @@ public class FriendsFragment extends Fragment {
         @Override
         public void call(final Object... args) {
             mSocket.emit("ready", sessionManager.getToken());
-            Log.d(TAG, "Sockets: connecting...");
         }
     };
 
     private Emitter.Listener onConnected = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            Log.d(TAG, "Sockets: connected!");
+            Log.d("Sockets", "Sockets: connected!");
         }
     };
 
@@ -271,7 +265,6 @@ public class FriendsFragment extends Fragment {
                 public void run() {
                     refreshFriendsView(gSwipeRefreshLayout, gView);
                 }});
-            Log.d(TAG, "Sockets: modifiedRelationship");
         }
     };
 
