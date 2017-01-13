@@ -2,8 +2,10 @@ package com.azinecllc.champy.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -200,14 +202,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                     .dontAnimate()
                     .into(imageViewUserAvatar);
 
-//            Glide.with(context)
-//                    .load(contact.getPicture())
-//                    .asBitmap()
-//                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                    .transform(new CropCircleTransformation(context))
-//                    .placeholder(R.drawable.ic_champy_circle)
-//                    .override(80, 80)
-//                    .into(imageViewUserAvatar);
             // made our "open-view" is visible and 'close-view' invisible
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.VISIBLE);
             viewHolder.itemView.findViewById(R.id.row_friends_list_close).setVisibility(View.GONE);
@@ -227,14 +221,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                     .override(80, 80)
                     .dontAnimate()
                     .into(ivFriendPicture);
-//            Glide.with(context)
-//                    .load(contact.getPicture())
-//                    .asBitmap()
-//                    .transform(new CropCircleTransformation(context))
-//                    .placeholder(R.drawable.ic_champy_circle)
-//                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                    .override(80, 80)
-//                    .into(imageViewFriendPicture);
+
             // made our "close-view" is visible and 'open-view' invisible
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.GONE);
             viewHolder.itemView.findViewById(R.id.row_friends_list_close).setVisibility(View.VISIBLE);
@@ -245,25 +232,44 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             @Override
             public void onClick(View v) {
                 if (offlineMode.isConnectedToRemoteAPI(activity)) {
-                    String friend = mContacts.get(position).getID();
-                    Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-
-                    com.azinecllc.champy.interfaces.Friends friends = retrofit.create(com.azinecllc.champy.interfaces.Friends.class);
-                    Call<com.azinecllc.champy.model.friend.Friend> call = friends.removeFriend(id, friend, token);
-                    call.enqueue(new Callback<com.azinecllc.champy.model.friend.Friend>() {
+                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                         @Override
-                        public void onResponse(Response<com.azinecllc.champy.model.friend.Friend> response, Retrofit retrofit) {
-                            //final String myLog = (response.isSuccess()) ? "Status: Removed" : "Status: " + response.toString();
-                            //Log.d(TAG, "onResponse: " + myLog);
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which) {
+                                case DialogInterface.BUTTON_POSITIVE:
+                                    String friend = mContacts.get(position).getID();
+                                    Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+
+                                    com.azinecllc.champy.interfaces.Friends friends = retrofit.create(com.azinecllc.champy.interfaces.Friends.class);
+                                    Call<com.azinecllc.champy.model.friend.Friend> call = friends.removeFriend(id, friend, token);
+                                    call.enqueue(new Callback<com.azinecllc.champy.model.friend.Friend>() {
+                                        @Override
+                                        public void onResponse(Response<com.azinecllc.champy.model.friend.Friend> response, Retrofit retrofit) {
+                                            //final String myLog = (response.isSuccess()) ? "Status: Removed" : "Status: " + response.toString();
+                                            //Log.d(TAG, "onResponse: " + myLog);
+                                        }
+
+                                        @Override
+                                        public void onFailure(Throwable t) {
+                                        }
+                                    });
+                                    sessionManager.setRefreshFriends("false");
+                                    mContacts.remove(position);
+                                    notifyItemRemoved(position);
+                                    selected.clear();
+                                    break;
+                                case DialogInterface.BUTTON_NEGATIVE:
+                                    break;
+                            }
                         }
-
-                        @Override
-                        public void onFailure(Throwable t) { }
-                    });
-                    sessionManager.setRefreshFriends("false");
-                    mContacts.remove(position);
-                    notifyItemRemoved(position);
-                    selected.clear();
+                    };
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setMessage("Do you want to delete this user from your friends list?")
+                            .setTitle("Are you sure")
+                            .setIcon(R.mipmap.nav_friends)
+                            .setPositiveButton("Yes", dialogClickListener)
+                            .setNegativeButton("No", dialogClickListener)
+                            .show();
                 }
             }
         });

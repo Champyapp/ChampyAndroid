@@ -247,7 +247,7 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
                                 cv.put("user_id", mContacts.get(position).getID());
                                 cv.put("level",   mContacts.get(position).getmLevel());
                                 cv.put("inProgressChallengesCount", mContacts.get(position).getmChallenges());
-                                cv.put("successChallenges",  mContacts.get(position).getmWins());
+                                cv.put("successChallenges", mContacts.get(position).getmWins());
                                 cv.put("allChallengesCount", mContacts.get(position).getmTotal());
                                 db.insert("pending", null, cv);
                             }

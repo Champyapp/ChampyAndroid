@@ -255,8 +255,6 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                     call.enqueue(new Callback<com.azinecllc.champy.model.friend.Friend>() {
                         @Override
                         public void onResponse(Response<com.azinecllc.champy.model.friend.Friend> response, Retrofit retrofit) {
-                            //final String myLog = (response.isSuccess()) ? "Status: Removed" : "Status: " + response.toString();
-                            //Log.d(TAG, "onResponse: " + myLog);
                         }
 
                         @Override
@@ -271,7 +269,6 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                 }
             }
         });
-
 
         viewHolder.add.setOnClickListener(new View.OnClickListener() {
             @Override
