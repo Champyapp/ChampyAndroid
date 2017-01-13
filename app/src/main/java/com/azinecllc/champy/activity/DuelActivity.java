@@ -47,7 +47,6 @@ import static java.lang.Math.round;
 public class DuelActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private SessionManager sessionManager;
-    private NavigationView navigationView;
     private DrawerLayout drawer;
     private View spinner;
 
@@ -60,12 +59,10 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         spinner = findViewById(R.id.loadingPanel);
         spinner.setVisibility(View.VISIBLE);
 
-        //new ProgressTask().execute();
-
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        final Bundle extras = getIntent().getExtras();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Bundle extras = getIntent().getExtras();
         String friendsPhoto, name;
-        if(extras == null) {
+        if (extras == null) {
             Uri uri = Uri.parse("android.resource://com.azinecllc.champy/drawable/ic_champy_circle");
             friendsPhoto = uri.toString();
             name = "Your friend";
@@ -75,7 +72,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         }
 
         int x = round(getWindowManager().getDefaultDisplay().getWidth() / 2);
-        final ImageView imageMyPhoto = (ImageView)findViewById(R.id.imageMyPhoto);
+        ImageView imageMyPhoto = (ImageView) findViewById(R.id.imageMyPhoto);
         imageMyPhoto.getLayoutParams().width = x;
         imageMyPhoto.getLayoutParams().height = x; // because we need a square
 
@@ -97,9 +94,9 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
                 .skipMemoryCache(true)
                 .into(imageMyPhoto);
 
-        final TextView tvIChallengeMyFriendTo = (TextView)findViewById(R.id.tvIChallengeMyFriendTo);
-        final TextView textViewYouVsFriend = (TextView)findViewById(R.id.tvYouVsFriend);
-        final Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
+        TextView tvIChallengeMyFriendTo = (TextView) findViewById(R.id.tvIChallengeMyFriendTo);
+        TextView textViewYouVsFriend = (TextView) findViewById(R.id.tvYouVsFriend);
+        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
 
         textViewYouVsFriend.setText(getString(R.string.duel_with) + name);
         textViewYouVsFriend.setTypeface(typeface);
@@ -111,7 +108,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -220,7 +217,6 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
     private void getChallenges() {
         DBHelper dbHelper = DBHelper.getInstance(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.delete("duel", null, null);
         final ContentValues cv  = new ContentValues();
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         final String token      = sessionManager.getToken();
@@ -232,6 +228,8 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onResponse(Response<SelfImprovement> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
+                    db.delete("duel", null, null);
+
                     List<Datum> data = response.body().getData();
                     int data_size = 0;
                     for (int i = 0; i < data.size(); i++) {

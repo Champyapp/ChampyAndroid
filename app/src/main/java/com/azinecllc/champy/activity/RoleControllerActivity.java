@@ -94,16 +94,6 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        typeface = null;
-//        if(lostInternet != null) {
-//            lostInternet.destroyDrawingCache();
-//            lostInternet = null;
-//        }
-//        imageReload.destroyDrawingCache();
-//        imageReload = null;
-//        spinner.destroyDrawingCache();
-//        spinner = null;
-//        cc = null;
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
     }

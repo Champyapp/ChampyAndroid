@@ -52,10 +52,6 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
-
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-
         sessionManager = SessionManager.getInstance(getApplicationContext());
 
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
@@ -96,7 +92,9 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
         if (offlineMode.isConnectedToRemoteAPI(this)) {
             if (checkWriteExternalPermission()) {
                 switch (v.getId()) {
-                    case R.id.tv_choose_from_gallery: Crop.pickImage(PhotoActivity.this); break;
+                    case R.id.tv_choose_from_gallery:
+                        Crop.pickImage(PhotoActivity.this);
+                        break;
                     case R.id.tv_take_a_picture:
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         File f = new File(path, "profile.jpg");

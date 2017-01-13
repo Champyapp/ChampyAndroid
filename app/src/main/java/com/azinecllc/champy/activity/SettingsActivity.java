@@ -56,7 +56,6 @@ import static com.azinecllc.champy.utils.Constants.path;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
 
-    private final String TAG = "SettingsActivity";
     private TextView tvChangeName, tvName;
     private String name, userID, token;
     private OfflineMode offline;

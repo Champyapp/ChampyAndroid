@@ -51,16 +51,12 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_self_improvement);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         sessionManager = SessionManager.getInstance(getApplicationContext());
 
         spinner = findViewById(R.id.loadingPanel);
         spinner.setVisibility(View.VISIBLE);
-
-        //new getChallenges().execute();
-
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
@@ -75,9 +71,6 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
-
-        //Glide.with(this).load(R.drawable.ic_self_white).override(130, 130).into((ImageView) findViewById(R.id.imageViewLogo));
-        //Glide.with(this).load(R.drawable.selfimprtext).override(280, 250).into((ImageView) findViewById(R.id.imageWakeUpChall));
 
         ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
         ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
@@ -246,15 +239,6 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
 
     }
 
-
-//    private class getChallenges extends AsyncTask<Void,Void,Void> {
-//        @Override
-//        protected Void doInBackground(Void... arg0) {
-//            getChallenges();
-//            return null;
-//        }
-//
-//    }
 
 
 }

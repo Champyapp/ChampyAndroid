@@ -93,6 +93,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
                 }
                 try {
                     cc.doneForToday(progressID, details, alarmID);
+                    cc.setNewAlarmClock(details, alarmID);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -133,14 +134,6 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
 
 
     private Uri getAlarmUri() {
-//        Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-//        if (alert == null) {
-//            alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//            if (alert == null) {
-//                alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-//            }
-//        }
-//        return alert;
         Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         if (alert == null) {
             alert = RingtoneManager.getActualDefaultRingtoneUri(getApplicationContext(), RingtoneManager.TYPE_RINGTONE);

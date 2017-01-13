@@ -106,9 +106,6 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         tvDays.setTypeface(typeface);
         tvGoal.setTypeface(typeface);
 
-        //Glide.with(this).load(R.drawable.wakeupwhite).override(110, 110).into((ImageView) findViewById(R.id.imageViewLogo));
-        //Glide.with(this).load(R.drawable.wakeuptext) .override(180, 150).into((ImageView) findViewById(R.id.imageWakeUpChall));
-
         sessionManager = SessionManager.getInstance(getApplicationContext());
         offlineMode = OfflineMode.getInstance();
 

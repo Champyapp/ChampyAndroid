@@ -672,7 +672,7 @@ public class ChallengeController {
      * @value details - cleaned up our array from '[1, 2, 3]' to '1, 2, 3'
      * @value now     - current time on the device in seconds
      */
-    private void setNewAlarmClock(String arrayDetails, String alarmID) {
+    public void setNewAlarmClock(String arrayDetails, String alarmID) {
         String[] details = arrayDetails.replace("[", "").replace("]", "").split(", ");
 
         long now = System.currentTimeMillis() / 1000;

@@ -48,9 +48,9 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
         TextView drawerUserName = (TextView)findViewById(R.id.textView1); // overloading, be care
         drawerUserName.setVisibility(View.INVISIBLE);
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
@@ -61,25 +61,33 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
+        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
-        final ImageView drawerUserPhoto = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        final ImageView drawerBG = (ImageView) headerLayout.findViewById(R.id.slide_background);
+        ImageView drawerUserPhoto = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        ImageView drawerBG = (ImageView) headerLayout.findViewById(R.id.slide_background);
         drawerBG.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         File file = new File(path, "profile.jpg");
         Uri url = Uri.fromFile(file);
 
-        Glide.with(this).load(url).bitmapTransform(new CropCircleTransformation(this))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
+        Glide.with(this)
+                .load(url)
+                .bitmapTransform(new CropCircleTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(drawerUserPhoto);
 
         file = new File(path, "blurred.png");
         url = Uri.fromFile(file);
-        Glide.with(this).load(url).bitmapTransform(new CropSquareTransformation(this))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBG);
+        Glide.with(this)
+                .load(url)
+                .bitmapTransform(new CropSquareTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(drawerBG);
 
 
-        final Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
+        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
         String name = sessionManager.getUserName();
         drawerUserName.setText(name);

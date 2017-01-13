@@ -51,21 +51,19 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
 
         new LoadTermsText().execute();
 
-
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
 
-
-        final Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
-        final ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        final TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        final ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
+        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
+        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
+        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
         drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         File file = new File(path, "profile.jpg");
@@ -102,7 +100,6 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
             view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
         }
 
-        //ViewServer.get(this).addWindow(this);
     }
 
     @Override

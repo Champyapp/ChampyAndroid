@@ -33,10 +33,8 @@ import static com.azinecllc.champy.utils.Constants.path;
 
 public class PendingDuelActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private NavigationView navigationView;
     private SessionManager sessionManager;
     private DrawerLayout drawer;
-    private int size;
     public View spinner;
 
     @Override
@@ -55,12 +53,12 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         setSupportActionBar(toolbar);
         toggle.syncState();
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
 
-        final Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
-        final TextView tvPendingDuels = (TextView) findViewById(R.id.tvChallengeToMySelf);
+        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
+        TextView tvPendingDuels = (TextView) findViewById(R.id.tvChallengeToMySelf);
         tvPendingDuels.setTypeface(typeface);
 
         Glide.with(this).load(R.drawable.ic_duel_blue).override(130, 130).into((ImageView) findViewById(R.id.imageViewLogo));
@@ -81,7 +79,7 @@ public class PendingDuelActivity extends AppCompatActivity implements Navigation
         Glide.with(this).load(url).bitmapTransform(new CropSquareTransformation(this))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBackground);
 
-        size = Integer.parseInt(sessionManager.get_duel_pending());
+        int size = Integer.parseInt(sessionManager.get_duel_pending());
         PendingDuelsAdapter pagerAdapter = new PendingDuelsAdapter(getSupportFragmentManager());
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager_pending_duel);
         pagerAdapter.setCount(size);
