@@ -126,7 +126,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
             }
         }
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs_friends);
         tabLayout.setupWithViewPager(viewPager);
         //setupCustomTabIcons();
 

@@ -28,7 +28,7 @@ import static org.mockito.Mockito.when;
 /**
  * Created by SashaKhyzhun on 12/27/16.
  */
-public class ChallengeControllerTest {
+public class ChallengeControllerMethodsTest {
     @Mock
     Context mockContext;
     @Mock

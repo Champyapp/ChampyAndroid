@@ -236,15 +236,11 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
                     int data_size = 0;
                     for (int i = 0; i < data.size(); i++) {
                         com.azinecllc.champy.model.self.Datum datum = data.get(i);
-                        if (datum.getType().getName().equals("duel") /*&& !datum.getCreatedBy().equals(userID)*/) {
-//                            if (datum.getCreatedBy().contentEquals(userID)) {
-//                                Log.d("TAG", "onResponse: vse ok");
-//                            } else {
-//                                Log.d("TAG", "onResponse: vse xyinja");
-//                            }
-                            cv.put("name",         datum.getName());
-                            cv.put("description",  datum.getDescription());
-                            cv.put("duration",     datum.getDuration());
+                        if (datum.getType().getName().equals("duel") && datum.getCreatedBy() == null) {
+                            // check it.
+                            cv.put("name", datum.getName());
+                            cv.put("description", datum.getDescription());
+                            cv.put("duration", datum.getDuration());
                             cv.put("challenge_id", datum.get_id());
                             db.insert("duel", null, cv);
                             data_size++;
