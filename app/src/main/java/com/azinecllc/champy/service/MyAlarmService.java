@@ -11,10 +11,10 @@ import android.support.v4.app.NotificationCompat;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.WakeUpActivity;
 
-public class AlarmService extends IntentService {
+public class MyAlarmService extends IntentService {
 
-    public AlarmService() {
-        super("AlarmService");
+    public MyAlarmService() {
+        super("MyAlarmService");
     }
 
     @Override

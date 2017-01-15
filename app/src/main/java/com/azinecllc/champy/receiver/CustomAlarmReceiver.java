@@ -1,5 +1,6 @@
 package com.azinecllc.champy.receiver;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
@@ -10,7 +11,7 @@ import com.facebook.FacebookSdk;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class CustomAlarmReceiver extends WakefulBroadcastReceiver {
+public class CustomAlarmReceiver extends BroadcastReceiver {
 
     public final String TAG = "CustomAlarmReceiver";
 

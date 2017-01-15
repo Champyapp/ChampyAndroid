@@ -58,7 +58,6 @@ public class ChallengeController {
     private String token, userID;
     private Activity activity;
     private Context context;
-    //private Retrofit retrofit;
 
 
     public ChallengeController(Context mContext, Activity activity, String uToken, String uID) {
@@ -66,7 +65,6 @@ public class ChallengeController {
         this.context = mContext;
         this.token = uToken;
         this.userID = uID;
-        //this.retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
     }
 
     public ChallengeController() {}
@@ -523,9 +521,6 @@ public class ChallengeController {
             public void onResponse(Response<com.azinecllc.champy.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     List<Datum> data = response.body().getData();
-                    // idea: create boolean isLastInData and make it false;
-                    // then: check this bool if he is real last;
-                    // final: if 'true' - in surrender method create new Intent for update challenges
                     for (int i = 0; i < data.size(); i++) {
                         com.azinecllc.champy.model.active_in_progress.Datum datum = data.get(i);
 
@@ -589,20 +584,16 @@ public class ChallengeController {
                         String prog[] = new String[progress.size()];
 
                         if (challenge_status.equals("started")) {
-                            Log.d(TAG, "onResponse: progress[] before parsing: " + Arrays.toString(prog));
-                            Log.d(TAG, "onResponse: lastCheck  before parsing: " + lastCheck);
                             for (int j = 0; j < progress.size(); j++) {
                                 try {
                                     JSONObject json = new JSONObject(progress.get(j).toString());
                                     long at = json.getLong("at");
                                     prog[j] = String.valueOf(at);
-                                    Log.d(TAG, "\nonResponse: progress[]: " + Arrays.toString(prog));
                                 } catch (JSONException e) { e.printStackTrace(); }
                             }
 
                             if (prog.length != 0) {
                                 lastCheck = Long.parseLong(prog[prog.length - 1]);
-                                Log.d(TAG, "onResponse: lastCheck : " + lastCheck);
                             }
 
                             if (lastCheck != 0) {
