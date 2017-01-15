@@ -24,9 +24,9 @@ public class DailyRemindController {
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
 
-        System.out.println("System.currentTimeMillis: " + System.currentTimeMillis() + "\ncalender.currentInMillis: " + calendar.getTimeInMillis());
+        //System.out.println("System.currentTimeMillis: " + System.currentTimeMillis() + "\ncalender.currentInMillis: " + calendar.getTimeInMillis());
         if (System.currentTimeMillis() > calendar.getTimeInMillis()) {
-            System.out.println("System time > Needed time for remind");
+            //System.out.println("System time > Needed time for remind");
             calendar.add(Calendar.DAY_OF_YEAR, 1);
         }
 

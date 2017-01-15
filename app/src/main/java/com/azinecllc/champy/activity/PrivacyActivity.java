@@ -177,13 +177,13 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
                     "    <strong>PRIVACY POLICY</strong>\n" +
                     "</p>\n" +
                     "<p>\n" +
-                    "    Champy (“Champy,” “we,” and “us”) respects the privacy of its users (“you”) and has developed this PrivacyActivity Policy to demonstrate its commitment to\n" +
-                    "    protecting your privacy. This PrivacyActivity Policy describes the information we collect, how that information may be used, with whom it may be shared, and your\n" +
-                    "    choices about such uses and disclosures. We encourage you to read this PrivacyActivity Policy carefully when using our application or services or transacting\n" +
-                    "    business with us. By using our website or application (our “Service”), you are accepting the practices described in this PrivacyActivity Policy.\n" +
+                    "    Champy (“Champy,” “we,” and “us”) respects the privacy of its users (“you”) and has developed this Privacy Policy to demonstrate its commitment to\n" +
+                    "    protecting your privacy. This Privacy Policy describes the information we collect, how that information may be used, with whom it may be shared, and your\n" +
+                    "    choices about such uses and disclosures. We encourage you to read this Privacy Policy carefully when using our application or services or transacting\n" +
+                    "    business with us. By using our website or application (our “Service”), you are accepting the practices described in this Privacy Policy.\n" +
                     "</p>\n" +
                     "<p>\n" +
-                    "    If you have any questions about our privacy practices, please refer to the end of this PrivacyActivity Policy for information on how to contact us.\n" +
+                    "    If you have any questions about our privacy practices, please refer to the end of this Privacy Policy for information on how to contact us.\n" +
                     "</p>\n" +
                     "<ol>\n" +
                     "    <li>\n" +
@@ -332,7 +332,7 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
                     "            </li>\n" +
                     "            <li>\n" +
                     "                <p>\n" +
-                    "                    Personal information. We do not share your personal information with others except as indicated in this PrivacyActivity Policy or when we inform\n" +
+                    "                    Personal information. We do not share your personal information with others except as indicated in this Privacy Policy or when we inform\n" +
                     "                    you and give you an opportunity to opt out of having your personal information shared. We may share personal information with:\n" +
                     "                </p>\n" +
                     "                <ul>\n" +
@@ -398,7 +398,7 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
                     "    settings. More information about how to contact us is provided below. You also may close your account at any time by visiting the \"SettingsActivity\" page for your\n" +
                     "    account. If you close your account, we will retain certain information associated with your account for analytical purposes and recordkeeping integrity, as\n" +
                     "    well as to prevent fraud, enforce our TermsActivity of Use, take actions we deem necessary to protect the integrity of our Service or our users, or take other\n" +
-                    "    actions otherwise permitted by law. In addition, if certain information has already been provided to third parties as described in this PrivacyActivity Policy,\n" +
+                    "    actions otherwise permitted by law. In addition, if certain information has already been provided to third parties as described in this Privacy Policy,\n" +
                     "    retention of that information will be subject to those third parties' policies.\n" +
                     "</p>\n" +
                     "<ol start=\"5\">\n" +
@@ -475,19 +475,19 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
                     "    </li>\n" +
                     "</ol>\n" +
                     "<p>\n" +
-                    "    This PrivacyActivity Policy does not create rights enforceable by third parties or require disclosure of any personal information relating to users of the website.\n" +
+                    "    This Privacy Policy does not create rights enforceable by third parties or require disclosure of any personal information relating to users of the website.\n" +
                     "</p>\n" +
                     "<ol start=\"10\">\n" +
                     "    <li>\n" +
                     "        <p align=\"justify\">\n" +
-                    "            <strong>Changes to this PrivacyActivity Policy</strong>\n" +
+                    "            <strong>Changes to this Privacy Policy</strong>\n" +
                     "        </p>\n" +
                     "    </li>\n" +
                     "</ol>\n" +
                     "<p>\n" +
                     "    <a name=\"_GoBack\"></a>\n" +
-                    "    We will occasionally update this PrivacyActivity Policy. When we post changes to this PrivacyActivity Policy, we will revise the \"last updated\" date at the top of this\n" +
-                    "    PrivacyActivity Policy. We recommend that you check our Service from time to time to inform yourself of any changes in this PrivacyActivity Policy or any of our other\n" +
+                    "    We will occasionally update this Privacy Policy. When we post changes to this Privacy Policy, we will revise the \"last updated\" date at the top of this\n" +
+                    "    Privacy Policy. We recommend that you check our Service from time to time to inform yourself of any changes in this Privacy Policy or any of our other\n" +
                     "    policies.\n" +
                     "</p>\n" +
                     "<ol start=\"11\">\n" +
@@ -498,10 +498,10 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
                     "    </li>\n" +
                     "</ol>\n" +
                     "<p>\n" +
-                    "    If you have any questions about this PrivacyActivity Policy, please contact us by email or postalmail as follows:\n" +
+                    "    If you have any questions about this Privacy Policy, please contact us by email or postalmail as follows:\n" +
                     "</p>\n" +
                     "<p>\n" +
-                    "    PrivacyActivity Officer\n" +
+                    "    Privacy Officer\n" +
                     "    <br/>\n" +
                     "    Azinec LLC.\n" +
                     "    <br/>\n" +

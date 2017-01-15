@@ -173,8 +173,8 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
         protected String doInBackground(String... urls) {
             String text  = "<p lang=\"en-US\">\n" +
                     "    By accessing the Champy application or its website found at <a href=\"champyapp.com\">champyapp.com</a>, whether through a mobile device, mobile application\n" +
-                    "    or computer (collectively, the “<strong>Service</strong>”) you agree to be bound by these TermsActivity of Use (this “<strong>Agreement</strong>”), whether or not\n" +
-                    "    you create a Champy account. If you wish to create a Champy account and make use of the Service, please read these TermsActivity of Use.\n" +
+                    "    or computer (collectively, the “<strong>Service</strong>”) you agree to be bound by these Terms of Use (this “<strong>Agreement</strong>”), whether or not\n" +
+                    "    you create a Champy account. If you wish to create a Champy account and make use of the Service, please read these Terms of Use.\n" +
                     "</p>\n" +
                     "<p lang=\"en-US\">\n" +
                     "    You should also read the Champy PrivacyActivity Policy, which is incorporated by reference into this Agreement and available in the Service. If you do not button_accept\n" +
@@ -184,7 +184,7 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
                     "<ol>\n" +
                     "    <li>\n" +
                     "        <p lang=\"en-US\">\n" +
-                    "            <strong>Acceptance of TermsActivity of Use Agreement.</strong>\n" +
+                    "            <strong>Acceptance of Terms of Use Agreement.</strong>\n" +
                     "        </p>\n" +
                     "        <ol type=\"a\">\n" +
                     "            <li>\n" +
