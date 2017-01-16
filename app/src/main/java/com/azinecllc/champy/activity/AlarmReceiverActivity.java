@@ -86,13 +86,14 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        Intent intent = new Intent(this, RoleControllerActivity.class);
         switch (v.getId()) {
             case R.id.buttonWakeUpDoneForToday:
                 if (mMediaPlayer.isPlaying()) {
                     mMediaPlayer.stop();
                 }
                 try {
-                    cc.doneForToday(progressID, details, alarmID, new Intent(this, MainActivity.class));
+                    cc.doneForToday(progressID, details, alarmID, intent);
                     cc.setNewAlarmClock(details, alarmID);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -105,7 +106,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
                     mMediaPlayer.stop();
                 }
                 try {
-                    cc.give_up(progressID, Integer.parseInt(alarmID), new Intent(this, MainActivity.class));
+                    cc.give_up(progressID, Integer.parseInt(alarmID), intent);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

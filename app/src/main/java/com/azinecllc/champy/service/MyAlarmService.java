@@ -11,6 +11,10 @@ import android.support.v4.app.NotificationCompat;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.WakeUpActivity;
 
+/**
+ * Service for wake-up challenge.
+ * I think this is useless.
+ */
 public class MyAlarmService extends IntentService {
 
     public MyAlarmService() {
@@ -19,10 +23,11 @@ public class MyAlarmService extends IntentService {
 
     @Override
     public void onHandleIntent(Intent intent) {
-        sendNotification("Wake Up! Wake Up!");
+        sendNotification("Wake Up! lol");
     }
 
     private void sendNotification(String msg) {
+        System.out.println("MyAlarmService.sendNotification() is working!");
         NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
         Intent goToWakeUp = new Intent(this, WakeUpActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, goToWakeUp, 0);

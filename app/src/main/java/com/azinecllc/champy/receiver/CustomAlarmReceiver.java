@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
+import com.azinecllc.champy.activity.AlarmReceiverActivity;
 import com.azinecllc.champy.utils.SessionManager;
 import com.facebook.FacebookSdk;
 
@@ -27,8 +28,8 @@ public class CustomAlarmReceiver extends BroadcastReceiver {
         final String alarmID      = intent.getStringExtra("alarmID");
         final String details      = intent.getStringExtra("details");
 
-        Intent alarmIntent = new Intent();
-        alarmIntent.setClassName("com.azinecllc.champy", "com.azinecllc.champy.activity.AlarmReceiverActivity");
+        Intent alarmIntent = new Intent(context, AlarmReceiverActivity.class);
+        //alarmIntent.setClassName("com.azinecllc.champy", "com.azinecllc.champy.activity.AlarmReceiverActivity");
         alarmIntent.putExtra("finalInProgressID", inProgressId);
         alarmIntent.putExtra("finalAlarmID", alarmID);
         alarmIntent.putExtra("finalDetails", details);

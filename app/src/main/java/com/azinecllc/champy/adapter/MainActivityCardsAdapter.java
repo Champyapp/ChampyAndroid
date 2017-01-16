@@ -48,7 +48,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
             tempView = inflater.inflate(R.layout.single_card_fragment_self, null, false);
         }
 
-        SelfImprovement_model currentCard = arrayList.get(position);
+        final SelfImprovement_model currentCard = arrayList.get(position);
         ImageView cardImage = (ImageView)tempView.findViewById(R.id.cardImage);
         ImageView imageChallengeLogo = (ImageView)tempView.findViewById(R.id.imageViewChallengeLogo);
         Typeface typeface = android.graphics.Typeface.createFromAsset(getContext().getAssets(), "fonts/bebasneue.ttf");
@@ -73,22 +73,28 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         tvChallengeType.setText(currentCard.getType());
         tvChallengeType.setTextSize((float)(y*1.7));
         tvChallengeType.setTypeface(typeface);
+
         TextView tvChallengeDescription = (TextView) tempView.findViewById(R.id.tvChallengeDescription);
         tvChallengeDescription.setText(itemGoal);
         tvChallengeDescription.setTextSize(y*2);
         tvChallengeDescription.setTypeface(typeface);
+
         Button buttonGiveUp = (Button) tempView.findViewById(R.id.buttonGiveUp);
         buttonGiveUp.getLayoutParams().width  = x*7;
         buttonGiveUp.getLayoutParams().height = x*7;
+
         Button buttonDone = (Button) tempView.findViewById(R.id.buttonDoneForToday);
         buttonDone.getLayoutParams()  .width  = x*7;
         buttonDone.getLayoutParams()  .height = x*7;
+
         Button buttonShare = (Button) tempView.findViewById(R.id.buttonShare);
         buttonShare.getLayoutParams() .width  = x*7;
         buttonShare.getLayoutParams() .height = x*7;
+
         TextView tvEveryDayForTheNext = (TextView) tempView.findViewById(R.id.tvEveryDayForTheNext);
         tvEveryDayForTheNext.setTypeface(typeface);
         tvEveryDayForTheNext.setTextSize((float)(y*1.3));
+
         TextView tvDuration = (TextView) tempView.findViewById(R.id.textViewDuration);
         tvDuration.setTypeface(typeface);
         tvDuration.setTextSize(y*2);
@@ -144,9 +150,9 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         }
 
         SessionManager sessionManager = SessionManager.getInstance(getContext());
-        final String userId = sessionManager.getUserId();
+        final String uID = sessionManager.getUserId();
         final String token = sessionManager.getToken();
-        final ChallengeController cc = new ChallengeController(getContext(), (Activity) getContext(), token, userId);
+        ChallengeController cc = new ChallengeController(getContext(), (Activity) getContext(), token, uID);
 
         /*************************** last check-in time for buttons view *************************/
         long now = System.currentTimeMillis() / 1000;
@@ -196,19 +202,17 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                     tvDuration.setVisibility(View.VISIBLE);
 //                    int newDays = Integer.parseInt(currentCard.getDays()) - 1;
 //                    if (newDays < 1) {
-                    cc.doneForToday(itemInProgressId, currentCard.getWakeUpTime(),
-                            itemGoal, new Intent(getContext(), MainActivity.class));
+//                        Intent i = new Intent(getContext(), MainActivity.class);
+//                        cc.doneForToday(itemInProgressId, currentCard.getWakeUpTime(), itemGoal, i);
 //                    } else {
 //                        cc.doneForToday(itemInProgressId, currentCard.getWakeUpTime(), itemGoal, null);
 //                        tvDuration.setText(String.format("%s", newDays + getContext().getResources().getString(R.string.daysToGo)));
 //                        tvEveryDayForTheNext.setVisibility(View.VISIBLE);
 //                    }
-
+                    Intent i = new Intent(getContext(), MainActivity.class);
+                    cc.doneForToday(itemInProgressId, currentCard.getWakeUpTime(), itemGoal, i);
                     snackbar = Snackbar.make(v, "Well done!", Snackbar.LENGTH_SHORT);
                     snackbar.show();
-
-                    //refreshCardByPosition();
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

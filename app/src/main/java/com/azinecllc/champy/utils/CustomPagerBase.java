@@ -30,19 +30,19 @@ public class CustomPagerBase {
     private int previousItemXPosition;
     private View currentItem, nextItem, previousItem, removedItem;
     private View[] viewList;
-    private Activity context;
+    private Activity activity;
     private MainActivityCardPagerAdapter pagerAdapter;
     private RelativeLayout rootView;
     private LayoutInflater inflater;
 
-    private static CustomPagerBase instance;
+    private CustomPagerBase instance;
 
-    public static CustomPagerBase getInstance() {
+    public CustomPagerBase getInstance() {
         return instance;
     }
 
     public CustomPagerBase(Activity activity, RelativeLayout rootView, MainActivityCardPagerAdapter pagerAdapter) {
-        this.context      = activity;
+        this.activity = activity;
         this.rootView     = rootView;
         this.pagerAdapter = pagerAdapter;
         viewList          = new View[pagerAdapter.dataCount()];
@@ -59,9 +59,9 @@ public class CustomPagerBase {
      *                 variable with one, two and three+ cards. Need to set touchListener for them;
      */
     public void preparePager(int position) {
-        int width = CHWindowView.getWindowWidth(context);
-        nextItemXPosition     = CHWindowView.getCurrentCardPositionX(context) + Math.round(width/1.65f); // was 8, need 1.5f
-        previousItemXPosition = CHWindowView.getCurrentCardPositionX(context) - Math.round(width/1.65f); // but I wanna 2'
+        int width = CHWindowView.getWindowWidth(activity);
+        nextItemXPosition = CHWindowView.getCurrentCardPositionX(activity) + Math.round(width / 1.65f); // was 8, need 1.5f
+        previousItemXPosition = CHWindowView.getCurrentCardPositionX(activity) - Math.round(width / 1.65f); // but I wanna 2'
 
         if (pagerAdapter != null && pagerAdapter.dataCount() > 0) {
             /**
@@ -87,13 +87,13 @@ public class CustomPagerBase {
                 // Create the view for the selected position
                 currentItem = createCardLayout(position);
                 setTouchListenerToView(currentItem, true);
-                ObjectAnimator.ofFloat(currentItem, "translationX", 0, CHWindowView.getCurrentCardPositionX(context)).setDuration(1).start();
+                ObjectAnimator.ofFloat(currentItem, "translationX", 0, CHWindowView.getCurrentCardPositionX(activity)).setDuration(1).start();
             }
             if (pagerAdapter.dataCount() == 1) {
                 // Create the view for one page and freeze it.
                 currentItem = createCardLayout(position);
                 setTouchListenerToView(currentItem, false);
-                ObjectAnimator.ofFloat(currentItem, "translationX", 0, CHWindowView.getCurrentCardPositionX(context)).setDuration(1).start();
+                ObjectAnimator.ofFloat(currentItem, "translationX", 0, CHWindowView.getCurrentCardPositionX(activity)).setDuration(1).start();
             }
         }
         currentPosition = position;
@@ -111,7 +111,7 @@ public class CustomPagerBase {
             public boolean onTouch(View v, MotionEvent event) {
 
                 if (isTouchEnabled) {
-                    int width = Math.round(CHWindowView.getWindowWidth(context) / 100); // = 10
+                    int width = Math.round(CHWindowView.getWindowWidth(activity) / 100); // = 10
                     final int X = (int) event.getRawX();
                     float viewXPosition = ViewHelper.getX(itemView);
 
@@ -245,7 +245,7 @@ public class CustomPagerBase {
                     ObjectAnimator.ofFloat(currentItem, "scaleY", ViewHelper.getScaleY(currentItem), 0.8f),
 
                     // We do next card larger and move it to new position (centralItem)
-                    ObjectAnimator.ofFloat(nextItem, "translationX", ViewHelper.getX(nextItem), CHWindowView.getCurrentCardPositionX(context)),
+                    ObjectAnimator.ofFloat(nextItem, "translationX", ViewHelper.getX(nextItem), CHWindowView.getCurrentCardPositionX(activity)),
                     ObjectAnimator.ofFloat(nextItem, "scaleX", ViewHelper.getScaleX(nextItem), 1f),
                     ObjectAnimator.ofFloat(nextItem, "scaleY", ViewHelper.getScaleY(nextItem), 1f)
             );
@@ -282,7 +282,7 @@ public class CustomPagerBase {
                     }
 
                     if (removedItem != null) {
-                        context.runOnUiThread(new Runnable() {
+                        activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 rootView.removeView(removedItem);
@@ -321,7 +321,7 @@ public class CustomPagerBase {
                     ObjectAnimator.ofFloat(currentItem, "scaleY", ViewHelper.getScaleY(currentItem), 0.8f),
 
                     // We do previous card larger and move it to new position (centralItem)
-                    ObjectAnimator.ofFloat(previousItem, "translationX", ViewHelper.getX(previousItem), CHWindowView.getCurrentCardPositionX(context)),
+                    ObjectAnimator.ofFloat(previousItem, "translationX", ViewHelper.getX(previousItem), CHWindowView.getCurrentCardPositionX(activity)),
                     ObjectAnimator.ofFloat(previousItem, "scaleX", ViewHelper.getScaleX(previousItem), 1f),
                     ObjectAnimator.ofFloat(previousItem, "scaleY", ViewHelper.getScaleY(previousItem), 1f)
             );
@@ -358,7 +358,7 @@ public class CustomPagerBase {
                     }
 
                     if (removedItem != null) {
-                        context.runOnUiThread(new Runnable() {
+                        activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 rootView.removeView(removedItem);
@@ -383,7 +383,7 @@ public class CustomPagerBase {
 
 
     private float getScaleValue(float currentPoint) {
-        float value = (float) (((CHWindowView.getCurrentCardPositionX(context) - currentPoint) * 0.5) / CHWindowView.getCurrentCardPositionX(context));
+        float value = (float) (((CHWindowView.getCurrentCardPositionX(activity) - currentPoint) * 0.5) / CHWindowView.getCurrentCardPositionX(activity));
         if (1 - value * value < 0.8f)
             return 0.8f;
         return 1 - value * value;
@@ -417,7 +417,7 @@ public class CustomPagerBase {
     private void moveCentralItemToDefault() {
         AnimatorSet set = new AnimatorSet();
         set.playTogether(
-                ObjectAnimator.ofFloat(currentItem, "translationX", ViewHelper.getX(currentItem), CHWindowView.getCurrentCardPositionX(context)),
+                ObjectAnimator.ofFloat(currentItem, "translationX", ViewHelper.getX(currentItem), CHWindowView.getCurrentCardPositionX(activity)),
                 ObjectAnimator.ofFloat(currentItem, "scaleX",  ViewHelper.getScaleX(currentItem), 1f),
                 ObjectAnimator.ofFloat(currentItem, "scaleY", ViewHelper.getScaleY(currentItem), 1f)
         );

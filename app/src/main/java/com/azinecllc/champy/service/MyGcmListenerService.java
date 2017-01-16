@@ -80,7 +80,7 @@ public class MyGcmListenerService extends GcmListenerService {
                 notifyForFriends(friendsIntent, message);
                 break;
             case "Challenge request":
-                Intent goToPendingDuels = new Intent(MyGcmListenerService.this, PendingDuelActivity.class);
+                Intent goToPendingDuels = new Intent(this, PendingDuelActivity.class);
                 cc = new ChallengeController(getApplicationContext(),
                         (Activity)getApplicationContext(), session.getToken(), session.getUserId()
                 );
@@ -88,7 +88,7 @@ public class MyGcmListenerService extends GcmListenerService {
                 notifyChallenges(goToPendingDuels, message);
                 break;
             case "Challenge accepted":
-                Intent roleIntent = new Intent(MyGcmListenerService.this, RoleControllerActivity.class);
+                Intent roleIntent = new Intent(this, RoleControllerActivity.class);
                 roleIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 notifyChallenges(roleIntent, message);
                 break;
@@ -109,7 +109,7 @@ public class MyGcmListenerService extends GcmListenerService {
     private void notifyChallenges(Intent intent, String message) {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(MyGcmListenerService.this, 0 /* Request code */, intent, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent, PendingIntent.FLAG_ONE_SHOT);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_duel_white)
                 .setContentTitle("Champy")
