@@ -392,12 +392,10 @@ public class ChallengeController {
     }
 
 
-
-
-    public void doneForToday(String inProgressId, String details, String alarmID) throws IOException {
+    public void doneForToday(String progID, String details, String alarmID, Intent i) throws IOException {
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
 
-        Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = activeInProgress.checkChallenge(inProgressId, token);
+        Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = activeInProgress.checkChallenge(progID, token);
         call.enqueue(new Callback<com.azinecllc.champy.model.single_in_progress.SingleInProgress>() {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
@@ -408,7 +406,7 @@ public class ChallengeController {
                         setNewAlarmClock(details, alarmID);
                     }
 
-                    generateCardsForMainActivity(new Intent(activity, MainActivity.class));
+                    generateCardsForMainActivity(i);
 
                 } else {
                     Log.i(TAG, "onResponse: Done for today failed: " + response.message() + " " + response.code());
@@ -631,7 +629,6 @@ public class ChallengeController {
 
                     if (intent != null) {
                         activity.startActivity(intent);
-                        // progressBar.loadUserProgressBarInfo(); mb?
                     }
 
                 }

@@ -92,7 +92,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
                     mMediaPlayer.stop();
                 }
                 try {
-                    cc.doneForToday(progressID, details, alarmID);
+                    cc.doneForToday(progressID, details, alarmID, new Intent(this, MainActivity.class));
                     cc.setNewAlarmClock(details, alarmID);
                 } catch (IOException e) {
                     e.printStackTrace();

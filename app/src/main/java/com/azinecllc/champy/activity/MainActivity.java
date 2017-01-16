@@ -86,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ImageView drawerUserPhoto = (ImageView) headerLayout.findViewById(R.id.profile_image);
         TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
 
-
         // GET PHOTO AND MAKE BLUR
         ImageView background = (ImageView) findViewById(R.id.main_background);
         background.setScaleType(ImageView.ScaleType.CENTER_CROP);

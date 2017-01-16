@@ -18,13 +18,12 @@ public abstract class MainActivityCardPagerAdapter {
 
     public abstract int dataCount();
 
-    public Context getContext() {
-        return context;
-    }
-
-    // need?
     public void setContext(Context context) {
         this.context = context;
+    }
+
+    public Context getContext() {
+        return context;
     }
 
 }
