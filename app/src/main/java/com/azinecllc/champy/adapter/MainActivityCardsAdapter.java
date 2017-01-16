@@ -109,7 +109,6 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 //            Log.d(TAG, "getVersus: "        + currentCard.getVersus());         // not duel
 //            Log.d(TAG, "getNeedsToCheck: "  + currentCard.getNeedsToCheck());   // true / false
 //        } catch (Exception e) { e.printStackTrace(); }
-
         if (itemNeedsToCheck.equals("true")) {
             tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
             buttonDone.setVisibility(View.VISIBLE);
@@ -163,22 +162,9 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         }
 
         if (myProgress != 0L && now > progressMidNight + oneDay) {
-            //if (!itemType.equals("Wake Up")) {
-//            //    tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
-//            //    buttonShare.setVisibility(View.INVISIBLE);
-//            //    buttonDone.setVisibility(View.VISIBLE);
-//            //}
             tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
             buttonShare.setVisibility(View.INVISIBLE);
             buttonDone.setVisibility(View.VISIBLE);
-//            if (now > progressMidNight + twoDays) {
-//                try {
-//                    int i = (itemType.equals("Wake Up")) ? Integer.parseInt(currentCard.getWakeUpTime()) : 0;
-//                    cc.give_up(itemInProgressId, i, null);
-//                } catch (IOException | NumberFormatException e) {
-//                    e.printStackTrace();
-//                }
-//            }
         }
 
         /************************************* Clicks ********************************************/
@@ -210,6 +196,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                     buttonShare.setVisibility(View.VISIBLE);
                     snackbar = Snackbar.make(v, "Well done!", Snackbar.LENGTH_SHORT);
                     snackbar.show();
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

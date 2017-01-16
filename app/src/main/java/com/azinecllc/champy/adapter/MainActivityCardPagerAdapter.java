@@ -14,16 +14,17 @@ public abstract class MainActivityCardPagerAdapter {
         this.context = context;
     }
 
+    public abstract View getView(int position, View convertView);
+
+    public abstract int dataCount();
+
     public Context getContext() {
         return context;
     }
 
+    // need?
     public void setContext(Context context) {
         this.context = context;
     }
-
-    public abstract View getView(int position, View convertView);
-
-    public abstract int dataCount();
 
 }
