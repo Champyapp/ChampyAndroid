@@ -49,6 +49,13 @@ public class FriendsFragment extends Fragment {
     private SessionManager sessionManager;
     private Socket mSocket;
 
+    public static FriendsFragment newInstance(int page) {
+        Bundle args = new Bundle();
+        args.putInt(ARG_PAGE, page);
+        FriendsFragment fragment = new FriendsFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -267,99 +274,5 @@ public class FriendsFragment extends Fragment {
                 }});
         }
     };
-
-//    public static FriendsFragment newInstance(int page) {
-//        Bundle args = new Bundle();
-//        args.putInt(ARG_PAGE, page);
-//        FriendsFragment fragment = new FriendsFragment();
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
-
-//    public void UpdateFriendsList() {
-//        final String API_URL = "http://46.101.213.24:3007";
-//        SessionManager sessionManager = new SessionManager(getActivity());
-//        HashMap<String, String> user;
-//        user = sessionManager.getUserDetails();
-//        final String id = user.get("id");
-//        String token = user.get("token");
-//        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-//        DBHelper dbHelper = new DBHelper(getActivity());
-//        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-//        db.delete("friends", null, null);
-//        final ContentValues cv = new ContentValues();
-//
-//        com.example.ivan.champy_v2.interfaces.Friends friends = retrofit.create(com.example.ivan.interfaces.Friends.class);
-//        Call<com.example.ivan.model.FriendModel.FriendModel> call = friends.getUserFriends(id, token);
-//        call.enqueue(new Callback<com.example.ivan.champy_v2.model.FriendModel.FriendModel>() {
-//            @Override
-//            public void onResponse(Response<com.example.ivan.champy_v2.model.FriendModel.FriendModel> response, Retrofit retrofit) {
-//                if (response.isSuccess()) {
-//                    List<Datum> data = response.body().getData();
-//                    for (int i = 0; i < data.size(); i++) {
-//                        Datum datum = data.get(i);
-//
-//                        if (datum.getFriend() != null) {
-//                            if (datum.getStatus().toString().equals("true")) {
-//                                if (datum.getOwner().getID().equals(id)) {
-//
-//                                    Friend_ friend = datum.getFriend();
-//                                    cv.put("name", friend.getName());
-//                                    if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
-//                                    else cv.put("photo", "");
-//                                    cv.put("user_id", friend.getId());
-//                                    db.insert("friends", null, cv);
-//
-//                                } else {
-//                                    Owner friend = datum.getOwner();
-//                                    cv.put("name", friend.getName());
-//
-//                                    if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
-//                                    else cv.put("photo", "");
-//                                    cv.put("user_id", friend.getID());
-//                                    db.insert("friends", null, cv);
-//                                }
-//                            }
-//                        }
-//                    }
-//                    final List<com.example.ivan.champy_v2.model.FriendModel> newfriends = new ArrayList<>();
-//                    Cursor c = db.query("friends", null, null, null, null, null, null);
-//                    if (c.moveToFirst()) {
-//                        int idColIndex = c.getColumnIndex("id");
-//                        int nameColIndex = c.getColumnIndex("name");
-//                        int photoColIndex = c.getColumnIndex("photo");
-//                        int index = c.getColumnIndex("user_id");
-//                        do {
-//                            Log.i("newusers", "NewUser: " + c.getString(nameColIndex) + " Photo: " + c.getString(photoColIndex));
-//                            newfriends.add(new com.example.ivan.champy_v2.model.FriendModel(
-//                                    c.getString(nameColIndex),
-//                                    API_URL + c.getString(photoColIndex),
-//                                    c.getString(index),
-//                                    "0", "0", "0" ,"0"));
-//                        } while (c.moveToNext());
-//                    }
-//                    c.close();
-//
-//                    Log.i("stat", "FriendsActivity :" + newfriends.toString());
-//
-//                    RecyclerView rvContacts = (RecyclerView) getActivity().findViewById(R.id.rvContacts);
-//                    final FriendsAdapter adapter = new FriendsAdapter(newfriends, getContext(), getActivity(), new CustomItemClickListener() {
-//                        @Override
-//                        public void onItemClick(View view, int position) {
-//                            com.example.ivan.champy_v2.model.FriendModel friend = newfriends.get(position);
-//                        }
-//                    });
-//                    rvContacts.setAdapter(adapter);
-//                    rvContacts.getAdapter().notifyDataSetChanged();
-//                    rvContacts.invalidate();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Throwable t) {
-//
-//            }
-//        });
-//    }
 
 }
