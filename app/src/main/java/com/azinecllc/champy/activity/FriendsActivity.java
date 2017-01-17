@@ -119,8 +119,12 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                 sessionManager.setRefreshOthers("true");
                 switch (friendRequest) {
                     case "friend_request_confirmed": viewPager.setCurrentItem(0); break;
-                    case "incoming_friend_request": viewPager.setCurrentItem(1); break;
-                    case "friend_request_removed": viewPager.setCurrentItem(2); break;
+                    case "friend_request_incoming":
+                        viewPager.setCurrentItem(1);
+                        break;
+                    case "friend_request_removed":
+                        viewPager.setCurrentItem(2);
+                        break;
                     default: viewPager.setCurrentItem(0);
                 }
             }

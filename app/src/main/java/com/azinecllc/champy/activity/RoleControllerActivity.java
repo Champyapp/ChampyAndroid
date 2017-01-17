@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,18 +22,48 @@ import com.azinecllc.champy.utils.SessionManager;
 public class RoleControllerActivity extends AppCompatActivity implements View.OnClickListener {
 
     private SessionManager sessionManager;
-    private ChallengeController cc;
     private OfflineMode offlineMode;
     private Typeface typeface;
     private TextView lostInternet;
     private ImageView imageReload;
     private View spinner;
+    private Intent goTo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_role_controller);
         spinner = findViewById(R.id.loadingPanel);
+
+        Bundle bundle = getIntent().getExtras();
+        String extras;
+        goTo = new Intent(this, MainActivity.class);
+        if (bundle != null) {
+            extras = bundle.getString("friend_request");
+            if (extras != null) {
+                switch (extras) {
+                    case "friend_request_confirmed":
+                        goTo = new Intent(this, FriendsActivity.class);
+                        break;
+                    case "friend_request_incoming":
+                        goTo = new Intent(this, FriendsActivity.class);
+                        break;
+                    case "friend_request_removed":
+                        goTo = new Intent(this, FriendsActivity.class);
+                        break;
+                    case "challenge_request_win":
+                        goTo = new Intent(this, HistoryActivity.class);
+                        break;
+                    case "challenge_request_incoming":
+                        goTo = new Intent(this, PendingDuelActivity.class);
+                        break;
+                    case "challenge_request_confirmed":
+                        goTo = new Intent(this, MainActivity.class);
+                        break;
+                }
+            }
+        }
+
 
         sessionManager = SessionManager.getInstance(getApplicationContext());
         offlineMode = OfflineMode.getInstance();
@@ -42,7 +73,7 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
         tvChampy.setTypeface(typeface);
 
 
-        checkIfLoggedInAndMakeRedirect();
+        checkIfLoggedInAndMakeRedirect(goTo);
 
 
     }
@@ -53,22 +84,24 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
             spinner.setVisibility(View.VISIBLE);
             lostInternet.setVisibility(View.INVISIBLE);
             imageReload.setVisibility(View.INVISIBLE);
-            checkIfLoggedInAndMakeRedirect();
+            checkIfLoggedInAndMakeRedirect(goTo);
         }
     }
 
 
-    private void checkIfLoggedInAndMakeRedirect() {
+    private void checkIfLoggedInAndMakeRedirect(Intent goTo) {
         if (offlineMode.isConnectedToRemoteAPI(this)) {
             if (sessionManager.isUserLoggedIn()) {
-                final String uId = sessionManager.getUserId();
-                final String uToken = sessionManager.getToken();
+                final String uID = sessionManager.getUserId();
+                final String token = sessionManager.getToken();
 
-                cc = new ChallengeController(getApplicationContext(), this, uToken, uId);
-                cc.refreshCardsForPendingDuel(new Intent(this, MainActivity.class));
+                ChallengeController cc = new ChallengeController(getApplicationContext(), this, token, uID);
+                cc.refreshCardsForPendingDuel(goTo);
 
                 DailyRemindController reminder = new DailyRemindController(getApplicationContext());
                 reminder.enableDailyNotificationReminder();
+
+
             } else {
                 startActivity(new Intent(this, LoginActivity.class));
             }

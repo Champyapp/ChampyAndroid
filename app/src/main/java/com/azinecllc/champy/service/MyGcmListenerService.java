@@ -62,45 +62,39 @@ public class MyGcmListenerService extends GcmListenerService {
      */
     private void sendNotification(String message, String title) {
         Log.d(TAG, title);
-        Intent friendsIntent = new Intent(this, FriendsActivity.class);
-        friendsIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        ChallengeController cc;
+        Intent intent = new Intent(this, RoleControllerActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         switch (title) {
             case "Friend Request Confirmed":
-                friendsIntent.putExtra("friend_request", "friend_request_confirmed");
-                notifyForFriends(friendsIntent, message);
+                intent.putExtra("friend_request", "friend_request_confirmed");
+                notifyForFriends(intent, message);
                 break;
             case "Incoming Friend Request":
-                friendsIntent.putExtra("friend_request", "incoming_friend_request");
-                notifyForFriends(friendsIntent, message);
+                intent.putExtra("friend_request", "friend_request_incoming");
+                notifyForFriends(intent, message);
                 break;
             case "Friend Request Removed":
-                friendsIntent.putExtra("friend_request", "friend_request_removed");
-                notifyForFriends(friendsIntent, message);
+                intent.putExtra("friend_request", "friend_request_removed");
+                notifyForFriends(intent, message);
                 break;
             case "Challenge request":
-                Intent goToPendingDuels = new Intent(this, PendingDuelActivity.class);
-                cc = new ChallengeController(getApplicationContext(),
-                        (Activity)getApplicationContext(), session.getToken(), session.getUserId()
-                );
-                cc.refreshCardsForPendingDuel(goToPendingDuels);
-                notifyChallenges(goToPendingDuels, message);
+                //Intent goToPendingDuels = new Intent(this, RoleControllerActivity.class);
+                intent.putExtra("friend_request", "challenge_request_incoming");
+                notifyChallenges(intent, message);
                 break;
             case "Challenge accepted":
-                Intent roleIntent = new Intent(this, RoleControllerActivity.class);
-                roleIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                notifyChallenges(roleIntent, message);
+                //Intent roleIntent = new Intent(this, RoleControllerActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("friend_request", "challenge_request_confirmed");
+                notifyChallenges(intent, message);
                 break;
             case "Win":
-                Intent historyIntent = new Intent(this, HistoryActivity.class);
-                historyIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                historyIntent.putExtra("win_request", "true");
-                cc = new ChallengeController(getApplicationContext(),
-                        (Activity)getApplicationContext(), session.getToken(), session.getUserId()
-                );
-                cc.refreshCardsForPendingDuel(historyIntent);
-                notifyChallenges(historyIntent, message);
+                //Intent historyIntent = new Intent(this, HistoryActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                //historyIntent.putExtra("win_request", "true");
+                intent.putExtra("friend_request", "challenge_request_win");
+                notifyChallenges(intent, message);
                 break;
         }
     }
