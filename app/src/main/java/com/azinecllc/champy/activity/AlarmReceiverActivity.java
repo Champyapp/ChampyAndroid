@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.controller.ChallengeController;
+import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
 import com.facebook.FacebookSdk;
 
@@ -87,17 +88,22 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(this, RoleControllerActivity.class);
+        OfflineMode offlineMode = OfflineMode.getInstance();
         switch (v.getId()) {
             case R.id.buttonWakeUpDoneForToday:
                 if (mMediaPlayer.isPlaying()) {
                     mMediaPlayer.stop();
                 }
-                try {
-                    cc.doneForToday(progressID, details, alarmID, intent);
-                    cc.setNewAlarmClock(details, alarmID);
-                } catch (IOException e) {
-                    e.printStackTrace();
+
+                if (offlineMode.isConnectedToRemoteAPI(this)) {
+                    try {
+                        cc.doneForToday(progressID, details, alarmID, intent);
+                        cc.setNewAlarmClock(details, alarmID);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
+
                 finish();
                 break;
 
@@ -105,10 +111,12 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
                 if (mMediaPlayer.isPlaying()) {
                     mMediaPlayer.stop();
                 }
-                try {
-                    cc.give_up(progressID, Integer.parseInt(alarmID), intent);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (offlineMode.isConnectedToRemoteAPI(this)) {
+                    try {
+                        cc.give_up(progressID, Integer.parseInt(alarmID), intent);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 // so, we take 0 updates and then this challenge will auto surrender.
                 finish();
