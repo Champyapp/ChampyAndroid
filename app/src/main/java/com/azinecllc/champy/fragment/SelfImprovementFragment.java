@@ -194,7 +194,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                             }
                         }
                     }
-                });
+                });//.setAction("No", v -> snackbar.dismiss());
                 snackbar.show();
                 break;
 
@@ -236,8 +236,8 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         c = null;
         viewPager.destroyDrawingCache();
 
-        Runtime.getRuntime().runFinalization();
-        Runtime.getRuntime().gc();
+        //Runtime.getRuntime().runFinalization();
+        //Runtime.getRuntime().gc();
     }
 
 

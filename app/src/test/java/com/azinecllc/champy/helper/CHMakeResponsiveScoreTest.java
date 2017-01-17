@@ -1,100 +1,84 @@
 package com.azinecllc.champy.helper;
 
-import android.content.Context;
+import android.os.Build;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
+import com.azinecllc.champy.BuildConfig;
+import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.MainActivity;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricGradleTestRunner;
+import org.robolectric.annotation.Config;
 
 import static java.lang.Math.round;
 import static org.junit.Assert.*;
-import org.mockito.runners.MockitoJUnitRunner;
-
-import java.util.LinkedList;
-
-import static org.mockito.Matchers.notNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 /**
- * Created by SashaKhyzhun on 12/27/16.
+ * Created by SashaKhyzhun on 1/16/17.
  */
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(RobolectricGradleTestRunner.class)
+@Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.LOLLIPOP)
 public class CHMakeResponsiveScoreTest {
 
-    private MainActivity mockMainActivity;
-    private Context context;
-    @Mock
-    ImageView circleInProgress;
-    @Mock
-    ImageView mockImageView;
-
+    private CHMakeResponsiveScore instance = null;
+    private MainActivity activity;
 
     @Before
     public void setup() throws Exception {
-        mockMainActivity = mock(MainActivity.class);
-        mockImageView    = mock(ImageView.class);
-        context          = mock(Context.class);
+        instance = CHMakeResponsiveScore.getInstance();
+        activity = Mockito.mock(MainActivity.class);  //Robolectric.buildActivity(Mockito.mock(MainActivity.class)).create().get();
     }
 
     @Test
     public void getInstance() throws Exception {
-        if (context == null) {
-            assertEquals("Error", false, true);
-        } else {
-            assertEquals("OK!", false, false);
-            assertNotNull(context);
+        assertNotNull(instance);
+        if (instance == null) {
+            assertNotNull(instance);
         }
-        System.out.println(context);
-
     }
 
     @Test
     public void makeResponsiveScore() throws Exception {
-        if (mockMainActivity == null) {
-            assertEquals("Error", false, true);
-        } else {
-            assertEquals("OK!", false, false);
-            assertNotNull(mockMainActivity);
-        }
-        System.out.println(mockMainActivity);
+        //int x = round(width/100);
+        int x = 10;
 
-        if (mockImageView == null) {
-            assertEquals("Error", false, true);
-        } else {
-            assertEquals("OK!", false, false);
-            assertNotNull(mockImageView);
-        }
-        System.out.println(mockImageView);
+        //-------------------------- Circles ---------------------------//
+        ImageView imageView = (ImageView) activity.findViewById(R.id.imageView_challenges_animation);
+        imageView.getLayoutParams().width = x * 25;
+        imageView.getLayoutParams().height = x * 25;
 
-        //CHMakeResponsiveScore makeResponsiveScore = CHMakeResponsiveScore.getInstance();
-        //makeResponsiveScore.makeResponsiveScore(mockMainActivity, 720);
+        imageView = (ImageView) activity.findViewById(R.id.imageView_wins_animation);
+        imageView.getLayoutParams().width = x * 25;
+        imageView.getLayoutParams().height = x * 25;
 
+        imageView = (ImageView) activity.findViewById(R.id.imageView_total_animation);
+        imageView.getLayoutParams().width = x * 25;
+        imageView.getLayoutParams().height = x * 25;
 
-    }
+        //---------------------------- Logo -----------------------------//
+        imageView = (ImageView) activity.findViewById(R.id.imageView_wins_logo);
+        imageView.getLayoutParams().width = x * 5;
+        imageView.getLayoutParams().height = x * 5;
 
-    @Test
-    public void testForLinkedList() throws Exception {
-        LinkedList mockedList = mock(LinkedList.class);
+        imageView = (ImageView) activity.findViewById(R.id.imageView_total_logo);
+        imageView.getLayoutParams().width = x * 5;
+        imageView.getLayoutParams().height = x * 5;
 
-        //stub'инг
-        when(mockedList.get(0)).thenReturn("first");
-        when(mockedList.get(1)).thenThrow(new RuntimeException());
+        imageView = (ImageView) activity.findViewById(R.id.imageView_challenges_logo);
+        imageView.getLayoutParams().width = x * 5;
+        imageView.getLayoutParams().height = x * 5;
 
-        //получим "first"
-        System.out.println(mockedList.get(0));
-
-        //получим RuntimeException
-        //System.out.println(mockedList.get(1));
-
-        //получим "null" ибо get(999) не был определен
-        System.out.println(mockedList.get(999) + " // it's ok.");
+        //---------------------------- Fab -----------------------------//
+        ImageButton fab = (ImageButton) activity.findViewById(R.id.fabPlus);
+        fab.getLayoutParams().width = x * 20;
+        fab.getLayoutParams().height = x * 20;
     }
 
 }

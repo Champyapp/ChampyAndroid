@@ -77,7 +77,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         String token = sessionManager.getToken();
         String userId = sessionManager.getUserId();
         cc = new ChallengeController(getContext(), getActivity(), token, userId);
-
+        size = sessionManager.getSelfSize();
         Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
         View line = view.findViewById(R.id.line);
         etGoal = (EditText)view.findViewById(R.id.et_goal);
@@ -212,8 +212,8 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Runtime.getRuntime().runFinalization();
-        Runtime.getRuntime().gc();
+        //Runtime.getRuntime().runFinalization();
+        //Runtime.getRuntime().gc();
     }
 
 
