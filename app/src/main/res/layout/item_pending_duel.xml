@@ -22,6 +22,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/tvYouVsSomebody"
             android:layout_alignParentTop="true"
+            android:text="Waiting for recipient\nKristian Molnar"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentLeft="true"
@@ -38,6 +39,7 @@
             android:layout_above="@+id/tvEveryDayPending"
             android:textAllCaps="true"
             android:textColor="@color/colorTextAqua"
+            android:text="Smoking Free Life"
             android:textAlignment="center"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
@@ -68,27 +70,33 @@
             android:layout_marginTop="5dp" />
 
         <ImageButton
-            android:id="@+id/btn_cancel"
-            android:background="@drawable/button_ic_give_up"
+            android:id="@+id/btn_cancelc"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_alignTop="@+id/btn_accept"
-            android:layout_toLeftOf="@+id/textViewDuring"
-            android:layout_toStartOf="@+id/textViewDuring"
-            android:layout_marginRight="20dp"
-            android:layout_marginEnd="20dp" />
+            android:layout_marginRight="35dp"
+            android:layout_marginLeft="35dp"
+            android:visibility="invisible"
+            android:background="@drawable/button_ic_give_up"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
+
+        <ImageButton
+            android:id="@+id/btn_cancel"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/button_ic_give_up"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@+id/btn_cancelc"
+            android:layout_toStartOf="@+id/btn_cancelc" />
 
         <ImageButton
             android:id="@+id/btn_accept"
             android:background="@drawable/button_ic_done"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_marginTop="42dp"
-            android:layout_below="@+id/textViewDuring"
-            android:layout_toRightOf="@+id/textViewDuring"
-            android:layout_toEndOf="@+id/textViewDuring"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp" />
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/btn_cancelc"
+            android:layout_toEndOf="@+id/btn_cancelc" />
 
     </RelativeLayout>
 

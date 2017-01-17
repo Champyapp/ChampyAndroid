@@ -127,27 +127,6 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
             tvEveryDayForTheNext.setVisibility(View.VISIBLE);
         }
 
-        switch (itemType) {
-            case "Wake Up":
-                imageChallengeLogo.setImageResource(R.drawable.ic_wakeup_white);
-                tvChallengeDescription.setText(currentCard.getChallengeName());
-                //~~~~~~~~~~
-                //tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
-                //buttonShare.setVisibility(View.VISIBLE);
-                //buttonDone.setVisibility(View.INVISIBLE);
-                //tvEveryDayForTheNext.setVisibility(View.VISIBLE);
-                //~~~~~~~~~~
-                break;
-            case "Duel":
-                imageChallengeLogo.setImageResource(R.drawable.ic_duel_white);
-                TextView tvRecipientName = (TextView)tempView.findViewById(R.id.tvRecipientName);
-                tvRecipientName.setText(String.format("%s", "with " + currentCard.getVersus()));
-                tvRecipientName.setTypeface(typeface);
-                break;
-            case "Self-Improvement":
-                imageChallengeLogo.setImageResource(R.drawable.ic_self_white);
-                break;
-        }
 
         SessionManager sessionManager = SessionManager.getInstance(getContext());
         final String uID = sessionManager.getUserId();
@@ -159,8 +138,8 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         long myProgress = 0;
         long progressMidNight = 0;
         if (!challengeProgress[challengeProgress.length - 1].equals("")) {
-            myProgress = Long.parseLong(challengeProgress[challengeProgress.length - 1]); // our last checkIn in seconds
-            Date date = new Date(myProgress * 1000); // convert last checkIn in date format
+            myProgress = Long.parseLong(challengeProgress[challengeProgress.length - 1]);
+            Date date = new Date(myProgress * 1000);
             progressMidNight = myProgress
                     - (date.getHours()  * 60 * 60)
                     - (date.getMinutes()* 60)
@@ -168,9 +147,41 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         }
 
         if (myProgress != 0L && now > progressMidNight + oneDay) {
-            tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
-            buttonShare.setVisibility(View.INVISIBLE);
-            buttonDone.setVisibility(View.VISIBLE);
+            if (!itemType.equals("Wake Up")) {
+                tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
+                buttonShare.setVisibility(View.INVISIBLE);
+                buttonDone.setVisibility(View.VISIBLE);
+            }
+        }
+
+        switch (itemType) {
+            case "Wake Up":
+                imageChallengeLogo.setImageResource(R.drawable.ic_wakeup_white);
+                tvChallengeDescription.setText(currentCard.getChallengeName());
+                //~~~~~~~~~~
+                if (now > myProgress + oneDay) {
+                    tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
+                    buttonDone.setVisibility(View.VISIBLE);
+                    buttonShare.setVisibility(View.INVISIBLE);
+                    tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
+                    if (now > myProgress + oneDay + (5 * 60)) {
+                        tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
+                        buttonShare.setVisibility(View.VISIBLE);
+                        buttonDone.setVisibility(View.INVISIBLE);
+                        tvEveryDayForTheNext.setVisibility(View.VISIBLE);
+                    }
+                }
+                //~~~~~~~~~~
+                break;
+            case "Duel":
+                imageChallengeLogo.setImageResource(R.drawable.ic_duel_white);
+                TextView tvRecipientName = (TextView) tempView.findViewById(R.id.tvRecipientName);
+                tvRecipientName.setText(String.format("%s", "with " + currentCard.getVersus()));
+                tvRecipientName.setTypeface(typeface);
+                break;
+            case "Self-Improvement":
+                imageChallengeLogo.setImageResource(R.drawable.ic_self_white);
+                break;
         }
 
         /************************************* Clicks ********************************************/

@@ -30,7 +30,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
     public int position, size, inProgressCount, days = 21, o = 0;
     public String versus, duration, description, challenge_id, status, recipient;
     public TextView tvGoal, tvDays, tvUserVsUser, everyDayForTheNext;
-    public ImageButton btnAccept, btnCancel;
+    public ImageButton btnAccept, btnCancel, btnCancelC;
     public OfflineMode offlineMode;
     public ViewPager viewPager;
     public Typeface typeface;
@@ -98,10 +98,12 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
 
         btnAccept = (ImageButton)view.findViewById(R.id.btn_accept);
         btnCancel = (ImageButton)view.findViewById(R.id.btn_cancel);
-        btnAccept.getLayoutParams().height = x*10;
-        btnAccept.getLayoutParams().width = x*10;
-        btnCancel.getLayoutParams().height = x*10;
-        btnCancel.getLayoutParams().width = x*10;
+        btnCancelC = (ImageButton) view.findViewById(R.id.btn_cancelc);
+
+//        btnAccept.getLayoutParams().height = x*10;
+//        btnAccept.getLayoutParams().width = x*10;
+//        btnCancel.getLayoutParams().height = x*10;
+//        btnCancel.getLayoutParams().width = x*10;
 
         typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
         viewPager = (ViewPager)getActivity().findViewById(R.id.pager_pending_duel);
@@ -115,9 +117,12 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
             tvUserVsUser.setText(String.format("%s", "from " + versus));
             btnAccept.setVisibility(View.VISIBLE);
             btnCancel.setVisibility(View.VISIBLE);
+            btnCancelC.setVisibility(View.INVISIBLE);
         } else {
             tvUserVsUser.setText(getContext().getResources().getString(R.string.waiting_for_your_recipient) + "\n " + versus);
             btnAccept.setVisibility(View.INVISIBLE);
+            btnCancel.setVisibility(View.INVISIBLE);
+            btnCancelC.setVisibility(View.VISIBLE);
         }
 
         if (duration != null && !duration.isEmpty()) days = Integer.parseInt(duration) / 86400;
@@ -133,6 +138,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         offlineMode.isConnectedToRemoteAPI(getActivity());
         btnAccept.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
+        btnCancelC.setOnClickListener(this);
 
         return view;
     }
@@ -177,16 +183,10 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
                 break;
 
             case R.id.btn_cancel:
-                snackbar = Snackbar.make(view, R.string.are_you_sure, Snackbar.LENGTH_LONG).setAction(R.string.yes, vCancel -> {
-                    try {
-                        cc.rejectInviteForPendingDuel(challenge_id);
-                        snackbar = Snackbar.make(vCancel, getString(R.string.challenge_canceled), Snackbar.LENGTH_SHORT);
-                        snackbar.show();
-                    } catch (IOException | NullPointerException e) {
-                        e.printStackTrace();
-                    }
-                });
-                snackbar.show();
+                onClickCancer(view);
+                break;
+            case R.id.btn_cancelc:
+                onClickCancer(view);
                 break;
         }
 
@@ -197,6 +197,20 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         super.onDestroy();
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
+    }
+
+
+    private void onClickCancer(View view) {
+        snackbar = Snackbar.make(view, R.string.are_you_sure, Snackbar.LENGTH_LONG).setAction(R.string.yes, vCancel -> {
+            try {
+                cc.rejectInviteForPendingDuel(challenge_id);
+                snackbar = Snackbar.make(vCancel, getString(R.string.challenge_canceled), Snackbar.LENGTH_SHORT);
+                snackbar.show();
+            } catch (IOException | NullPointerException e) {
+                e.printStackTrace();
+            }
+        });
+        snackbar.show();
     }
 
 
