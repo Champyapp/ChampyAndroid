@@ -164,7 +164,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                     buttonDone.setVisibility(View.VISIBLE);
                     buttonShare.setVisibility(View.INVISIBLE);
                     tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
-                    if (now > myProgress + oneDay + (5 * 60)) {
+                    if (now > myProgress + oneDay + (10 * 60)) {
                         tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
                         buttonShare.setVisibility(View.VISIBLE);
                         buttonDone.setVisibility(View.INVISIBLE);

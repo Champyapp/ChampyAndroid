@@ -15,6 +15,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.controller.ChallengeController;
@@ -29,6 +30,7 @@ import java.io.IOException;
  */
 public class AlarmReceiverActivity extends Activity implements View.OnClickListener {
 
+    private static final int LONG_DELAY = 3500; // 3.5 seconds
     public final String TAG = "AlarmReceiverActivity";
     private MediaPlayer mMediaPlayer;
     private ChallengeController cc;
@@ -89,38 +91,35 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
     public void onClick(View v) {
         Intent intent = new Intent(this, RoleControllerActivity.class);
         OfflineMode offlineMode = OfflineMode.getInstance();
-        switch (v.getId()) {
-            case R.id.buttonWakeUpDoneForToday:
-                if (mMediaPlayer.isPlaying()) {
-                    mMediaPlayer.stop();
-                }
-
-                if (offlineMode.isConnectedToRemoteAPI(this)) {
+        if (offlineMode.isConnectedToRemoteAPI(this)) {
+            switch (v.getId()) {
+                case R.id.buttonWakeUpDoneForToday:
+                    if (mMediaPlayer.isPlaying()) {
+                        mMediaPlayer.stop();
+                    }
                     try {
                         cc.doneForToday(progressID, details, alarmID, intent);
                         cc.setNewAlarmClock(details, alarmID);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }
-
-                finish();
-                break;
-
-            case R.id.buttonWakeUpSurrender:
-                if (mMediaPlayer.isPlaying()) {
-                    mMediaPlayer.stop();
-                }
-                if (offlineMode.isConnectedToRemoteAPI(this)) {
+                    finish();
+                    break;
+                case R.id.buttonWakeUpSurrender:
+                    if (mMediaPlayer.isPlaying()) {
+                        mMediaPlayer.stop();
+                    }
                     try {
                         cc.give_up(progressID, Integer.parseInt(alarmID), intent);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }
-                // so, we take 0 updates and then this challenge will auto surrender.
-                finish();
-                break;
+                    // so, we take 0 updates and then this challenge will auto surrender.
+                    finish();
+                    break;
+            }
+        } else {
+            Toast.makeText(context, R.string.lost_inet_wake_up, Toast.LENGTH_LONG).show();
         }
     }
 
