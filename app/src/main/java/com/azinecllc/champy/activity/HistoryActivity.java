@@ -106,7 +106,7 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         tabLayout.setupWithViewPager(viewPager);
 
         // this out method for open "in progress" when you click on notification about win request
-        String extras = this.getIntent().getStringExtra("win_request");
+        String extras = this.getIntent().getStringExtra("challenge_request_win");
         if (extras != null && "true".equals(extras)) { viewPager.setCurrentItem(1); }
 
 

@@ -67,33 +67,33 @@ public class MyGcmListenerService extends GcmListenerService {
 
         switch (title) {
             case "Friend Request Confirmed":
-                intent.putExtra("friend_request", "friend_request_confirmed");
+                intent.putExtra("gcm", "friend_request_confirmed");
                 notifyForFriends(intent, message);
                 break;
             case "Incoming Friend Request":
-                intent.putExtra("friend_request", "friend_request_incoming");
+                intent.putExtra("gcm", "friend_request_incoming");
                 notifyForFriends(intent, message);
                 break;
             case "Friend Request Removed":
-                intent.putExtra("friend_request", "friend_request_removed");
+                intent.putExtra("gcm", "friend_request_removed");
                 notifyForFriends(intent, message);
                 break;
             case "Challenge request":
                 //Intent goToPendingDuels = new Intent(this, RoleControllerActivity.class);
-                intent.putExtra("friend_request", "challenge_request_incoming");
+                intent.putExtra("gcm", "challenge_request_incoming");
                 notifyChallenges(intent, message);
                 break;
             case "Challenge accepted":
                 //Intent roleIntent = new Intent(this, RoleControllerActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("friend_request", "challenge_request_confirmed");
+                intent.putExtra("gcm", "challenge_request_confirmed");
                 notifyChallenges(intent, message);
                 break;
             case "Win":
                 //Intent historyIntent = new Intent(this, HistoryActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 //historyIntent.putExtra("win_request", "true");
-                intent.putExtra("friend_request", "challenge_request_win");
+                intent.putExtra("gcm", "challenge_request_win");
                 notifyChallenges(intent, message);
                 break;
         }
