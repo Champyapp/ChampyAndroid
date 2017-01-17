@@ -73,8 +73,12 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
 
         int x = round(getWindowManager().getDefaultDisplay().getWidth() / 2);
         ImageView imageMyPhoto = (ImageView) findViewById(R.id.imageMyPhoto);
+        ImageView imageFriendPhoto = (ImageView) findViewById(R.id.imageFriendsPhoto);
         imageMyPhoto.getLayoutParams().width = x;
         imageMyPhoto.getLayoutParams().height = x; // because we need a square
+        imageFriendPhoto.getLayoutParams().width = x;
+        imageFriendPhoto.getLayoutParams().height = x;
+
 
         File fileProfile = new File(path, "profile.jpg");
         File fileBlur = new File(path, "blurred.png");
@@ -86,7 +90,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .centerCrop()
-                .into((ImageView)findViewById(R.id.imageFriendsPhoto));
+                .into(imageFriendPhoto);
 
         Glide.with(this)
                 .load(uriProfile)
@@ -98,7 +102,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         TextView textViewYouVsFriend = (TextView) findViewById(R.id.tvYouVsFriend);
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
 
-        textViewYouVsFriend.setText(getString(R.string.duel_with) + name);
+        textViewYouVsFriend.setText(String.format("%s", getString(R.string.duel_with) + name));
         textViewYouVsFriend.setTypeface(typeface);
         tvIChallengeMyFriendTo.setTypeface(typeface);
 
