@@ -159,17 +159,24 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                 imageChallengeLogo.setImageResource(R.drawable.ic_wakeup_white);
                 tvChallengeDescription.setText(currentCard.getChallengeName());
                 //~~~~~~~~~~
-                if (now > myProgress + oneDay) {
-                    tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
-                    buttonDone.setVisibility(View.VISIBLE);
-                    buttonShare.setVisibility(View.INVISIBLE);
-                    tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
-                    if (now > myProgress + oneDay + (10 * 60)) {
-                        tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
-                        buttonShare.setVisibility(View.VISIBLE);
-                        buttonDone.setVisibility(View.INVISIBLE);
-                        tvEveryDayForTheNext.setVisibility(View.VISIBLE);
+                if (myProgress != 0) {
+                    if (now > myProgress + oneDay) {
+                        tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
+                        buttonDone.setVisibility(View.VISIBLE);
+                        buttonShare.setVisibility(View.INVISIBLE);
+                        tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
+                        if (now > myProgress + oneDay + (10 * 60)) {
+                            tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
+                            buttonShare.setVisibility(View.VISIBLE);
+                            buttonDone.setVisibility(View.INVISIBLE);
+                            tvEveryDayForTheNext.setVisibility(View.VISIBLE);
+                        }
                     }
+                } else {
+                    tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
+                    buttonShare.setVisibility(View.VISIBLE);
+                    buttonDone.setVisibility(View.INVISIBLE);
+                    tvEveryDayForTheNext.setVisibility(View.VISIBLE);
                 }
                 //~~~~~~~~~~
                 break;
@@ -211,15 +218,6 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                     buttonDone.setVisibility(View.INVISIBLE);
                     buttonShare.setVisibility(View.VISIBLE);
                     tvDuration.setVisibility(View.VISIBLE);
-//                    int newDays = Integer.parseInt(currentCard.getDays()) - 1;
-//                    if (newDays < 1) {
-//                        Intent i = new Intent(getContext(), MainActivity.class);
-//                        cc.doneForToday(itemInProgressId, currentCard.getWakeUpTime(), itemGoal, i);
-//                    } else {
-//                        cc.doneForToday(itemInProgressId, currentCard.getWakeUpTime(), itemGoal, null);
-//                        tvDuration.setText(String.format("%s", newDays + getContext().getResources().getString(R.string.daysToGo)));
-//                        tvEveryDayForTheNext.setVisibility(View.VISIBLE);
-//                    }
                     Intent i = new Intent(getContext(), MainActivity.class);
                     cc.doneForToday(itemInProgressId, currentCard.getWakeUpTime(), itemGoal, i);
                     snackbar = Snackbar.make(v, "Well done!", Snackbar.LENGTH_SHORT);

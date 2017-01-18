@@ -29,7 +29,6 @@ import java.io.IOException;
  */
 public class AlarmReceiverActivity extends Activity implements View.OnClickListener {
 
-    private static final int LONG_DELAY = 3500; // 3.5 seconds
     private MediaPlayer mMediaPlayer;
     private ChallengeController cc;
     private String progressID, alarmID, details;
@@ -87,36 +86,44 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
     public void onClick(View v) {
         Intent intent = new Intent(this, RoleControllerActivity.class);
         OfflineMode offlineMode = OfflineMode.getInstance();
-        if (offlineMode.isConnectedToRemoteAPI(this)) {
+
             switch (v.getId()) {
                 case R.id.buttonWakeUpDoneForToday:
                     if (mMediaPlayer.isPlaying()) {
                         mMediaPlayer.stop();
                     }
-                    try {
-                        cc.doneForToday(progressID, details, alarmID, intent);
-                        cc.setNewAlarmClock(details, alarmID);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if (offlineMode.isConnectedToRemoteAPI(this)) {
+                        try {
+                            cc.doneForToday(progressID, details, alarmID, intent);
+                            cc.setNewAlarmClock(details, alarmID);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Toast.makeText(this, getResources().getString(R.string.lost_inet_wake_up), Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, getResources().getString(R.string.lost_inet_wake_up), Toast.LENGTH_LONG).show();
                     }
+
                     finish();
                     break;
                 case R.id.buttonWakeUpSurrender:
                     if (mMediaPlayer.isPlaying()) {
                         mMediaPlayer.stop();
                     }
-                    try {
-                        cc.give_up(progressID, Integer.parseInt(alarmID), intent);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if (offlineMode.isConnectedToRemoteAPI(this)) {
+                        try {
+                            cc.give_up(progressID, Integer.parseInt(alarmID), intent);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Toast.makeText(this, getResources().getString(R.string.lost_inet_wake_up), Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, getResources().getString(R.string.lost_inet_wake_up), Toast.LENGTH_LONG).show();
                     }
                     // so, we take 0 updates and then this challenge will auto surrender.
                     finish();
                     break;
             }
-        } else {
-            Toast.makeText(context, R.string.lost_inet_wake_up, Toast.LENGTH_LONG).show();
-        }
     }
 
 

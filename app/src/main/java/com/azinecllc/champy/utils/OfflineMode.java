@@ -10,7 +10,8 @@ public class OfflineMode {
 
     private static OfflineMode instance = null;
 
-    private OfflineMode() {};
+    private OfflineMode() {
+    }
 
     public static OfflineMode getInstance() {
         if (instance == null) {
@@ -21,7 +22,7 @@ public class OfflineMode {
 
     public boolean isConnectedToRemoteAPI(Activity activity) {
         if (isInternetAvailable(activity)) { return true; }
-        Toast.makeText(activity, "Lost internet connection!", Toast.LENGTH_LONG).show();
+        Toast.makeText(activity, "Lost internet connection!", Toast.LENGTH_SHORT).show();
         return false;
     }
 
