@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import android.widget.Toast;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.PendingAdapter;
 import com.azinecllc.champy.data.DBHelper;
-import com.azinecllc.champy.interfaces.CustomItemClickListener;
 import com.azinecllc.champy.model.Pending_friend;
 import com.azinecllc.champy.model.friend.Datum;
 import com.azinecllc.champy.model.friend.Friend_;
@@ -185,9 +183,14 @@ public class PendingFragment extends Fragment {
                                 if (datum.getOwner().get_id().equals(id)) {
                                     status = "false";
                                     Friend_ friend = datum.getFriend();
+                                    String friendPhoto = (friend.getPhoto() != null) ? friend.getPhoto().getMedium() : "";
+                                    //if (friend.getPhoto() != null) {
+                                    //    cv.put("photo", friend.getPhoto().getMedium());
+                                    //} else {
+                                    //    cv.put("photo", "");
+                                    //}
                                     cv.put("name", friend.getName());
-                                    if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
-                                    else cv.put("photo", "");
+                                    cv.put("photo", friendPhoto);
                                     cv.put("user_id", friend.getId());
                                     cv.put("inProgressChallengesCount", friend.getInProgressChallengesCount());
                                     cv.put("allChallengesCount", friend.getAllChallengesCount());
@@ -196,9 +199,14 @@ public class PendingFragment extends Fragment {
                                 } else {
                                     status = "true";
                                     Owner friend = datum.getOwner();
+                                    //if (friend.getPhoto() != null) {
+                                    //    cv.put("photo", friend.getPhoto().getMedium());
+                                    //} else {
+                                    //    cv.put("photo", "");
+                                    //}
+                                    String friendPhoto = (friend.getPhoto() != null) ? friend.getPhoto().getMedium() : "";
                                     cv.put("name", friend.getName());
-                                    if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
-                                    else cv.put("photo", "");
+                                    cv.put("photo", friendPhoto);
                                     cv.put("user_id", friend.get_id());
                                     cv.put("inProgressChallengesCount", friend.getInProgressChallengesCount());
                                     cv.put("allChallengesCount", friend.getAllChallengesCount());
@@ -267,7 +275,7 @@ public class PendingFragment extends Fragment {
     private Emitter.Listener onConnected = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            Log.d("Sockets", "Sockets: connected!");
+            //Log.d("Sockets", "Sockets: connected!");
         }
     };
 

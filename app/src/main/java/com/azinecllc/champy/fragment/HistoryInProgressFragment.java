@@ -11,11 +11,9 @@ import android.view.ViewGroup;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.HistoryChallengeAdapter;
-import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.model.HistoryChallenge;
 import com.azinecllc.champy.model.SelfImprovement_model;
 import com.azinecllc.champy.utils.OfflineMode;
-import com.azinecllc.champy.utils.SessionManager;
 
 import java.util.ArrayList;
 

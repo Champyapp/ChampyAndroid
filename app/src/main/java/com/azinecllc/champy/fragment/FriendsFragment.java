@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -182,9 +181,14 @@ public class FriendsFragment extends Fragment {
                             if (datum.getFriend() != null && datum.getStatus().toString().equals("true")) {
                                 if (datum.getOwner().get_id().equals(id)) {
                                     Friend_ friend = datum.getFriend();
+                                    //if (friend.getPhoto() != null) {
+                                    //    cv.put("photo", friend.getPhoto().getMedium());
+                                    //} else {
+                                    //    cv.put("photo", "");
+                                    //}
+                                    String friendPhoto = (friend.getPhoto() != null) ? friend.getPhoto().getMedium() : "";
                                     cv.put("name", friend.getName());
-                                    if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
-                                    else cv.put("photo", "");
+                                    cv.put("photo", friendPhoto);
                                     cv.put("user_id", friend.getId());
                                     cv.put("inProgressChallengesCount", friend.getInProgressChallengesCount());
                                     cv.put("allChallengesCount", friend.getAllChallengesCount());
@@ -192,9 +196,14 @@ public class FriendsFragment extends Fragment {
                                     db.insert("friends", null, cv);
                                 } else {
                                     Owner friend = datum.getOwner();
+                                    String friendPhoto = (friend.getPhoto() != null) ? friend.getPhoto().getMedium() : "";
+                                    //if (friend.getPhoto() != null) {
+                                    //    cv.put("photo", friend.getPhoto().getMedium());
+                                    //} else {
+                                    //    cv.put("photo", "");
+                                    //}
                                     cv.put("name", friend.getName());
-                                    if (friend.getPhoto() != null) cv.put("photo", friend.getPhoto().getMedium());
-                                    else cv.put("photo", "");
+                                    cv.put("photo", friendPhoto);
                                     cv.put("user_id", friend.get_id());
                                     cv.put("inProgressChallengesCount", friend.getInProgressChallengesCount());
                                     cv.put("allChallengesCount", friend.getAllChallengesCount());
@@ -260,7 +269,7 @@ public class FriendsFragment extends Fragment {
     private Emitter.Listener onConnected = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            Log.d("Sockets", "Sockets: connected!");
+            //Log.d("Sockets", "Sockets: connected!");
         }
     };
 

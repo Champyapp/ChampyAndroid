@@ -194,7 +194,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                             }
                         }
                     }
-                });//.setAction("No", v -> snackbar.dismiss());
+                });
                 snackbar.show();
                 break;
 

@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.azinecllc.champy.R;
@@ -54,7 +53,6 @@ import static java.lang.Math.round;
 public class ChallengeController {
 
     private static final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-    private static final String TAG = "ChallengeController";
     private String token, userID;
     private Activity activity;
     private Context context;
@@ -245,12 +243,12 @@ public class ChallengeController {
         final int alarmID = Integer.parseInt(wakeUpTime);
 
         Calendar c = GregorianCalendar.getInstance();
-        Log.d(TAG, "createNewWakeUpChallenge: calendar: " + c);
+        //Log.d(TAG, "createNewWakeUpChallenge: calendar: " + c);
         final long currentMidnight = System.currentTimeMillis() / 1000
                 - (c.get(Calendar.HOUR_OF_DAY) * 60 * 60)
                 - (c.get(Calendar.MINUTE) * 60)
                 - (c.get(Calendar.SECOND));
-        Log.d(TAG, "currentMidnight: " + currentMidnight);
+        //Log.d(TAG, "currentMidnight: " + currentMidnight);
 
         final String[] details = new String[days];
         for (int i = 0; i < days; i++) {
@@ -261,7 +259,7 @@ public class ChallengeController {
                             + (i * (24 * 60 * 60)));
         }
 
-        Log.d(TAG, "details: " + Arrays.toString(details));
+        //Log.d(TAG, "details: " + Arrays.toString(details));
 
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
         Call<com.azinecllc.champy.model.create_challenge.CreateChallenge> call = createChallenge
@@ -301,21 +299,21 @@ public class ChallengeController {
                 - (c.get(Calendar.HOUR_OF_DAY) * 60 * 60)
                 - (c.get(Calendar.MINUTE) * 60)
                 - (c.get(Calendar.SECOND));
-        Log.d(TAG, "sendSingleInProgressForWakeUp: currentMidnight: " + currentMidnight);
+        //Log.d(TAG, "sendSingleInProgressForWakeUp: currentMidnight: " + currentMidnight);
 
         Date date = new Date();
         date.setTime(((min  * 60) + (hour * 60 * 60) + currentMidnight) * 1000);
         c.setTime(date); // set date for calendar. now our calendar has a right time for ring
 
         if (System.currentTimeMillis() > c.getTimeInMillis()) {
-            Log.d(TAG, "sendSingleInProgressForWakeUp: now > input. need to add one day");
-            Log.d(TAG, "sendSingleInProgressForWakeUp: " + System.currentTimeMillis() + " > " + c.getTimeInMillis());
+            //Log.d(TAG, "sendSingleInProgressForWakeUp: now > input. need to add one day");
+            //Log.d(TAG, "sendSingleInProgressForWakeUp: " + System.currentTimeMillis() + " > " + c.getTimeInMillis());
             c.add(Calendar.DAY_OF_YEAR, 1);
-            Log.d(TAG, "sendSingleInProgressForWakeUp: new date for ring: " + c.getTime());
+            //Log.d(TAG, "sendSingleInProgressForWakeUp: new date for ring: " + c.getTime());
         }
 
         final long userInputTime = c.getTimeInMillis(); // must be in millis
-        Log.d(TAG, "sendSingleInProgressForWakeUp: time for ring: " + userInputTime);
+        //Log.d(TAG, "sendSingleInProgressForWakeUp: time for ring: " + userInputTime);
 
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
         Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = singleinprogress.startSingleInProgress(inProgressID, token);
@@ -401,7 +399,7 @@ public class ChallengeController {
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String type = response.body().getData().getChallenge().getType();
-                    Log.i(TAG, "onResponse: Done for today is success");
+                    //Log.i(TAG, "onResponse: Done for today is success");
                     if (type.equals(typeWake)) {
                         setNewAlarmClock(details, alarmID);
                     }
@@ -409,7 +407,7 @@ public class ChallengeController {
                     generateCardsForMainActivity(i);
 
                 } else {
-                    Log.i(TAG, "onResponse: Done for today failed: " + response.message() + " " + response.code());
+                    //Log.i(TAG, "onResponse: Done for today failed: " + response.message() + " " + response.code());
                 }
             }
 
@@ -666,20 +664,20 @@ public class ChallengeController {
 
         long now = System.currentTimeMillis() / 1000;
 
-        Log.i(TAG, "~~~~~~~~~~~~~~~ START ~~~~~~~~~~~~~~~");
-        Log.i(TAG, "details.length = " + details.length);
-        Log.i(TAG, "details.full   = " + Arrays.toString(details));
-        Log.i(TAG, "~~~~~~~~~~~~~ START IF ~~~~~~~~~~~~~~");
+        //Log.i(TAG, "~~~~~~~~~~~~~~~ START ~~~~~~~~~~~~~~~");
+        //Log.i(TAG, "details.length = " + details.length);
+        //Log.i(TAG, "details.full   = " + Arrays.toString(details));
+        //Log.i(TAG, "~~~~~~~~~~~~~ START IF ~~~~~~~~~~~~~~");
         for (int i = 0; i <= details.length - 1; i++) {
-            Log.d(TAG, "i = " + i + " | d[i]: " + details[i]);
+            //Log.d(TAG, "i = " + i + " | d[i]: " + details[i]);
 
             if (now < Integer.parseInt(details[i])) {
-                Log.i(TAG, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-                Log.i(TAG, "Woo-hoo");
-                Log.i(TAG, "now < d[i]");
-                Log.i(TAG, now + " < " + Integer.parseInt(details[i]));
-                Log.i(TAG, "next alarm will be at: " + Long.parseLong(details[i]) * 1000);
-                Log.i(TAG, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                //Log.i(TAG, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                //Log.i(TAG, "Woo-hoo");
+                //Log.i(TAG, "now < d[i]");
+                //Log.i(TAG, now + " < " + Integer.parseInt(details[i]));
+                //Log.i(TAG, "next alarm will be at: " + Long.parseLong(details[i]) * 1000);
+                //Log.i(TAG, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
                 Intent intent = new Intent(context, MainActivity.class);
                 PendingIntent operation = PendingIntent.getBroadcast(context, Integer.parseInt(alarmID), intent, 0);
                 AlarmManager aManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
@@ -687,8 +685,8 @@ public class ChallengeController {
                 break;
             }
 
-            Log.i(TAG, "i-element < needed time");
-            Log.i(TAG, "i++");
+            //Log.i(TAG, "i-element < needed time");
+            //Log.i(TAG, "i++");
 
         }
 

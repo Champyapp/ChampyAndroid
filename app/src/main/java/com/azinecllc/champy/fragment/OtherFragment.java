@@ -9,9 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -20,7 +18,6 @@ import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.OtherAdapter;
 import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.helper.CHCheckTableForExist;
-import com.azinecllc.champy.helper.WrapContentLinearLayoutManager;
 import com.azinecllc.champy.interfaces.NewUser;
 import com.azinecllc.champy.model.FriendModel;
 import com.azinecllc.champy.model.user.Data;
@@ -304,7 +301,7 @@ public class OtherFragment extends Fragment {
     private Emitter.Listener onConnected = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            Log.d("Sockets", "Sockets: connected!");
+            //Log.d("Sockets", "Sockets: connected!");
         }
     };
 
