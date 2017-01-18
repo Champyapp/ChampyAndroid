@@ -1,6 +1,5 @@
 package com.azinecllc.champy.service;
 
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -9,24 +8,17 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.activity.FriendsActivity;
-import com.azinecllc.champy.activity.HistoryActivity;
-import com.azinecllc.champy.activity.PendingDuelActivity;
 import com.azinecllc.champy.activity.RoleControllerActivity;
-import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.utils.SessionManager;
 import com.google.android.gms.gcm.GcmListenerService;
 
 import java.util.HashMap;
 
-import static java.lang.Math.round;
-
 public class MyGcmListenerService extends GcmListenerService {
 
-    private final String TAG = "MyGcmListenerService";
+    //private final String TAG = "MyGcmListenerService";
     private SessionManager session;
 
     /**
@@ -49,7 +41,7 @@ public class MyGcmListenerService extends GcmListenerService {
             String name = user.get("name");
             String message = data.getString("gcm.notification.body");
             String title = data.getString("gcm.notification.title");
-            Log.d(TAG, "From: " + from + " " + name + "\nMessage: " + message);
+            //Log.d(TAG, "From: " + from + " " + name + "\nMessage: " + message);
 
             if (message != null && !message.toLowerCase().contains(name.toLowerCase()))
                 sendNotification(message, title);
@@ -61,7 +53,7 @@ public class MyGcmListenerService extends GcmListenerService {
      * @param message GCM message received.
      */
     private void sendNotification(String message, String title) {
-        Log.d(TAG, title);
+        //Log.d(TAG, title);
         Intent intent = new Intent(this, RoleControllerActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 

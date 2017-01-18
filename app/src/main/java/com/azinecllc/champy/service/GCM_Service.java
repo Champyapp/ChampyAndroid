@@ -2,7 +2,6 @@ package com.azinecllc.champy.service;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.util.Log;
 
 import com.azinecllc.champy.R;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -12,11 +11,10 @@ import java.io.IOException;
 
 public class GCM_Service extends IntentService {
 
-    private static final String TAG = "RegIntentService";
     private static final String[] TOPICS = {"global"};
 
     public GCM_Service() {
-        super(TAG);
+        super("RegIntentService");
     }
 
     @Override
@@ -29,7 +27,7 @@ public class GCM_Service extends IntentService {
             e.printStackTrace();
         }
         // [END get_token]
-        Log.d(TAG, "GCM Registration Token: " + token);
+        //Log.d(TAG, "GCM Registration Token: " + token);
     }
 
 

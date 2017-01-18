@@ -13,9 +13,6 @@ public class Champy extends Application {
 
     private static Champy instance;
 
-
-    // TODO: 1/13/17 Test for Helper folder
-
     @Override
     public void onCreate() {
         super.onCreate();

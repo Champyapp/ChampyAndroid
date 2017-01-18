@@ -27,7 +27,7 @@ public class MyAlarmService extends IntentService {
     }
 
     private void sendNotification(String msg) {
-        System.out.println("MyAlarmService.sendNotification() is working!");
+        System.out.println("MyAlarmService.sendNotification() is working! hallelujah");
         NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
         Intent goToWakeUp = new Intent(this, WakeUpActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, goToWakeUp, 0);

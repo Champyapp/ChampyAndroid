@@ -3,12 +3,10 @@ package com.azinecllc.champy.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
-import android.view.View;
 
 /**
  * This class is responsible for Blur pictures
@@ -52,11 +50,11 @@ public class Blur {
     }
 
     // TODO: 06.10.2016 Delete trash
-    private static Bitmap getScreenshot(View v) {
-        Bitmap b = Bitmap.createBitmap(v.getWidth(), v.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas c = new Canvas(b);
-        v.draw(c);
-        return b;
-    }
+//    private static Bitmap getScreenshot(View v) {
+//        Bitmap b = Bitmap.createBitmap(v.getWidth(), v.getHeight(), Bitmap.Config.ARGB_8888);
+//        Canvas c = new Canvas(b);
+//        v.draw(c);
+//        return b;
+//    }
 
 }

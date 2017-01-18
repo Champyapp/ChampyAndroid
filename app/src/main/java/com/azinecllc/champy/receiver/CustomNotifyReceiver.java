@@ -10,8 +10,8 @@ import android.graphics.Color;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.azinecllc.champy.activity.MainActivity;
 import com.azinecllc.champy.R;
+import com.azinecllc.champy.activity.MainActivity;
 import com.azinecllc.champy.utils.SessionManager;
 import com.facebook.FacebookSdk;
 
@@ -19,15 +19,12 @@ import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class CustomNotifyReceiver extends BroadcastReceiver {
 
-    public final String TAG = "CustomNotifyReceiver";
-
     @Override
     public void onReceive(Context context, Intent intent) {
         try {
             FacebookSdk.sdkInitialize(context);
-            Log.d(TAG, "onReceive: received new notification");
         } catch (RuntimeException e) {
-            Log.e(TAG, "onReceive: I Hate Facebook: " + e);
+            Log.e("CustomNotifyReceiver", "onReceive: I Hate Facebook: " + e);
             e.printStackTrace();
         }
 
@@ -35,12 +32,10 @@ public class CustomNotifyReceiver extends BroadcastReceiver {
         SessionManager sessionManager = SessionManager.getInstance(context);
         if (sessionManager.isUserLoggedIn()) {
             sendNotification(context);
-            Log.d(TAG, "onReceive: send notification");
-//            DailyRemindController daily = new DailyRemindController(context);
-//            daily.enableDailyNotificationReminder();
-        } else {
-            Log.d(TAG, "onReceive: can't send notification: not logged in");
         }
+        //else {
+        //    Log.d(TAG, "onReceive: can't send notification: not logged in");
+        //}
 
     }
 

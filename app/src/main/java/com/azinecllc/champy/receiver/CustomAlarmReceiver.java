@@ -3,25 +3,20 @@ package com.azinecllc.champy.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
 import com.azinecllc.champy.activity.AlarmReceiverActivity;
 import com.azinecllc.champy.utils.SessionManager;
 import com.facebook.FacebookSdk;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
-
 public class CustomAlarmReceiver extends BroadcastReceiver {
-
-    public final String TAG = "CustomAlarmReceiver";
 
     @Override
     public void onReceive(final Context context, Intent intent) {
         try {
             FacebookSdk.sdkInitialize(context);
         } catch (RuntimeException e) {
-            Log.e(TAG, "onReceive: I Hate Facebook: " + e);
+            Log.e("Custom", "onReceive: I Hate Facebook: " + e);
             e.printStackTrace();
         }
         final String inProgressId = intent.getStringExtra("inProgressID");
@@ -38,9 +33,10 @@ public class CustomAlarmReceiver extends BroadcastReceiver {
         SessionManager sessionManager = SessionManager.getInstance(context);
         if (sessionManager.isUserLoggedIn()) {
             context.startActivity(alarmIntent);
-        } else {
-            Log.i(TAG, "onReceive: AutoGiveUp. Reason: not logged in");
         }
+        //else {
+        //    Log.i(TAG, "onReceive: AutoGiveUp. Reason: not logged in");
+        //}
 
     }
 }
