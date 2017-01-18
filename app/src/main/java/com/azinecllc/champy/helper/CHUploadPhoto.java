@@ -1,7 +1,6 @@
 package com.azinecllc.champy.helper;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.azinecllc.champy.interfaces.Update_user;
 import com.azinecllc.champy.model.user.User;
@@ -21,8 +20,7 @@ import static com.azinecllc.champy.utils.Constants.API_URL;
 
 public class CHUploadPhoto {
 
-    public final String TAG = "CHUploadPhoto";
-    Context context;
+    private Context context;
 
     public CHUploadPhoto(Context context) {
         this.context = context;
@@ -42,12 +40,10 @@ public class CHUploadPhoto {
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
-                final String myLog = (response.isSuccess()) ? "Status: photo uploaded!" : "Status: " + response.code();
-                Log.i(TAG, "onResponse: " + myLog);
             }
-
             @Override
-            public void onFailure(Throwable t) {Log.d(TAG, "Status: vse hyunya: " + t ); }
+            public void onFailure(Throwable t) {
+            }
         });
 
     }

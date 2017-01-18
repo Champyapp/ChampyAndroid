@@ -36,20 +36,21 @@ import static com.azinecllc.champy.utils.Constants.API_URL;
 public class CHGetFacebookFriends {
 
     private Context context;
+    private Retrofit retrofit;
 
-    public CHGetFacebookFriends(Context context) {
+    public CHGetFacebookFriends(Context context, Retrofit retrofit) {
         this.context = context;
+        this.retrofit = retrofit;
     }
 
     // OTHER TABLE. method which get friends and their data
     public void getUserFacebookFriends(final String gcm) {
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         NewUser newUser = retrofit.create(NewUser.class);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         DBHelper dbHelper = DBHelper.getInstance(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int clearCount = db.delete("mytable", null, null);
+        db.delete("mytable", null, null);
         ContentValues cv = new ContentValues();
         CHCheckTableForExist checkTableForExist = new CHCheckTableForExist(db);
         GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONArrayCallback() {
@@ -58,7 +59,6 @@ public class CHGetFacebookFriends {
                 for (int i = 0; i < array.length(); i++) {
                     try {
                         final String fb_id = array.getJSONObject(i).getString("id");
-                        //final String user_name = array.getJSONObject(i).getString("name");
                         JSONObject jsonObject = new JSONObject();
                         jsonObject.put("facebookId", fb_id);
                         jsonObject.put("AndroidOS", gcm);
@@ -82,7 +82,10 @@ public class CHGetFacebookFriends {
                                         photo = API_URL + data.getPhoto().getMedium();
                                     } else {
                                         try {
-                                            URL profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
+                                            URL profile_pic = new URL(
+                                                    "https://graph.facebook.com/"
+                                                            + fb_id
+                                                            + "/picture?type=large");
                                             photo = profile_pic.toString();
                                         } catch (MalformedURLException e) {
                                             e.printStackTrace();
@@ -99,27 +102,8 @@ public class CHGetFacebookFriends {
 
                                     if (!checkTableForExist.isInOtherTable(data.get_id())) {
                                         db.insert("mytable", null, cv);
-//                                        Log.d("GetFacebookFriends", "GetUserFriendsInfo | DBase: vse okay! " + name + " in other");
-//                                    } else {
-//                                        Log.d("GetFacebookFriends", "GetUserFriendsInfo | DBase: " + name + " in pending or friends");
                                     }
                                 }
-//                                else {
-//                                    Log.d("AppSync", "GetUserFriendsInfo | onResponse: " + response.message());
-//                                    URL profile_pic;
-//                                    String photo = "";
-//                                    try {
-//                                        profile_pic = new URL("https://graph.facebook.com/" + fb_id + "/picture?type=large");
-//                                        photo = profile_pic.toString();
-//                                    } catch (MalformedURLException e) { e.printStackTrace(); }
-//                                    cv.put("name", user_name);
-//                                    cv.put("photo", photo);
-//                                    cv.put("ic_score_prog", "0");
-//                                    cv.put("ic_score_wins", "0");
-//                                    cv.put("ic_score_total", "0");
-//                                    cv.put("level", "0");
-//                                    db.insert("mytable", null, cv);
-//                                }
                             }
 
                             @Override

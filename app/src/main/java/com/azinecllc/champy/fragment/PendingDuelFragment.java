@@ -166,22 +166,8 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
 
         switch (view.getId()) {
             case R.id.btn_accept:
-                snackbar = Snackbar.make(view, getString(R.string.are_you_sure), Snackbar.LENGTH_LONG).setAction(getString(R.string.yes), vAccept -> {
-                    try {
-                        if (!cc.isActive(description) && recipient.equals("true") && inProgressCount < 10) {
-                            cc.joinToChallenge(challenge_id);
-                            snackbar = Snackbar.make(vAccept, getString(R.string.challenge_created), Snackbar.LENGTH_SHORT);
-                        } else {
-                            snackbar = Snackbar.make(vAccept, getString(R.string.cant_create_this_challenge), Snackbar.LENGTH_SHORT);
-                        }
-                        snackbar.show();
-                    } catch (NullPointerException e) {
-                        e.printStackTrace();
-                    }
-                });
-                snackbar.show();
+                onClickAccept(view);
                 break;
-
             case R.id.btn_cancel:
                 onClickCancer(view);
                 break;
@@ -207,6 +193,23 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
                 snackbar = Snackbar.make(vCancel, getString(R.string.challenge_canceled), Snackbar.LENGTH_SHORT);
                 snackbar.show();
             } catch (IOException | NullPointerException e) {
+                e.printStackTrace();
+            }
+        });
+        snackbar.show();
+    }
+
+    private void onClickAccept(View view) {
+        snackbar = Snackbar.make(view, getString(R.string.are_you_sure), Snackbar.LENGTH_LONG).setAction(getString(R.string.yes), vAccept -> {
+            try {
+                if (!cc.isActive(description) && recipient.equals("true") && inProgressCount < 10) {
+                    cc.joinToChallenge(challenge_id);
+                    snackbar = Snackbar.make(vAccept, getString(R.string.challenge_created), Snackbar.LENGTH_SHORT);
+                } else {
+                    snackbar = Snackbar.make(vAccept, getString(R.string.cant_create_this_challenge), Snackbar.LENGTH_SHORT);
+                }
+                snackbar.show();
+            } catch (NullPointerException e) {
                 e.printStackTrace();
             }
         });

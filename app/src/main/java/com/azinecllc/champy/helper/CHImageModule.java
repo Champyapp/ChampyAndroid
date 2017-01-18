@@ -1,26 +1,14 @@
 package com.azinecllc.champy.helper;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.widget.ImageView;
-
-import com.azinecllc.champy.R;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 /**
  * FOR TEST;
@@ -75,18 +63,18 @@ public class CHImageModule {
     }
 
 
-    public Drawable Init(String path, Activity activity) throws FileNotFoundException {
-        File file = new File(path, "blurred.png");
-        Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
-        Drawable dr = new BitmapDrawable(context.getResources(), bitmap);
-        dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
-        if (activity != null) {
-            ImageView imageView = (ImageView) activity.findViewById(R.id.friends_background);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setImageDrawable(dr);
-        }
-        return dr;
-    }
+//    public Drawable Init(String path, Activity activity) throws FileNotFoundException {
+//        File file = new File(path, "blurred.png");
+//        Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
+//        Drawable dr = new BitmapDrawable(context.getResources(), bitmap);
+//        dr.setColorFilter(Color.argb(230, 52, 108, 117), PorterDuff.Mode.MULTIPLY);
+//        if (activity != null) {
+//            ImageView imageView = (ImageView) activity.findViewById(R.id.friends_background);
+//            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//            imageView.setImageDrawable(dr);
+//        }
+//        return dr;
+//    }
 
 
  }

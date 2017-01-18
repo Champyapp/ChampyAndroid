@@ -87,10 +87,10 @@ public class AppSync {
                     UpdatePushIdentifier pushIdentifier = new UpdatePushIdentifier();
                     pushIdentifier.updatePushIdentifier(sessionManager);
 
-                    CHGetFacebookFriends getFbFriends = new CHGetFacebookFriends(context);
+                    CHGetFacebookFriends getFbFriends = new CHGetFacebookFriends(context, retrofit);
                     getFbFriends.getUserFacebookFriends(gcm);
 
-                    CHGetPendingFriends getPendingFriends = new CHGetPendingFriends(context);
+                    CHGetPendingFriends getPendingFriends = new CHGetPendingFriends(context, retrofit);
                     getPendingFriends.getUserPending(userId, token);
 
                     DailyRemindController dailyRemind = new DailyRemindController(context);

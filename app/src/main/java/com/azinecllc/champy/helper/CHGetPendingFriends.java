@@ -14,27 +14,25 @@ import java.util.List;
 
 import retrofit.Call;
 import retrofit.Callback;
-import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
-
-import static com.azinecllc.champy.utils.Constants.API_URL;
 
 public class CHGetPendingFriends {
 
     private Context context;
+    private Retrofit retrofit;
 
-    public CHGetPendingFriends(Context context) {
+    public CHGetPendingFriends(Context context, Retrofit retrofit) {
         this.context = context;
+        this.retrofit = retrofit;
     }
 
 
     public void getUserPending(final String userId, String token) {
-        final ContentValues cv = new ContentValues();
+        ContentValues cv = new ContentValues();
         DBHelper dbHelper = DBHelper.getInstance(context);
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int clearCount = db.delete("pending", null, null);
-        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.delete("pending", null, null);
         com.azinecllc.champy.interfaces.Friends friends = retrofit.create(com.azinecllc.champy.interfaces.Friends.class);
         Call<Friend> callGetUserFriends = friends.getUserFriends(userId, token);
         callGetUserFriends.enqueue(new Callback<Friend>() {

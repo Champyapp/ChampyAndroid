@@ -14,11 +14,11 @@ import android.os.Environment;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.MainActivity;
 import com.azinecllc.champy.utils.Blur;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -153,17 +153,6 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
                 fos.write(bitmapData);
                 fos.flush();
                 fos.close();
-
-//                RelativeLayout relativeLayout = (RelativeLayout)activity.findViewById(R.id.content_main);
-//                relativeLayout.setDrawingCacheEnabled(true);
-//                relativeLayout.buildDrawingCache();
-                //Bitmap bm = relativeLayout.getDrawingCache();
-                //blurred = Blur.blurRenderScript(context, bm, 25);
-
-//                ImageView screen = (ImageView)activity.findViewById(R.id.blurScreen);
-
-//                Drawable ob = new BitmapDrawable(context.getResources(), blurred);
-//                screen.setImageDrawable(ob);
             }
         }
         catch (IOException e) {

@@ -1,7 +1,5 @@
 package com.azinecllc.champy.helper;
 
-import android.util.Log;
-
 import com.azinecllc.champy.interfaces.Update_user;
 import com.azinecllc.champy.model.user.User;
 import com.azinecllc.champy.utils.SessionManager;
@@ -31,12 +29,9 @@ public class UpdatePushIdentifier {
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
-                final String log = (response.isSuccess()) ? "Profile Updated" : "ERROR: " + response.message();
-                Log.d("UpdatePushIdentifier", "onResponse: Status: " + log);
             }
             @Override
             public void onFailure(Throwable t) {
-                Log.d("UpdatePushIdentifier", "VSE huynya");
             }
         });
     }

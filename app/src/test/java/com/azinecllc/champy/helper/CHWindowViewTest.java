@@ -101,7 +101,7 @@ public class CHWindowViewTest {
         });
 
 
-        System.out.println("expect: " + CHWindowView.getWindowHeight(mockContext) + " | actual: " + metrics.heightPixels); //mockWM.getDefaultDisplay().getWidth());
+        //System.out.println("expect: " + CHWindowView.getWindowHeight(mockContext) + " | actual: " + metrics.heightPixels); //mockWM.getDefaultDisplay().getWidth());
 
         assertEquals(CHWindowView.getWindowHeight(mockContext), metrics.heightPixels);
     }
