@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.model.HistoryChallenge;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.List;
 
@@ -72,7 +71,7 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
                 Glide.with(mContext).load(R.drawable.ic_self_yellow).override(80, 80).into(viewHolder.pic);
                 break;
             default:
-                nameTextView.setText(R.string.lostInternetConnection);
+                nameTextView.setText("Unknown");
                 Glide.with(mContext).load(R.drawable.ic_champy_circle).override(80, 80).into(viewHolder.pic);
                 break;
         }

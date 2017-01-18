@@ -261,7 +261,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
                         public void onFailure(Throwable t) {}
                     });
 
-                    //щоб воно не обновляло (і дублювало) лист друзів після додавання когось, то має юути false
+                    // Should be false to not recreate or duplicate
                     sessionManager.setRefreshPending("false");
                     mContacts.remove(position);
                     notifyItemRemoved(position);

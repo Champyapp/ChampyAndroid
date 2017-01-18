@@ -24,7 +24,7 @@ public class DuelPagerAdapter extends FragmentStatePagerAdapter {
     }
 
 
-    public void setCount(int count){
+    public void setCount(int count) {
         size = count;
     }
 
