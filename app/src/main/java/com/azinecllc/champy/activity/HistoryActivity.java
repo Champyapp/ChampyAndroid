@@ -110,7 +110,6 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         if (extras != null && "true".equals(extras)) { viewPager.setCurrentItem(1); }
 
 
-
         final String name = sessionManager.getUserName();
         drawerUserName.setText(name);
         drawerUserName.setTypeface(typeface);

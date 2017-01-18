@@ -9,7 +9,6 @@ import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -31,7 +30,6 @@ import java.io.IOException;
 public class AlarmReceiverActivity extends Activity implements View.OnClickListener {
 
     private static final int LONG_DELAY = 3500; // 3.5 seconds
-    public final String TAG = "AlarmReceiverActivity";
     private MediaPlayer mMediaPlayer;
     private ChallengeController cc;
     private String progressID, alarmID, details;
@@ -46,8 +44,6 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
         alarmID = getIntent().getStringExtra("finalAlarmID");
         details = getIntent().getStringExtra("finalDetails");
         progressID = getIntent().getStringExtra("finalInProgressID");
-
-        Log.d(TAG, "\nalarmID: " + alarmID + "\ndetails: " + details + "\nprogressID: " + progressID);
 
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);

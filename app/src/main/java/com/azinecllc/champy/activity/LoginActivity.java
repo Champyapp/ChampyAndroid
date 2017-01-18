@@ -63,9 +63,7 @@ import static com.azinecllc.champy.utils.Constants.path;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
-    public final String TAG = "LoginActivity";
     public View spinner;
-
     private String user_email, path_to_pic, name, fb_id;
     private AccessTokenTracker mTokenTracker;
     private CallbackManager mCallbackManager;
@@ -134,12 +132,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                 registerUser(fb_id, name, user_email, json, token_android);
                             } catch (Exception e) {
-                                Log.e(TAG, "error: ", e);
+                                Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_LONG).show();
                             }
                         }).start();
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Log.e(TAG, "onCompleted: no permissions granted");
+                        Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_LONG).show();
                     }
                 });
                 Bundle parameters = new Bundle();
@@ -155,12 +153,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             public void onCancel() {
                 LoginManager.getInstance().logOut();
                 Toast.makeText(LoginActivity.this, "Login status: Denied", Toast.LENGTH_SHORT).show();
-                Log.e(TAG, "onCancel: LOGIN CANCELED");
             }
 
             @Override
             public void onError(FacebookException exception) {
-                Log.e(TAG, "onError: LOGIN FAILED");
+                Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -208,10 +205,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
-                Log.d(TAG, "KeyHash: " + Base64.encodeToString(md.digest(), Base64.DEFAULT));
             }
         } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
-            Log.d(TAG, "KeyHash: not working" );
+            e.printStackTrace();
         }
     }
 
@@ -247,7 +243,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
-                Log.d(TAG, "Response Status: register " + response.code());
                 User decodedResponse = response.body();
                 if (response.isSuccess()) {
                     Data user = decodedResponse.getData(); // data == user

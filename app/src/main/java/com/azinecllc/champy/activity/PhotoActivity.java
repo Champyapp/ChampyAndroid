@@ -43,7 +43,6 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
     private static final int CAMERA_REQUEST = 1888;
     private static final int SELECT_FILE = 1999;
     private static final int CROP_PIC = 1777;
-    private final String TAG = "PhotoActivity";
     private SessionManager sessionManager;
     private CHUploadPhoto uploadPhoto;
     public Uri picUri;
