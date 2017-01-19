@@ -99,6 +99,8 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
                     sendSingleInProgressForSelf(challengeId);
+                } else {
+                    Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -130,6 +132,8 @@ public class ChallengeController {
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     generateCardsForMainActivity(new Intent(activity, MainActivity.class));
+                } else {
+                    Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -167,6 +171,8 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
                     sendSingleInProgressForDuel(challengeId, friend_id);
+                } else {
+                    Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -211,6 +217,8 @@ public class ChallengeController {
                     //////////////////////////////////////////////////
 
                     refreshCardsForPendingDuel(new Intent(activity, MainActivity.class));
+                } else {
+                    Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -271,6 +279,8 @@ public class ChallengeController {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
                     sendSingleInProgressForWakeUp(challengeId, alarmID, intMin, intHour, details);
+                } else {
+                    Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -336,6 +346,8 @@ public class ChallengeController {
 
 
                     generateCardsForMainActivity(new Intent(activity, MainActivity.class));
+                } else {
+                    Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -360,6 +372,8 @@ public class ChallengeController {
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     refreshCardsForPendingDuel(new Intent(activity, MainActivity.class));
+                } else {
+                    Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -377,8 +391,10 @@ public class ChallengeController {
         call.enqueue(new Callback<com.azinecllc.champy.model.single_in_progress.SingleInProgress>() {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
-                if (response.isSuccess()){
+                if (response.isSuccess()) {
                     refreshCardsForPendingDuel(new Intent(activity, MainActivity.class));
+                } else {
+                    Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -399,15 +415,12 @@ public class ChallengeController {
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String type = response.body().getData().getChallenge().getType();
-                    //Log.i(TAG, "onResponse: Done for today is success");
                     if (type.equals(typeWake)) {
                         setNewAlarmClock(details, alarmID);
                     }
-
                     generateCardsForMainActivity(i);
-
                 } else {
-                    //Log.i(TAG, "onResponse: Done for today failed: " + response.message() + " " + response.code());
+                    Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -439,6 +452,8 @@ public class ChallengeController {
 
                     if (intent != null) { generateCardsForMainActivity(intent); }
 
+                } else {
+                    Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -495,6 +510,8 @@ public class ChallengeController {
                         generateCardsForMainActivity(intent);
                     //}
 
+                } else {
+                    Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -539,18 +556,8 @@ public class ChallengeController {
                         String isRecipient;
                         String versus;
 
-                        //String isRecipient      = (userID.equals(sender.getID())) ? "false" : "true";
-                        //List<Object> progress   = (userID.equals(sender.getID()))
-                        //                           ? datum.getSenderProgress()
-                        //                           : datum.getRecipientProgress();
-                        //String needsToCheck     = (userID.equals(sender.getID()))
-                        //                           ? datum.getNeedsToCheckSender()
-                        //                           : datum.getNeedsToCheckRecipient();
-                        //String versus           = (challenge_type.equals(typeDuel))
-                        //                           ? (userID.equals(sender.getID())
-                        //                                            ? recipient.getName()
-                        //                                            : sender.getName())
-                        //                           : "notDuel";
+
+                        /**************** separation of the recipient and the sender  *************/
 
                         if (userID.equals(sender.getID())) {
                             progress = datum.getSenderProgress();
@@ -565,6 +572,8 @@ public class ChallengeController {
                             versus = (challenge_type.equals(typeDuel)) ? sender.getName() : "notDuel";
                             isRecipient = "true";
                         }
+
+                        /**************************** Days and Time *******************************/
 
                         if (datum.getEnd() != null) {
                             int constDays = round((datum.getEnd() - datum.getBegin()) / 86400);

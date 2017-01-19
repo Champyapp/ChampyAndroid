@@ -99,22 +99,25 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         tvDuration.setTypeface(typeface);
         tvDuration.setTextSize(y*2);
 
-//        try {
-//            String TAG = "INFO ABOUT CARD:";
-//            Log.d(TAG, "getRecipient: "     + currentCard.getRecipient());      // false;
-//            Log.d(TAG, "getChallengeName: " + currentCard.getChallengeName());  // Wake up at 08:55
-//            Log.d(TAG, "getGoal: "          + currentCard.getGoal());           // 0855
-//            Log.d(TAG, "getId: "            + currentCard.getId());             // 58605a9645af8ed13f56b8c1
-//            Log.d(TAG, "getName: "          + currentCard.getName());           // null
-//            Log.d(TAG, "getWakeUpTime: "    + currentCard.getWakeUpTime());     // [1482735221, 1482821621]
-//            Log.d(TAG, "getType: "          + currentCard.getType());           // Wake Up
-//            Log.d(TAG, "getConstDuration: " + currentCard.getConstDuration());  // 2 days
-//            Log.d(TAG, "getDays: "          + currentCard.getDays());           // 1-2 (current)
-//            Log.d(TAG, "getProgress: "      + currentCard.getProgress());       // [UnixTime]
-//            Log.d(TAG, "getStatus: "        + currentCard.getStatus());         // started
-//            Log.d(TAG, "getVersus: "        + currentCard.getVersus());         // not duel
-//            Log.d(TAG, "getNeedsToCheck: "  + currentCard.getNeedsToCheck());   // true / false
-//        } catch (Exception e) { e.printStackTrace(); }
+        try {
+            String TAG = "INFO ABOUT CARD:";
+            Log.d(TAG, "getRecipient: " + currentCard.getRecipient());      // false;
+            Log.d(TAG, "getChallengeName: " + currentCard.getChallengeName());  // Wake up at 08:55
+            Log.d(TAG, "getGoal: " + currentCard.getGoal());           // 0855
+            Log.d(TAG, "getId: " + currentCard.getId());             // 58605a9645af8ed13f56b8c1
+            Log.d(TAG, "getName: " + currentCard.getName());           // null
+            Log.d(TAG, "getWakeUpTime: " + currentCard.getWakeUpTime());     // [1482735221, 1482821621]
+            Log.d(TAG, "getType: " + currentCard.getType());           // Wake Up
+            Log.d(TAG, "getConstDuration: " + currentCard.getConstDuration());  // 2 days
+            Log.d(TAG, "getDays: " + currentCard.getDays());           // 1-2 (current)
+            Log.d(TAG, "getProgress: " + currentCard.getProgress());       // [UnixTime]
+            Log.d(TAG, "getStatus: " + currentCard.getStatus());         // started
+            Log.d(TAG, "getVersus: " + currentCard.getVersus());         // not duel
+            Log.d(TAG, "getNeedsToCheck: " + currentCard.getNeedsToCheck());   // true / false
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         if (itemNeedsToCheck.equals("true")) {
             tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
             buttonDone.setVisibility(View.VISIBLE);
@@ -193,6 +196,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 
         /************************************* Clicks ********************************************/
 
+        Intent goMain = new Intent(getContext(), MainActivity.class);
         buttonGiveUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -201,7 +205,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                     public void onClick(View view) {
                         try {
                             int i = (itemType.equals("Wake Up")) ? Integer.parseInt(currentCard.getGoal()) : 0;
-                            cc.give_up(itemInProgressId, i, new Intent(getContext(), MainActivity.class));
+                            cc.give_up(itemInProgressId, i, goMain);
                         } catch (IOException | NumberFormatException e) {
                             e.printStackTrace();
                         }
@@ -218,8 +222,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                     buttonDone.setVisibility(View.INVISIBLE);
                     buttonShare.setVisibility(View.VISIBLE);
                     tvDuration.setVisibility(View.VISIBLE);
-                    Intent i = new Intent(getContext(), MainActivity.class);
-                    cc.doneForToday(itemInProgressId, currentCard.getWakeUpTime(), itemGoal, i);
+                    cc.doneForToday(itemInProgressId, currentCard.getWakeUpTime(), itemGoal, goMain);
                     snackbar = Snackbar.make(v, "Well done!", Snackbar.LENGTH_SHORT);
                     snackbar.show();
                 } catch (IOException e) {
