@@ -2,7 +2,9 @@ package com.azinecllc.champy.activity;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -33,6 +35,7 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_role_controller);
         spinner = findViewById(R.id.loadingPanel);
+
 
         checkNotificationExtras();
 

@@ -6,7 +6,12 @@ import android.content.Context;
 import com.facebook.FacebookSdk;
 
 /**
- * Created by SashaKhyzhun on 1/10/17.
+ * Created by Azinec Development Team on 1/10/17.
+ * Copyright © 2017 Azinec LLC. All rights reserved.
+ * Developed by Sasha Khyzhun.
+ * My contacts:
+ * sasha.khyzhun@azinec.com
+ * sasha.khyzhun@gmail.com
  */
 
 public class Champy extends Application {
