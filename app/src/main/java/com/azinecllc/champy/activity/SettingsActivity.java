@@ -28,6 +28,7 @@ import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.controller.DailyRemindController;
 import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.helper.CHCheckPendingDuels;
+import com.azinecllc.champy.helper.CHSetupUI;
 import com.azinecllc.champy.interfaces.Update_user;
 import com.azinecllc.champy.model.user.Delete;
 import com.azinecllc.champy.model.user.Profile_data;
@@ -77,6 +78,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         ImageView background = (ImageView) findViewById(R.id.back_settings);
         ImageView userImageProfile = (ImageView) findViewById(R.id.img_profile);
         background.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+        CHSetupUI setupUI = new CHSetupUI();
+        setupUI.setupUI(findViewById(R.id.settings_layout), this);
 
         File fileBlur = new File(path, "blurred.png");
         Uri uriBlur = Uri.fromFile(fileBlur);
