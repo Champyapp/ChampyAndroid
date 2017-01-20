@@ -101,19 +101,20 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 
         try {
             String TAG = "INFO ABOUT CARD:";
-            Log.d(TAG, "getRecipient: " + currentCard.getRecipient());      // false;
+            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            Log.d(TAG, "getRecipient: " + currentCard.getRecipient());          // false;
             Log.d(TAG, "getChallengeName: " + currentCard.getChallengeName());  // Wake up at 08:55
-            Log.d(TAG, "getGoal: " + currentCard.getGoal());           // 0855
-            Log.d(TAG, "getId: " + currentCard.getId());             // 58605a9645af8ed13f56b8c1
-            Log.d(TAG, "getName: " + currentCard.getName());           // null
-            Log.d(TAG, "getWakeUpTime: " + currentCard.getWakeUpTime());     // [1482735221, 1482821621]
-            Log.d(TAG, "getType: " + currentCard.getType());           // Wake Up
+            Log.d(TAG, "getGoal: " + currentCard.getGoal());                    // 0855
+            Log.d(TAG, "getId: " + currentCard.getId());                        // 58605a9645af8ed13f56b8c1
+            Log.d(TAG, "getName: " + currentCard.getName());                    // null
+            Log.d(TAG, "getWakeUpTime: " + currentCard.getWakeUpTime());        // [1482735221, 1482821621]
+            Log.d(TAG, "getType: " + currentCard.getType());                    // Wake Up
             Log.d(TAG, "getConstDuration: " + currentCard.getConstDuration());  // 2 days
-            Log.d(TAG, "getDays: " + currentCard.getDays());           // 1-2 (current)
-            Log.d(TAG, "getProgress: " + currentCard.getProgress());       // [UnixTime]
-            Log.d(TAG, "getStatus: " + currentCard.getStatus());         // started
-            Log.d(TAG, "getVersus: " + currentCard.getVersus());         // not duel
-            Log.d(TAG, "getNeedsToCheck: " + currentCard.getNeedsToCheck());   // true / false
+            Log.d(TAG, "getDays: " + currentCard.getDays());                    // 1-2 (current)
+            Log.d(TAG, "getProgress: " + currentCard.getProgress());            // [UnixTime]
+            Log.d(TAG, "getStatus: " + currentCard.getStatus());                // started
+            Log.d(TAG, "getVersus: " + currentCard.getVersus());                // not duel
+            Log.d(TAG, "getNeedsToCheck: " + currentCard.getNeedsToCheck());    // true / false
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -154,6 +155,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                 tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
                 buttonShare.setVisibility(View.INVISIBLE);
                 buttonDone.setVisibility(View.VISIBLE);
+                tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
             }
         }
 
@@ -168,12 +170,12 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                         buttonDone.setVisibility(View.VISIBLE);
                         buttonShare.setVisibility(View.INVISIBLE);
                         tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
-                        if (now > myProgress + oneDay + (10 * 60)) {
-                            tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
-                            buttonShare.setVisibility(View.VISIBLE);
-                            buttonDone.setVisibility(View.INVISIBLE);
-                            tvEveryDayForTheNext.setVisibility(View.VISIBLE);
-                        }
+//                        if (now > myProgress + oneDay + (10 * 60)) {
+//                            tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
+//                            buttonShare.setVisibility(View.VISIBLE);
+//                            buttonDone.setVisibility(View.INVISIBLE);
+//                            tvEveryDayForTheNext.setVisibility(View.VISIBLE);
+//                        }
                     }
                 } else {
                     tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
@@ -197,6 +199,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         /************************************* Clicks ********************************************/
 
         Intent goMain = new Intent(getContext(), MainActivity.class);
+
         buttonGiveUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

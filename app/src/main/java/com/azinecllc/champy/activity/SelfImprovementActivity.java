@@ -1,6 +1,8 @@
 package com.azinecllc.champy.activity;
 
+import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
@@ -15,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -62,6 +65,15 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+//                try {
+//                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+//                } catch (NullPointerException npe) { npe.printStackTrace(); }
             }
         };
         drawer.setDrawerListener(toggle);
@@ -117,7 +129,6 @@ public class SelfImprovementActivity extends AppCompatActivity implements Naviga
         getChallenges();
 
     }
-
 
     @Override
     protected void onDestroy() {

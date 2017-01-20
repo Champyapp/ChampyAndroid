@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.data.DBHelper;
+import com.azinecllc.champy.helper.CHSetupUI;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
 
@@ -144,14 +145,14 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                             duration = etDays.getText().toString();
                             try {
                             days = Integer.parseInt(duration);
-                            if (!cc.isActive(description) && !description.isEmpty()) {
-                                cc.createNewSelfImprovementChallenge(description, days);
-                                snackbar = Snackbar.make(view, R.string.challenge_created, Snackbar.LENGTH_SHORT);
-                                snackbar.show();
-                            } else {
-                                snackbar = Snackbar.make(view, R.string.cant_create_this_challenge, Snackbar.LENGTH_SHORT);
-                                snackbar.show();
-                            }
+                                if (!cc.isActive(description) && !description.isEmpty()) {
+                                    cc.createNewSelfImprovementChallenge(description, days);
+                                    snackbar = Snackbar.make(view, R.string.challenge_created, Snackbar.LENGTH_SHORT);
+                                    snackbar.show();
+                                } else {
+                                    snackbar = Snackbar.make(view, R.string.cant_create_this_challenge, Snackbar.LENGTH_SHORT);
+                                    snackbar.show();
+                                }
                             } catch (NullPointerException | NumberFormatException e) {
                                 e.printStackTrace();
                             }

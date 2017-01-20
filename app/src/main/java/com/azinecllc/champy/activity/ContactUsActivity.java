@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.helper.CHCheckPendingDuels;
+import com.azinecllc.champy.helper.CHSetupUI;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
 import com.bumptech.glide.Glide;
@@ -77,10 +78,19 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         drawerUserName.setTypeface(typeface);
 
 
-        Glide.with(this).load(uriBlur).bitmapTransform(new CropSquareTransformation(this))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerBG);
-        Glide.with(this).load(uriProfile).bitmapTransform(new CropCircleTransformation(this))
-                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(drawerUserPhoto);
+        Glide.with(this)
+                .load(uriBlur)
+                .bitmapTransform(new CropSquareTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(drawerBG);
+
+        Glide.with(this)
+                .load(uriProfile)
+                .bitmapTransform(new CropCircleTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(drawerUserPhoto);
 
 
         inputLayoutSubject = (TextInputLayout)findViewById(R.id.input_layout_name);
@@ -101,6 +111,9 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
             TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
             view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
         }
+
+        CHSetupUI chSetupUI = new CHSetupUI();
+        chSetupUI.setupUI(buttonSend, this);
 
         //ViewServer.get(this).addWindow(this);
     }
