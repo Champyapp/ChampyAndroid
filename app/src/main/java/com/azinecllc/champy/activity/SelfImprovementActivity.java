@@ -1,41 +1,23 @@
 package com.azinecllc.champy.activity;
 
-import android.app.Activity;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.SelfImprovementPagerAdapter;
 import com.azinecllc.champy.data.DBHelper;
-import com.azinecllc.champy.helper.CHCheckPendingDuels;
 import com.azinecllc.champy.model.self.Datum;
-import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
-import java.io.File;
 import java.util.List;
 
-import jp.wasabeef.glide.transformations.CropCircleTransformation;
-import jp.wasabeef.glide.transformations.CropSquareTransformation;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
@@ -43,7 +25,6 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 import static com.azinecllc.champy.utils.Constants.API_URL;
-import static com.azinecllc.champy.utils.Constants.path;
 
 public class SelfImprovementActivity extends AppCompatActivity /*implements NavigationView.OnNavigationItemSelectedListener*/ {
 
@@ -128,7 +109,7 @@ public class SelfImprovementActivity extends AppCompatActivity /*implements Navi
 //            view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
 //        }
 
-        getChallenges();
+        getSelfChallenges();
 
     }
 
@@ -203,7 +184,7 @@ public class SelfImprovementActivity extends AppCompatActivity /*implements Navi
 
 
     // get standard self-improvement challenges
-    private void getChallenges() {
+    private void getSelfChallenges() {
         DBHelper dbHelper = DBHelper.getInstance(this);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final ContentValues cv  = new ContentValues();

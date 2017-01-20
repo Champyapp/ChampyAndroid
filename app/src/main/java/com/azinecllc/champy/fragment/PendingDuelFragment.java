@@ -58,7 +58,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.item_pending_duel, container, false);
+        View view = inflater.inflate(R.layout.item_pending_duel, container, false);
 
         final Bundle args = this.getArguments();
         c = db.query("pending_duel", null, null, null, null, null, null);
@@ -87,8 +87,8 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
 
         c.close();
 
-        int screenWidth = getActivity().getWindowManager().getDefaultDisplay().getWidth();
-        int x = round(screenWidth/100);
+        //int screenWidth = getActivity().getWindowManager().getDefaultDisplay().getWidth();
+        //int x = round(screenWidth/100);
 
         btnAccept = (ImageButton)view.findViewById(R.id.btn_accept);
         btnCancel = (ImageButton)view.findViewById(R.id.btn_cancel);

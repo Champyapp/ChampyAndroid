@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.PendingDuelsAdapter;
+import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.helper.CHCheckPendingDuels;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
@@ -99,6 +100,17 @@ public class PendingDuelActivity extends AppCompatActivity /*implements Navigati
 //            view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
 //        }
 
+        ImageView imageViewLogo = (ImageView) findViewById(R.id.imageViewLogo);
+        imageViewLogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: 1/20/17 Test code for search bug
+                String uID = sessionManager.getUserId();
+                String token = sessionManager.getToken();
+                ChallengeController cc = new ChallengeController(getApplicationContext(), PendingDuelActivity.this, token, uID);
+                cc.refreshCardsForPendingDuel(new Intent(getApplicationContext(), PendingDuelActivity.class));
+            }
+        });
         spinner.setVisibility(View.INVISIBLE);
     }
 

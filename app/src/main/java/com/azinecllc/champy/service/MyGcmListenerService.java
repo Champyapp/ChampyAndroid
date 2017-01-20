@@ -28,9 +28,11 @@ import java.util.List;
 
 import retrofit.Call;
 import retrofit.Callback;
+import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
+import static com.azinecllc.champy.utils.Constants.API_URL;
 import static com.azinecllc.champy.utils.Constants.update;
 
 public class MyGcmListenerService extends GcmListenerService {
@@ -89,24 +91,79 @@ public class MyGcmListenerService extends GcmListenerService {
                 break;
             case "Challenge request":
                 intent.putExtra("gcm", "challenge_request_incoming");
-                notifyChallenges(intent, message);
+                notifyChallenges(intent, message, title);
                 break;
             case "Challenge accepted":
-                //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("gcm", "challenge_request_confirmed");
-                notifyChallenges(intent, message);
+                notifyChallenges(intent, message, title);
                 break;
             case "Win":
-                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                //historyIntent.putExtra("win_request", "true");
                 intent.putExtra("gcm", "challenge_request_win");
-                notifyChallenges(intent, message);
+                notifyChallenges(intent, message, title);
                 break;
         }
     }
 
+//    public void refreshCardsForPendingDuel() {
+//        ContentValues cv  = new ContentValues();
+//        DBHelper dbHelper = DBHelper.getInstance(getApplicationContext());
+//        SQLiteDatabase db = dbHelper.getWritableDatabase();
+//        db.delete("pending_duel", null, null);
+//        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+//        SessionManager sm = SessionManager.getInstance(getApplicationContext());
+//        String userID     = sm.getUserId();
+//        String token      = sm.getToken();
+//        ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
+//
+//        Call<com.azinecllc.champy.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userID, update, token);
+//        call1.enqueue(new Callback<com.azinecllc.champy.model.active_in_progress.ActiveInProgress>() {
+//            @Override
+//            public void onResponse(Response<com.azinecllc.champy.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
+//                if (response.isSuccess()) {
+//                    List<Datum> data = response.body().getData();
+//                    for (int i = 0; i < data.size(); i++) {
+//                        com.azinecllc.champy.model.active_in_progress.Datum datum = data.get(i);
+//                        Recipient recipient = datum.getRecipient();
+//                        Challenge challenge = datum.getChallenge();
+//                        Sender sender       = datum.getSender();
+//
+//                        String challengeStatus = datum.getStatus();
+//
+//                        if (challengeStatus.equals("pending")) {
+//                            String inProgressId = datum.get_id();
+//                            String challengeDescription = challenge.getDescription();
+//                            int challengeDuration = challenge.getDuration();
+//                            String versus = (userID.equals(recipient.getId())) ? sender.getName() : recipient.getName();
+//                            String mRecipient = (userID.equals(recipient.getId())) ? "true" : "false";
+//
+//                            cv.put("versus",       versus);
+//                            cv.put("recipient",    mRecipient);
+//                            cv.put("challenge_id", inProgressId);
+//                            cv.put("description",  challengeDescription);
+//                            cv.put("duration",     challengeDuration);
+//                            db.insert("pending_duel", null, cv);
+//                        }
+//                    }
+//
+//                    System.out.println("Refresh Pending Cards is Success GCM");
+//                } else {
+//                    System.out.println("Refresh Pending Cards is failed GCM");
+//                    Toast.makeText(getApplicationContext(), R.string.service_not_available, Toast.LENGTH_LONG).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Throwable t) {
+//                Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.service_not_available), Toast.LENGTH_LONG).show();
+//            }
+//        });
+//    }
 
-    private void notifyChallenges(Intent intent, String message) {
+    private void notifyChallenges(Intent intent, String message, String title) {
+//        System.out.println("Title = " + title);
+//        if (title.equals("Challenge request")) {
+//            refreshCardsForPendingDuel();
+//        }
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent, PendingIntent.FLAG_ONE_SHOT);
