@@ -374,6 +374,7 @@ public class ChallengeController {
                     refreshCardsForPendingDuel(new Intent(activity, MainActivity.class));
                 } else {
                     Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                    refreshCardsForPendingDuel(new Intent(activity, MainActivity.class));
                 }
             }
 
