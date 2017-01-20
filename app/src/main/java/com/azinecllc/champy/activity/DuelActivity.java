@@ -44,10 +44,10 @@ import static com.azinecllc.champy.utils.Constants.API_URL;
 import static com.azinecllc.champy.utils.Constants.path;
 import static java.lang.Math.round;
 
-public class DuelActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class DuelActivity extends AppCompatActivity /*implements NavigationView.OnNavigationItemSelectedListener*/ {
 
     private SessionManager sessionManager;
-    private DrawerLayout drawer;
+    //    private DrawerLayout drawer;
     private View spinner;
 
     @Override
@@ -59,7 +59,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         spinner = findViewById(R.id.loadingPanel);
         spinner.setVisibility(View.VISIBLE);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         Bundle extras = getIntent().getExtras();
         String friendsPhoto, name;
         if (extras == null) {
@@ -83,7 +83,7 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         File fileProfile = new File(path, "profile.jpg");
         File fileBlur = new File(path, "blurred.png");
         Uri uriProfile = Uri.fromFile(fileProfile);
-        Uri uriBlur = Uri.fromFile(fileBlur);
+//        Uri uriBlur = Uri.fromFile(fileBlur);
 
         Glide.with(this)
                 .load(friendsPhoto)
@@ -107,48 +107,48 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
         tvIChallengeMyFriendTo.setTypeface(typeface);
 
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+//        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        drawer.setDrawerListener(toggle);
+//        toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
-        navigationView.setNavigationItemSelectedListener(this);
-
-
-        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
-        drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
-        Glide.with(this)
-                .load(uriBlur)
-                .bitmapTransform(new CropSquareTransformation(this))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(drawerBackground);
-
-        Glide.with(this)
-                .load(uriProfile)
-                .bitmapTransform(new CropCircleTransformation(this))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(drawerImageProfile);
-
-        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        name = sessionManager.getUserName();
-        drawerUserName.setText(name);
-        drawerUserName.setTypeface(typeface);
+//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+//        final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
+//        navigationView.setNavigationItemSelectedListener(this);
 
 
-        CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();
-        int count = checker.getPendingCount(getApplicationContext());
-        if (count == 0) {
-            checker.hideItem(navigationView);
-        } else {
-            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-            view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
-        }
+//        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
+//        ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
+//        drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+//        Glide.with(this)
+//                .load(uriBlur)
+//                .bitmapTransform(new CropSquareTransformation(this))
+//                .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                .skipMemoryCache(true)
+//                .into(drawerBackground);
+
+//        Glide.with(this)
+//                .load(uriProfile)
+//                .bitmapTransform(new CropCircleTransformation(this))
+//                .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                .skipMemoryCache(true)
+//                .into(drawerImageProfile);
+
+//        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+//        name = sessionManager.getUserName();
+//        drawerUserName.setText(name);
+//        drawerUserName.setTypeface(typeface);
+//
+//
+//        CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();
+//        int count = checker.getPendingCount(getApplicationContext());
+//        if (count == 0) {
+//            checker.hideItem(navigationView);
+//        } else {
+//            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+//            view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
+//        }
 
         getChallenges();
 
@@ -163,59 +163,60 @@ public class DuelActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
+//        if (drawer.isDrawerOpen(GravityCompat.START)) {
+//            drawer.closeDrawer(GravityCompat.START);
+//        } else {
             super.onBackPressed();
-        }
+//        }
     }
 
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.challenges:
-                Intent goToChallenges = new Intent(this, MainActivity.class);
-                startActivity(goToChallenges);
-                finish();
-                break;
-            case R.id.friends:
-                Intent goToFriends = new Intent(this, FriendsActivity.class);
-                startActivity(goToFriends);
-                finish();
-                break;
-            case R.id.pending_duels:
-                Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
-                startActivity(goToPendingDuel);
-                finish();
-                break;
-            case R.id.history:
-                Intent goToHistory = new Intent(this, HistoryActivity.class);
-                startActivity(goToHistory);
-                finish();
-                break;
-            case R.id.settings:
-                Intent goToSettings = new Intent(this, SettingsActivity.class);
-                startActivity(goToSettings);
-                finish();
-                break;
-            case R.id.share:
-                String message = getString(R.string.share_text2);
-                Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType("text/plain");
-                share.putExtra(Intent.EXTRA_TEXT, message);
-                startActivity(Intent.createChooser(share, getString(R.string.how_would_you_like_to_share)));
-                break;
-            case R.id.nav_logout:
-                OfflineMode offlineMode = OfflineMode.getInstance();
-                if (offlineMode.isConnectedToRemoteAPI(this)) {
-                    sessionManager.logout(this);
-                    finish();
-                }
-                break;
-        }
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
+//    @Override
+//    public boolean onNavigationItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.challenges:
+//                Intent goToChallenges = new Intent(this, MainActivity.class);
+//                startActivity(goToChallenges);
+//                finish();
+//                break;
+//            case R.id.friends:
+//                Intent goToFriends = new Intent(this, FriendsActivity.class);
+//                startActivity(goToFriends);
+//                finish();
+//                break;
+//            case R.id.pending_duels:
+//                Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
+//                startActivity(goToPendingDuel);
+//                finish();
+//                break;
+//            case R.id.history:
+//                Intent goToHistory = new Intent(this, HistoryActivity.class);
+//                startActivity(goToHistory);
+//                finish();
+//                break;
+//            case R.id.settings:
+//                Intent goToSettings = new Intent(this, SettingsActivity.class);
+//                startActivity(goToSettings);
+//                finish();
+//                break;
+//            case R.id.share:
+//                String message = getString(R.string.share_text2);
+//                Intent share = new Intent(Intent.ACTION_SEND);
+//                share.setType("text/plain");
+//                share.putExtra(Intent.EXTRA_TEXT, message);
+//                startActivity(Intent.createChooser(share, getString(R.string.how_would_you_like_to_share)));
+//                break;
+//            case R.id.nav_logout:
+//                OfflineMode offlineMode = OfflineMode.getInstance();
+//                if (offlineMode.isConnectedToRemoteAPI(this)) {
+//                    sessionManager.logout(this);
+//                    finish();
+//                }
+//                break;
+//        }
+//        drawer.closeDrawer(GravityCompat.START);
+//        return true;
+//    }
+
 
     // get standard cards for button_duel activity
     private void getChallenges() {

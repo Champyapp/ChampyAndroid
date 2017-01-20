@@ -33,13 +33,12 @@ import jp.wasabeef.glide.transformations.CropSquareTransformation;
 
 import static com.azinecllc.champy.utils.Constants.path;
 
-public class WakeUpActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+public class WakeUpActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private SessionManager sessionManager;
     private TimePicker alarmTimePicker;
     private OfflineMode offlineMode;
     private ChallengeController cc;
-    private DrawerLayout drawer;
+    //private DrawerLayout drawer;
     private Snackbar snackbar;
     private TextView etDays;
 
@@ -47,47 +46,47 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wake_up);
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-                super.onDrawerSlide(drawerView, slideOffset);
-            }
-        };
-        drawer.setDrawerListener(toggle);
-        toggle.setDrawerIndicatorEnabled(true);
-        toggle.syncState();
+//        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+//            @Override
+//            public void onDrawerSlide(View drawerView, float slideOffset) {
+//                super.onDrawerSlide(drawerView, slideOffset);
+//            }
+//        };
+//        drawer.setDrawerListener(toggle);
+//        toggle.setDrawerIndicatorEnabled(true);
+//        toggle.syncState();
 
-        final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
-        navigationView.setNavigationItemSelectedListener(this);
+//        final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+//        final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
+//        navigationView.setNavigationItemSelectedListener(this);
 
         final Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
-        final ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        final ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
-        final TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//        final ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
+//        final ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
+//        final TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+//        drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-        File file = new File(path, "profile.jpg");
-        Uri url = Uri.fromFile(file);
-
-        Glide.with(this)
-                .load(url)
-                .bitmapTransform(new CropCircleTransformation(this))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(drawerImageProfile);
-
-        file = new File(path, "blurred.png");
-        url = Uri.fromFile(file);
-
-        Glide.with(this)
-                .load(url)
-                .bitmapTransform(new CropSquareTransformation(this))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(drawerBackground);
+//        File file = new File(path, "profile.jpg");
+//        Uri url = Uri.fromFile(file);
+//
+//        Glide.with(this)
+//                .load(url)
+//                .bitmapTransform(new CropCircleTransformation(this))
+//                .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                .skipMemoryCache(true)
+//                .into(drawerImageProfile);
+//
+//        file = new File(path, "blurred.png");
+//        url = Uri.fromFile(file);
+//
+//        Glide.with(this)
+//                .load(url)
+//                .bitmapTransform(new CropSquareTransformation(this))
+//                .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                .skipMemoryCache(true)
+//                .into(drawerBackground);
 
         final TextView tvIChallengeMySelf = (TextView) findViewById(R.id.tvChallengeToMySelf);
         final ImageButton buttonAccept = (ImageButton) findViewById(R.id.imageButtonAccept);
@@ -106,24 +105,25 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
         tvDays.setTypeface(typeface);
         tvGoal.setTypeface(typeface);
 
-        sessionManager = SessionManager.getInstance(getApplicationContext());
+        SessionManager sessionManager = SessionManager.getInstance(getApplicationContext());
         offlineMode = OfflineMode.getInstance();
 
-        CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();
-        int count = checker.getPendingCount(getApplicationContext());
-        if (count == 0) {
-            checker.hideItem(navigationView);
-        } else {
-            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-            view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
-        }
+//        CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();
+//        int count = checker.getPendingCount(getApplicationContext());
+//        if (count == 0) {
+//            checker.hideItem(navigationView);
+//        } else {
+//            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+//            view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
+//        }
 
-        final String userName = sessionManager.getUserName();
+//        final String userName = sessionManager.getUserName();
+//        drawerUserName.setText(userName);
+//        drawerUserName.setTypeface(typeface);
+
         final String userID = sessionManager.getUserId();
         final String token = sessionManager.getToken();
         cc = new ChallengeController(this, this, token, userID);
-        drawerUserName.setText(userName);
-        drawerUserName.setTypeface(typeface);
 
         alarmTimePicker = (TimePicker) findViewById(R.id.timePicker);
 
@@ -196,61 +196,61 @@ public class WakeUpActivity extends AppCompatActivity implements NavigationView.
 
     @Override
     public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
+//        if (drawer.isDrawerOpen(GravityCompat.START)) {
+//            drawer.closeDrawer(GravityCompat.START);
+//        } else {
             Intent intent = new Intent(WakeUpActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
             super.onBackPressed();
-        }
+//        }
     }
 
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.challenges:
-                Intent goToChallenges = new Intent(this, MainActivity.class);
-                startActivity(goToChallenges);
-                finish();
-                break;
-            case R.id.friends:
-                Intent goToFriends = new Intent(this, FriendsActivity.class);
-                startActivity(goToFriends);
-                finish();
-                break;
-            case R.id.history:
-                Intent goToHistory = new Intent(this, HistoryActivity.class);
-                startActivity(goToHistory);
-                finish();
-                break;
-            case R.id.settings:
-                Intent goToSettings = new Intent(this, SettingsActivity.class);
-                startActivity(goToSettings);
-                finish();
-                break;
-            case R.id.pending_duels:
-                Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
-                startActivity(goToPendingDuel);
-                finish();
-                break;
-            case R.id.share:
-                String message = getString(R.string.share_text2);
-                Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType("text/plain");
-                share.putExtra(Intent.EXTRA_TEXT, message);
-                startActivity(Intent.createChooser(share, getString(R.string.how_would_you_like_to_share)));
-                break;
-            case R.id.nav_logout:
-                if (offlineMode.isConnectedToRemoteAPI(this)) {
-                    sessionManager.logout(this);
-                    finish();
-                }
-                break;
-        }
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
+//    @Override
+//    public boolean onNavigationItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.challenges:
+//                Intent goToChallenges = new Intent(this, MainActivity.class);
+//                startActivity(goToChallenges);
+//                finish();
+//                break;
+//            case R.id.friends:
+//                Intent goToFriends = new Intent(this, FriendsActivity.class);
+//                startActivity(goToFriends);
+//                finish();
+//                break;
+//            case R.id.history:
+//                Intent goToHistory = new Intent(this, HistoryActivity.class);
+//                startActivity(goToHistory);
+//                finish();
+//                break;
+//            case R.id.settings:
+//                Intent goToSettings = new Intent(this, SettingsActivity.class);
+//                startActivity(goToSettings);
+//                finish();
+//                break;
+//            case R.id.pending_duels:
+//                Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
+//                startActivity(goToPendingDuel);
+//                finish();
+//                break;
+//            case R.id.share:
+//                String message = getString(R.string.share_text2);
+//                Intent share = new Intent(Intent.ACTION_SEND);
+//                share.setType("text/plain");
+//                share.putExtra(Intent.EXTRA_TEXT, message);
+//                startActivity(Intent.createChooser(share, getString(R.string.how_would_you_like_to_share)));
+//                break;
+//            case R.id.nav_logout:
+//                if (offlineMode.isConnectedToRemoteAPI(this)) {
+//                    sessionManager.logout(this);
+//                    finish();
+//                }
+//                break;
+//        }
+//        drawer.closeDrawer(GravityCompat.START);
+//        return true;
+//    }
 
 
 }
