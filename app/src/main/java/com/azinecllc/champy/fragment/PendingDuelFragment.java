@@ -42,13 +42,6 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
     public SQLiteDatabase db;
 
 
-    public static PendingDuelFragment newInstance(int page) {
-        Bundle args = new Bundle();
-        args.putInt(ARG_PAGE, page);
-        PendingDuelFragment fragment = new PendingDuelFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,14 +51,15 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         final String userId = sessionManager.getUserId();
         cc = new ChallengeController(getContext(), getActivity(), token, userId);
         inProgressCount = Integer.parseInt(sessionManager.getChampyOptions().get("challenges"));
+        dbHelper = DBHelper.getInstance(getContext());
+        db = dbHelper.getWritableDatabase();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.item_pending_duel, container, false);
-        dbHelper = DBHelper.getInstance(getContext());
-        db = dbHelper.getWritableDatabase();
+
         final Bundle args = this.getArguments();
         c = db.query("pending_duel", null, null, null, null, null, null);
         position = args.getInt(ARG_PAGE);
@@ -169,10 +163,10 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
                 onClickAccept(view);
                 break;
             case R.id.btn_cancel:
-                onClickCancer(view);
+                onClickCancel(view);
                 break;
             case R.id.btn_cancelc:
-                onClickCancer(view);
+                onClickCancel(view);
                 break;
         }
 
@@ -186,7 +180,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
     }
 
 
-    private void onClickCancer(View view) {
+    private void onClickCancel(View view) {
         snackbar = Snackbar.make(view, R.string.are_you_sure, Snackbar.LENGTH_LONG).setAction(R.string.yes, vCancel -> {
             try {
                 cc.rejectInviteForPendingDuel(challenge_id);
@@ -202,10 +196,8 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
     private void onClickAccept(View view) {
         snackbar = Snackbar.make(view, getString(R.string.are_you_sure), Snackbar.LENGTH_LONG).setAction(getString(R.string.yes), vAccept -> {
             try {
-
                 if (!cc.isActive(description) && recipient.equals("true") && inProgressCount < 10) {
                     cc.joinToChallenge(challenge_id);
-                    //snackbar = Snackbar.make(vAccept, getString(R.string.challenge_created), Snackbar.LENGTH_SHORT);
                 } else {
                     snackbar = Snackbar.make(vAccept, getString(R.string.cant_create_this_challenge), Snackbar.LENGTH_SHORT);
                 }
@@ -217,5 +209,12 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         snackbar.show();
     }
 
+    public static PendingDuelFragment newInstance(int page) {
+        Bundle args = new Bundle();
+        args.putInt(ARG_PAGE, page);
+        PendingDuelFragment fragment = new PendingDuelFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
 }

@@ -507,11 +507,13 @@ public class ChallengeController {
                         }
                     }
 
+                    System.out.println("Refresh Pending Cards is Success");
                     //if (intent != null) {
                         generateCardsForMainActivity(intent);
                     //}
 
                 } else {
+                    System.out.println("Refresh Pending Cards is failed");
                     Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
             }
