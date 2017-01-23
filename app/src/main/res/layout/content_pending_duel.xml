@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".activity.PendingDuelActivity"
-    tools:showIn="@layout/app_bar_pending__duel"
+    tools:showIn="@layout/app_bar_pending_duel"
     android:background="@drawable/gradient_self"
     android:id="@+id/pending_duel">
 
