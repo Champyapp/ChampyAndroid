@@ -18,7 +18,6 @@ import android.widget.TextView;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.data.DBHelper;
-import com.azinecllc.champy.helper.CHSetupUI;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
 

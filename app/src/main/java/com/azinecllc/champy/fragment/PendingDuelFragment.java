@@ -22,8 +22,6 @@ import com.azinecllc.champy.utils.SessionManager;
 
 import java.io.IOException;
 
-import static java.lang.Math.round;
-
 public class PendingDuelFragment extends Fragment implements View.OnClickListener {
 
     public static final String ARG_PAGE = "ARG_PAGE";
