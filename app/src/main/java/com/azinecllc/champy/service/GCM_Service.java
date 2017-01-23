@@ -9,6 +9,9 @@ import com.google.android.gms.iid.InstanceID;
 
 import java.io.IOException;
 
+/**
+ * useless
+ */
 public class GCM_Service extends IntentService {
 
     private static final String[] TOPICS = {"global"};

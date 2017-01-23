@@ -33,9 +33,6 @@ public class CustomNotifyReceiver extends BroadcastReceiver {
         if (sessionManager.isUserLoggedIn()) {
             sendNotification(context);
         }
-        //else {
-        //    Log.d(TAG, "onReceive: can't send notification: not logged in");
-        //}
 
     }
 

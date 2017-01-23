@@ -168,12 +168,12 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                         buttonDone.setVisibility(View.VISIBLE);
                         buttonShare.setVisibility(View.INVISIBLE);
                         tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
-//                        if (now > myProgress + oneDay + (10 * 60)) {
-//                            tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
-//                            buttonShare.setVisibility(View.VISIBLE);
-//                            buttonDone.setVisibility(View.INVISIBLE);
-//                            tvEveryDayForTheNext.setVisibility(View.VISIBLE);
-//                        }
+                        if (now > myProgress + oneDay + (10 * 60)) {
+                            tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
+                            buttonShare.setVisibility(View.VISIBLE);
+                            buttonDone.setVisibility(View.INVISIBLE);
+                            tvEveryDayForTheNext.setVisibility(View.VISIBLE);
+                        }
                     }
                 } else {
                     tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
@@ -223,7 +223,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                     buttonDone.setVisibility(View.INVISIBLE);
                     buttonShare.setVisibility(View.VISIBLE);
                     tvDuration.setVisibility(View.VISIBLE);
-                    cc.doneForToday(itemInProgressId, currentCard.getWakeUpTime(), itemGoal, goMain);
+                    cc.doneForToday(itemInProgressId, itemGoal, goMain);
                     snackbar = Snackbar.make(v, "Well done!", Snackbar.LENGTH_SHORT);
                     snackbar.show();
                 } catch (IOException e) {
