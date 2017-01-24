@@ -17,6 +17,7 @@ import com.android.debug.hv.ViewServer;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.controller.DailyRemindController;
 import com.azinecllc.champy.helper.AppSync;
+import com.azinecllc.champy.helper.CHUploadPhoto;
 import com.azinecllc.champy.helper.UpdatePushIdentifier;
 import com.azinecllc.champy.interfaces.NewUser;
 import com.azinecllc.champy.model.user.Data;
@@ -128,7 +129,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 AppSync sync = new AppSync(fb_id, json, path_to_pic, LoginActivity.this, token_android);
                                 sync.getUserProfile();
 
-                                registerUser(fb_id, name, user_email, json, token_android);
+                                registerUser(fb_id, name, user_email, json, token_android, path_to_pic);
                             } catch (Exception e) {
                                 Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_LONG).show();
                             }
@@ -227,7 +228,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    private void registerUser(String fbID, String name, String email, String gcm, String token_android) throws JSONException {
+    private void registerUser(String fbID, String name, String email, String gcm, String token_android, String fb_photo) throws JSONException {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("facebookId", fb_id);
@@ -275,12 +276,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
                     String api_photo_path = null;
+                    CHUploadPhoto chUploadPhoto = new CHUploadPhoto(getApplicationContext());
                     if (user.getPhoto() != null) {
                         File profile = new File(path, "profile.jpg");
                         if (!profile.exists()) {
                             com.azinecllc.champy.model.user.Photo photo = user.getPhoto();
                             api_photo_path = API_URL + photo.getLarge();
                         }
+                    } else {
+                        chUploadPhoto.uploadPhotoForAPI(fb_photo);
                     }
 
                     if (api_photo_path == null) {

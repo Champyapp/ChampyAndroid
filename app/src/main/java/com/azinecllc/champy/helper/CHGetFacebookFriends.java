@@ -81,11 +81,10 @@ public class CHGetFacebookFriends {
                                     if (data.getPhoto() != null) {
                                         photo = API_URL + data.getPhoto().getMedium();
                                     } else {
+                                        // need to use champy icon.
                                         try {
                                             URL profile_pic = new URL(
-                                                    "https://graph.facebook.com/"
-                                                            + fb_id
-                                                            + "/picture?type=large");
+                                                    "https://graph.facebook.com/" + fb_id + "/picture?type=large");
                                             photo = profile_pic.toString();
                                         } catch (MalformedURLException e) {
                                             e.printStackTrace();

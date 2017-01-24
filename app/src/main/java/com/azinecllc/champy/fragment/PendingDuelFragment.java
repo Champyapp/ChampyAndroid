@@ -85,17 +85,9 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
 
         c.close();
 
-        //int screenWidth = getActivity().getWindowManager().getDefaultDisplay().getWidth();
-        //int x = round(screenWidth/100);
-
         btnAccept = (ImageButton)view.findViewById(R.id.btn_accept);
         btnCancel = (ImageButton)view.findViewById(R.id.btn_cancel);
         btnCancelC = (ImageButton) view.findViewById(R.id.btn_cancelc);
-
-//        btnAccept.getLayoutParams().height = x*10;
-//        btnAccept.getLayoutParams().width = x*10;
-//        btnCancel.getLayoutParams().height = x*10;
-//        btnCancel.getLayoutParams().width = x*10;
 
         typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
         viewPager = (ViewPager)getActivity().findViewById(R.id.pager_pending_duel);
@@ -195,11 +187,8 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         snackbar = Snackbar.make(view, getString(R.string.are_you_sure), Snackbar.LENGTH_LONG).setAction(getString(R.string.yes), vAccept -> {
             try {
                 if (!cc.isActive(description) && recipient.equals("true") && inProgressCount < 10) {
-                    cc.joinToChallenge(challenge_id);
-                } else {
-                    snackbar = Snackbar.make(vAccept, getString(R.string.cant_create_this_challenge), Snackbar.LENGTH_SHORT);
+                    cc.joinToChallenge(challenge_id, view);
                 }
-                snackbar.show();
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }

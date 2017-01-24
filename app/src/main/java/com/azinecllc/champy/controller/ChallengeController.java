@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.design.widget.Snackbar;
+import android.view.View;
 import android.widget.Toast;
 
 import com.azinecllc.champy.R;
@@ -369,7 +371,7 @@ public class ChallengeController {
      *                     this we can make call to API for create this challenge. After that
      *                     we can refresh pending card to get new data.
      */
-    public void joinToChallenge(String inProgressId) {
+    public void joinToChallenge(String inProgressId, View view) {
         SingleInProgress singleInProgress = retrofit.create(SingleInProgress.class);
 
         Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = singleInProgress.join(inProgressId, token);
@@ -377,9 +379,12 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
+                    Snackbar snackbar = Snackbar.make(view, context.getString(R.string.challenge_canceled), Snackbar.LENGTH_SHORT);
+                    snackbar.show();
                     refreshCardsForPendingDuel(new Intent(activity, MainActivity.class));
                 } else {
-                    Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                    Snackbar snackbar = Snackbar.make(view, context.getString(R.string.cant_create_this_challenge), Snackbar.LENGTH_SHORT);
+                    snackbar.show();
                     refreshCardsForPendingDuel(new Intent(activity, MainActivity.class));
                 }
             }
