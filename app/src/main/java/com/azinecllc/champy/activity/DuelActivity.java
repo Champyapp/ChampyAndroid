@@ -68,7 +68,6 @@ public class DuelActivity extends AppCompatActivity {
 
 
         File fileProfile = new File(path, "profile.jpg");
-        File fileBlur = new File(path, "blurred.png");
         Uri uriProfile = Uri.fromFile(fileProfile);
 //        Uri uriBlur = Uri.fromFile(fileBlur);
 

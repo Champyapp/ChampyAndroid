@@ -3,6 +3,7 @@ package com.azinecllc.champy.helper;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.StrictMode;
 
 import com.azinecllc.champy.data.DBHelper;
@@ -82,13 +83,15 @@ public class CHGetFacebookFriends {
                                         photo = API_URL + data.getPhoto().getMedium();
                                     } else {
                                         // need to use champy icon.
-                                        try {
-                                            URL profile_pic = new URL(
-                                                    "https://graph.facebook.com/" + fb_id + "/picture?type=large");
-                                            photo = profile_pic.toString();
-                                        } catch (MalformedURLException e) {
-                                            e.printStackTrace();
-                                        }
+                                        //try {
+                                        //    URL profile_pic = new URL(
+                                        //            "https://graph.facebook.com/" + fb_id + "/picture?type=large");
+                                        //    photo = profile_pic.toString();
+                                        //} catch (MalformedURLException e) {
+                                        //    e.printStackTrace();
+                                        //}
+                                        Uri uri = Uri.parse("android.resource://com.azinecllc.champy/drawable/ic_champy_circle");
+                                        photo = uri.toString();
                                     }
                                     final String name = data.getName();
                                     cv.put("name", name);
