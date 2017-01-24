@@ -173,9 +173,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
     private void onClickCancel(View view) {
         snackbar = Snackbar.make(view, R.string.are_you_sure, Snackbar.LENGTH_LONG).setAction(R.string.yes, vCancel -> {
             try {
-                cc.rejectInviteForPendingDuel(challenge_id);
-                snackbar = Snackbar.make(vCancel, getString(R.string.challenge_canceled), Snackbar.LENGTH_SHORT);
-                snackbar.show();
+                cc.rejectInviteForPendingDuel(challenge_id, view);
             } catch (IOException | NullPointerException e) {
                 e.printStackTrace();
             }
@@ -188,6 +186,9 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
             try {
                 if (!cc.isActive(description) && recipient.equals("true") && inProgressCount < 10) {
                     cc.joinToChallenge(challenge_id, view);
+                } else {
+                    snackbar = Snackbar.make(view, getString(R.string.cant_create_this_challenge), Snackbar.LENGTH_SHORT);
+                    snackbar.show();
                 }
             } catch (NullPointerException e) {
                 e.printStackTrace();

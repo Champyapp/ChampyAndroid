@@ -144,8 +144,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 request.setParameters(parameters);
                 request.executeAsync();
                 spinner.setVisibility(View.INVISIBLE);
-//                spinner = findViewById(R.id.loadingPanel);
-//                spinner.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -190,7 +188,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        spinner.setVisibility(View.INVISIBLE);
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
         ViewServer.get(this).removeWindow(this);
@@ -261,6 +258,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             user_name, email, fb_id, path_to_pic,
                             jwtString, id, pushN, newChallReq, acceptedYour,
                             challegeEnd, "true", "true", gcm, token_android);
+
+                    System.out.println("token: " + jwtString);
 
                     sessionManager.setChampyOptions(
                             user.getAllChallengesCount().toString(),

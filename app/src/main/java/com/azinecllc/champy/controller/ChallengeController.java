@@ -383,7 +383,7 @@ public class ChallengeController {
                     snackbar.show();
                     refreshCardsForPendingDuel(new Intent(activity, MainActivity.class));
                 } else {
-                    Snackbar snackbar = Snackbar.make(view, context.getString(R.string.cant_create_this_challenge), Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar.make(view, context.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);
                     snackbar.show();
                     refreshCardsForPendingDuel(new Intent(activity, MainActivity.class));
                 }
@@ -396,7 +396,7 @@ public class ChallengeController {
         });
     }
 
-    public void rejectInviteForPendingDuel(String inProgressId) throws IOException {
+    public void rejectInviteForPendingDuel(String inProgressId, View view) throws IOException {
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
 
         Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = activeInProgress.reject(inProgressId, token);
@@ -405,8 +405,11 @@ public class ChallengeController {
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     refreshCardsForPendingDuel(new Intent(activity, MainActivity.class));
+                    Snackbar snackbar = Snackbar.make(view, context.getString(R.string.challenge_canceled), Snackbar.LENGTH_SHORT);
+                    snackbar.show();
                 } else {
-                    Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                    Snackbar snackbar = Snackbar.make(view, context.getString(R.string.service_not_available), Snackbar.LENGTH_SHORT);
+                    snackbar.show();
                 }
             }
 

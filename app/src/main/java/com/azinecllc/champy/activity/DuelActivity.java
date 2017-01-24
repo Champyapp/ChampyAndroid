@@ -83,6 +83,7 @@ public class DuelActivity extends AppCompatActivity {
                 .load(uriProfile)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
+                .centerCrop()
                 .into(imageMyPhoto);
 
         TextView tvIChallengeMyFriendTo = (TextView) findViewById(R.id.tvIChallengeMyFriendTo);

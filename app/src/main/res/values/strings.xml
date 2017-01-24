@@ -211,7 +211,7 @@
     <string name="challenge_canceled">Challenge canceled</string>
     <string name="sent_duel_request">Sent duel request</string>
     <string name="you_have_too_much_challenges">You have too much challenges</string>
-    <string name="service_not_available">Service Not Available Try Again Later</string>
+    <string name="service_not_available">Service is not available. Try again later</string>
     <string name="self_improvement">Self-Improvement</string>
     <string name="duel_challenge">Duel challenge</string>
     <string name="i_challenge_my_friend_to">I challenge my friend to</string>
