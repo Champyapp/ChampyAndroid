@@ -38,19 +38,11 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
     private SessionManager sessionManager;
     private DrawerLayout drawer;
 
-//    private int[] tabIcons = {
-//            R.drawable.ic_tab_friends,
-//            R.drawable.ic_tab_pending,
-//            R.drawable.ic_tab_others
-//    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_friends);
-        //spinner = (View)findViewById(R.id.loadingPanel);
-        //spinner.setVisibility(View.VISIBLE);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -154,7 +146,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
     @Override
     protected void onResume() {
         super.onResume();
-        // TODO: 1/11/17 Check on low devices
         View spinner = findViewById(R.id.loadingPanel);
         if (spinner.getVisibility() == View.VISIBLE) {
             spinner.setVisibility(View.INVISIBLE);

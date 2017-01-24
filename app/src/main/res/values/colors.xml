@@ -25,12 +25,4 @@
     <color name="champy_gradient_end">#365060</color>
 
 
-    <!--<color name="self_gradient_start">#a64f5d</color>-->
-    <!--<color name="self_gradient_center">#f3a358</color>-->
-    <!--<color name="self_gradient_end">#f8da99</color>-->
-
-    <!--<color name="self_gradient_start">#943e60</color>-->
-    <!--<color name="self_gradient_center">#e59058</color>-->
-    <!--<color name="self_gradient_end">#f8da97</color>-->
-
 </resources>
