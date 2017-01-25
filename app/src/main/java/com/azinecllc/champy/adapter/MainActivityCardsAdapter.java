@@ -175,6 +175,11 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                             tvEveryDayForTheNext.setVisibility(View.VISIBLE);
                         }
                     }
+                } else {
+                    tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
+                    buttonShare.setVisibility(View.VISIBLE);
+                    buttonDone.setVisibility(View.INVISIBLE);
+                    tvEveryDayForTheNext.setVisibility(View.VISIBLE);
                 }
 //                else {
 //                    String[] wakeArray = currentCard.getWakeUpTime().replace("[", "").replace("]", "").split(",");
