@@ -55,6 +55,7 @@ import static java.lang.Math.round;
 
 public class ChallengeController {
 
+    public static final String TAG = "ChallengeController";
     private static final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
     private String token, userID;
     private Activity activity;
@@ -249,17 +250,26 @@ public class ChallengeController {
         final String duration   = String.format("%s", days * oneDay);
         final String wakeUpName = "Wake up at " + sHour + ":" + sMinute;
         final String wakeUpTime = sHour + sMinute;
+
         final int intHour = Integer.parseInt(sHour);
         final int intMin  = Integer.parseInt(sMinute);
         final int alarmID = Integer.parseInt(wakeUpTime);
 
         Calendar c = GregorianCalendar.getInstance();
-        //Log.d(TAG, "createNewWakeUpChallenge: calendar: " + c);
+        Log.d(TAG, "createNewWakeUpChallenge: calendar: " + c);
+
+        if (System.currentTimeMillis() > c.getTimeInMillis()) {
+            Log.d(TAG, "createNewWakeUpChallenge: now > input. need to add one day");
+            Log.d(TAG, "createNewWakeUpChallenge: " + System.currentTimeMillis() + " > " + c.getTimeInMillis());
+            c.add(Calendar.DAY_OF_YEAR, 1);
+            Log.d(TAG, "createNewWakeUpChallenge: new date for ring: " + c.getTime());
+        }
+
         final long currentMidnight = System.currentTimeMillis() / 1000
                 - (c.get(Calendar.HOUR_OF_DAY) * 60 * 60)
                 - (c.get(Calendar.MINUTE) * 60)
                 - (c.get(Calendar.SECOND));
-        //Log.d(TAG, "currentMidnight: " + currentMidnight);
+        Log.d(TAG, "currentMidnight: " + currentMidnight);
 
         // TODO: 1/24/17 треба передвигати час на 1 сутку вперед якшо now > firstAlarmTime
         final String[] details = new String[days];
@@ -271,7 +281,7 @@ public class ChallengeController {
                             + (i * (24 * 60 * 60)));
         }
 
-        //Log.d(TAG, "details: " + Arrays.toString(details));
+        Log.d(TAG, "details: " + Arrays.toString(details));
 
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
         Call<com.azinecllc.champy.model.create_challenge.CreateChallenge> call = createChallenge
@@ -694,7 +704,6 @@ public class ChallengeController {
      *                     method we put in our array 'for' to compare current time with elements
      *                     inside array. If current time is more than 'i[0]' then we get next 'i'
      *                     and do it while current time will be smaller than i[n];
-     *
      * @value details - cleaned up our array from '[1, 2, 3]' to '1, 2, 3'
      * @value now     - current time on the device in seconds
      */

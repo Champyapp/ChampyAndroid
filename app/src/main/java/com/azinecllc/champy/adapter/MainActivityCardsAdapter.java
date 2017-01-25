@@ -175,24 +175,25 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                             tvEveryDayForTheNext.setVisibility(View.VISIBLE);
                         }
                     }
-                } else {
-                    String[] wakeArray = currentCard.getWakeUpTime().replace("[", "").replace("]", "").split(",");
-                    System.out.println(Arrays.toString(wakeArray));
-                    System.out.println(wakeArray[0]);
-                    int firstAlarm = Integer.parseInt(wakeArray[0]);
-                    if (now > firstAlarm) {
-                        tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
-                        buttonDone.setVisibility(View.VISIBLE);
-                        buttonShare.setVisibility(View.INVISIBLE);
-                        tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
-                    } else {
-                        tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
-                        buttonShare.setVisibility(View.VISIBLE);
-                        buttonDone.setVisibility(View.INVISIBLE);
-                        tvEveryDayForTheNext.setVisibility(View.VISIBLE);
-                        //}
-                    }
                 }
+//                else {
+//                    String[] wakeArray = currentCard.getWakeUpTime().replace("[", "").replace("]", "").split(",");
+//                    System.out.println(Arrays.toString(wakeArray));
+//                    System.out.println(wakeArray[0]);
+//                    int firstAlarm = Integer.parseInt(wakeArray[0]);
+//                    if (now > firstAlarm) {
+//                        tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
+//                        buttonDone.setVisibility(View.VISIBLE);
+//                        buttonShare.setVisibility(View.INVISIBLE);
+//                        tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
+//                    } else {
+//                        tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
+//                        buttonShare.setVisibility(View.VISIBLE);
+//                        buttonDone.setVisibility(View.INVISIBLE);
+//                        tvEveryDayForTheNext.setVisibility(View.VISIBLE);
+                        //}
+//                    }
+//                }
                 //~~~~~~~~~~
                 break;
             case "Duel":

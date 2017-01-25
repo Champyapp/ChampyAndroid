@@ -72,6 +72,7 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
             file.delete();
         }
         try {
+            file.createNewFile();
             FileOutputStream out = new FileOutputStream(file);
             bitmapImage.compress(Bitmap.CompressFormat.JPEG, 90, out);
             out.flush();
