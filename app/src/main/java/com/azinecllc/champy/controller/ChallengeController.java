@@ -250,19 +250,12 @@ public class ChallengeController {
         final String duration = String.format("%s", days * oneDay);       // 'n' Days
         final String wakeUpName = "Wake up at " + sHour + ":" + sMinute;    // Wake up at 'n':'n'
         final String wakeUpTime = sHour + sMinute;                          // 1253
-        Log.i(TAG, "createNewWakeUpChallenge: duration:      " + duration);
-        Log.i(TAG, "createNewWakeUpChallenge: wakeUpName:    " + wakeUpName);
-        Log.i(TAG, "createNewWakeUpChallenge: wakeUpTime:    " + wakeUpTime);
-
         final int intHour = Integer.parseInt(sHour);
         final int intMin  = Integer.parseInt(sMinute);
         final int alarmID = Integer.parseInt(wakeUpTime);
-        Log.i(TAG, "createNewWakeUpChallenge: intHour:       " + intHour);
-        Log.i(TAG, "createNewWakeUpChallenge: intMin:        " + intMin);
-        Log.i(TAG, "createNewWakeUpChallenge: alarmID:       " + alarmID);
 
         Calendar c = GregorianCalendar.getInstance();                       // just  calendar
-        final long currentMidnight = System.currentTimeMillis() / 1000      // midnight in seconds.
+        long currentMidnight = System.currentTimeMillis() / 1000      // midnight in seconds.
                 - (c.get(Calendar.HOUR_OF_DAY) * 60 * 60)
                 - (c.get(Calendar.MINUTE) * 60)
                 - (c.get(Calendar.SECOND));
@@ -278,16 +271,16 @@ public class ChallengeController {
         Log.i(TAG, "createNewWakeUpChallenge: curr cal:      " + c.getTimeInMillis() / 1000 + " (in sec)");
 
         Log.i(TAG, "createNewWakeUpChallenge: . . . . . . . .");
-        Log.i(TAG, "createNewWakeUpChallenge: now > curr cal ???");
+        Log.i(TAG, "createNewWakeUpChallenge: now > custom calendar ???");
 
         if (System.currentTimeMillis() > c.getTimeInMillis()) {
             c.add(Calendar.DAY_OF_YEAR, 1);                                 // if (now > ringTime) then add one day
-            Log.i(TAG, "createNewWakeUpChallenge: now > curr cal");
+            Log.i(TAG, "createNewWakeUpChallenge: YES! ADDED 1 DAY!");
             Log.i(TAG, "createNewWakeUpChallenge: added 1 day!");
             Log.i(TAG, "createNewWakeUpChallenge: curr time: " + System.currentTimeMillis());
             Log.i(TAG, "createNewWakeUpChallenge: curr cal:  " + c.getTimeInMillis());
         } else {
-            Log.i(TAG, "createNewWakeUpChallenge: now < curr cal");
+            Log.i(TAG, "createNewWakeUpChallenge: NO! VSE OK!");
             Log.i(TAG, "createNewWakeUpChallenge: curr time: " + System.currentTimeMillis());
             Log.i(TAG, "createNewWakeUpChallenge: curr cal:  " + c.getTimeInMillis());
         }
@@ -296,7 +289,7 @@ public class ChallengeController {
         for (int i = 0; i < days; i++) {
             details[i] = String.valueOf(
                     currentMidnight
-                            + (intMin * 60) // mb c.get(Calender.MINUTE)
+                            + (intMin * 60)
                             + (intHour * 60 * 60)
                             + (i * (24 * 60 * 60)));
         }
@@ -467,12 +460,12 @@ public class ChallengeController {
                     String type = response.body().getData().getChallenge().getType();
                     int end = response.body().getData().getEnd();
                     long now = System.currentTimeMillis() / 1000;
-                    System.out.println("now: " + System.currentTimeMillis() / 1000);
-                    System.out.println("end: " + (end - oneDay));
+                    Log.i(TAG, "now: " + System.currentTimeMillis() / 1000);
+                    Log.i(TAG, "end: " + (end - oneDay));
 
                     if (type.equals(typeWake) && (now > end - oneDay)) {
                         //setNewAlarmClock(details, alarmID);
-                        System.out.println("now < end :)");
+                        Log.i(TAG, "now < end :)");
                         Intent myIntent = new Intent(activity, CustomAlarmReceiver.class);
                         PendingIntent pendingIntent = PendingIntent.getBroadcast(activity, Integer.valueOf(alarmID), myIntent, 0);
                         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
