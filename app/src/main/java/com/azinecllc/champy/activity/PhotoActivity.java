@@ -1,5 +1,6 @@
 package com.azinecllc.champy.activity;
 
+import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -38,8 +40,7 @@ import static com.azinecllc.champy.utils.Constants.path;
 
 public class PhotoActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String WRITE_EXTERNAL_STORAGE = "android.permission.WRITE_EXTERNAL_STORAGE";
-    private static final int CHAMPY_PERMISSIONS = 228;
+    private static final String READ_EXTERNAL_STORAGE = "android.permission.READ_EXTERNAL_STORAGE";
     private static final int CAMERA_REQUEST = 1888;
     private static final int SELECT_FILE = 1999;
     private static final int CROP_PIC = 1777;
@@ -102,17 +103,36 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
                         break;
                 }
             } else {
-                Toast.makeText(this, "No Permission Granted", Toast.LENGTH_LONG).show();
-                startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                        Uri.fromParts("package", getPackageName(), null)));
+                /************************ for API >= 23 *************************/
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                /****************************************************************/
+                return;
             }
         }
     }
 
 
     private boolean checkWriteExternalPermission() {
-        int res = this.checkCallingOrSelfPermission(WRITE_EXTERNAL_STORAGE);
+        int res = this.checkCallingOrSelfPermission(READ_EXTERNAL_STORAGE);
         return (res == PackageManager.PERMISSION_GRANTED);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the contacts-related task you need to do.
+                }
+//                else {
+//                      //permission denied, boo! Disable the functionality that depends on this permission.
+//                    Toast.makeText(this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
+//                }
+                return;
+            }
+            // other 'case' lines to check for other permissions this app might request
+        }
     }
 
 
