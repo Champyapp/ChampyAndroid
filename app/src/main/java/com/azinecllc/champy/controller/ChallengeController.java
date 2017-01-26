@@ -247,42 +247,28 @@ public class ChallengeController {
      * @param sMinute - all description is equal to @sHour
      */
     public void createNewWakeUpChallenge(int days, String sHour, String sMinute) {
-        final String duration = String.format("%s", days * oneDay);       // 'n' Days
-        final String wakeUpName = "Wake up at " + sHour + ":" + sMinute;    // Wake up at 'n':'n'
-        final String wakeUpTime = sHour + sMinute;                          // 1253
+        final String duration = String.format("%s", days * oneDay);
+        final String wakeUpName = "Wake up at " + sHour + ":" + sMinute;
+        final String wakeUpTime = sHour + sMinute;
+
         final int intHour = Integer.parseInt(sHour);
         final int intMin  = Integer.parseInt(sMinute);
         final int alarmID = Integer.parseInt(wakeUpTime);
 
-        Calendar c = GregorianCalendar.getInstance();                       // just  calendar
-        long currentMidnight = System.currentTimeMillis() / 1000      // midnight in seconds.
+        Calendar c = GregorianCalendar.getInstance();
+        long currentMidnight = System.currentTimeMillis() / 1000
                 - (c.get(Calendar.HOUR_OF_DAY) * 60 * 60)
                 - (c.get(Calendar.MINUTE) * 60)
                 - (c.get(Calendar.SECOND));
 
-        Log.i(TAG, "createNewWakeUpChallenge: calendar:      " + c.getTimeInMillis() / 1000 + " (in sec)");
-        Log.i(TAG, "createNewWakeUpChallenge: midnight:      " + currentMidnight);
 
-        Date date = new Date();                                             // creating new date
-        date.setTime(((intMin * 60) + (intHour * 60 * 60) + currentMidnight) * 1000);  // setting time from time picker
-        c.setTime(date);                                                    //now our calendar has a right time for ring
-
-        Log.i(TAG, "createNewWakeUpChallenge: dateTime:      " + date.getTime());
-        Log.i(TAG, "createNewWakeUpChallenge: curr cal:      " + c.getTimeInMillis() / 1000 + " (in sec)");
-
-        Log.i(TAG, "createNewWakeUpChallenge: . . . . . . . .");
-        Log.i(TAG, "createNewWakeUpChallenge: now > custom calendar ???");
+        Date date = new Date();
+        date.setTime(((intMin * 60) + (intHour * 60 * 60) + currentMidnight) * 1000);
+        c.setTime(date); // here calender = time from picker
 
         if (System.currentTimeMillis() > c.getTimeInMillis()) {
-            c.add(Calendar.DAY_OF_YEAR, 1);                                 // if (now > ringTime) then add one day
-            Log.i(TAG, "createNewWakeUpChallenge: YES! ADDED 1 DAY!");
-            Log.i(TAG, "createNewWakeUpChallenge: added 1 day!");
-            Log.i(TAG, "createNewWakeUpChallenge: curr time: " + System.currentTimeMillis());
-            Log.i(TAG, "createNewWakeUpChallenge: curr cal:  " + c.getTimeInMillis());
-        } else {
-            Log.i(TAG, "createNewWakeUpChallenge: NO! VSE OK!");
-            Log.i(TAG, "createNewWakeUpChallenge: curr time: " + System.currentTimeMillis());
-            Log.i(TAG, "createNewWakeUpChallenge: curr cal:  " + c.getTimeInMillis());
+            c.add(Calendar.DAY_OF_YEAR, 1);
+            currentMidnight += oneDay;
         }
 
         final String[] details = new String[days];
@@ -293,8 +279,6 @@ public class ChallengeController {
                             + (intHour * 60 * 60)
                             + (i * (24 * 60 * 60)));
         }
-
-        Log.i(TAG, "createNewWakeUpChallenge: details[days]: " + Arrays.toString(details));
 
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
         Call<com.azinecllc.champy.model.create_challenge.CreateChallenge> call = createChallenge.createChallenge(

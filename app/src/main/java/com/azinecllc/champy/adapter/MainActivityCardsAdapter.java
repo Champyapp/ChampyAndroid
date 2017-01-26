@@ -14,9 +14,11 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.MainActivity;
+import com.azinecllc.champy.activity.PendingDuelActivity;
 import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.model.SelfImprovement_model;
 import com.azinecllc.champy.utils.SessionManager;
@@ -67,7 +69,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         String itemType = currentCard.getType();
         String itemNeedsToCheck = currentCard.getNeedsToCheck();
         String itemInProgressId = currentCard.getId();
-        String[] challengeProgress = itemProgress.replace("[", "").replace("]", "").split(" ");
+        String[] challengeProgress = itemProgress.replace("[", "").replace("]", "").split(", ");
 
         TextView tvChallengeType = (TextView) tempView.findViewById(R.id.tvChallengeType);
         tvChallengeType.setText(currentCard.getType());
@@ -161,42 +163,72 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
             case "Wake Up":
                 imageChallengeLogo.setImageResource(R.drawable.ic_wakeup_white);
                 tvChallengeDescription.setText(currentCard.getChallengeName());
-                //~~~~~~~~~~
-                if (myProgress != 0) {
-                    if (now > myProgress + oneDay) {
-                        tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
-                        buttonDone.setVisibility(View.VISIBLE);
-                        buttonShare.setVisibility(View.INVISIBLE);
-                        tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
-                        if (now > myProgress + oneDay + (10 * 60)) {
-                            tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
-                            buttonShare.setVisibility(View.VISIBLE);
-                            buttonDone.setVisibility(View.INVISIBLE);
-                            tvEveryDayForTheNext.setVisibility(View.VISIBLE);
+                tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
+                buttonShare.setVisibility(View.VISIBLE);
+                buttonDone.setVisibility(View.INVISIBLE);
+                tvEveryDayForTheNext.setVisibility(View.VISIBLE);
+
+                String[] wakeArray = currentCard.getWakeUpTime().replace("[", "").replace("]", "").split(", ");
+                int alarmTime = 0;
+                for (int i = 0; i < wakeArray.length; i++) {
+                    if (now < Long.parseLong(wakeArray[i])) {
+                        try {
+                            alarmTime = Integer.parseInt(wakeArray[i - 1]);
+                        } catch (IndexOutOfBoundsException ex) {
+                            alarmTime = Integer.parseInt(wakeArray[i]);
                         }
+                        break;
                     }
-                } else {
-                    tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
-                    buttonShare.setVisibility(View.VISIBLE);
-                    buttonDone.setVisibility(View.INVISIBLE);
-                    tvEveryDayForTheNext.setVisibility(View.VISIBLE);
                 }
-//                else {
+
+                System.out.println("array:" + Arrays.toString(wakeArray));
+                System.out.println("ring : " + alarmTime);
+                System.out.println("now  : " + now);
+                System.out.println(currentCard.getNeedsToCheck());
+                if (itemNeedsToCheck.equals("true") && (now > alarmTime)) {
+                    tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
+                    buttonDone.setVisibility(View.VISIBLE);
+                    buttonShare.setVisibility(View.INVISIBLE);
+                    tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
+                    if (now > alarmTime + 10 * 60) {
+                        tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
+                        buttonShare.setVisibility(View.VISIBLE);
+                        buttonDone.setVisibility(View.INVISIBLE);
+                        tvEveryDayForTheNext.setVisibility(View.VISIBLE);
+                    }
+                }
+
+
+                //~~~~~~~~~~
+//                if (myProgress != 0) {
+//                    if (now > myProgress + oneDay) {
+//                        tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
+//                        buttonDone.setVisibility(View.VISIBLE);
+//                        buttonShare.setVisibility(View.INVISIBLE);
+//                        tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
+//                        if (now > myProgress + oneDay + (10 * 60)) {
+//                            tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
+//                            buttonShare.setVisibility(View.VISIBLE);
+//                            buttonDone.setVisibility(View.INVISIBLE);
+//                            tvEveryDayForTheNext.setVisibility(View.VISIBLE);
+//                        }
+//                    }
+//                } else {
 //                    String[] wakeArray = currentCard.getWakeUpTime().replace("[", "").replace("]", "").split(",");
-//                    System.out.println(Arrays.toString(wakeArray));
-//                    System.out.println(wakeArray[0]);
 //                    int firstAlarm = Integer.parseInt(wakeArray[0]);
 //                    if (now > firstAlarm) {
 //                        tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
 //                        buttonDone.setVisibility(View.VISIBLE);
 //                        buttonShare.setVisibility(View.INVISIBLE);
 //                        tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
+////                    } else {
+////                        tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
+////                        buttonShare.setVisibility(View.VISIBLE);
+////                        buttonDone.setVisibility(View.INVISIBLE);
+////                        tvEveryDayForTheNext.setVisibility(View.VISIBLE);
+//                        //}
 //                    } else {
-//                        tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
-//                        buttonShare.setVisibility(View.VISIBLE);
-//                        buttonDone.setVisibility(View.INVISIBLE);
-//                        tvEveryDayForTheNext.setVisibility(View.VISIBLE);
-                        //}
+//                        Toast.makeText(getContext(), "WTF!?!?!?!?!", Toast.LENGTH_SHORT).show();
 //                    }
 //                }
                 //~~~~~~~~~~
