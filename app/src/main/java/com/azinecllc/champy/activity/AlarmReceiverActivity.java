@@ -32,7 +32,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
     private MediaPlayer mMediaPlayer;
     private ChallengeController cc;
     private String progressID, alarmID;
-    //private String details;
+    private String details;
     public Context context;
     public Activity activity;
 
@@ -42,7 +42,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
         FacebookSdk.sdkInitialize(getApplicationContext());
 
         alarmID = getIntent().getStringExtra("finalAlarmID");
-        //details = getIntent().getStringExtra("finalDetails");
+        details = getIntent().getStringExtra("finalDetails");
         progressID = getIntent().getStringExtra("finalInProgressID");
 
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -95,7 +95,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
                     }
                     if (offlineMode.isConnectedToRemoteAPI(this)) {
                         try {
-                            cc.doneForToday(progressID, alarmID, intent);
+                            cc.doneForToday(progressID, alarmID, intent, details);
                             //cc.setNewAlarmClock(details, alarmID);
                         } catch (IOException e) {
                             e.printStackTrace();

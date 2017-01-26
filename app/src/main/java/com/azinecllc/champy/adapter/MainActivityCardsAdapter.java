@@ -69,7 +69,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         String itemType = currentCard.getType();
         String itemNeedsToCheck = currentCard.getNeedsToCheck();
         String itemInProgressId = currentCard.getId();
-        String[] challengeProgress = itemProgress.replace("[", "").replace("]", "").split(", ");
+        String[] challengeProgress = itemProgress.replace("[", "").replace("]", "").split(",");
 
         TextView tvChallengeType = (TextView) tempView.findViewById(R.id.tvChallengeType);
         tvChallengeType.setText(currentCard.getType());
@@ -169,34 +169,38 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                 tvEveryDayForTheNext.setVisibility(View.VISIBLE);
 
                 String[] wakeArray = currentCard.getWakeUpTime().replace("[", "").replace("]", "").split(", ");
-                int alarmTime = 0;
-                for (int i = 0; i < wakeArray.length; i++) {
-                    if (now < Long.parseLong(wakeArray[i])) {
-                        try {
-                            alarmTime = Integer.parseInt(wakeArray[i - 1]);
-                        } catch (IndexOutOfBoundsException ex) {
-                            alarmTime = Integer.parseInt(wakeArray[i]);
-                        }
-                        break;
-                    }
-                }
-
-                System.out.println("array:" + Arrays.toString(wakeArray));
-                System.out.println("ring : " + alarmTime);
-                System.out.println("now  : " + now);
-                System.out.println(currentCard.getNeedsToCheck());
-                if (itemNeedsToCheck.equals("true") && (now > alarmTime)) {
+                int prog = challengeProgress.length;
+                int nextAlarm;
+                nextAlarm = (Arrays.toString(challengeProgress).equals("[]"))
+                        ? Integer.parseInt(wakeArray[prog - 1])
+                        : Integer.parseInt(wakeArray[prog]);
+                if (now > nextAlarm) {
+                    // enable
                     tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
                     buttonDone.setVisibility(View.VISIBLE);
                     buttonShare.setVisibility(View.INVISIBLE);
                     tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
-                    if (now > alarmTime + 10 * 60) {
+                    if (now > nextAlarm + (60 * 60)) {
+                        // disable
                         tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
                         buttonShare.setVisibility(View.VISIBLE);
                         buttonDone.setVisibility(View.INVISIBLE);
                         tvEveryDayForTheNext.setVisibility(View.VISIBLE);
                     }
                 }
+
+//                if (itemNeedsToCheck.equals("true") && (now > alarmTime)) {
+//                    tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
+//                    buttonDone.setVisibility(View.VISIBLE);
+//                    buttonShare.setVisibility(View.INVISIBLE);
+//                    tvEveryDayForTheNext.setVisibility(View.INVISIBLE);
+//                    if (now > alarmTime + 60 * 60) {
+//                        tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
+//                        buttonShare.setVisibility(View.VISIBLE);
+//                        buttonDone.setVisibility(View.INVISIBLE);
+//                        tvEveryDayForTheNext.setVisibility(View.VISIBLE);
+//                    }
+//                }
 
 
                 //~~~~~~~~~~
@@ -273,7 +277,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                     buttonDone.setVisibility(View.INVISIBLE);
                     buttonShare.setVisibility(View.VISIBLE);
                     tvDuration.setVisibility(View.VISIBLE);
-                    cc.doneForToday(itemInProgressId, itemGoal, goMain);
+                    cc.doneForToday(itemInProgressId, itemGoal, goMain, currentCard.getWakeUpTime());
                     snackbar = Snackbar.make(v, "Well done!", Snackbar.LENGTH_SHORT);
                     snackbar.show();
                 } catch (IOException e) {
