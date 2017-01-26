@@ -55,7 +55,7 @@ import static java.lang.Math.round;
 
 public class ChallengeController {
 
-    public static final String TAG = "ChallengeController";
+    private static final String TAG = "ChallengeController";
     private static final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
     private String token, userID;
     private Activity activity;
@@ -82,7 +82,7 @@ public class ChallengeController {
      *             from EditText and pass value here. After that we convert current value of days
      *             to UnixTime because API works only with it and push it up.
      */
-    public void createNewSelfImprovementChallenge(String description, int days) {
+    public void createNewSelfImprovementChallenge(String description, int days, View view) {
         final String duration = "" + (days * 86400);
         final String details = description + " during this period: " + days + " days";
 
@@ -102,15 +102,17 @@ public class ChallengeController {
             public void onResponse(Response<com.azinecllc.champy.model.create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
-                    sendSingleInProgressForSelf(challengeId);
+                    sendSingleInProgressForSelf(challengeId, view);
                 } else {
-                    Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                    Snackbar snackbar = Snackbar.make(view, (R.string.service_not_available), Snackbar.LENGTH_LONG);
+                    snackbar.show();
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                Snackbar snackbar = Snackbar.make(view, R.string.service_not_available, Snackbar.LENGTH_SHORT);
+                snackbar.show();
             }
         });
 
@@ -127,23 +129,29 @@ public class ChallengeController {
      *                     count of days for challenge. After this operation we can get 'inProgressID'
      *                     and with that we can sent it to API
      */
-    public void sendSingleInProgressForSelf(String inProgressID) {
+    public void sendSingleInProgressForSelf(String inProgressID, View view) {
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
 
-        Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = singleinprogress.startSingleInProgress(inProgressID, token);
+        Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call =
+                singleinprogress.startSingleInProgress(inProgressID, token);
+
         call.enqueue(new Callback<com.azinecllc.champy.model.single_in_progress.SingleInProgress>() {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
+                    Snackbar snackbar = Snackbar.make(view, (R.string.challenge_created), Snackbar.LENGTH_SHORT);
+                    snackbar.show();
                     generateCardsForMainActivity(new Intent(activity, MainActivity.class));
                 } else {
-                    Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                    Snackbar snackbar = Snackbar.make(view, R.string.service_not_available, Snackbar.LENGTH_LONG);
+                    snackbar.show();
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                Snackbar snackbar = Snackbar.make(view, (R.string.service_not_available), Snackbar.LENGTH_LONG);
+                snackbar.show();
             }
         });
     }
@@ -161,28 +169,37 @@ public class ChallengeController {
      * @param friend_id - this is userID with whom we want to make a duel. this is ID has generated
      *                  when user create his account. (this is friend from Facebook)
      */
-    public void createNewDuelChallenge(String description, int days, String friend_id) {
+    public void createNewDuelChallenge(String description, int days, String friend_id, View view) {
         final String duration = String.valueOf(days * 86400);
         final String details = description + " during this period: " + days + " days";
 
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
         Call<com.azinecllc.champy.model.create_challenge.CreateChallenge> call = createChallenge
-                .createChallenge(description, typeDuel, description, details, duration, token);
+                .createChallenge(
+                        description,
+                        typeDuel,
+                        description,
+                        details,
+                        duration,
+                        token
+                );
 
         call.enqueue(new Callback<com.azinecllc.champy.model.create_challenge.CreateChallenge>() {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
-                    sendSingleInProgressForDuel(challengeId, friend_id);
+                    sendSingleInProgressForDuel(challengeId, friend_id, view);
                 } else {
-                    Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                    Snackbar snackbar = Snackbar.make(view, (R.string.service_not_available), Snackbar.LENGTH_SHORT);
+                    snackbar.show();
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                Snackbar snackbar = Snackbar.make(view, (R.string.service_not_available), Snackbar.LENGTH_LONG);
+                snackbar.show();
             }
         });
 
@@ -199,7 +216,7 @@ public class ChallengeController {
      * @param friend_id - this is userID with whom we want to make a duel. this is ID has generated
      *                  when user create his account. (this is friend from Facebook)
      */
-    public void sendSingleInProgressForDuel(String inProgressID, String friend_id) {
+    public void sendSingleInProgressForDuel(String inProgressID, String friend_id, View view) {
 
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
         Call<Duel> call = singleinprogress.startDuel(friend_id, inProgressID, token);
@@ -221,14 +238,18 @@ public class ChallengeController {
                     //////////////////////////////////////////////////
 
                     refreshCardsForPendingDuel(new Intent(activity, MainActivity.class));
+                    Snackbar snackbar = Snackbar.make(view, (R.string.sent_duel_request), Snackbar.LENGTH_SHORT);
+                    snackbar.show();
                 } else {
-                    Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                    Snackbar snackbar = Snackbar.make(view, (R.string.service_not_available), Snackbar.LENGTH_SHORT);
+                    snackbar.show();
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                Snackbar snackbar = Snackbar.make(view, (R.string.service_not_available), Snackbar.LENGTH_LONG);
+                snackbar.show();
             }
         });
     }
@@ -246,7 +267,7 @@ public class ChallengeController {
      *              than 10. Also we use this value for alarmID and calendar.
      * @param sMinute - all description is equal to @sHour
      */
-    public void createNewWakeUpChallenge(int days, String sHour, String sMinute) {
+    public void createNewWakeUpChallenge(int days, String sHour, String sMinute, View view) {
         final String duration = String.format("%s", days * oneDay);
         final String wakeUpName = "Wake up at " + sHour + ":" + sMinute;
         final String wakeUpTime = sHour + sMinute;
@@ -296,15 +317,17 @@ public class ChallengeController {
             public void onResponse(Response<com.azinecllc.champy.model.create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
-                    sendSingleInProgressForWakeUp(challengeId, alarmID, c.getTimeInMillis(), details);
+                    sendSingleInProgressForWakeUp(challengeId, alarmID, c.getTimeInMillis(), details, view);
                 } else {
-                    Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                    Snackbar snackbar = Snackbar.make(view, (R.string.service_not_available), Snackbar.LENGTH_SHORT);
+                    snackbar.show();
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                Snackbar snackbar = Snackbar.make(view, (R.string.service_not_available), Snackbar.LENGTH_LONG);
+                snackbar.show();
             }
         });
     }
@@ -313,16 +336,15 @@ public class ChallengeController {
      * Private Method for send Wake-Up challenge 'in progress'. Here we get data from our method
      * 'createNewWakeUpChallenge', create AlarmManager for daily ring, convert time for API, and
      * sending extras for CustomAlarmReceiver. Next we generate cards for MainActivity.
-     * @param inProgressID - our unique 'ID' for create new challenge, we get this value from
+     * @param pID - our unique 'ID' for create new challenge, we get this value from
      *                     'createNewWakeUpChallenge' and transit here.
-     * @param alarmID - values from time picker: minutes and hour. To start we get this, convert to
+     * @param aID - values from time picker: minutes and hour. To start we get this, convert to
      *                normal view (means from 1:8 to 01:08) and put inside alarmManager like ID.
      * @param -min - minutes from time picker. We transmit this from last method.
      * @param -hour - hours from time picker. We transmit this from last method.
      * @param -det - an array with time for alarm (in seconds). Size of array has generated by day count.
      */
-    private void sendSingleInProgressForWakeUp(String inProgressID, int alarmID, long whenRing, String[] det) {
-
+    private void sendSingleInProgressForWakeUp(String pID, int aID, long ring, String[] det, View v) {
 //        Calendar c = GregorianCalendar.getInstance();
 //        final long currentMidnight = System.currentTimeMillis() / 1000
 //                - (c.get(Calendar.HOUR_OF_DAY) * 60 * 60)
@@ -339,9 +361,9 @@ public class ChallengeController {
 
 //        final long userInputTime = c.getTimeInMillis(); // must be in millis
 //        Log.d(TAG, "sendSingleInProgressForWakeUp: time for ring: " + userInputTime);
-        Log.i(TAG, "sendSingleInProgressForWakeUp: when ring: " + whenRing);
+        Log.i(TAG, "sendSingleInProgressForWakeUp: when ring: " + ring);
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
-        Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = singleinprogress.startSingleInProgress(inProgressID, token);
+        Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = singleinprogress.startSingleInProgress(pID, token);
         call.enqueue(new Callback<com.azinecllc.champy.model.single_in_progress.SingleInProgress>() {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
@@ -351,29 +373,34 @@ public class ChallengeController {
 
                     Intent myIntent = new Intent(activity, CustomAlarmReceiver.class);
                     myIntent.putExtra("inProgressID", inProgressId);
-                    myIntent.putExtra("alarmID", String.valueOf(alarmID));
+                    myIntent.putExtra("alarmID", String.valueOf(aID));
                     myIntent.putExtra("details", Arrays.toString(det));
 
 
-                    PendingIntent pi = PendingIntent.getBroadcast(activity, alarmID, myIntent, 0);
+                    PendingIntent pi = PendingIntent.getBroadcast(activity, aID, myIntent, 0);
                     AlarmManager aManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                    aManager.setRepeating(AlarmManager.RTC_WAKEUP, whenRing, AlarmManager.INTERVAL_DAY, pi);
+                    aManager.setRepeating(AlarmManager.RTC_WAKEUP, ring, AlarmManager.INTERVAL_DAY, pi);
 
 
+                    Snackbar snackbar = Snackbar.make(v, (R.string.challenge_created), Snackbar.LENGTH_SHORT);
+                    snackbar.show();
                     generateCardsForMainActivity(new Intent(activity, MainActivity.class));
                 } else {
-                    Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                    Snackbar snackbar = Snackbar.make(v, (R.string.service_not_available), Snackbar.LENGTH_SHORT);
+                    snackbar.show();
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                Snackbar snackbar = Snackbar.make(v, (R.string.service_not_available), Snackbar.LENGTH_LONG);
+                snackbar.show();
             }
 
         });
 
     }
+
 
 
     /**
@@ -392,11 +419,11 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    Snackbar snackbar = Snackbar.make(view, context.getString(R.string.challenge_canceled), Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar.make(view, (R.string.challenge_canceled), Snackbar.LENGTH_SHORT);
                     snackbar.show();
                     refreshCardsForPendingDuel(new Intent(activity, MainActivity.class));
                 } else {
-                    Snackbar snackbar = Snackbar.make(view, context.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);
+                    Snackbar snackbar = Snackbar.make(view, (R.string.service_not_available), Snackbar.LENGTH_LONG);
                     snackbar.show();
                     refreshCardsForPendingDuel(new Intent(activity, MainActivity.class));
                 }
@@ -404,11 +431,17 @@ public class ChallengeController {
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                Snackbar snackbar = Snackbar.make(view, (R.string.service_not_available), Snackbar.LENGTH_LONG);
+                snackbar.show();
             }
         });
     }
 
+    /**
+     * @param inProgressId
+     * @param view
+     * @throws IOException
+     */
     public void rejectInviteForPendingDuel(String inProgressId, View view) throws IOException {
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
 
@@ -418,56 +451,79 @@ public class ChallengeController {
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     refreshCardsForPendingDuel(new Intent(activity, MainActivity.class));
-                    Snackbar snackbar = Snackbar.make(view, context.getString(R.string.challenge_canceled), Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar.make(view, (R.string.challenge_canceled), Snackbar.LENGTH_SHORT);
                     snackbar.show();
                 } else {
-                    Snackbar snackbar = Snackbar.make(view, context.getString(R.string.service_not_available), Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar.make(view, (R.string.service_not_available), Snackbar.LENGTH_LONG);
                     snackbar.show();
+                    refreshCardsForPendingDuel(new Intent(activity, MainActivity.class));
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                Snackbar snackbar = Snackbar.make(view, (R.string.service_not_available), Snackbar.LENGTH_LONG);
+                snackbar.show();
             }
         });
     }
 
 
-    public void doneForToday(String progID, String alarmID, Intent i, String det) throws IOException {
+
+    /**
+     *
+     * @param pID
+     * @param aID
+     * @param i
+     * @param det
+     * @throws IOException
+     */
+    public void doneForToday(String pID, String aID, Intent i, String det, View v) throws IOException {
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
-        Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = activeInProgress.checkChallenge(progID, token);
+        Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = activeInProgress.checkChallenge(pID, token);
         call.enqueue(new Callback<com.azinecllc.champy.model.single_in_progress.SingleInProgress>() {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String type = response.body().getData().getChallenge().getType();
-//                    int end = response.body().getData().getEnd();
-//                    long now = System.currentTimeMillis() / 1000;
-//                    Log.i(TAG, "now: " + System.currentTimeMillis() / 1000);
-//                    Log.i(TAG, "end: " + (end - oneDay));
-                    if (type.equals(typeWake) /*&&(now>end-oneDay)*/) {
-                        setNewAlarmClock(det, alarmID);
+                    int end = response.body().getData().getEnd();
+                    long now = System.currentTimeMillis() / 1000;
+                    Log.i(TAG, "now: " + System.currentTimeMillis() / 1000);
+                    Log.i(TAG, "end: " + (end - oneDay));
+                    if (type.equals(typeWake) && (now > end - oneDay)) {
+                        setNewAlarmClock(det, aID);
                         Log.i(TAG, "now < end :)");
                         Intent myIntent = new Intent(activity, CustomAlarmReceiver.class);
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast(activity, Integer.valueOf(alarmID), myIntent, 0);
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(activity, Integer.valueOf(aID), myIntent, 0);
                         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                         alarmManager.cancel(pendingIntent);
                     }
 
+                    Snackbar snackbar = Snackbar.make(v, ("Well done!"), Snackbar.LENGTH_LONG);
+                    snackbar.show();
+
                     generateCardsForMainActivity(i);
                 } else {
-                    Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                    Snackbar snackbar = Snackbar.make(v, (R.string.service_not_available), Snackbar.LENGTH_LONG);
+                    snackbar.show();
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                Snackbar snackbar = Snackbar.make(v, (R.string.service_not_available), Snackbar.LENGTH_LONG);
+                snackbar.show();
             }
         });
     }
 
+    /**
+     *
+     * @param id
+     * @param alarmID
+     * @param intent
+     * @throws IOException
+     */
     public void give_up(String id, int alarmID, Intent intent) throws IOException {
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
         Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = activeInProgress.surrender(id, token);
@@ -487,10 +543,10 @@ public class ChallengeController {
                         alarmManager.cancel(pendingIntent);
                     }
 
-                    if (intent != null) { generateCardsForMainActivity(intent); }
+                    if (intent != null) {
+                        generateCardsForMainActivity(intent);
+                    }
 
-                } else {
-                    Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -504,7 +560,10 @@ public class ChallengeController {
 
 
 
-
+    /**
+     *
+     * @param intent
+     */
     public void refreshCardsForPendingDuel(Intent intent) {
         ContentValues cv  = new ContentValues();
         DBHelper dbHelper = DBHelper.getInstance(context);
@@ -559,6 +618,10 @@ public class ChallengeController {
         });
     }
 
+    /**
+     *
+     * @param intent
+     */
     private void generateCardsForMainActivity(Intent intent) {
         DBHelper dbHelper = DBHelper.getInstance(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -649,7 +712,7 @@ public class ChallengeController {
                                     try {
                                         int alarmID = (challenge_type.equals("Wake Up"))
                                                 ? Integer.parseInt(challenge_desc) : 0;
-                                        give_up(challenge_id, alarmID, new Intent(context, MainActivity.class));
+                                        give_up(challenge_id, alarmID, intent);
                                     } catch (Exception e) { e.printStackTrace(); }
                                 }
                             }
@@ -691,6 +754,7 @@ public class ChallengeController {
     }
 
 
+
     /**
      * Method for compare current time with 'i-element' in array of alarm time.
      * @param arrayDetails - this is our array with time for alarm in seconds. When user has
@@ -704,7 +768,7 @@ public class ChallengeController {
      * @value details - cleaned up our array from '[1, 2, 3]' to '1, 2, 3'
      * @value now     - current time on the device in seconds
      */
-    public void setNewAlarmClock(String arrayDetails, String alarmID) {
+    private void setNewAlarmClock(String arrayDetails, String alarmID) {
         String[] details = arrayDetails.replace("[", "").replace("]", "").split(", ");
         long now = System.currentTimeMillis() / 1000;
         //Log.i(TAG, "~~~~~~~~~~~~~~~ START ~~~~~~~~~~~~~~~");
@@ -732,7 +796,6 @@ public class ChallengeController {
         }
 
     }
-
 
     /**
      * @param description - this is 'description' of challenges like 'No TV' or 'Wake Up at 9:00'.

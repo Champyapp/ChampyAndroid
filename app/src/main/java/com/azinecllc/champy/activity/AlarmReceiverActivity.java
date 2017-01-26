@@ -88,43 +88,42 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
         Intent intent = new Intent(this, RoleControllerActivity.class);
         OfflineMode offlineMode = OfflineMode.getInstance();
 
-            switch (v.getId()) {
-                case R.id.buttonWakeUpDoneForToday:
-                    if (mMediaPlayer.isPlaying()) {
-                        mMediaPlayer.stop();
+        switch (v.getId()) {
+            case R.id.buttonWakeUpDoneForToday:
+                if (mMediaPlayer.isPlaying()) {
+                    mMediaPlayer.stop();
+                }
+                if (offlineMode.isConnectedToRemoteAPI(this)) {
+                    try {
+                        cc.doneForToday(progressID, alarmID, intent, details, v);
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                    if (offlineMode.isConnectedToRemoteAPI(this)) {
-                        try {
-                            cc.doneForToday(progressID, alarmID, intent, details);
-                            //cc.setNewAlarmClock(details, alarmID);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        Toast.makeText(this, getResources().getString(R.string.lost_inet_wake_up), Toast.LENGTH_LONG).show();
-                        Toast.makeText(this, getResources().getString(R.string.lost_inet_wake_up), Toast.LENGTH_LONG).show();
-                    }
+                } else {
+                    Toast.makeText(this, (R.string.lost_inet_wake_up), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, (R.string.lost_inet_wake_up), Toast.LENGTH_LONG).show();
+                }
 
-                    finish();
-                    break;
-                case R.id.buttonWakeUpSurrender:
-                    if (mMediaPlayer.isPlaying()) {
-                        mMediaPlayer.stop();
+                finish();
+                break;
+            case R.id.buttonWakeUpSurrender:
+                if (mMediaPlayer.isPlaying()) {
+                    mMediaPlayer.stop();
+                }
+                if (offlineMode.isConnectedToRemoteAPI(this)) {
+                    try {
+                        cc.give_up(progressID, Integer.parseInt(alarmID), intent);
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                    if (offlineMode.isConnectedToRemoteAPI(this)) {
-                        try {
-                            cc.give_up(progressID, Integer.parseInt(alarmID), intent);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        Toast.makeText(this, getResources().getString(R.string.lost_inet_wake_up), Toast.LENGTH_LONG).show();
-                        Toast.makeText(this, getResources().getString(R.string.lost_inet_wake_up), Toast.LENGTH_LONG).show();
-                    }
-                    // so, we take 0 updates and then this challenge will auto surrender.
-                    finish();
-                    break;
-            }
+                } else {
+                    Toast.makeText(this, (R.string.lost_inet_wake_up), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, (R.string.lost_inet_wake_up), Toast.LENGTH_LONG).show();
+                }
+                // so, we take 0 updates and then this challenge will auto surrender.
+                finish();
+                break;
+        }
     }
 
 

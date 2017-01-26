@@ -91,12 +91,12 @@ public class WakeUpActivity extends AppCompatActivity implements View.OnClickLis
                         @Override
                         public void onClick(View view) {
                             if (!isActive) {
-                                cc.createNewWakeUpChallenge(Integer.parseInt(etDays.getText().toString()), fHour, fMin);
-                                snackbar = Snackbar.make(view, R.string.challenge_created, Snackbar.LENGTH_SHORT);
+                                int days = Integer.parseInt(etDays.getText().toString());
+                                cc.createNewWakeUpChallenge(days, fHour, fMin, v);
                             } else {
                                 snackbar = Snackbar.make(view, R.string.cant_create_this_challenge, Snackbar.LENGTH_SHORT);
+                                snackbar.show();
                             }
-                            snackbar.show();
                         }
                     });
                     snackbar.show();

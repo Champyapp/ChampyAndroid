@@ -145,9 +145,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                             try {
                             days = Integer.parseInt(duration);
                                 if (!cc.isActive(description) && !description.isEmpty()) {
-                                    cc.createNewSelfImprovementChallenge(description, days);
-                                    snackbar = Snackbar.make(view, R.string.challenge_created, Snackbar.LENGTH_SHORT);
-                                    snackbar.show();
+                                    cc.createNewSelfImprovementChallenge(description, days, view);
                                 } else {
                                     snackbar = Snackbar.make(view, R.string.cant_create_this_challenge, Snackbar.LENGTH_SHORT);
                                     snackbar.show();
@@ -183,12 +181,11 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 
                             try {
                                 if (!cc.isActive(description)) {
-                                    cc.sendSingleInProgressForSelf(challenge_id);
-                                    snackbar = Snackbar.make(view, R.string.challenge_created, Snackbar.LENGTH_SHORT);
+                                    cc.sendSingleInProgressForSelf(challenge_id, view);
                                 } else {
                                     snackbar = Snackbar.make(view, R.string.cant_create_this_challenge, Snackbar.LENGTH_SHORT);
+                                    snackbar.show();
                                 }
-                                snackbar.show();
                             } catch (NullPointerException e) {
                                 e.printStackTrace();
                             }

@@ -159,13 +159,13 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
             progMidNight = prog - (date.getHours() * 60 * 60) - (date.getMinutes() * 60) - (date.getSeconds());
         }
 
-        /**
+        /******************************************************************************************
          * Here I just check challengeProgress (prog). If it non-empty, means what user had some
          * element in array, then I check if current time > midnight of current challengeProgress
          * plus one day. Why plus one day? Because I need to enable button 'done for today' after
          * midnight of next day.
          * @param oneDay - this is constant value of day in seconds, I get it from class Constants.
-         */
+         *****************************************************************************************/
         if (prog != 0L && now > progMidNight + oneDay) {
             if (!itemType.equals("Wake Up")) {
                 tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
@@ -184,7 +184,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                 buttonDone.setVisibility(View.INVISIBLE);
                 tvEveryDayForTheNext.setVisibility(View.VISIBLE);
 
-                /**
+                /**********************************************************************************
                  * @Idea I have a 'details' array from database which had created in method
                  *       'createWakeUpChallenge' and I have a 'challengeProgress' array. With this
                  *       two array i can compare they length for find element which will be next.
@@ -202,7 +202,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                  *                  [alarm1, alarm2, alarm3, alarm4, alarm5]
                  *                     |        |       |       |       |
                  *                  [prog 1, prog 2, prog 3, prog 4, prog 5]
-                 */
+                 **********************************************************************************/
                 String[] wakeArray = currentCard.getWakeUpTime().replace("[", "").replace("]", "").split(", ");
                 int wakeProg = challengeProgress.length;
                 int nextAlarm;
@@ -311,9 +311,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                     buttonDone.setVisibility(View.INVISIBLE);
                     buttonShare.setVisibility(View.VISIBLE);
                     tvDuration.setVisibility(View.VISIBLE);
-                    cc.doneForToday(itemInProgressId, itemGoal, goMain, currentCard.getWakeUpTime());
-                    snackbar = Snackbar.make(v, "Well done!", Snackbar.LENGTH_SHORT);
-                    snackbar.show();
+                    cc.doneForToday(itemInProgressId, itemGoal, goMain, currentCard.getWakeUpTime(), v);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
