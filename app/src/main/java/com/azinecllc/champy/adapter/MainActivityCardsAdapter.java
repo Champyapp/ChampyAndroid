@@ -137,20 +137,36 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         final String token = sessionManager.getToken();
         ChallengeController cc = new ChallengeController(getContext(), (Activity) getContext(), token, uID);
 
-        /*************************** last check-in time for buttons view *************************/
+        /*************************** last check-in time for buttons view **************************
+         * @param prog = this is last element from 'challengeProgress' array. I had created this
+         *             primitive as a helper for 'progMidNight' to get data from self-improvement
+         *             model. When user has created his challenge, but has not checked yet we have
+         *             empty StringArray[]. To avoid empty, zero and other cases I had set equal 0.
+         * @param progMidNight - this is current midnight of challengeProgress (@prog). I had
+         *                     created this primitive to display right buttons and other views
+         *                     this is midnight of last element in 'challengeProgress' array.
+         *                     We got our 'prog' like as last element and subtract hours, minutes
+         *                     and seconds to get current midnight of last check-in. Like in 'prog'
+         *                     I had created this and set equal 0 because we need to avoid null.
+         *                     If 'prog' equal null then and progMidNight will to.
+         ******************************************************************************************/
         long now = System.currentTimeMillis() / 1000;
-        long myProgress = 0;
-        long progressMidNight = 0;
+        long prog = 0;
+        long progMidNight = 0;
         if (!challengeProgress[challengeProgress.length - 1].equals("")) {
-            myProgress = Long.parseLong(challengeProgress[challengeProgress.length - 1]);
-            Date date = new Date(myProgress * 1000);
-            progressMidNight = myProgress
-                    - (date.getHours()  * 60 * 60)
-                    - (date.getMinutes()* 60)
-                    - (date.getSeconds());
+            prog = Long.parseLong(challengeProgress[challengeProgress.length - 1]);
+            Date date = new Date(prog * 1000);
+            progMidNight = prog - (date.getHours() * 60 * 60) - (date.getMinutes() * 60) - (date.getSeconds());
         }
 
-        if (myProgress != 0L && now > progressMidNight + oneDay) {
+        /**
+         * Here I just check challengeProgress (prog). If it non-empty, means what user had some
+         * element in array, then I check if current time > midnight of current challengeProgress
+         * plus one day. Why plus one day? Because I need to enable button 'done for today' after
+         * midnight of next day.
+         * @param oneDay - this is constant value of day in seconds, I get it from class Constants.
+         */
+        if (prog != 0L && now > progMidNight + oneDay) {
             if (!itemType.equals("Wake Up")) {
                 tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
                 buttonShare.setVisibility(View.INVISIBLE);
@@ -168,12 +184,31 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                 buttonDone.setVisibility(View.INVISIBLE);
                 tvEveryDayForTheNext.setVisibility(View.VISIBLE);
 
+                /**
+                 * @Idea I have a 'details' array from database which had created in method
+                 *       'createWakeUpChallenge' and I have a 'challengeProgress' array. With this
+                 *       two array i can compare they length for find element which will be next.
+                 *       With this 'last' element I can compare real time and if now > 'last' then
+                 *       i can show button 'done for today', after that I check [x] minutes and
+                 *       disable buttons. This makes it possible for the user to check challenge
+                 *       if he didn't.
+                 * @param wakeArray = this is 'details' field from database. I had created this while
+                 *                  sending wakeUpChallenge in progress.
+                 * @param nextAlarm = this is our 'challengeProgress'. First I had check the
+                 *                  challengeProgress length. If user has created his challenge,
+                 *                  but has not checked yet (situation when alarm should fire
+                 *                  tomorrow) I got 0-element from this array, in case when user had
+                 *                  non-empty progress I just get current element, example:
+                 *                  [alarm1, alarm2, alarm3, alarm4, alarm5]
+                 *                     |        |       |       |       |
+                 *                  [prog 1, prog 2, prog 3, prog 4, prog 5]
+                 */
                 String[] wakeArray = currentCard.getWakeUpTime().replace("[", "").replace("]", "").split(", ");
-                int prog = challengeProgress.length;
+                int wakeProg = challengeProgress.length;
                 int nextAlarm;
                 nextAlarm = (Arrays.toString(challengeProgress).equals("[]"))
-                        ? Integer.parseInt(wakeArray[prog - 1])
-                        : Integer.parseInt(wakeArray[prog]);
+                        ? Integer.parseInt(wakeArray[wakeProg - 1])
+                        : Integer.parseInt(wakeArray[wakeProg]);
                 if (now > nextAlarm) {
                     // enable
                     tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
@@ -188,7 +223,6 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                         tvEveryDayForTheNext.setVisibility(View.VISIBLE);
                     }
                 }
-
 //                if (itemNeedsToCheck.equals("true") && (now > alarmTime)) {
 //                    tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
 //                    buttonDone.setVisibility(View.VISIBLE);
