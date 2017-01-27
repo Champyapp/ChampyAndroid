@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +13,9 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.MainActivity;
-import com.azinecllc.champy.activity.PendingDuelActivity;
 import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.model.SelfImprovement_model;
 import com.azinecllc.champy.utils.SessionManager;
@@ -26,11 +23,9 @@ import com.azinecllc.champy.utils.SessionManager;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 
 import static com.azinecllc.champy.utils.Constants.oneDay;
-import static com.azinecllc.champy.utils.Constants.twoDays;
 
 public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 
@@ -70,7 +65,6 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         String itemNeedsToCheck = currentCard.getNeedsToCheck();
         String itemInProgressId = currentCard.getId();
         String[] challengeProgress = itemProgress.replace("[", "").replace("]", "").split(", ");
-        System.out.println("challengeProgress: " + Arrays.toString(challengeProgress));
 
         TextView tvChallengeType = (TextView) tempView.findViewById(R.id.tvChallengeType);
         tvChallengeType.setText(currentCard.getType());

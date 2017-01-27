@@ -391,22 +391,6 @@ public class ChallengeController {
      *          not available". In case when response is success we just show message about "created".
      */
     private void sendSingleInProgressForWakeUp(String pID, int aID, long ring, String[] det, View v) {
-//        Calendar c = GregorianCalendar.getInstance();
-//        final long currentMidnight = System.currentTimeMillis() / 1000
-//                - (c.get(Calendar.HOUR_OF_DAY) * 60 * 60)
-//                - (c.get(Calendar.MINUTE) * 60)
-//                - (c.get(Calendar.SECOND));
-
-//        Date date = new Date();
-//        date.setTime(((min  * 60) + (hour * 60 * 60) + currentMidnight) * 1000);
-//        c.setTime(date); // set date for calendar. now our calendar has a right time for ring
-//
-//        if (System.currentTimeMillis() > c.getTimeInMillis()) {
-//            c.add(Calendar.DAY_OF_YEAR, 1);
-//        }
-
-//        final long userInputTime = c.getTimeInMillis(); // must be in millis
-//        Log.d(TAG, "sendSingleInProgressForWakeUp: time for ring: " + userInputTime);
         Log.i(TAG, "sendSingleInProgressForWakeUp: when ring: " + ring);
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
         Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = singleinprogress.startSingleInProgress(pID, token);
@@ -518,7 +502,6 @@ public class ChallengeController {
             }
         });
     }
-
 
 
     /**
