@@ -33,30 +33,6 @@ public class CHBuildAnim {
 
 
     public void buildAnim(Activity activity, SessionManager sessionManager, Typeface typeface) {
-//        WindowManager wm = (WindowManager)activity.getSystemService(Context.WINDOW_SERVICE);
-//        Display display = wm.getDefaultDisplay();
-//        Point size = new Point();
-//        display.getSize(size);
-//        int x = size.x / 100;
-//        int y = size.y / 100;
-//
-//        ImageView circleInProgress = (ImageView)activity.findViewById(R.id.imageView_challenges_animation);
-//        ImageView circleViewWins = (ImageView)activity.findViewById(R.id.imageView_wins_animation);
-//        ImageView circleViewTotal = (ImageView)activity.findViewById(R.id.imageView_total_animation);
-//
-//        circleInProgress.getLayoutParams().width = x*30;
-//        circleInProgress.getLayoutParams().height = y*15;
-//
-//        circleViewWins.getLayoutParams().width = x*30;
-//        circleViewWins.getLayoutParams().height = y*15;
-//
-//        circleViewTotal.getLayoutParams().width = x*30;
-//        circleViewTotal.getLayoutParams().height = y*15;
-
-//          //uncomment if need animation in main activity
-//        ((AnimationDrawable) mImageViewFilling0.getBackground()).start();
-//        ((AnimationDrawable) mImageViewFilling1.getBackground()).start();
-//        ((AnimationDrawable) mImageViewFilling2.getBackground()).start();
         int width = activity.getWindowManager().getDefaultDisplay().getWidth();
         CHMakeResponsiveScore chMakeResponsiveScore = CHMakeResponsiveScore.getInstance();
         chMakeResponsiveScore.makeResponsiveScore(activity, width);

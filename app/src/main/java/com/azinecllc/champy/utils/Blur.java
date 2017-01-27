@@ -49,12 +49,5 @@ public class Blur {
         return result;
     }
 
-    // TODO: 06.10.2016 Delete trash
-//    private static Bitmap getScreenshot(View v) {
-//        Bitmap b = Bitmap.createBitmap(v.getWidth(), v.getHeight(), Bitmap.Config.ARGB_8888);
-//        Canvas c = new Canvas(b);
-//        v.draw(c);
-//        return b;
-//    }
 
 }

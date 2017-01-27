@@ -99,7 +99,6 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
             view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
         }
 
-        //ViewServer.get(this).addWindow(this);
     }
 
     @Override

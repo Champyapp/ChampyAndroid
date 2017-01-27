@@ -181,11 +181,6 @@ public class FriendsFragment extends Fragment {
                             if (datum.getFriend() != null && datum.getStatus().toString().equals("true")) {
                                 if (datum.getOwner().get_id().equals(id)) {
                                     Friend_ friend = datum.getFriend();
-                                    //if (friend.getPhoto() != null) {
-                                    //    cv.put("photo", friend.getPhoto().getMedium());
-                                    //} else {
-                                    //    cv.put("photo", "");
-                                    //}
                                     String friendPhoto = (friend.getPhoto() != null) ? friend.getPhoto().getMedium() : "";
                                     cv.put("name", friend.getName());
                                     cv.put("photo", friendPhoto);
@@ -197,11 +192,6 @@ public class FriendsFragment extends Fragment {
                                 } else {
                                     Owner friend = datum.getOwner();
                                     String friendPhoto = (friend.getPhoto() != null) ? friend.getPhoto().getMedium() : "";
-                                    //if (friend.getPhoto() != null) {
-                                    //    cv.put("photo", friend.getPhoto().getMedium());
-                                    //} else {
-                                    //    cv.put("photo", "");
-                                    //}
                                     cv.put("name", friend.getName());
                                     cv.put("photo", friendPhoto);
                                     cv.put("user_id", friend.get_id());

@@ -51,9 +51,6 @@ import retrofit.Retrofit;
 
 import static com.azinecllc.champy.utils.Constants.API_URL;
 
-/**
- * Класс отвечает за OTHER в разделе FriendsActivity
- */
 public class OtherFragment extends Fragment {
 
     private static final String ARG_PAGE = "ARG_PAGE";

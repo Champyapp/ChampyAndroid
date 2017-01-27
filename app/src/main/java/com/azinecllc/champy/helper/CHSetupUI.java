@@ -8,13 +8,18 @@ import android.widget.EditText;
 
 /**
  * Created by SashaKhyzhun on 1/19/17.
+ * This is class helper to close navigation drawer when user had opens keyboard
  */
 
 public class CHSetupUI {
 
     private static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+        try {
+            InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
 

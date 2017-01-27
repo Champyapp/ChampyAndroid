@@ -23,7 +23,6 @@ public class HistoryInProgressFragment extends Fragment {
     private OfflineMode offlineMode;
     private ArrayList<HistoryChallenge> all;
     private HistoryChallengeAdapter adapter;
-    //private ChallengeController cc;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,8 +30,6 @@ public class HistoryInProgressFragment extends Fragment {
         offlineMode = OfflineMode.getInstance();
         all = new ArrayList<>();
         adapter = new HistoryChallengeAdapter(all, getContext());
-        //SessionManager s = SessionManager.getInstance(getContext());
-        //cc = new ChallengeController(getContext(), getActivity(), s.getToken(), s.getUserId());
 
     }
 
@@ -46,8 +43,6 @@ public class HistoryInProgressFragment extends Fragment {
         gSwipeRefreshLayout.setOnRefreshListener(() -> {
             if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
                 all.clear();
-                //rvContacts.getLayoutManager().removeAllViews();
-                //cc.refreshCardsForPendingDuel(null);
                 gSwipeRefreshLayout.setRefreshing(true);
                 loadInProgressHistory(view);
                 gSwipeRefreshLayout.setRefreshing(false);

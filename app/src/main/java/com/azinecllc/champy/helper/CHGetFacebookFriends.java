@@ -18,14 +18,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import retrofit.Call;
 import retrofit.Callback;
-import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
@@ -82,14 +78,6 @@ public class CHGetFacebookFriends {
                                     if (data.getPhoto() != null) {
                                         photo = API_URL + data.getPhoto().getMedium();
                                     } else {
-                                        // need to use champy icon.
-                                        //try {
-                                        //    URL profile_pic = new URL(
-                                        //            "https://graph.facebook.com/" + fb_id + "/picture?type=large");
-                                        //    photo = profile_pic.toString();
-                                        //} catch (MalformedURLException e) {
-                                        //    e.printStackTrace();
-                                        //}
                                         Uri uri = Uri.parse("android.resource://com.azinecllc.champy/drawable/ic_champy_circle");
                                         photo = uri.toString();
                                     }

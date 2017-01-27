@@ -29,7 +29,7 @@ public class PendingDuelActivity extends AppCompatActivity /*implements Navigati
         tvPendingDuels.setTypeface(typeface);
 
         CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();
-        int count = checker.getPendingCount(getApplicationContext());
+        checker.getPendingCount(getApplicationContext());
 
         spinner.setVisibility(View.INVISIBLE);
     }

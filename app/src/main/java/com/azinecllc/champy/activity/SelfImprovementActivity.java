@@ -26,7 +26,7 @@ import retrofit.Retrofit;
 
 import static com.azinecllc.champy.utils.Constants.API_URL;
 
-public class SelfImprovementActivity extends AppCompatActivity /*implements NavigationView.OnNavigationItemSelectedListener*/ {
+public class SelfImprovementActivity extends AppCompatActivity {
 
     private SessionManager sessionManager;
     public View spinner;
