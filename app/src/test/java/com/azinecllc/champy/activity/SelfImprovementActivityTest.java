@@ -97,6 +97,8 @@ public class SelfImprovementActivityTest {
 
         assertEquals(Color.WHITE, tvChallengeToMySelf.getTextColors().getDefaultColor());
 
+        assertEquals("I challenge myself to", tvChallengeToMySelf.getText());
+
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) tvChallengeToMySelf.getLayoutParams();
         assertEquals(32, lp.topMargin);
 
