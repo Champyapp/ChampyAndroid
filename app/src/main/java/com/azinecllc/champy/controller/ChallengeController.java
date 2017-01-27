@@ -62,6 +62,17 @@ public class ChallengeController {
     private Context context;
 
 
+    /**
+     * Public constructor which contains parameters for two reason: Because this is class-helper and
+     * we used it in different activities, So much time we need to use context and activity to do
+     * some action. For economy space, because we don't want to create one parameter in every method
+     * like as token and userID.
+     *
+     * @param mContext - context from parent class (means class when we initiate this CC).
+     * @param activity - activity from parent class (means class when we initiate this CC).
+     * @param uToken   - User's Token from SessionManager
+     * @param uID      - User's ID from SessionManager
+     */
     public ChallengeController(Context mContext, Activity activity, String uToken, String uID) {
         this.activity = activity;
         this.context = mContext;
@@ -76,11 +87,15 @@ public class ChallengeController {
      * Method for create new Self-Improvement challenge and send call to API with Retrofit2.
      * We create new challenge and try to send it 'in progress'. This is only for custom cards.
      * @param description - this is value of challenge description. We get it from EditText in
-     *                    SelfImprovementFragment.class Of course we check if this value
-     *                    isActive or isEmpty
+     *                    SelfImprovementFragment Ofc we check if this value isActive or isEmpty
      * @param days - this is count of duration by challenge. Like with 'description': we get value
      *             from EditText and pass value here. After that we convert current value of days
      *             to UnixTime because API works only with it and push it up.
+     * @param view - this is simple view from class when I had initialise this ChallengeController.
+     *             we need this to see actual message without duplication of different type of
+     *             notifications. We check response and if we got a failure than I show message for
+     *             user about "Service not available". In case when response is success we just
+     *             transmit this view in next method 'sendSingleInProgressForSelf' and do there next.
      */
     public void createNewSelfImprovementChallenge(String description, int days, View view) {
         final String duration = "" + (days * 86400);
@@ -128,6 +143,12 @@ public class ChallengeController {
      *                     need to create new self-improvement challenge with user description and
      *                     count of days for challenge. After this operation we can get 'inProgressID'
      *                     and with that we can sent it to API
+     * @param view - this is simple view from class when I had initialise this challenge controller
+     *             in case: if user want to create custom challenge, in other case we got it from
+     *             last method-provider 'createSingleInProgressForSelf'. We need this to see actual
+     *             message without duplication of different type of notifications. We check response
+     *             and if we got a failure than I show message for user about "Service not
+     *             available". In case when response is success we just show message about "created".
      */
     public void sendSingleInProgressForSelf(String inProgressID, View view) {
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
@@ -168,8 +189,14 @@ public class ChallengeController {
      *             to UnixTime because API works only with it and push it up.
      * @param friend_id - this is userID with whom we want to make a duel. this is ID has generated
      *                  when user create his account. (this is friend from Facebook)
+     * @param v - this is simple view from class when I had initialise this ChallengeController.
+     *             we need this to see actual message without duplication of different type of
+     *             notifications. We check response and if we got a failure than I show message for
+     *             user about "Service not available". In case when response is success we just
+     *             transmit this view in next method 'sendSingleInProgressForDuel' and do there
+     *             next logic.
      */
-    public void createNewDuelChallenge(String description, int days, String friend_id, View view) {
+    public void createNewDuelChallenge(String description, int days, String friend_id, View v) {
         final String duration = String.valueOf(days * 86400);
         final String details = description + " during this period: " + days + " days";
 
@@ -189,16 +216,16 @@ public class ChallengeController {
             public void onResponse(Response<com.azinecllc.champy.model.create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
-                    sendSingleInProgressForDuel(challengeId, friend_id, view);
+                    sendSingleInProgressForDuel(challengeId, friend_id, v);
                 } else {
-                    Snackbar snackbar = Snackbar.make(view, (R.string.service_not_available), Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar.make(v, (R.string.service_not_available), Snackbar.LENGTH_SHORT);
                     snackbar.show();
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Snackbar snackbar = Snackbar.make(view, (R.string.service_not_available), Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(v, (R.string.service_not_available), Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
         });
@@ -208,18 +235,24 @@ public class ChallengeController {
     /**
      * Method which get data from 'createNewDuelChallenge' in case if this is custom card and sending
      * it 'in progress'. In others case we just try to send ID from standard card with standard values.
-     * @param inProgressID - this is unique challenge ID. in case when we create standard cahllenge
-     *                     we just put in unique inProgressID after this we can make call to API
-     *                     for create this challenge. In others case when we create custom card we
-     *                     need to create new 'Duel challenge' with description, count of days and
-     *                     friends id. After this operation we can get 'inProgressID' and make call.
-     * @param friend_id - this is userID with whom we want to make a duel. this is ID has generated
-     *                  when user create his account. (this is friend from Facebook)
+     * @param iID - this is unique challenge IN PROGRESS ID. in case when we create standard challenge
+     *            we just put in unique inProgressID after this we can make call to API for create
+     *            this challenge. In others case when we create custom card we need to create new
+     *            'Duel challenge' with description, count of days and friends id. After this
+     *            operation we can get 'inProgressID' and make call.
+     * @param friendID - this is userID with whom we want to make a duel. this is ID has generated
+     *                 when user create his account. (this is friend from Facebook)
+     * @param view - this is simple view from class when I had initialise this challenge controller
+     *             in case: if user want to create custom challenge, in other case we got it from
+     *             last method-provider 'createSingleInProgressForDuel'. We need this to see actual
+     *             message without duplication of different type of notifications. We check response
+     *             and if we got a failure than I show message for user about "Service not
+     *             available". In case when response is success we just show message about "created".
      */
-    public void sendSingleInProgressForDuel(String inProgressID, String friend_id, View view) {
+    public void sendSingleInProgressForDuel(String iID, String friendID, View view) {
 
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
-        Call<Duel> call = singleinprogress.startDuel(friend_id, inProgressID, token);
+        Call<Duel> call = singleinprogress.startDuel(friendID, iID, token);
         call.enqueue(new Callback<Duel>() {
             @Override
             public void onResponse(Response<Duel> response, Retrofit retrofit) {
@@ -263,9 +296,16 @@ public class ChallengeController {
      * @param days - this is custom value of challenge duration which user has chosen. This is simple
      *             integer which we use like a range for array. Also we convert this count in UnixTime
      *             for APi
-     * @param sHour - we get this value from time picker and convert from 1:8 to 01:08 if value lower
-     *              than 10. Also we use this value for alarmID and calendar.
-     * @param sMinute - all description is equal to @sHour
+     * @param sHour - we get this value from time picker and convert from 1:8 to 01:08 if value
+     *              lower than 10. Also we use this value for alarmID and calendar.
+     * @param sMinute - we get this value from time picker and convert from 1:8 to 01:08 if value
+     *              lower than 10. Also we use this value for alarmID and calendar.
+     * @param view - this is simple view from class when I had initialise this ChallengeController.
+     *             we need this to see actual message without duplication of different type of
+     *             notifications. We check response and if we got a failure than I show message for
+     *             user about "Service not available". In case when response is success we just
+     *             transmit this view in next method 'sendSingleInProgressForWakeUp' and do there
+     *             next logic.
      */
     public void createNewWakeUpChallenge(int days, String sHour, String sMinute, View view) {
         final String duration = String.format("%s", days * oneDay);
@@ -340,9 +380,15 @@ public class ChallengeController {
      *                     'createNewWakeUpChallenge' and transit here.
      * @param aID - values from time picker: minutes and hour. To start we get this, convert to
      *                normal view (means from 1:8 to 01:08) and put inside alarmManager like ID.
-     * @param -min - minutes from time picker. We transmit this from last method.
-     * @param -hour - hours from time picker. We transmit this from last method.
-     * @param -det - an array with time for alarm (in seconds). Size of array has generated by day count.
+     * @param ring - this is value from last method-provider, this value is equals to time when
+     *             we need fire our alarm manager.
+     * @param det - this is array with time when need to fire our alarm manager multiplied on cour
+     *            of day from TimePicker which sets the user.
+     * @param v - this is simple view from class when I had initialise this challenge controller.
+     *          we got it from last method-provider 'createSingleInProgressForWake'. We need this
+     *          to see actual message without duplication of different type of notifications. We
+     *          check response and if we got a failure than I show message for user about "Service
+     *          not available". In case when response is success we just show message about "created".
      */
     private void sendSingleInProgressForWakeUp(String pID, int aID, long ring, String[] det, View v) {
 //        Calendar c = GregorianCalendar.getInstance();
@@ -410,6 +456,11 @@ public class ChallengeController {
      * @param inProgressId - this is unique challenge ID. we just put in unique inProgressID after
      *                     this we can make call to API for create this challenge. After that
      *                     we can refresh pending card to get new data.
+     * @param view - this is simple view from class when I had initialise this challenge controller.
+     *             We need this to see actual message without duplication of different type of
+     *             notifications. We check response and if we got a failure than I show message for
+     *             user about "Service not available". In case when response is success we just
+     *             show message about "Challenge created!".
      */
     public void joinToChallenge(String inProgressId, View view) {
         SingleInProgress singleInProgress = retrofit.create(SingleInProgress.class);

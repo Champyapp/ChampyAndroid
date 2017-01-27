@@ -1,5 +1,9 @@
 package com.azinecllc.champy.activity;
 
+import android.annotation.SuppressLint;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -12,6 +16,7 @@ import android.widget.TextView;
 
 import com.azinecllc.champy.BuildConfig;
 import com.azinecllc.champy.R;
+import com.facebook.FacebookSdk;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +26,14 @@ import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 import org.w3c.dom.Text;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import static android.content.pm.PackageManager.GET_SIGNATURES;
+import static com.facebook.FacebookSdk.getApplicationContext;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
+import static org.robolectric.RuntimeEnvironment.getPackageManager;
 
 /**
  * Created by SashaKhyzhun on 1/12/17.
@@ -85,28 +97,42 @@ public class LoginActivityTest {
     }
 
     @Test
-    public void onCreate() throws Exception {
-
+    public void testGetHashKey() throws Exception {
+        try {
+            @SuppressLint("PackageManagerGetSignatures") // check package name..
+                    PackageInfo info = getPackageManager().getPackageInfo("com.azinecllc.champy", PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+            }
+        } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
     }
 
-    @Test
-    public void onClick() throws Exception {
-
-    }
-
-    @Test
-    public void onResume() throws Exception {
-
-    }
-
-    @Test
-    public void onStop() throws Exception {
-
-    }
-
-    @Test
-    public void onBackPressed() throws Exception {
-
-    }
+//    @Test
+//    public void onCreate() throws Exception {
+//
+//    }
+//
+//    @Test
+//    public void onClick() throws Exception {
+//
+//    }
+//
+//    @Test
+//    public void onResume() throws Exception {
+//
+//    }
+//
+//    @Test
+//    public void onStop() throws Exception {
+//
+//    }
+//
+//    @Test
+//    public void onBackPressed() throws Exception {
+//
+//    }
 
 }

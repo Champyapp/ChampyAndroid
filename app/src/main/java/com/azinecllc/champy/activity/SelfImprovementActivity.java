@@ -74,7 +74,7 @@ public class SelfImprovementActivity extends AppCompatActivity /*implements Navi
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final ContentValues cv  = new ContentValues();
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        int   clearCount        = db.delete("selfimprovement", null, null);
+        db.delete("selfimprovement", null, null);
 
         com.azinecllc.champy.interfaces.SelfImprovement selfImprovement = retrofit.create(com.azinecllc.champy.interfaces.SelfImprovement.class);
         Call<com.azinecllc.champy.model.self.SelfImprovement> call = selfImprovement.getChallenges(sessionManager.getToken());

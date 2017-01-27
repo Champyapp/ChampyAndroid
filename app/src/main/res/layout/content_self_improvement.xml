@@ -56,6 +56,11 @@
         android:layout_below="@+id/tvChallengeToMySelf"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:paddingLeft="90dp"
+        android:paddingRight="90dp"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        android:layout_margin="20dp"
         android:layout_above="@+id/imageButtonAccept"
         android:layout_marginBottom="8dp" />
 
