@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 
 
 android {
+
     compileSdkVersion 23
     buildToolsVersion '23.0.3'
 
@@ -35,14 +36,34 @@ android {
         abortOnError false
     }
     productFlavors {
-
+        // на случий платной версии
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true                      // Включаем обфускaцию
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //signingConfig signingConfigs.release // Указываем релизный конфиг для подписывания
+        }
+        debug {
+            minifyEnabled false
+            signingConfig signingConfigs.debug // Указываем отлaдочный конфиг для подписывания
+        }
+        qa {
+            minifyEnabled false                // Отключаем обфускацию
+            signingConfig signingConfigs.debug // Указываем отладочный конфиг для подписывания
+            testCoverageEnabled true           // Включаем анализ покрытия тестами
         }
     }
+
+    signingConfigs {
+        config {
+            keyAlias 'Champy'
+            keyPassword 'Azinec2014'
+            storeFile file('/Users/SashaKhyzhun/Work/AndroidStudioProjects/KeyStore & Templates/champykeystore.jks')
+            storePassword 'Azinec2014'
+        }
+    }
+
     compileOptions {
         targetCompatibility 1.8
         sourceCompatibility 1.8
@@ -58,15 +79,18 @@ dependencies {
 
     // Test Support Library
     androidTestCompile 'com.android.support:support-annotations:23.4.0'
-    androidTestCompile 'com.android.support.test:runner:0.5'                      // делает ClassRule.class и ActiveTestSuite (junit-dep-4.12.sources)
-    androidTestCompile 'com.android.support.test:rules:0.5'                       // делает ClassRule.class и ActiveTestSuite (junit-dep-4.12.sources)
-    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'    // делает ClassRule.class и ActiveTestSuite (junit-dep-4.12.sources)
-    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2.2' // делает ClassRule.class и ActiveTestSuite (junit-dep-4.12.sources)
+    androidTestCompile 'com.android.support.test:runner:0.5'
+
+    // делает ClassRule.class и ActiveTestSuite (junit-dep-4.12.sources)
+    androidTestCompile 'com.android.support.test:rules:0.5'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2.2'
     androidTestCompile 'com.android.support.test.espresso:espresso-idling-resource:2.2.2'
 
     // RetroLambda & GCM Services
     apply plugin: 'me.tatarka.retrolambda'
     apply plugin: 'com.google.gms.google-services'
+
     // JUnit 5
     apply plugin: "com.android.application"
     apply plugin: "de.mannodermaus.android-junit5"
@@ -81,10 +105,9 @@ dependencies {
     compile 'com.android.support:cardview-v7:23.1.1'
     compile 'com.android.support:recyclerview-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
-    compile ('com.android.support:appcompat-v7:23.1.1') {
+    compile('com.android.support:appcompat-v7:23.1.1') {
         exclude module: 'support-v4'
     }
-
     // Dagger 2
     compile 'com.google.dagger:dagger:2.0'
     // Facebook
@@ -107,30 +130,24 @@ dependencies {
     compile 'com.soundcloud.android:android-crop:1.0.1@aar'
     // JWT
     compile 'io.jsonwebtoken:jjwt:0.6.0'
-
     // Glide
     compile 'com.github.bumptech.glide:glide:3.6.1'
     compile 'jp.wasabeef:glide-transformations:1.3.1'
-
     // Fab (Simple & Circular)
     compile 'com.oguzdev:CircularFloatingActionMenu:1.0.2'
     compile 'com.getbase:floatingactionbutton:1.10.1'
-
     // RxAndroid
     compile 'io.reactivex:rxandroid:1.0.1'
     compile 'io.reactivex:rxjava:1.0.14'
-
     // Retrofit
     compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'
     compile 'com.squareup.retrofit:converter-gson:2.0.0-beta2'
-
     // GCM
-    compile ('com.google.android.gms:play-services-gcm:8.3.0')  {
+    compile('com.google.android.gms:play-services-gcm:8.3.0') {
         exclude group: 'com.android.support', module: 'support-v4'
     }
     // Sockets
-    compile ('com.github.nkzawa:socket.io-client:0.3.0') {
+    compile('com.github.nkzawa:socket.io-client:0.3.0') {
         exclude group: 'org.json', module: 'json'
     }
-
 }
