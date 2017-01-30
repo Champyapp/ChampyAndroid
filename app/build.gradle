@@ -38,29 +38,28 @@ android {
     productFlavors {
         // на случий платной версии
     }
-    buildTypes {
-        release {
-            minifyEnabled true                      // Включаем обфускaцию
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            //signingConfig signingConfigs.release // Указываем релизный конфиг для подписывания
-        }
-        debug {
-            minifyEnabled false
-            signingConfig signingConfigs.debug // Указываем отлaдочный конфиг для подписывания
-        }
-        qa {
-            minifyEnabled false                // Отключаем обфускацию
-            signingConfig signingConfigs.debug // Указываем отладочный конфиг для подписывания
-            testCoverageEnabled true           // Включаем анализ покрытия тестами
-        }
-    }
-
     signingConfigs {
-        config {
+        release {
             keyAlias 'Champy'
             keyPassword 'Azinec2014'
             storeFile file('/Users/SashaKhyzhun/Work/AndroidStudioProjects/KeyStore & Templates/champykeystore.jks')
             storePassword 'Azinec2014'
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled true                      // Включаем обфускaцию
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release    // Указываем релизный конфиг для подписывания
+        }
+        debug {
+            minifyEnabled false
+            signingConfig signingConfigs.debug      // Указываем отлaдочный конфиг для подписывания
+        }
+        qa {
+            minifyEnabled false                     // Отключаем обфускацию
+            signingConfig signingConfigs.debug      // Указываем отладочный конфиг для подписывания
+            testCoverageEnabled true                // Включаем анализ покрытия тестами
         }
     }
 
@@ -108,46 +107,29 @@ dependencies {
     compile('com.android.support:appcompat-v7:23.1.1') {
         exclude module: 'support-v4'
     }
-    // Dagger 2
-    compile 'com.google.dagger:dagger:2.0'
-    // Facebook
-    compile 'com.facebook.android:facebook-android-sdk:4.7.0'
-    // GSON
-    compile 'com.google.code.gson:gson:2.4'
-    // OkHttp
-    compile 'com.squareup.okhttp3:okhttp:3.0.1'
-    // Retrofit 2
-    compile 'com.squareup.retrofit2:retrofit-mock:2.1.0'
-    // Material Tabs
-    compile 'it.neokree:MaterialTabs:0.11'
-    // View Server
-    compile 'com.github.romainguy:ViewServer:017c01c'
-    // Nine old Androids
-    compile 'com.nineoldandroids:library:2.4.0'
-    // Apache
-    compile 'org.apache.commons:commons-io:1.3.2'
-    // Crop
-    compile 'com.soundcloud.android:android-crop:1.0.1@aar'
-    // JWT
-    compile 'io.jsonwebtoken:jjwt:0.6.0'
-    // Glide
-    compile 'com.github.bumptech.glide:glide:3.6.1'
-    compile 'jp.wasabeef:glide-transformations:1.3.1'
-    // Fab (Simple & Circular)
-    compile 'com.oguzdev:CircularFloatingActionMenu:1.0.2'
-    compile 'com.getbase:floatingactionbutton:1.10.1'
-    // RxAndroid
-    compile 'io.reactivex:rxandroid:1.0.1'
-    compile 'io.reactivex:rxjava:1.0.14'
-    // Retrofit
-    compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'
-    compile 'com.squareup.retrofit:converter-gson:2.0.0-beta2'
-    // GCM
-    compile('com.google.android.gms:play-services-gcm:8.3.0') {
+    compile 'com.google.dagger:dagger:2.0'                          // Dagger 2
+    compile 'com.facebook.android:facebook-android-sdk:4.7.0'       // Facebook
+    compile 'com.google.code.gson:gson:2.4'                         // GSON
+    compile 'com.squareup.okhttp3:okhttp:3.0.1'                     // OkHttp
+    compile 'com.squareup.retrofit2:retrofit-mock:2.1.0'            // Retrofit 2
+    compile 'it.neokree:MaterialTabs:0.11'                          // Material Tabs
+    compile 'com.github.romainguy:ViewServer:017c01c'               // View Server
+    compile 'com.nineoldandroids:library:2.4.0'                     // Nine old Androids
+    compile 'org.apache.commons:commons-io:1.3.2'                   // Apache
+    compile 'com.soundcloud.android:android-crop:1.0.1@aar'         // Crop
+    compile 'io.jsonwebtoken:jjwt:0.6.0'                            // JWT
+    compile 'com.github.bumptech.glide:glide:3.6.1'                 // Glide
+    compile 'jp.wasabeef:glide-transformations:1.3.1'               // Glide
+    compile 'com.oguzdev:CircularFloatingActionMenu:1.0.2'          // Fab (Simple & Circular)
+    compile 'com.getbase:floatingactionbutton:1.10.1'               // Fab (Simple & Circular)
+    compile 'io.reactivex:rxandroid:1.0.1'                          // RxAndroid
+    compile 'io.reactivex:rxjava:1.0.14'                            // RxAndroid
+    compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'            // Retrofit
+    compile 'com.squareup.retrofit:converter-gson:2.0.0-beta2'      // Retrofit
+    compile('com.google.android.gms:play-services-gcm:8.3.0') {     // GCM
         exclude group: 'com.android.support', module: 'support-v4'
     }
-    // Sockets
-    compile('com.github.nkzawa:socket.io-client:0.3.0') {
+    compile('com.github.nkzawa:socket.io-client:0.3.0') {           // Sockets
         exclude group: 'org.json', module: 'json'
     }
 }
