@@ -70,10 +70,10 @@
 
     <!--    counters    -->
     <TextView
-        android:layout_width="20dp"
+        android:layout_width="25dp"
         android:layout_height="wrap_content"
         android:id="@+id/counterInProgress"
-        android:text="10"
+        android:text="0"
         android:textColor="@color/colorWhite"
         android:textAlignment="center"
         android:textAppearance="@android:style/TextAppearance.Medium"
@@ -83,10 +83,10 @@
         android:layout_toStartOf="@+id/imageView_wins_logo"
         android:layout_marginRight="5dp" />
     <TextView
-        android:layout_width="20dp"
+        android:layout_width="25dp"
         android:layout_height="wrap_content"
         android:id="@+id/counterWins"
-        android:text="15"
+        android:text="0"
         android:textColor="@color/colorWhite"
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -96,10 +96,10 @@
         android:layout_toStartOf="@+id/imageView_total_logo"
         android:layout_marginRight="5dp" />
     <TextView
-        android:layout_width="20dp"
+        android:layout_width="30dp"
         android:layout_height="wrap_content"
         android:id="@+id/counterTotal"
-        android:text="79"
+        android:text="0"
         android:textColor="#ffffff"
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceMedium"

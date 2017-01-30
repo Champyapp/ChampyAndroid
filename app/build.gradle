@@ -33,10 +33,17 @@ android {
         exclude 'LICENSE.txt'
     }
     lintOptions {
+        // This is important, it will run lint checks but won't abort build
         abortOnError false
     }
+    //configurations.all {
+    //    resolutionStrategy {
+    //        // to fix conflict between the versions of the test-app and the main app of the library
+    //        force 'com.android.support:support-annotations:23.1.1'
+    //    }
+    //}
     productFlavors {
-        // на случий платной версии
+        // на случай платной версии
     }
     signingConfigs {
         release {
@@ -48,7 +55,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled true                      // Включаем обфускaцию
+            minifyEnabled false                      // Включаем обфускaцию
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release    // Указываем релизный конфиг для подписывания
         }
@@ -111,7 +118,9 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:4.7.0'       // Facebook
     compile 'com.google.code.gson:gson:2.4'                         // GSON
     compile 'com.squareup.okhttp3:okhttp:3.0.1'                     // OkHttp
-    compile 'com.squareup.retrofit2:retrofit-mock:2.1.0'            // Retrofit 2
+    compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'            // Retrofit 2
+    compile 'com.squareup.retrofit2:retrofit-mock:2.1.0'            // Retrofit 2 Mock
+    compile 'com.squareup.retrofit:converter-gson:2.0.0-beta2'      // Retrofit Gson Converter
     compile 'it.neokree:MaterialTabs:0.11'                          // Material Tabs
     compile 'com.github.romainguy:ViewServer:017c01c'               // View Server
     compile 'com.nineoldandroids:library:2.4.0'                     // Nine old Androids
@@ -124,8 +133,6 @@ dependencies {
     compile 'com.getbase:floatingactionbutton:1.10.1'               // Fab (Simple & Circular)
     compile 'io.reactivex:rxandroid:1.0.1'                          // RxAndroid
     compile 'io.reactivex:rxjava:1.0.14'                            // RxAndroid
-    compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'            // Retrofit
-    compile 'com.squareup.retrofit:converter-gson:2.0.0-beta2'      // Retrofit
     compile('com.google.android.gms:play-services-gcm:8.3.0') {     // GCM
         exclude group: 'com.android.support', module: 'support-v4'
     }

@@ -160,11 +160,11 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    Snackbar snackbar = Snackbar.make(view, (R.string.challenge_created), Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar.make(view, context.getString(R.string.challenge_created), Snackbar.LENGTH_SHORT);
                     snackbar.show();
                     generateCardsForMainActivity(new Intent(activity, MainActivity.class));
                 } else {
-                    Snackbar snackbar = Snackbar.make(view, R.string.service_not_available, Snackbar.LENGTH_LONG);
+                    Snackbar snackbar = Snackbar.make(view, context.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);
                     snackbar.show();
                 }
             }
