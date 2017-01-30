@@ -14,7 +14,7 @@ import com.azinecllc.champy.adapter.PendingDuelsAdapter;
 import com.azinecllc.champy.helper.CHCheckPendingDuels;
 import com.azinecllc.champy.utils.SessionManager;
 
-public class PendingDuelActivity extends AppCompatActivity /*implements NavigationView.OnNavigationItemSelectedListener*/ {
+public class PendingDuelActivity extends AppCompatActivity {
 
     public View spinner;
 

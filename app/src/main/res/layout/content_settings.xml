@@ -147,7 +147,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/avatar"
+                android:text="@string/profile_pictures"
                 android:id="@+id/avatar"
                 android:layout_below="@+id/view"
                 android:layout_alignParentLeft="true"

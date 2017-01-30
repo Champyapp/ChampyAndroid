@@ -49,7 +49,7 @@ android {
         release {
             keyAlias 'Champy'
             keyPassword 'Azinec2014'
-            storeFile file('/Users/SashaKhyzhun/Work/AndroidStudioProjects/KeyStore & Templates/champykeystore.jks')
+            storeFile file('/Users/SashaKhyzhun/Work/AndroidStudioProjects/KeyStore/champykeystore.jks')
             storePassword 'Azinec2014'
         }
     }
