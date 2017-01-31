@@ -60,6 +60,12 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
     }
 
 
+    /**
+     * Method which has check connection to the internet and then check if user has logged-in.
+     * In case 'no' we redirect he to login page, in other case to main screen.
+     *
+     * @param goTo - intent which will redirect the users.
+     */
     private void checkIfLoggedInAndMakeRedirect(Intent goTo) {
         if (offlineMode.isConnectedToRemoteAPI(this)) {
             if (sessionManager.isUserLoggedIn()) {
@@ -92,6 +98,11 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
     }
 
 
+    /**
+     * Method for handle ALL notification. We just handle notification from GCM Service which has
+     * redirect the user to this activity and here we check 'what the notification' and depending
+     * on the type of notification we redirect the user to needed activity.
+     */
     private void checkNotificationExtras() {
         goTo = new Intent(this, MainActivity.class);
         Bundle bundle = getIntent().getExtras();

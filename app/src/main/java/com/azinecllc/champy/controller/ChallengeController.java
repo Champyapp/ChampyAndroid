@@ -119,14 +119,14 @@ public class ChallengeController {
                     String challengeId = response.body().getData().get_id();
                     sendSingleInProgressForSelf(challengeId, view);
                 } else {
-                    Snackbar snackbar = Snackbar.make(view, (R.string.service_not_available), Snackbar.LENGTH_LONG);
+                    Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);
                     snackbar.show();
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Snackbar snackbar = Snackbar.make(view, R.string.service_not_available, Snackbar.LENGTH_SHORT);
+                Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.service_not_available), Snackbar.LENGTH_SHORT);
                 snackbar.show();
             }
         });
@@ -160,18 +160,18 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    Snackbar snackbar = Snackbar.make(view, context.getString(R.string.challenge_created), Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.challenge_created), Snackbar.LENGTH_SHORT);
                     snackbar.show();
                     generateCardsForMainActivity(new Intent(activity, MainActivity.class));
                 } else {
-                    Snackbar snackbar = Snackbar.make(view, context.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);
+                    Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);
                     snackbar.show();
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Snackbar snackbar = Snackbar.make(view, (R.string.service_not_available), Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
         });
@@ -218,14 +218,14 @@ public class ChallengeController {
                     String challengeId = response.body().getData().get_id();
                     sendSingleInProgressForDuel(challengeId, friend_id, v);
                 } else {
-                    Snackbar snackbar = Snackbar.make(v, (R.string.service_not_available), Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar.make(v, activity.getString(R.string.service_not_available), Snackbar.LENGTH_SHORT);
                     snackbar.show();
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Snackbar snackbar = Snackbar.make(v, (R.string.service_not_available), Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(v, activity.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
         });
@@ -271,17 +271,17 @@ public class ChallengeController {
                     //////////////////////////////////////////////////
 
                     refreshCardsForPendingDuel(new Intent(activity, MainActivity.class));
-                    Snackbar snackbar = Snackbar.make(view, (R.string.sent_duel_request), Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.sent_duel_request), Snackbar.LENGTH_SHORT);
                     snackbar.show();
                 } else {
-                    Snackbar snackbar = Snackbar.make(view, (R.string.service_not_available), Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.service_not_available), Snackbar.LENGTH_SHORT);
                     snackbar.show();
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Snackbar snackbar = Snackbar.make(view, (R.string.service_not_available), Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
         });
@@ -359,14 +359,14 @@ public class ChallengeController {
                     String challengeId = response.body().getData().get_id();
                     sendSingleInProgressForWakeUp(challengeId, alarmID, c.getTimeInMillis(), details, view);
                 } else {
-                    Snackbar snackbar = Snackbar.make(view, (R.string.service_not_available), Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.service_not_available), Snackbar.LENGTH_SHORT);
                     snackbar.show();
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Snackbar snackbar = Snackbar.make(view, (R.string.service_not_available), Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
         });
@@ -412,18 +412,18 @@ public class ChallengeController {
                     aManager.setRepeating(AlarmManager.RTC_WAKEUP, ring, AlarmManager.INTERVAL_DAY, pi);
 
 
-                    Snackbar snackbar = Snackbar.make(v, (R.string.challenge_created), Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar.make(v, activity.getString(R.string.challenge_created), Snackbar.LENGTH_SHORT);
                     snackbar.show();
                     generateCardsForMainActivity(new Intent(activity, MainActivity.class));
                 } else {
-                    Snackbar snackbar = Snackbar.make(v, (R.string.service_not_available), Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar.make(v, activity.getString(R.string.service_not_available), Snackbar.LENGTH_SHORT);
                     snackbar.show();
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Snackbar snackbar = Snackbar.make(v, (R.string.service_not_available), Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(v, activity.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
 
@@ -454,11 +454,11 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    Snackbar snackbar = Snackbar.make(view, (R.string.challenge_canceled), Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.challenge_canceled), Snackbar.LENGTH_SHORT);
                     snackbar.show();
                     refreshCardsForPendingDuel(new Intent(activity, MainActivity.class));
                 } else {
-                    Snackbar snackbar = Snackbar.make(view, (R.string.service_not_available), Snackbar.LENGTH_LONG);
+                    Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);
                     snackbar.show();
                     refreshCardsForPendingDuel(new Intent(activity, MainActivity.class));
                 }
@@ -466,7 +466,7 @@ public class ChallengeController {
 
             @Override
             public void onFailure(Throwable t) {
-                Snackbar snackbar = Snackbar.make(view, (R.string.service_not_available), Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
         });
@@ -495,10 +495,10 @@ public class ChallengeController {
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     refreshCardsForPendingDuel(new Intent(activity, MainActivity.class));
-                    Snackbar snackbar = Snackbar.make(view, (R.string.challenge_canceled), Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.challenge_canceled), Snackbar.LENGTH_SHORT);
                     snackbar.show();
                 } else {
-                    Snackbar snackbar = Snackbar.make(view, (R.string.service_not_available), Snackbar.LENGTH_LONG);
+                    Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);
                     snackbar.show();
                     refreshCardsForPendingDuel(new Intent(activity, MainActivity.class));
                 }
@@ -506,7 +506,7 @@ public class ChallengeController {
 
             @Override
             public void onFailure(Throwable t) {
-                Snackbar snackbar = Snackbar.make(view, (R.string.service_not_available), Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
         });
@@ -552,14 +552,14 @@ public class ChallengeController {
 
                     generateCardsForMainActivity(i);
                 } else {
-                    Snackbar snackbar = Snackbar.make(v, (R.string.service_not_available), Snackbar.LENGTH_LONG);
+                    Snackbar snackbar = Snackbar.make(v, activity.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);
                     snackbar.show();
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Snackbar snackbar = Snackbar.make(v, (R.string.service_not_available), Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(v, activity.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
         });
@@ -604,7 +604,7 @@ public class ChallengeController {
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, activity.getString(R.string.service_not_available), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -666,13 +666,13 @@ public class ChallengeController {
                     }
 
                 } else {
-                    Toast.makeText(activity, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, activity.getString(R.string.service_not_available), Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(context, context.getString(R.string.service_not_available), Toast.LENGTH_LONG).show();
+                Toast.makeText(context, activity.getString(R.string.service_not_available), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -835,30 +835,15 @@ public class ChallengeController {
     private void setNewAlarmClock(String arrayDetails, String alarmID) {
         String[] details = arrayDetails.replace("[", "").replace("]", "").split(", ");
         long now = System.currentTimeMillis() / 1000;
-        //Log.i(TAG, "~~~~~~~~~~~~~~~ START ~~~~~~~~~~~~~~~");
-        //Log.i(TAG, "details.length = " + details.length);
-        //Log.i(TAG, "details.full   = " + Arrays.toString(details));
-        //Log.i(TAG, "~~~~~~~~~~~~~ START IF ~~~~~~~~~~~~~~");
         for (int i = 0; i <= details.length - 1; i++) {
-            //Log.d(TAG, "i = " + i + " | d[i]: " + details[i]);
             if (now < Integer.parseInt(details[i])) {
-                //Log.i(TAG, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-                //Log.i(TAG, "Woo-hoo");
-                //Log.i(TAG, "now < d[i]");
-                //Log.i(TAG, now + " < " + Integer.parseInt(details[i]));
-                //Log.i(TAG, "next alarm will be at: " + Long.parseLong(details[i]) * 1000);
-                //Log.i(TAG, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
                 Intent intent = new Intent(context, MainActivity.class);
                 PendingIntent operation = PendingIntent.getBroadcast(context, Integer.parseInt(alarmID), intent, 0);
                 AlarmManager aManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                 aManager.set(AlarmManager.RTC_WAKEUP, Long.parseLong(details[i]) * 1000, operation);
                 break;
             }
-            //Log.i(TAG, "i-element < needed time");
-            //Log.i(TAG, "i++");
-
         }
-
     }
 
     /**
