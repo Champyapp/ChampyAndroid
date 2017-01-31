@@ -84,6 +84,10 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_above="@+id/ok"
+        android:paddingLeft="90dp"
+        android:paddingRight="90dp"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
         android:layout_marginBottom="8dp" />
 
     <ImageButton

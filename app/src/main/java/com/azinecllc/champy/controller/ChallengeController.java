@@ -473,9 +473,18 @@ public class ChallengeController {
     }
 
     /**
-     * @param inProgressId
-     * @param view
-     * @throws IOException
+     * Method for reject some challenge if we doesn't want to accept her. This method made call to
+     * API and transmit need value: inProgressID. After that we can refresh local database tables.
+     * @param inProgressId - this is unique challenge ID. we just put in unique inProgressID after
+     *                     this we can make call to API for create this challenge. After that
+     *                     we can refresh pending card to get new data.
+     * @param view - this is simple view from class when I had initialise this challenge controller.
+     *             We need this to see actual message without duplication of different type of
+     *             notifications. We check response and if we got a failure than I show message for
+     *             user about "Service not available". In case when response is success we just
+     *             show message about "Challenge created!".
+     * @throws IOException - we can expect this exception because user has opportunity to reject
+     *                     challenge which has already rejected. In this case we can handle error
      */
     public void rejectInviteForPendingDuel(String inProgressId, View view) throws IOException {
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
@@ -505,12 +514,17 @@ public class ChallengeController {
 
 
     /**
-     *
-     * @param pID
-     * @param aID
-     * @param i
-     * @param det
-     * @throws IOException
+     * Method for check any type of challenge. We used this challenge everyday to make call fro API.
+     * User should do this everyday to continue her challenge in other case he will have auto-surrender
+     * @param pID - this is unique challenge inProgress ID. we just put in unique inProgressID after
+     *                     this we can make call to API for create this challenge. After that
+     *                     we can refresh pending card to get new data.
+     * @param aID - alarmManager ID. This is only for wake-up challenge. We need this for re-enable
+     *            alarmManager every check-in and if we had finished our challenge then disable.
+     * @param i - intent. We need this to redirect user to needed activity.
+     * @param det - details. this is Array with times when we need fire the alarm manager.
+     * @throws IOException - we can expect this exception because user has opportunity to check
+     *                     challenge which has already checked or lost. In this case we can handle it
      */
     public void doneForToday(String pID, String aID, Intent i, String det, View v) throws IOException {
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
@@ -525,8 +539,8 @@ public class ChallengeController {
                     Log.i(TAG, "now: " + System.currentTimeMillis() / 1000);
                     Log.i(TAG, "end: " + (end - oneDay));
                     if (type.equals(typeWake) && (now > end - oneDay)) {
-                        setNewAlarmClock(det, aID);
-                        Log.i(TAG, "now < end :)");
+                        //setNewAlarmClock(det, aID);
+                        Log.i(TAG, "now < end\n disabled the AlarmManager");
                         Intent myIntent = new Intent(activity, CustomAlarmReceiver.class);
                         PendingIntent pendingIntent = PendingIntent.getBroadcast(activity, Integer.valueOf(aID), myIntent, 0);
                         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -553,10 +567,14 @@ public class ChallengeController {
 
     /**
      *
-     * @param id
-     * @param alarmID
-     * @param intent
-     * @throws IOException
+     * @param id - this is unique challenge ID. we just put in unique inProgressID after
+     *                     this we can make call to API for create this challenge. After that
+     *                     we can refresh pending card to get new data.
+     * @param alarmID - alarmManager ID. This is only for wake-up challenge. We need this for
+     *                disable alarmManager if we had finished our challenge or just gave up.
+     * @param intent - intent. We need this to redirect user to needed activity.
+     * @throws IOException - we can expect this exception because user has opportunity to give up
+     *                     challenge which has already lost. In this case we can handle error
      */
     public void give_up(String id, int alarmID, Intent intent) throws IOException {
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
@@ -595,8 +613,15 @@ public class ChallengeController {
 
 
     /**
+     * Method for refreshing card for pending duel. We store the cards locally, but we got it from API.
+     * So, this is important method because we should always refresh out data (ex: every login).
+     * We had cleared our table 'pending_duel' before all actions and after that we make call to api
+     * for get our current pending card and store it to database. For this method we don't need input
+     * data like inProgressID or something else.
+     * @param intent - simple intent to provide call for next method. Actually we don't need this
+     *               in current method, but we need to make call inside the call and for this we
+     *               provide 'intent' to 'generate' method.
      *
-     * @param intent
      */
     public void refreshCardsForPendingDuel(Intent intent) {
         ContentValues cv  = new ContentValues();
@@ -653,8 +678,13 @@ public class ChallengeController {
     }
 
     /**
-     *
-     * @param intent
+     * Method for refreshing card for mainScreen. We store the cards locally, but we got it frim API.
+     * So, this is important method because we should always refresh out data (ex: every login or
+     * creating new challenge). We had cleared our table 'myChallenges' (which contains any type of
+     * challenges!) before all actions and after that we make call to API for get our current card
+     * with challenges which has in progress and store it to database. For this method we need only
+     * intent to redirect the users to needed activity.
+     * @param intent - simple intent to provide the users after call.
      */
     private void generateCardsForMainActivity(Intent intent) {
         DBHelper dbHelper = DBHelper.getInstance(context);

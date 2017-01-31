@@ -23,7 +23,7 @@ public class MyAlarmService extends IntentService {
 
     @Override
     public void onHandleIntent(Intent intent) {
-        sendNotification("Wake Up! lol");
+        sendNotification("Wake Up, Dude!");
     }
 
     private void sendNotification(String msg) {
