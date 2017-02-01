@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.controller.ChallengeController;
@@ -173,7 +174,9 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
     private void onClickCancel(View view) {
         snackbar = Snackbar.make(view, R.string.are_you_sure, Snackbar.LENGTH_LONG).setAction(R.string.yes, vCancel -> {
             try {
-                cc.rejectInviteForPendingDuel(challenge_id, view);
+                cc.rejectInviteForPendingDuel(challenge_id);
+                snackbar = Snackbar.make(view, R.string.challenge_canceled, Snackbar.LENGTH_SHORT);
+                snackbar.show();
             } catch (IOException | NullPointerException e) {
                 e.printStackTrace();
             }
@@ -185,9 +188,11 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         snackbar = Snackbar.make(view, getString(R.string.are_you_sure), Snackbar.LENGTH_LONG).setAction(getString(R.string.yes), vAccept -> {
             try {
                 if (!cc.isActive(description) && recipient.equals("true") && inProgressCount < 10) {
-                    cc.joinToChallenge(challenge_id, view);
+                    cc.joinToChallenge(challenge_id);
+                    snackbar = Snackbar.make(view, R.string.challenge_created, Snackbar.LENGTH_SHORT);
+                    snackbar.show();
                 } else {
-                    snackbar = Snackbar.make(view, getString(R.string.cant_create_this_challenge), Snackbar.LENGTH_SHORT);
+                    snackbar = Snackbar.make(view, R.string.cant_create_this_challenge, Snackbar.LENGTH_SHORT);
                     snackbar.show();
                 }
             } catch (NullPointerException e) {

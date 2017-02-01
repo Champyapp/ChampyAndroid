@@ -20,28 +20,14 @@ android {
         versionName "1.0"
         renderscriptTargetApi 18
         multiDexEnabled true
-        dexOptions {
-            javaMaxHeapSize "4g"
-        }
         renderscriptSupportModeEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
-    packagingOptions {
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/LICENSE'
-        exclude 'LICENSE.txt'
-    }
     lintOptions {
-        // This is important, it will run lint checks but won't abort build
-        abortOnError false
+        abortOnError false // This is important, it will run lint checks but won't abort build
     }
-    //configurations.all {
-    //    resolutionStrategy {
-    //        // to fix conflict between the versions of the test-app and the main app of the library
-    //        force 'com.android.support:support-annotations:23.1.1'
-    //    }
-    //}
+
     productFlavors {
         // на случай платной версии
     }
@@ -56,6 +42,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false                      // Включаем обфускaцию
+            shrinkResources false                    // Включаем сокращение
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release    // Указываем релизный конфиг для подписывания
         }
@@ -63,16 +50,25 @@ android {
             minifyEnabled false
             signingConfig signingConfigs.debug      // Указываем отлaдочный конфиг для подписывания
         }
-        qa {
-            minifyEnabled false                     // Отключаем обфускацию
-            signingConfig signingConfigs.debug      // Указываем отладочный конфиг для подписывания
-            testCoverageEnabled true                // Включаем анализ покрытия тестами
-        }
     }
 
     compileOptions {
         targetCompatibility 1.8
         sourceCompatibility 1.8
+    }
+
+    dexOptions {
+        jumboMode true
+        javaMaxHeapSize "4g"
+    }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/DEPENDENCIES'
+        pickFirst 'AndroidManifest.xml'
     }
 }
 

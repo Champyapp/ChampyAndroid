@@ -140,7 +140,9 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
                             try {
                                 days = Integer.parseInt(duration);
                                 if (!cc.isActive(description) && !description.isEmpty()) {
-                                    cc.createNewDuelChallenge(description, days, friend_id, view);
+                                    cc.createNewDuelChallenge(description, days, friend_id);
+                                    snackbar = Snackbar.make(view, (R.string.sent_duel_request), Snackbar.LENGTH_SHORT);
+                                    snackbar.show();
                                 } else {
                                     snackbar = Snackbar.make(view, R.string.cant_create_this_challenge, Snackbar.LENGTH_SHORT);
                                     snackbar.show();
@@ -174,7 +176,9 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
 
                             try {
                                 if (!cc.isActive(description)) {
-                                    cc.sendSingleInProgressForDuel(challenge_id, friend_id, view);
+                                    cc.sendSingleInProgressForDuel(challenge_id, friend_id);
+                                    snackbar = Snackbar.make(view, (R.string.sent_duel_request), Snackbar.LENGTH_SHORT);
+                                    snackbar.show();
                                 } else {
                                     snackbar = Snackbar.make(view, R.string.cant_create_this_challenge, Snackbar.LENGTH_SHORT);
                                     snackbar.show();

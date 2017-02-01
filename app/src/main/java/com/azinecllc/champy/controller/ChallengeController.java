@@ -84,20 +84,20 @@ public class ChallengeController {
 
 
     /**
-     * Method for create new Self-Improvement challenge and send call to API with Retrofit2.
+     * Method to create new Self-Improvement challenge and send call to API with Retrofit2.
      * We create new challenge and try to send it 'in progress'. This is only for custom cards.
      * @param description - this is value of challenge description. We get it from EditText in
      *                    SelfImprovementFragment Ofc we check if this value isActive or isEmpty
      * @param days - this is count of duration by challenge. Like with 'description': we get value
      *             from EditText and pass value here. After that we convert current value of days
      *             to UnixTime because API works only with it and push it up.
-     * @param view - this is simple view from class when I had initialise this ChallengeController.
+     * @param -view - this is simple view from class where I initialize this ChallengeController.
      *             we need this to see actual message without duplication of different type of
      *             notifications. We check response and if we got a failure than I show message for
      *             user about "Service not available". In case when response is success we just
      *             transmit this view in next method 'sendSingleInProgressForSelf' and do there next.
      */
-    public void createNewSelfImprovementChallenge(String description, int days, View view) {
+    public void createNewSelfImprovementChallenge(String description, int days) {
         final String duration = "" + (days * 86400);
         final String details = description + " during this period: " + days + " days";
 
@@ -117,17 +117,15 @@ public class ChallengeController {
             public void onResponse(Response<com.azinecllc.champy.model.create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
-                    sendSingleInProgressForSelf(challengeId, view);
+                    sendSingleInProgressForSelf(challengeId);
                 } else {
-                    Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);
-                    snackbar.show();
+                    Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.service_not_available), Snackbar.LENGTH_SHORT);
-                snackbar.show();
+                Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
             }
         });
 
@@ -143,14 +141,14 @@ public class ChallengeController {
      *                     need to create new self-improvement challenge with user description and
      *                     count of days for challenge. After this operation we can get 'inProgressID'
      *                     and with that we can sent it to API
-     * @param view - this is simple view from class when I had initialise this challenge controller
+     * @param -view - this is simple view from class where I initialize this challenge controller
      *             in case: if user want to create custom challenge, in other case we got it from
      *             last method-provider 'createSingleInProgressForSelf'. We need this to see actual
      *             message without duplication of different type of notifications. We check response
      *             and if we got a failure than I show message for user about "Service not
      *             available". In case when response is success we just show message about "created".
      */
-    public void sendSingleInProgressForSelf(String inProgressID, View view) {
+    public void sendSingleInProgressForSelf(String inProgressID) {
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
 
         Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call =
@@ -160,19 +158,15 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.challenge_created), Snackbar.LENGTH_SHORT);
-                    snackbar.show();
                     generateCardsForMainActivity(new Intent(activity, MainActivity.class));
                 } else {
-                    Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);
-                    snackbar.show();
+                    Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);
-                snackbar.show();
+                Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -180,7 +174,7 @@ public class ChallengeController {
 
 
     /**
-     * Method for create new Duel challenge and make call to API with Retrofit2.
+     * Method to create new Duel challenge and make call to API with Retrofit2.
      * We create new challenge and try to sent it 'in progress'. This is only for custom cards.
      * @param description - this is value of challenge description. We get it from EditText in
      *                    DuelFragment.class, before sending we check if this value isActive or Empty
@@ -189,14 +183,14 @@ public class ChallengeController {
      *             to UnixTime because API works only with it and push it up.
      * @param friend_id - this is userID with whom we want to make a duel. this is ID has generated
      *                  when user create his account. (this is friend from Facebook)
-     * @param v - this is simple view from class when I had initialise this ChallengeController.
-     *             we need this to see actual message without duplication of different type of
-     *             notifications. We check response and if we got a failure than I show message for
+     * @param -v - this is simple view from class where I initialize this challenge controller.
+     *             We need this to see actual message without duplication of different type of
+     *             notifications. We check response and if we got a failure then I show message for
      *             user about "Service not available". In case when response is success we just
      *             transmit this view in next method 'sendSingleInProgressForDuel' and do there
      *             next logic.
      */
-    public void createNewDuelChallenge(String description, int days, String friend_id, View v) {
+    public void createNewDuelChallenge(String description, int days, String friend_id) {
         final String duration = String.valueOf(days * 86400);
         final String details = description + " during this period: " + days + " days";
 
@@ -216,17 +210,15 @@ public class ChallengeController {
             public void onResponse(Response<com.azinecllc.champy.model.create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
-                    sendSingleInProgressForDuel(challengeId, friend_id, v);
+                    sendSingleInProgressForDuel(challengeId, friend_id);
                 } else {
-                    Snackbar snackbar = Snackbar.make(v, activity.getString(R.string.service_not_available), Snackbar.LENGTH_SHORT);
-                    snackbar.show();
+                    Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Snackbar snackbar = Snackbar.make(v, activity.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);
-                snackbar.show();
+                Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
             }
         });
 
@@ -242,14 +234,14 @@ public class ChallengeController {
      *            operation we can get 'inProgressID' and make call.
      * @param friendID - this is userID with whom we want to make a duel. this is ID has generated
      *                 when user create his account. (this is friend from Facebook)
-     * @param view - this is simple view from class when I had initialise this challenge controller
+     * @param -view - this is simple view from class when I had initialise this challenge controller
      *             in case: if user want to create custom challenge, in other case we got it from
      *             last method-provider 'createSingleInProgressForDuel'. We need this to see actual
      *             message without duplication of different type of notifications. We check response
      *             and if we got a failure than I show message for user about "Service not
      *             available". In case when response is success we just show message about "created".
      */
-    public void sendSingleInProgressForDuel(String iID, String friendID, View view) {
+    public void sendSingleInProgressForDuel(String iID, String friendID) {
 
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
         Call<Duel> call = singleinprogress.startDuel(friendID, iID, token);
@@ -271,18 +263,14 @@ public class ChallengeController {
                     //////////////////////////////////////////////////
 
                     refreshCardsForPendingDuel(new Intent(activity, MainActivity.class));
-                    Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.sent_duel_request), Snackbar.LENGTH_SHORT);
-                    snackbar.show();
                 } else {
-                    Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.service_not_available), Snackbar.LENGTH_SHORT);
-                    snackbar.show();
+                    Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);
-                snackbar.show();
+                Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -290,7 +278,7 @@ public class ChallengeController {
 
 
     /**
-     * Method for create new Wake-Up challenge, send this challenge to API after check, and transmit
+     * Method to create new Wake-Up challenge, send this challenge to API after check, and transmit
      * needed values to method 'sendSingleInProgressForWakeUp'. We get data from TimePicker and calculate
      * current Midnight, create calendar we needed time for ring and create an array with time for ring
      * @param days - this is custom value of challenge duration which user has chosen. This is simple
@@ -300,14 +288,14 @@ public class ChallengeController {
      *              lower than 10. Also we use this value for alarmID and calendar.
      * @param sMinute - we get this value from time picker and convert from 1:8 to 01:08 if value
      *              lower than 10. Also we use this value for alarmID and calendar.
-     * @param view - this is simple view from class when I had initialise this ChallengeController.
-     *             we need this to see actual message without duplication of different type of
-     *             notifications. We check response and if we got a failure than I show message for
+     * @param -view - this is simple view from class where I initialize this challenge controller.
+     *             We need this to see actual message without duplication of different type of
+     *             notifications. We check response and if we got a failure then I show message for
      *             user about "Service not available". In case when response is success we just
      *             transmit this view in next method 'sendSingleInProgressForWakeUp' and do there
      *             next logic.
      */
-    public void createNewWakeUpChallenge(int days, String sHour, String sMinute, View view) {
+    public void createNewWakeUpChallenge(int days, String sHour, String sMinute) {
         final String duration = String.format("%s", days * oneDay);
         final String wakeUpName = "Wake up at " + sHour + ":" + sMinute;
         final String wakeUpTime = sHour + sMinute;
@@ -357,23 +345,21 @@ public class ChallengeController {
             public void onResponse(Response<com.azinecllc.champy.model.create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
-                    sendSingleInProgressForWakeUp(challengeId, alarmID, c.getTimeInMillis(), details, view);
+                    sendSingleInProgressForWakeUp(challengeId, alarmID, c.getTimeInMillis(), details);
                 } else {
-                    Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.service_not_available), Snackbar.LENGTH_SHORT);
-                    snackbar.show();
+                    Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);
-                snackbar.show();
+                Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
             }
         });
     }
 
     /**
-     * Private Method for send Wake-Up challenge 'in progress'. Here we get data from our method
+     * Private Method to send Wake-Up challenge 'in progress'. Here we get data from our method
      * 'createNewWakeUpChallenge', create AlarmManager for daily ring, convert time for API, and
      * sending extras for CustomAlarmReceiver. Next we generate cards for MainActivity.
      * @param pID - our unique 'ID' for create new challenge, we get this value from
@@ -384,13 +370,13 @@ public class ChallengeController {
      *             we need fire our alarm manager.
      * @param det - this is array with time when need to fire our alarm manager multiplied on cour
      *            of day from TimePicker which sets the user.
-     * @param v - this is simple view from class when I had initialise this challenge controller.
+     * @param -v - this is simple view from class where I initialize this challenge controller.
      *          we got it from last method-provider 'createSingleInProgressForWake'. We need this
      *          to see actual message without duplication of different type of notifications. We
      *          check response and if we got a failure than I show message for user about "Service
      *          not available". In case when response is success we just show message about "created".
      */
-    private void sendSingleInProgressForWakeUp(String pID, int aID, long ring, String[] det, View v) {
+    private void sendSingleInProgressForWakeUp(String pID, int aID, long ring, String[] det) {
         Log.i(TAG, "sendSingleInProgressForWakeUp: when ring: " + ring);
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
         Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = singleinprogress.startSingleInProgress(pID, token);
@@ -411,20 +397,15 @@ public class ChallengeController {
                     AlarmManager aManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                     aManager.setRepeating(AlarmManager.RTC_WAKEUP, ring, AlarmManager.INTERVAL_DAY, pi);
 
-
-                    Snackbar snackbar = Snackbar.make(v, activity.getString(R.string.challenge_created), Snackbar.LENGTH_SHORT);
-                    snackbar.show();
                     generateCardsForMainActivity(new Intent(activity, MainActivity.class));
                 } else {
-                    Snackbar snackbar = Snackbar.make(v, activity.getString(R.string.service_not_available), Snackbar.LENGTH_SHORT);
-                    snackbar.show();
+                    Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Snackbar snackbar = Snackbar.make(v, activity.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);
-                snackbar.show();
+                Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
             }
 
         });
@@ -434,19 +415,18 @@ public class ChallengeController {
 
 
     /**
-     * Method for join to some challenge which you had received from your friends.
-     * This method made call to API and transmit need value: inProgressID.
-     *
-     * @param inProgressId - this is unique challenge ID. we just put in unique inProgressID after
-     *                     this we can make call to API for create this challenge. After that
-     *                     we can refresh pending card to get new data.
-     * @param view - this is simple view from class when I had initialise this challenge controller.
+     * Method to join to some challenge which you had received from your friends.
+     * This method make call to API and transmit needed value: inProgressID.
+     * @param inProgressId - this is unique challenge ID. we just put this unique inProgressID after
+     *                     this we can make call to API for create this challenge. After that we
+     *                     can refresh pending card to get new data.
+     * @param -view - this is simple view from class where I initialize this challenge controller.
      *             We need this to see actual message without duplication of different type of
-     *             notifications. We check response and if we got a failure than I show message for
+     *             notifications. We check response and if we got a failure then I show message for
      *             user about "Service not available". In case when response is success we just
      *             show message about "Challenge created!".
      */
-    public void joinToChallenge(String inProgressId, View view) {
+    public void joinToChallenge(String inProgressId) {
         SingleInProgress singleInProgress = retrofit.create(SingleInProgress.class);
 
         Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = singleInProgress.join(inProgressId, token);
@@ -454,39 +434,35 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.challenge_canceled), Snackbar.LENGTH_SHORT);
-                    snackbar.show();
                     refreshCardsForPendingDuel(new Intent(activity, MainActivity.class));
                 } else {
-                    Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);
-                    snackbar.show();
+                    Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
                     refreshCardsForPendingDuel(new Intent(activity, MainActivity.class));
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);
-                snackbar.show();
+                Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
             }
         });
     }
 
     /**
-     * Method for reject some challenge if we doesn't want to accept her. This method made call to
-     * API and transmit need value: inProgressID. After that we can refresh local database tables.
+     * Method to reject some challenge if we doesn't want accept her. This method make call to API
+     * and transmit needed value: inProgressID. After that we can refresh local database tables.
      * @param inProgressId - this is unique challenge ID. we just put in unique inProgressID after
      *                     this we can make call to API for create this challenge. After that
      *                     we can refresh pending card to get new data.
-     * @param view - this is simple view from class when I had initialise this challenge controller.
+     * @param -view - this is simple view from class where I initialize this challenge controller.
      *             We need this to see actual message without duplication of different type of
-     *             notifications. We check response and if we got a failure than I show message for
+     *             notifications. We check response and if we got a failure then I show message for
      *             user about "Service not available". In case when response is success we just
      *             show message about "Challenge created!".
      * @throws IOException - we can expect this exception because user has opportunity to reject
      *                     challenge which has already rejected. In this case we can handle error
      */
-    public void rejectInviteForPendingDuel(String inProgressId, View view) throws IOException {
+    public void rejectInviteForPendingDuel(String inProgressId) throws IOException {
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
 
         Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = activeInProgress.reject(inProgressId, token);
@@ -495,19 +471,15 @@ public class ChallengeController {
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     refreshCardsForPendingDuel(new Intent(activity, MainActivity.class));
-                    Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.challenge_canceled), Snackbar.LENGTH_SHORT);
-                    snackbar.show();
                 } else {
-                    Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);
-                    snackbar.show();
+                    Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
                     refreshCardsForPendingDuel(new Intent(activity, MainActivity.class));
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Snackbar snackbar = Snackbar.make(view, activity.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);
-                snackbar.show();
+                Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
             }
         });
     }
