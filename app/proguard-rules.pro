@@ -5,7 +5,7 @@
 # directive in build.gradle.
 #
 # For more details, see
-#   http://d...content-available-to-author-only...d.com/guide/developing/tools/proguard.html
+# http://d...content-available-to-author-only...d.com/guide/developing/tools/proguard.html
 
 # Add any project specific keep options here:
 
@@ -24,12 +24,33 @@
 -optimizations !code/simplification/arithmetic
 -keepattributes *Annotation*
 -dontwarn
+-optimizationpasses 5
+-dontusemixedcaseclassnames
+-dontskipnonpubliclibraryclasses
+-dontskipnonpubliclibraryclassmembers
+-dontpreverify
+-verbose
+-dump class_files.txt
+-printseeds seeds.txt
+-printusage unused.txt
+-printmapping mapping.txt
+-optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
+
+-allowaccessmodification
+-keepattributes *Annotation*
+-renamesourcefileattribute SourceFile
+-keepattributes SourceFile,LineNumberTable
+-repackageclasses ''
 
 -keep public class * extends android.app.Activity
 -keep public class * extends android.app.Application
 -keep public class * extends android.app.Service
 -keep public class * extends android.content.BroadcastReceiver
 -keep public class * extends android.content.ContentProvider
+
+-keep public class * extends com.azinecllc.champy.model.* {
+
+}
 
 -keep public class * extends android.view.View {
     public <init>(android.content.Context);
@@ -110,3 +131,11 @@ public void updateFields(com.andymcsherry.proguarddemo.SensorData);
     public static *** d(...);
     public static *** v(...);
 }
+
+# Ignoring private classes
+
+-ignorewarnings
+
+#-keep class * {
+#    public private *;
+#}

@@ -41,8 +41,8 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false                      // Включаем обфускaцию
-            shrinkResources false                    // Включаем сокращение
+            minifyEnabled true                      // Включаем обфускaцию
+            shrinkResources true                    // Включаем сокращение
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release    // Указываем релизный конфиг для подписывания
         }

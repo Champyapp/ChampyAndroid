@@ -87,6 +87,11 @@ public class SelfImprovementActivity extends AppCompatActivity {
                     for (int i = 0; i < data.size(); i++) {
                         com.azinecllc.champy.model.self.Datum datum = data.get(i);
                         String datumType = datum.getType().getName();
+
+                        if (datum.getName().equals("Reading a Books")) {
+                            datum.setName("Read a Books");
+                        }
+
                         if (datumType.equals("self improvement")) {
                             if (!datum.getName().equals("User_Challenge")) {
                                 cv.put("name", datum.getName());
