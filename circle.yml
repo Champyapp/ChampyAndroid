@@ -4,18 +4,23 @@
 
 general:
     artifacts:
-        - /Users/SashaKhyzhun/Work/AndroidStudioProjects/ChampyAndroid/app/build/outputs/
+        - /home/ubuntu/ChampyAndroid/app/build/outputs/apk/
 
 machine:
     environment:
-        ANDROID_HOME: /Users/SashaKhyzhun/Library/Android/sdk
+        ANDROID_HOME: /usr/local/android-sdk-linux
 
 dependencies:
+    pre:
+        - chmod +x gradlew
     override:
-        - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-23.0.1,android-32,extra-google-m2repository,extra-google-google_play_services,extra-android-support
-        - ANDROID_HOME=/Users/SashaKhyzhun/Library/Android/sdk ./gradlew dependencies
+        - echo y | android update sdk --no-ui --all --filter --stacktrace tools,platform-tools,build-tools-23.0.1,android-23,extra-google-m2repository,extra-google-google_play_services,extra-android-support
+        - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
 
 test:
     override:
-        - (./gradlew test --continue):
+        - (./gradlew assemble):
             timeout: 360
+
+#- echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-23.0.1,android-32,extra-google-m2repository,extra-google-google_play_services,extra-android-support
+#- ANDROID_HOME=/Users/SashaKhyzhun/Library/Android/sdk ./gradlew dependencies
