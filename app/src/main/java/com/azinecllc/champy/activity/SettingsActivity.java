@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -382,30 +383,54 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         map.put("pushNotifications",     pushNotify);
 
         Switch switchForPushNotif = (Switch) findViewById(R.id.switchPushNotifications);
-        if (pushNotify.equals("true")) switchForPushNotif.setChecked(true);
-        else switchForPushNotif.setChecked(false);
+        if (pushNotify.equals("true")) {
+            switchForPushNotif.setChecked(true);
+        } else {
+            switchForPushNotif.setChecked(false);
+        }
 
         switchForPushNotif.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) map.put("pushNotifications", "true");
-            else map.put("pushNotifications", "false");
+            if (isChecked) {
+                map.put("pushNotifications", "true");
+                updateProfile(map);
+            } else {
+                map.put("pushNotifications", "false");
+                updateProfile(map);
+            }
         });
 
-        Switch switchorNewChallRequests = (Switch) findViewById(R.id.switchNewChallengeRequest);
-        if (newChallengeReq.equals("true")) switchorNewChallRequests.setChecked(true);
-        else switchorNewChallRequests.setChecked(false);
+        Switch switchForNewChallRequests = (Switch) findViewById(R.id.switchNewChallengeRequest);
+        if (newChallengeReq.equals("true")) {
+            switchForNewChallRequests.setChecked(true);
+        } else {
+            switchForNewChallRequests.setChecked(false);
+        }
 
-        switchorNewChallRequests.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) map.put("newChallengeRequests", "true");
-            else map.put("newChallengeRequests", "false");
+        switchForNewChallRequests.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                map.put("newChallengeRequests", "true");
+                updateProfile(map);
+            } else {
+                map.put("newChallengeRequests", "false");
+                updateProfile(map);
+            }
         });
 
         Switch switchForAcceptedYourChall = (Switch) findViewById(R.id.switchAcceptedYourChallenge);
-        if (acceptedYour.equals("true")) switchForAcceptedYourChall.setChecked(true);
-        else switchForAcceptedYourChall.setChecked(false);
+        if (acceptedYour.equals("true")) {
+            switchForAcceptedYourChall.setChecked(true);
+        } else {
+            switchForAcceptedYourChall.setChecked(false);
+        }
 
         switchForAcceptedYourChall.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) map.put("acceptedYourChallenge", "true");
-            else map.put("acceptedYourChallenge", "false");
+            if (isChecked) {
+                map.put("acceptedYourChallenge", "true");
+                updateProfile(map);
+            } else {
+                map.put("acceptedYourChallenge", "false");
+                updateProfile(map);
+            }
         });
 
         Switch switchForChallengesEnd = (Switch) findViewById(R.id.switchChallengeEnd);
@@ -413,8 +438,13 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         else switchForChallengesEnd.setChecked(false);
 
         switchForChallengesEnd.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) map.put("challengeEnd", "true");
-            else map.put("challengeEnd", "false");
+            if (isChecked) {
+                map.put("challengeEnd", "true");
+                updateProfile(map);
+            } else {
+                map.put("challengeEnd", "false");
+                updateProfile(map);
+            }
         });
 
         Switch switchChallengesForToday = (Switch) findViewById(R.id.switchChallengesForToday);
@@ -425,9 +455,11 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             if (isChecked) {
                 map.put("challengesForToday", "true");
                 reminder.enableDailyNotificationReminder();
+                updateProfile(map);
             } else {
                 map.put("challengesForToday", "false");
                 reminder.disableDailyNotificationReminder();
+                updateProfile(map);
             }
         });
 
