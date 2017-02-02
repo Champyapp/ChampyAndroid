@@ -353,42 +353,33 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
-                if (!response.isSuccess()) {
-                    Toast.makeText(SettingsActivity.this, R.string.service_not_available, Toast.LENGTH_LONG).show();
-                }
             }
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(SettingsActivity.this, R.string.service_not_available, Toast.LENGTH_LONG).show();
             }
         });
     }
 
 
     private void initSwitches() {
-        String pushNotify      = user.get("pushN");
-        String acceptedYour    = user.get("acceptedYour");
-        String challengeEnd    = user.get("challengeEnd");
+        String pushNotify = user.get("pushN");
+        String acceptedYour = user.get("acceptedYour");
+        String challengeEnd = user.get("challengeEnd");
         String newChallengeReq = user.get("newChallReq");
-        String challForToday   = user.get("challengesForToday");
+        String challForToday = user.get("challengesForToday");
 
         map.put("joinedChampy",          "true");
         map.put("friendRequests",        "true");
         map.put("challengeConfirmation", "true");
-        map.put("challengeEnd",          challengeEnd);
         map.put("reminderTime",          "12"); // was 17
-        map.put("challengesForToday",    challForToday);
+        map.put("challengeEnd", challengeEnd);
+        map.put("challengesForToday", challForToday);
         map.put("acceptedYourChallenge", acceptedYour);
-        map.put("newChallengeRequests",  newChallengeReq);
-        map.put("pushNotifications",     pushNotify);
+        map.put("newChallengeRequests", newChallengeReq);
+        map.put("pushNotifications", pushNotify);
 
         Switch switchForPushNotif = (Switch) findViewById(R.id.switchPushNotifications);
-        if (pushNotify.equals("true")) {
-            switchForPushNotif.setChecked(true);
-        } else {
-            switchForPushNotif.setChecked(false);
-        }
-
+        switchForPushNotif.setChecked(Boolean.parseBoolean(pushNotify));
         switchForPushNotif.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 map.put("pushNotifications", "true");
@@ -400,12 +391,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         });
 
         Switch switchForNewChallRequests = (Switch) findViewById(R.id.switchNewChallengeRequest);
-        if (newChallengeReq.equals("true")) {
-            switchForNewChallRequests.setChecked(true);
-        } else {
-            switchForNewChallRequests.setChecked(false);
-        }
-
+        switchForNewChallRequests.setChecked(Boolean.parseBoolean(newChallengeReq));
         switchForNewChallRequests.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 map.put("newChallengeRequests", "true");
@@ -417,12 +403,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         });
 
         Switch switchForAcceptedYourChall = (Switch) findViewById(R.id.switchAcceptedYourChallenge);
-        if (acceptedYour.equals("true")) {
-            switchForAcceptedYourChall.setChecked(true);
-        } else {
-            switchForAcceptedYourChall.setChecked(false);
-        }
-
+        switchForAcceptedYourChall.setChecked(Boolean.parseBoolean(acceptedYour));
         switchForAcceptedYourChall.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 map.put("acceptedYourChallenge", "true");
@@ -434,9 +415,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         });
 
         Switch switchForChallengesEnd = (Switch) findViewById(R.id.switchChallengeEnd);
-        if (challengeEnd.equals("true")) switchForChallengesEnd.setChecked(true);
-        else switchForChallengesEnd.setChecked(false);
-
+        switchForChallengesEnd.setChecked(Boolean.parseBoolean(challengeEnd));
         switchForChallengesEnd.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 map.put("challengeEnd", "true");
@@ -448,9 +427,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         });
 
         Switch switchChallengesForToday = (Switch) findViewById(R.id.switchChallengesForToday);
-        if (challForToday.equals("true")) switchChallengesForToday.setChecked(true);
-        else switchChallengesForToday.setChecked(false);
-
+        switchChallengesForToday.setChecked(Boolean.parseBoolean(challForToday));
         switchChallengesForToday.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 map.put("challengesForToday", "true");
