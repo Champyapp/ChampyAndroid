@@ -58,13 +58,13 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
 
-        final ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        final ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
-        final TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        final ImageView background = (ImageView) findViewById(R.id.history_background);
+        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
+        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        ImageView background = (ImageView) findViewById(R.id.history_background);
         drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
         background.setScaleType(ImageView.ScaleType.CENTER_CROP);
 

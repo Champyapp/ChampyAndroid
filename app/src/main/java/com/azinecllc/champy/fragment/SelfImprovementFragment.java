@@ -55,11 +55,11 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         c = db.query("selfimprovement", null, null, null, null, null, null);
         position = bundle.getInt(ARG_PAGE);
         if (c.moveToFirst()) {
-            int colstatus = c.getColumnIndex("status");
             int nameColIndex = c.getColumnIndex("name");
-            int colduration = c.getColumnIndex("duration");
             int coldescription = c.getColumnIndex("description");
             int colchallenge_id = c.getColumnIndex("challenge_id");
+            int colduration = c.getColumnIndex("duration");
+            int colstatus = c.getColumnIndex("status");
             try {
                 do {
                     o++;

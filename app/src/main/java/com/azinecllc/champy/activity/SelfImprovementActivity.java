@@ -88,19 +88,22 @@ public class SelfImprovementActivity extends AppCompatActivity {
                         com.azinecllc.champy.model.self.Datum datum = data.get(i);
                         String datumType = datum.getType().getName();
 
-                        if (datum.getName().equals("Reading a Books")) {
-                            datum.setName("Read a Books");
-                        }
 
-                        if (datumType.equals("self improvement")) {
-                            if (!datum.getName().equals("User_Challenge")) {
-                                cv.put("name", datum.getName());
-                                cv.put("description", datum.getDescription());
-                                cv.put("duration", datum.getDuration());
-                                cv.put("challenge_id", datum.get_id());
-                                db.insert("selfimprovement", null, cv);
-                                data_size++;
+                        if (datumType.equals("self improvement") && datum.getCreatedBy() == null) {
+
+                            if (datum.getDescription().equals("Taking stares")) {
+                                datum.setDescription("Taking Stairs");
                             }
+                            if (datum.getDescription().equals("Reading a books")) {
+                                datum.setDescription("Reading Books");
+                            }
+
+                            cv.put("name", datum.getName());
+                            cv.put("description", datum.getDescription());
+                            cv.put("duration", datum.getDuration());
+                            cv.put("challenge_id", datum.get_id());
+                            db.insert("selfimprovement", null, cv);
+                            data_size++;
                         }
                     }
                     sessionManager.setSelfSize(data_size);

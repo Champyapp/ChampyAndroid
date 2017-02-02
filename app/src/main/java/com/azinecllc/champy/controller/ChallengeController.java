@@ -624,6 +624,13 @@ public class ChallengeController {
                             String versus = (userID.equals(recipient.getId())) ? sender.getName() : recipient.getName();
                             String mRecipient = (userID.equals(recipient.getId())) ? "true" : "false";
 
+                            if (challengeDescription.equals("Taking stares")) {
+                                challengeDescription = "Taking Stairs";
+                            }
+                            if (challengeDescription.equals("Reading a books")) {
+                                challengeDescription = "Reading Books";
+                            }
+
                             cv.put("versus",       versus);
                             cv.put("recipient",    mRecipient);
                             cv.put("challenge_id", inProgressId);
@@ -692,6 +699,13 @@ public class ChallengeController {
                         String isRecipient;
                         String versus;
 
+                        /************************* best practices in my life ***********************/
+                        if (challenge_desc.equals("Taking stares")) {
+                            challenge_desc = "Taking Stairs";
+                        }
+                        if (challenge_desc.equals("Reading a books")) {
+                            challenge_desc = "Reading Books";
+                        }
 
                         /**************** separation of the recipient and the sender  *************/
 

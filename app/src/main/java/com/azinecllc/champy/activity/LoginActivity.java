@@ -131,7 +131,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 jsonObject.put("timeZone", "-2");
                                 String json = jsonObject.toString();
 
-//                                getUserData(fb_id, path_to_pic, json, token_android);
                                 AppSync sync = new AppSync(fb_id, json, path_to_pic, LoginActivity.this, token_android);
                                 sync.getUserProfile();
 
@@ -209,11 +208,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
 //                else {
 //                      //permission denied, boo! Disable the functionality that depends on this permission.
-//                    Toast.makeText(this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
 //                }
                 return;
             }
-            // other 'case' lines to check for other permissions this app might request
         }
     }
 
