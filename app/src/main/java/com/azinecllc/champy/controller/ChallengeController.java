@@ -395,7 +395,7 @@ public class ChallengeController {
 
                     PendingIntent pi = PendingIntent.getBroadcast(activity, aID, myIntent, 0);
                     AlarmManager aManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                    aManager.setRepeating(AlarmManager.RTC_WAKEUP, ring, AlarmManager.INTERVAL_DAY, pi);
+                    aManager.set(AlarmManager.RTC_WAKEUP, ring, pi);
 
                     generateCardsForMainActivity(new Intent(activity, MainActivity.class));
                 } else {
@@ -511,7 +511,7 @@ public class ChallengeController {
                     Log.i(TAG, "now: " + System.currentTimeMillis() / 1000);
                     Log.i(TAG, "end: " + (end - oneDay));
                     if (type.equals(typeWake) && (now > end - oneDay)) {
-                        //setNewAlarmClock(det, aID);
+                        setNewAlarmClock(det, aID);
                         Log.i(TAG, "now < end\n disabled the AlarmManager");
                         Intent myIntent = new Intent(activity, CustomAlarmReceiver.class);
                         PendingIntent pendingIntent = PendingIntent.getBroadcast(activity, Integer.valueOf(aID), myIntent, 0);
