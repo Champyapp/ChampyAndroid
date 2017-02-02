@@ -132,11 +132,11 @@ public class DuelActivity extends AppCompatActivity {
                         com.azinecllc.champy.model.self.Datum datum = data.get(i);
                         if (datum.getType().getName().equals("duel") && datum.getCreatedBy() == null) {
 
-                            if (datum.getDescription().equals("Taking stares")) {
-                                datum.setDescription("Taking Stairs");
+                            if (datum.getName().equals("Taking stares")) {
+                                datum.setName("Taking Stairs");
                             }
-                            if (datum.getDescription().equals("Reading a books")) {
-                                datum.setDescription("Reading Books");
+                            if (datum.getName().equals("Reading a books")) {
+                                datum.setName("Reading Books");
                             }
 
                             cv.put("name", datum.getName());

@@ -92,7 +92,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         if (duration != null && !duration.isEmpty()) days = Integer.parseInt(duration) / 86400;
 
         tvDays.setText(String.format("%s", days + " days")); //days + " days");
-        tvGoal.setText(description);
+        tvGoal.setText(name);
         tvDays.setTypeface(typeface);
         tvGoal.setTypeface(typeface);
         tvEvery.setTypeface(typeface);
@@ -135,12 +135,12 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
                         position = viewPager.getCurrentItem();
                         size = sessionManager.getSelfSize();
                         if (position == size) {
-                            description = etGoal.getText().toString();
+                            name = etGoal.getText().toString();
                             duration = etDays.getText().toString();
                             try {
                                 days = Integer.parseInt(duration);
-                                if (!cc.isActive(description) && !description.isEmpty()) {
-                                    cc.createNewDuelChallenge(description, days, friend_id);
+                                if (!cc.isActive(name) && !name.isEmpty()) {
+                                    cc.createNewDuelChallenge(name, days, friend_id);
                                     snackbar = Snackbar.make(view, (R.string.sent_duel_request), Snackbar.LENGTH_SHORT);
                                     snackbar.show();
                                 } else {
@@ -175,7 +175,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
                             c.close();
 
                             try {
-                                if (!cc.isActive(description)) {
+                                if (!cc.isActive(name)) {
                                     cc.sendSingleInProgressForDuel(challenge_id, friend_id);
                                     snackbar = Snackbar.make(view, (R.string.sent_duel_request), Snackbar.LENGTH_SHORT);
                                     snackbar.show();

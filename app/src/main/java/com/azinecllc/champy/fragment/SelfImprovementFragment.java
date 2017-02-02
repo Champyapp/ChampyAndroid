@@ -93,7 +93,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
         if (duration != null && !duration.isEmpty()) days = Integer.parseInt(duration) / 86400;
 
         tvDays.setText(String.format("%s", days + " days")); //days + " days");
-        tvGoal.setText(description);
+        tvGoal.setText(name);
         tvDays.setTypeface(typeface);
         tvGoal.setTypeface(typeface);
         tvEveryDay.setTypeface(typeface);
@@ -140,11 +140,11 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                     @Override
                     public void onClick(View view) {
                         if (position == size) {
-                            description = etGoal.getText().toString();
+                            name = etGoal.getText().toString();
                             duration = etDays.getText().toString();
                             try {
                             days = Integer.parseInt(duration);
-                                if (!cc.isActive(description) && !description.isEmpty()) {
+                                if (!cc.isActive(name) && !name.isEmpty()) {
                                     cc.createNewSelfImprovementChallenge(description, days);
                                     snackbar = Snackbar.make(view, R.string.challenge_created, Snackbar.LENGTH_SHORT);
                                     snackbar.show();
@@ -182,7 +182,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                             }
 
                             try {
-                                if (!cc.isActive(description)) {
+                                if (!cc.isActive(name)) {
                                     cc.sendSingleInProgressForSelf(challenge_id);
                                     snackbar = Snackbar.make(view, R.string.challenge_created, Snackbar.LENGTH_SHORT);
                                     snackbar.show();

@@ -619,22 +619,22 @@ public class ChallengeController {
 
                         if (challengeStatus.equals("pending")) {
                             String inProgressId = datum.get_id();
-                            String challengeDescription = challenge.getDescription();
+                            String challengeName = challenge.getName();
                             int challengeDuration = challenge.getDuration();
                             String versus = (userID.equals(recipient.getId())) ? sender.getName() : recipient.getName();
                             String mRecipient = (userID.equals(recipient.getId())) ? "true" : "false";
 
-                            if (challengeDescription.equals("Taking stares")) {
-                                challengeDescription = "Taking Stairs";
+                            if (challengeName.equals("Taking stares")) {
+                                challengeName = "Taking Stairs";
                             }
-                            if (challengeDescription.equals("Reading a books")) {
-                                challengeDescription = "Reading Books";
+                            if (challengeName.equals("Reading a books")) {
+                                challengeName = "Reading Books";
                             }
 
                             cv.put("versus",       versus);
                             cv.put("recipient",    mRecipient);
                             cv.put("challenge_id", inProgressId);
-                            cv.put("description",  challengeDescription);
+                            cv.put("description", challengeName);
                             cv.put("duration",     challengeDuration);
                             db.insert("pending_duel", null, cv);
                         }
@@ -700,11 +700,11 @@ public class ChallengeController {
                         String versus;
 
                         /************************* best practices in my life ***********************/
-                        if (challenge_desc.equals("Taking stares")) {
-                            challenge_desc = "Taking Stairs";
+                        if (challenge_name.equals("Taking stares")) {
+                            challenge_name = "Taking Stairs";
                         }
-                        if (challenge_desc.equals("Reading a books")) {
-                            challenge_desc = "Reading Books";
+                        if (challenge_name.equals("Reading a books")) {
+                            challenge_name = "Reading Books";
                         }
 
                         /**************** separation of the recipient and the sender  *************/
