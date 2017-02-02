@@ -42,15 +42,24 @@
 -keepattributes SourceFile,LineNumberTable
 -repackageclasses ''
 
+# Keep Activities, Services, Receivers, Providers, Fragments
 -keep public class * extends android.app.Activity
 -keep public class * extends android.app.Application
 -keep public class * extends android.app.Service
 -keep public class * extends android.content.BroadcastReceiver
 -keep public class * extends android.content.ContentProvider
+-keep public class * extends android.support.v4.app.Fragment
+-keep public class * extends android.app.Fragment
 
--keep public class * extends com.azinecllc.champy.model.* {
 
+# Keep Model Package
+-keep public class com.azinecllc.champy.model.** {
+    public protected private *;
 }
+
+# Keep Interface Package
+-keep public interface com.azinecllc.champy.interfaces.**
+
 
 -keep public class * extends android.view.View {
     public <init>(android.content.Context);
@@ -58,27 +67,18 @@
     public <init>(android.content.Context, android.util.AttributeSet, int);
     public void set*(...);
 }
-
 -keepclasseswithmembers class * {
     public <init>(android.content.Context, android.util.AttributeSet);
 }
-
 -keepclasseswithmembers class * {
     public <init>(android.content.Context, android.util.AttributeSet, int);
 }
-
 -keepclassmembers class * implements android.os.Parcelable {
     static android.os.Parcelable$Creator CREATOR;
 }
-
 -keepclassmembers class **.R$* {
     public static <fields>;
 }
-
-# Keep fragments
-
--keep public class * extends android.support.v4.app.Fragment
--keep public class * extends android.app.Fragment
 
 # Serializables
 
@@ -103,23 +103,18 @@
 }
 
 # Android Support Library
-
 -keep class android.** {*;}
 
 # Button methods
 
 -keepclassmembers class * {
-
-public void *ButtonClicked(android.view.View);
-
+    public void *ButtonClicked(android.view.View);
 }
 
 # Reflection
 
 -keepclassmembers class com.andymcsherry.proguarddemo.SensorDescriptionFragment {
-
-public void updateFields(com.andymcsherry.proguarddemo.SensorData);
-
+    public void updateFields(com.andymcsherry.proguarddemo.SensorData);
 }
 
 # Remove Logging
