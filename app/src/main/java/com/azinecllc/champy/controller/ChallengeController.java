@@ -97,14 +97,14 @@ public class ChallengeController {
      *             user about "Service not available". In case when response is success we just
      *             transmit this view in next method 'sendSingleInProgressForSelf' and do there next.
      */
-    public void createNewSelfImprovementChallenge(String description, int days) {
+    public void createNewSelfImprovementChallenge(String name, String description, int days) {
         final String duration = "" + (days * 86400);
         final String details = description + " during this period: " + days + " days";
 
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
         Call<com.azinecllc.champy.model.create_challenge.CreateChallenge> call = createChallenge
                 .createChallenge(
-                        "User_Challenge",
+                        name,
                         typeSelf,
                         description,
                         details,
