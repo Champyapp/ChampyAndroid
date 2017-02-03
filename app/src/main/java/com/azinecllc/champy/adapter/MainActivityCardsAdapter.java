@@ -97,25 +97,25 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         tvDuration.setTypeface(typeface);
         tvDuration.setTextSize(y*2);
 
-        try {
-            String TAG = "INFO ABOUT CARD:";
-            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-            Log.d(TAG, "getRecipient: " + currentCard.getRecipient());     // false;
-            Log.d(TAG, "getChallengeName: " + currentCard.getChallengeName()); // Wake up at 08:55
-            Log.d(TAG, "getGoal: " + currentCard.getGoal());          // 0855
-            Log.d(TAG, "getId: " + currentCard.getId());            // 58605a9645af8ed13f56b8c1
-            Log.d(TAG, "getName: " + currentCard.getName());          // null
-            Log.d(TAG, "getWakeUpTime: " + currentCard.getWakeUpTime());    // [1482735221, 1482821621]
-            Log.d(TAG, "getType: " + currentCard.getType());          // Wake Up
-            Log.d(TAG, "getConstDuration: " + currentCard.getConstDuration()); // 2 days
-            Log.d(TAG, "getDays: " + currentCard.getDays());          // 1-2 (current)
-            Log.d(TAG, "getProgress: " + currentCard.getProgress());      // [UnixTime]
-            Log.d(TAG, "getStatus: " + currentCard.getStatus());        // started
-            Log.d(TAG, "getVersus: " + currentCard.getVersus());        // not duel
-            Log.d(TAG, "getNeedsToCheck: " + currentCard.getNeedsToCheck());  // true / false
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            String TAG = "INFO ABOUT CARD:";
+//            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+//            Log.d(TAG, "getRecipient: " + currentCard.getRecipient());     // false;
+//            Log.d(TAG, "getChallengeName: " + currentCard.getChallengeName()); // Wake up at 08:55
+//            Log.d(TAG, "getGoal: " + currentCard.getGoal());          // 0855
+//            Log.d(TAG, "getId: " + currentCard.getId());            // 58605a9645af8ed13f56b8c1
+//            Log.d(TAG, "getName: " + currentCard.getName());          // null
+//            Log.d(TAG, "getWakeUpTime: " + currentCard.getWakeUpTime());    // [1482735221, 1482821621]
+//            Log.d(TAG, "getType: " + currentCard.getType());          // Wake Up
+//            Log.d(TAG, "getConstDuration: " + currentCard.getConstDuration()); // 2 days
+//            Log.d(TAG, "getDays: " + currentCard.getDays());          // 1-2 (current)
+//            Log.d(TAG, "getProgress: " + currentCard.getProgress());      // [UnixTime]
+//            Log.d(TAG, "getStatus: " + currentCard.getStatus());        // started
+//            Log.d(TAG, "getVersus: " + currentCard.getVersus());        // not duel
+//            Log.d(TAG, "getNeedsToCheck: " + currentCard.getNeedsToCheck());  // true / false
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
         if (itemNeedsToCheck.equals("true")) {
             tvDuration.setText(getContext().getResources().getString(R.string.done_for_today));
@@ -176,7 +176,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         switch (itemType) {
             case "Wake Up":
                 imageChallengeLogo.setImageResource(R.drawable.ic_wakeup_white);
-                tvChallengeDescription.setText(currentCard.getChallengeName());
+                tvChallengeDescription.setText(currentCard.getGoal());
                 tvDuration.setText(String.format("%s", currentCard.getDays() + getContext().getResources().getString(R.string.daysToGo)));
                 buttonShare.setVisibility(View.VISIBLE);
                 buttonDone.setVisibility(View.INVISIBLE);
@@ -244,7 +244,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                     @Override
                     public void onClick(View view) {
                         try {
-                            int i = (itemType.equals("Wake Up")) ? Integer.parseInt(currentCard.getGoal()) : 0;
+                            int i = (itemType.equals("Wake Up")) ? Integer.parseInt(currentCard.getChallengeName()) : 0;
                             cc.give_up(itemInProgressId, i, goMain);
                         } catch (IOException | NumberFormatException e) {
                             e.printStackTrace();

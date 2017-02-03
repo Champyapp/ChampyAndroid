@@ -333,9 +333,9 @@ public class ChallengeController {
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
         Call<com.azinecllc.champy.model.create_challenge.CreateChallenge> call = createChallenge
                 .createChallenge(
-                        wakeUpName,
-                        typeWake,
                         wakeUpTime,
+                        typeWake,
+                        wakeUpName,
                         Arrays.toString(details),
                         duration,
                         token
@@ -778,6 +778,22 @@ public class ChallengeController {
                             }
                         }
 
+                        try {
+                            String TAG = "INFO ABOUT CARD:";
+                            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                            Log.d(TAG, "challType: " + challType);     // false;
+                            Log.d(TAG, "versus: " + versus); // Wake up at 08:55
+                            Log.d(TAG, "challenge_detail: " + challenge_detail);          // 0855
+                            Log.d(TAG, "challenge_name: " + challenge_name);            // 58605a9645af8ed13f56b8c1
+                            Log.d(TAG, "challenge_desc: " + challenge_desc);          // null
+                            Log.d(TAG, "challenge_dur: " + challenge_dur);    // [1482735221, 1482821621]
+                            Log.d(TAG, "challenge_id: " + challenge_id);          // Wake Up
+                            Log.d(TAG, "challenge_status: " + challenge_status); // 2 days
+                            Log.d(TAG, "isRecipient: " + isRecipient);          // 1-2 (current)
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
                         cv.put("name",          challType);             // Self-Improvement / Duel / Wake Up
                         cv.put("versus",        versus);                // if this is duel than versus = recipient / sender name
                         cv.put("wakeUpTime",    challenge_detail);      // our specific time id for delete wakeUp (example: 1448);
@@ -864,7 +880,7 @@ public class ChallengeController {
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
         boolean ok = false;
         if (c.moveToFirst()) {
-            int coldescription = c.getColumnIndex("name");
+            int coldescription = c.getColumnIndex("challengeName");
             do {
                 try {
                     if (c.getString(c.getColumnIndex("status")).equals("started")) {

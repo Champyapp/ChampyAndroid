@@ -48,7 +48,7 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         TextView nameTextView    = viewHolder.nameTextView;
 
         String constDuration  = itemRow.getConstDuration();
-        String wakeUpTime     = itemRow.getChallengeName();
+        String challengeName = itemRow.getChallengeName();
         String itemRowType    = itemRow.getType();
         String versus         = itemRow.getVersus();
         String goal           = itemRow.getGoal();
@@ -59,15 +59,15 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
         switch (itemRowType) {
             // removed .diskCacheStrategy(DiskCacheStrategy.ALL)
             case "Duel":
-                nameTextView.setText(goal + " with " + versus);
+                nameTextView.setText(challengeName + " with " + versus);
                 Glide.with(mContext).load(R.drawable.ic_duel_yellow).override(80, 80).into(viewHolder.pic);
                 break;
             case "Wake Up":
-                nameTextView.setText(wakeUpTime);
+                nameTextView.setText(goal);
                 Glide.with(mContext).load(R.drawable.ic_wakeup_yellow).override(80, 80).into(viewHolder.pic);
                 break;
             case "Self-Improvement":
-                nameTextView.setText(goal);
+                nameTextView.setText(challengeName);
                 Glide.with(mContext).load(R.drawable.ic_self_yellow).override(80, 80).into(viewHolder.pic);
                 break;
             default:
