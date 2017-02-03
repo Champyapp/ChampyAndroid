@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
@@ -393,9 +394,18 @@ public class ChallengeController {
                     myIntent.putExtra("details", Arrays.toString(det));
 
 
-                    PendingIntent pi = PendingIntent.getBroadcast(activity, aID, myIntent, 0);
+                    PendingIntent pi = PendingIntent.getBroadcast(activity, aID, myIntent, PendingIntent.FLAG_ONE_SHOT);
                     AlarmManager aManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                    aManager.set(AlarmManager.RTC_WAKEUP, ring, pi);
+
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {        // KITKAT and later
+                            aManager.set(AlarmManager.RTC_WAKEUP, ring, pi);
+                        } else {
+                            aManager.setExact(AlarmManager.RTC_WAKEUP, ring, pi);
+                        }
+                    } else {
+                        aManager.set(AlarmManager.RTC_WAKEUP, ring, pi);
+                    }
 
                     generateCardsForMainActivity(new Intent(activity, MainActivity.class));
                 } else {
@@ -824,7 +834,9 @@ public class ChallengeController {
         for (int i = 0; i <= details.length - 1; i++) {
             if (now < Integer.parseInt(details[i])) {
                 Intent intent = new Intent(context, MainActivity.class);
-                PendingIntent operation = PendingIntent.getBroadcast(context, Integer.parseInt(alarmID), intent, 0);
+                PendingIntent operation = PendingIntent.getBroadcast(
+                        context, Integer.parseInt(alarmID), intent, PendingIntent.FLAG_ONE_SHOT
+                );
                 AlarmManager aManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                 aManager.set(AlarmManager.RTC_WAKEUP, Long.parseLong(details[i]) * 1000, operation);
                 break;
@@ -852,7 +864,7 @@ public class ChallengeController {
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
         boolean ok = false;
         if (c.moveToFirst()) {
-            int coldescription = c.getColumnIndex("description");
+            int coldescription = c.getColumnIndex("name");
             do {
                 try {
                     if (c.getString(c.getColumnIndex("status")).equals("started")) {

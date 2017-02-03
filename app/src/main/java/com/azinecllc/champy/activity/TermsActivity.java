@@ -177,8 +177,8 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
                     "    you create a Champy account. If you wish to create a Champy account and make use of the Service, please read these Terms of Use.\n" +
                     "</p>\n" +
                     "<p lang=\"en-US\">\n" +
-                    "    You should also read the Champy PrivacyActivity Policy, which is incorporated by reference into this Agreement and available in the Service. If you do not button_accept\n" +
-                    "    and agree to be bound by all of the terms of this Agreement, including the Champy PrivacyActivity Policy, do not use the Service. Please contact us with any\n" +
+                    "    You should also read the Champy Privacy Policy, which is incorporated by reference into this Agreement and available in the Service. If you do not accept\n" +
+                    "    and agree to be bound by all of the terms of this Agreement, including the Champy Privacy Policy, do not use the Service. Please contact us with any\n" +
                     "    questions regarding this Agreement.\n" +
                     "</p>\n" +
                     "<ol>\n" +
@@ -189,14 +189,14 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
                     "        <ol type=\"a\">\n" +
                     "            <li>\n" +
                     "                <p lang=\"en-US\">\n" +
-                    "                    This Agreement is an electronic contract that establishes the legally binding terms you must button_accept to use the Service. This Agreement\n" +
-                    "                    includes the Company’s (i) PrivacyActivity Policy, (ii) and terms disclosed and agreed to by you if you purchase or button_accept additional features,\n" +
+                    "                    This Agreement is an electronic contract that establishes the legally binding terms you must accept to use the Service. This Agreement\n" +
+                    "                    includes the Company’s (i) Privacy Policy, (ii) and terms disclosed and agreed to by you if you purchase or accept additional features,\n" +
                     "                    products or services we offer on the Service, such as terms governing features, billing, free trials, discounts and promotions.\n" +
                     "                </p>\n" +
                     "            </li>\n" +
                     "            <li>\n" +
                     "                <p lang=\"en-US\">\n" +
-                    "                    By accessing or using the Service, you button_accept this Agreement and agree to the terms, conditions and notices contained or referenced herein\n" +
+                    "                    By accessing or using the Service, you accept this Agreement and agree to the terms, conditions and notices contained or referenced herein\n" +
                     "                    and consent to have this Agreement and all notices provided to you in electronic form. To withdraw this consent, you must cease using the\n" +
                     "                    Service and terminate your account. Please print a copy of this Agreement for your records. To receive a non- electronic copy of this\n" +
                     "                    Agreement, please contact us at <a href=\"mailto:iam@champyapp.com\">iam@champyapp.com</a> . This Agreement may be modified by the Company\n" +
@@ -210,14 +210,14 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
                     "            <strong>Creating an Account.</strong>\n" +
                     "            In order to use Champy, you must sign in using your Facebook login. If you do so, you authorize us to access and use certain Facebook account\n" +
                     "            information, including but not limited to your public Facebook profile and information about Facebook friends you might share in common with other\n" +
-                    "            Champy users. For more information regarding the information we collect from you and how we use it, please consult our PrivacyActivity Policy.\n" +
+                    "            Champy users. For more information regarding the information we collect from you and how we use it, please consult our Privacy Policy.\n" +
                     "        </p>\n" +
                     "    </li>\n" +
                     "    <li>\n" +
                     "        <p lang=\"en-US\">\n" +
                     "            <strong>Term and Termination.</strong>\n" +
                     "            This Agreement will remain in full force and effect while you use the Service and/or have a Champy account. You may offAndDisconnect your account at any\n" +
-                    "            time, for any reason, by following the instructions in “SettingsActivity” in the Service. The Company may terminate or suspend your account at any time\n" +
+                    "            time, for any reason, by following the instructions in “settings” in the Service. The Company may terminate or suspend your account at any time\n" +
                     "            without notice if the Company believes that you have breached this Agreement, or for any other reason, with or without cause, in its sole\n" +
                     "            discretion. Upon such termination or suspension, you will not be entitled to any refund of unused fees for in app purchases. The Company is not\n" +
                     "            required to disclose, and may be prohibited by law from disclosing, the reason for the termination or suspension of your account. After your\n" +
@@ -731,7 +731,7 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
                     "    <li>\n" +
                     "        <p lang=\"en-US\">\n" +
                     "            <strong>Entire Agreement; Other.</strong>\n" +
-                    "            This Agreement, with the PrivacyActivity Policy and any specific guidelines or rules that are separately posted for particular services or offers in the\n" +
+                    "            This Agreement, with the Privacy Policy and any specific guidelines or rules that are separately posted for particular services or offers in the\n" +
                     "            Service, contains the entire agreement between you and the Company regarding the use of the Service. If any provision of this Agreement is held\n" +
                     "            invalid, the remainder of this Agreement shall continue in full force and effect. The failure of the Company to exercise or enforce any right or\n" +
                     "            provision of this Agreement shall not constitute a waiver of such right or provision. You agree that your online account is non-transferable and\n" +

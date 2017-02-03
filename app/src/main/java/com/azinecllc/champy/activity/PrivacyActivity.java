@@ -299,7 +299,7 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
                     "                    </li>\n" +
                     "                    <li>\n" +
                     "                        <p>\n" +
-                    "                            enforce or exercise any rights in our TermsActivity of Use; and\n" +
+                    "                            enforce or exercise any rights in our Terms of Use; and\n" +
                     "                        </p>\n" +
                     "                    </li>\n" +
                     "                    <li>\n" +
@@ -364,7 +364,7 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
                     "                                    When we believe disclosure is appropriate in connection with efforts to investigate, prevent, or take other action\n" +
                     "                                    regarding illegal activity, suspected fraud or other wrongdoing; to protect and defend the rights, property or safety of\n" +
                     "                                    our company, our users, our employees, or others; to comply with applicable law or cooperate with law enforcement; or to\n" +
-                    "                                    enforce our TermsActivity of Use or other agreements or policies.\n" +
+                    "                                    enforce our Terms of Use or other agreements or policies.\n" +
                     "                                </p>\n" +
                     "                            </li>\n" +
                     "                            <li>\n" +
@@ -395,9 +395,9 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
                     "</ol>\n" +
                     "<p>\n" +
                     "    If you have a Champy account, you have the ability to review and update your personal information within the Service by opening your account and going to\n" +
-                    "    settings. More information about how to contact us is provided below. You also may close your account at any time by visiting the \"SettingsActivity\" page for your\n" +
+                    "    settings. More information about how to contact us is provided below. You also may close your account at any time by visiting the \"Settings\" page for your\n" +
                     "    account. If you close your account, we will retain certain information associated with your account for analytical purposes and recordkeeping integrity, as\n" +
-                    "    well as to prevent fraud, enforce our TermsActivity of Use, take actions we deem necessary to protect the integrity of our Service or our users, or take other\n" +
+                    "    well as to prevent fraud, enforce our Terms of Use, take actions we deem necessary to protect the integrity of our Service or our users, or take other\n" +
                     "    actions otherwise permitted by law. In addition, if certain information has already been provided to third parties as described in this Privacy Policy,\n" +
                     "    retention of that information will be subject to those third parties' policies.\n" +
                     "</p>\n" +
@@ -450,7 +450,7 @@ public class PrivacyActivity extends AppCompatActivity implements NavigationView
                     "</ol>\n" +
                     "<p>\n" +
                     "    We provide areas on our Service where you can post information about yourself and others and communicate with others. Such postings are governed by our\n" +
-                    "    TermsActivity of Use. Also, whenever you voluntarily disclose personal information on publicly-viewable pages, that information will be publicly available and can\n" +
+                    "    Terms of Use. Also, whenever you voluntarily disclose personal information on publicly-viewable pages, that information will be publicly available and can\n" +
                     "    be collected and used by others. For example, if you post your email address, you may receive unsolicited messages. We cannot control who reads your\n" +
                     "    posting or what other users may do with the information you voluntarily post, so we encourage you to exercise discretion and caution with respect to your\n" +
                     "    personal information.\n" +
