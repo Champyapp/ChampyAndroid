@@ -394,11 +394,14 @@ public class ChallengeController {
                     myIntent.putExtra("details", Arrays.toString(det));
 
 
-                    PendingIntent pi = PendingIntent.getBroadcast(activity, aID, myIntent, PendingIntent.FLAG_ONE_SHOT);
+                    PendingIntent pi = PendingIntent.getBroadcast(activity, aID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                     AlarmManager aManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
+                    // LOLLIPOP = 5.0 / 5.1
+                    // KITKAT   = 4.4
+                    // SDK_INT  = user api version
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {        // KITKAT and later
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
                             aManager.set(AlarmManager.RTC_WAKEUP, ring, pi);
                         } else {
                             aManager.setExact(AlarmManager.RTC_WAKEUP, ring, pi);
@@ -851,10 +854,23 @@ public class ChallengeController {
             if (now < Integer.parseInt(details[i])) {
                 Intent intent = new Intent(context, MainActivity.class);
                 PendingIntent operation = PendingIntent.getBroadcast(
-                        context, Integer.parseInt(alarmID), intent, PendingIntent.FLAG_ONE_SHOT
+                        context, Integer.parseInt(alarmID), intent, PendingIntent.FLAG_UPDATE_CURRENT
                 );
                 AlarmManager aManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                aManager.set(AlarmManager.RTC_WAKEUP, Long.parseLong(details[i]) * 1000, operation);
+
+                // LOLLIPOP = 5.0 / 5.1
+                // KITKAT   = 4.4
+                // SDK_INT  = user api version
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+                        aManager.set(AlarmManager.RTC_WAKEUP, Long.parseLong(details[i]) * 1000, operation);
+                    } else {
+                        aManager.setExact(AlarmManager.RTC_WAKEUP, Long.parseLong(details[i]) * 1000, operation);
+                    }
+                } else {
+                    aManager.set(AlarmManager.RTC_WAKEUP, Long.parseLong(details[i]) * 1000, operation);
+                }
+
                 break;
             }
         }

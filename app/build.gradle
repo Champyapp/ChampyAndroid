@@ -16,7 +16,7 @@ android {
         applicationId "com.azinecllc.champy"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 4
+        versionCode 6
         versionName "1.0"
         renderscriptTargetApi 18
         multiDexEnabled true
