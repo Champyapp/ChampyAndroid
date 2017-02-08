@@ -191,6 +191,10 @@ public class SessionManager {
         return pref.getString(KEY_PATH, "");
     }
 
+    public String getUserEmail() {
+        return pref.getString("email", "");
+    }
+
     public String getUserName() {
         return pref.getString("name", "");
     }

@@ -5,9 +5,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.azinecllc.champy.fragment.FriendsFragment;
-import com.azinecllc.champy.fragment.OtherFragment;
-import com.azinecllc.champy.fragment.PendingFragment;
+import com.azinecllc.champy.fragment.MyFriendsFragment;
+import com.azinecllc.champy.fragment.MyOtherFragment;
+import com.azinecllc.champy.fragment.MyPendingFragment;
 
 public class FriendsActivityPagerAdapter extends FragmentPagerAdapter {
 
@@ -27,9 +27,12 @@ public class FriendsActivityPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch(position) {
-            case 0: return new FriendsFragment();
-            case 1: return new PendingFragment();
-            case 2: return new OtherFragment();
+            case 0:
+                return new MyFriendsFragment();
+            case 1:
+                return new MyPendingFragment();
+            case 2:
+                return new MyOtherFragment();
         }
         return null;
     }

@@ -40,7 +40,13 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
     public Cursor c;
     public SQLiteDatabase db;
 
-
+    public static PendingDuelFragment newInstance(int page) {
+        Bundle args = new Bundle();
+        args.putInt(ARG_PAGE, page);
+        PendingDuelFragment fragment = new PendingDuelFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -202,12 +208,5 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
         snackbar.show();
     }
 
-    public static PendingDuelFragment newInstance(int page) {
-        Bundle args = new Bundle();
-        args.putInt(ARG_PAGE, page);
-        PendingDuelFragment fragment = new PendingDuelFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
 }

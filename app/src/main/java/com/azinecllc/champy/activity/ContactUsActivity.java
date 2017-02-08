@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -27,7 +26,6 @@ import android.widget.Toast;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.helper.CHCheckPendingDuels;
 import com.azinecllc.champy.helper.CHSetupUI;
-import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -39,7 +37,7 @@ import jp.wasabeef.glide.transformations.CropSquareTransformation;
 
 import static com.azinecllc.champy.utils.Constants.path;
 
-public class ContactUsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+public class ContactUsActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText inputSubject, inputMessage;
     private TextInputLayout inputLayoutSubject, inputLayoutMessage;
@@ -68,7 +66,7 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
 
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
-        navigationView.setNavigationItemSelectedListener(this);
+        //navigationView.setNavigationItemSelectedListener(this);
 
         sessionManager = SessionManager.getInstance(getApplicationContext());
         File fileProfile = new File(path, "profile.jpg");
@@ -80,7 +78,7 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
 
         final Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         final ImageView drawerBG = (ImageView) headerLayout.findViewById(R.id.slide_background);
-        final ImageView drawerUserPhoto = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        final ImageView drawerUserPhoto = (ImageView) headerLayout.findViewById(R.id.imageUserPicture);
         final TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
         drawerBG.setScaleType(ImageView.ScaleType.CENTER_CROP);
         drawerUserName.setText(name);
@@ -117,7 +115,7 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         if (count == 0) {
             checker.hideItem(navigationView);
         } else {
-            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+            TextView view = (TextView) navigationView.getMenu().findItem(R.id.nav_pending_duels).getActionView();
             view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
         }
 
@@ -149,54 +147,54 @@ public class ContactUsActivity extends AppCompatActivity implements NavigationVi
         Runtime.getRuntime().gc();
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.challenges:
-                Intent goToChallenges = new Intent(this, MainActivity.class);
-                startActivity(goToChallenges);
-                finish();
-                break;
-            case R.id.friends:
-                Intent goToFriends = new Intent(this, FriendsActivity.class);
-                startActivity(goToFriends);
-                finish();
-                break;
-            case R.id.pending_duels:
-                Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
-                startActivity(goToPendingDuel);
-                finish();
-                break;
-            case R.id.history:
-                Intent goToHistory = new Intent(this, HistoryActivity.class);
-                startActivity(goToHistory);
-                finish();
-                break;
-            case R.id.settings:
-                Intent goToSettings = new Intent(this, SettingsActivity.class);
-                startActivity(goToSettings);
-                finish();
-                break;
-            case R.id.share:
-                String message = getString(R.string.share_text2);
-                Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType("text/plain");
-                share.putExtra(Intent.EXTRA_TEXT, message);
-                startActivity(Intent.createChooser(share, getString(R.string.how_would_you_like_to_share)));
-                break;
-            case R.id.nav_logout:
-                OfflineMode offlineMode = OfflineMode.getInstance();
-                if (offlineMode.isConnectedToRemoteAPI(this)) {
-                    sessionManager.logout(this);
-                    finish();
-                }
-                break;
-        }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
+//    @SuppressWarnings("StatementWithEmptyBody")
+//    @Override
+//    public boolean onNavigationItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.challenges:
+//                Intent goToChallenges = new Intent(this, MainActivity.class);
+//                startActivity(goToChallenges);
+//                finish();
+//                break;
+//            case R.id.friends:
+//                Intent goToFriends = new Intent(this, FriendsActivity.class);
+//                startActivity(goToFriends);
+//                finish();
+//                break;
+//            case R.id.pending_duels:
+//                Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
+//                startActivity(goToPendingDuel);
+//                finish();
+//                break;
+//            case R.id.history:
+//                Intent goToHistory = new Intent(this, HistoryActivity.class);
+//                startActivity(goToHistory);
+//                finish();
+//                break;
+//            case R.id.settings:
+//                Intent goToSettings = new Intent(this, SettingsActivity.class);
+//                startActivity(goToSettings);
+//                finish();
+//                break;
+//            case R.id.share:
+//                String message = getString(R.string.share_text2);
+//                Intent share = new Intent(Intent.ACTION_SEND);
+//                share.setType("text/plain");
+//                share.putExtra(Intent.EXTRA_TEXT, message);
+//                startActivity(Intent.createChooser(share, getString(R.string.how_would_you_like_to_share)));
+//                break;
+//            case R.id.nav_logout:
+//                OfflineMode offlineMode = OfflineMode.getInstance();
+//                if (offlineMode.isConnectedToRemoteAPI(this)) {
+//                    sessionManager.logout(this);
+//                    finish();
+//                }
+//                break;
+//        }
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        drawer.closeDrawer(GravityCompat.START);
+//        return true;
+//    }
 
 
     private void submitForm() {

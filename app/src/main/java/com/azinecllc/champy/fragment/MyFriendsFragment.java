@@ -3,17 +3,22 @@ package com.azinecllc.champy.fragment;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.azinecllc.champy.R;
+import com.azinecllc.champy.adapter.FriendsActivityPagerAdapter;
 import com.azinecllc.champy.adapter.FriendsAdapter;
 import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.model.FriendModel;
@@ -22,14 +27,18 @@ import com.azinecllc.champy.model.friend.Friend_;
 import com.azinecllc.champy.model.friend.Owner;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 
+import java.io.File;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.CropSquareTransformation;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
@@ -37,8 +46,9 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 import static com.azinecllc.champy.utils.Constants.API_URL;
+import static com.azinecllc.champy.utils.Constants.path;
 
-public class FriendsFragment extends Fragment {
+public class MyFriendsFragment extends Fragment {
 
     private static final String ARG_PAGE = "ARG_PAGE";
     private String id, token;
@@ -48,10 +58,10 @@ public class FriendsFragment extends Fragment {
     private SessionManager sessionManager;
     private Socket mSocket;
 
-    public static FriendsFragment newInstance(int page) {
+    public static MyFriendsFragment newInstance(int page) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
-        FriendsFragment fragment = new FriendsFragment();
+        MyFriendsFragment fragment = new MyFriendsFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -68,20 +78,20 @@ public class FriendsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)  {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_friends, container, false);
 
         final List<FriendModel> friends = new ArrayList<>();
         Cursor c = db.query("friends", null, null, null, null, null, null);
         if (c.moveToFirst()) {
-            int idColIndex      = c.getColumnIndex("id");
-            int nameColIndex    = c.getColumnIndex("name");
-            int photoColIndex   = c.getColumnIndex("photo");
-            int index           = c.getColumnIndex("user_id");
-            int winsCount       = c.getColumnIndex("successChallenges");
-            int allCount        = c.getColumnIndex("allChallengesCount");
+            int idColIndex = c.getColumnIndex("id");
+            int nameColIndex = c.getColumnIndex("name");
+            int photoColIndex = c.getColumnIndex("photo");
+            int index = c.getColumnIndex("user_id");
+            int winsCount = c.getColumnIndex("successChallenges");
+            int allCount = c.getColumnIndex("allChallengesCount");
             int inProgressCount = c.getColumnIndex("inProgressChallengesCount");
-            int level           = c.getColumnIndex("level");
+            int level = c.getColumnIndex("level");
             do {
                 friends.add(new FriendModel(
                         c.getString(nameColIndex),
@@ -95,8 +105,8 @@ public class FriendsFragment extends Fragment {
         }
         c.close();
 
-        final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-        final FriendsAdapter adapter = new FriendsAdapter(friends, getContext(), getActivity(), (view1, position) -> {
+        RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
+        FriendsAdapter adapter = new FriendsAdapter(friends, getContext(), getActivity(), (view1, position) -> {
             FriendModel friend = friends.get(position);
         });
 
@@ -105,7 +115,7 @@ public class FriendsFragment extends Fragment {
         rvContacts.setAdapter(adapter);
 
 
-        gSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
+        gSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_to_refresh);
         gSwipeRefreshLayout.setOnRefreshListener(() -> refreshFriendsView(gSwipeRefreshLayout, gView));
         this.gView = view;
 
@@ -113,7 +123,6 @@ public class FriendsFragment extends Fragment {
             refreshFriendsView(gSwipeRefreshLayout, gView);
             sessionManager.setRefreshFriends("false");
         }
-
 
 
         return view;
@@ -141,6 +150,11 @@ public class FriendsFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
         mSocket.off();
@@ -160,8 +174,8 @@ public class FriendsFragment extends Fragment {
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         final DBHelper dbHelper = DBHelper.getInstance(getContext());
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final ContentValues cv  = new ContentValues();
-        int   clearCount        = db.delete("friends", null, null);
+        final ContentValues cv = new ContentValues();
+        int clearCount = db.delete("friends", null, null);
 
         final com.azinecllc.champy.interfaces.Friends friends = retrofit.create(com.azinecllc.champy.interfaces.Friends.class);
 
@@ -207,14 +221,14 @@ public class FriendsFragment extends Fragment {
                         final List<FriendModel> newfriends = new ArrayList<>();
                         Cursor c = db.query("friends", null, null, null, null, null, null);
                         if (c.moveToFirst()) {
-                            int nameColIndex  = c.getColumnIndex("name");
+                            int nameColIndex = c.getColumnIndex("name");
                             int photoColIndex = c.getColumnIndex("photo");
-                            int idColIndex    = c.getColumnIndex("id");
-                            int index         = c.getColumnIndex("user_id");
-                            int winsCount     = c.getColumnIndex("successChallenges");
-                            int allCount      = c.getColumnIndex("allChallengesCount");
-                            int inProgress    = c.getColumnIndex("inProgressChallengesCount");
-                            int level         = c.getColumnIndex("level");
+                            int idColIndex = c.getColumnIndex("id");
+                            int index = c.getColumnIndex("user_id");
+                            int winsCount = c.getColumnIndex("successChallenges");
+                            int allCount = c.getColumnIndex("allChallengesCount");
+                            int inProgress = c.getColumnIndex("inProgressChallengesCount");
+                            int level = c.getColumnIndex("level");
                             do {
                                 newfriends.add(new FriendModel(
                                         c.getString(nameColIndex),
@@ -270,7 +284,8 @@ public class FriendsFragment extends Fragment {
                 @Override
                 public void run() {
                     refreshFriendsView(gSwipeRefreshLayout, gView);
-                }});
+                }
+            });
         }
     };
 

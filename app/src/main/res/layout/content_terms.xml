@@ -11,7 +11,7 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/app_bar_terms"
-    tools:context="com.azinecllc.champy.activity.TermsActivity">
+    tools:context="com.azinecllc.champy.activity.MainActivity">
 
     <ScrollView
         android:id="@+id/scrollView1"
@@ -20,15 +20,15 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/textView_terms"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="" />
-
+                android:textColor="@color/color_white" />
         </LinearLayout>
+
     </ScrollView>
 
     <ProgressBar

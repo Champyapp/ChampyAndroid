@@ -5,39 +5,39 @@
 
     <group>
         <item
-            android:id="@+id/challenges"
+            android:id="@+id/nav_challenges"
             android:icon="@mipmap/nav_challenges"
             android:title="@string/challenges" />
         <item
-            android:id="@+id/friends"
+            android:id="@+id/nav_friends"
             android:icon="@mipmap/nav_friends"
             android:title="@string/friends" />
         <item
-            android:id="@+id/history"
+            android:id="@+id/nav_history"
             android:icon="@mipmap/nav_history"
             android:title="@string/history" />
         <item
-            android:id="@+id/settings"
+            android:id="@+id/nav_pending_duels"
+            android:title="@string/pending_duels"
+            android:icon="@drawable/ic_duel_yellow"
+            app:actionLayout="@layout/plus_one" />
+        <item
+            android:id="@+id/nav_settings"
             android:icon="@mipmap/nav_settings"
             android:title="@string/settings" />
     </group>
 
 
-    <item
-        android:id="@+id/pending_duels"
-        android:title="@string/pending_duels"
-        android:icon="@drawable/ic_duel_yellow"
-        app:actionLayout="@layout/plus_one" />
-
-    <item
-        android:id="@+id/share"
-        android:icon="@mipmap/nav_share"
-        android:title="@string/share" />
-
-    <item
-        android:id="@+id/nav_logout"
-        android:icon="@mipmap/nav_logout"
-        android:title="@string/logout" />
+    <item android:title="Other">
+        <menu>
+            <item
+                android:id="@+id/nav_terms"
+                android:title="@string/nav_terms" />
+            <item
+                android:id="@+id/nav_privacy_policy"
+                android:title="@string/privacy_policy" />
+        </menu>
+    </item>
 
 
 

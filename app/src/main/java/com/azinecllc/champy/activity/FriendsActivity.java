@@ -33,7 +33,7 @@ import jp.wasabeef.glide.transformations.CropSquareTransformation;
 
 import static com.azinecllc.champy.utils.Constants.path;
 
-public class FriendsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class FriendsActivity extends AppCompatActivity {
 
     private SessionManager sessionManager;
     private DrawerLayout drawer;
@@ -70,9 +70,9 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
-        navigationView.setNavigationItemSelectedListener(this);
+        //navigationView.setNavigationItemSelectedListener(this);
 
-        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.imageUserPicture);
         ImageView drawerBackground   = (ImageView) headerLayout.findViewById(R.id.slide_background);
         TextView drawerUserName      = (TextView)  headerLayout.findViewById(R.id.tvUserName);
         drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -136,7 +136,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         if (count == 0) {
             checker.hideItem(navigationView);
         } else {
-            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+            TextView view = (TextView) navigationView.getMenu().findItem(R.id.nav_pending_duels).getActionView();
             view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
         }
 
@@ -157,8 +157,8 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            Intent intent = new Intent(FriendsActivity.this, MainActivity.class);
-            startActivity(intent);
+//            Intent intent = new Intent(FriendsActivity.this, MainActivity.class);
+//            startActivity(intent);
             finish();
             super.onBackPressed();
         }
@@ -171,49 +171,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         this.isFinishing();
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.challenges:
-                Intent goToMainActivity = new Intent(this, MainActivity.class);
-                startActivity(goToMainActivity);
-                finish();
-                break;
-            case R.id.history:
-                Intent goToHistory = new Intent(this, HistoryActivity.class);
-                startActivity(goToHistory);
-                finish();
-                break;
-            case R.id.settings:
-                Intent goToSettings = new Intent(this, SettingsActivity.class);
-                startActivity(goToSettings);
-                finish();
-                break;
-            case R.id.pending_duels:
-                Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
-                startActivity(goToPendingDuel);
-                finish();
-                break;
-            case R.id.share:
-                String message = getString(R.string.share_text2);
-                Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType("text/plain");
-                share.putExtra(Intent.EXTRA_TEXT, message);
-                startActivity(Intent.createChooser(share, getString(R.string.how_would_you_like_to_share)));
-                break;
-            case R.id.nav_logout:
-                OfflineMode offlineMode = OfflineMode.getInstance();
-                if (offlineMode.isConnectedToRemoteAPI(this)) {
-                    sessionManager.logout(this);
-                    finish();
-                }
-                break;
-        }
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 
 

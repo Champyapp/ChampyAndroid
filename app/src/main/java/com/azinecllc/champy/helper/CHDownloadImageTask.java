@@ -32,6 +32,7 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 /** Class helper for download and blur user's photo.
  *  Use the compress method on the BitMap object to write image to the OutputStream ! */
+// TODO: 2/8/17 Replace it to mainActivity
 public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
     private Context context;
@@ -116,7 +117,7 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
                     .bitmapTransform(new CropCircleTransformation(context))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
-                    .into((ImageView)activity.findViewById(R.id.profile_image));
+                    .into((ImageView) activity.findViewById(R.id.imageUserPicture));
 
             File blurred = new File(path, "blurred.png");
             if (blurred.exists()) {
@@ -142,7 +143,6 @@ public class CHDownloadImageTask extends AsyncTask<String, Void, Bitmap> {
                 ImageView blurItem = (ImageView)activity.findViewById(R.id.item_blur);
                 blurItem.setVisibility(View.VISIBLE);
                 blurItem.setAlpha(0.35f);
-
 
                 /******************** Write image to OutputStream and close it ********************/
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();

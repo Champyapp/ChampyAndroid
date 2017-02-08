@@ -38,7 +38,7 @@ import retrofit.Retrofit;
 
 import static com.azinecllc.champy.utils.Constants.API_URL;
 
-public class PendingFragment extends Fragment {
+public class MyPendingFragment extends Fragment {
 
     private static final String ARG_PAGE = "ARG_PAGE";
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -47,10 +47,10 @@ public class PendingFragment extends Fragment {
     private Socket mSocket;
     private View gView;
 
-    public static PendingFragment newInstance(int page) {
+    public static MyPendingFragment newInstance(int page) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
-        PendingFragment fragment = new PendingFragment();
+        MyPendingFragment fragment = new MyPendingFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -73,13 +73,13 @@ public class PendingFragment extends Fragment {
 
         Cursor c = db.query("pending", null, null, null, null, null, null);
         if (c.moveToFirst()) {
-            int nameColIndex  = c.getColumnIndex("name");
+            int nameColIndex = c.getColumnIndex("name");
             int photoColIndex = c.getColumnIndex("photo");
-            int index         = c.getColumnIndex("user_id");
-            int owner         = c.getColumnIndex("owner");
-            int winsCount     = c.getColumnIndex("successChallenges");
-            int allCount      = c.getColumnIndex("allChallengesCount");
-            int inProgress    = c.getColumnIndex("inProgressChallengesCount");
+            int index = c.getColumnIndex("user_id");
+            int owner = c.getColumnIndex("owner");
+            int winsCount = c.getColumnIndex("successChallenges");
+            int allCount = c.getColumnIndex("allChallengesCount");
+            int inProgress = c.getColumnIndex("inProgressChallengesCount");
             do {
                 pendingFriends.add(new Pending_friend(
                         c.getString(nameColIndex),
@@ -102,11 +102,10 @@ public class PendingFragment extends Fragment {
         SessionManager sessionManager = SessionManager.getInstance(getContext());
         String checkRefresh = sessionManager.getRefreshPending();
 
-
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         rvContacts.setAdapter(adapter);
 
-        swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_to_refresh);
         swipeRefreshLayout.setOnRefreshListener(() -> refreshPendingView(swipeRefreshLayout, gView));
         this.gView = view;
 
@@ -161,7 +160,7 @@ public class PendingFragment extends Fragment {
     private void refreshPendingView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         swipeRefreshLayout.setRefreshing(true);
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        final ContentValues cv  = new ContentValues();
+        final ContentValues cv = new ContentValues();
         db.delete("pending", null, null);
 
         com.azinecllc.champy.interfaces.Friends friends = retrofit.create(com.azinecllc.champy.interfaces.Friends.class);
@@ -184,11 +183,6 @@ public class PendingFragment extends Fragment {
                                     status = "false";
                                     Friend_ friend = datum.getFriend();
                                     String friendPhoto = (friend.getPhoto() != null) ? friend.getPhoto().getMedium() : "";
-                                    //if (friend.getPhoto() != null) {
-                                    //    cv.put("photo", friend.getPhoto().getMedium());
-                                    //} else {
-                                    //    cv.put("photo", "");
-                                    //}
                                     cv.put("name", friend.getName());
                                     cv.put("photo", friendPhoto);
                                     cv.put("user_id", friend.getId());
@@ -199,11 +193,6 @@ public class PendingFragment extends Fragment {
                                 } else {
                                     status = "true";
                                     Owner friend = datum.getOwner();
-                                    //if (friend.getPhoto() != null) {
-                                    //    cv.put("photo", friend.getPhoto().getMedium());
-                                    //} else {
-                                    //    cv.put("photo", "");
-                                    //}
                                     String friendPhoto = (friend.getPhoto() != null) ? friend.getPhoto().getMedium() : "";
                                     cv.put("name", friend.getName());
                                     cv.put("photo", friendPhoto);
@@ -222,14 +211,14 @@ public class PendingFragment extends Fragment {
                         final List<Pending_friend> newfriends = new ArrayList<>();
                         Cursor c = db.query("pending", null, null, null, null, null, null);
                         if (c.moveToFirst()) {
-                            int idColIndex    = c.getColumnIndex("id");
-                            int nameColIndex  = c.getColumnIndex("name");
+                            int idColIndex = c.getColumnIndex("id");
+                            int nameColIndex = c.getColumnIndex("name");
                             int photoColIndex = c.getColumnIndex("photo");
-                            int index         = c.getColumnIndex("user_id");
-                            int owner         = c.getColumnIndex("owner");
-                            int winsCount     = c.getColumnIndex("successChallenges");
-                            int allCount      = c.getColumnIndex("allChallengesCount");
-                            int inProgress    = c.getColumnIndex("inProgressChallengesCount");
+                            int index = c.getColumnIndex("user_id");
+                            int owner = c.getColumnIndex("owner");
+                            int winsCount = c.getColumnIndex("successChallenges");
+                            int allCount = c.getColumnIndex("allChallengesCount");
+                            int inProgress = c.getColumnIndex("inProgressChallengesCount");
                             do {
                                 newfriends.add(new Pending_friend(
                                         c.getString(nameColIndex),
@@ -262,7 +251,6 @@ public class PendingFragment extends Fragment {
             swipeRefreshLayout.setRefreshing(false);
         }
     }
-
 
 
     private Emitter.Listener onConnect = new Emitter.Listener() {

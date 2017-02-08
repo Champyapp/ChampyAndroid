@@ -91,7 +91,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/colorTextAqua"
+        android:background="@color/color_text_aqua"
         android:id="@+id/view"
         android:visibility="visible"
         android:layout_below="@+id/picture"

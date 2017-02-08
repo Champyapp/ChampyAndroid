@@ -21,7 +21,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/colorTextAqua"
+        android:background="@color/color_text_aqua"
         android:id="@+id/view2"
         android:visibility="visible"
         android:layout_below="@id/photo" />
@@ -46,7 +46,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:id="@+id/view1"
-        android:background="@color/colorTextAqua"
+        android:background="@color/color_text_aqua"
         android:layout_above="@+id/tv_choose_from_gallery"
         android:layout_alignLeft="@+id/tv_choose_from_gallery"
         android:layout_alignStart="@+id/tv_choose_from_gallery" />
@@ -72,7 +72,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:id="@+id/view"
-        android:background="@color/colorTextAqua"
+        android:background="@color/color_text_aqua"
         android:layout_below="@+id/tv_choose_from_gallery"
         android:layout_alignLeft="@+id/tv_choose_from_gallery"
         android:layout_alignStart="@+id/tv_choose_from_gallery" />

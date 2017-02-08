@@ -1,26 +1,37 @@
 <resources>
     <string name="app_name">Champy</string>
+    <string name="app_id">433222243507216</string>
 
     <string name="navigation_drawer_open">Open</string>
     <string name="navigation_drawer_close">Close</string>
 
-    <string name="action_settings">Settings</string>
     <string name="title_activity_login">LoginActivity</string>
-    <string name="app_id">433222243507216</string>
     <string name="title_activity_friends">Friends</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_photo">Photo</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_self_improvement1">SelfImprovement1</string>
     <string name="title_activity_history">History</string>
     <string name="title_activity_wake_up">WakeUp</string>
     <string name="title_activity_duel">Duel</string>
     <string name="title_activity_pending__duel">Pending_Duel</string>
     <string name="action_pending_duel">Pending Duel</string>
+    <string name="action_settings">Settings</string>
 
-     <string name="large_text">
+
+    <!-- Toolbar titles when navigation menu item is selected -->
+    <string-array name="nav_item_activity_titles">
+        <item>Challenges</item>
+        <!--<item>Friends</item>-->
+        <!--<item>History</item>-->
+        <item>Pending Duels</item>
+        <item>Settings</item>
+        <item>Terms</item>
+        <item>Privacy Police</item>
+    </string-array>
+
+
+    <string name="large_text">
         "Material is the metaphor.\n\n"
 
         "A material metaphor is the unifying theory of a rationalized space and a system of motion."
@@ -217,5 +228,6 @@
     <string name="i_challenge_my_friend_to">I challenge my friend to</string>
     <string name="lost_inet_wake_up">If you would like to check your wake-up challenge, please connect to the Internet, then open Champy and make it done for today there.</string>
     <string name="challenge_canceled_by_opponent">The challenge has been canceled by the opponent</string>
+    <string name="nav_terms">Terms</string>
 
 </resources>

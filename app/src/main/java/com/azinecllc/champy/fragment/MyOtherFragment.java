@@ -51,7 +51,7 @@ import retrofit.Retrofit;
 
 import static com.azinecllc.champy.utils.Constants.API_URL;
 
-public class OtherFragment extends Fragment {
+public class MyOtherFragment extends Fragment {
 
     private static final String ARG_PAGE = "ARG_PAGE";
     private SwipeRefreshLayout gSwipeRefreshLayout;
@@ -68,10 +68,10 @@ public class OtherFragment extends Fragment {
     private Socket mSocket;
     private View gView;
 
-    public static OtherFragment newInstance(int page) {
+    public static MyOtherFragment newInstance(int page) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
-        OtherFragment fragment = new OtherFragment();
+        MyOtherFragment fragment = new MyOtherFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -96,14 +96,14 @@ public class OtherFragment extends Fragment {
         friends = new ArrayList<>();
         Cursor c = db.query("mytable", null, null, null, null, null, null);
         if (c.moveToFirst()) {
-            int nameColIndex  = c.getColumnIndex("name");
+            int nameColIndex = c.getColumnIndex("name");
             int photoColIndex = c.getColumnIndex("photo");
-            int index         = c.getColumnIndex("user_id");
-            int challenges    = c.getColumnIndex("challenges");
-            int wins          = c.getColumnIndex("wins");
-            int total         = c.getColumnIndex("total");
-            int level         = c.getColumnIndex("level");
-            int idColIndex    = c.getColumnIndex("id");
+            int index = c.getColumnIndex("user_id");
+            int challenges = c.getColumnIndex("challenges");
+            int wins = c.getColumnIndex("wins");
+            int total = c.getColumnIndex("total");
+            int level = c.getColumnIndex("level");
+            int idColIndex = c.getColumnIndex("id");
             do {
                 if (!checkTableForExist.isInOtherTable(c.getString(index)))
                     friends.add(new FriendModel(
@@ -125,7 +125,7 @@ public class OtherFragment extends Fragment {
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         rvContacts.setAdapter(adapter);
 
-        gSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_to_refresh);
+        gSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_to_refresh);
         gSwipeRefreshLayout.setOnRefreshListener(() -> {
             refreshOtherView(gSwipeRefreshLayout, gView);
         });
@@ -188,7 +188,6 @@ public class OtherFragment extends Fragment {
     }
 
 
-
     private void refreshOtherView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
             swipeRefreshLayout.setRefreshing(true);
@@ -233,9 +232,9 @@ public class OtherFragment extends Fragment {
                                                 } else {
                                                     try {
                                                         URL profile_pic = new URL(
-                                                                  "https://graph.facebook.com/"
-                                                                + fb_id
-                                                                + "/picture?type=large");
+                                                                "https://graph.facebook.com/"
+                                                                        + fb_id
+                                                                        + "/picture?type=large");
                                                         photo = profile_pic.toString();
                                                     } catch (Exception e) {
                                                         e.printStackTrace();
@@ -243,13 +242,13 @@ public class OtherFragment extends Fragment {
                                                 }
 
                                                 String name = data.getName();
-                                                cv.put("user_id",    data.get_id());
-                                                cv.put("name",       name);
-                                                cv.put("photo",      photo);
-                                                cv.put("total",      data.getAllChallengesCount().toString());
-                                                cv.put("wins",       data.getSuccessChallenges().toString());
+                                                cv.put("user_id", data.get_id());
+                                                cv.put("name", name);
+                                                cv.put("photo", photo);
+                                                cv.put("total", data.getAllChallengesCount().toString());
+                                                cv.put("wins", data.getSuccessChallenges().toString());
                                                 cv.put("challenges", data.getInProgressChallenges().toString());
-                                                cv.put("level",      data.getLevel().getNumber().toString());
+                                                cv.put("level", data.getLevel().getNumber().toString());
 
                                                 // отображаем друзей в списке
                                                 if (!checkTableForExist.isInOtherTable(data.get_id())) {
@@ -274,7 +273,9 @@ public class OtherFragment extends Fragment {
                                         }
                                     });
 
-                                } catch (JSONException e) { e.printStackTrace(); }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     });
@@ -309,7 +310,8 @@ public class OtherFragment extends Fragment {
                 @Override
                 public void run() {
                     refreshOtherView(gSwipeRefreshLayout, gView);
-                }});
+                }
+            });
         }
     };
 

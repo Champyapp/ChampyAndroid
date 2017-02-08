@@ -37,7 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/wake_up_n_challenge"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/color_white"
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textAllCaps="true"
@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/goal_text"
                 android:text="@string/wake_up_at"
-                android:textColor="@color/colorTextAqua"
+                android:textColor="@color/color_text_aqua"
                 android:textAlignment="center"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                 android:layout_alignParentTop="true"
@@ -98,7 +98,7 @@
                 android:text="@string/twenty_one"
                 android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/colorTextAqua"
+                android:textColor="@color/color_text_aqua"
                 android:layout_above="@+id/tvDays"
                 android:layout_centerHorizontal="true" />
 
@@ -109,7 +109,7 @@
                 android:text="@string/days"
                 android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/colorTextAqua"
+                android:textColor="@color/color_text_aqua"
                 android:paddingBottom="20dp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"/>

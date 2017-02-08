@@ -1,10 +1,11 @@
 package com.azinecllc.champy.activity;
 
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,24 +14,22 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.MainActivityCardsAdapter;
-import com.azinecllc.champy.helper.CHBuildAnim;
+import com.azinecllc.champy.fragment.MainFragment;
+import com.azinecllc.champy.fragment.PendingDuelFragment;
+import com.azinecllc.champy.fragment.PrivacyPoliceFragment;
+import com.azinecllc.champy.fragment.SettingsFragment;
+import com.azinecllc.champy.fragment.TermsFragment;
 import com.azinecllc.champy.helper.CHCheckPendingDuels;
 import com.azinecllc.champy.helper.CHDownloadImageTask;
-import com.azinecllc.champy.model.SelfImprovement_model;
-import com.azinecllc.champy.utils.CustomPagerBase;
-import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.facebook.FacebookSdk;
 
 import java.io.File;
@@ -38,16 +37,28 @@ import java.io.File;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import jp.wasabeef.glide.transformations.CropSquareTransformation;
 
+import static android.support.v7.appcompat.R.attr.background;
+import static com.azinecllc.champy.utils.Constants.TAG_CHALLENGES;
+// friends
+// history
+import static com.azinecllc.champy.utils.Constants.TAG_PENDING_DUELS;
+import static com.azinecllc.champy.utils.Constants.TAG_SETTINGS;
+import static com.azinecllc.champy.utils.Constants.TAG_TERMS;
+import static com.azinecllc.champy.utils.Constants.TAG_PRIVACY_POLICE;
 import static com.azinecllc.champy.utils.Constants.path;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private SessionManager sessionManager;
-    private Boolean isFabOpen = false;
     private DrawerLayout drawer;
-    private FloatingActionButton fabPlus, fabWake, fabSelf, fabDuel;
-    private Animation fab_open, fab_close, rotate_forward, rotate_backward;
     private MainActivityCardsAdapter adapter;
+    private NavigationView navigationView;
+
+    public static String CURRENT_TAG = TAG_CHALLENGES;
+    public static int navItemIndex = 0;
+    private String[] activityTitles;
+    private Handler mHandler;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,41 +68,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        sessionManager = SessionManager.getInstance(getApplicationContext());
-        adapter = new MainActivityCardsAdapter(this, SelfImprovement_model.generate(this));
-        if (adapter.dataCount() > 0) {
-            RelativeLayout cards = (RelativeLayout) findViewById(R.id.cards);
-            CustomPagerBase pager = new CustomPagerBase(this, cards, adapter);
-            pager.preparePager(0);
-        }
-
         // DRAWER
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
-                if (isFabOpen) closeFab();
+                //if (isFabOpen) closeFab();
             }
         };
         drawer.setDrawerListener(drawerToggle);
         drawerToggle.syncState();
 
         // NAVIGATION VIEW
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(MainActivity.this);
         View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
-        ImageView drawerUserPhoto = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        ImageView drawerUserPhoto = (ImageView) headerLayout.findViewById(R.id.imageUserPicture);
+        TextView drawerUserEmail = (TextView) headerLayout.findViewById(R.id.tvUserEmail);
         TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
 
         // GET PHOTO AND MAKE BLUR
-        ImageView background = (ImageView) findViewById(R.id.main_background);
-        background.setScaleType(ImageView.ScaleType.CENTER_CROP);
         drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
+        sessionManager = SessionManager.getInstance(getApplicationContext());
         File blurred = new File(path, "blurred.png");
         if (blurred.exists()) {
+            ImageView background = (ImageView) findViewById(R.id.main_background);
+            Glide.with(this)
+                    .load(blurred)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .centerCrop()
+                    .into(background);
             File profile = new File(path, "profile.jpg");
             Glide.with(this)
                     .load(profile)
@@ -104,129 +113,129 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .bitmapTransform(new CropSquareTransformation(this))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
-                    .into(background);
-            Glide.with(this)
-                    .load(blurred)
-                    .bitmapTransform(new CropSquareTransformation(this))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
                     .into(drawerBackground);
         } else {
-            final String pathToPic = sessionManager.getPathToPic();
+            String pathToPic = sessionManager.getPathToPic();
             CHDownloadImageTask chDownloadImageTask = new CHDownloadImageTask(getApplicationContext(), MainActivity.this);
             chDownloadImageTask.execute(pathToPic);
         }
 
         // USER NAME
-        final String name = sessionManager.getUserName();
+        String name = sessionManager.getUserName();
+        String email = sessionManager.getUserEmail();
         drawerUserName.setText(name);
-        Typeface typeface = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
-        drawerUserName.setTypeface(typeface);
+        drawerUserEmail.setText(email);
 
         // PENDING DUEL MENU IN DRAWER
         CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();
         int count = checker.getPendingCount(getApplicationContext());
-        if (count == 0) {
-            checker.hideItem(navigationView);
-        } else {
-            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+        if (count != 0) {
+            //checker.hideItem(navigationView);
+            //} else {
+            TextView view = (TextView) navigationView.getMenu().findItem(R.id.nav_pending_duels).getActionView();
             view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
         }
 
-        // ANIM
-        CHBuildAnim chBuildAnim = CHBuildAnim.getInstance();
-        chBuildAnim.buildAnim(this, sessionManager, typeface);
 
-        // BUTTONS
-        fabPlus   = (FloatingActionButton)findViewById(R.id.fabPlus);
-        fabSelf   = (FloatingActionButton)findViewById(R.id.fabSelf);
-        fabDuel   = (FloatingActionButton)findViewById(R.id.fabDuel);
-        fabWake   = (FloatingActionButton)findViewById(R.id.fabWake);
-        fab_open  = AnimationUtils.loadAnimation(this, R.anim.fab_open);
-        fab_close = AnimationUtils.loadAnimation(this, R.anim.fab_close);
-        rotate_forward  = AnimationUtils.loadAnimation(this, R.anim.rotate_forward);
-        rotate_backward = AnimationUtils.loadAnimation(this, R.anim.rotate_backward);
-        fabPlus.setOnClickListener(v -> animateFAB());
-        fabSelf.setOnClickListener(this);
-        fabDuel.setOnClickListener(this);
-        fabWake.setOnClickListener(this);
-
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (adapter.dataCount() < 10) {
-            switch (v.getId()) {
-                case R.id.fabSelf:
-                    startActivity(new Intent(this, SelfImprovementActivity.class));
-                    finish();
-                    break;
-                case R.id.fabDuel:
-                    startActivity(new Intent(this, FriendsActivity.class));
-                    finish();
-                    break;
-                case R.id.fabWake:
-                    startActivity(new Intent(this, WakeUpActivity.class));
-                    finish();
-                    break;
-            }
-        } else {
-            Toast.makeText(this, R.string.you_have_too_much_challenges, Toast.LENGTH_LONG).show();
+        if (savedInstanceState == null) {
+            navItemIndex = 0;
+            CURRENT_TAG = TAG_CHALLENGES;
+            loadHomeFragment();
         }
+
     }
+
+    /***
+     * Returns respected fragment that user
+     * selected from navigation menu
+     */
+    private void loadHomeFragment() {
+        activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
+        navigationView.getMenu().getItem(navItemIndex);   // selecting appropriate nav menu item
+        getSupportActionBar().setTitle(activityTitles[navItemIndex]); // set toolbar title
+
+        // if user select the current navigation menu again, just close the navigation drawer
+        if (getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
+            drawer.closeDrawers();
+            return;
+        }
+
+        // Sometimes, when fragment has huge data, screen seems hanging
+        // when switching between navigation menus
+        // So using runnable, the fragment is loaded with cross fade effect
+        // This effect can be seen in GMail app
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                // update the main content by replacing fragments
+                Fragment fragment = getHomeFragment();
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
+                fragmentTransaction.commitAllowingStateLoss();
+            }
+        };
+
+        mHandler = new Handler();
+        mHandler.post(runnable); // If 'runnable' is not null, then add to the message queue
+        drawer.closeDrawers();   // Closing drawer on item click
+        invalidateOptionsMenu(); // refresh toolbar menu
+    }
+
 
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if (isFabOpen) {
-            closeFab();
         }
+
+        if (!CURRENT_TAG.equals(TAG_CHALLENGES)) {
+            navItemIndex = 0;
+            CURRENT_TAG = TAG_CHALLENGES;
+            loadHomeFragment();
+        }
+
     }
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-//        new Handler().postDelayed(() -> {
-//        navDrawerHandler.postDelayed(mRunnable, drawerCloseTime);
-            switch (item.getItemId()) {
-                case R.id.friends:
-                    Intent goToFriends = new Intent(MainActivity.this, FriendsActivity.class);
-                    startActivity(goToFriends);
-                    startActivity(new Intent(this, FriendsActivity.class));
-                    finish();
-                    break;
-                case R.id.history:
-                    Intent goToHistory = new Intent(MainActivity.this, HistoryActivity.class);
-                    startActivity(goToHistory);
-                    finish();
-                    break;
-                case R.id.settings:
-                    Intent goToSettings = new Intent(MainActivity.this, SettingsActivity.class);
-                    startActivity(goToSettings);
-                    finish();
-                    break;
-                case R.id.pending_duels:
-                    Intent goToPendingDuel = new Intent(MainActivity.this, PendingDuelActivity.class);
-                    startActivity(goToPendingDuel);
-                    finish();
-                    break;
-                case R.id.share:
-                    String message = getString(R.string.share_text2);
-                    Intent share = new Intent(Intent.ACTION_SEND);
-                    share.setType("text/plain");
-                    share.putExtra(Intent.EXTRA_TEXT, message);
-                    startActivity(Intent.createChooser(share, getString(R.string.how_would_you_like_to_share)));
-                    break;
-                case R.id.nav_logout:
-                    OfflineMode offlineMode = OfflineMode.getInstance();
-                    if (offlineMode.isConnectedToRemoteAPI(MainActivity.this)) {
-                        sessionManager.logout(MainActivity.this);
-                        finish();
-                    }
-                    break;
-            }
-//        }, drawerCloseTime);
+        switch (item.getItemId()) {
+            case R.id.nav_challenges:
+                navItemIndex = 0;
+                CURRENT_TAG = TAG_CHALLENGES;
+                break;
+            case R.id.nav_friends:
+                //navItemIndex = 1;
+                //CURRENT_TAG = TAG_FRIENDS;
+                startActivity(new Intent(this, FriendsActivity.class));
+                break;
+            case R.id.nav_history:
+                //navItemIndex = 2;
+                //CURRENT_TAG = TAG_HISTORY;
+                startActivity(new Intent(this, HistoryActivity.class));
+                break;
+            case R.id.nav_pending_duels:
+                navItemIndex = 1;
+                CURRENT_TAG = TAG_PENDING_DUELS;
+                break;
+            case R.id.nav_settings:
+                navItemIndex = 2;
+                CURRENT_TAG = TAG_SETTINGS;
+                break;
+            case R.id.nav_terms:
+                navItemIndex = 3;
+                CURRENT_TAG = TAG_TERMS;
+                //startActivity(new Intent(this, TermsActivity.class));
+                break;
+            case R.id.nav_privacy_policy:
+                navItemIndex = 4;
+                CURRENT_TAG = TAG_PRIVACY_POLICE;
+                //startActivity(new Intent(this, PrivacyActivity.class));
+                break;
+
+        }
         drawer.closeDrawer(GravityCompat.START);
+        loadHomeFragment();
         return true;
     }
 
@@ -252,30 +261,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    private void animateFAB() {
-        if(isFabOpen) {
-            closeFab();
-        } else {
-            openFab();
+    private Fragment getHomeFragment() {
+        switch (navItemIndex) {
+            case 0:
+                return new MainFragment();
+//            case 1: return new FragmentFriends();
+//            case 2: return new HistoryFragment();
+            case 1:
+                return new PendingDuelFragment();
+
+            case 2:
+                return new SettingsFragment();
+
+            case 3:
+                return new TermsFragment();
+
+            case 4:
+                return new PrivacyPoliceFragment();
+
+            default:
+                return new MainFragment();
         }
-    }
-
-
-    private void closeFab() {
-        fabPlus.startAnimation(rotate_backward);
-        fabWake.startAnimation(fab_close);
-        fabSelf.startAnimation(fab_close);
-        fabDuel.startAnimation(fab_close);
-        isFabOpen = false;
-    }
-
-
-    private void openFab() {
-        fabPlus.startAnimation(rotate_forward);
-        fabWake.startAnimation(fab_open);
-        fabSelf.startAnimation(fab_open);
-        fabDuel.startAnimation(fab_open);
-        isFabOpen = true;
     }
 
 

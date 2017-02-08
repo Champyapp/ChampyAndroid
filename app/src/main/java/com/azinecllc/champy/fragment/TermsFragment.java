@@ -1,177 +1,57 @@
-package com.azinecllc.champy.activity;
+package com.azinecllc.champy.fragment;
 
-import android.content.Intent;
-import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.text.Html;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.helper.CHCheckPendingDuels;
-import com.azinecllc.champy.utils.OfflineMode;
-import com.azinecllc.champy.utils.SessionManager;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
-import java.io.File;
+/**
+ * Created by SashaKhyzhun on 2/8/17.
+ */
+public class TermsFragment extends Fragment {
 
-import jp.wasabeef.glide.transformations.CropCircleTransformation;
-import jp.wasabeef.glide.transformations.CropSquareTransformation;
-
-import static com.azinecllc.champy.utils.Constants.path;
-
-public class TermsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
-    private SessionManager sessionManager;
     private TextView tvTerms;
-    private DrawerLayout drawer;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_terms);
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        sessionManager = SessionManager.getInstance(getApplicationContext());
-        tvTerms = (TextView)findViewById(R.id.textView_terms);
-        tvTerms.setVisibility(View.INVISIBLE);
-
-        new LoadTermsText().execute();
-
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
-        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
-        ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
-        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
-        File file = new File(path, "profile.jpg");
-        Uri url = Uri.fromFile(file);
-
-        Glide.with(this)
-                .load(url)
-                .bitmapTransform(new CropCircleTransformation(this))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(drawerImageProfile);
-
-        file = new File(path, "blurred.png");
-        url = Uri.fromFile(file);
-
-        Glide.with(this)
-                .load(url)
-                .bitmapTransform(new CropSquareTransformation(this))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(drawerBackground);
-
-
-        final String name = sessionManager.getUserName();
-        drawerUserName.setText(name);
-        drawerUserName.setTypeface(typeface);
-
-        CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();
-        int count = checker.getPendingCount(getApplicationContext());
-        if (count == 0) {
-            checker.hideItem(navigationView);
-        } else {
-            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
-            view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
-        }
-
     }
 
+    @Nullable
     @Override
-    protected void onDestroy() {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View viewTerms = inflater.inflate(R.layout.content_terms, container, false);
+
+        tvTerms = (TextView) viewTerms.findViewById(R.id.textView_terms);
+        tvTerms.setVisibility(View.INVISIBLE);
+        new LoadTermsText().execute();
+
+        ProgressBar progressBar = (ProgressBar) viewTerms.findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.GONE);
+
+        return viewTerms;
+    }
+
+
+    @Override
+    public void onDestroy() {
         super.onDestroy();
-        this.isFinishing();
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
     }
 
-    @Override
-    public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.challenges:
-                Intent goToChallenges = new Intent(this, MainActivity.class);
-                startActivity(goToChallenges);
-                finish();
-                break;
-            case R.id.friends:
-                Intent goToFriends = new Intent(this, FriendsActivity.class);
-                startActivity(goToFriends);
-                finish();
-                break;
-            case R.id.pending_duels:
-                Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
-                startActivity(goToPendingDuel);
-                finish();
-                break;
-            case R.id.history:
-                Intent goToHistory = new Intent(this, HistoryActivity.class);
-                startActivity(goToHistory);
-                finish();
-                break;
-            case R.id.settings:
-                Intent goToSettings = new Intent(this, SettingsActivity.class);
-                startActivity(goToSettings);
-                finish();
-                break;
-            case R.id.share:
-                String message = "Check out Champy - it helps you improve and compete with your friends!";
-                Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType("text/plain");
-                share.putExtra(Intent.EXTRA_TEXT, message);
-                startActivity(Intent.createChooser(share, "How would you like to share?"));
-                break;
-            case R.id.nav_logout:
-                OfflineMode offlineMode = OfflineMode.getInstance();
-                if (offlineMode.isConnectedToRemoteAPI(this)) {
-                    sessionManager.logout(this);
-                    finish();
-                }
-                break;
-        }
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-
     private class LoadTermsText extends AsyncTask<String, Void, String> {
 
         protected String doInBackground(String... urls) {
-            String text  = "<p lang=\"en-US\">\n" +
+            String text = "<p lang=\"en-US\">\n" +
                     "    By accessing the Champy application or its website found at <a href=\"champyapp.com\">champyapp.com</a>, whether through a mobile device, mobile application\n" +
                     "    or computer (collectively, the “<strong>Service</strong>”) you agree to be bound by these Terms of Use (this “<strong>Agreement</strong>”), whether or not\n" +
                     "    you create a Champy account. If you wish to create a Champy account and make use of the Service, please read these Terms of Use.\n" +
@@ -752,11 +632,7 @@ public class TermsActivity extends AppCompatActivity implements NavigationView.O
         protected void onPostExecute(String result) {
             // Do your staff here to save image
             tvTerms.setText(result, TextView.BufferType.SPANNABLE);
-            ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
-            progressBar.setVisibility(View.GONE);
             tvTerms.setVisibility(View.VISIBLE);
         }
     }
-
-
 }

@@ -126,9 +126,6 @@ public class WakeUpActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(WakeUpActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
         super.onBackPressed();
     }
 

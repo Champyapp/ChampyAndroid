@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".activity.MainActivity"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:windowEnableSplitTouch="false"
+    android:splitMotionEvents="false">
 
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/back_settings" />
-
-    <include layout="@layout/item_blur" />
 
     <ScrollView
         android:layout_width="wrap_content"
@@ -27,7 +27,7 @@
                 android:id="@+id/img_profile"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:contentDescription="@string/userPhoto"
                 android:clickable="true" />
 
@@ -96,7 +96,7 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:text="OK"
-                    android:textColor="@color/colorWhite"
+                    android:textColor="@color/color_white"
                     android:id="@+id/imageButtonAcceptMaybe"
                     android:layout_below="@+id/new_name"
                     android:background="@drawable/round_corner"

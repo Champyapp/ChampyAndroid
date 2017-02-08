@@ -47,7 +47,7 @@ public class CHCheckPendingDuels {
     public void hideItem(View view) {
         NavigationView navigationView = (NavigationView)view.findViewById(R.id.nav_view);
         Menu nav_Menu = navigationView.getMenu();
-        nav_Menu.findItem(R.id.pending_duels).setVisible(false);
+        nav_Menu.findItem(R.id.nav_pending_duels).setVisible(false);
     }
 
 }

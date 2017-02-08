@@ -22,7 +22,6 @@ import android.widget.TextView;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.helper.CHCheckPendingDuels;
-import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -35,7 +34,7 @@ import jp.wasabeef.glide.transformations.CropSquareTransformation;
 import static com.azinecllc.champy.utils.Constants.azinecUrl;
 import static com.azinecllc.champy.utils.Constants.path;
 
-public class AboutActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class AboutActivity extends AppCompatActivity {
 
     private SessionManager sessionManager;
     private DrawerLayout drawer;
@@ -66,7 +65,7 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
 
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         final View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
-        navigationView.setNavigationItemSelectedListener(this);
+        //navigationView.setNavigationItemSelectedListener(this);
 
         File filePhoto = new File(path, "profile.jpg");
         File fileBlur  = new File(path, "blurred.png");
@@ -74,7 +73,7 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
         Uri blurred = Uri.fromFile(fileBlur);
 
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
-        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.profile_image);
+        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.imageUserPicture);
         TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
 
         ImageView drawerBG = (ImageView) headerLayout.findViewById(R.id.slide_background);
@@ -95,7 +94,7 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
         if (count == 0) {
             checker.hideItem(navigationView);
         } else {
-            TextView view = (TextView) navigationView.getMenu().findItem(R.id.pending_duels).getActionView();
+            TextView view = (TextView) navigationView.getMenu().findItem(R.id.nav_pending_duels).getActionView();
             view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
         }
 
@@ -110,53 +109,39 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
         }
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.challenges:
-                Intent goToChallenges = new Intent(this, MainActivity.class);
-                startActivity(goToChallenges);
-                finish();
-                break;
-            case R.id.friends:
-                Intent goToFriends = new Intent(this, FriendsActivity.class);
-                startActivity(goToFriends);
-                finish();
-                break;
-            case R.id.pending_duels:
-                Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
-                startActivity(goToPendingDuel);
-                finish();
-                break;
-            case R.id.history:
-                Intent goToHistory = new Intent(this, HistoryActivity.class);
-                startActivity(goToHistory);
-                finish();
-                break;
-            case R.id.settings:
-                Intent goToSettings = new Intent(this, SettingsActivity.class);
-                startActivity(goToSettings);
-                finish();
-                break;
-            case R.id.share:
-                String message = getString(R.string.share_text2);
-                Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType("text/plain");
-                share.putExtra(Intent.EXTRA_TEXT, message);
-                startActivity(Intent.createChooser(share, getString(R.string.how_would_you_like_to_share)));
-                break;
-            case R.id.nav_logout:
-                OfflineMode offline = OfflineMode.getInstance();
-                if (offline.isConnectedToRemoteAPI(this)) {
-                    sessionManager.logout(this);
-                    finish();
-                }
-                break;
-        }
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
+//    @SuppressWarnings("StatementWithEmptyBody")
+//    @Override
+//    public boolean onNavigationItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.nav_challenges:
+//                Intent goToChallenges = new Intent(this, MainActivity.class);
+//                startActivity(goToChallenges);
+//                finish();
+//                break;
+//            case R.id.nav_friends:
+//                Intent goToFriends = new Intent(this, FriendsActivity.class);
+//                startActivity(goToFriends);
+//                finish();
+//                break;
+//            case R.id.nav_history:
+//                Intent goToHistory = new Intent(this, HistoryActivity.class);
+//                startActivity(goToHistory);
+//                finish();
+//                break;
+//            case R.id.nav_pending_duels:
+//                Intent goToPendingDuel = new Intent(this, PendingDuelActivity.class);
+//                startActivity(goToPendingDuel);
+//                finish();
+//                break;
+//            case R.id.nav_settings:
+//                Intent goToSettings = new Intent(this, SettingsActivity.class);
+//                startActivity(goToSettings);
+//                finish();
+//                break;
+//        }
+//        drawer.closeDrawer(GravityCompat.START);
+//        return true;
+//    }
 
     @Override
     protected void onDestroy() {

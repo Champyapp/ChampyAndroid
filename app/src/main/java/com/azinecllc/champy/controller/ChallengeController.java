@@ -394,7 +394,7 @@ public class ChallengeController {
                     myIntent.putExtra("details", Arrays.toString(det));
 
 
-                    PendingIntent pi = PendingIntent.getBroadcast(activity, aID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    PendingIntent pi = PendingIntent.getBroadcast(context, aID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                     AlarmManager aManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                     aManager.setRepeating(AlarmManager.RTC_WAKEUP, ring, AlarmManager.INTERVAL_DAY, pi);
                     // LOLLIPOP = 5.0 / 5.1

@@ -77,8 +77,6 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
 
                 DailyRemindController reminder = new DailyRemindController(getApplicationContext());
                 reminder.enableDailyNotificationReminder();
-
-
             } else {
                 startActivity(new Intent(this, LoginActivity.class));
             }
@@ -105,37 +103,37 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
      */
     private void checkNotificationExtras() {
         goTo = new Intent(this, MainActivity.class);
-        Bundle bundle = getIntent().getExtras();
-        String extras;
-        if (bundle != null) {
-            extras = bundle.getString("gcm");
-            if (extras != null) {
-                switch (extras) {
-                    case "friend_request_confirmed":
-                        goTo = new Intent(this, FriendsActivity.class);
-                        goTo.putExtra("friend_request", "friend_request_confirmed");
-                        break;
-                    case "friend_request_incoming":
-                        goTo = new Intent(this, FriendsActivity.class);
-                        goTo.putExtra("friend_request", "friend_request_incoming");
-                        break;
-                    case "friend_request_removed":
-                        goTo = new Intent(this, FriendsActivity.class);
-                        goTo.putExtra("friend_request", "friend_request_removed");
-                        break;
-                    case "challenge_request_win":
-                        goTo = new Intent(this, HistoryActivity.class);
-                        goTo.putExtra("challenge_request_win", "true");
-                        break;
-                    case "challenge_request_confirmed":
-                        goTo = new Intent(this, MainActivity.class);
-                        break;
-                    case "challenge_request_incoming":
-                        goTo = new Intent(this, PendingDuelActivity.class);
-                        break;
-                }
-            }
-        }
+//        Bundle bundle = getIntent().getExtras();
+//        String extras;
+//        if (bundle != null) {
+//            extras = bundle.getString("gcm");
+//            if (extras != null) {
+//                switch (extras) {
+//                    case "friend_request_confirmed":
+//                        goTo = new Intent(this, FriendsActivity.class);
+//                        goTo.putExtra("friend_request", "friend_request_confirmed");
+//                        break;
+//                    case "friend_request_incoming":
+//                        goTo = new Intent(this, FriendsActivity.class);
+//                        goTo.putExtra("friend_request", "friend_request_incoming");
+//                        break;
+//                    case "friend_request_removed":
+//                        goTo = new Intent(this, FriendsActivity.class);
+//                        goTo.putExtra("friend_request", "friend_request_removed");
+//                        break;
+//                    case "challenge_request_win":
+//                        goTo = new Intent(this, HistoryActivity.class);
+//                        goTo.putExtra("challenge_request_win", "true");
+//                        break;
+//                    case "challenge_request_confirmed":
+//                        goTo = new Intent(this, MainActivity.class);
+//                        break;
+//                    case "challenge_request_incoming":
+//                        goTo = new Intent(this, PendingDuelActivity.class);
+//                        break;
+//                }
+//            }
+//        }
     }
 
 

@@ -5,23 +5,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".activity.MainActivity"
-    tools:showIn="@layout/app_bar_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:windowEnableSplitTouch="false"
     android:splitMotionEvents="false"
     android:id="@+id/content_main"  >
-
-    <!-- background for user photo -->
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/main_background"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true" />
-
-    <include layout="@layout/item_blur" />
-
 
     <!-- text "welcome username" -->
     <TextView
@@ -209,25 +197,10 @@
         android:focusable="false">
     </RelativeLayout>
 
-    <!-- blurred screen -->
-
-    <!-- fab -->
-    <!--<ImageButton-->
-        <!--android:layout_width="60dp"-->
-        <!--android:layout_height="60dp"-->
-        <!--android:id="@+id/fabPlus"-->
-        <!--android:background="@drawable/centerwithplus"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_alignParentEnd="true"-->
-        <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
-        <!--android:layout_marginRight="@dimen/activity_horizontal_margin"-->
-        <!--android:layout_marginBottom="@dimen/activity_vertical_margin"/>-->
-
 
 
     <android.support.design.widget.FloatingActionButton
-        app:backgroundTint="@color/colorTextAqua"
+        app:backgroundTint="@color/color_text_aqua"
         android:id="@+id/fabSelf"
         android:src="@drawable/fab_self"
         android:scaleType="center"
@@ -239,7 +212,7 @@
         android:layout_alignStart="@+id/fabDuel" />
 
     <android.support.design.widget.FloatingActionButton
-        app:backgroundTint="@color/colorTextAqua"
+        app:backgroundTint="@color/color_text_aqua"
         android:background="@drawable/ic_duel_yellow"
         android:id="@+id/fabDuel"
         android:src="@drawable/fab_duel"
@@ -252,7 +225,7 @@
         android:layout_alignStart="@+id/fabWake" />
 
     <android.support.design.widget.FloatingActionButton
-        app:backgroundTint="@color/colorTextAqua"
+        app:backgroundTint="@color/color_text_aqua"
         android:id="@+id/fabWake"
         android:src="@drawable/fab_wake"
         android:visibility="invisible"
@@ -264,7 +237,7 @@
         android:layout_alignStart="@+id/fabPlus" />
 
     <android.support.design.widget.FloatingActionButton
-        app:backgroundTint="@color/colorTextAqua"
+        app:backgroundTint="@color/color_text_aqua"
         android:src="@drawable/fab_plus"
         android:id="@+id/fabPlus"
         android:scaleType="center"

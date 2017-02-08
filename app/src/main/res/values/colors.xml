@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="color_primary">#FF008080</color>
+    <color name="color_primary_dark">#FF008080</color>
+    <color name="color_accent">#FF4081</color>
     <color name="black_overlay">#66000000</color>
-    <color name="colorHint">#d7d7d7</color>
-    <color name="colorTextAqua">#339997</color>
-    <color name="colorWhite">#FFF</color>
+    <color name="color_hint">#d7d7d7</color>
+    <color name="color_text_aqua">#339997</color>
+    <color name="color_white">#FFF</color>
 
     <color name="color_preloader_start">#000000</color>
     <color name="color_preloader_center">#000000</color>

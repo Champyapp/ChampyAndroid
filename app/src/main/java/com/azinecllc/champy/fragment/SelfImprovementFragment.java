@@ -77,12 +77,6 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
             }
         }
 
-        System.out.println("Self-Fragment: " + status);
-        System.out.println("Self-Fragment: " + name);
-        System.out.println("Self-Fragment: " + duration);
-        System.out.println("Self-Fragment: " + description);
-        System.out.println("Self-Fragment: " + challenge_id);
-
         sessionManager = SessionManager.getInstance(getContext());
         size = sessionManager.getSelfSize();
         typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
