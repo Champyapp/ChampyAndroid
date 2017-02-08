@@ -396,19 +396,19 @@ public class ChallengeController {
 
                     PendingIntent pi = PendingIntent.getBroadcast(activity, aID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                     AlarmManager aManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-
+                    aManager.setRepeating(AlarmManager.RTC_WAKEUP, ring, AlarmManager.INTERVAL_DAY, pi);
                     // LOLLIPOP = 5.0 / 5.1
                     // KITKAT   = 4.4
                     // SDK_INT  = user api version
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                            aManager.set(AlarmManager.RTC_WAKEUP, ring, pi);
-                        } else {
-                            aManager.setExact(AlarmManager.RTC_WAKEUP, ring, pi);
-                        }
-                    } else {
-                        aManager.set(AlarmManager.RTC_WAKEUP, ring, pi);
-                    }
+//                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+//                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+//                            aManager.set(AlarmManager.RTC_WAKEUP, ring, pi);
+//                        } else {
+//                            aManager.setExact(AlarmManager.RTC_WAKEUP, ring, pi);
+//                        }
+//                    } else {
+//                        aManager.set(AlarmManager.RTC_WAKEUP, ring, pi);
+//                    }
 
                     generateCardsForMainActivity(new Intent(activity, MainActivity.class));
                 } else {
@@ -521,13 +521,18 @@ public class ChallengeController {
                     String type = response.body().getData().getChallenge().getType();
                     int end = response.body().getData().getEnd();
                     long now = System.currentTimeMillis() / 1000;
-                    Log.i(TAG, "now: " + System.currentTimeMillis() / 1000);
-                    Log.i(TAG, "end: " + (end - oneDay));
+                    //Log.i(TAG, "now: " + System.currentTimeMillis() / 1000);
+                    //Log.i(TAG, "end: " + (end - oneDay));
                     if (type.equals(typeWake) && (now > end - oneDay)) {
-                        setNewAlarmClock(det, aID);
-                        Log.i(TAG, "now < end\n disabled the AlarmManager");
+                        //setNewAlarmClock(det, aID);
+                        //Log.i(TAG, "now < end\n disabled the AlarmManager");
                         Intent myIntent = new Intent(activity, CustomAlarmReceiver.class);
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast(activity, Integer.valueOf(aID), myIntent, 0);
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                                activity,
+                                Integer.valueOf(aID),
+                                myIntent,
+                                PendingIntent.FLAG_UPDATE_CURRENT
+                        );
                         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                         alarmManager.cancel(pendingIntent);
                     }
@@ -575,7 +580,7 @@ public class ChallengeController {
                     if (type.equals(typeWake)) {
                         //if this is "wake up" challenge then stop alarm manager;
                         Intent myIntent = new Intent(activity, CustomAlarmReceiver.class);
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast(activity, alarmID, myIntent, 0);
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(activity, alarmID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                         alarmManager.cancel(pendingIntent);
                     }
