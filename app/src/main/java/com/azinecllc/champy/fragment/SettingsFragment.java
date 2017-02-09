@@ -24,7 +24,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,7 +32,6 @@ import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.AboutActivity;
 import com.azinecllc.champy.activity.ContactUsActivity;
 import com.azinecllc.champy.activity.MainActivity;
-import com.azinecllc.champy.activity.PhotoActivity;
 import com.azinecllc.champy.activity.RoleControllerActivity;
 import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.controller.DailyRemindController;
@@ -122,7 +120,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
         File fileProfile = new File(path, "profile.jpg");
         Uri userPicturePath = Uri.fromFile(fileProfile);
-        //String userPicturePath = session.getPathToPic();
         Glide.with(this)
                 .load(userPicturePath)
                 .bitmapTransform(new CropCircleTransformation(context))
@@ -217,8 +214,11 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                     layoutButtons.setVisibility(View.VISIBLE);
                     tvTakeAPicture.setVisibility(View.VISIBLE);
                     tvChooseFrom.setVisibility(View.VISIBLE);
-                    tvChooseFrom.setOnClickListener(view -> startActivity(new Intent(context, PhotoActivity.class)));
-                    //tvChooseFrom.setOnClickListener(view -> Crop.pickImage(getActivity()));
+//                    tvChooseFrom.setOnClickListener(view -> startActivity(new Intent(context, PhotoActivity.class)));
+
+                    // context, this
+                    tvChooseFrom.setOnClickListener(view -> Crop.pickImage(context, this));
+
                     tvTakeAPicture.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -255,18 +255,14 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        System.out.println("я веселый метод: onActivityResult " + "(" + requestCode + ")");
         if (resultCode == RESULT_OK) {
             if (requestCode == CAMERA_REQUEST) {
                 Bundle extras = data.getExtras();
                 Bitmap thePic = extras.getParcelable("data"); // get the cropped bitmap
                 savePhoto(thePic);
-                uploadPhoto.uploadPhotoForAPI(saveFromCamera(thePic));
-                startActivity(new Intent(getContext(), MainActivity.class));
-            } else if (requestCode == CROP_PIC) {
-                Bundle extras = data.getExtras();
-                Bitmap thePic = extras.getParcelable("data"); // get the cropped bitmap
-                savePhoto(thePic);
-                startActivity(new Intent(getContext(), MainActivity.class));
+                uploadPhoto.uploadPhotoForAPI(saveToStorageFromCamera(thePic));
+                startActivity(new Intent(getActivity(), MainActivity.class));
             } else if (requestCode == Crop.REQUEST_PICK) {
                 beginCrop(data.getData());
             } else if (requestCode == Crop.REQUEST_CROP) {
@@ -275,6 +271,11 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            } else if (requestCode == CROP_PIC) {
+                Bundle extras = data.getExtras();
+                Bitmap thePic = extras.getParcelable("data"); // get the cropped bitmap
+                savePhoto(thePic);
+                startActivity(new Intent(getActivity(), MainActivity.class));
             } else if (requestCode == SELECT_FILE) {
                 Uri selectedImageUri = data.getData();
                 performCrop(selectedImageUri);
@@ -530,6 +531,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
     @Nullable
     private String getPath(Uri uri) throws URISyntaxException {
+        System.out.println("я веселый метод: getPath(Uri uri)");
         if ("content".equalsIgnoreCase(uri.getScheme())) {
             String[] projection = {"_data"};
             Cursor cursor;
@@ -554,27 +556,29 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
 
     private void beginCrop(Uri source) {
+        System.out.println("я веселый метод: beginCrop(Uri source)");
         Uri destination = Uri.fromFile(new File(getContext().getCacheDir(), "cropped"));
-        Crop.of(source, destination).asSquare().withMaxSize(300, 300).start(getActivity());
+        // start activity for result 'REQUEST_CROP'
+        Crop.of(source, destination).asSquare().withMaxSize(300, 300).start(context, this);
     }
 
 
     private void handleCrop(int resultCode, Intent result) throws IOException {
+        System.out.println("я веселый метод: handleCrop(int resultCode, Intent result)");
+
         if (resultCode == RESULT_OK) {
             Uri uri = Crop.getOutput(result);
             String path = null;
             try {
-                path = getPath(uri);
+                path = getPath(uri); // my method which returns path to picture...
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
 
-            //Upload_photo(path);
             uploadPhoto.uploadPhotoForAPI(path);
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), uri);
-            savePhoto(bitmap);
-            Intent intent = new Intent(getContext(), MainActivity.class);
-            startActivity(intent);
+            savePhoto(bitmap); // my method which saves picture to storage
+            startActivity(new Intent(getContext(), MainActivity.class));
 
         } else if (resultCode == Crop.RESULT_ERROR) {
             Toast.makeText(context, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
@@ -582,7 +586,8 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    private String saveFromCamera(Bitmap finalBitmap) {
+    private String saveToStorageFromCamera(Bitmap finalBitmap) {
+        System.out.println("я веселый метод: saveToStorageFromCamera(Bitmap finalBitmap)");
         String root = Environment.getExternalStorageDirectory().toString();
         File myDir = new File(root + "/android/data/com.azinecllc.champy/images");
         myDir.mkdirs();
@@ -606,11 +611,13 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
 
     public void savePhoto(Bitmap photo) {
+        System.out.println("я веселый метод: savePhoto(Bitmap photo)");
+
         File profileImage = new File(path, "profile.jpg");
         File profileBlurred = new File(path, "blurred.png");
         Uri uri = Uri.fromFile(profileImage);
 
-        Bitmap blurred = Blur.blurRenderScript(getContext(), photo, 15);
+        Bitmap blurred = Blur.blurRenderScript(getActivity(), photo, 15);
 
         session.setUserPicture(uri.toString());
 
@@ -650,6 +657,8 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
 
     private void performCrop(Uri picUri) {
+        System.out.println("я веселый метод: performCrop(Uri picUri)");
+
         // take care of exceptions
         try {
             // call the standard crop action intent (the user device may not

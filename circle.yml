@@ -4,24 +4,23 @@
 
 general:
     artifacts:
-        - /home/ubuntu/ChampyAndroi/app/build/outputs/apk/
+        - /home/ubuntu/ChampyAndroid/app/build/outputs/apk/
 
 machine:
     environment:
         ANDROID_HOME: /usr/local/android-sdk-linux
 
 dependencies:
-    pre:
-        - wget "https://services.gradle.org/distributions/gradle-2.13-bin.zip"; unzip gradle-2.13-bin.zip
-        - source environmentSetup.sh && copyEnvVarsToGradleProperties
     override:
-        - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-23.0.3,android-23,extra-google-m2repository,extra-google-google_play_services,extra-android-m2repository
+        - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-23.0.1,android-32,extra-google-m2repository,extra-google-google_play_services,extra-android-support
         - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
 
 test:
     override:
-        - (./gradlew assemble):
+        - (./gradlew test --continue):
             timeout: 360
+
+
 #        # start the emulator
 #        - emulator -avd circleci-android22 -no-audio -no-window:
 #            background: true
