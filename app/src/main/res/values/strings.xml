@@ -229,5 +229,6 @@
     <string name="lost_inet_wake_up">If you would like to check your wake-up challenge, please connect to the Internet, then open Champy and make it done for today there.</string>
     <string name="challenge_canceled_by_opponent">The challenge has been canceled by the opponent</string>
     <string name="nav_terms">Terms</string>
+    <string name="ok">OK</string>
 
 </resources>

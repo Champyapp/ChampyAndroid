@@ -139,12 +139,12 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
                 Bitmap thePic = extras.getParcelable("data"); // get the cropped bitmap
                 savePhoto(thePic);
                 uploadPhoto.uploadPhotoForAPI(saveFromCamera(thePic));
-                startActivity(new Intent(this, SettingsActivity.class));
+                startActivity(new Intent(this, MainActivity.class));
             } else if (requestCode == CROP_PIC) {
                 Bundle extras = data.getExtras();
                 Bitmap thePic = extras.getParcelable("data"); // get the cropped bitmap
                 savePhoto(thePic);
-                startActivity(new Intent(this, SettingsActivity.class));
+                startActivity(new Intent(this, MainActivity.class));
             } else if (requestCode == Crop.REQUEST_PICK) {
                 beginCrop(data.getData());
             } else if (requestCode == Crop.REQUEST_CROP) {
@@ -212,7 +212,7 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
             uploadPhoto.uploadPhotoForAPI(path);
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),uri);
             savePhoto(bitmap);
-            Intent intent = new Intent(PhotoActivity.this, SettingsActivity.class);
+            Intent intent = new Intent(PhotoActivity.this, MainActivity.class);
             startActivity(intent);
 
         } else if (resultCode == Crop.RESULT_ERROR) {
@@ -251,7 +251,7 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
 
         Bitmap blurred = Blur.blurRenderScript(getApplicationContext(), photo, 15);
 
-        sessionManager.change_avatar(uri.toString());
+        sessionManager.setUserPicture(uri.toString());
 
         FileOutputStream out = null;
         try {

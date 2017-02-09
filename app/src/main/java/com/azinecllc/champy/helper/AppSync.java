@@ -110,10 +110,10 @@ public class AppSync {
                     Intent extras = new Intent(context, MainActivity.class);
                     if (api_path == null) {
                         extras.putExtra("path_to_pic", path_to_pic);
-                        sessionManager.change_avatar(path_to_pic);
+                        sessionManager.setUserPicture(path_to_pic);
                     } else {
                         extras.putExtra("path_to_pic", api_path);
-                        sessionManager.change_avatar(api_path);
+                        sessionManager.setUserPicture(api_path);
                     }
                     Intent goToRoleActivity = new Intent(context, RoleControllerActivity.class);
                     context.startActivity(goToRoleActivity);

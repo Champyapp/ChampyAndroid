@@ -308,9 +308,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }
 
                     if (api_photo_path == null) {
-                        sessionManager.change_avatar(path_to_pic);
+                        sessionManager.setUserPicture(path_to_pic);
                     } else {
-                        sessionManager.change_avatar(api_photo_path);
+                        sessionManager.setUserPicture(api_photo_path);
                     }
 
                     Intent goToRoleActivity = new Intent(LoginActivity.this, RoleControllerActivity.class);

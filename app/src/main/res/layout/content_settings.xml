@@ -21,6 +21,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/settings_layout" >
 
+            <!-- User Photo -->
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
@@ -31,6 +32,7 @@
                 android:contentDescription="@string/userPhoto"
                 android:clickable="true" />
 
+            <!-- User Name -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -38,22 +40,25 @@
                 android:id="@+id/tvUserName"
                 android:layout_below="@+id/img_profile"
                 android:layout_centerHorizontal="true"
-                android:textColor="#ffffff" />
+                android:textColor="@color/color_white" />
 
+            <!-- Simple menu text 'General' -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/general"
                 android:id="@+id/tvGeneral"
+                android:text="@string/general"
+                android:textColor="@color/color_white"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_below="@+id/tvUserName"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="8dp"
-                android:textColor="#ffffff"
+                android:layout_marginRight="8dp"
                 android:layout_marginBottom="8dp" />
 
+            <!-- Layout to change user name -->
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -63,23 +68,32 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true">
 
+                <!--<ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageViewBackground" />
+
+                <include layout="@layout/item_blur" />-->
+
+                <!-- Simple text 'Enter new name' -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="@string/enter_new_name"
-                    android:id="@+id/tvEntedYourName"
+                    android:id="@+id/tvEnterNewName"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:textColor="#ffffff"
                     android:visibility="gone"
                     android:layout_marginTop="8dp" />
 
+                <!-- Edit text for new name -->
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/new_name"
-                    android:layout_below="@+id/tvEntedYourName"
+                    android:id="@+id/editTextNewName"
+                    android:layout_below="@+id/tvEnterNewName"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentRight="true"
@@ -87,51 +101,53 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:maxLength="25"
-                    android:singleLine="true"
+                    android:maxLines="1"
                     android:visibility="gone"
                     android:textColor="#ffffff"
                     android:inputType="text" />
 
+                <!-- My custom button 'ok' to confirm new name -->
                 <Button
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:text="OK"
+                    android:text="@string/ok"
                     android:textColor="@color/color_white"
-                    android:id="@+id/imageButtonAcceptMaybe"
-                    android:layout_below="@+id/new_name"
+                    android:id="@+id/buttonOk"
+                    android:layout_below="@+id/editTextNewName"
                     android:background="@drawable/round_corner"
                     android:layout_centerHorizontal="true"
-                    android:visibility="gone"
-                    android:elevation="0dp" />
+                    android:visibility="gone" />
 
+                <!-- Simple text 'Name' -->
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:id="@+id/tvName"
+                    android:text="@string/name"
+                    android:textColor="@color/color_white"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:textColor="#ffffff"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
-                    android:clickable="true"
                     android:layout_marginLeft="16dp"
-                    android:visibility="visible" />
+                    android:layout_marginRight="16dp"
+                    android:visibility="visible"
+                    android:clickable="true" />
 
+                <!-- Line after current layout -->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="#339997"
                     android:id="@+id/view11"
                     android:visibility="gone"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignRight="@+id/tvName"
-                    android:layout_alignEnd="@+id/tvName" />
+                    android:layout_alignParentTop="true" />
 
             </RelativeLayout>
 
+            <!-- Line after menu item 'Name' -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -139,26 +155,27 @@
                 android:background="#339997"
                 android:id="@+id/view"
                 android:visibility="visible"
-                android:layout_below="@+id/change_name"
-                android:layout_alignRight="@+id/change_name"
-                android:layout_alignEnd="@+id/change_name" />
+                android:layout_below="@+id/change_name" />
 
+            <!-- Simple Text 'Profile Picture' -->
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/profile_pictures"
                 android:id="@+id/avatar"
+                android:text="@string/profile_pictures"
+                android:textColor="@color/color_white"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_below="@+id/view"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:clickable="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:textColor="#ffffff"
                 android:layout_marginTop="8dp"
-                android:layout_marginLeft="16dp" />
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:clickable="true" />
 
+            <!-- Line after menu item 'Profile Picture' -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -166,26 +183,27 @@
                 android:background="#339997"
                 android:id="@+id/view1"
                 android:visibility="visible"
-                android:layout_below="@+id/avatar"
-                android:layout_alignRight="@+id/change_name"
-                android:layout_alignEnd="@+id/change_name" />
+                android:layout_below="@+id/avatar" />
 
+            <!-- Simple text 'Delete Account' -->
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/delete_account"
                 android:id="@+id/delete_acc"
+                android:text="@string/delete_account"
+                android:textColor="@color/color_white"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_below="@+id/view1"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:clickable="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:textColor="#ffffff"
                 android:layout_marginTop="8dp"
-                android:layout_marginLeft="16dp" />
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:clickable="true" />
 
+            <!-- Line after menu item 'Delete Account' -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -193,148 +211,141 @@
                 android:id="@+id/view2"
                 android:layout_marginTop="8dp"
                 android:visibility="visible"
-                android:layout_below="@+id/delete_acc"
-                android:layout_alignRight="@+id/change_name"
-                android:layout_alignEnd="@+id/change_name" />
+                android:layout_below="@+id/delete_acc" />
 
+            <!-- Simple menu text 'Notifications-->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/notifications"
                 android:id="@+id/tvNotifications"
+                android:text="@string/notifications"
+                android:textColor="@color/color_white"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_below="@+id/view2"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="16dp"
                 android:layout_marginLeft="8dp"
-                android:textColor="#ffffff" />
+                android:layout_marginRight="8dp" />
 
+            <!-- Switch with text 'Push Notifications' -->
             <Switch
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/push_notifications"
                 android:id="@+id/switchPushNotifications"
+                android:text="@string/push_notifications"
+                android:textColor="@color/color_white"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                 android:layout_below="@+id/tvNotifications"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_alignRight="@+id/delete_acc"
-                android:layout_alignEnd="@+id/delete_acc"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:textColor="#ffffff"
-                android:enabled="true" />
+                android:checked="true" />
 
+            <!-- Line after menu item 'Push Notifications' -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#339997"
                 android:id="@+id/view3"
                 android:layout_marginTop="8dp"
-                android:visibility="visible"
-                android:layout_below="@+id/switchPushNotifications"
-                android:layout_alignRight="@+id/change_name"
-                android:layout_alignEnd="@+id/change_name" />
+                android:layout_below="@+id/switchPushNotifications" />
 
+            <!-- Switch with text 'New Challenge Requests' -->
             <Switch
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/new_challenge_requests"
                 android:id="@+id/switchNewChallengeRequest"
+                android:text="@string/new_challenge_requests"
+                android:textColor="@color/color_white"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                 android:layout_below="@+id/view3"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_alignRight="@+id/delete_acc"
-                android:layout_alignEnd="@+id/delete_acc"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:textColor="#ffffff" />
+                android:checked="true" />
 
+            <!-- Line after menu item 'New Challenge Requests' -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#339997"
                 android:id="@+id/view4"
                 android:layout_marginTop="8dp"
-                android:visibility="visible"
-                android:layout_below="@+id/switchNewChallengeRequest"
-                android:layout_alignRight="@+id/change_name"
-                android:layout_alignEnd="@+id/change_name" />
+                android:layout_below="@+id/switchNewChallengeRequest" />
 
+            <!-- Switch with text 'Accepted Your Challenge' -->
             <Switch
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/accepted_your_challenge"
                 android:id="@+id/switchAcceptedYourChallenge"
+                android:text="@string/accepted_your_challenge"
+                android:textColor="@color/color_white"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                 android:layout_below="@+id/view4"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_alignRight="@+id/delete_acc"
-                android:layout_alignEnd="@+id/delete_acc"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:textColor="#ffffff" />
+                android:checked="true" />
 
+            <!-- Line after menu item 'Accepted Your Challenge' -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#339997"
                 android:id="@+id/view5"
+                android:background="#339997"
                 android:layout_marginTop="8dp"
-                android:visibility="visible"
-                android:layout_below="@+id/switchAcceptedYourChallenge"
-                android:layout_alignRight="@+id/change_name"
-                android:layout_alignEnd="@+id/change_name" />
+                android:layout_below="@+id/switchAcceptedYourChallenge" />
 
+            <!-- Switch with text 'Challenge End' -->
             <Switch
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/challenge_end"
                 android:id="@+id/switchChallengeEnd"
+                android:text="@string/challenge_end"
+                android:textColor="@color/color_white"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                 android:layout_below="@+id/view5"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_alignRight="@+id/delete_acc"
-                android:layout_alignEnd="@+id/delete_acc"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:textColor="#ffffff" />
+                android:checked="true" />
 
+            <!-- Line after menu item 'Challenge End' -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#339997"
                 android:id="@+id/view6"
+                android:background="#339997"
                 android:layout_marginTop="8dp"
                 android:visibility="visible"
-                android:layout_below="@+id/switchChallengeEnd"
-                android:layout_alignRight="@+id/change_name"
-                android:layout_alignEnd="@+id/change_name" />
+                android:layout_below="@+id/switchChallengeEnd" />
 
+            <!-- Switch with text 'Daily Reminder' -->
             <Switch
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/daily_reminder"
                 android:id="@+id/switchChallengesForToday"
+                android:text="@string/daily_reminder"
+                android:textColor="@color/color_white"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                 android:layout_below="@+id/view6"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_alignRight="@+id/delete_acc"
-                android:layout_alignEnd="@+id/delete_acc"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:textColor="#ffffff" />
+                android:checked="true" />
 
+            <!-- Line after menu item 'Daily Reminder' -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -346,62 +357,38 @@
                 android:layout_alignRight="@+id/change_name"
                 android:layout_alignEnd="@+id/change_name" />
 
+            <!-- Simple menu text 'Legal'-->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/legal"
                 android:id="@+id/tvLegal"
+                android:text="@string/legal"
+                android:textColor="@color/color_white"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_below="@+id/viewLine"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="16dp"
                 android:layout_marginLeft="8dp"
-                android:textColor="#ffffff" />
+                android:layout_marginRight="8dp" />
 
+            <!-- Simple text 'About' -->
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/about"
                 android:id="@+id/about"
+                android:textColor="@color/color_white"
+                android:text="@string/about"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_below="@+id/tvLegal"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:layout_marginTop="8dp"
-                android:textColor="#ffffff"
-                android:layout_alignRight="@+id/switchChallengeEnd"
-                android:layout_alignEnd="@+id/switchChallengeEnd"
                 android:clickable="true" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#339997"
-                android:id="@+id/view7"
-                android:layout_marginTop="8dp"
-                android:visibility="visible"
-                android:layout_below="@+id/about"
-                android:layout_alignRight="@+id/change_name"
-                android:layout_alignEnd="@+id/change_name" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/privacy_policy"
-                android:id="@+id/privacy"
-                android:layout_below="@+id/view7"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="8dp"
-                android:textColor="#ffffff"
-                android:layout_alignRight="@+id/switchChallengeEnd"
-                android:layout_alignEnd="@+id/switchChallengeEnd"
-                android:clickable="true" />
-
+            <!-- Line after menu item 'About' -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -409,26 +396,28 @@
                 android:id="@+id/view8"
                 android:layout_marginTop="8dp"
                 android:visibility="visible"
-                android:layout_below="@+id/privacy"
+                android:layout_below="@+id/about"
                 android:layout_alignRight="@+id/change_name"
                 android:layout_alignEnd="@+id/change_name" />
 
+            <!-- Simple text 'Contact Us' -->
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/contact_us"
+                android:text="@string/contact_us"
+                android:textColor="@color/color_white"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/terms"
-                android:id="@+id/terms"
                 android:layout_below="@+id/view8"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:layout_marginTop="8dp"
-                android:textColor="#ffffff"
-                android:layout_alignRight="@+id/switchChallengeEnd"
-                android:layout_alignEnd="@+id/switchChallengeEnd"
+                android:layout_marginBottom="8dp"
                 android:clickable="true" />
 
+            <!-- Line after menu item 'Contact Us' -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -436,35 +425,7 @@
                 android:id="@+id/view9"
                 android:layout_marginTop="8dp"
                 android:visibility="visible"
-                android:layout_below="@+id/terms"
-                android:layout_alignRight="@+id/change_name"
-                android:layout_alignEnd="@+id/change_name" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/contact_us"
-                android:id="@+id/contact_us"
-                android:layout_below="@+id/view9"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="8dp"
-                android:textColor="#ffffff"
-                android:layout_alignRight="@+id/switchChallengeEnd"
-                android:layout_alignEnd="@+id/switchChallengeEnd"
-                android:clickable="true"
-                android:layout_marginBottom="8dp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#339997"
-                android:id="@+id/view10"
-                android:layout_marginTop="8dp"
-                android:visibility="visible"
-                android:layout_below="@+id/privacy"
+                android:layout_below="@+id/contact_us"
                 android:layout_alignRight="@+id/change_name"
                 android:layout_alignEnd="@+id/change_name" />
 

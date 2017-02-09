@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,7 +44,6 @@ import java.io.File;
 import java.util.HashMap;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
-import jp.wasabeef.glide.transformations.CropSquareTransformation;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
@@ -64,17 +64,18 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     private Typeface typeface;
     private OfflineMode offline;
     private SessionManager session;
-    private String name, userID, token;
+    private String userName, userID, userToken;
     private DailyRemindController reminder;
     private TextView tvChangeName, tvUserName;
 
     private HashMap<String, String> map = new HashMap<>();
-    private HashMap<String, String> user = new HashMap<>();
+    private HashMap<String, String> userDetails = new HashMap<>();
     private Retrofit retrofit;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = getContext();
 
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
@@ -83,8 +84,9 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         dbHelper = DBHelper.getInstance(context);
         offline = OfflineMode.getInstance();
         userID = session.getUserId();
-        token = session.getToken();
-        user = session.getUserDetails();
+        userName = session.getUserName();
+        userToken = session.getToken();
+        userDetails = session.getUserDetails();
 
     }
 
@@ -97,10 +99,10 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         ImageView userImageProfile = (ImageView) viewSettings.findViewById(R.id.img_profile);
 
         File fileProfile = new File(path, "profile.jpg");
-        Uri uriProfile = Uri.fromFile(fileProfile);
-
+        Uri userPicturePath = Uri.fromFile(fileProfile);
+        //String userPicturePath = session.getPathToPic();
         Glide.with(this)
-                .load(uriProfile)
+                .load(userPicturePath)
                 .bitmapTransform(new CropCircleTransformation(context))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
@@ -109,10 +111,8 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
         initSwitches(viewSettings);
 
-        TextView terms = (TextView) viewSettings.findViewById(R.id.terms);
         TextView about = (TextView) viewSettings.findViewById(R.id.about);
         TextView avatar = (TextView) viewSettings.findViewById(R.id.avatar);
-        TextView privacy = (TextView) viewSettings.findViewById(R.id.privacy);
         TextView tvLegal = (TextView) viewSettings.findViewById(R.id.tvLegal);
         TextView delete = (TextView) viewSettings.findViewById(R.id.delete_acc);
         TextView tvGeneral = (TextView) viewSettings.findViewById(R.id.tvGeneral);
@@ -121,17 +121,15 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         tvUserName = (TextView) viewSettings.findViewById(R.id.tvUserName);
         tvChangeName = (TextView) viewSettings.findViewById(R.id.tvName);
 
-        tvUserName.setText(name);
+        tvUserName.setText(userName);
         tvUserName.setTypeface(typeface);
         tvLegal.setTypeface(typeface);
         tvNotif.setTypeface(typeface);
         tvGeneral.setTypeface(typeface);
 
         about.setOnClickListener(this);
-        terms.setOnClickListener(this);
         delete.setOnClickListener(this);
         avatar.setOnClickListener(this);
-        privacy.setOnClickListener(this);
         contactUs.setOnClickListener(this);
         tvChangeName.setOnClickListener(this);
 
@@ -142,41 +140,49 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        Intent intent;
         switch (v.getId()) {
             case R.id.tvName:
                 tvChangeName.setVisibility(View.INVISIBLE);
-                TextView tvEnterYourName = (TextView) v.findViewById(R.id.tvEntedYourName);
+
+//                ImageView imageViewBG = (ImageView) getActivity().findViewById(R.id.imageViewBackground);
+//                File blurred = new File(path, "blurred.png");
+//                Glide.with(this)
+//                        .load(blurred)
+//                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                        .skipMemoryCache(true)
+//                        .centerCrop()
+//                        .into(imageViewBG);
+
+                TextView tvEnterYourName = (TextView) getActivity().findViewById(R.id.tvEnterNewName);
+                EditText etNewName = (EditText) getActivity().findViewById(R.id.editTextNewName);
+                Button buttonOK = (Button) getActivity().findViewById(R.id.buttonOk);
+                View lineOfTheNed = getActivity().findViewById(R.id.view11);
+
                 tvEnterYourName.setVisibility(View.VISIBLE);
-
-                EditText etNewName = (EditText) v.findViewById(R.id.new_name);
-                etNewName.setVisibility(View.VISIBLE);
-                etNewName.setText(name);
-
-                Button imageButtonAcceptName = (Button) v.findViewById(R.id.imageButtonAcceptMaybe);
-                imageButtonAcceptName.setVisibility(View.VISIBLE);
-
-                View lineOfTheNed = v.findViewById(R.id.view11);
                 lineOfTheNed.setVisibility(View.VISIBLE);
+                etNewName.setVisibility(View.VISIBLE);
+                buttonOK.setVisibility(View.VISIBLE);
 
-                imageButtonAcceptName.setOnClickListener(v1 -> {
+                etNewName.setText(userName);
+
+                buttonOK.setOnClickListener(v1 -> {
                     String checkName = etNewName.getText().toString();
                     if (offline.isConnectedToRemoteAPI(getActivity()) && !checkName.isEmpty()) {
                         String newName = etNewName.getText().toString().trim();
-                        session.change_name(newName);
-                        setNewName(newName);
+                        session.setUserName(newName);
+
+                        updateUserName(newName);
 
                         tvUserName.setText(etNewName.getText().toString());
-                        imageButtonAcceptName.setVisibility(View.GONE);
-                        tvChangeName.setVisibility(View.VISIBLE);
                         tvEnterYourName.setVisibility(View.GONE);
-                        lineOfTheNed.setVisibility(View.GONE);
                         etNewName.setVisibility(View.GONE);
+                        buttonOK.setVisibility(View.GONE);
+                        lineOfTheNed.setVisibility(View.GONE);
+                        tvChangeName.setVisibility(View.VISIBLE);
                     }
                 });
                 break;
             case R.id.avatar:
-                //updateProfile(map);
                 startActivity(new Intent(context, PhotoActivity.class));
                 break;
             case R.id.delete_acc:
@@ -187,18 +193,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.about:
-                //updateProfile(map);
                 startActivity(new Intent(context, AboutActivity.class));
-                break;
-            case R.id.privacy:
-//                updateProfile(map);
-//                intent = new Intent(context, PrivacyActivity.class);
-//                startActivity(intent);
-                break;
-            case R.id.terms:
-//                updateProfile(map);
-//                intent = new Intent(context, TermsActivity.class);
-//                startActivity(intent);
                 break;
             case R.id.contact_us:
                 startActivity(new Intent(context, ContactUsActivity.class));
@@ -210,11 +205,11 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
 
     private void initSwitches(View view) {
-        String pushNotify = user.get("pushN");
-        String acceptedYour = user.get("acceptedYour");
-        String challengeEnd = user.get("challengeEnd");
-        String newChallengeReq = user.get("newChallReq");
-        String challForToday = user.get("challengesForToday");
+        String pushNotify = userDetails.get("pushN");
+        String acceptedYour = userDetails.get("acceptedYour");
+        String challengeEnd = userDetails.get("challengeEnd");
+        String newChallenge = userDetails.get("newChallReq");
+        String challForToday = userDetails.get("challengesForToday");
 
         map.put("joinedChampy", "true");
         map.put("friendRequests", "true");
@@ -223,7 +218,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         map.put("challengeEnd", challengeEnd);
         map.put("challengesForToday", challForToday);
         map.put("acceptedYourChallenge", acceptedYour);
-        map.put("newChallengeRequests", newChallengeReq);
+        map.put("newChallengeRequests", newChallenge);
         map.put("pushNotifications", pushNotify);
 
         Switch switchForPushNotif = (Switch) view.findViewById(R.id.switchPushNotifications);
@@ -239,7 +234,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         });
 
         Switch switchForNewChallRequests = (Switch) view.findViewById(R.id.switchNewChallengeRequest);
-        switchForNewChallRequests.setChecked(Boolean.parseBoolean(newChallengeReq));
+        switchForNewChallRequests.setChecked(Boolean.parseBoolean(newChallenge));
         switchForNewChallRequests.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 map.put("newChallengeRequests", "true");
@@ -300,7 +295,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
         Update_user update_user = retrofit.create(Update_user.class);
         Profile_data profile_data = new Profile_data(map);
-        Call<User> call = update_user.update_profile_options(userID, token, profile_data);
+        Call<User> call = update_user.update_profile_options(userID, userToken, profile_data);
 
         call.enqueue(new Callback<User>() {
             @Override
@@ -325,7 +320,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                         ChallengeController cc = new ChallengeController(
                                 context,
                                 getActivity(),
-                                token,
+                                userToken,
                                 userID
                         );
 
@@ -376,7 +371,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                     case DialogInterface.BUTTON_POSITIVE:
                         final Update_user update_user = retrofit.create(Update_user.class);
 
-                        Call<Delete> callForDeleteUser = update_user.delete_user(userID, token);
+                        Call<Delete> callForDeleteUser = update_user.delete_user(userID, userToken);
                         callForDeleteUser.enqueue(new Callback<Delete>() {
                             @Override
                             public void onResponse(Response<Delete> response, Retrofit retrofit) {
@@ -423,9 +418,9 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     }
 
     // @Call to API
-    private void setNewName(String newName) {
+    private void updateUserName(String newName) {
         Update_user update_user = retrofit.create(Update_user.class);
-        Call<User> call = update_user.update_user_name(userID, token, newName);
+        Call<User> call = update_user.update_user_name(userID, userToken, newName);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {

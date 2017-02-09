@@ -70,6 +70,7 @@ public class SessionManager {
         editor.commit(); // commit changes
     }
 
+
     public void setChampyOptions(String challenges, String wins, String total, String level) {
         editor.putString("challenges", challenges);
         editor.putString("wins",  wins);
@@ -142,12 +143,12 @@ public class SessionManager {
         activity.startActivity(intent);
     }
 
-    public void change_avatar(String url) {
+    public void setUserPicture(String url) {
         editor.putString(KEY_PATH, url);
         editor.commit();
     }
 
-    public void change_name(String name) {
+    public void setUserName(String name) {
         editor.putString(KEY_NAME, name);
         editor.commit();
     }
