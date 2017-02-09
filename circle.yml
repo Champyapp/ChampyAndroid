@@ -4,7 +4,7 @@
 
 general:
     artifacts:
-        - /home/ubuntu/ChampyAndroid/app/build/outputs/apk/
+        - /home/ubuntu/ChampyAndroi/app/build/outputs/apk/
 
 machine:
     environment:
@@ -12,15 +12,28 @@ machine:
 
 dependencies:
     pre:
-        - chmod +x gradlew
+        - wget "https://services.gradle.org/distributions/gradle-2.13-bin.zip"; unzip gradle-2.13-bin.zip
+        - source environmentSetup.sh && copyEnvVarsToGradleProperties
     override:
-        - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-23.0.3,android-23,extra-google-m2repository,extra-google-google_play_services,extra-android-support
+        - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-23.0.3,android-23,extra-google-m2repository,extra-google-google_play_services,extra-android-m2repository
         - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
 
 test:
     override:
         - (./gradlew assemble):
             timeout: 360
-
-#- echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-23.0.1,android-32,extra-google-m2repository,extra-google-google_play_services,extra-android-support
-#- ANDROID_HOME=/Users/SashaKhyzhun/Library/Android/sdk ./gradlew dependencies
+#        # start the emulator
+#        - emulator -avd circleci-android22 -no-audio -no-window:
+#            background: true
+#            parallel: true
+#        # wait for it to have booted
+#        - circle-android wait-for-boot
+#        # unlock the emulator screen
+#        - sleep 30
+#        - adb shell input keyevent 82
+#        # run tests  against the emulator.
+#        - ./gradlew connectedDevelopmentDebugAndroidTest -PdisablePreDex
+#        # copy the build outputs to artifacts
+#        - cp -r app/build/outputs $CIRCLE_ARTIFACTS
+#        # copy the test results to the test results directory.
+#        - cp -r app/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS

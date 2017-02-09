@@ -33,10 +33,10 @@ android {
     }
     signingConfigs {
         release {
-            keyAlias 'Champy'
-            keyPassword 'Azinec2014'
+            keyAlias '**********'
+            keyPassword '**********'
             storeFile file('/Users/SashaKhyzhun/Work/AndroidStudioProjects/KeyStore/champykeystore.jks')
-            storePassword 'Azinec2014'
+            storePassword '**********'
         }
     }
     buildTypes {
