@@ -32,4 +32,10 @@ public class Constants {
     public static final int twoDays = 172800;
     public static final int drawerCloseTime = 250;
 
+
+    public static final String READ_EXTERNAL_STORAGE = "android.permission.READ_EXTERNAL_STORAGE";
+    public static final int CAMERA_REQUEST = 1888;
+    public static final int SELECT_FILE = 1999;
+    public static final int CROP_PIC = 1777;
+
 }

@@ -1,15 +1,19 @@
 package com.azinecllc.champy.fragment;
 
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -28,22 +32,31 @@ import android.widget.Toast;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.AboutActivity;
 import com.azinecllc.champy.activity.ContactUsActivity;
+import com.azinecllc.champy.activity.MainActivity;
+import com.azinecllc.champy.activity.PhotoActivity;
 import com.azinecllc.champy.activity.RoleControllerActivity;
 import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.controller.DailyRemindController;
 import com.azinecllc.champy.data.DBHelper;
+import com.azinecllc.champy.helper.CHUploadPhoto;
 import com.azinecllc.champy.interfaces.Update_user;
 import com.azinecllc.champy.model.user.Delete;
 import com.azinecllc.champy.model.user.Profile_data;
 import com.azinecllc.champy.model.user.User;
+import com.azinecllc.champy.utils.Blur;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.login.LoginManager;
+import com.soundcloud.android.crop.Crop;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.Random;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import retrofit.Call;
@@ -53,7 +66,11 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.app.Activity.RESULT_OK;
 import static com.azinecllc.champy.utils.Constants.API_URL;
+import static com.azinecllc.champy.utils.Constants.CAMERA_REQUEST;
+import static com.azinecllc.champy.utils.Constants.CROP_PIC;
+import static com.azinecllc.champy.utils.Constants.SELECT_FILE;
 import static com.azinecllc.champy.utils.Constants.path;
 
 /**
@@ -70,10 +87,11 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     private String userName, userID, userToken;
     private DailyRemindController reminder;
     private TextView tvChangeName, tvUserName;
-
+    private CHUploadPhoto uploadPhoto;
     private HashMap<String, String> map = new HashMap<>();
     private HashMap<String, String> userDetails = new HashMap<>();
     private Retrofit retrofit;
+    public Uri picUri;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,6 +108,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         userName = session.getUserName();
         userToken = session.getToken();
         userDetails = session.getUserDetails();
+        uploadPhoto = new CHUploadPhoto(getContext());
 
     }
 
@@ -143,9 +162,12 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        if (!offline.isConnectedToRemoteAPI(getActivity())) {
+            return;
+        }
+
         switch (v.getId()) {
             case R.id.tvName:
-
                 LinearLayout layoutEditText = (LinearLayout) getActivity().findViewById(R.id.layoutEditText);
                 TextView tvEnterYourName = (TextView) getActivity().findViewById(R.id.tvEnterNewName);
                 EditText etNewName = (EditText) getActivity().findViewById(R.id.editTextNewName);
@@ -153,32 +175,25 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 View lineOfTheNed = getActivity().findViewById(R.id.view11);
 
                 if (layoutEditText.getVisibility() == View.GONE) {
-                    Toast.makeText(context, "Було Gone, Стало не Gone", Toast.LENGTH_SHORT).show();
                     layoutEditText.setVisibility(View.VISIBLE);
                     tvEnterYourName.setVisibility(View.VISIBLE);
                     lineOfTheNed.setVisibility(View.VISIBLE);
                     etNewName.setVisibility(View.VISIBLE);
-                    buttonOK.setVisibility(View.VISIBLE);
-
                     etNewName.setText(userName);
 
+                    buttonOK.setVisibility(View.VISIBLE);
                     buttonOK.setOnClickListener(v1 -> {
-                        String checkName = etNewName.getText().toString();
-                        if (offline.isConnectedToRemoteAPI(getActivity()) && !checkName.isEmpty()) {
-                            String newName = etNewName.getText().toString().trim();
-                            session.setUserName(newName);
-
-                            updateUserName(newName); // call
-
-                            tvUserName.setText(etNewName.getText().toString());
-
-                            layoutEditText.setVisibility(View.GONE);
-                            tvEnterYourName.setVisibility(View.GONE);
-                            etNewName.setVisibility(View.GONE);
-                            buttonOK.setVisibility(View.GONE);
-                            lineOfTheNed.setVisibility(View.GONE);
-
-                        }
+                        String userNewName = (etNewName.getText().toString().isEmpty())
+                                ? session.getUserName() : etNewName.getText().toString().trim();
+                        session.setUserName(userNewName);
+                        updateUserName(userNewName); // call
+                        tvUserName.setText(etNewName.getText().toString());
+                        layoutEditText.setVisibility(View.GONE);
+                        tvEnterYourName.setVisibility(View.GONE);
+                        etNewName.setVisibility(View.GONE);
+                        buttonOK.setVisibility(View.GONE);
+                        lineOfTheNed.setVisibility(View.GONE);
+                        getActivity().recreate();
                     });
                 } else {
                     layoutEditText.setVisibility(View.GONE);
@@ -189,43 +204,36 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.avatar:
-                //startActivity(new Intent(context, PhotoActivity.class));
+                if (!checkWriteExternalPermission()) {
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{READ_EXTERNAL_STORAGE}, 1);
+                    return;
+                }
 
                 LinearLayout layoutButtons = (LinearLayout) getActivity().findViewById(R.id.layoutButtons);
                 TextView tvTakeAPicture = (TextView) getActivity().findViewById(R.id.textViewTakeAPicture);
                 TextView tvChooseFrom = (TextView) getActivity().findViewById(R.id.textViewChooseFromGallery);
 
-                if (checkWriteExternalPermission()) {
-                    if (layoutButtons.getVisibility() == View.GONE) {
-                        layoutButtons.setVisibility(View.VISIBLE);
-                        tvTakeAPicture.setVisibility(View.VISIBLE);
-                        tvChooseFrom.setVisibility(View.VISIBLE);
+                if (layoutButtons.getVisibility() == View.GONE) {
+                    layoutButtons.setVisibility(View.VISIBLE);
+                    tvTakeAPicture.setVisibility(View.VISIBLE);
+                    tvChooseFrom.setVisibility(View.VISIBLE);
+                    tvChooseFrom.setOnClickListener(view -> startActivity(new Intent(context, PhotoActivity.class)));
+                    //tvChooseFrom.setOnClickListener(view -> Crop.pickImage(getActivity()));
+                    tvTakeAPicture.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            File f = new File(path, "profile.jpg");
+                            picUri = Uri.fromFile(f);
+                            startActivityForResult(intent, CAMERA_REQUEST);
+                        }
+                    });
 
-                        tvTakeAPicture.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Toast.makeText(context, "Take A Pic", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
-                        tvChooseFrom.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Toast.makeText(context, "From Gallery", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    } else {
-                        layoutButtons.setVisibility(View.GONE);
-                        tvTakeAPicture.setVisibility(View.INVISIBLE);
-                        tvChooseFrom.setVisibility(View.INVISIBLE);
-                        tvTakeAPicture.setOnClickListener(null);
-                        tvChooseFrom.setOnClickListener(null);
-                    }
                 } else {
-                    ActivityCompat.requestPermissions(getActivity(), new String[]{READ_EXTERNAL_STORAGE}, 1);
-                    return;
+                    layoutButtons.setVisibility(View.GONE);
+                    tvTakeAPicture.setVisibility(View.INVISIBLE);
+                    tvChooseFrom.setVisibility(View.INVISIBLE);
                 }
-
                 break;
             case R.id.delete_acc:
                 if (!session.getChampyOptions().get("challenges").equals("0")) {
@@ -245,7 +253,37 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         updateProfile(map);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == CAMERA_REQUEST) {
+                Bundle extras = data.getExtras();
+                Bitmap thePic = extras.getParcelable("data"); // get the cropped bitmap
+                savePhoto(thePic);
+                uploadPhoto.uploadPhotoForAPI(saveFromCamera(thePic));
+                startActivity(new Intent(getContext(), MainActivity.class));
+            } else if (requestCode == CROP_PIC) {
+                Bundle extras = data.getExtras();
+                Bitmap thePic = extras.getParcelable("data"); // get the cropped bitmap
+                savePhoto(thePic);
+                startActivity(new Intent(getContext(), MainActivity.class));
+            } else if (requestCode == Crop.REQUEST_PICK) {
+                beginCrop(data.getData());
+            } else if (requestCode == Crop.REQUEST_CROP) {
+                try {
+                    handleCrop(resultCode, data);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else if (requestCode == SELECT_FILE) {
+                Uri selectedImageUri = data.getData();
+                performCrop(selectedImageUri);
+            }
 
+        }
+    }
+
+    // Initialization switches
     private void initSwitches(View view) {
         String pushNotify = userDetails.get("pushN");
         String acceptedYour = userDetails.get("acceptedYour");
@@ -327,7 +365,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
     }
 
-
+    // @Call to API
     private void updateProfile(HashMap<String, String> map) {
         session.toggleChallengeEnd(map.get("challengeEnd"));
         session.togglePushNotification(map.get("pushNotifications"));
@@ -350,6 +388,27 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         });
     }
 
+    // @Call to API
+    private void updateUserName(String newName) {
+        Update_user update_user = retrofit.create(Update_user.class);
+        Call<User> call = update_user.update_user_name(userID, userToken, newName);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Response<User> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    //взяти имя с базы и поставить как новое в текст-вью.
+                } else {
+                    Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 
     // @Костыль
     private void surrenderAllChallengesDialog() {
@@ -459,32 +518,163 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 .show();
     }
 
-    // @Call to API
-    private void updateUserName(String newName) {
-        Update_user update_user = retrofit.create(Update_user.class);
-        Call<User> call = update_user.update_user_name(userID, userToken, newName);
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Response<User> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    //взяти имя с базы и поставить как новое в текст-вью.
-                } else {
-                    Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
-                }
-
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
     // Check Permission
     private boolean checkWriteExternalPermission() {
         int res = getActivity().checkCallingOrSelfPermission(READ_EXTERNAL_STORAGE);
         return (res == PackageManager.PERMISSION_GRANTED);
+    }
+
+    /**
+     * Methods for photo.
+     */
+
+    @Nullable
+    private String getPath(Uri uri) throws URISyntaxException {
+        if ("content".equalsIgnoreCase(uri.getScheme())) {
+            String[] projection = {"_data"};
+            Cursor cursor;
+
+            try {
+                cursor = getContext().getContentResolver().query(uri, projection, null, null, null);
+                int column_index = cursor.getColumnIndexOrThrow("_data");
+                if (cursor.moveToFirst()) {
+                    return cursor.getString(column_index);
+                }
+                cursor.close(); // added this line, if something went wrong than just delete this line;
+
+            } catch (Exception e) {
+                // Eat it
+            }
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
+
+        return null;
+    }
+
+
+    private void beginCrop(Uri source) {
+        Uri destination = Uri.fromFile(new File(getContext().getCacheDir(), "cropped"));
+        Crop.of(source, destination).asSquare().withMaxSize(300, 300).start(getActivity());
+    }
+
+
+    private void handleCrop(int resultCode, Intent result) throws IOException {
+        if (resultCode == RESULT_OK) {
+            Uri uri = Crop.getOutput(result);
+            String path = null;
+            try {
+                path = getPath(uri);
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+
+            //Upload_photo(path);
+            uploadPhoto.uploadPhotoForAPI(path);
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), uri);
+            savePhoto(bitmap);
+            Intent intent = new Intent(getContext(), MainActivity.class);
+            startActivity(intent);
+
+        } else if (resultCode == Crop.RESULT_ERROR) {
+            Toast.makeText(context, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    private String saveFromCamera(Bitmap finalBitmap) {
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root + "/android/data/com.azinecllc.champy/images");
+        myDir.mkdirs();
+        Random generator = new Random();
+        int n = 100000000;
+        n = generator.nextInt(n);
+        String fileName = "Image-" + n + ".jpg";
+        File file = new File(myDir, fileName);
+        if (file.exists()) file.delete();
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return (Uri.fromFile(file).getPath());
+    }
+
+
+    public void savePhoto(Bitmap photo) {
+        File profileImage = new File(path, "profile.jpg");
+        File profileBlurred = new File(path, "blurred.png");
+        Uri uri = Uri.fromFile(profileImage);
+
+        Bitmap blurred = Blur.blurRenderScript(getContext(), photo, 15);
+
+        session.setUserPicture(uri.toString());
+
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(profileBlurred);
+            blurred.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+            // PNG is a loss less format, the compression factor (100) is ignored
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        out = null;
+        try {
+            out = new FileOutputStream(profileImage);
+            photo.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+            // PNG is a loss less format, the compression factor (100) is ignored
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    private void performCrop(Uri picUri) {
+        // take care of exceptions
+        try {
+            // call the standard crop action intent (the user device may not
+            // support it)
+            Intent cropIntent = new Intent("com.android.camera.action.CROP");
+            // indicate image type and Uri
+            cropIntent.setDataAndType(picUri, "image/*");
+            // set crop properties
+            cropIntent.putExtra("crop", "true");
+            // indicate aspect of desired crop
+            cropIntent.putExtra("aspectX", 4);
+            cropIntent.putExtra("aspectY", 2);
+            // indicate output X and Y
+            cropIntent.putExtra("outputX", 300);
+            cropIntent.putExtra("outputY", 500);
+            // retrieve data on return
+            cropIntent.putExtra("return-data", true);
+            // start the activity - we handle returning in onActivityResult
+            startActivityForResult(cropIntent, CROP_PIC);
+        }
+        // respond to users whose devices do not support the crop action
+        catch (ActivityNotFoundException e) {
+            Toast toast = Toast.makeText(getContext(), "This device doesn't support the crop action!", Toast.LENGTH_SHORT);
+            toast.show();
+        }
     }
 
 }

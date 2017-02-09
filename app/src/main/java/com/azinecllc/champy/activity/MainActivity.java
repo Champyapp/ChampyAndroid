@@ -186,7 +186,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         invalidateOptionsMenu(); // refresh toolbar menu
     }
 
-
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -269,20 +268,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (navItemIndex) {
             case 0:
                 return new MainFragment();
-//            case 1: return new FragmentFriends();
-//            case 2: return new HistoryFragment();
+//          case 1:  return new FragmentFriends();
+//          case 2:  return new HistoryFragment();
             case 1:
                 return new PendingDuelFragment();
-
             case 2:
                 return new SettingsFragment();
-
             case 3:
                 return new TermsFragment();
-
             case 4:
                 return new PrivacyPoliceFragment();
-
             default:
                 return new MainFragment();
         }
