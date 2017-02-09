@@ -4,12 +4,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -25,7 +28,6 @@ import android.widget.Toast;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.AboutActivity;
 import com.azinecllc.champy.activity.ContactUsActivity;
-import com.azinecllc.champy.activity.PhotoActivity;
 import com.azinecllc.champy.activity.RoleControllerActivity;
 import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.controller.DailyRemindController;
@@ -50,6 +52,7 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static com.azinecllc.champy.utils.Constants.API_URL;
 import static com.azinecllc.champy.utils.Constants.path;
 
@@ -142,48 +145,87 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tvName:
-                tvChangeName.setVisibility(View.INVISIBLE);
 
-//                ImageView imageViewBG = (ImageView) getActivity().findViewById(R.id.imageViewBackground);
-//                File blurred = new File(path, "blurred.png");
-//                Glide.with(this)
-//                        .load(blurred)
-//                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-//                        .skipMemoryCache(true)
-//                        .centerCrop()
-//                        .into(imageViewBG);
-
+                LinearLayout layoutEditText = (LinearLayout) getActivity().findViewById(R.id.layoutEditText);
                 TextView tvEnterYourName = (TextView) getActivity().findViewById(R.id.tvEnterNewName);
                 EditText etNewName = (EditText) getActivity().findViewById(R.id.editTextNewName);
                 Button buttonOK = (Button) getActivity().findViewById(R.id.buttonOk);
                 View lineOfTheNed = getActivity().findViewById(R.id.view11);
 
-                tvEnterYourName.setVisibility(View.VISIBLE);
-                lineOfTheNed.setVisibility(View.VISIBLE);
-                etNewName.setVisibility(View.VISIBLE);
-                buttonOK.setVisibility(View.VISIBLE);
+                if (layoutEditText.getVisibility() == View.GONE) {
+                    Toast.makeText(context, "Було Gone, Стало не Gone", Toast.LENGTH_SHORT).show();
+                    layoutEditText.setVisibility(View.VISIBLE);
+                    tvEnterYourName.setVisibility(View.VISIBLE);
+                    lineOfTheNed.setVisibility(View.VISIBLE);
+                    etNewName.setVisibility(View.VISIBLE);
+                    buttonOK.setVisibility(View.VISIBLE);
 
-                etNewName.setText(userName);
+                    etNewName.setText(userName);
 
-                buttonOK.setOnClickListener(v1 -> {
-                    String checkName = etNewName.getText().toString();
-                    if (offline.isConnectedToRemoteAPI(getActivity()) && !checkName.isEmpty()) {
-                        String newName = etNewName.getText().toString().trim();
-                        session.setUserName(newName);
+                    buttonOK.setOnClickListener(v1 -> {
+                        String checkName = etNewName.getText().toString();
+                        if (offline.isConnectedToRemoteAPI(getActivity()) && !checkName.isEmpty()) {
+                            String newName = etNewName.getText().toString().trim();
+                            session.setUserName(newName);
 
-                        updateUserName(newName);
+                            updateUserName(newName); // call
 
-                        tvUserName.setText(etNewName.getText().toString());
-                        tvEnterYourName.setVisibility(View.GONE);
-                        etNewName.setVisibility(View.GONE);
-                        buttonOK.setVisibility(View.GONE);
-                        lineOfTheNed.setVisibility(View.GONE);
-                        tvChangeName.setVisibility(View.VISIBLE);
-                    }
-                });
+                            tvUserName.setText(etNewName.getText().toString());
+
+                            layoutEditText.setVisibility(View.GONE);
+                            tvEnterYourName.setVisibility(View.GONE);
+                            etNewName.setVisibility(View.GONE);
+                            buttonOK.setVisibility(View.GONE);
+                            lineOfTheNed.setVisibility(View.GONE);
+
+                        }
+                    });
+                } else {
+                    layoutEditText.setVisibility(View.GONE);
+                    tvEnterYourName.setVisibility(View.GONE);
+                    etNewName.setVisibility(View.GONE);
+                    buttonOK.setVisibility(View.GONE);
+                    lineOfTheNed.setVisibility(View.GONE);
+                }
                 break;
             case R.id.avatar:
-                startActivity(new Intent(context, PhotoActivity.class));
+                //startActivity(new Intent(context, PhotoActivity.class));
+
+                LinearLayout layoutButtons = (LinearLayout) getActivity().findViewById(R.id.layoutButtons);
+                TextView tvTakeAPicture = (TextView) getActivity().findViewById(R.id.textViewTakeAPicture);
+                TextView tvChooseFrom = (TextView) getActivity().findViewById(R.id.textViewChooseFromGallery);
+
+                if (checkWriteExternalPermission()) {
+                    if (layoutButtons.getVisibility() == View.GONE) {
+                        layoutButtons.setVisibility(View.VISIBLE);
+                        tvTakeAPicture.setVisibility(View.VISIBLE);
+                        tvChooseFrom.setVisibility(View.VISIBLE);
+
+                        tvTakeAPicture.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Toast.makeText(context, "Take A Pic", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        tvChooseFrom.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Toast.makeText(context, "From Gallery", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        layoutButtons.setVisibility(View.GONE);
+                        tvTakeAPicture.setVisibility(View.INVISIBLE);
+                        tvChooseFrom.setVisibility(View.INVISIBLE);
+                        tvTakeAPicture.setOnClickListener(null);
+                        tvChooseFrom.setOnClickListener(null);
+                    }
+                } else {
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{READ_EXTERNAL_STORAGE}, 1);
+                    return;
+                }
+
                 break;
             case R.id.delete_acc:
                 if (!session.getChampyOptions().get("challenges").equals("0")) {
@@ -437,6 +479,12 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    // Check Permission
+    private boolean checkWriteExternalPermission() {
+        int res = getActivity().checkCallingOrSelfPermission(READ_EXTERNAL_STORAGE);
+        return (res == PackageManager.PERMISSION_GRANTED);
     }
 
 }

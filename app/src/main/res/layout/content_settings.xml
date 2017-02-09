@@ -59,63 +59,22 @@
                 android:layout_marginBottom="8dp" />
 
             <!-- Layout to change user name -->
-            <RelativeLayout
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:layout_below="@+id/tvGeneral"
+                android:id="@+id/layoutChangeName"
                 android:visibility="visible"
-                android:id="@+id/change_name"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true">
 
-                <!--<ImageView
+                <!-- Line after current layout -->
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/imageViewBackground" />
-
-                <include layout="@layout/item_blur" />-->
-
-                <!-- Simple text 'Enter new name' -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="@string/enter_new_name"
-                    android:id="@+id/tvEnterNewName"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:textColor="#ffffff"
-                    android:visibility="gone"
-                    android:layout_marginTop="8dp" />
-
-                <!-- Edit text for new name -->
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/editTextNewName"
-                    android:layout_below="@+id/tvEnterNewName"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:maxLength="25"
-                    android:maxLines="1"
-                    android:visibility="gone"
-                    android:textColor="#ffffff"
-                    android:inputType="text" />
-
-                <!-- My custom button 'ok' to confirm new name -->
-                <Button
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:text="@string/ok"
-                    android:textColor="@color/color_white"
-                    android:id="@+id/buttonOk"
-                    android:layout_below="@+id/editTextNewName"
-                    android:background="@drawable/round_corner"
-                    android:layout_centerHorizontal="true"
+                    android:layout_height="1dp"
+                    android:background="#339997"
+                    android:id="@+id/view11"
                     android:visibility="gone" />
 
                 <!-- Simple text 'Name' -->
@@ -126,26 +85,56 @@
                     android:text="@string/name"
                     android:textColor="@color/color_white"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:visibility="visible"
                     android:clickable="true" />
 
-                <!-- Line after current layout -->
-                <View
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#339997"
-                    android:id="@+id/view11"
-                    android:visibility="gone"
-                    android:layout_alignParentTop="true" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/layoutEditText"
+                    android:visibility="gone">
+                    <!-- Simple text 'Enter new name' -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvEnterNewName"
+                        android:text="@string/enter_new_name"
+                        android:textColor="@color/color_white"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:layout_gravity="center"
+                        android:visibility="gone" />
 
-            </RelativeLayout>
+                    <!-- Edit text for new name -->
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/editTextNewName"
+                        android:textColor="@color/color_white"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:maxLength="25"
+                        android:maxLines="1"
+                        android:visibility="gone"
+                        android:layout_gravity="center"
+                        android:inputType="text" />
+
+                    <!-- My custom button 'ok' to confirm new name -->
+                    <Button
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/buttonOk"
+                        android:text="@string/ok"
+                        android:textColor="@color/color_white"
+                        android:layout_gravity="center"
+                        android:background="@drawable/round_corner"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+            </LinearLayout>
 
             <!-- Line after menu item 'Name' -->
             <View
@@ -155,25 +144,70 @@
                 android:background="#339997"
                 android:id="@+id/view"
                 android:visibility="visible"
-                android:layout_below="@+id/change_name" />
+                android:layout_below="@+id/layoutChangeName" />
 
-            <!-- Simple Text 'Profile Picture' -->
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/avatar"
-                android:text="@string/profile_pictures"
-                android:textColor="@color/color_white"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:layout_below="@+id/view"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="8dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:clickable="true" />
+                android:id="@+id/layoutProfilePicture"
+                android:orientation="vertical"
+                android:visibility="visible"
+                android:layout_below="@id/view">
+
+                <!-- Simple Text 'Profile Picture' -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/avatar"
+                    android:text="@string/profile_pictures"
+                    android:textColor="@color/color_white"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:clickable="true" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:id="@+id/layoutButtons">
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textViewTakeAPicture"
+                        android:text="@string/take_photo_from_camera"
+                        android:textColor="@color/color_white"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:background="@drawable/round_corner"
+                        android:visibility="gone"
+                        android:padding="8dp"
+                        android:layout_weight="1"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp" />
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textViewChooseFromGallery"
+                        android:text="@string/take_photo_from_gallery"
+                        android:textColor="@color/color_white"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:background="@drawable/round_corner"
+                        android:visibility="gone"
+                        android:padding="8dp"
+                        android:layout_weight="1"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp" />
+
+
+                </LinearLayout>
+
+            </LinearLayout>
 
             <!-- Line after menu item 'Profile Picture' -->
             <View
@@ -183,7 +217,7 @@
                 android:background="#339997"
                 android:id="@+id/view1"
                 android:visibility="visible"
-                android:layout_below="@+id/avatar" />
+                android:layout_below="@+id/layoutProfilePicture" />
 
             <!-- Simple text 'Delete Account' -->
             <TextView
@@ -354,8 +388,8 @@
                 android:layout_marginTop="8dp"
                 android:visibility="visible"
                 android:layout_below="@+id/switchChallengesForToday"
-                android:layout_alignRight="@+id/change_name"
-                android:layout_alignEnd="@+id/change_name" />
+                android:layout_alignRight="@+id/layoutChangeName"
+                android:layout_alignEnd="@+id/layoutChangeName" />
 
             <!-- Simple menu text 'Legal'-->
             <TextView
@@ -397,8 +431,8 @@
                 android:layout_marginTop="8dp"
                 android:visibility="visible"
                 android:layout_below="@+id/about"
-                android:layout_alignRight="@+id/change_name"
-                android:layout_alignEnd="@+id/change_name" />
+                android:layout_alignRight="@+id/layoutChangeName"
+                android:layout_alignEnd="@+id/layoutChangeName" />
 
             <!-- Simple text 'Contact Us' -->
             <TextView
@@ -426,8 +460,8 @@
                 android:layout_marginTop="8dp"
                 android:visibility="visible"
                 android:layout_below="@+id/contact_us"
-                android:layout_alignRight="@+id/change_name"
-                android:layout_alignEnd="@+id/change_name" />
+                android:layout_alignRight="@+id/layoutChangeName"
+                android:layout_alignEnd="@+id/layoutChangeName" />
 
         </RelativeLayout>
 
