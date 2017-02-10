@@ -47,6 +47,7 @@ import static com.azinecllc.champy.utils.Constants.TAG_PENDING_DUELS;
 import static com.azinecllc.champy.utils.Constants.TAG_SETTINGS;
 import static com.azinecllc.champy.utils.Constants.TAG_TERMS;
 import static com.azinecllc.champy.utils.Constants.TAG_PRIVACY_POLICE;
+import static com.azinecllc.champy.utils.Constants.drawerCloseTime;
 import static com.azinecllc.champy.utils.Constants.path;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -146,6 +147,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             CURRENT_TAG = TAG_CHALLENGES;
             loadHomeFragment();
         }
+        if (getIntent().getExtras() != null) {
+            navItemIndex = getIntent().getExtras().getInt("extras", 0);
+            getHomeFragment();
+        }
 
     }
 
@@ -202,6 +207,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        //new Handler().postDelayed(new Runnable() {
+        //    @Override
+        //    public void run() {
         switch (item.getItemId()) {
             case R.id.nav_challenges:
                 navItemIndex = 0;
@@ -210,12 +218,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_friends:
                 //navItemIndex = 1;
                 //CURRENT_TAG = TAG_FRIENDS;
-                startActivity(new Intent(this, FriendsActivity.class));
+                new Handler().postDelayed(() -> startActivity(new Intent(this, FriendsActivity.class)), 250);
                 break;
             case R.id.nav_history:
                 //navItemIndex = 2;
                 //CURRENT_TAG = TAG_HISTORY;
-                startActivity(new Intent(this, HistoryActivity.class));
+                new Handler().postDelayed(() -> startActivity(new Intent(this, HistoryActivity.class)), 250);
                 break;
             case R.id.nav_pending_duels:
                 navItemIndex = 1;
@@ -228,15 +236,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_terms:
                 navItemIndex = 3;
                 CURRENT_TAG = TAG_TERMS;
-                //startActivity(new Intent(this, TermsActivity.class));
                 break;
             case R.id.nav_privacy_policy:
                 navItemIndex = 4;
                 CURRENT_TAG = TAG_PRIVACY_POLICE;
-                //startActivity(new Intent(this, PrivacyActivity.class));
                 break;
-
         }
+        //    }
+        //}, drawerCloseTime);
         drawer.closeDrawer(GravityCompat.START);
         loadHomeFragment();
         return true;
@@ -268,8 +275,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (navItemIndex) {
             case 0:
                 return new MainFragment();
-//          case 1:  return new FragmentFriends();
-//          case 2:  return new HistoryFragment();
             case 1:
                 return new PendingDuelFragment();
             case 2:

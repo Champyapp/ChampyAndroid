@@ -4,8 +4,11 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -19,6 +22,11 @@ import android.widget.TextView;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.FriendsActivityPagerAdapter;
+import com.azinecllc.champy.fragment.MainFragment;
+import com.azinecllc.champy.fragment.PendingDuelFragment;
+import com.azinecllc.champy.fragment.PrivacyPoliceFragment;
+import com.azinecllc.champy.fragment.SettingsFragment;
+import com.azinecllc.champy.fragment.TermsFragment;
 import com.azinecllc.champy.helper.CHCheckPendingDuels;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
@@ -31,11 +39,19 @@ import java.io.File;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import jp.wasabeef.glide.transformations.CropSquareTransformation;
 
+import static com.azinecllc.champy.activity.MainActivity.CURRENT_TAG;
+import static com.azinecllc.champy.activity.MainActivity.navItemIndex;
+import static com.azinecllc.champy.utils.Constants.TAG_CHALLENGES;
+import static com.azinecllc.champy.utils.Constants.TAG_PENDING_DUELS;
+import static com.azinecllc.champy.utils.Constants.TAG_PRIVACY_POLICE;
+import static com.azinecllc.champy.utils.Constants.TAG_SETTINGS;
+import static com.azinecllc.champy.utils.Constants.TAG_TERMS;
 import static com.azinecllc.champy.utils.Constants.path;
 
-public class FriendsActivity extends AppCompatActivity {
+public class FriendsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private SessionManager sessionManager;
+    private NavigationView navigationView;
     private DrawerLayout drawer;
 
     @Override
@@ -68,9 +84,9 @@ public class FriendsActivity extends AppCompatActivity {
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
-        //navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setNavigationItemSelectedListener(this);
 
         ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.imageUserPicture);
         ImageView drawerBackground   = (ImageView) headerLayout.findViewById(R.id.slide_background);
@@ -124,7 +140,6 @@ public class FriendsActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs_friends);
         tabLayout.setupWithViewPager(viewPager);
-        //setupCustomTabIcons();
 
         String name = sessionManager.getUserName();
         drawerUserName.setText(name);
@@ -133,13 +148,57 @@ public class FriendsActivity extends AppCompatActivity {
 
         CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();
         int count = checker.getPendingCount(getApplicationContext());
-        if (count == 0) {
-            checker.hideItem(navigationView);
-        } else {
+        if (count != 0) {
+//            checker.hideItem(navigationView);
+//        } else {
             TextView view = (TextView) navigationView.getMenu().findItem(R.id.nav_pending_duels).getActionView();
             view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
         }
 
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.nav_challenges:
+                navItemIndex = 0;
+                CURRENT_TAG = TAG_CHALLENGES;
+                startActivity(new Intent(this, MainActivity.class));
+                break;
+            case R.id.nav_friends:
+                //navItemIndex = 1;
+                //CURRENT_TAG = TAG_FRIENDS;
+                new Handler().postDelayed(() -> startActivity(new Intent(this, FriendsActivity.class)), 250);
+                break;
+            case R.id.nav_history:
+                //navItemIndex = 2;
+                //CURRENT_TAG = TAG_HISTORY;
+                new Handler().postDelayed(() -> startActivity(new Intent(this, HistoryActivity.class)), 250);
+                break;
+            case R.id.nav_pending_duels:
+                navItemIndex = 1;
+                CURRENT_TAG = TAG_PENDING_DUELS;
+                break;
+            case R.id.nav_settings:
+                navItemIndex = 2;
+                CURRENT_TAG = TAG_SETTINGS;
+                Intent intentSettings = new Intent(this, MainActivity.class);
+                intentSettings.putExtra("extras", 2);
+                startActivity(intentSettings);
+                break;
+            case R.id.nav_terms:
+                navItemIndex = 3;
+                CURRENT_TAG = TAG_TERMS;
+                break;
+            case R.id.nav_privacy_policy:
+                navItemIndex = 4;
+                CURRENT_TAG = TAG_PRIVACY_POLICE;
+                break;
+        }
+        //    }
+        //}, drawerCloseTime);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
 
@@ -157,8 +216,6 @@ public class FriendsActivity extends AppCompatActivity {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-//            Intent intent = new Intent(FriendsActivity.this, MainActivity.class);
-//            startActivity(intent);
             finish();
             super.onBackPressed();
         }
