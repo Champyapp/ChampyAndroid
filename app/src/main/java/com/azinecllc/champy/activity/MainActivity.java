@@ -135,22 +135,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();
         int count = checker.getPendingCount(getApplicationContext());
         if (count != 0) {
-            //checker.hideItem(navigationView);
-            //} else {
             TextView view = (TextView) navigationView.getMenu().findItem(R.id.nav_pending_duels).getActionView();
             view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
         }
 
 
-        if (savedInstanceState == null) {
-            navItemIndex = 0;
-            CURRENT_TAG = TAG_CHALLENGES;
-            loadHomeFragment();
+        if (savedInstanceState != null) {
+            navItemIndex = getIntent().getIntExtra("navItemIndex", 0);
+            CURRENT_TAG = getIntent().getStringExtra("currentTag");
+            System.out.println("navItemIndex: " + getIntent().getIntExtra("navItemIndex", 0));
+            System.out.println("current_tag : " + getIntent().getStringExtra("currentTag"));
         }
-        if (getIntent().getExtras() != null) {
-            navItemIndex = getIntent().getExtras().getInt("extras", 0);
-            getHomeFragment();
-        }
+
+        loadHomeFragment();
+
+        //if (getIntent().getExtras() != null) {
+        //    navItemIndex = getIntent().getExtras().getInt("extras", 0);
+        //    getHomeFragment();
+        //}
 
     }
 
