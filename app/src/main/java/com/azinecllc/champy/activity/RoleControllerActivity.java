@@ -77,6 +77,8 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
 
                 DailyRemindController reminder = new DailyRemindController(getApplicationContext());
                 reminder.enableDailyNotificationReminder();
+
+
             } else {
                 startActivity(new Intent(this, LoginActivity.class));
             }

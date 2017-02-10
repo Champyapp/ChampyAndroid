@@ -71,7 +71,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.content_main, container, false);
-
+        // TODO: 2/10/17 перевірити lifecycle чи удаляється після переходу на settings
         adapter = new MainActivityCardsAdapter(getContext(), SelfImprovement_model.generate(getContext()));
         if (adapter.dataCount() > 0) {
             RelativeLayout cards = (RelativeLayout) view.findViewById(R.id.cards);

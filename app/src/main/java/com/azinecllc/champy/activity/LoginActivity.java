@@ -113,6 +113,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     spinner.setVisibility(View.VISIBLE);
                     try {
                         user_email = object.getString("email");
+                        // TODO: 2/10/17 check if email == null, because some people uses fb with phone number
                         fb_id = object.getString("id");
                         name = object.getString("first_name") + " " + object.getString("last_name");
                         try {

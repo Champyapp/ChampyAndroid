@@ -45,6 +45,7 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
+import static android.content.Context.ALARM_SERVICE;
 import static com.azinecllc.champy.utils.Constants.API_URL;
 import static com.azinecllc.champy.utils.Constants.oneDay;
 import static com.azinecllc.champy.utils.Constants.twoDays;
@@ -81,7 +82,6 @@ public class ChallengeController {
         this.userID = uID;
     }
 
-    public ChallengeController() {}
 
 
     /**
@@ -346,7 +346,7 @@ public class ChallengeController {
             public void onResponse(Response<com.azinecllc.champy.model.create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
-                    sendSingleInProgressForWakeUp(challengeId, alarmID, c.getTimeInMillis(), details);
+                    sendSingleInProgressForWakeUp(challengeId, alarmID, intHour, intMin, c.getTimeInMillis());
                 } else {
                     Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
@@ -367,9 +367,9 @@ public class ChallengeController {
      *                     'createNewWakeUpChallenge' and transit here.
      * @param aID - values from time picker: minutes and hour. To start we get this, convert to
      *                normal view (means from 1:8 to 01:08) and put inside alarmManager like ID.
-     * @param ring - this is value from last method-provider, this value is equals to time when
+     * @param when - this is value from last method-provider, this value is equals to time when
      *             we need fire our alarm manager.
-     * @param det - this is array with time when need to fire our alarm manager multiplied on cour
+     * @param -det - this is array with time when need to fire our alarm manager multiplied on cour
      *            of day from TimePicker which sets the user.
      * @param -v - this is simple view from class where I initialize this challenge controller.
      *          we got it from last method-provider 'createSingleInProgressForWake'. We need this
@@ -377,8 +377,7 @@ public class ChallengeController {
      *          check response and if we got a failure than I show message for user about "Service
      *          not available". In case when response is success we just show message about "created".
      */
-    private void sendSingleInProgressForWakeUp(String pID, int aID, long ring, String[] det) {
-        Log.i(TAG, "sendSingleInProgressForWakeUp: when ring: " + ring);
+    private void sendSingleInProgressForWakeUp(String pID, int aID, int hour, int min, long when) {
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
         Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = singleinprogress.startSingleInProgress(pID, token);
         call.enqueue(new Callback<com.azinecllc.champy.model.single_in_progress.SingleInProgress>() {
@@ -390,25 +389,14 @@ public class ChallengeController {
 
                     Intent myIntent = new Intent(activity, CustomAlarmReceiver.class);
                     myIntent.putExtra("inProgressID", inProgressId);
-                    myIntent.putExtra("alarmID", String.valueOf(aID));
-                    myIntent.putExtra("details", Arrays.toString(det));
+                    myIntent.putExtra("alarmID", aID);
+                    myIntent.putExtra("alarmHour", hour);
+                    myIntent.putExtra("alarmMin", min);
 
 
                     PendingIntent pi = PendingIntent.getBroadcast(context, aID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                     AlarmManager aManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                    aManager.setRepeating(AlarmManager.RTC_WAKEUP, ring, AlarmManager.INTERVAL_DAY, pi);
-                    // LOLLIPOP = 5.0 / 5.1
-                    // KITKAT   = 4.4
-                    // SDK_INT  = user api version
-//                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-//                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-//                            aManager.set(AlarmManager.RTC_WAKEUP, ring, pi);
-//                        } else {
-//                            aManager.setExact(AlarmManager.RTC_WAKEUP, ring, pi);
-//                        }
-//                    } else {
-//                        aManager.set(AlarmManager.RTC_WAKEUP, ring, pi);
-//                    }
+                    aManager.setRepeating(AlarmManager.RTC_WAKEUP, when, AlarmManager.INTERVAL_DAY, pi);
 
                     generateCardsForMainActivity(new Intent(activity, MainActivity.class));
                 } else {
@@ -504,14 +492,14 @@ public class ChallengeController {
      * @param pID - this is unique challenge inProgress ID. we just put in unique inProgressID after
      *                     this we can make call to API for create this challenge. After that
      *                     we can refresh pending card to get new data.
-     * @param aID - alarmManager ID. This is only for wake-up challenge. We need this for re-enable
+     * @param alarmID - alarmManager ID. This is only for wake-up challenge. We need this for re-enable
      *            alarmManager every check-in and if we had finished our challenge then disable.
      * @param i - intent. We need this to redirect user to needed activity.
-     * @param det - details. this is Array with times when we need fire the alarm manager.
+     * @param -det - details. this is Array with times when we need fire the alarm manager.
      * @throws IOException - we can expect this exception because user has opportunity to check
      *                     challenge which has already checked or lost. In this case we can handle it
      */
-    public void doneForToday(String pID, String aID, Intent i, String det, View v) throws IOException {
+    public void doneForToday(String pID, int alarmID, Intent i, /*long nextAlarm,*/ View v) throws IOException {
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
         Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = activeInProgress.checkChallenge(pID, token);
         call.enqueue(new Callback<com.azinecllc.champy.model.single_in_progress.SingleInProgress>() {
@@ -521,25 +509,21 @@ public class ChallengeController {
                     String type = response.body().getData().getChallenge().getType();
                     int end = response.body().getData().getEnd();
                     long now = System.currentTimeMillis() / 1000;
-                    //Log.i(TAG, "now: " + System.currentTimeMillis() / 1000);
-                    //Log.i(TAG, "end: " + (end - oneDay));
-                    if (type.equals(typeWake) && (now > end - oneDay)) {
-                        //setNewAlarmClock(det, aID);
-                        //Log.i(TAG, "now < end\n disabled the AlarmManager");
-                        Intent myIntent = new Intent(activity, CustomAlarmReceiver.class);
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                                activity,
-                                Integer.valueOf(aID),
-                                myIntent,
-                                PendingIntent.FLAG_UPDATE_CURRENT
-                        );
-                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                        alarmManager.cancel(pendingIntent);
+
+                    if (type.equals(typeWake)) {
+                        if ((now > end - oneDay)) {
+                            Intent alarmIntent = new Intent(activity, CustomAlarmReceiver.class);
+                            PendingIntent pi = PendingIntent.getBroadcast(activity, alarmID, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                            alarmManager.cancel(pi);
+                            //} else {
+                            //    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, nextAlarm, AlarmManager.INTERVAL_DAY, pi);
+                        }
+
                     }
 
                     Snackbar snackbar = Snackbar.make(v, ("Well done!"), Snackbar.LENGTH_LONG);
                     snackbar.show();
-
                     generateCardsForMainActivity(i);
                 } else {
                     Snackbar snackbar = Snackbar.make(v, activity.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);

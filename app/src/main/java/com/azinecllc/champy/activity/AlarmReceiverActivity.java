@@ -9,6 +9,7 @@ import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -31,28 +32,35 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
 
     private MediaPlayer mMediaPlayer;
     private ChallengeController cc;
-    private String progressID, alarmID;
-    private String details;
+    private String progressID;
+    private int alarmID;
+    private long nextAlarm;
     public Context context;
     public Activity activity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext());
 
-        alarmID = getIntent().getStringExtra("finalAlarmID");
-        details = getIntent().getStringExtra("finalDetails");
+        try {
+            FacebookSdk.sdkInitialize(getApplicationContext());
+        } catch (RuntimeException r) {
+            Log.e("AlarmReceiverActivity", "I hate facebook: " + r);
+            //eat it, bitch;
+        }
+
+        alarmID = getIntent().getIntExtra("finalAlarmID", 0);
+        //nextAlarm = getIntent().getLongExtra("finalNextAlarm", 0);
         progressID = getIntent().getStringExtra("finalInProgressID");
 
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.item_alarm);
         playSound(this, getAlarmUri());
 
-        final TextView tvWakeUpChallenge = (TextView) findViewById(R.id.tvWakeUpChallenge);
-        final TextView tvWakeUp = (TextView) findViewById(R.id.wakeup_text);
-        final Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
+        TextView tvWakeUpChallenge = (TextView) findViewById(R.id.tvWakeUpChallenge);
+        TextView tvWakeUp = (TextView) findViewById(R.id.wakeup_text);
+        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         tvWakeUpChallenge.setTypeface(typeface);
         tvWakeUp.setTypeface(typeface);
 
@@ -95,7 +103,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
                 }
                 if (offlineMode.isConnectedToRemoteAPI(this)) {
                     try {
-                        cc.doneForToday(progressID, alarmID, intent, details, v);
+                        cc.doneForToday(progressID, alarmID, intent /*nextAlarm*/, v);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -112,7 +120,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
                 }
                 if (offlineMode.isConnectedToRemoteAPI(this)) {
                     try {
-                        cc.give_up(progressID, Integer.parseInt(alarmID), intent);
+                        cc.give_up(progressID, alarmID, intent);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

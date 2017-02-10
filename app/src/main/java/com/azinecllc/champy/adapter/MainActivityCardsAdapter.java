@@ -262,7 +262,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                     buttonDone.setVisibility(View.INVISIBLE);
                     buttonShare.setVisibility(View.VISIBLE);
                     tvDuration.setVisibility(View.VISIBLE);
-                    cc.doneForToday(itemInProgressId, itemGoal, goMain, currentCard.getWakeUpTime(), v);
+                    cc.doneForToday(itemInProgressId, Integer.parseInt(itemGoal), goMain, v);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -305,6 +305,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
 
         return tempView;
     }
+
 
     @Override
     public int dataCount() {
