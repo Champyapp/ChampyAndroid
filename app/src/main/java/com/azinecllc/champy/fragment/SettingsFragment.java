@@ -1,5 +1,6 @@
 package com.azinecllc.champy.fragment;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -13,10 +14,12 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,6 +72,7 @@ import static com.azinecllc.champy.utils.Constants.API_URL;
 import static com.azinecllc.champy.utils.Constants.CAMERA_REQUEST;
 import static com.azinecllc.champy.utils.Constants.CROP_PIC;
 import static com.azinecllc.champy.utils.Constants.SELECT_FILE;
+import static com.azinecllc.champy.utils.Constants.TAG_SETTINGS;
 import static com.azinecllc.champy.utils.Constants.path;
 
 /**
@@ -259,7 +263,8 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 Bitmap thePic = extras.getParcelable("data"); // get the cropped bitmap
                 savePhoto(thePic);
                 uploadPhoto.uploadPhotoForAPI(saveToStorageFromCamera(thePic));
-                getActivity().recreate(); // or startActivity(new Intent(getActivity(), 1.class));
+                getActivity().recreate();
+//                startActivity(new Intent(getContext(), MainActivity.class));
             } else if (requestCode == Crop.REQUEST_PICK) {
                 beginCrop(data.getData());
             } else if (requestCode == Crop.REQUEST_CROP) {
@@ -501,7 +506,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
-                        startActivity(role);
                         break;
                 }
             }
@@ -572,7 +576,8 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
             uploadPhoto.uploadPhotoForAPI(path);
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), uri);
             savePhoto(bitmap); // my method which saves picture to storage
-            getActivity().recreate(); // or startActivity(new Intent(getContext(), 1.class));
+            getActivity().recreate();
+            //startActivity(new Intent(getContext(), 1.class));
         } else if (resultCode == Crop.RESULT_ERROR) {
             Toast.makeText(context, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
         }

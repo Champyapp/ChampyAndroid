@@ -499,7 +499,7 @@ public class ChallengeController {
      * @throws IOException - we can expect this exception because user has opportunity to check
      *                     challenge which has already checked or lost. In this case we can handle it
      */
-    public void doneForToday(String pID, int alarmID, Intent i, /*long nextAlarm,*/ View v) throws IOException {
+    public void doneForToday(String pID, String alarmID, Intent i, /*long nextAlarm,*/ View v) throws IOException {
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
         Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = activeInProgress.checkChallenge(pID, token);
         call.enqueue(new Callback<com.azinecllc.champy.model.single_in_progress.SingleInProgress>() {
@@ -513,7 +513,7 @@ public class ChallengeController {
                     if (type.equals(typeWake)) {
                         if ((now > end - oneDay)) {
                             Intent alarmIntent = new Intent(activity, CustomAlarmReceiver.class);
-                            PendingIntent pi = PendingIntent.getBroadcast(activity, alarmID, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                            PendingIntent pi = PendingIntent.getBroadcast(activity, Integer.parseInt(alarmID), alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                             alarmManager.cancel(pi);
                             //} else {

@@ -262,7 +262,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
                     buttonDone.setVisibility(View.INVISIBLE);
                     buttonShare.setVisibility(View.VISIBLE);
                     tvDuration.setVisibility(View.VISIBLE);
-                    cc.doneForToday(itemInProgressId, Integer.parseInt(itemGoal), goMain, v);
+                    cc.doneForToday(itemInProgressId, itemGoal, goMain, v);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

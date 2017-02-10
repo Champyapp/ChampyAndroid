@@ -103,7 +103,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
                 }
                 if (offlineMode.isConnectedToRemoteAPI(this)) {
                     try {
-                        cc.doneForToday(progressID, alarmID, intent /*nextAlarm*/, v);
+                        cc.doneForToday(progressID, String.valueOf(alarmID), intent /*nextAlarm*/, v);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
