@@ -8,7 +8,6 @@ import android.os.Environment;
 
 import com.azinecllc.champy.BuildConfig;
 import com.azinecllc.champy.activity.FriendsActivity;
-import com.azinecllc.champy.helper.CHImageModule;
 
 import org.junit.Before;
 import org.junit.Test;

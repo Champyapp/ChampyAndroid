@@ -7,7 +7,6 @@ import android.widget.ImageView;
 
 import com.azinecllc.champy.BuildConfig;
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.helper.CHDownloadImageTask;
 
 import org.junit.Before;
 import org.junit.Test;

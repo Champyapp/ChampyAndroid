@@ -26,26 +26,20 @@ import com.azinecllc.champy.fragment.PrivacyPoliceFragment;
 import com.azinecllc.champy.fragment.SettingsFragment;
 import com.azinecllc.champy.fragment.TermsFragment;
 import com.azinecllc.champy.helper.CHCheckPendingDuels;
-import com.azinecllc.champy.helper.CHDownloadImageTask;
 import com.azinecllc.champy.utils.SessionManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.FacebookSdk;
 
-import java.io.File;
-
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
-import jp.wasabeef.glide.transformations.CropSquareTransformation;
 
 import static com.azinecllc.champy.utils.Constants.TAG_CHALLENGES;
 // friends
 // history
-import static com.azinecllc.champy.utils.Constants.TAG_PENDING_DUELS;
 import static com.azinecllc.champy.utils.Constants.TAG_SETTINGS;
 import static com.azinecllc.champy.utils.Constants.TAG_TERMS;
 import static com.azinecllc.champy.utils.Constants.TAG_PRIVACY_POLICE;
-import static com.azinecllc.champy.utils.Constants.path;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
