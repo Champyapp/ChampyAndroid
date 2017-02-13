@@ -1,6 +1,5 @@
 package com.azinecllc.champy.activity;
 
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,6 +21,7 @@ public class PendingDuelActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pending_duel);
+
         new ProgressTask().execute();
 
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
@@ -43,8 +43,6 @@ public class PendingDuelActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(PendingDuelActivity.this, MainActivity.class);
-        startActivity(intent);
         finish();
         super.onBackPressed();
     }

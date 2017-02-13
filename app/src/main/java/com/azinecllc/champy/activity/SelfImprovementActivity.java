@@ -40,8 +40,8 @@ public class SelfImprovementActivity extends AppCompatActivity {
         spinner = findViewById(R.id.loadingPanel);
         spinner.setVisibility(View.VISIBLE);
 
-        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
-        final TextView tvIChallengeMySelfTo = (TextView)findViewById(R.id.tvChallengeToMySelf);
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
+        final TextView tvIChallengeMySelfTo = (TextView) findViewById(R.id.tvChallengeToMySelf);
         final TextView tvSIC = (TextView) findViewById(R.id.tvSIC);
         tvSIC.setTypeface(typeface);
         tvIChallengeMySelfTo.setTypeface(typeface);

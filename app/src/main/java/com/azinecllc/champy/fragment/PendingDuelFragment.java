@@ -52,8 +52,8 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sessionManager = SessionManager.getInstance(getContext());
-        final String token = sessionManager.getToken();
-        final String userId = sessionManager.getUserId();
+        String token = sessionManager.getToken();
+        String userId = sessionManager.getUserId();
         cc = new ChallengeController(getContext(), getActivity(), token, userId);
         inProgressCount = Integer.parseInt(sessionManager.getChampyOptions().get("challenges"));
         dbHelper = DBHelper.getInstance(getContext());
@@ -67,7 +67,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
 
         final Bundle args = this.getArguments();
         c = db.query("pending_duel", null, null, null, null, null, null);
-        position = args.getInt(ARG_PAGE);
+        position = (args != null) ? args.getInt(ARG_PAGE) : 0;
 
         if (c.moveToFirst()) {
             int idColIndex      = c.getColumnIndex("id");

@@ -140,14 +140,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
 
-        if (savedInstanceState != null) {
-            navItemIndex = getIntent().getIntExtra("navItemIndex", 0);
-            CURRENT_TAG = getIntent().getStringExtra("currentTag");
-            System.out.println("navItemIndex: " + getIntent().getIntExtra("navItemIndex", 0));
-            System.out.println("current_tag : " + getIntent().getStringExtra("currentTag"));
-        }
+//        if (savedInstanceState != null) {
+        //navItemIndex = getIntent().getIntExtra("navItemIndex", 0);
+        //CURRENT_TAG = getIntent().getStringExtra("currentTag");
+        //System.out.println("navItemIndex: " + getIntent().getIntExtra("navItemIndex", 0));
+        //System.out.println("current_tag : " + getIntent().getStringExtra("currentTag"));
+//        }
 
         loadHomeFragment();
+
 
         //if (getIntent().getExtras() != null) {
         //    navItemIndex = getIntent().getExtras().getInt("extras", 0);
@@ -230,6 +231,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_pending_duels:
                 navItemIndex = 1;
                 CURRENT_TAG = TAG_PENDING_DUELS;
+                startActivity(new Intent(this, PendingDuelActivity.class));
                 break;
             case R.id.nav_settings:
                 navItemIndex = 2;
@@ -277,8 +279,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (navItemIndex) {
             case 0:
                 return new MainFragment();
-            case 1:
-                return new PendingDuelFragment();
+            //case 1:
+            //    return new PendingDuelFragment();
             case 2:
                 return new SettingsFragment();
             case 3:
