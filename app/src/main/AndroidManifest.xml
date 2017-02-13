@@ -77,7 +77,7 @@
         <!--Activity which works with challenge. AppCreateChallengeTheme -->
         <activity
             android:name="com.azinecllc.champy.activity.SelfImprovementActivity"
-            android:label="@string/title_activity_self_improvement1"
+            android:label="@string/title_activity_self_improvement"
             android:screenOrientation="portrait"
             android:hardwareAccelerated="true"
             android:theme="@style/AppCreateChallengeTheme" />
@@ -93,7 +93,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppCreateChallengeTheme" />
         <activity android:name="com.azinecllc.champy.activity.PendingDuelActivity"
-            android:label="@string/title_activity_pending__duel"
+            android:label="@string/title_activity_pending_duel"
             android:screenOrientation="portrait"
             android:theme="@style/AppCreateChallengeTheme" />
 

@@ -149,7 +149,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                                     snackbar = Snackbar.make(view, R.string.challenge_created, Snackbar.LENGTH_SHORT);
                                     snackbar.show();
                                 } else {
-                                    snackbar = Snackbar.make(view, R.string.cant_create_this_challenge, Snackbar.LENGTH_SHORT);
+                                    snackbar = Snackbar.make(view, R.string.challenge_cant_create, Snackbar.LENGTH_SHORT);
                                     snackbar.show();
                                 }
                             } catch (NullPointerException | NumberFormatException e) {
@@ -187,7 +187,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
                                     snackbar = Snackbar.make(view, R.string.challenge_created, Snackbar.LENGTH_SHORT);
                                     snackbar.show();
                                 } else {
-                                    snackbar = Snackbar.make(view, R.string.cant_create_this_challenge, Snackbar.LENGTH_SHORT);
+                                    snackbar = Snackbar.make(view, R.string.challenge_cant_create, Snackbar.LENGTH_SHORT);
                                     snackbar.show();
                                 }
                             } catch (NullPointerException e) {

@@ -30,13 +30,7 @@ import com.azinecllc.champy.model.SelfImprovement_model;
 import com.azinecllc.champy.utils.CustomPagerBase;
 import com.azinecllc.champy.utils.SessionManager;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
-import java.io.File;
-
-import jp.wasabeef.glide.transformations.CropSquareTransformation;
-
-import static com.azinecllc.champy.utils.Constants.path;
 import static java.lang.Math.round;
 
 /**
@@ -215,7 +209,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             }
             animateFAB();
         } else {
-            Toast.makeText(getContext(), R.string.you_have_too_much_challenges, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.challenges_to_much, Toast.LENGTH_LONG).show();
         }
     }
 

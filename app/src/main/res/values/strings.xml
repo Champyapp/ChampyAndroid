@@ -5,18 +5,24 @@
     <string name="navigation_drawer_open">Open</string>
     <string name="navigation_drawer_close">Close</string>
 
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="title_activity_friends">Friends</string>
-    <string name="title_activity_scrolling">ScrollingActivity</string>
-    <string name="title_activity_settings">Settings</string>
-    <string name="title_activity_photo">Photo</string>
-    <string name="title_activity_self_improvement1">SelfImprovement1</string>
-    <string name="title_activity_history">History</string>
-    <string name="title_activity_wake_up">WakeUp</string>
     <string name="title_activity_duel">Duel</string>
-    <string name="title_activity_pending__duel">Pending_Duel</string>
-    <string name="action_pending_duel">Pending Duel</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_photo">Photo</string>
+    <string name="title_activity_wake_up">WakeUp</string>
+    <string name="title_activity_history">History</string>
+    <string name="title_activity_friends">Friends</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_pending_duel">Pending Duel</string>
+    <string name="title_activity_scrolling">ScrollingActivity</string>
+    <string name="title_activity_self_improvement">SelfImprovement</string>
+
+    <string name="youWantToGiveUp">You want to give up?</string>
+    <string name="youWantAcceptRequest">You want to accept request?</string>
+    <string name="youWantCancelRequest">You want to cancel request?</string>
+    <string name="youWantSendDuelRequest">You want to send duel request?</string>
+    <string name="youWantToDeleteYourAcc">You want to delete your account?</string>
+    <string name="youWantCreateThisChall">You want to create this challenge?</string>
 
 
     <!-- Toolbar titles when navigation menu item is selected -->
@@ -30,205 +36,100 @@
         <item>Privacy Police</item>
     </string-array>
 
-
-    <string name="large_text">
-        "Material is the metaphor.\n\n"
-
-        "A material metaphor is the unifying theory of a rationalized space and a system of motion."
-        "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
-        "technologically advanced and open to imagination and magic.\n"
-        "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
-        "use of familiar tactile attributes helps users quickly understand affordances. Yet the "
-        "flexibility of the material creates new affordances that supercede those in the physical "
-        "world, without breaking the rules of physics.\n"
-        "The fundamentals of light, surface, and movement are key to conveying how objects move, "
-        "interact, and exist in space and in relation to each other. Realistic lighting shows "
-        "seams, divides space, and indicates moving parts.\n\n"
-
-        "Bold, graphic, intentional.\n\n"
-
-        "The foundational elements of print based design typography, grids, space, scale, color, "
-        "and use of imagery guide visual treatments. These elements do far more than please the "
-        "eye. They create hierarchy, meaning, and focus. Deliberate color choices, edge to edge "
-        "imagery, large scale typography, and intentional white space create a bold and graphic "
-        "interface that immerse the user in the experience.\n"
-        "An emphasis on user actions makes core functionality immediately apparent and provides "
-        "waypoints for the user.\n\n"
-
-        "Motion provides meaning.\n\n"
-
-        "Motion respects and reinforces the user as the prime mover. Primary user actions are "
-        "inflection points that initiate motion, transforming the whole design.\n"
-        "All action takes place in a single environment. Objects are presented to the user without "
-        "breaking the continuity of experience even as they transform and reorganize.\n"
-        "Motion is meaningful and appropriate, serving to focus attention and maintain continuity. "
-        "Feedback is subtle yet clear. Transitions are efﬁcient yet coherent.\n\n"
-
-        "3D world.\n\n"
-
-        "The material environment is a 3D space, which means all objects have x, y, and z "
-        "dimensions. The z-axis is perpendicularly aligned to the plane of the display, with the "
-        "positive z-axis extending towards the viewer. Every sheet of material occupies a single "
-        "position along the z-axis and has a standard 1dp thickness.\n"
-        "On the web, the z-axis is used for layering and not for perspective. The 3D world is "
-        "emulated by manipulating the y-axis.\n\n"
-
-        "Light and shadow.\n\n"
-
-        "Within the material environment, virtual lights illuminate the scene. Key lights create "
-        "directional shadows, while ambient light creates soft shadows from all angles.\n"
-        "Shadows in the material environment are cast by these two light sources. In Android "
-        "development, shadows occur when light sources are blocked by sheets of material at "
-        "various positions along the z-axis. On the web, shadows are depicted by manipulating the "
-        "y-axis only. The following example shows the card with a height of 6dp.\n\n"
-
-        "Resting elevation.\n\n"
-
-        "All material objects, regardless of size, have a resting elevation, or default elevation "
-        "that does not change. If an object changes elevation, it should return to its resting "
-        "elevation as soon as possible.\n\n"
-
-        "Component elevations.\n\n"
-
-        "The resting elevation for a component type is consistent across apps (e.g., FAB elevation "
-        "does not vary from 6dp in one app to 16dp in another app).\n"
-        "Components may have different resting elevations across platforms, depending on the depth "
-        "of the environment (e.g., TV has a greater depth than mobile or desktop).\n\n"
-
-        "Responsive elevation and dynamic elevation offsets.\n\n"
-
-        "Some component types have responsive elevation, meaning they change elevation in response "
-        "to user input (e.g., normal, focused, and pressed) or system events. These elevation "
-        "changes are consistently implemented using dynamic elevation offsets.\n"
-        "Dynamic elevation offsets are the goal elevation that a component moves towards, relative "
-        "to the component’s resting state. They ensure that elevation changes are consistent "
-        "across actions and component types. For example, all components that lift on press have "
-        "the same elevation change relative to their resting elevation.\n"
-        "Once the input event is completed or cancelled, the component will return to its resting "
-        "elevation.\n\n"
-
-        "Avoiding elevation interference.\n\n"
-
-        "Components with responsive elevations may encounter other components as they move between "
-        "their resting elevations and dynamic elevation offsets. Because material cannot pass "
-        "through other material, components avoid interfering with one another any number of ways, "
-        "whether on a per component basis or using the entire app layout.\n"
-        "On a component level, components can move or be removed before they cause interference. "
-        "For example, a floating action button (FAB) can disappear or move off screen before a "
-        "user picks up a card, or it can move if a snackbar appears.\n"
-        "On the layout level, design your app layout to minimize opportunities for interference. "
-        "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
-        "when a user tries to pick up one of cards.\n\n"
-    </string>
-
-
-    <string name="loginText">\'\'it\'s your thinking that \n decides whether you\'re \n going to succeed or fail\'\' - \n henry ford</string>
-    <string name="foreveralonetext">You don\'t seem to be that guy</string>
-    <string name="foreveralonetext2">get extra motivation and have fun challenging your \n friends. improve together and compete to become the \n ultimate champy!</string>
-    <string name="total">Total</string>
-    <string name="wins">Wins</string>
-    <string name="in_progress">Challenges</string>
-    <string name="zero">0</string>
-    <string name="level_0_champy">Level 0 Champy</string>
-    <string name="general">General:</string>
-    <string name="enter_new_name">Enter new name</string>
-    <string name="name">Name</string>
-    <string name="delete_account">Delete Account</string>
-    <string name="notifications">Notifications:</string>
-    <string name="push_notifications">Push Notifications</string>
-    <string name="new_challenge_requests">New Challenge Requests</string>
-    <string name="accepted_your_challenge">Accepted Your Challenge</string>
-    <string name="challenge_end">Challenge End</string>
     <string name="terms">Terms</string>
-    <string name="privacy_policy">Privacy Policy</string>
     <string name="about">About</string>
+    <string name="share">Share</string>
     <string name="legal">Legal:</string>
-    <string name="contact_us">Contact Us</string>
-    <string name="level_1_challenge">Level 1 Challenge</string>
-    <string name="reward_10_points">Reward +10 points</string>
-    <string name="reward_10__n_points">Reward +10 \npoints</string>
-    <string name="everyday_for_next">everyday for next</string>
-    <string name="_21_days">21 DAYS</string>
-    <string name="wake_up_at">WAKE UP AT</string>
-    <string name="i_challenge_myself_to">I challenge myself to</string>
-    <string name="wake_up">wake up!</string>
-    <string name="enter_your_challenge">Enter your challenge</string>
-    <string name="hint_21">21</string>
-    <string name="days">Days</string>
-    <string name="everyday_for_the_next">everyday for the next</string>
-    <string name="info_about_challenge">Info about challenge</string>
-    <string name="challengestatus">challengeStatus</string>
-    <string name="points">points</string>
-    <string name="count_of_points_10">10</string>
-    <string name="status">Status</string>
-    <string name="challengetypeicon">challengeTypeIcon</string>
-    <string name="userAvatar">userAvatar</string>
-    <string name="backgroundforcircle">backgroundForCircle</string>
-    <string name="button_block">button block</string>
-    <string name="button_add">button add</string>
-    <string name="userPhoto">user photo</string>
-    <string name="smallIcon">small icon</string>
-    <string name="level">"Level "</string>
-    <string name="champy">" Champy"</string>
-    <string name="daysToGo">" DAYS TO GO"</string>
-    <string name="take_photo_from_camera">Take a picture</string>
-    <string name="take_photo_from_gallery">Choose from Gallery</string>
-    <string name="areYouSure">Are you sure</string>
-    <string name="youWannaCreateThisChall">You want to create this challenge?</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="youWantToDeleteYourAcc">You want to delete your account?</string>
-    <string name="youWannaAcceptRequest">You want to accept request?</string>
-    <string name="youWannaCancelRequest">You want to cancel request?</string>
-    <string name="youWannaSendDuelRequest">You want to send duel request?</string>
-    <string name="youWantToGiveUp">You want to give up?</string>
-    <string name="inProgress">In Progress</string>
-    <string name="failed">Failed</string>
-    <string name="lostInternetConnection">Lost internet connection</string>
-    <string name="wake_up_n_challenge">wake up \nchallenge</string>
-    <string name="wake_up_challenge">Wake-Up challenge</string>
-    <string name="level_1_challenge_reward_10_points">Level 1 Challenge / Reward + 10 points</string>
-    <string name="duel_challenge_with">Duel Challenge \n with</string>
-    <string name="self_improvement_challenge">self-improvement \n challenge</string>
-    <string name="done_for_today">Done for today?</string>
-    <string name="duel_with">"Duel with "</string>
-    <string name="settings">Settings</string>
-    <string name="history">History</string>
+    <string name="logout">Logout</string>
     <string name="friends">Friends</string>
+    <string name="history">History</string>
+    <string name="settings">Settings</string>
+    <string name="contact_us">Contact Us</string>
     <string name="challenges">Challenges</string>
     <string name="pending_duels">Pending Duels</string>
-    <string name="share">Share</string>
-    <string name="logout">Logout</string>
+    <string name="privacy_policy">Privacy Policy</string>
+
+    <string name="name">Name</string>
+    <string name="general">General:</string>
+    <string name="challenge_end">Challenge End</string>
+    <string name="notifications">Notifications:</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="daily_reminder">Daily Reminder</string>
+    <string name="enter_new_name">Enter new name</string>
+    <string name="profile_pictures">Profile Picture</string>
+    <string name="push_notifications">Push Notifications</string>
+    <string name="take_photo_from_camera">Take a picture</string>
+    <string name="take_photo_from_gallery">Choose from Gallery</string>
+    <string name="new_challenge_requests">New Challenge Requests</string>
+    <string name="accepted_your_challenge">Accepted Your Challenge</string>
+
+
+    <string name="ok">OK</string>
+    <string name="no">No</string>
+    <string name="plus">+</string>
+    <string name="zero">0</string>
+    <string name="yes">Yes</string>
+    <string name="wins">Wins</string>
+    <string name="days">Days</string>
+    <string name="hint_21">21</string>
+    <string name="total">Total</string>
+    <string name="failed">Failed</string>
+    <string name="twenty_one">21</string>
+    <string name="_21_days">21 DAYS</string>
+    <string name="welcome">"Welcome "</string>
+    <string name="inProgress">In Progress</string>
+    <string name="in_progress">Challenges</string>
+    <string name="areYouSure">Are you sure</string>
+    <string name="are_you_sure">Are you sure?</string>
+
+
+    <string name="everyday_for_next">everyday for next</string>
+    <string name="everyday_for_the_next">everyday for the next</string>
+
+    <string name="champy">" Champy"</string>
+    <string name="wake_up">wake up!</string>
+    <string name="wake_up_at">WAKE UP AT</string>
+    <string name="daysToGo">" DAYS TO GO"</string>
+    <string name="i_challenge_myself_to">I challenge myself to</string>
+    <string name="enter_your_challenge">Enter your challenge</string>
+    <string name="info_about_challenge">Info about challenge</string>
+
+
+    <string name="done_for_today">Done for today?</string>
+    <string name="duel_with">"Duel with "</string>
+
     <string name="send">Send</string>
     <string name="subject">Subject</string>
     <string name="your_message">Your message</string>
-    <string name="contact_us_background">contact us background</string>
     <string name="waiting_for_your_recipient">waiting for recipient</string>
-    <string name="level_1_n_challenge"> Level 1 \n Challenge</string>
-    <string name="reward_10_npoints">Reward +10 \npoints</string>
-    <string name="share_text">Constantly improving myself with Champy\n</string>
-    <string name="champyapp_link">\nhttp://champyapp.com</string>
-    <string name="how_would_you_like_to_share">How would you like to share?</string>
-    <string name="profile_pictures">Profile Picture</string>
-    <string name="daily_reminder">Daily Reminder</string>
-    <string name="noOneHasInstalledChampy">No one of your friends has not installed Champy!</string>
-    <string name="welcome">"Welcome "</string>
-    <string name="twenty_one">21</string>
-    <string name="cant_create_this_challenge">Can\'t create this challenge</string>
+
+
     <string name="challenge_created">Challenge created!</string>
-    <string name="are_you_sure">Are you sure?</string>
-    <string name="share_text2">Check out Champy - it helps you improve and compete with your friends!</string>
-    <string name="plus">+</string>
     <string name="challenge_canceled">Challenge canceled</string>
-    <string name="sent_duel_request">Sent duel request</string>
-    <string name="you_have_too_much_challenges">You have too much challenges</string>
-    <string name="service_not_available">Service is not available. Try again later</string>
-    <string name="self_improvement">Self-Improvement</string>
-    <string name="duel_challenge">Duel challenge</string>
+    <string name="challenges_to_much">You have too much challenges</string>
     <string name="i_challenge_my_friend_to">I challenge my friend to</string>
-    <string name="lost_inet_wake_up">If you would like to check your wake-up challenge, please connect to the Internet, then open Champy and make it done for today there.</string>
+    <string name="challenge_cant_create">Can\'t create this challenge</string>
     <string name="challenge_canceled_by_opponent">The challenge has been canceled by the opponent</string>
-    <string name="nav_terms">Terms</string>
-    <string name="ok">OK</string>
+
+    <string name="sent_duel_request">Sent duel request</string>
+    <string name="wake_up_challenge">Wake-Up challenge</string>
+    <string name="wake_up_n_challenge">wake up \nchallenge</string>
+    <string name="duel_challenge">Duel challenge</string>
+    <string name="duel_challenge_with">Duel Challenge \n with</string>
+    <string name="self_improvement">Self-Improvement</string>
+    <string name="self_improvement_challenge">self-improvement \n challenge</string>
+
+
+    <string name="lostInternetConnection">Lost internet connection</string>
+    <string name="share_text">Constantly improving myself with Champy\n</string>
+    <string name="how_would_you_like_to_share">How would you like to share?</string>
+    <string name="champyapp_link">\nhttp://champyapp.com</string>
+    <string name="noOneHasInstalledChampy">No one of your friends has not installed Champy!</string>
+    <string name="service_not_available">Service is not available. Try again later</string>
+    <string name="share_text2">Check out Champy - it helps you improve and compete with your friends!</string>
+    <string name="lost_inet_wake_up">If you would like to check your wake-up challenge, please connect to the Internet, then open Champy and make it done for today there.</string>
+    <string name="loginText">\'\'it\'s your thinking that \n decides whether you\'re \n going to succeed or fail\'\' - \n henry ford</string>
+    <string name="foreveralonetext">You don\'t seem to be that guy</string>
+    <string name="foreveralonetext2">get extra motivation and have fun challenging your \n friends. improve together and compete to become the \n ultimate champy!</string>
 
 </resources>

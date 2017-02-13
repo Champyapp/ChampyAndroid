@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -145,7 +144,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
                                     snackbar = Snackbar.make(view, (R.string.sent_duel_request), Snackbar.LENGTH_SHORT);
                                     snackbar.show();
                                 } else {
-                                    snackbar = Snackbar.make(view, R.string.cant_create_this_challenge, Snackbar.LENGTH_SHORT);
+                                    snackbar = Snackbar.make(view, R.string.challenge_cant_create, Snackbar.LENGTH_SHORT);
                                     snackbar.show();
                                 }
                             } catch (NullPointerException | NumberFormatException e) {
@@ -181,7 +180,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
                                     snackbar = Snackbar.make(view, (R.string.sent_duel_request), Snackbar.LENGTH_SHORT);
                                     snackbar.show();
                                 } else {
-                                    snackbar = Snackbar.make(view, R.string.cant_create_this_challenge, Snackbar.LENGTH_SHORT);
+                                    snackbar = Snackbar.make(view, R.string.challenge_cant_create, Snackbar.LENGTH_SHORT);
                                     snackbar.show();
                                 }
                             } catch (NullPointerException e) {

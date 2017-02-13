@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.controller.ChallengeController;
@@ -198,7 +197,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
                     snackbar = Snackbar.make(view, R.string.challenge_created, Snackbar.LENGTH_SHORT);
                     snackbar.show();
                 } else {
-                    snackbar = Snackbar.make(view, R.string.cant_create_this_challenge, Snackbar.LENGTH_SHORT);
+                    snackbar = Snackbar.make(view, R.string.challenge_cant_create, Snackbar.LENGTH_SHORT);
                     snackbar.show();
                 }
             } catch (NullPointerException e) {

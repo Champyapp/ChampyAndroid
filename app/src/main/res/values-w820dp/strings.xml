@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="action_pending_duel">Pending Duel</string>
+    <string name="title_activity_pending_duel">Pending Duel</string>
 </resources>

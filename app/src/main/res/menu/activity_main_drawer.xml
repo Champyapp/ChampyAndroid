@@ -32,7 +32,7 @@
         <menu>
             <item
                 android:id="@+id/nav_terms"
-                android:title="@string/nav_terms" />
+                android:title="@string/terms" />
             <item
                 android:id="@+id/nav_privacy_policy"
                 android:title="@string/privacy_policy" />

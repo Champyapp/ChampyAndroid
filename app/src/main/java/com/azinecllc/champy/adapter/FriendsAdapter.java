@@ -286,7 +286,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                     intent.putExtra("id", contact.getID());
                     context.startActivity(intent);
                 } else {
-                    Toast.makeText(context, R.string.you_have_too_much_challenges, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.challenges_to_much, Toast.LENGTH_SHORT).show();
                 }
             }
         });

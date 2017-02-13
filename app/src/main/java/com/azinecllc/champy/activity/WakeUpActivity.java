@@ -1,6 +1,5 @@
 package com.azinecllc.champy.activity;
 
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -96,7 +95,7 @@ public class WakeUpActivity extends AppCompatActivity implements View.OnClickLis
                                 snackbar = Snackbar.make(v, R.string.challenge_created, Snackbar.LENGTH_SHORT);
                                 snackbar.show();
                             } else {
-                                snackbar = Snackbar.make(view, R.string.cant_create_this_challenge, Snackbar.LENGTH_SHORT);
+                                snackbar = Snackbar.make(view, R.string.challenge_cant_create, Snackbar.LENGTH_SHORT);
                                 snackbar.show();
                             }
                         }
