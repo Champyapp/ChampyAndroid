@@ -44,6 +44,7 @@ public class TermsFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        getActivity().isFinishing();
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
     }

@@ -14,6 +14,9 @@ import com.facebook.login.LoginManager;
 import java.io.File;
 import java.util.HashMap;
 
+import static com.azinecllc.champy.activity.MainActivity.CURRENT_TAG;
+import static com.azinecllc.champy.activity.MainActivity.navItemIndex;
+import static com.azinecllc.champy.utils.Constants.TAG_CHALLENGES;
 import static com.azinecllc.champy.utils.Constants.path;
 
 public class SessionManager {
@@ -139,6 +142,8 @@ public class SessionManager {
         blurred.delete();
         File profile = new File(path, "profile.jpg");
         profile.delete();
+        CURRENT_TAG = TAG_CHALLENGES;
+        navItemIndex = 0;
         Intent intent = new Intent(activity, RoleControllerActivity.class);
         activity.startActivity(intent);
     }

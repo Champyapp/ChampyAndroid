@@ -247,6 +247,34 @@
                 android:visibility="visible"
                 android:layout_below="@+id/delete_acc" />
 
+            <!-- Simple text 'Logout' -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textViewLogout"
+                android:text="@string/logout"
+                android:textColor="@color/color_white"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:layout_below="@+id/view2"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:clickable="true" />
+
+            <!-- Line after menu item 'Logout' -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#339997"
+                android:id="@+id/view12"
+                android:layout_marginTop="8dp"
+                android:visibility="visible"
+                android:layout_below="@+id/textViewLogout" />
+
             <!-- Simple menu text 'Notifications-->
             <TextView
                 android:layout_width="wrap_content"
@@ -255,7 +283,7 @@
                 android:text="@string/notifications"
                 android:textColor="@color/color_white"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:layout_below="@+id/view2"
+                android:layout_below="@+id/view12"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="16dp"

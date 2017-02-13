@@ -2,7 +2,7 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+
         <item name="colorPrimary">@color/color_primary</item>
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
         <item name="colorAccent">#339997</item>
@@ -13,8 +13,33 @@
         <item name="android:splitMotionEvents">false</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
+
     </style>
 
+    <!-- Challenge Theme -->
+    <style name="AppCreateChallengeTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+
+        <item name="colorPrimary">@color/self_gradient_center</item>
+        <item name="colorPrimaryDark">@color/self_gradient_end</item>
+        <item name="colorAccent">@color/self_gradient_center</item>
+        <item name="android:windowEnableSplitTouch">false</item>
+        <item name="android:splitMotionEvents">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+
+    </style>
+
+    <style name="AppLoginTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+
+        <item name="colorAccent">@color/champy_gradient_start</item>
+        <item name="colorPrimary">@color/champy_gradient_center</item>
+        <item name="colorPrimaryDark">@color/champy_gradient_end</item>
+        <item name="android:windowEnableSplitTouch">false</item>
+        <item name="android:splitMotionEvents">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+
+    </style>
 
 
     <style name="AppTheme.NoActionBar">

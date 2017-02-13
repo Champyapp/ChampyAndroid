@@ -159,12 +159,10 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        Intent intent = new Intent(this, MainActivity.class);
         switch (item.getItemId()) {
             case R.id.nav_challenges:
                 navItemIndex = 0;
                 CURRENT_TAG = TAG_CHALLENGES;
-                startActivity(new Intent(this, MainActivity.class));
                 break;
             case R.id.nav_friends:
                 new Handler().postDelayed(() -> startActivity(new Intent(this, FriendsActivity.class)), 250);
@@ -175,7 +173,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
             case R.id.nav_pending_duels:
                 navItemIndex = 1;
                 CURRENT_TAG = TAG_PENDING_DUELS;
-                intent = new Intent(this, PendingDuelActivity.class);
+                new Handler().postDelayed(() -> startActivity(new Intent(this, PendingDuelActivity.class)), 250);
                 break;
             case R.id.nav_settings:
                 navItemIndex = 2;
@@ -190,7 +188,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                 CURRENT_TAG = TAG_PRIVACY_POLICE;
                 break;
         }
-        startActivity(intent);
+
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

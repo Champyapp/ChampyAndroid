@@ -29,29 +29,28 @@
 
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/app_id" />
 
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!-- Activities For Login. AppLoginTheme -->
         <activity android:name="com.azinecllc.champy.activity.RoleControllerActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppLoginTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.azinecllc.champy.activity.LoginActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppLoginTheme" />
+
+        <!-- Basic Activities. AppTheme.NoActionBar -->
         <activity android:name="com.azinecllc.champy.activity.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustPan"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.azinecllc.champy.activity.LoginActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
         <activity android:name="com.azinecllc.champy.activity.FriendsActivity"
             android:label="@string/friends"
             android:screenOrientation="portrait"
@@ -61,38 +60,47 @@
             android:label="Contact Us"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.azinecllc.champy.activity.SelfImprovementActivity"
-            android:label="@string/title_activity_self_improvement1"
-            android:screenOrientation="portrait"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name="com.azinecllc.champy.activity.HistoryActivity"
             android:label="@string/title_activity_history"
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.azinecllc.champy.activity.WakeUpActivity"
-            android:label="@string/title_activity_wake_up"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.azinecllc.champy.activity.AlarmReceiverActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.azinecllc.champy.activity.DuelActivity"
-            android:label="@string/title_activity_duel"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.azinecllc.champy.activity.PendingDuelActivity"
-            android:label="@string/title_activity_pending__duel"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.azinecllc.champy.activity.PhotoActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.azinecllc.champy.activity.AboutActivity"
+        <activity
+            android:name="com.azinecllc.champy.activity.AboutActivity"
             android:label="@string/about"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <!--Activity which works with challenge. AppCreateChallengeTheme -->
+        <activity
+            android:name="com.azinecllc.champy.activity.SelfImprovementActivity"
+            android:label="@string/title_activity_self_improvement1"
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppCreateChallengeTheme" />
+        <activity android:name="com.azinecllc.champy.activity.WakeUpActivity"
+            android:label="@string/title_activity_wake_up"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppCreateChallengeTheme" />
+        <activity android:name="com.azinecllc.champy.activity.AlarmReceiverActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppCreateChallengeTheme" />
+        <activity android:name="com.azinecllc.champy.activity.DuelActivity"
+            android:label="@string/title_activity_duel"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppCreateChallengeTheme" />
+        <activity android:name="com.azinecllc.champy.activity.PendingDuelActivity"
+            android:label="@string/title_activity_pending__duel"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppCreateChallengeTheme" />
+
+        <!-- Activity not from Champy -->
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity android:name="com.soundcloud.android.crop.CropImageActivity"
             android:screenOrientation="portrait"/>
 

@@ -68,10 +68,13 @@ import retrofit.Retrofit;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.app.Activity.RESULT_OK;
+import static com.azinecllc.champy.activity.MainActivity.CURRENT_TAG;
+import static com.azinecllc.champy.activity.MainActivity.navItemIndex;
 import static com.azinecllc.champy.utils.Constants.API_URL;
 import static com.azinecllc.champy.utils.Constants.CAMERA_REQUEST;
 import static com.azinecllc.champy.utils.Constants.CROP_PIC;
 import static com.azinecllc.champy.utils.Constants.SELECT_FILE;
+import static com.azinecllc.champy.utils.Constants.TAG_CHALLENGES;
 import static com.azinecllc.champy.utils.Constants.TAG_SETTINGS;
 import static com.azinecllc.champy.utils.Constants.path;
 
@@ -135,11 +138,13 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
         TextView about = (TextView) viewSettings.findViewById(R.id.about);
         TextView avatar = (TextView) viewSettings.findViewById(R.id.avatar);
-        TextView tvLegal = (TextView) viewSettings.findViewById(R.id.tvLegal);
         TextView delete = (TextView) viewSettings.findViewById(R.id.delete_acc);
+        TextView tvNotif = (TextView) viewSettings.findViewById(R.id.tvNotifications);
+        TextView tvLegal = (TextView) viewSettings.findViewById(R.id.tvLegal);
+        TextView tvLogout = (TextView) viewSettings.findViewById(R.id.textViewLogout);
         TextView tvGeneral = (TextView) viewSettings.findViewById(R.id.tvGeneral);
         TextView contactUs = (TextView) viewSettings.findViewById(R.id.contact_us);
-        TextView tvNotif = (TextView) viewSettings.findViewById(R.id.tvNotifications);
+
         tvUserName = (TextView) viewSettings.findViewById(R.id.tvUserName);
         tvChangeName = (TextView) viewSettings.findViewById(R.id.tvName);
 
@@ -152,6 +157,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         about.setOnClickListener(this);
         delete.setOnClickListener(this);
         avatar.setOnClickListener(this);
+        tvLogout.setOnClickListener(this);
         contactUs.setOnClickListener(this);
         tvChangeName.setOnClickListener(this);
 
@@ -216,19 +222,12 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                     layoutButtons.setVisibility(View.VISIBLE);
                     tvTakeAPicture.setVisibility(View.VISIBLE);
                     tvChooseFrom.setVisibility(View.VISIBLE);
-//                    tvChooseFrom.setOnClickListener(view -> startActivity(new Intent(context, PhotoActivity.class)));
-
-                    // context, this
                     tvChooseFrom.setOnClickListener(view -> Crop.pickImage(context, this));
-
-                    tvTakeAPicture.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            File f = new File(path, "profile.jpg");
-                            picUri = Uri.fromFile(f);
-                            startActivityForResult(intent, CAMERA_REQUEST);
-                        }
+                    tvTakeAPicture.setOnClickListener(view -> {
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        File f = new File(path, "profile.jpg");
+                        picUri = Uri.fromFile(f);
+                        startActivityForResult(intent, CAMERA_REQUEST);
                     });
 
                 } else {
@@ -243,6 +242,9 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 } else {
                     deleteAccountDialog();
                 }
+                break;
+            case R.id.textViewLogout:
+                session.logout(getActivity());
                 break;
             case R.id.about:
                 startActivity(new Intent(context, AboutActivity.class));
@@ -284,6 +286,14 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
             }
 
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().isFinishing();
+        Runtime.getRuntime().runFinalization();
+        Runtime.getRuntime().gc();
     }
 
     // Initialization switches
@@ -399,7 +409,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    //взяти имя с базы и поставить как новое в текст-вью.
+                    //взять имя с базы и поставить как новое в текст-вью.
                 } else {
                     Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
@@ -493,6 +503,8 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                                     db.delete("updated", null, null);
                                     db.delete("myChallenges", null, null);
 
+                                    CURRENT_TAG = TAG_CHALLENGES;
+                                    navItemIndex = 0;
                                     session.logout(getActivity());
                                     LoginManager.getInstance().logOut();
                                     startActivity(role);
