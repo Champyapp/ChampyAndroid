@@ -22,12 +22,6 @@ public interface NewUser {
     Call<User> getUserInfo(
             @Query("token") String token);
 
-    @GET("/v1/users/getusersbyfacebookid")
-    Call<User> getFacebookFriends(
-            @Query("token") String token
-            //@Query("facebookFriends[]") List<String> facebookFriends
-    );
-
 
     @GET("/v1/users/{id}/token")
     Call<Token> getUserToken(

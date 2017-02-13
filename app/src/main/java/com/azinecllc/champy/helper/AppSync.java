@@ -32,28 +32,24 @@ public class AppSync {
 
     private Context context;
     private SessionManager sessionManager;
-    private String fbId, gcm, token, path, token_android;
+    private String userFBID, gcm, userToken, userPicture, userAndroidToken;
 
 
     public AppSync(String fb_id, String gcm, String path_to_pic, Context context, String token_android) throws JSONException {
-        this.fbId = fb_id;
+        this.userFBID = fb_id;
         this.gcm = gcm;
-        this.token = getToken(this.fbId, this.gcm);
-        this.path = path_to_pic;
+        this.userToken = getToken(userFBID, gcm);
+        this.userPicture = path_to_pic;
         this.context = context;
-        this.token_android = token_android;
+        this.userAndroidToken = token_android;
     }
 
 
     public void getUserProfile() {
-        final String facebookId = this.fbId;
-        final String jwtString = this.token;
-        final String path_to_pic = this.path;
-        final String gcm = this.gcm;
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
         NewUser newUser = retrofit.create(NewUser.class);
-        Call<User> callGetUserInfo = newUser.getUserInfo(jwtString);
+        Call<User> callGetUserInfo = newUser.getUserInfo(userToken);
         callGetUserInfo.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
@@ -74,8 +70,8 @@ public class AppSync {
                     sessionManager.setRefreshPending("false");
                     sessionManager.setRefreshOthers("true");
                     sessionManager.createUserLoginSession(
-                            user_name, email, facebookId, path_to_pic, jwtString, userId, pushN, newChallengeReq,
-                            acceptedYour, challengeEnd, challengesForToday, "true", gcm, token_android
+                            user_name, email, userFBID, userPicture, userToken, userId, pushN, newChallengeReq,
+                            acceptedYour, challengeEnd, challengesForToday, "true", gcm, userAndroidToken
                     );
                     sessionManager.setChampyOptions(
                             data.getAllChallengesCount().toString(),
@@ -89,9 +85,10 @@ public class AppSync {
 
                     CHGetFacebookFriends getFbFriends = new CHGetFacebookFriends(context, retrofit);
                     getFbFriends.getUserFacebookFriends(gcm);
+                    getFbFriends.getUserPending(userId, userToken);
 
-                    CHGetPendingFriends getPendingFriends = new CHGetPendingFriends(context, retrofit);
-                    getPendingFriends.getUserPending(userId, token);
+                    //CHGetPendingFriends getPendingFriends = new CHGetPendingFriends(context, retrofit);
+                    //getPendingFriends.getUserPending(userId, userToken);
 
                     DailyRemindController dailyRemind = new DailyRemindController(context);
                     dailyRemind.enableDailyNotificationReminder();
@@ -101,7 +98,7 @@ public class AppSync {
                     if (data.getPhoto() != null){
                         String path = "/data/data/com.azinecllc.champy/app_imageDir/";
                         File file = new File(path, "profile.jpg");
-                        if (!file.exists()){
+                        if (!file.exists()) {
                             com.azinecllc.champy.model.user.Photo photo = data.getPhoto();
                             api_path = API_URL + photo.getLarge();
                         }
@@ -109,8 +106,8 @@ public class AppSync {
 
                     Intent extras = new Intent(context, MainActivity.class);
                     if (api_path == null) {
-                        extras.putExtra("path_to_pic", path_to_pic);
-                        sessionManager.setUserPicture(path_to_pic);
+                        extras.putExtra("path_to_pic", userPicture);
+                        sessionManager.setUserPicture(userPicture);
                     } else {
                         extras.putExtra("path_to_pic", api_path);
                         sessionManager.setUserPicture(api_path);
