@@ -28,15 +28,15 @@ public class WakeUpActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wake_up);
 
-        final Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
-        final TextView tvIChallengeMySelf = (TextView) findViewById(R.id.tvChallengeToMySelf);
-        final ImageButton buttonAccept = (ImageButton) findViewById(R.id.imageButtonAccept);
-        final ImageButton buttonMinus = (ImageButton) findViewById(R.id.imageButtonMinus);
-        final ImageButton buttonPlus = (ImageButton) findViewById(R.id.imageButtonPlus);
-        final TextView tvEveryDay = (TextView) findViewById(R.id.tvEveryDayWakeUp);
-        final TextView tvWakeUp = (TextView) findViewById(R.id.tvWakeUpChallenge);
-        final TextView tvGoal = (TextView) findViewById(R.id.goal_text);
-        final TextView tvDays = (TextView) findViewById(R.id.tvDays);
+        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
+        TextView tvIChallengeMySelf = (TextView) findViewById(R.id.tvChallengeToMySelf);
+        ImageButton buttonAccept = (ImageButton) findViewById(R.id.imageButtonAccept);
+        ImageButton buttonMinus = (ImageButton) findViewById(R.id.imageButtonMinus);
+        ImageButton buttonPlus = (ImageButton) findViewById(R.id.imageButtonPlus);
+        TextView tvEveryDay = (TextView) findViewById(R.id.tvEveryDayWakeUp);
+        TextView tvWakeUp = (TextView) findViewById(R.id.tvWakeUpChallenge);
+        TextView tvGoal = (TextView) findViewById(R.id.goal_text);
+        TextView tvDays = (TextView) findViewById(R.id.tvDays);
         etDays = (TextView) findViewById(R.id.etDays);
 
         tvIChallengeMySelf.setTypeface(typeface);

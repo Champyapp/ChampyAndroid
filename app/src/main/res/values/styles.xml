@@ -38,7 +38,7 @@
     <style name="AppThemeAboutUs" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorAccent">@color/color_blue_site</item>
         <item name="colorPrimary">@color/color_blue_site</item>
-        <item name="colorPrimaryDark">@color/color_blue_site</item>
+        <item name="colorPrimaryDark">@color/color_blue_primary_site</item>
         <item name="android:windowEnableSplitTouch">false</item>
         <item name="android:splitMotionEvents">false</item>
         <item name="windowNoTitle">true</item>

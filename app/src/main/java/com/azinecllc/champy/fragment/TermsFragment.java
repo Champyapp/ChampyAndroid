@@ -32,6 +32,7 @@ public class TermsFragment extends Fragment {
 
         tvTerms = (TextView) viewTerms.findViewById(R.id.textView_terms);
         tvTerms.setVisibility(View.INVISIBLE);
+
         new LoadTermsText().execute();
 
         ProgressBar progressBar = (ProgressBar) viewTerms.findViewById(R.id.progressBar);

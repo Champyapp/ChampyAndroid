@@ -54,11 +54,10 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         setSupportActionBar(toolbar);
 
         sessionManager = SessionManager.getInstance(context);
+
+        // MAKE BACKGROUND (great again)
         final String userPicture = sessionManager.getUserPicture();
-
         ImageView background = (ImageView) findViewById(R.id.friends_background);
-        background.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
         Glide.with(this)
                 .load(userPicture)
                 .bitmapTransform(new BlurTransformation(getApplicationContext(), 25))
@@ -66,6 +65,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                 .skipMemoryCache(true)
                 .into(background);
 
+        // DRAWER
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
@@ -75,32 +75,11 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         };
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
         navigationView = (NavigationView) findViewById(R.id.nav_view);
-        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         navigationView.setNavigationItemSelectedListener(this);
 
-        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.imageUserPicture);
-        ImageView drawerBackground   = (ImageView) headerLayout.findViewById(R.id.slide_background);
-        TextView drawerUserEmail = (TextView) headerLayout.findViewById(R.id.tvUserEmail);
-        TextView drawerUserName      = (TextView)  headerLayout.findViewById(R.id.tvUserName);
-        drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
-        Glide.with(this)
-                .load(userPicture)
-                .bitmapTransform(new BlurTransformation(getApplicationContext(), 25))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(drawerBackground);
-
-        Glide.with(this)
-                .load(userPicture)
-                .bitmapTransform(new CropCircleTransformation(this))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(drawerImageProfile);
-
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        // VIEW PAGER
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setOffscreenPageLimit(2);
         FriendsActivityPagerAdapter adapterViewPager = new FriendsActivityPagerAdapter(getSupportFragmentManager(), context);
         viewPager.setAdapter(adapterViewPager);
@@ -131,6 +110,27 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs_friends);
         tabLayout.setupWithViewPager(viewPager);
 
+        // OTHER INFO FOR DRAWER
+        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
+        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.imageUserPicture);
+        ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
+        TextView drawerUserEmail = (TextView) headerLayout.findViewById(R.id.tvUserEmail);
+        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+
+        Glide.with(this)
+                .load(userPicture)
+                .bitmapTransform(new BlurTransformation(getApplicationContext(), 25))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(drawerBackground);
+
+        Glide.with(this)
+                .load(userPicture)
+                .bitmapTransform(new CropCircleTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(drawerImageProfile);
+
         final String userEmail = sessionManager.getUserEmail();
         final String userName = sessionManager.getUserName();
         drawerUserEmail.setText(userEmail);
@@ -147,40 +147,41 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        Intent intent = new Intent(this, MainActivity.class);
         switch (item.getItemId()) {
             case R.id.nav_challenges:
                 navItemIndex = 0;
                 CURRENT_TAG = TAG_CHALLENGES;
+                startActivity(intent);
                 break;
             case R.id.nav_friends:
-                new Handler().postDelayed(() -> startActivity(new Intent(this, FriendsActivity.class)), 250);
                 break;
             case R.id.nav_history:
                 new Handler().postDelayed(() -> startActivity(new Intent(this, HistoryActivity.class)), 250);
                 break;
             case R.id.nav_pending_duels:
-                navItemIndex = 1;
-                CURRENT_TAG = TAG_PENDING_DUELS;
-                new Handler().postDelayed(() -> startActivity(new Intent(this, PendingDuelActivity.class)), 250);
+                startActivity(new Intent(this, PendingDuelActivity.class));
                 break;
             case R.id.nav_settings:
                 navItemIndex = 2;
                 CURRENT_TAG = TAG_SETTINGS;
+                startActivity(intent);
                 break;
             case R.id.nav_terms:
                 navItemIndex = 3;
                 CURRENT_TAG = TAG_TERMS;
+                startActivity(intent);
                 break;
             case R.id.nav_privacy_policy:
                 navItemIndex = 4;
                 CURRENT_TAG = TAG_PRIVACY_POLICE;
+                startActivity(intent);
                 break;
         }
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 
     @Override
     protected void onResume() {
@@ -196,16 +197,18 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            finish();
+            navItemIndex = 0;
+            CURRENT_TAG = TAG_CHALLENGES;
+            startActivity(new Intent(this, MainActivity.class));
             super.onBackPressed();
         }
     }
-
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         this.isFinishing();
+        Glide.get(context).clearMemory();
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
     }

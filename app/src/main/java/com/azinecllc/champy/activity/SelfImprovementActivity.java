@@ -71,7 +71,6 @@ public class SelfImprovementActivity extends AppCompatActivity {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         final ContentValues cv  = new ContentValues();
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        db.delete("selfimprovement", null, null);
 
         com.azinecllc.champy.interfaces.SelfImprovement selfImprovement = retrofit.create(com.azinecllc.champy.interfaces.SelfImprovement.class);
         Call<com.azinecllc.champy.model.self.SelfImprovement> call = selfImprovement.getChallenges(sessionManager.getToken());
@@ -79,6 +78,8 @@ public class SelfImprovementActivity extends AppCompatActivity {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.self.SelfImprovement> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
+                    db.delete("selfimprovement", null, null);
+
                     List<Datum> data = response.body().getData();
                     int data_size = 0;
                     for (int i = 0; i < data.size(); i++) {

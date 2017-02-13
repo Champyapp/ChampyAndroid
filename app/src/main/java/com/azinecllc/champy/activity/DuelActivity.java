@@ -67,10 +67,6 @@ public class DuelActivity extends AppCompatActivity {
         imageFriendPhoto.getLayoutParams().height = x;
 
 
-        File fileProfile = new File(path, "profile.jpg");
-        Uri uriProfile = Uri.fromFile(fileProfile);
-//        Uri uriBlur = Uri.fromFile(fileBlur);
-
         Glide.with(this)
                 .load(friendsPhoto)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -79,7 +75,7 @@ public class DuelActivity extends AppCompatActivity {
                 .into(imageFriendPhoto);
 
         Glide.with(this)
-                .load(uriProfile)
+                .load(sessionManager.getUserPicture())
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .centerCrop()
@@ -164,6 +160,7 @@ public class DuelActivity extends AppCompatActivity {
             @Override
             public void onFailure(Throwable t) {
             }
+
         });
     }
 

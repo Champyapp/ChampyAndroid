@@ -61,7 +61,6 @@ public class MyPendingFragment extends Fragment {
         SessionManager sessionManager = SessionManager.getInstance(getContext());
         id = sessionManager.getUserId();
         token = sessionManager.getToken();
-
         DBHelper dbHelper = DBHelper.getInstance(getContext());
         db = dbHelper.getWritableDatabase();
     }

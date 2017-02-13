@@ -34,6 +34,7 @@ import com.facebook.FacebookSdk;
 
 import java.io.File;
 
+import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import jp.wasabeef.glide.transformations.CropSquareTransformation;
 
@@ -93,39 +94,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // GET PHOTO AND MAKE BLUR
         drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
         sessionManager = SessionManager.getInstance(getApplicationContext());
-        File blurred = new File(path, "blurred.png");
-        if (blurred.exists()) {
-            ImageView background = (ImageView) findViewById(R.id.main_background);
-            Glide.with(this)
-                    .load(blurred)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .centerCrop()
-                    .into(background);
-            File profile = new File(path, "profile.jpg");
-            Glide.with(this)
-                    .load(profile)
-                    .bitmapTransform(new CropCircleTransformation(this))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(drawerUserPhoto);
-            Glide.with(this)
-                    .load(blurred)
-                    .bitmapTransform(new CropSquareTransformation(this))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(drawerBackground);
-        } else {
-            String pathToPic = sessionManager.getUserPicture();
-            CHDownloadImageTask chDownloadImageTask = new CHDownloadImageTask(getApplicationContext(), MainActivity.this);
-            chDownloadImageTask.execute(pathToPic);
-        }
-
-        // USER NAME
-        String name = sessionManager.getUserName();
-        String email = sessionManager.getUserEmail();
-        drawerUserName.setText(name);
-        drawerUserEmail.setText(email);
+        final String userPicture = sessionManager.getUserPicture();
+        final String userEmail = sessionManager.getUserEmail();
+        final String userName = sessionManager.getUserName();
+        ImageView background = (ImageView) findViewById(R.id.main_background);
+        Glide.with(this)
+                .load(userPicture)
+                .bitmapTransform(new BlurTransformation(getApplicationContext(), 25))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(background);
+        Glide.with(this)
+                .load(userPicture)
+                .bitmapTransform(new CropCircleTransformation(this))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(drawerUserPhoto);
+        Glide.with(this)
+                .load(userPicture)
+                .bitmapTransform(new BlurTransformation(getApplicationContext(), 25))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(drawerBackground);
+        drawerUserName.setText(userName);
+        drawerUserEmail.setText(userEmail);
 
         // PENDING DUEL MENU IN DRAWER
         CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();
@@ -206,27 +198,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        //new Handler().postDelayed(new Runnable() {
-        //    @Override
-        //    public void run() {
         switch (item.getItemId()) {
             case R.id.nav_challenges:
                 navItemIndex = 0;
                 CURRENT_TAG = TAG_CHALLENGES;
                 break;
             case R.id.nav_friends:
-                //navItemIndex = 1;
-                //CURRENT_TAG = TAG_FRIENDS;
                 new Handler().postDelayed(() -> startActivity(new Intent(this, FriendsActivity.class)), 250);
                 break;
             case R.id.nav_history:
-                //navItemIndex = 2;
-                //CURRENT_TAG = TAG_HISTORY;
                 new Handler().postDelayed(() -> startActivity(new Intent(this, HistoryActivity.class)), 250);
                 break;
             case R.id.nav_pending_duels:
-                navItemIndex = 1;
-                CURRENT_TAG = TAG_PENDING_DUELS;
                 startActivity(new Intent(this, PendingDuelActivity.class));
                 break;
             case R.id.nav_settings:
@@ -242,8 +225,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 CURRENT_TAG = TAG_PRIVACY_POLICE;
                 break;
         }
-        //    }
-        //}, drawerCloseTime);
         drawer.closeDrawer(GravityCompat.START);
         loadHomeFragment();
         return true;

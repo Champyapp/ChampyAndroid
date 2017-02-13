@@ -155,6 +155,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         animatorTotal.setDuration(1000);
         animatorTotal.start();
 
+
         TextView textViewWins = (TextView) view.findViewById(R.id.textViewWins);
         TextView textViewTotal = (TextView) view.findViewById(R.id.textViewTotal);
         TextView welcomeUserName = (TextView) view.findViewById(R.id.welcomeUserName);

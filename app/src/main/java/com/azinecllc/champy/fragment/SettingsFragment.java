@@ -89,7 +89,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     private Typeface typeface;
     private OfflineMode offline;
     private SessionManager session;
-    private String userName, userID, userToken;
+    private String userName, userID, userToken, userPicture;
     private DailyRemindController reminder;
     private TextView tvChangeName, tvUserName;
     private CHUploadPhoto uploadPhoto;
@@ -112,6 +112,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         userID = session.getUserId();
         userName = session.getUserName();
         userToken = session.getToken();
+        userPicture = session.getUserPicture();
         userDetails = session.getUserDetails();
         uploadPhoto = new CHUploadPhoto(getContext());
 
@@ -124,10 +125,8 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
         ImageView userImageProfile = (ImageView) viewSettings.findViewById(R.id.img_profile);
 
-        File fileProfile = new File(path, "profile.jpg");
-        Uri userPicturePath = Uri.fromFile(fileProfile);
         Glide.with(this)
-                .load(userPicturePath)
+                .load(userPicture)
                 .bitmapTransform(new CropCircleTransformation(context))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
@@ -188,17 +187,18 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
                     buttonOK.setVisibility(View.VISIBLE);
                     buttonOK.setOnClickListener(v1 -> {
-                        String userNewName = (etNewName.getText().toString().isEmpty())
-                                ? session.getUserName() : etNewName.getText().toString().trim();
-                        session.setUserName(userNewName);
-                        updateUserName(userNewName); // call
-                        tvUserName.setText(etNewName.getText().toString());
+                        String userNewName = etNewName.getText().toString().trim();
+                        if (!etNewName.getText().toString().trim().equals(session.getUserName())) {
+                            session.setUserName(userNewName);
+                            updateUserName(userNewName); // call
+                            tvUserName.setText(etNewName.getText().toString());
+                            getActivity().recreate();
+                        }
                         layoutEditText.setVisibility(View.GONE);
                         tvEnterYourName.setVisibility(View.GONE);
                         etNewName.setVisibility(View.GONE);
                         buttonOK.setVisibility(View.GONE);
                         lineOfTheNed.setVisibility(View.GONE);
-                        getActivity().recreate();
                     });
                 } else {
                     layoutEditText.setVisibility(View.GONE);
@@ -266,7 +266,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 savePhoto(thePic);
                 uploadPhoto.uploadPhotoForAPI(saveToStorageFromCamera(thePic));
                 getActivity().recreate();
-//                startActivity(new Intent(getContext(), MainActivity.class));
+                //startActivity(new Intent(getContext(), MainActivity.class));
             } else if (requestCode == Crop.REQUEST_PICK) {
                 beginCrop(data.getData());
             } else if (requestCode == Crop.REQUEST_CROP) {
@@ -389,12 +389,10 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         Update_user update_user = retrofit.create(Update_user.class);
         Profile_data profile_data = new Profile_data(map);
         Call<User> call = update_user.update_profile_options(userID, userToken, profile_data);
-
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
             }
-
             @Override
             public void onFailure(Throwable t) {
             }

@@ -171,13 +171,11 @@ public class MyFriendsFragment extends Fragment {
 
     private void refreshFriendsView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
         swipeRefreshLayout.setRefreshing(true);
-        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        final DBHelper dbHelper = DBHelper.getInstance(getContext());
-        final SQLiteDatabase db = dbHelper.getWritableDatabase();
-        final ContentValues cv = new ContentValues();
-        int clearCount = db.delete("friends", null, null);
-
-        final com.azinecllc.champy.interfaces.Friends friends = retrofit.create(com.azinecllc.champy.interfaces.Friends.class);
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        DBHelper dbHelper = DBHelper.getInstance(getContext());
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        com.azinecllc.champy.interfaces.Friends friends = retrofit.create(com.azinecllc.champy.interfaces.Friends.class);
 
         // Проверка на оффлайн вкладке FriendsActivity
         OfflineMode offlineMode = OfflineMode.getInstance();
@@ -187,6 +185,7 @@ public class MyFriendsFragment extends Fragment {
                 @Override
                 public void onResponse(Response<com.azinecllc.champy.model.friend.Friend> response, Retrofit retrofit) {
                     if (response.isSuccess()) {
+                        db.delete("friends", null, null);
                         List<Datum> data = response.body().getData();
 
                         // get friends from response.

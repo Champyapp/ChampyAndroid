@@ -126,10 +126,7 @@ public class MyOtherFragment extends Fragment {
         rvContacts.setAdapter(adapter);
 
         gSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_to_refresh);
-        gSwipeRefreshLayout.setOnRefreshListener(() -> {
-            refreshOtherView(gSwipeRefreshLayout, gView);
-        });
-
+        gSwipeRefreshLayout.setOnRefreshListener(() -> refreshOtherView(gSwipeRefreshLayout, gView));
         this.gView = view;
 
         if (sessionManager.getRefreshOthers().equals("true")) {
@@ -175,7 +172,6 @@ public class MyOtherFragment extends Fragment {
         cv.clear();
         friends.clear();
         gView.destroyDrawingCache();
-//        gSwipeRefreshLayout.destroyDrawingCache();
         cv = null;
         gView = null;
         adapter = null;
