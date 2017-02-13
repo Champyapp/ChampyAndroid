@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.azinecllc.champy.R;
+import com.azinecllc.champy.activity.FriendsActivity;
 import com.azinecllc.champy.activity.SelfImprovementActivity;
 import com.azinecllc.champy.activity.WakeUpActivity;
 import com.azinecllc.champy.adapter.MainActivityCardsAdapter;
@@ -204,7 +206,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                     startActivity(new Intent(getContext(), SelfImprovementActivity.class));
                     break;
                 case R.id.fabDuel:
-                    //startActivity(new Intent(getContext(), FriendsActivity.class));
+                    new Handler().postDelayed(() -> startActivity(new Intent(getContext(), FriendsActivity.class)), 250);
                     break;
                 case R.id.fabWake:
                     startActivity(new Intent(getContext(), WakeUpActivity.class));

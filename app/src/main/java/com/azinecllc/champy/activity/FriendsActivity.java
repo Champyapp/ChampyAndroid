@@ -1,14 +1,12 @@
 package com.azinecllc.champy.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -22,20 +20,13 @@ import android.widget.TextView;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.FriendsActivityPagerAdapter;
-import com.azinecllc.champy.fragment.MainFragment;
-import com.azinecllc.champy.fragment.PendingDuelFragment;
-import com.azinecllc.champy.fragment.PrivacyPoliceFragment;
-import com.azinecllc.champy.fragment.SettingsFragment;
-import com.azinecllc.champy.fragment.TermsFragment;
 import com.azinecllc.champy.helper.CHCheckPendingDuels;
-import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.FacebookSdk;
 
-import java.io.File;
-
+import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import jp.wasabeef.glide.transformations.CropSquareTransformation;
 
@@ -46,13 +37,13 @@ import static com.azinecllc.champy.utils.Constants.TAG_PENDING_DUELS;
 import static com.azinecllc.champy.utils.Constants.TAG_PRIVACY_POLICE;
 import static com.azinecllc.champy.utils.Constants.TAG_SETTINGS;
 import static com.azinecllc.champy.utils.Constants.TAG_TERMS;
-import static com.azinecllc.champy.utils.Constants.path;
 
 public class FriendsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private SessionManager sessionManager;
     private NavigationView navigationView;
     private DrawerLayout drawer;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,14 +53,15 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        sessionManager = SessionManager.getInstance(context);
+        final String userPicture = sessionManager.getUserPicture();
+
         ImageView background = (ImageView) findViewById(R.id.friends_background);
         background.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-        File fileBlur = new File(path, "blurred.png");
-        Uri uriBlur = Uri.fromFile(fileBlur);
         Glide.with(this)
-                .load(uriBlur)
-                .bitmapTransform(new CropSquareTransformation(this))
+                .load(userPicture)
+                .bitmapTransform(new BlurTransformation(getApplicationContext(), 25))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(background);
@@ -90,21 +82,19 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 
         ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.imageUserPicture);
         ImageView drawerBackground   = (ImageView) headerLayout.findViewById(R.id.slide_background);
+        TextView drawerUserEmail = (TextView) headerLayout.findViewById(R.id.tvUserEmail);
         TextView drawerUserName      = (TextView)  headerLayout.findViewById(R.id.tvUserName);
         drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-        File fileProfile = new File(path, "profile.jpg");
-        Uri uriProfile = Uri.fromFile(fileProfile);
-
         Glide.with(this)
-                .load(uriBlur)
-                .bitmapTransform(new CropSquareTransformation(this))
+                .load(userPicture)
+                .bitmapTransform(new BlurTransformation(getApplicationContext(), 25))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(drawerBackground);
 
         Glide.with(this)
-                .load(uriProfile)
+                .load(userPicture)
                 .bitmapTransform(new CropCircleTransformation(this))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
@@ -112,21 +102,21 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setOffscreenPageLimit(2);
-        FriendsActivityPagerAdapter adapterViewPager = new FriendsActivityPagerAdapter(getSupportFragmentManager(), getApplicationContext());
+        FriendsActivityPagerAdapter adapterViewPager = new FriendsActivityPagerAdapter(getSupportFragmentManager(), context);
         viewPager.setAdapter(adapterViewPager);
 
-        sessionManager = SessionManager.getInstance(getApplicationContext());
+
         sessionManager.setRefreshFriends("true");
         sessionManager.setRefreshPending("true");
-
-
         Bundle bundle = this.getIntent().getExtras();
         if (bundle != null) {
             String friendRequest = bundle.getString("friend_request");
             if (friendRequest != null) {
                 sessionManager.setRefreshOthers("true");
                 switch (friendRequest) {
-                    case "friend_request_confirmed": viewPager.setCurrentItem(0); break;
+                    case "friend_request_confirmed":
+                        viewPager.setCurrentItem(0);
+                        break;
                     case "friend_request_incoming":
                         viewPager.setCurrentItem(1);
                         break;
@@ -141,16 +131,14 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs_friends);
         tabLayout.setupWithViewPager(viewPager);
 
-        String name = sessionManager.getUserName();
-        drawerUserName.setText(name);
-        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
-        drawerUserName.setTypeface(typeface);
+        final String userEmail = sessionManager.getUserEmail();
+        final String userName = sessionManager.getUserName();
+        drawerUserEmail.setText(userEmail);
+        drawerUserName.setText(userName);
 
         CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();
-        int count = checker.getPendingCount(getApplicationContext());
+        int count = checker.getPendingCount(context);
         if (count != 0) {
-//            checker.hideItem(navigationView);
-//        } else {
             TextView view = (TextView) navigationView.getMenu().findItem(R.id.nav_pending_duels).getActionView();
             view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
         }

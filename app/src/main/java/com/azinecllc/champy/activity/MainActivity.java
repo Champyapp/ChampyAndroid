@@ -22,7 +22,6 @@ import android.widget.TextView;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.MainActivityCardsAdapter;
 import com.azinecllc.champy.fragment.MainFragment;
-import com.azinecllc.champy.fragment.PendingDuelFragment;
 import com.azinecllc.champy.fragment.PrivacyPoliceFragment;
 import com.azinecllc.champy.fragment.SettingsFragment;
 import com.azinecllc.champy.fragment.TermsFragment;
@@ -31,7 +30,6 @@ import com.azinecllc.champy.helper.CHDownloadImageTask;
 import com.azinecllc.champy.utils.SessionManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.facebook.FacebookSdk;
 
 import java.io.File;
@@ -39,7 +37,6 @@ import java.io.File;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import jp.wasabeef.glide.transformations.CropSquareTransformation;
 
-import static android.support.v7.appcompat.R.attr.background;
 import static com.azinecllc.champy.utils.Constants.TAG_CHALLENGES;
 // friends
 // history
@@ -47,7 +44,6 @@ import static com.azinecllc.champy.utils.Constants.TAG_PENDING_DUELS;
 import static com.azinecllc.champy.utils.Constants.TAG_SETTINGS;
 import static com.azinecllc.champy.utils.Constants.TAG_TERMS;
 import static com.azinecllc.champy.utils.Constants.TAG_PRIVACY_POLICE;
-import static com.azinecllc.champy.utils.Constants.drawerCloseTime;
 import static com.azinecllc.champy.utils.Constants.path;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -120,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .skipMemoryCache(true)
                     .into(drawerBackground);
         } else {
-            String pathToPic = sessionManager.getPathToPic();
+            String pathToPic = sessionManager.getUserPicture();
             CHDownloadImageTask chDownloadImageTask = new CHDownloadImageTask(getApplicationContext(), MainActivity.this);
             chDownloadImageTask.execute(pathToPic);
         }

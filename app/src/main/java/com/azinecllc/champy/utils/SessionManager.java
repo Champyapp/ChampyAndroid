@@ -193,7 +193,7 @@ public class SessionManager {
         return pref.getString("facebook_id", "");
     }
 
-    public String getPathToPic() {
+    public String getUserPicture() {
         return pref.getString(KEY_PATH, "");
     }
 
