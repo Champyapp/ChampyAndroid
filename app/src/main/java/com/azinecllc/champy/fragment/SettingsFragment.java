@@ -38,8 +38,8 @@ import com.azinecllc.champy.activity.MainActivity;
 import com.azinecllc.champy.activity.RoleControllerActivity;
 import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.controller.DailyRemindController;
+import com.azinecllc.champy.controller.UserController;
 import com.azinecllc.champy.data.DBHelper;
-import com.azinecllc.champy.helper.CHUploadPhoto;
 import com.azinecllc.champy.interfaces.Update_user;
 import com.azinecllc.champy.model.user.Delete;
 import com.azinecllc.champy.model.user.Profile_data;
@@ -92,7 +92,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     private String userName, userID, userToken, userPicture;
     private DailyRemindController reminder;
     private TextView tvChangeName, tvUserName;
-    private CHUploadPhoto uploadPhoto;
+    private UserController userController;
     private HashMap<String, String> map = new HashMap<>();
     private HashMap<String, String> userDetails = new HashMap<>();
     private Retrofit retrofit;
@@ -114,7 +114,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         userToken = session.getToken();
         userPicture = session.getUserPicture();
         userDetails = session.getUserDetails();
-        uploadPhoto = new CHUploadPhoto(getContext());
+        userController = new UserController(session, retrofit);
 
     }
 
@@ -190,7 +190,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                         String userNewName = etNewName.getText().toString().trim();
                         if (!etNewName.getText().toString().trim().equals(session.getUserName())) {
                             session.setUserName(userNewName);
-                            updateUserName(userNewName); // call
+                            userController.updateUserName(userNewName); // call
                             tvUserName.setText(etNewName.getText().toString());
                             getActivity().recreate();
                         }
@@ -254,7 +254,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 break;
 
         }
-        updateProfile(map);
+        userController.updateProfile(map);
     }
 
     @Override
@@ -264,11 +264,13 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 Bundle extras = data.getExtras();
                 Bitmap thePic = extras.getParcelable("data"); // get the cropped bitmap
                 savePhoto(thePic);
-                uploadPhoto.uploadPhotoForAPI(saveToStorageFromCamera(thePic));
+                userController.uploadPhotoForAPI(saveToStorageFromCamera(thePic));
                 getActivity().recreate();
                 //startActivity(new Intent(getContext(), MainActivity.class));
             } else if (requestCode == Crop.REQUEST_PICK) {
-                beginCrop(data.getData());
+                Uri destination = Uri.fromFile(new File(getContext().getCacheDir(), "cropped"));
+                // this thing starts activity for result 'REQUEST_CROP'
+                Crop.of(data.getData(), destination).asSquare().withMaxSize(300, 300).start(context, this);
             } else if (requestCode == Crop.REQUEST_CROP) {
                 try {
                     handleCrop(resultCode, data);
@@ -319,11 +321,10 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         switchForPushNotif.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 map.put("pushNotifications", "true");
-                updateProfile(map);
             } else {
                 map.put("pushNotifications", "false");
-                updateProfile(map);
             }
+            userController.updateProfile(map);
         });
 
         Switch switchForNewChallRequests = (Switch) view.findViewById(R.id.switchNewChallengeRequest);
@@ -331,11 +332,10 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         switchForNewChallRequests.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 map.put("newChallengeRequests", "true");
-                updateProfile(map);
             } else {
                 map.put("newChallengeRequests", "false");
-                updateProfile(map);
             }
+            userController.updateProfile(map);
         });
 
         Switch switchForAcceptedYourChall = (Switch) view.findViewById(R.id.switchAcceptedYourChallenge);
@@ -343,11 +343,10 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         switchForAcceptedYourChall.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 map.put("acceptedYourChallenge", "true");
-                updateProfile(map);
             } else {
                 map.put("acceptedYourChallenge", "false");
-                updateProfile(map);
             }
+            userController.updateProfile(map);
         });
 
         Switch switchForChallengesEnd = (Switch) view.findViewById(R.id.switchChallengeEnd);
@@ -355,11 +354,10 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         switchForChallengesEnd.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 map.put("challengeEnd", "true");
-                updateProfile(map);
             } else {
                 map.put("challengeEnd", "false");
-                updateProfile(map);
             }
+            userController.updateProfile(map);
         });
 
         Switch switchChallengesForToday = (Switch) view.findViewById(R.id.switchChallengesForToday);
@@ -368,57 +366,13 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
             if (isChecked) {
                 map.put("challengesForToday", "true");
                 reminder.enableDailyNotificationReminder();
-                updateProfile(map);
             } else {
                 map.put("challengesForToday", "false");
                 reminder.disableDailyNotificationReminder();
-                updateProfile(map);
             }
+            userController.updateProfile(map);
         });
 
-    }
-
-    // @Call to API
-    private void updateProfile(HashMap<String, String> map) {
-        session.toggleChallengeEnd(map.get("challengeEnd"));
-        session.togglePushNotification(map.get("pushNotifications"));
-        session.toggleChallengesForToday(map.get("challengesForToday"));
-        session.toggleNewChallengeRequest(map.get("newChallengeRequests"));
-        session.toggleAcceptYourChallenge(map.get("acceptedYourChallenge"));
-
-        Update_user update_user = retrofit.create(Update_user.class);
-        Profile_data profile_data = new Profile_data(map);
-        Call<User> call = update_user.update_profile_options(userID, userToken, profile_data);
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Response<User> response, Retrofit retrofit) {
-            }
-            @Override
-            public void onFailure(Throwable t) {
-            }
-        });
-    }
-
-    // @Call to API
-    private void updateUserName(String newName) {
-        Update_user update_user = retrofit.create(Update_user.class);
-        Call<User> call = update_user.update_user_name(userID, userToken, newName);
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Response<User> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    //взять имя с базы и поставить как новое в текст-вью.
-                } else {
-                    Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
-                }
-
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
-            }
-        });
     }
 
     // @Костыль
@@ -429,12 +383,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 case DialogInterface.BUTTON_POSITIVE:
                     if (offline.isConnectedToRemoteAPI(getActivity())) {
                         SQLiteDatabase db = dbHelper.getWritableDatabase();
-                        ChallengeController cc = new ChallengeController(
-                                context,
-                                getActivity(),
-                                userToken,
-                                userID
-                        );
+                        ChallengeController cc = new ChallengeController(context, getActivity(), userToken, userID);
 
                         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
                         if (c.moveToFirst()) {
@@ -478,41 +427,14 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent role = new Intent(context, RoleControllerActivity.class);
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        final Update_user update_user = retrofit.create(Update_user.class);
-
-                        Call<Delete> callForDeleteUser = update_user.delete_user(userID, userToken);
-                        callForDeleteUser.enqueue(new Callback<Delete>() {
-                            @Override
-                            public void onResponse(Response<Delete> response, Retrofit retrofit) {
-                                if (response.isSuccess()) {
-                                    File profile = new File(path, "profile.jpg");
-                                    profile.delete();
-                                    File blurred = new File(path, "blurred.png");
-                                    blurred.delete();
-
-                                    SQLiteDatabase db = dbHelper.getWritableDatabase();
-                                    db.delete("pending", null, null);
-                                    db.delete("pending_duel", null, null);
-                                    db.delete("duel", null, null);
-                                    db.delete("friends", null, null);
-                                    db.delete("updated", null, null);
-                                    db.delete("myChallenges", null, null);
-
-                                    CURRENT_TAG = TAG_CHALLENGES;
-                                    navItemIndex = 0;
-                                    session.logout(getActivity());
-                                    LoginManager.getInstance().logOut();
-                                    startActivity(role);
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Throwable t) {
-                            }
-                        });
+                        userController.deleteUserProfile(dbHelper);
+                        CURRENT_TAG = TAG_CHALLENGES;
+                        navItemIndex = 0;
+                        session.logout(getActivity());
+                        LoginManager.getInstance().logOut();
+                        startActivity(new Intent(getContext(), RoleControllerActivity.class));
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
@@ -566,13 +488,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    private void beginCrop(Uri source) {
-        Uri destination = Uri.fromFile(new File(getContext().getCacheDir(), "cropped"));
-        // this thing starts activity for result 'REQUEST_CROP'
-        Crop.of(source, destination).asSquare().withMaxSize(300, 300).start(context, this);
-    }
-
-
     private void handleCrop(int resultCode, Intent result) throws IOException {
         if (resultCode == RESULT_OK) {
             Uri uri = Crop.getOutput(result);
@@ -583,7 +498,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 e.printStackTrace();
             }
 
-            uploadPhoto.uploadPhotoForAPI(path);
+            userController.uploadPhotoForAPI(path);
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), uri);
             savePhoto(bitmap); // my method which saves picture to storage
             getActivity().recreate();

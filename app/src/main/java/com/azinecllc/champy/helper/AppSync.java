@@ -8,6 +8,7 @@ import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.MainActivity;
 import com.azinecllc.champy.activity.RoleControllerActivity;
 import com.azinecllc.champy.controller.DailyRemindController;
+import com.azinecllc.champy.controller.UserController;
 import com.azinecllc.champy.interfaces.NewUser;
 import com.azinecllc.champy.model.user.Data;
 import com.azinecllc.champy.model.user.User;
@@ -80,15 +81,12 @@ public class AppSync {
                             data.getLevel().getNumber().toString()
                     );
 
-                    UpdatePushIdentifier pushIdentifier = new UpdatePushIdentifier();
-                    pushIdentifier.updatePushIdentifier(sessionManager);
+                    UserController userController = new UserController(sessionManager, retrofit);
+                    userController.updatePushIdentifier();
 
                     CHGetFacebookFriends getFbFriends = new CHGetFacebookFriends(context, retrofit);
                     getFbFriends.getUserFacebookFriends(gcm);
                     getFbFriends.getUserPending(userId, userToken);
-
-                    //CHGetPendingFriends getPendingFriends = new CHGetPendingFriends(context, retrofit);
-                    //getPendingFriends.getUserPending(userId, userToken);
 
                     DailyRemindController dailyRemind = new DailyRemindController(context);
                     dailyRemind.enableDailyNotificationReminder();
