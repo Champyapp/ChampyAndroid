@@ -4,7 +4,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 /**
- * Ultra stupid solution for checking other table.
+ * The method of checking some users in another table.
+ * For example: while we load Friends Facebook in 'Other' table, we check each user in another table.
+ * If we have current user in 'Pending Table' we just don't load this friend in 'Other' table
  */
 public class CHCheckTableForExist {
 
@@ -16,14 +18,14 @@ public class CHCheckTableForExist {
 
     public Boolean isInOtherTable(String id) {
         Boolean ok = false;
-        String user_id;
+        String friendID;
 
         Cursor c = db.query("pending", null, null, null, null, null, null);
         if (c.moveToFirst()) {
-            int index = c.getColumnIndex("user_id");
+            int i = c.getColumnIndex("user_id");
             do {
-                user_id = c.getString(index);
-                if (user_id.equals(id)) {
+                friendID = c.getString(i);
+                if (friendID.equals(id)) {
                     ok = true;
                     break;
                 }
@@ -34,8 +36,8 @@ public class CHCheckTableForExist {
         if (c.moveToFirst()) {
             int index = c.getColumnIndex("user_id");
             do {
-                user_id = c.getString(index);
-                if (user_id.equals(id)) {
+                friendID = c.getString(index);
+                if (friendID.equals(id)) {
                     ok = true;
                     break;
                 }

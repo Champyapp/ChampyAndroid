@@ -10,14 +10,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.MainActivity;
 import com.azinecllc.champy.data.DBHelper;
-import com.azinecllc.champy.helper.CHLoadUserProgressBarInfo;
+import com.azinecllc.champy.helper.CHGetUserProgressBarInfo;
 import com.azinecllc.champy.interfaces.ActiveInProgress;
 import com.azinecllc.champy.interfaces.CreateChallenge;
 import com.azinecllc.champy.interfaces.SingleInProgress;
@@ -45,7 +44,6 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-import static android.content.Context.ALARM_SERVICE;
 import static com.azinecllc.champy.utils.Constants.API_URL;
 import static com.azinecllc.champy.utils.Constants.oneDay;
 import static com.azinecllc.champy.utils.Constants.twoDays;
@@ -813,8 +811,8 @@ public class ChallengeController {
             public void onFailure(Throwable t) { }
         });
 
-        CHLoadUserProgressBarInfo progressBar = new CHLoadUserProgressBarInfo(context);
-        progressBar.loadUserProgressBarInfo();
+        CHGetUserProgressBarInfo progressBar = new CHGetUserProgressBarInfo(context);
+        progressBar.getUserProgressBarInfo();
 
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();

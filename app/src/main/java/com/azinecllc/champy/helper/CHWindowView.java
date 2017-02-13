@@ -40,8 +40,8 @@ public class CHWindowView {
     }
 
     public static int getCurrentCardPositionX(Context context) {
-        float cardWidth = getWindowWidth(context) / (100 * 65);
-        return (int) ((getWindowWidth(context) / 2) - (cardWidth / 2));
+        float cardWidth = getWindowWidth(context) / 100 * 65;
+        return (int) (getWindowWidth(context) / 2 - cardWidth / 2);
     }
 
 }

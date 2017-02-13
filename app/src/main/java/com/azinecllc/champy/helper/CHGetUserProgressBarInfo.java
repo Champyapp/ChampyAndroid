@@ -15,15 +15,21 @@ import retrofit.Retrofit;
 
 import static com.azinecllc.champy.utils.Constants.API_URL;
 
-public class CHLoadUserProgressBarInfo {
+/**
+ * Class-helper with a call to get information on the status bar (in progress, wins and total).
+ * We can move this method to "UserController", but actually we do not need that because we use this
+ * class only after calling the method 'generateCardsForMainActivity'. Here we need a session
+ * manager that is not there in class...
+ */
+public class CHGetUserProgressBarInfo {
 
     private Context context;
 
-    public CHLoadUserProgressBarInfo(Context context) {
+    public CHGetUserProgressBarInfo(Context context) {
         this.context = context;
     }
 
-    public void loadUserProgressBarInfo() {
+    public void getUserProgressBarInfo() {
         SessionManager sessionManager = SessionManager.getInstance(context);
         final String token = sessionManager.getToken();
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
