@@ -29,7 +29,7 @@ public class DailyRemindController {
         }
 
         Intent notifyIntent = new Intent(context, CustomNotifyReceiver.class);
-        PendingIntent pi = PendingIntent.getBroadcast(context, 1337, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pi = PendingIntent.getBroadcast(context, 9999, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager manager = (AlarmManager)context.getSystemService(ALARM_SERVICE);
         manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pi);
@@ -38,7 +38,7 @@ public class DailyRemindController {
 
     public void disableDailyNotificationReminder() {
         Intent alarmIntent = new Intent(context, CustomNotifyReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1337, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 9999, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
     }

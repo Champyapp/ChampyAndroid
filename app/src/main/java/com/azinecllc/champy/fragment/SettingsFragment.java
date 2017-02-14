@@ -380,8 +380,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    // @Костыль
-
     /**
      * Method to avoid bug on APi. Before deleting an account we need to surrender all challenge.
      * In case if we doesn't do it another opponent always will have one challenge in progress.

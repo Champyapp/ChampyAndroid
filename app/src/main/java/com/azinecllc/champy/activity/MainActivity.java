@@ -143,24 +143,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * Returns respected fragment that user
      * selected from navigation menu
      */
+    @SuppressWarnings("ConstantConditions")
     private void loadHomeFragment() {
-        activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
-        navigationView.getMenu().getItem(navItemIndex);   // selecting appropriate nav menu item
-        getSupportActionBar().setTitle(activityTitles[navItemIndex]); // set toolbar title
-
         // if user select the current navigation menu again, just close the navigation drawer
         if (getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
             drawer.closeDrawers();
             return;
         }
-
-        // Sometimes, when fragment has huge data, screen seems hanging
-        // when switching between navigation menus
-        // So using runnable, the fragment is loaded with cross fade effect
-        // This effect can be seen in GMail app
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
+                // Sometimes, when fragment has huge data, screen seems hanging when switching between
+                // navigation menus So using runnable, the fragment is loaded with cross fade effect
+                // This effect can be seen in GMail app
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // update the main content by replacing fragments
                 Fragment fragment = getHomeFragment();
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -169,6 +165,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragmentTransaction.commitAllowingStateLoss();
             }
         };
+
+        activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
+        navigationView.getMenu().getItem(navItemIndex);   // selecting appropriate nav menu item
+        getSupportActionBar().setTitle(activityTitles[navItemIndex]); // set toolbar title
 
         mHandler = new Handler();
         mHandler.post(runnable); // If 'runnable' is not null, then add to the message queue
@@ -181,12 +181,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         }
-
-        if (!CURRENT_TAG.equals(TAG_CHALLENGES)) {
-            navItemIndex = 0;
-            CURRENT_TAG = TAG_CHALLENGES;
-            loadHomeFragment();
-        }
+        navItemIndex = 0;
+        CURRENT_TAG = TAG_CHALLENGES;
+        loadHomeFragment();
 
     }
 
@@ -227,6 +224,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_settings) {
+            navItemIndex = 0;
+            CURRENT_TAG = TAG_CHALLENGES;
             startActivity(new Intent(this, RoleControllerActivity.class));
         }
         return super.onOptionsItemSelected(item);

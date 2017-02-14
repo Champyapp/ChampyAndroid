@@ -90,11 +90,6 @@ public class ChallengeController {
      * @param days - this is count of duration by challenge. Like with 'description': we get value
      *             from EditText and pass value here. After that we convert current value of days
      *             to UnixTime because API works only with it and push it up.
-     * @param -view - this is simple view from class where I initialize this ChallengeController.
-     *             we need this to see actual message without duplication of different type of
-     *             notifications. We check response and if we got a failure than I show message for
-     *             user about "Service not available". In case when response is success we just
-     *             transmit this view in next method 'sendSingleInProgressForSelf' and do there next.
      */
     public void createNewSelfImprovementChallenge(String name, String description, int days) {
         final String duration = "" + (days * 86400);
@@ -140,12 +135,6 @@ public class ChallengeController {
      *                     need to create new self-improvement challenge with user description and
      *                     count of days for challenge. After this operation we can get 'inProgressID'
      *                     and with that we can sent it to API
-     * @param -view - this is simple view from class where I initialize this challenge controller
-     *             in case: if user want to create custom challenge, in other case we got it from
-     *             last method-provider 'createSingleInProgressForSelf'. We need this to see actual
-     *             message without duplication of different type of notifications. We check response
-     *             and if we got a failure than I show message for user about "Service not
-     *             available". In case when response is success we just show message about "created".
      */
     public void sendSingleInProgressForSelf(String inProgressID) {
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
@@ -182,12 +171,6 @@ public class ChallengeController {
      *             to UnixTime because API works only with it and push it up.
      * @param friend_id - this is userID with whom we want to make a duel. this is ID has generated
      *                  when user create his account. (this is friend from Facebook)
-     * @param -v - this is simple view from class where I initialize this challenge controller.
-     *             We need this to see actual message without duplication of different type of
-     *             notifications. We check response and if we got a failure then I show message for
-     *             user about "Service not available". In case when response is success we just
-     *             transmit this view in next method 'sendSingleInProgressForDuel' and do there
-     *             next logic.
      */
     public void createNewDuelChallenge(String description, int days, String friend_id) {
         final String duration = String.valueOf(days * 86400);
@@ -233,12 +216,6 @@ public class ChallengeController {
      *            operation we can get 'inProgressID' and make call.
      * @param friendID - this is userID with whom we want to make a duel. this is ID has generated
      *                 when user create his account. (this is friend from Facebook)
-     * @param -view - this is simple view from class when I had initialise this challenge controller
-     *             in case: if user want to create custom challenge, in other case we got it from
-     *             last method-provider 'createSingleInProgressForDuel'. We need this to see actual
-     *             message without duplication of different type of notifications. We check response
-     *             and if we got a failure than I show message for user about "Service not
-     *             available". In case when response is success we just show message about "created".
      */
     public void sendSingleInProgressForDuel(String iID, String friendID) {
 
@@ -287,12 +264,6 @@ public class ChallengeController {
      *              lower than 10. Also we use this value for alarmID and calendar.
      * @param sMinute - we get this value from time picker and convert from 1:8 to 01:08 if value
      *              lower than 10. Also we use this value for alarmID and calendar.
-     * @param -view - this is simple view from class where I initialize this challenge controller.
-     *             We need this to see actual message without duplication of different type of
-     *             notifications. We check response and if we got a failure then I show message for
-     *             user about "Service not available". In case when response is success we just
-     *             transmit this view in next method 'sendSingleInProgressForWakeUp' and do there
-     *             next logic.
      */
     public void createNewWakeUpChallenge(int days, String sHour, String sMinute) {
         final String duration = String.format("%s", days * oneDay);
@@ -367,13 +338,6 @@ public class ChallengeController {
      *                normal view (means from 1:8 to 01:08) and put inside alarmManager like ID.
      * @param when - this is value from last method-provider, this value is equals to time when
      *             we need fire our alarm manager.
-     * @param -det - this is array with time when need to fire our alarm manager multiplied on cour
-     *            of day from TimePicker which sets the user.
-     * @param -v - this is simple view from class where I initialize this challenge controller.
-     *          we got it from last method-provider 'createSingleInProgressForWake'. We need this
-     *          to see actual message without duplication of different type of notifications. We
-     *          check response and if we got a failure than I show message for user about "Service
-     *          not available". In case when response is success we just show message about "created".
      */
     private void sendSingleInProgressForWakeUp(String pID, int aID, int hour, int min, long when) {
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
@@ -419,11 +383,6 @@ public class ChallengeController {
      * @param inProgressId - this is unique challenge ID. we just put this unique inProgressID after
      *                     this we can make call to API for create this challenge. After that we
      *                     can refresh pending card to get new data.
-     * @param -view - this is simple view from class where I initialize this challenge controller.
-     *             We need this to see actual message without duplication of different type of
-     *             notifications. We check response and if we got a failure then I show message for
-     *             user about "Service not available". In case when response is success we just
-     *             show message about "Challenge created!".
      */
     public void joinToChallenge(String inProgressId) {
         SingleInProgress singleInProgress = retrofit.create(SingleInProgress.class);
@@ -453,11 +412,6 @@ public class ChallengeController {
      * @param inProgressId - this is unique challenge ID. we just put in unique inProgressID after
      *                     this we can make call to API for create this challenge. After that
      *                     we can refresh pending card to get new data.
-     * @param -view - this is simple view from class where I initialize this challenge controller.
-     *             We need this to see actual message without duplication of different type of
-     *             notifications. We check response and if we got a failure then I show message for
-     *             user about "Service not available". In case when response is success we just
-     *             show message about "Challenge created!".
      * @throws IOException - we can expect this exception because user has opportunity to reject
      *                     challenge which has already rejected. In this case we can handle error
      */
@@ -493,7 +447,6 @@ public class ChallengeController {
      * @param alarmID - alarmManager ID. This is only for wake-up challenge. We need this for re-enable
      *            alarmManager every check-in and if we had finished our challenge then disable.
      * @param i - intent. We need this to redirect user to needed activity.
-     * @param -det - details. this is Array with times when we need fire the alarm manager.
      * @throws IOException - we can expect this exception because user has opportunity to check
      *                     challenge which has already checked or lost. In this case we can handle it
      */
