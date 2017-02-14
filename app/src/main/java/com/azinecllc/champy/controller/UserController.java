@@ -83,10 +83,12 @@ public class UserController {
             @Override
             public void onResponse(Response<Delete> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
+                    ////////// not sure what we need this ////////
                     File profile = new File(path, "profile.jpg");
                     profile.delete();
                     File blurred = new File(path, "blurred.png");
                     blurred.delete();
+                    // ///////////////////////////////////////////
 
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
                     db.delete("pending", null, null);
@@ -97,7 +99,6 @@ public class UserController {
                     db.delete("myChallenges", null, null);
                 }
             }
-
             @Override
             public void onFailure(Throwable t) {
             }

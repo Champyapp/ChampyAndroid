@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -89,11 +90,12 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     private Typeface typeface;
     private OfflineMode offline;
     private SessionManager session;
-    private String userName, userID, userToken, userPicture;
+    private ImageView userImageProfile;
+    private UserController userController;
     private DailyRemindController reminder;
     private TextView tvChangeName, tvUserName;
-    private UserController userController;
     private HashMap<String, String> map = new HashMap<>();
+    private String userName, userID, userToken, userPicture;
     private HashMap<String, String> userDetails = new HashMap<>();
     private Retrofit retrofit;
     public Uri picUri;
@@ -123,7 +125,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View viewSettings = inflater.inflate(R.layout.content_settings, container, false);
 
-        ImageView userImageProfile = (ImageView) viewSettings.findViewById(R.id.img_profile);
+        userImageProfile = (ImageView) viewSettings.findViewById(R.id.img_profile);
 
         Glide.with(this)
                 .load(userPicture)
@@ -266,14 +268,13 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 savePhoto(thePic);
                 userController.uploadPhotoForAPI(saveToStorageFromCamera(thePic));
                 getActivity().recreate();
-                //startActivity(new Intent(getContext(), MainActivity.class));
             } else if (requestCode == Crop.REQUEST_PICK) {
-                Uri destination = Uri.fromFile(new File(getContext().getCacheDir(), "cropped"));
                 // this thing starts activity for result 'REQUEST_CROP'
+                Uri destination = Uri.fromFile(new File(getContext().getCacheDir(), "cropped"));
                 Crop.of(data.getData(), destination).asSquare().withMaxSize(300, 300).start(context, this);
             } else if (requestCode == Crop.REQUEST_CROP) {
                 try {
-                    handleCrop(resultCode, data);
+                    handleCrop(resultCode, data); //this thing starts activity for result 'CROP_PIC'
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -281,7 +282,8 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 Bundle extras = data.getExtras();
                 Bitmap thePic = extras.getParcelable("data"); // get the cropped bitmap
                 savePhoto(thePic);
-                startActivity(new Intent(getActivity(), MainActivity.class));
+                getActivity().recreate();
+                //startActivity(new Intent(getActivity(), MainActivity.class));
             } else if (requestCode == SELECT_FILE) {
                 Uri selectedImageUri = data.getData();
                 performCrop(selectedImageUri);
@@ -298,7 +300,10 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         Runtime.getRuntime().gc();
     }
 
-    // Initialization switches
+    /**
+     * Simple initialization switches. Here I had set for them onClickListeners, load current state
+     * from sessionManager and inputted call for api after each changes.
+     */
     private void initSwitches(View view) {
         String pushNotify = userDetails.get("pushN");
         String acceptedYour = userDetails.get("acceptedYour");
@@ -376,6 +381,13 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     }
 
     // @Костыль
+
+    /**
+     * Method to avoid bug on APi. Before deleting an account we need to surrender all challenge.
+     * In case if we doesn't do it another opponent always will have one challenge in progress.
+     *
+     * @Костыль
+     */
     private void surrenderAllChallengesDialog() {
         DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
             boolean canDeleteAcc = false;
@@ -422,7 +434,11 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    // @Костыль
+    /**
+     * Method to delete user account. We make call to api for that and locally clear out database,
+     * delete user profile and clear other data.
+     * @Костыль
+     */
     private void deleteAccountDialog() {
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
@@ -452,7 +468,12 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 .show();
     }
 
-    // Check Permission
+
+    /**
+     * Method which returns boolean value of granted permission. To work with storage we need to
+     * have this permission and we had to check it in runtime
+     * @return value of granted permission
+     */
     private boolean checkWriteExternalPermission() {
         int res = getActivity().checkCallingOrSelfPermission(READ_EXTERNAL_STORAGE);
         return (res == PackageManager.PERMISSION_GRANTED);
@@ -460,7 +481,9 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
 
     /**
-     * Methods for photo.
+     * Methods to get absolute path to picture from internal storage.
+     * @param uri - this is data from intent: data.getData();
+     * @return absolute path to picture from storage
      */
     @Nullable
     private String getPath(Uri uri) throws URISyntaxException {
@@ -488,6 +511,12 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     }
 
 
+    /**
+     * Method witch handling crop the picture. Here we get photo path, cropped it and upload on API
+     * @param resultCode - code from intent 'start activity for result' must be 'OK'
+     * @param result - code from intent which shows for us specify request, must be 'REQUEST_CROP'
+     * @throws IOException if something went wrong then we  can expect empty fields.
+     */
     private void handleCrop(int resultCode, Intent result) throws IOException {
         if (resultCode == RESULT_OK) {
             Uri uri = Crop.getOutput(result);
@@ -502,21 +531,24 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), uri);
             savePhoto(bitmap); // my method which saves picture to storage
             getActivity().recreate();
-            //startActivity(new Intent(getContext(), 1.class));
         } else if (resultCode == Crop.RESULT_ERROR) {
             Toast.makeText(context, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
 
+    /**
+     * Method to save photo in cache-folder in an Internal storage on the device. We use this method
+     * only after 'take a picture from camera' because we need to create this picture into storage.
+     * @param finalBitmap - this is parcelable data from intent (extras.getParcelable("data"))
+     * @return the actually path to picture with witch we can upload this photo to API.
+     */
     private String saveToStorageFromCamera(Bitmap finalBitmap) {
         String root = Environment.getExternalStorageDirectory().toString();
         File myDir = new File(root + "/android/data/com.azinecllc.champy/images");
         myDir.mkdirs();
-        Random generator = new Random();
-        int n = 100000000;
-        n = generator.nextInt(n);
-        String fileName = "Image-" + n + ".jpg";
+        //Random generator = new Random(); //int n = 100000000; //n = generator.nextInt(n);
+        String fileName = "ChampyAwesomePicture.jpg";
         File file = new File(myDir, fileName);
         if (file.exists()) file.delete();
         try {
@@ -532,26 +564,44 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     }
 
 
+    /**
+     * Method to save photo in storage from camera. Actually this method creates folder and file
+     * like as Object on device. We uses this method after 'take picture' and 'choose from storage'
+     * @param photo - bitmap which we get from extras.getParcelable
+     */
     public void savePhoto(Bitmap photo) {
-        File profileImage = new File(path, "profile.jpg");
-        File profileBlurred = new File(path, "blurred.png");
-        Uri uri = Uri.fromFile(profileImage);
+        String root = Environment.getExternalStorageDirectory().toString(); // path
+        File myDir = new File(root + "/android/data/com.sashakhyzhun.gerzhiktattooink"); // folder
+        myDir.mkdirs(); // create folder
 
-        Bitmap blurred = Blur.blurRenderScript(getActivity(), photo, 15);
+        File file = new File(myDir, "profile.jpg"); // file
+        if (!file.exists()) {
+            try { // if not exist
+                file.createNewFile(); // create
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            file.delete(); // if exist - delete
+            try {
+                file.createNewFile(); // and again create, ibo nexyu
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
+        Uri uri = Uri.fromFile(file);
         session.setUserPicture(uri.toString());
 
         FileOutputStream out = null;
         try {
-            out = new FileOutputStream(profileBlurred);
-            blurred.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
-            // PNG is a loss less format, the compression factor (100) is ignored
+            out = new FileOutputStream(file); // create folder in system like a real FILE, not virtual.
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             try {
                 if (out != null) {
-                    out.close();
+                    out.close(); // closing stream
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -559,49 +609,45 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         }
         out = null;
         try {
-            out = new FileOutputStream(profileImage);
+            out = new FileOutputStream(file); // create picture in system like a real FILE, not virtual.
             photo.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
-            // PNG is a loss less format, the compression factor (100) is ignored
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             try {
                 if (out != null) {
-                    out.close();
+                    out.close(); // closing stream
                 }
             } catch (IOException e) {
-                e.printStackTrace();
-            }
+                e.printStackTrace(); }
         }
+
     }
 
-
+    /**
+     * Method to start crop the photo. This method starts activity for result 'CROP_PIC'
+     * @param picUri - this is data from intent: data.getData();
+     */
     private void performCrop(Uri picUri) {
         // take care of exceptions
         try {
-            // call the standard crop action intent (the user device may not
-            // support it)
+            // call the standard crop action intent (the user device may not support it)
             Intent cropIntent = new Intent("com.android.camera.action.CROP");
-            // indicate image type and Uri
-            cropIntent.setDataAndType(picUri, "image/*");
-            // set crop properties
-            cropIntent.putExtra("crop", "true");
-            // indicate aspect of desired crop
-            cropIntent.putExtra("aspectX", 4);
-            cropIntent.putExtra("aspectY", 2);
-            // indicate output X and Y
+            cropIntent.setDataAndType(picUri, "image/*"); // indicate image type and Uri
+            cropIntent.putExtra("crop", "true");          // set crop properties
+            cropIntent.putExtra("aspectX", 4);            // indicate aspect of desired crop
+            cropIntent.putExtra("aspectY", 2);            // indicate output X and Y
             cropIntent.putExtra("outputX", 300);
             cropIntent.putExtra("outputY", 500);
-            // retrieve data on return
-            cropIntent.putExtra("return-data", true);
-            // start the activity - we handle returning in onActivityResult
+            cropIntent.putExtra("return-data", true);     // retrieve data on return
             startActivityForResult(cropIntent, CROP_PIC);
         }
         // respond to users whose devices do not support the crop action
         catch (ActivityNotFoundException e) {
-            Toast toast = Toast.makeText(getContext(), "This device doesn't support the crop action!", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(getContext(), "This device doesn't support the crop action!", Toast.LENGTH_LONG);
             toast.show();
         }
     }
+
 
 }
