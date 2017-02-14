@@ -15,7 +15,9 @@ import com.azinecllc.champy.utils.SessionManager;
 
 public class PendingDuelActivity extends AppCompatActivity {
 
-    public View spinner;
+    private int size;
+    private View spinner;
+    private TextView tvNoPendingDuels;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,12 @@ public class PendingDuelActivity extends AppCompatActivity {
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         TextView tvPendingDuels = (TextView) findViewById(R.id.tvChallengeToMySelf);
         tvPendingDuels.setTypeface(typeface);
+
+        if (size == 0) {
+            tvNoPendingDuels = (TextView) findViewById(R.id.textViewNoPendingDuels);
+            tvNoPendingDuels.setTypeface(typeface);
+            tvNoPendingDuels.setVisibility(View.VISIBLE);
+        }
 
         CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();
         checker.getPendingCount(getApplicationContext());
@@ -61,7 +69,7 @@ public class PendingDuelActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     SessionManager sessionManager = SessionManager.getInstance(getApplicationContext());
-                    int size = Integer.parseInt(sessionManager.get_duel_pending());
+                    size = Integer.parseInt(sessionManager.get_duel_pending());
                     PendingDuelsAdapter pagerAdapter = new PendingDuelsAdapter(getSupportFragmentManager());
                     ViewPager viewPager = (ViewPager) findViewById(R.id.pager_pending_duel);
                     pagerAdapter.setCount(size);

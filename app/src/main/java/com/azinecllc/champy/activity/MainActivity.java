@@ -139,43 +139,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    /***
-     * Returns respected fragment that user
-     * selected from navigation menu
-     */
-    @SuppressWarnings("ConstantConditions")
-    private void loadHomeFragment() {
-        // if user select the current navigation menu again, just close the navigation drawer
-        if (getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
-            drawer.closeDrawers();
-            return;
-        }
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                // Sometimes, when fragment has huge data, screen seems hanging when switching between
-                // navigation menus So using runnable, the fragment is loaded with cross fade effect
-                // This effect can be seen in GMail app
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                // update the main content by replacing fragments
-                Fragment fragment = getHomeFragment();
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-                fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
-                fragmentTransaction.commitAllowingStateLoss();
-            }
-        };
-
-        activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
-        navigationView.getMenu().getItem(navItemIndex);   // selecting appropriate nav menu item
-        getSupportActionBar().setTitle(activityTitles[navItemIndex]); // set toolbar title
-
-        mHandler = new Handler();
-        mHandler.post(runnable); // If 'runnable' is not null, then add to the message queue
-        drawer.closeDrawers();   // Closing drawer on item click
-        invalidateOptionsMenu(); // refresh toolbar menu
-    }
-
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -201,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 new Handler().postDelayed(() -> startActivity(new Intent(this, HistoryActivity.class)), 250);
                 break;
             case R.id.nav_pending_duels:
-                startActivity(new Intent(this, PendingDuelActivity.class));
+                new Handler().postDelayed(() -> startActivity(new Intent(this, PendingDuelActivity.class)), 250);
                 break;
             case R.id.nav_settings:
                 navItemIndex = 2;
@@ -245,6 +208,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    /**
+     * Method provider which returns respected fragment that user selected from navigation menu.
+     * I transmit needed fragment to method 'loadHomeFragment' which will show it.
+     */
     private Fragment getHomeFragment() {
         switch (navItemIndex) {
             case 0:
@@ -262,5 +229,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * Method which shows selected fragment from drawer and loads it in UI Thread, because we need to
+     * avoid large object and freezes. In this method I also was set current title for toolbar.
+     */
+    @SuppressWarnings("ConstantConditions")
+    private void loadHomeFragment() {
+        // if user select the current navigation menu again, just close the navigation drawer
+        if (getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
+            drawer.closeDrawers();
+            return;
+        }
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                // Sometimes, when fragment has huge data, screen seems hanging when switching between
+                // navigation menus So using runnable, the fragment is loaded with cross fade effect
+                // This effect can be seen in GMail app
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                // update the main content by replacing fragments
+                Fragment fragment = getHomeFragment();
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
+                fragmentTransaction.commitAllowingStateLoss();
+            }
+        };
+
+        activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
+        navigationView.getMenu().getItem(navItemIndex);   // selecting appropriate nav menu item
+        getSupportActionBar().setTitle(activityTitles[navItemIndex]); // set toolbar title
+
+        mHandler = new Handler();
+        mHandler.post(runnable); // If 'runnable' is not null, then add to the message queue
+        drawer.closeDrawers();   // Closing drawer on item click
+        invalidateOptionsMenu(); // refresh toolbar menu
+    }
 
 }
