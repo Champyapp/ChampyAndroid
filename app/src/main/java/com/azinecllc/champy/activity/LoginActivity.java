@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.android.debug.hv.ViewServer;
 import com.azinecllc.champy.R;
+import com.azinecllc.champy.controller.DailyRemindController;
 import com.azinecllc.champy.controller.UserController;
 import com.azinecllc.champy.helper.AppSync;
 import com.azinecllc.champy.interfaces.NewUser;
@@ -271,7 +272,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     String pushN = user.getProfileOptions().getPushNotifications().toString();
                     String newChallReq = user.getProfileOptions().getNewChallengeRequests().toString();
                     String acceptedYour = user.getProfileOptions().getAcceptedYourChallenge().toString();
-                    String challegeEnd = user.getProfileOptions().getChallengeEnd().toString();
+                    String challengeEnd = user.getProfileOptions().getChallengeEnd().toString();
 
                     SessionManager sessionManager = SessionManager.getInstance(getApplicationContext());
                     sessionManager.setRefreshPending("true");
@@ -280,7 +281,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     sessionManager.createUserLoginSession(
                             user_name, email, userFBID, userPicture,
                             jwtString, id, pushN, newChallReq, acceptedYour,
-                            challegeEnd, "true", "true", gcm, token_android);
+                            challengeEnd, "true", "true", gcm, token_android);
 
                     sessionManager.setChampyOptions(
                             user.getAllChallengesCount().toString(),
@@ -292,26 +293,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     userController.updatePushIdentifier();
                     userController.uploadPhotoForAPI(fb_photo);
 
-//                    DailyRemindController dailyRemind = new DailyRemindController(getApplicationContext());
-//                    dailyRemind.enableDailyNotificationReminder();
-
-//                    String api_photo_path = null;
-//
-//                    if (user.getPhoto() != null) {
-//                        File profile = new File(path, "profile.jpg");
-//                        if (!profile.exists()) {
-//                            com.azinecllc.champy.model.user.Photo photo = user.getPhoto();
-//                            api_photo_path = API_URL + photo.getLarge();
-//                        }
-//                    } else {
-//                            userController.uploadPhotoForAPI(fb_photo);
-//                    }
-//
-//                    if (api_photo_path == null) {
-//                        sessionManager.setUserPicture(userPicture);
-//                    } else {
-//                        sessionManager.setUserPicture(api_photo_path);
-//                    }
+                    DailyRemindController drc = new DailyRemindController(getApplicationContext());
+                    drc.enableDailyNotificationReminder();
 
                     Intent goToRoleActivity = new Intent(LoginActivity.this, RoleControllerActivity.class);
                     startActivity(goToRoleActivity);

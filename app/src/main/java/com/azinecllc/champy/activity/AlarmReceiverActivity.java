@@ -41,7 +41,6 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         try {
             FacebookSdk.sdkInitialize(getApplicationContext());
         } catch (RuntimeException r) {
@@ -49,9 +48,9 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
             //eat it, bitch;
         }
 
-        alarmID = getIntent().getIntExtra("finalAlarmID", 0);
+        //alarmID = getIntent().getIntExtra("finalAlarmID", 0);
         //nextAlarm = getIntent().getLongExtra("finalNextAlarm", 0);
-        progressID = getIntent().getStringExtra("finalInProgressID");
+        //progressID = getIntent().getStringExtra("finalInProgressID");
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -147,7 +146,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
                 mMediaPlayer.start();
             }
         } catch (IOException e) {
-            System.out.println("OOPS");
+            //System.out.println("OOPS");
         }
     }
 

@@ -39,12 +39,8 @@ public class CustomNotifyReceiver extends BroadcastReceiver {
         SessionManager sessionManager = SessionManager.getInstance(context);
         if (sessionManager.isUserLoggedIn()) {
             sendNotification(context);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                DailyRemindController drc = new DailyRemindController(context);
-                new Handler().postDelayed(drc::enableDailyNotificationReminder, 1000);
-            }
-
+            DailyRemindController drc = new DailyRemindController(context);
+            new Handler().postDelayed(drc::enableDailyNotificationReminder, 1000);
         }
 
     }
@@ -52,7 +48,7 @@ public class CustomNotifyReceiver extends BroadcastReceiver {
 
     private void sendNotification(Context context) {
         Date date = new Date(System.currentTimeMillis());
-        System.out.println("Received notification at: " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
+        System.out.println("Notification: Received at: " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
 
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

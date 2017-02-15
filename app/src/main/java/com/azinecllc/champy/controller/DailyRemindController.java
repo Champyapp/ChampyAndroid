@@ -30,32 +30,29 @@ public class DailyRemindController {
 
         Date date = new Date(myCalender.getTimeInMillis());
         Date now = new Date(System.currentTimeMillis());
-        System.out.println("Current time on device  : " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds());
-        System.out.println("Enable Daily Reminder on: " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
+        System.out.println("Notification | Current time on device  : " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds());
+        System.out.println("Notification | Enable Daily Reminder on: " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
         Intent notifyIntent = new Intent(context, CustomNotifyReceiver.class);
         PendingIntent pi = PendingIntent.getBroadcast(context, 9999, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // this for android 4.4 and higher
             manager.setExact(AlarmManager.RTC_WAKEUP, myCalender.getTimeInMillis(), pi);
         } else {
+            // This for old android devices (13%). Almost nobody uses it.
+            // need to check, but really no devices with old versions
+
+            // set once
             manager.set(AlarmManager.RTC_WAKEUP, myCalender.getTimeInMillis(), pi);
-            manager.setRepeating(AlarmManager.RTC_WAKEUP, myCalender.getTimeInMillis(), 60 * 1000, pi);
-            manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, myCalender.getTimeInMillis(), 60 * 1000, pi);
+            // set repeat
+            manager.setRepeating(AlarmManager.RTC_WAKEUP, myCalender.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pi);
+            manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, myCalender.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pi);
         }
     }
 
-    /*
-    Value will be forced up to 60000 as of Android 5.1; don't rely on this to be exact less.
-    Frequent alarms are bad for battery life.
-    As of API 22, the AlarmManager will override near-future and high-frequency alarm requests,
-    delaying the alarm at least 5 seconds into the future and ensuring that the repeat interval
-    is at least 60 seconds.  If you really need to do work sooner than 5 seconds, post a delayed
-    message or runnable to a Handler.
-    */
-
     public void disableDailyNotificationReminder() {
-        System.out.println("Disable Daily Reminder");
+        System.out.println("Notification | Disable Daily Reminder");
         Intent alarmIntent = new Intent(context, CustomNotifyReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 9999, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

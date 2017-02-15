@@ -105,6 +105,7 @@ public class UserController {
         });
     }
 
+
     public void uploadPhotoForAPI(String path) {
         File userPhotoFile = new File(path);
         RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), userPhotoFile);
@@ -122,6 +123,7 @@ public class UserController {
         });
 
     }
+
 
     public void updatePushIdentifier() {
         Update_user update_user = retrofit.create(Update_user.class);

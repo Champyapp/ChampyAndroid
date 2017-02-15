@@ -280,7 +280,6 @@ public class ChallengeController {
                 - (c.get(Calendar.MINUTE) * 60)
                 - (c.get(Calendar.SECOND));
 
-
         Date date = new Date();
         date.setTime(((intMin * 60) + (intHour * 60 * 60) + currentMidnight) * 1000);
         c.setTime(date); // here calender = time from picker
@@ -315,7 +314,7 @@ public class ChallengeController {
             public void onResponse(Response<com.azinecllc.champy.model.create_challenge.CreateChallenge> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String challengeId = response.body().getData().get_id();
-                    sendSingleInProgressForWakeUp(challengeId, alarmID, intHour, intMin, c.getTimeInMillis());
+                    sendSingleInProgressForWakeUp(challengeId, intHour, intMin, alarmID);
                 } else {
                     Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
@@ -334,32 +333,34 @@ public class ChallengeController {
      * sending extras for CustomAlarmReceiver. Next we generate cards for MainActivity.
      * @param pID - our unique 'ID' for create new challenge, we get this value from
      *                     'createNewWakeUpChallenge' and transit here.
-     * @param aID - values from time picker: minutes and hour. To start we get this, convert to
+     * @param -aID - values from time picker: minutes and hour. To start we get this, convert to
      *                normal view (means from 1:8 to 01:08) and put inside alarmManager like ID.
-     * @param when - this is value from last method-provider, this value is equals to time when
+     * @param -when - this is value from last method-provider, this value is equals to time when
      *             we need fire our alarm manager.
      */
-    private void sendSingleInProgressForWakeUp(String pID, int aID, int hour, int min, long when) {
+    private void sendSingleInProgressForWakeUp(String pID, int hour, int min, int requestCode) {
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
         Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = singleinprogress.startSingleInProgress(pID, token);
         call.enqueue(new Callback<com.azinecllc.champy.model.single_in_progress.SingleInProgress>() {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    com.azinecllc.champy.model.single_in_progress.SingleInProgress data = response.body();
-                    final String inProgressId = data.getData().get_id();
+//                    com.azinecllc.champy.model.single_in_progress.SingleInProgress data = response.body();
+                    //String inProgressId = data.getData().get_id();
+                    //String id = response.body().getData().get_id();
 
-                    Intent myIntent = new Intent(activity, CustomAlarmReceiver.class);
-                    myIntent.putExtra("inProgressID", inProgressId);
-                    myIntent.putExtra("alarmID", aID);
-                    myIntent.putExtra("alarmHour", hour);
-                    myIntent.putExtra("alarmMin", min);
+                    //Intent myIntent = new Intent(activity, CustomAlarmReceiver.class);
+                    //myIntent.putExtra("inProgressID", inProgressId);
+                    //myIntent.putExtra("alarmID", aID);
+                    //myIntent.putExtra("alarmHour", hour);
+                    //myIntent.putExtra("alarmMin", min);
 
 
-                    PendingIntent pi = PendingIntent.getBroadcast(context, aID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                    AlarmManager aManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                    aManager.setRepeating(AlarmManager.RTC_WAKEUP, when, AlarmManager.INTERVAL_DAY, pi);
-
+                    //PendingIntent pi = PendingIntent.getBroadcast(context, aID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    //AlarmManager aManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                    //aManager.setRepeating(AlarmManager.RTC_WAKEUP, when, AlarmManager.INTERVAL_DAY, pi);
+                    DailyWakeUpController dwc = new DailyWakeUpController(context);
+                    dwc.enableDailyWakeUp(hour, min, requestCode);
                     generateCardsForMainActivity(new Intent(activity, MainActivity.class));
                 } else {
                     Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
@@ -493,13 +494,13 @@ public class ChallengeController {
     /**
      *
      * @param id - this is unique challenge ID. we just put in unique inProgressID after
-     *                     this we can make call to API for create this challenge. After that
-     *                     we can refresh pending card to get new data.
+     *                       this we can make call to API for create this challenge. After that
+     *                       we can refresh pending card to get new data.
      * @param alarmID - alarmManager ID. This is only for wake-up challenge. We need this for
-     *                disable alarmManager if we had finished our challenge or just gave up.
+     *                       disable alarmManager if we had finished our challenge or just gave up.
      * @param intent - intent. We need this to redirect user to needed activity.
      * @throws IOException - we can expect this exception because user has opportunity to give up
-     *                     challenge which has already lost. In this case we can handle error
+     *                       challenge which has already lost. In this case we can handle error
      */
     public void give_up(String id, int alarmID, Intent intent) throws IOException {
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
