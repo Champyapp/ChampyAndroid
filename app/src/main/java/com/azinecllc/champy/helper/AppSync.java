@@ -7,7 +7,6 @@ import android.widget.Toast;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.MainActivity;
 import com.azinecllc.champy.activity.RoleControllerActivity;
-import com.azinecllc.champy.controller.DailyRemindController;
 import com.azinecllc.champy.controller.UserController;
 import com.azinecllc.champy.interfaces.NewUser;
 import com.azinecllc.champy.model.user.Data;
@@ -88,8 +87,8 @@ public class AppSync {
                     getFbFriends.getUserFacebookFriends(gcm);
                     getFbFriends.getUserPending(userId, userToken);
 
-                    DailyRemindController dailyRemind = new DailyRemindController(context);
-                    dailyRemind.enableDailyNotificationReminder();
+//                    DailyRemindController dailyRemind = new DailyRemindController(context);
+//                    dailyRemind.enableDailyNotificationReminder();
 
 
                     String api_path = null;

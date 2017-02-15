@@ -45,7 +45,6 @@ import com.azinecllc.champy.interfaces.Update_user;
 import com.azinecllc.champy.model.user.Delete;
 import com.azinecllc.champy.model.user.Profile_data;
 import com.azinecllc.champy.model.user.User;
-import com.azinecllc.champy.utils.Blur;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
 import com.bumptech.glide.Glide;
@@ -134,6 +133,13 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 .skipMemoryCache(true)
                 .override(130, 130)
                 .into(userImageProfile);
+
+        userImageProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reminder.enableDailyNotificationReminder();
+            }
+        });
 
         initSwitches(viewSettings);
 
@@ -246,6 +252,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.textViewLogout:
+                reminder.disableDailyNotificationReminder();
                 session.logout(getActivity());
                 break;
             case R.id.about:
@@ -447,6 +454,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                         CURRENT_TAG = TAG_CHALLENGES;
                         navItemIndex = 0;
                         session.logout(getActivity());
+                        reminder.disableDailyNotificationReminder();
                         LoginManager.getInstance().logOut();
                         startActivity(new Intent(getContext(), RoleControllerActivity.class));
                         break;

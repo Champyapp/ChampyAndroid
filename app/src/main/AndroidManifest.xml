@@ -7,6 +7,7 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /> <!--care with it-->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
@@ -110,12 +111,17 @@
 
         <!-- RECEIVERS -->
         <receiver android:name="com.azinecllc.champy.receiver.CustomAlarmReceiver">
-            <!--added android:enabled="false" for reboot situation -->
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.azinecllc.champy.receiver.CustomNotifyReceiver" />
+
+        <receiver android:name="com.azinecllc.champy.receiver.CustomNotifyReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
         <receiver android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND" >
@@ -126,9 +132,7 @@
         </receiver>
 
         <!-- SERVICES -->
-        <service
-            android:name="com.azinecllc.champy.service.MyAlarmService"
-            android:enabled="true" />
+
         <service android:name="com.azinecllc.champy.service.MyGcmListenerService" android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />

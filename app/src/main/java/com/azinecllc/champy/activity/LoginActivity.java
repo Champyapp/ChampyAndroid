@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import com.android.debug.hv.ViewServer;
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.controller.DailyRemindController;
 import com.azinecllc.champy.controller.UserController;
 import com.azinecllc.champy.helper.AppSync;
 import com.azinecllc.champy.interfaces.NewUser;
@@ -293,8 +292,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     userController.updatePushIdentifier();
                     userController.uploadPhotoForAPI(fb_photo);
 
-                    DailyRemindController dailyRemind = new DailyRemindController(getApplicationContext());
-                    dailyRemind.enableDailyNotificationReminder();
+//                    DailyRemindController dailyRemind = new DailyRemindController(getApplicationContext());
+//                    dailyRemind.enableDailyNotificationReminder();
 
 //                    String api_photo_path = null;
 //

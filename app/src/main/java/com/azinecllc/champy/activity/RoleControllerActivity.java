@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.controller.ChallengeController;
-import com.azinecllc.champy.controller.DailyRemindController;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
 
@@ -75,8 +74,8 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
                 ChallengeController cc = new ChallengeController(getApplicationContext(), this, token, uID);
                 cc.refreshCardsForPendingDuel(goTo);
 
-                DailyRemindController reminder = new DailyRemindController(getApplicationContext());
-                reminder.enableDailyNotificationReminder();
+//                DailyRemindController reminder = new DailyRemindController(getApplicationContext());
+//                reminder.enableDailyNotificationReminder();
 
 
             } else {

@@ -240,6 +240,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawer.closeDrawers();
             return;
         }
+
         Runnable runnable = new Runnable() {
             @Override
             public void run() {

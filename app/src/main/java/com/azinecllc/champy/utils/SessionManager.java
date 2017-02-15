@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.azinecllc.champy.activity.RoleControllerActivity;
-import com.azinecllc.champy.controller.DailyRemindController;
 import com.facebook.login.LoginManager;
 
 import java.io.File;
@@ -134,8 +133,8 @@ public class SessionManager {
         editor.commit();
 
         // Disable daily notifications
-        DailyRemindController dailyRemind = new DailyRemindController(activity);
-        dailyRemind.disableDailyNotificationReminder();
+        //DailyRemindController dailyRemind = new DailyRemindController(activity);
+        //dailyRemind.disableDailyNotificationReminder();
 
         // go to login activity
         File blurred = new File(path, "blurred.png");
