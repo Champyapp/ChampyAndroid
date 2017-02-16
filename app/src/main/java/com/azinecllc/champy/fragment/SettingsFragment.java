@@ -1,6 +1,5 @@
 package com.azinecllc.champy.fragment;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -10,17 +9,14 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,16 +31,11 @@ import android.widget.Toast;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.AboutActivity;
 import com.azinecllc.champy.activity.ContactUsActivity;
-import com.azinecllc.champy.activity.MainActivity;
 import com.azinecllc.champy.activity.RoleControllerActivity;
 import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.controller.DailyRemindController;
 import com.azinecllc.champy.controller.UserController;
 import com.azinecllc.champy.data.DBHelper;
-import com.azinecllc.champy.interfaces.Update_user;
-import com.azinecllc.champy.model.user.Delete;
-import com.azinecllc.champy.model.user.Profile_data;
-import com.azinecllc.champy.model.user.User;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
 import com.bumptech.glide.Glide;
@@ -57,13 +48,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
-import java.util.Random;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
-import retrofit.Call;
-import retrofit.Callback;
 import retrofit.GsonConverterFactory;
-import retrofit.Response;
 import retrofit.Retrofit;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
@@ -75,7 +62,6 @@ import static com.azinecllc.champy.utils.Constants.CAMERA_REQUEST;
 import static com.azinecllc.champy.utils.Constants.CROP_PIC;
 import static com.azinecllc.champy.utils.Constants.SELECT_FILE;
 import static com.azinecllc.champy.utils.Constants.TAG_CHALLENGES;
-import static com.azinecllc.champy.utils.Constants.TAG_SETTINGS;
 import static com.azinecllc.champy.utils.Constants.path;
 
 /**
@@ -122,7 +108,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View viewSettings = inflater.inflate(R.layout.content_settings, container, false);
+        View viewSettings = inflater.inflate(R.layout.fragment_settings, container, false);
 
         userImageProfile = (ImageView) viewSettings.findViewById(R.id.img_profile);
 

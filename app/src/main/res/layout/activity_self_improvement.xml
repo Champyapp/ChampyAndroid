@@ -8,6 +8,6 @@
     android:fitsSystemWindows="true"
     tools:context=".activity.SelfImprovementActivity">
 
-    <include layout="@layout/content_self_improvement" />
+    <include layout="@layout/fragment_self_improvement" />
 
 </android.support.design.widget.CoordinatorLayout>

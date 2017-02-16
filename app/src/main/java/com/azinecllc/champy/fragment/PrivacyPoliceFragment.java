@@ -28,7 +28,7 @@ public class PrivacyPoliceFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View viewPrivacy = inflater.inflate(R.layout.content_privacy, container, false);
+        View viewPrivacy = inflater.inflate(R.layout.fragment_privacy, container, false);
 
         tvPrivacyPolice = (TextView) viewPrivacy.findViewById(R.id.textViewPrivacyPolice);
         tvPrivacyPolice.setVisibility(View.INVISIBLE);

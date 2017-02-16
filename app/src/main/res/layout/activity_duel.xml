@@ -8,7 +8,7 @@
     tools:context=".activity.DuelActivity">
 
 
-    <include layout="@layout/content_duel" />
+    <include layout="@layout/fragment_duel" />
 
 
 </android.support.design.widget.CoordinatorLayout>

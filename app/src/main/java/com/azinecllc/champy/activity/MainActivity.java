@@ -245,21 +245,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_settings) {
-            navItemIndex = 0;
-            CURRENT_TAG = TAG_CHALLENGES;
-            startActivity(new Intent(this, RoleControllerActivity.class));
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.sync_app, menu);
-        return true;
-    }
 
 
     private Emitter.Listener onConnect = new Emitter.Listener() {

@@ -28,7 +28,7 @@ public class TermsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View viewTerms = inflater.inflate(R.layout.content_terms, container, false);
+        View viewTerms = inflater.inflate(R.layout.fragment_terms, container, false);
 
         tvTerms = (TextView) viewTerms.findViewById(R.id.textView_terms);
         tvTerms.setVisibility(View.INVISIBLE);

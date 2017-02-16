@@ -9,7 +9,7 @@
     tools:context=".activity.WakeUpActivity">
 
 
-    <include layout="@layout/content_wake_up" />
+    <include layout="@layout/fragment_wake_up" />
 
 
 </android.support.design.widget.CoordinatorLayout>
