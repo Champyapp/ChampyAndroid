@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.SelfImprovementActivity"
-    tools:showIn="@layout/app_bar_wake_up"
     android:background="@drawable/gradient_self"
     android:id="@+id/wake_up">
 

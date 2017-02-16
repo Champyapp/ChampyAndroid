@@ -30,7 +30,8 @@
         android:textStyle="bold"
         android:textColor="#ffffff" />
 
-    <include layout="@layout/progress_bar_fragment"
+    <include
+        layout="@layout/item_progress_bar"
         android:visibility="invisible" />
 
     <ImageButton

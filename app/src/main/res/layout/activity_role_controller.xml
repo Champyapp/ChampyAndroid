@@ -53,7 +53,8 @@
         android:layout_marginTop="10dp" />
 
 
-    <include layout="@layout/progress_bar_fragment"
+    <include
+        layout="@layout/item_progress_bar"
         android:visibility="visible"/>
 
 </RelativeLayout>

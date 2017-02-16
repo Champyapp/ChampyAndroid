@@ -94,7 +94,7 @@ public class MyOtherFragment extends Fragment {
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_friends, container, false);
+        final View view = inflater.inflate(R.layout.item_recycler, container, false);
 
         sessionManager = SessionManager.getInstance(getContext());
         friends = new ArrayList<>();

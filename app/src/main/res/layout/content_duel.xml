@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".activity.DuelActivity"
-    tools:showIn="@layout/app_bar_duel"
     android:background="@drawable/gradient_self"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -74,7 +73,7 @@
         android:textColor="#ffffff"
         android:layout_marginTop="8dp" />
 
-    <include layout="@layout/progress_bar_fragment" />
+    <include layout="@layout/item_progress_bar" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager_duel"

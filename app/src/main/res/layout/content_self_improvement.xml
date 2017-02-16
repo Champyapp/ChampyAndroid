@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.SelfImprovementActivity"
-    tools:showIn="@layout/app_bar_self_improvement"
     android:background="@drawable/gradient_self"
     android:id="@+id/selfimprovement">
 
@@ -46,7 +45,7 @@
         android:layout_marginTop="32dp" />
 
 
-    <include layout="@layout/progress_bar_fragment" />
+    <include layout="@layout/item_progress_bar" />
 
 
     <android.support.v4.view.ViewPager

@@ -27,7 +27,7 @@
         android:layout_height="match_parent"
         android:id="@+id/webView" />
 
-    <include layout="@layout/progress_bar_fragment" />
+    <include layout="@layout/item_progress_bar" />
 
 
 </RelativeLayout>

@@ -26,7 +26,7 @@ import com.facebook.FacebookSdk;
 import java.io.IOException;
 
 /**
- * This is Wake-Up activity when our item_alarm manager starts ring
+ * This is Wake-Up activity when our activity_alarm_receiver manager starts ring
  */
 public class AlarmReceiverActivity extends Activity implements View.OnClickListener {
 
@@ -52,7 +52,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.item_alarm);
+        setContentView(R.layout.activity_alarm_receiver);
         playSound(this, getAlarmUri());
 
         TextView tvWakeUpChallenge = (TextView) findViewById(R.id.tvWakeUpChallenge);

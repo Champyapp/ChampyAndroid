@@ -70,7 +70,7 @@ public class MyPendingFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-        final View view = inflater.inflate(R.layout.fragment_friends, container, false);
+        final View view = inflater.inflate(R.layout.item_recycler, container, false);
         final List<Pending_friend> pendingFriends = new ArrayList<>();
 
         Cursor c = db.query("pending", null, null, null, null, null, null);

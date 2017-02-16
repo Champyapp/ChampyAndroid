@@ -34,7 +34,7 @@ public class HistoryWinsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_history, container, false);
+        final View view = inflater.inflate(R.layout.item_recycler, container, false);
 
         loadHistoryWins(view);
 
