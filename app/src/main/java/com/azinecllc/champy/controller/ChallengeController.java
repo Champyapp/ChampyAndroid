@@ -333,10 +333,13 @@ public class ChallengeController {
      * sending extras for CustomAlarmReceiver. Next we generate cards for MainActivity.
      * @param pID - our unique 'ID' for create new challenge, we get this value from
      *                     'createNewWakeUpChallenge' and transit here.
-     * @param -aID - values from time picker: minutes and hour. To start we get this, convert to
-     *                normal view (means from 1:8 to 01:08) and put inside alarmManager like ID.
-     * @param -when - this is value from last method-provider, this value is equals to time when
-     *             we need fire our alarm manager.
+     * @param requestCode - values from time picker: minutes and hour. To start we get this,
+     *                      convert to normal view (means from 1:8 to 01:08) and put inside
+     *                      alarmManager like ID.
+     * @param hour - this is value from last method-provider, this value is equals to time when
+     *               we need fire our alarm manager.
+     * @param min  - this is value from last method-provider, this value is equals to time when
+     *               we need fire our alarm manager.
      */
     private void sendSingleInProgressForWakeUp(String pID, int hour, int min, int requestCode) {
         SingleInProgress singleinprogress = retrofit.create(SingleInProgress.class);
@@ -345,22 +348,11 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-//                    com.azinecllc.champy.model.single_in_progress.SingleInProgress data = response.body();
-                    //String inProgressId = data.getData().get_id();
-                    //String id = response.body().getData().get_id();
+                    String inProgressID = response.body().getData().get_id();
 
-                    //Intent myIntent = new Intent(activity, CustomAlarmReceiver.class);
-                    //myIntent.putExtra("inProgressID", inProgressId);
-                    //myIntent.putExtra("alarmID", aID);
-                    //myIntent.putExtra("alarmHour", hour);
-                    //myIntent.putExtra("alarmMin", min);
-
-
-                    //PendingIntent pi = PendingIntent.getBroadcast(context, aID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                    //AlarmManager aManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                    //aManager.setRepeating(AlarmManager.RTC_WAKEUP, when, AlarmManager.INTERVAL_DAY, pi);
                     DailyWakeUpController dwc = new DailyWakeUpController(context);
-                    dwc.enableDailyWakeUp(hour, min, requestCode);
+                    dwc.enableDailyWakeUp(hour, min, requestCode, inProgressID);
+
                     generateCardsForMainActivity(new Intent(activity, MainActivity.class));
                 } else {
                     Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
@@ -447,11 +439,11 @@ public class ChallengeController {
      *                     we can refresh pending card to get new data.
      * @param alarmID - alarmManager ID. This is only for wake-up challenge. We need this for re-enable
      *            alarmManager every check-in and if we had finished our challenge then disable.
-     * @param i - intent. We need this to redirect user to needed activity.
+     * @param -i - intent. We need this to redirect user to needed activity.
      * @throws IOException - we can expect this exception because user has opportunity to check
      *                     challenge which has already checked or lost. In this case we can handle it
      */
-    public void doneForToday(String pID, String alarmID, Intent i, /*long nextAlarm,*/ View v) throws IOException {
+    public void doneForToday(String pID, String alarmID, View v) throws IOException {
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
         Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = activeInProgress.checkChallenge(pID, token);
         call.enqueue(new Callback<com.azinecllc.champy.model.single_in_progress.SingleInProgress>() {
@@ -462,21 +454,21 @@ public class ChallengeController {
                     int end = response.body().getData().getEnd();
                     long now = System.currentTimeMillis() / 1000;
 
-                    if (type.equals(typeWake)) {
-                        if ((now > end - oneDay)) {
-                            Intent alarmIntent = new Intent(activity, CustomAlarmReceiver.class);
-                            PendingIntent pi = PendingIntent.getBroadcast(activity, Integer.parseInt(alarmID), alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                            alarmManager.cancel(pi);
-                            //} else {
-                            //    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, nextAlarm, AlarmManager.INTERVAL_DAY, pi);
-                        }
-
+                    if (type.equals(typeWake) && (now > end - oneDay)) {
+                        Intent alarmIntent = new Intent(activity, CustomAlarmReceiver.class);
+                        PendingIntent pi = PendingIntent.getBroadcast(
+                                context,
+                                Integer.parseInt(alarmID),
+                                alarmIntent,
+                                PendingIntent.FLAG_UPDATE_CURRENT
+                        );
+                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                        alarmManager.cancel(pi);
                     }
 
                     Snackbar snackbar = Snackbar.make(v, ("Well done!"), Snackbar.LENGTH_LONG);
                     snackbar.show();
-                    generateCardsForMainActivity(i);
+                    generateCardsForMainActivity(new Intent(context, MainActivity.class));
                 } else {
                     Snackbar snackbar = Snackbar.make(v, activity.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);
                     snackbar.show();

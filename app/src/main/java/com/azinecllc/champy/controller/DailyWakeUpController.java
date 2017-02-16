@@ -25,7 +25,7 @@ public class DailyWakeUpController {
     }
 
 
-    public void enableDailyWakeUp(int hour, int min, int requestCode) {
+    public void enableDailyWakeUp(int hour, int min, int requestCode, String inProgressID) {
         Calendar myCalender = Calendar.getInstance();
         myCalender.set(Calendar.HOUR_OF_DAY, hour);
         myCalender.set(Calendar.MINUTE, min);
@@ -45,6 +45,7 @@ public class DailyWakeUpController {
         notifyIntent.putExtra("hour", hour);
         notifyIntent.putExtra("min", min);
         notifyIntent.putExtra("requestCode", requestCode);
+        notifyIntent.putExtra("inProgressID", inProgressID);
         PendingIntent pi = PendingIntent.getBroadcast(context, requestCode, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -54,10 +55,12 @@ public class DailyWakeUpController {
         } else {
             // This for old android devices (13%). Almost nobody uses it.
             // need to check, but really no devices with old versions
+            // TODO: 2/15/17 check it again.
+            // set once
             manager.set(AlarmManager.RTC_WAKEUP, myCalender.getTimeInMillis(), pi);
-
-            manager.setRepeating(AlarmManager.RTC_WAKEUP, myCalender.getTimeInMillis(), 60 * 1000, pi);
-            manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, myCalender.getTimeInMillis(), 60 * 1000, pi);
+            // set repeating
+            manager.setRepeating(AlarmManager.RTC_WAKEUP, myCalender.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pi);
+            manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, myCalender.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pi);
         }
     }
 

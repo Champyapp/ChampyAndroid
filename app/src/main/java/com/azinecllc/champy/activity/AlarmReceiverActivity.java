@@ -32,9 +32,8 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
 
     private MediaPlayer mMediaPlayer;
     private ChallengeController cc;
-    private String progressID;
-    private int alarmID;
-    private long nextAlarm;
+    private String inProgressID;
+    private int requestCode;
     public Context context;
     public Activity activity;
 
@@ -48,9 +47,8 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
             //eat it, bitch;
         }
 
-        //alarmID = getIntent().getIntExtra("finalAlarmID", 0);
-        //nextAlarm = getIntent().getLongExtra("finalNextAlarm", 0);
-        //progressID = getIntent().getStringExtra("finalInProgressID");
+        requestCode = getIntent().getIntExtra("finalRequestCode", 0);
+        inProgressID = getIntent().getStringExtra("finalInProgressID");
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -102,7 +100,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
                 }
                 if (offlineMode.isConnectedToRemoteAPI(this)) {
                     try {
-                        cc.doneForToday(progressID, String.valueOf(alarmID), intent /*nextAlarm*/, v);
+                        cc.doneForToday(inProgressID, String.valueOf(requestCode), v);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -119,7 +117,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
                 }
                 if (offlineMode.isConnectedToRemoteAPI(this)) {
                     try {
-                        cc.give_up(progressID, alarmID, intent);
+                        cc.give_up(inProgressID, requestCode, intent);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

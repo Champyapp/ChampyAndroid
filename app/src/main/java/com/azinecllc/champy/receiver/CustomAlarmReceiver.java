@@ -37,20 +37,20 @@ public class CustomAlarmReceiver extends BroadcastReceiver {
         final int hour = intent.getIntExtra("hour", 0);
         final int min = intent.getIntExtra("min", 0);
         final int requestCode = intent.getIntExtra("requestCode", 0);
-        System.out.println("Alarm | extras: hour" + hour + ", min: " + min + " (requestCode: " + requestCode + ")");
+        final String inProgressID = intent.getStringExtra("inProgressID");
+        System.out.println("Alarm | extras: hour: " + hour + ", min: " + min + " (requestCode: " + requestCode + ")");
 
         Intent alarmIntent = new Intent(context, AlarmReceiverActivity.class);
         alarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        //alarmIntent.putExtra("finalInProgressID", progID);
-        //alarmIntent.putExtra("finalAlarmID", alarmID);
-        //alarmIntent.putExtra("finalNextAlarm", c.getTimeInMillis() / 1000);
+        alarmIntent.putExtra("finalRequestCode", requestCode);
+        alarmIntent.putExtra("finalInProgressID", inProgressID);
 
         SessionManager sessionManager = SessionManager.getInstance(context);
         if (sessionManager.isUserLoggedIn()) {
             sendNotification(context);
 
             DailyWakeUpController dwc = new DailyWakeUpController(context);
-            new Handler().postDelayed(() -> dwc.enableDailyWakeUp(hour, min, requestCode), 1000);
+            new Handler().postDelayed(() -> dwc.enableDailyWakeUp(hour, min, requestCode, inProgressID), 1000);
             context.startActivity(alarmIntent);
         }
 
@@ -67,7 +67,7 @@ public class CustomAlarmReceiver extends BroadcastReceiver {
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(R.drawable.ic_wakeup_white)
                 .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
-                .setLights(Color.GREEN, 1000, 1500)
+                .setLights(Color.GREEN, 1000, 2500)
                 .setContentTitle("Champy")
                 .setContentText("Wake up!")
                 .setAutoCancel(true).setWhen(System.currentTimeMillis());
