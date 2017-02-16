@@ -37,16 +37,14 @@ import static java.lang.Math.round;
  * Created by SashaKhyzhun on 2/7/17.
  */
 
-public class MainFragment extends Fragment implements View.OnClickListener {
+public class MainFragment extends Fragment {
 
     private Typeface typeface;
     private MainActivityCardsAdapter adapter;
     private SessionManager sessionManager;
     private int challengesInteger, winsInteger, totalInteger;
-    private boolean isFabOpen = false;
     private String userName;
-    private FloatingActionButton fabPlus, fabWake, fabSelf, fabDuel;
-    private Animation fab_open, fab_close, rotate_forward, rotate_backward;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,7 +65,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-        // TODO: 2/10/17 перевірити lifecycle чи удаляється після переходу на settings
         adapter = new MainActivityCardsAdapter(getContext(), SelfImprovement_model.generate(getContext()));
         if (adapter.dataCount() > 0) {
             RelativeLayout cards = (RelativeLayout) view.findViewById(R.id.cards);
@@ -90,19 +87,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         imageView.getLayoutParams().width = x * 25;
         imageView.getLayoutParams().height = x * 25;
 
-
-        fabPlus = (FloatingActionButton) view.findViewById(R.id.fabPlus);
-        fabSelf = (FloatingActionButton) view.findViewById(R.id.fabSelf);
-        fabDuel = (FloatingActionButton) view.findViewById(R.id.fabDuel);
-        fabWake = (FloatingActionButton) view.findViewById(R.id.fabWake);
-        fab_open = AnimationUtils.loadAnimation(getContext(), R.anim.fab_open);
-        fab_close = AnimationUtils.loadAnimation(getContext(), R.anim.fab_close);
-        rotate_forward = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_forward);
-        rotate_backward = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_backward);
-        fabPlus.setOnClickListener(v -> animateFAB());
-        fabSelf.setOnClickListener(this);
-        fabDuel.setOnClickListener(this);
-        fabWake.setOnClickListener(this);
 
         TextView tvChallengesCounter = (TextView) view.findViewById(R.id.textViewChallengesCounter);
         TextView tvWinsCounter = (TextView) view.findViewById(R.id.textViewWinsCounter);
@@ -190,54 +174,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
 
         return view;
-    }
-
-
-    @Override
-    public void onClick(View v) {
-        if (adapter.dataCount() < 10) {
-            switch (v.getId()) {
-                case R.id.fabSelf:
-                    startActivity(new Intent(getContext(), SelfImprovementActivity.class));
-                    break;
-                case R.id.fabDuel:
-                    new Handler().postDelayed(() -> startActivity(new Intent(getContext(), FriendsActivity.class)), 250);
-                    break;
-                case R.id.fabWake:
-                    startActivity(new Intent(getContext(), WakeUpActivity.class));
-                    break;
-            }
-            animateFAB();
-        } else {
-            Toast.makeText(getContext(), R.string.challenges_to_much, Toast.LENGTH_LONG).show();
-        }
-    }
-
-
-    private void animateFAB() {
-        if (isFabOpen) {
-            closeFab();
-        } else {
-            openFab();
-        }
-    }
-
-
-    private void closeFab() {
-        fabPlus.startAnimation(rotate_backward);
-        fabWake.startAnimation(fab_close);
-        fabSelf.startAnimation(fab_close);
-        fabDuel.startAnimation(fab_close);
-        isFabOpen = false;
-    }
-
-
-    private void openFab() {
-        fabPlus.startAnimation(rotate_forward);
-        fabWake.startAnimation(fab_open);
-        fabSelf.startAnimation(fab_open);
-        fabDuel.startAnimation(fab_open);
-        isFabOpen = true;
     }
 
 

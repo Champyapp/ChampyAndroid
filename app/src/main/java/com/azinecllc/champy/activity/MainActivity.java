@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -17,9 +18,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.MainActivityCardsAdapter;
@@ -49,18 +53,21 @@ import static com.azinecllc.champy.utils.Constants.TAG_SETTINGS;
 import static com.azinecllc.champy.utils.Constants.TAG_TERMS;
 import static com.azinecllc.champy.utils.Constants.TAG_PRIVACY_POLICE;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
 
     public static final String TAG = "MainActivity";
     public static String CURRENT_TAG = TAG_CHALLENGES;
     public static int navItemIndex = 0;
 
     private String[] activityTitles;
+    private boolean isFabOpen = false;
 
     private SessionManager sessionManager;
     private DrawerLayout drawer;
 
-    private MainActivityCardsAdapter adapter;
+    private FloatingActionButton fabPlus, fabWake, fabSelf, fabDuel;
+    private Animation fab_open, fab_close, rotate_forward, rotate_backward;
+
     private NavigationView navigationView;
     private Handler mHandler;
     private Context context;
@@ -126,6 +133,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .into(drawerBackground);
         drawerUserName.setText(userName);
         drawerUserEmail.setText(userEmail);
+
+        fabPlus = (FloatingActionButton) findViewById(R.id.fabPlus);
+        fabSelf = (FloatingActionButton) findViewById(R.id.fabSelf);
+        fabDuel = (FloatingActionButton) findViewById(R.id.fabDuel);
+        fabWake = (FloatingActionButton) findViewById(R.id.fabWake);
+        fab_open = AnimationUtils.loadAnimation(this, R.anim.fab_open);
+        fab_close = AnimationUtils.loadAnimation(this, R.anim.fab_close);
+        rotate_forward = AnimationUtils.loadAnimation(this, R.anim.rotate_forward);
+        rotate_backward = AnimationUtils.loadAnimation(this, R.anim.rotate_backward);
+        fabPlus.setOnClickListener(v -> animateFAB());
+        fabSelf.setOnClickListener(this);
+        fabDuel.setOnClickListener(this);
+        fabWake.setOnClickListener(this);
 
         // PENDING DUEL MENU IN DRAWER
         setCounterForPendingDuels();
@@ -212,6 +232,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
+    public void onClick(View v) {
+        if (Integer.parseInt(sessionManager.getChampyOptions().get("challenges")) < 10) {
+            switch (v.getId()) {
+                case R.id.fabSelf:
+                    startActivity(new Intent(this, SelfImprovementActivity.class));
+                    break;
+                case R.id.fabDuel:
+                    new Handler().postDelayed(() -> startActivity(new Intent(this, FriendsActivity.class)), 250);
+                    break;
+                case R.id.fabWake:
+                    startActivity(new Intent(this, WakeUpActivity.class));
+                    break;
+            }
+            animateFAB();
+        } else {
+            Toast.makeText(this, R.string.challenges_to_much, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_challenges:
@@ -247,7 +287,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-
     private Emitter.Listener onConnect = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
@@ -272,6 +311,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             setCounterForPendingDuels();
         }
     };
+
 
 
     /**
@@ -299,7 +339,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * Method which shows selected fragment from drawer and loads it in UI Thread, because we need to
      * avoid large object and freezes. In this method I also was set current title for toolbar.
      */
-    @SuppressWarnings("ConstantConditions")
     private void loadHomeFragment() {
         // if user select the current navigation menu again, just close the navigation drawer
         if (getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
@@ -325,12 +364,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
         navigationView.getMenu().getItem(navItemIndex);   // selecting appropriate nav menu item
+        //noinspection ConstantConditions
         getSupportActionBar().setTitle(activityTitles[navItemIndex]); // set toolbar title
 
         mHandler = new Handler();
         mHandler.post(runnable); // If 'runnable' is not null, then add to the message queue
         drawer.closeDrawers();   // Closing drawer on item click
         invalidateOptionsMenu(); // refresh toolbar menu
+        toggleFab();             // show or hide the fab button
     }
 
     /**
@@ -342,5 +383,51 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView view = (TextView) navigationView.getMenu().findItem(R.id.nav_pending_duels).getActionView();
         runOnUiThread(() -> view.setText(count > 0 ? String.valueOf(getString(R.string.plus) + count) : null));
     }
+
+    /**
+     * Method which includes two method below. This method works like a toggle, on-off system.
+     */
+    private void animateFAB() {
+        if (isFabOpen) {
+            closeFab();
+        } else {
+            openFab();
+        }
+    }
+
+    /**
+     * Method to animate fab button, and make visible all sub buttons,
+     */
+    private void closeFab() {
+        fabPlus.startAnimation(rotate_backward);
+        fabWake.startAnimation(fab_close);
+        fabSelf.startAnimation(fab_close);
+        fabDuel.startAnimation(fab_close);
+        isFabOpen = false;
+    }
+
+    /**
+     * Method to animate fab button, and make invisible all sub buttons,
+     */
+    private void openFab() {
+        fabPlus.startAnimation(rotate_forward);
+        fabWake.startAnimation(fab_open);
+        fabSelf.startAnimation(fab_open);
+        fabDuel.startAnimation(fab_open);
+        isFabOpen = true;
+    }
+
+    /**
+     * Method to set visible for FabPlus if current fragment != main
+     */
+    private void toggleFab() {
+        if (navItemIndex == 0) {
+            fabPlus.show();
+        } else {
+            fabPlus.hide();
+        }
+    }
+
+
 
 }

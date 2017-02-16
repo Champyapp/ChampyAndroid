@@ -444,7 +444,7 @@ public class ChallengeController {
      * @throws IOException - we can expect this exception because user has opportunity to check
      *                     challenge which has already checked or lost. In this case we can handle it
      */
-    public void doneForToday(String pID, String alarmID, View v) throws IOException {
+    public void doneForToday(String pID, String alarmID, View v, Intent i) throws IOException {
         SingleInProgress activeInProgress = retrofit.create(SingleInProgress.class);
         Call<com.azinecllc.champy.model.single_in_progress.SingleInProgress> call = activeInProgress.checkChallenge(pID, token);
         call.enqueue(new Callback<com.azinecllc.champy.model.single_in_progress.SingleInProgress>() {
@@ -469,7 +469,7 @@ public class ChallengeController {
 
                     Snackbar snackbar = Snackbar.make(v, ("Well done!"), Snackbar.LENGTH_LONG);
                     snackbar.show();
-                    generateCardsForMainActivity(new Intent(context, MainActivity.class));
+                    generateCardsForMainActivity(i);
                 } else {
                     Snackbar snackbar = Snackbar.make(v, activity.getString(R.string.service_not_available), Snackbar.LENGTH_LONG);
                     snackbar.show();
