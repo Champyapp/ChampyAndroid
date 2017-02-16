@@ -1,6 +1,7 @@
 package com.azinecllc.champy.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +23,7 @@ import android.widget.TextView;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.MainActivityCardsAdapter;
+import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.fragment.MainFragment;
 import com.azinecllc.champy.fragment.PrivacyPoliceFragment;
 import com.azinecllc.champy.fragment.SettingsFragment;
@@ -30,28 +33,38 @@ import com.azinecllc.champy.utils.SessionManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.FacebookSdk;
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
+
+import java.net.URISyntaxException;
+import java.util.Date;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
+import static com.azinecllc.champy.utils.Constants.API_URL;
 import static com.azinecllc.champy.utils.Constants.TAG_CHALLENGES;
-// friends
-// history
 import static com.azinecllc.champy.utils.Constants.TAG_SETTINGS;
 import static com.azinecllc.champy.utils.Constants.TAG_TERMS;
 import static com.azinecllc.champy.utils.Constants.TAG_PRIVACY_POLICE;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private SessionManager sessionManager;
-    private DrawerLayout drawer;
-    private MainActivityCardsAdapter adapter;
-    private NavigationView navigationView;
-
+    public static final String TAG = "MainActivity";
     public static String CURRENT_TAG = TAG_CHALLENGES;
     public static int navItemIndex = 0;
+
     private String[] activityTitles;
+
+    private SessionManager sessionManager;
+    private DrawerLayout drawer;
+
+    private MainActivityCardsAdapter adapter;
+    private NavigationView navigationView;
     private Handler mHandler;
+    private Context context;
+    private Socket mSocket;
 
 
     @Override
@@ -59,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_main);
+        Log.i(TAG, "onCreate: ");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -88,9 +102,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // GET PHOTO AND MAKE BLUR
         drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
         sessionManager = SessionManager.getInstance(getApplicationContext());
-        final String userPicture = sessionManager.getUserPicture();
-        final String userEmail = sessionManager.getUserEmail();
-        final String userName = sessionManager.getUserName();
+        String userPicture = sessionManager.getUserPicture();
+        String userEmail = sessionManager.getUserEmail();
+        String userName = sessionManager.getUserName();
         ImageView background = (ImageView) findViewById(R.id.main_background);
         Glide.with(this)
                 .load(userPicture)
@@ -114,29 +128,76 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerUserEmail.setText(userEmail);
 
         // PENDING DUEL MENU IN DRAWER
-        CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();
-        int count = checker.getPendingCount(getApplicationContext());
-        if (count != 0) {
-            TextView view = (TextView) navigationView.getMenu().findItem(R.id.nav_pending_duels).getActionView();
-            view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
-        }
-
-
-//        if (savedInstanceState != null) {
-        //navItemIndex = getIntent().getIntExtra("navItemIndex", 0);
-        //CURRENT_TAG = getIntent().getStringExtra("currentTag");
-        //System.out.println("navItemIndex: " + getIntent().getIntExtra("navItemIndex", 0));
-        //System.out.println("current_tag : " + getIntent().getStringExtra("currentTag"));
-//        }
+        setCounterForPendingDuels();
 
         loadHomeFragment();
 
+    }
 
-        //if (getIntent().getExtras() != null) {
-        //    navItemIndex = getIntent().getExtras().getInt("extras", 0);
-        //    getHomeFragment();
-        //}
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.i(TAG, "onStart: ");
 
+        try {
+            mSocket = IO.socket(API_URL);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+
+        mSocket.on("connect", onConnect);
+        mSocket.on("connected", onConnected);
+
+//        InProgressChallenge:new
+//        InProgressChallenge:accepted
+//        InProgressChallenge:failed
+//        InProgressChallenge:checked
+//        InProgressChallenge:recipient:checked
+//        InProgressChallenge:sender:checked
+//        InProgressChallenge:updated
+//        InProgressChallenge:won
+//        InProgress:finish
+
+        mSocket.on("InProgressChallenge:accepted", modifiedChallenges);
+        mSocket.on("InProgressChallenge:new", modifiedChallenges);
+        mSocket.on("InProgressChallenge:won", modifiedChallenges);
+        mSocket.on("InProgressChallenge:updated", modifiedChallenges);
+
+        mSocket.connect();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.i(TAG, "onPause: ");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume: ");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Date now = new Date(System.currentTimeMillis());
+        Log.i(TAG, "onStop: Sockets disconnected "
+                + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds());
+
+        //mSocket.disconnect();
+        mSocket.off("InProgressChallenge:accepted", modifiedChallenges);
+        mSocket.off("InProgressChallenge:new", modifiedChallenges);
+        mSocket.off("InProgressChallenge:won", modifiedChallenges);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "onDestroy: ");
+        Runtime.getRuntime().runFinalization();
+        Runtime.getRuntime().gc();
     }
 
     @Override
@@ -200,12 +261,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Runtime.getRuntime().runFinalization();
-        Runtime.getRuntime().gc();
-    }
+
+    private Emitter.Listener onConnect = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            Log.i(TAG, "Sockets call: onConnect");
+            mSocket.emit("ready", sessionManager.getToken());
+        }
+    };
+
+    private Emitter.Listener onConnected = args -> Log.i(TAG, "Sockets call: onConnected!");
+
+    private Emitter.Listener modifiedChallenges = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            Log.i(TAG, "Sockets call: modifiedChallenges");
+            ChallengeController cc = new ChallengeController(
+                    context,
+                    MainActivity.this,
+                    sessionManager.getToken(),
+                    sessionManager.getUserId());
+
+            cc.refreshCardsForPendingDuel(null);
+            setCounterForPendingDuels();
+        }
+    };
 
 
     /**
@@ -265,6 +345,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mHandler.post(runnable); // If 'runnable' is not null, then add to the message queue
         drawer.closeDrawers();   // Closing drawer on item click
         invalidateOptionsMenu(); // refresh toolbar menu
+    }
+
+    /**
+     * Method to check pending counter and after that set value for navigation drawer menu
+     */
+    private void setCounterForPendingDuels() {
+        CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();
+        int count = checker.getPendingCount(getApplicationContext());
+        TextView view = (TextView) navigationView.getMenu().findItem(R.id.nav_pending_duels).getActionView();
+        runOnUiThread(() -> view.setText(count > 0 ? String.valueOf(getString(R.string.plus) + count) : null));
     }
 
 }

@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ import org.json.JSONException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import io.jsonwebtoken.Jwts;
@@ -53,6 +55,7 @@ import static com.azinecllc.champy.utils.Constants.API_URL;
 
 public class MyOtherFragment extends Fragment {
 
+    public static final String TAG = "OtherFriendsss";
     private static final String ARG_PAGE = "ARG_PAGE";
     private SwipeRefreshLayout gSwipeRefreshLayout;
     private CHCheckTableForExist checkTableForExist;
@@ -81,7 +84,7 @@ public class MyOtherFragment extends Fragment {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getContext());
         offlineMode = OfflineMode.getInstance();
-        sessionManager = SessionManager.getInstance(getContext());
+        //sessionManager = SessionManager.getInstance(getContext());
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         cv = new ContentValues();
         dbHelper = DBHelper.getInstance(getContext());
@@ -93,6 +96,7 @@ public class MyOtherFragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_friends, container, false);
 
+        sessionManager = SessionManager.getInstance(getContext());
         friends = new ArrayList<>();
         Cursor c = db.query("mytable", null, null, null, null, null, null);
         if (c.moveToFirst()) {
@@ -140,6 +144,8 @@ public class MyOtherFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        Log.i(TAG, "onStart: ");
+
         try {
             mSocket = IO.socket(API_URL);
         } catch (URISyntaxException e) {
@@ -161,8 +167,19 @@ public class MyOtherFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        mSocket.off();
+        Date now = new Date(System.currentTimeMillis());
+        Log.i(TAG, "onStop: Sockets disconnected "
+                + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds());
+
         mSocket.disconnect();
+        //mSocket.off();
+        //mSocket.off("connect", onConnect);
+        //mSocket.off("connected", onConnected);
+        mSocket.off("Relationship:new:accepted", modifiedRelationship);
+        mSocket.off("Relationship:new:removed", modifiedRelationship);
+        mSocket.off("Relationship:created:accepted", modifiedRelationship);
+        mSocket.off("Relationship:created:removed", modifiedRelationship);
+
     }
 
     @Override
@@ -176,7 +193,7 @@ public class MyOtherFragment extends Fragment {
         gView = null;
         adapter = null;
         friends = null;
-        mSocket = null;
+        //mSocket = null;
         retrofit = null;
         checkTableForExist = null;
         Runtime.getRuntime().runFinalization();
@@ -288,16 +305,12 @@ public class MyOtherFragment extends Fragment {
     private Emitter.Listener onConnect = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
+            Log.i(TAG, "Sockets call: onConnect");
             mSocket.emit("ready", sessionManager.getToken());
         }
     };
 
-    private Emitter.Listener onConnected = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-            //Log.d("Sockets", "Sockets: connected!");
-        }
-    };
+    private Emitter.Listener onConnected = args -> Log.d(TAG, "Sockets call: onConnected~");
 
     protected Emitter.Listener modifiedRelationship = new Emitter.Listener() {
         @Override
@@ -305,6 +318,7 @@ public class MyOtherFragment extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    Log.i(TAG, "Sockets run: modifiedRelationship");
                     refreshOtherView(gSwipeRefreshLayout, gView);
                 }
             });

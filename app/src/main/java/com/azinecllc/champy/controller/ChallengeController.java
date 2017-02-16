@@ -165,12 +165,13 @@ public class ChallengeController {
      * Method to create new Duel challenge and make call to API with Retrofit2.
      * We create new challenge and try to sent it 'in progress'. This is only for custom cards.
      * @param description - this is value of challenge description. We get it from EditText in
-     *                    DuelFragment.class, before sending we check if this value isActive or Empty
+     *                      DuelFragment.class, before sending we check if this value isActive
+     *                      or Empty
      * @param days - this is count of duration by challenge. Like with 'description': we get value
-     *             from EditText and pass value here. After that we convert current value of days
-     *             to UnixTime because API works only with it and push it up.
+     *               from EditText and pass value here. After that we convert current value of days
+     *               to UnixTime because API works only with it and push it up.
      * @param friend_id - this is userID with whom we want to make a duel. this is ID has generated
-     *                  when user create his account. (this is friend from Facebook)
+     *                    when user create his account. (this is friend from Facebook)
      */
     public void createNewDuelChallenge(String description, int days, String friend_id) {
         final String duration = String.valueOf(days * 86400);
@@ -586,9 +587,7 @@ public class ChallengeController {
                         }
                     }
 
-                    if (intent != null) {
-                        generateCardsForMainActivity(intent);
-                    }
+                    generateCardsForMainActivity(intent);
 
                 } else {
                     Toast.makeText(activity, activity.getString(R.string.service_not_available), Toast.LENGTH_LONG).show();

@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ import com.github.nkzawa.socketio.client.Socket;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import retrofit.Call;
@@ -40,6 +42,7 @@ import static com.azinecllc.champy.utils.Constants.API_URL;
 
 public class MyPendingFragment extends Fragment {
 
+    public static final String TAG = "PendingFriends";
     private static final String ARG_PAGE = "ARG_PAGE";
     private SwipeRefreshLayout swipeRefreshLayout;
     private SQLiteDatabase db;
@@ -120,6 +123,8 @@ public class MyPendingFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        Log.i(TAG, "onStart: ");
+
         try {
             mSocket = IO.socket(API_URL);
         } catch (URISyntaxException e) {
@@ -144,8 +149,20 @@ public class MyPendingFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        mSocket.off();
+        Date now = new Date(System.currentTimeMillis());
+        Log.i(TAG, "onStop: Sockets disconnected "
+                + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds());
+
         mSocket.disconnect();
+        //mSocket.off();
+        mSocket.off("Relationship:new", modifiedRelationship);
+        mSocket.off("Relationship:new:accepted", modifiedRelationship);
+        mSocket.off("Relationship:new:removed", removedRelationship);
+        mSocket.off("Relationship:accepted", modifiedRelationship);
+
+        mSocket.off("Relationship:created", modifiedRelationship);
+        mSocket.off("Relationship:created:accepted", modifiedRelationship);
+        mSocket.off("Relationship:created:removed", removedRelationship);
     }
 
     @Override
@@ -255,16 +272,12 @@ public class MyPendingFragment extends Fragment {
     private Emitter.Listener onConnect = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
+            Log.i(TAG, "Sockets call: onConnect");
             mSocket.emit("ready", token);
         }
     };
 
-    private Emitter.Listener onConnected = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-            //Log.d("Sockets", "Sockets: connected!");
-        }
-    };
+    private Emitter.Listener onConnected = args -> Log.i(TAG, "Sockets call: onConnected~");
 
     protected Emitter.Listener modifiedRelationship = new Emitter.Listener() {
 
@@ -273,6 +286,7 @@ public class MyPendingFragment extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    Log.i(TAG, "Sockets call: modifiedRelationship");
                     refreshPendingView(swipeRefreshLayout, gView);
                 }
             });
@@ -285,6 +299,7 @@ public class MyPendingFragment extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    Log.i(TAG, "Sockets call: removedRelationship");
                     refreshPendingView(swipeRefreshLayout, gView);
                 }
             });

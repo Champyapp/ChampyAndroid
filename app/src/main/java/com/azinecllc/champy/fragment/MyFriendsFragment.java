@@ -11,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ import com.github.nkzawa.socketio.client.Socket;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import jp.wasabeef.glide.transformations.CropSquareTransformation;
@@ -50,6 +52,7 @@ import static com.azinecllc.champy.utils.Constants.path;
 
 public class MyFriendsFragment extends Fragment {
 
+    public static final String TAG = "FriendsFriends";
     private static final String ARG_PAGE = "ARG_PAGE";
     private String id, token;
     private View gView;
@@ -157,8 +160,15 @@ public class MyFriendsFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        mSocket.off();
+        Date now = new Date(System.currentTimeMillis());
+        Log.i(TAG, "onStop: Sockets disconnected "
+                + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds());
         mSocket.disconnect();
+        //mSocket.off();
+        mSocket.off("Relationship:new:accepted", modifiedRelationship);
+        mSocket.off("Relationship:new:removed", modifiedRelationship);
+        mSocket.off("Relationship:created:accepted", modifiedRelationship);
+        mSocket.off("Relationship:created:removed", modifiedRelationship);
     }
 
     @Override
@@ -265,16 +275,12 @@ public class MyFriendsFragment extends Fragment {
     private Emitter.Listener onConnect = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
+            Log.i(TAG, "Sockets call: onConnect");
             mSocket.emit("ready", sessionManager.getToken());
         }
     };
 
-    private Emitter.Listener onConnected = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-            //Log.d("Sockets", "Sockets: connected!");
-        }
-    };
+    private Emitter.Listener onConnected = args -> Log.d(TAG, "Sockets call: onConnected~");
 
     protected Emitter.Listener modifiedRelationship = new Emitter.Listener() {
         @Override
@@ -282,6 +288,7 @@ public class MyFriendsFragment extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    Log.i(TAG, "Sockets run: modifiedRelationship");
                     refreshFriendsView(gSwipeRefreshLayout, gView);
                 }
             });
