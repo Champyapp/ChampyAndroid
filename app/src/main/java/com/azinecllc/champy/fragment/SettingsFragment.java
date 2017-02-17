@@ -49,6 +49,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 
+import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
@@ -210,12 +211,16 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                     layoutButtons.setVisibility(View.VISIBLE);
                     tvTakeAPicture.setVisibility(View.VISIBLE);
                     tvChooseFrom.setVisibility(View.VISIBLE);
-                    tvChooseFrom.setOnClickListener(view -> Crop.pickImage(context, this));
+                    tvChooseFrom.setOnClickListener(view -> {
+                        Crop.pickImage(context, this);
+                        layoutButtons.setVisibility(View.GONE);
+                    });
                     tvTakeAPicture.setOnClickListener(view -> {
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         File f = new File(path, "profile.jpg");
                         picUri = Uri.fromFile(f);
                         startActivityForResult(intent, CAMERA_REQUEST);
+                        layoutButtons.setVisibility(View.GONE);
                     });
 
                 } else {
@@ -253,7 +258,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 Bitmap thePic = extras.getParcelable("data"); // get the cropped bitmap
                 savePhoto(thePic);
                 userController.uploadPhotoForAPI(saveToStorageFromCamera(thePic));
-                getActivity().recreate();
             } else if (requestCode == Crop.REQUEST_PICK) {
                 // this thing starts activity for result 'REQUEST_CROP'
                 Uri destination = Uri.fromFile(new File(getContext().getCacheDir(), "cropped"));
@@ -268,8 +272,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 Bundle extras = data.getExtras();
                 Bitmap thePic = extras.getParcelable("data"); // get the cropped bitmap
                 savePhoto(thePic);
-                getActivity().recreate();
-                //startActivity(new Intent(getActivity(), MainActivity.class));
             } else if (requestCode == SELECT_FILE) {
                 Uri selectedImageUri = data.getData();
                 performCrop(selectedImageUri);
@@ -515,7 +517,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
             userController.uploadPhotoForAPI(path);
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), uri);
             savePhoto(bitmap); // my method which saves picture to storage
-            getActivity().recreate();
+
         } else if (resultCode == Crop.RESULT_ERROR) {
             Toast.makeText(context, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -576,6 +578,32 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
         Uri uri = Uri.fromFile(file);
         session.setUserPicture(uri.toString());
+
+        Glide.with(this)
+                .load(uri.toString())
+                .bitmapTransform(new CropCircleTransformation(context))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .override(130, 130)
+                .into(userImageProfile);
+        Glide.with(this)
+                .load(uri.toString())
+                .bitmapTransform(new CropCircleTransformation(context))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into((ImageView) getActivity().findViewById(R.id.drawer_user_photo));
+        Glide.with(this)
+                .load(uri.toString())
+                .bitmapTransform(new BlurTransformation(context, 25))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into((ImageView) getActivity().findViewById(R.id.drawer_background));
+        Glide.with(this)
+                .load(uri.toString())
+                .bitmapTransform(new BlurTransformation(context, 25))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into((ImageView) getActivity().findViewById(R.id.main_background));
 
         FileOutputStream out = null;
         try {
