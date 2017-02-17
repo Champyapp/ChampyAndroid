@@ -132,7 +132,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         TextView tvGeneral = (TextView) viewSettings.findViewById(R.id.tvGeneral);
         TextView contactUs = (TextView) viewSettings.findViewById(R.id.contact_us);
 
-        tvUserName = (TextView) viewSettings.findViewById(R.id.tvUserName);
+        tvUserName = (TextView) viewSettings.findViewById(R.id.tv_user_name);
         tvChangeName = (TextView) viewSettings.findViewById(R.id.tvName);
 
         tvUserName.setText(userName);
@@ -157,7 +157,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         if (!offline.isConnectedToRemoteAPI(getActivity())) {
             return;
         }
-
         switch (v.getId()) {
             case R.id.tvName:
                 LinearLayout layoutEditText = (LinearLayout) getActivity().findViewById(R.id.layoutEditText);
@@ -175,12 +174,13 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
                     buttonOK.setVisibility(View.VISIBLE);
                     buttonOK.setOnClickListener(v1 -> {
-                        String userNewName = etNewName.getText().toString().trim();
                         if (!etNewName.getText().toString().trim().equals(session.getUserName())) {
+                            String userNewName = etNewName.getText().toString().trim();
                             session.setUserName(userNewName);
                             userController.updateUserName(userNewName); // call
-                            tvUserName.setText(etNewName.getText().toString());
-                            getActivity().recreate();
+                            tvUserName.setText(userNewName);
+                            TextView drawerUserName = (TextView) getActivity().findViewById(R.id.drawer_tv_user_name);
+                            drawerUserName.setText(userNewName);
                         }
                         layoutEditText.setVisibility(View.GONE);
                         tvEnterYourName.setVisibility(View.GONE);

@@ -2,8 +2,6 @@ package com.azinecllc.champy.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
@@ -28,20 +26,15 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.FacebookSdk;
 
-import java.io.File;
-
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
-import jp.wasabeef.glide.transformations.CropSquareTransformation;
 
 import static com.azinecllc.champy.activity.MainActivity.CURRENT_TAG;
 import static com.azinecllc.champy.activity.MainActivity.navItemIndex;
 import static com.azinecllc.champy.utils.Constants.TAG_CHALLENGES;
-import static com.azinecllc.champy.utils.Constants.TAG_PENDING_DUELS;
 import static com.azinecllc.champy.utils.Constants.TAG_PRIVACY_POLICE;
 import static com.azinecllc.champy.utils.Constants.TAG_SETTINGS;
 import static com.azinecllc.champy.utils.Constants.TAG_TERMS;
-import static com.azinecllc.champy.utils.Constants.path;
 
 public class HistoryActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -94,10 +87,10 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         if (extras != null && "true".equals(extras)) { viewPager.setCurrentItem(1); }
 
         // OTHER DRAWER INFO
-        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.imageUserPicture);
-        ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
-        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        TextView drawerUserEmail = (TextView) headerLayout.findViewById(R.id.tvUserEmail);
+        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.drawer_user_photo);
+        ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.drawer_background);
+        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.drawer_tv_user_name);
+        TextView drawerUserEmail = (TextView) headerLayout.findViewById(R.id.drawer_tv_user_email);
         Glide.with(this)
                 .load(userPicture)
                 .skipMemoryCache(true)

@@ -15,7 +15,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -26,7 +25,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.adapter.MainActivityCardsAdapter;
 import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.fragment.MainFragment;
 import com.azinecllc.champy.fragment.PrivacyPoliceFragment;
@@ -79,7 +77,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_main);
-        Log.i(TAG, "onCreate: ");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -100,10 +97,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(MainActivity.this);
         View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
-        ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
-        ImageView drawerUserPhoto = (ImageView) headerLayout.findViewById(R.id.imageUserPicture);
-        TextView drawerUserEmail = (TextView) headerLayout.findViewById(R.id.tvUserEmail);
-        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.drawer_background);
+        ImageView drawerUserPhoto = (ImageView) headerLayout.findViewById(R.id.drawer_user_photo);
+        TextView drawerUserEmail = (TextView) headerLayout.findViewById(R.id.drawer_tv_user_email);
+        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.drawer_tv_user_name);
 
         // GET PHOTO AND MAKE BLUR
         drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -166,44 +163,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mSocket.on("connect", onConnect);
         mSocket.on("connected", onConnected);
-
-//        InProgressChallenge:new
-//        InProgressChallenge:accepted
-//        InProgressChallenge:failed
-//        InProgressChallenge:checked
-//        InProgressChallenge:recipient:checked
-//        InProgressChallenge:sender:checked
-//        InProgressChallenge:updated
-//        InProgressChallenge:won
-//        InProgress:finish
-
         mSocket.on("InProgressChallenge:accepted", modifiedChallenges);
         mSocket.on("InProgressChallenge:new", modifiedChallenges);
         mSocket.on("InProgressChallenge:won", modifiedChallenges);
-        mSocket.on("InProgressChallenge:updated", modifiedChallenges);
+        //mSocket.on("InProgressChallenge:updated", modifiedChallenges);
 
         mSocket.connect();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.i(TAG, "onPause: ");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.i(TAG, "onResume: ");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         Date now = new Date(System.currentTimeMillis());
-        Log.i(TAG, "onStop: Sockets disconnected "
-                + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds());
-
+        Log.i(TAG, "onStop: Sockets disconnected " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds());
         //mSocket.disconnect();
         mSocket.off("InProgressChallenge:accepted", modifiedChallenges);
         mSocket.off("InProgressChallenge:new", modifiedChallenges);
@@ -214,7 +186,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.i(TAG, "onDestroy: ");
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
     }
@@ -267,15 +238,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 new Handler().postDelayed(() -> startActivity(new Intent(this, PendingDuelActivity.class)), 250);
                 break;
             case R.id.nav_settings:
-                navItemIndex = 2;
+                navItemIndex = 1;
                 CURRENT_TAG = TAG_SETTINGS;
                 break;
             case R.id.nav_terms:
-                navItemIndex = 3;
+                navItemIndex = 2;
                 CURRENT_TAG = TAG_TERMS;
                 break;
             case R.id.nav_privacy_policy:
-                navItemIndex = 4;
+                navItemIndex = 3;
                 CURRENT_TAG = TAG_PRIVACY_POLICE;
                 break;
         }
@@ -321,13 +292,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (navItemIndex) {
             case 0:
                 return new MainFragment();
-            //case 1:
-            //    return new PendingDuelFragment();
-            case 2:
+            case 1:
                 return new SettingsFragment();
-            case 3:
+            case 2:
                 return new TermsFragment();
-            case 4:
+            case 3:
                 return new PrivacyPoliceFragment();
             default:
                 return new MainFragment();

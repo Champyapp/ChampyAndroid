@@ -2,7 +2,6 @@ package com.azinecllc.champy.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
@@ -28,12 +27,10 @@ import com.facebook.FacebookSdk;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
-import jp.wasabeef.glide.transformations.CropSquareTransformation;
 
 import static com.azinecllc.champy.activity.MainActivity.CURRENT_TAG;
 import static com.azinecllc.champy.activity.MainActivity.navItemIndex;
 import static com.azinecllc.champy.utils.Constants.TAG_CHALLENGES;
-import static com.azinecllc.champy.utils.Constants.TAG_PENDING_DUELS;
 import static com.azinecllc.champy.utils.Constants.TAG_PRIVACY_POLICE;
 import static com.azinecllc.champy.utils.Constants.TAG_SETTINGS;
 import static com.azinecllc.champy.utils.Constants.TAG_TERMS;
@@ -112,10 +109,10 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 
         // OTHER INFO FOR DRAWER
         View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
-        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.imageUserPicture);
-        ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.slide_background);
-        TextView drawerUserEmail = (TextView) headerLayout.findViewById(R.id.tvUserEmail);
-        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.drawer_user_photo);
+        ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.drawer_background);
+        TextView drawerUserEmail = (TextView) headerLayout.findViewById(R.id.drawer_tv_user_email);
+        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.drawer_tv_user_name);
 
         Glide.with(this)
                 .load(userPicture)
