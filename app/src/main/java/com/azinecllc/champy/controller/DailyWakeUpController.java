@@ -50,17 +50,9 @@ public class DailyWakeUpController {
 
         AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // this for android 4.4 and higher
             manager.setExact(AlarmManager.RTC_WAKEUP, myCalender.getTimeInMillis(), pi);
         } else {
-            // This for old android devices (13%). Almost nobody uses it.
-            // need to check, but really no devices with old versions
-            // TODO: 2/15/17 check it again.
-            // set once
-            manager.set(AlarmManager.RTC_WAKEUP, myCalender.getTimeInMillis(), pi);
-            // set repeating
             manager.setRepeating(AlarmManager.RTC_WAKEUP, myCalender.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pi);
-            manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, myCalender.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pi);
         }
     }
 

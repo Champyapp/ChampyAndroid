@@ -30,7 +30,7 @@ public class PendingDuelActivity extends AppCompatActivity {
         TextView tvPendingDuels = (TextView) findViewById(R.id.tvChallengeToMySelf);
         tvPendingDuels.setTypeface(typeface);
 
-        if (size > 0) {
+        if (size == 0) {
             tvNoPendingDuels = (TextView) findViewById(R.id.textViewNoPendingDuels);
             tvNoPendingDuels.setTypeface(typeface);
             tvNoPendingDuels.setVisibility(View.VISIBLE);
@@ -45,13 +45,13 @@ public class PendingDuelActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        this.isFinishing();
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
     }
 
     @Override
     public void onBackPressed() {
-        finish();
         super.onBackPressed();
     }
 

@@ -74,10 +74,6 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
                 ChallengeController cc = new ChallengeController(getApplicationContext(), this, token, uID);
                 cc.refreshCardsForPendingDuel(goTo);
 
-//                DailyRemindController reminder = new DailyRemindController(getApplicationContext());
-//                reminder.enableDailyNotificationReminder();
-
-
             } else {
                 startActivity(new Intent(this, LoginActivity.class));
             }

@@ -91,7 +91,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 super.onDrawerSlide(drawerView, slideOffset);
                 InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-                //if (isFabOpen) closeFab();
             }
         };
         drawer.setDrawerListener(drawerToggle);

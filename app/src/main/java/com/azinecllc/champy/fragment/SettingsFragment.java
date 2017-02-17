@@ -92,7 +92,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
-        reminder = new DailyRemindController(getContext()); // here should be getContext()
         session = SessionManager.getInstance(context);
         dbHelper = DBHelper.getInstance(context);
         offline = OfflineMode.getInstance();
@@ -120,12 +119,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 .override(130, 130)
                 .into(userImageProfile);
 
-        userImageProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                reminder.enableDailyNotificationReminder();
-            }
-        });
+        //userImageProfile.setOnClickListener(v -> reminder.enableDailyNotificationReminder());
 
         initSwitches(viewSettings);
 
@@ -238,7 +232,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.textViewLogout:
-                reminder.disableDailyNotificationReminder();
                 session.logout(getActivity());
                 break;
             case R.id.about:
@@ -361,6 +354,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         Switch switchChallengesForToday = (Switch) view.findViewById(R.id.switchChallengesForToday);
         switchChallengesForToday.setChecked(Boolean.parseBoolean(challForToday));
         switchChallengesForToday.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            reminder = new DailyRemindController(getContext()); // here should be getContext()
             if (isChecked) {
                 map.put("challengesForToday", "true");
                 reminder.enableDailyNotificationReminder();
@@ -440,7 +434,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                         CURRENT_TAG = TAG_CHALLENGES;
                         navItemIndex = 0;
                         session.logout(getActivity());
-                        reminder.disableDailyNotificationReminder();
+                        //reminder.disableDailyNotificationReminder();
                         LoginManager.getInstance().logOut();
                         startActivity(new Intent(getContext(), RoleControllerActivity.class));
                         break;

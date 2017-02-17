@@ -44,10 +44,10 @@ public class CHCheckPendingDuels {
         return countOfPendingDuel;
     }
 
-    public void hideItem(View view) {
-        NavigationView navigationView = (NavigationView)view.findViewById(R.id.nav_view);
-        Menu nav_Menu = navigationView.getMenu();
-        nav_Menu.findItem(R.id.nav_pending_duels).setVisible(false);
-    }
+    //public void hideItem(View view) {
+    //    NavigationView navigationView = (NavigationView)view.findViewById(R.id.nav_view);
+    //    Menu nav_Menu = navigationView.getMenu();
+    //    nav_Menu.findItem(R.id.nav_pending_duels).setVisible(false);
+    //}
 
 }

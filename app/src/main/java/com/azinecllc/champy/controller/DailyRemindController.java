@@ -20,7 +20,7 @@ public class DailyRemindController {
 
     public void enableDailyNotificationReminder() {
         Calendar myCalender = Calendar.getInstance();
-        myCalender.set(Calendar.HOUR_OF_DAY, 11);
+        myCalender.set(Calendar.HOUR_OF_DAY, 12);
         myCalender.set(Calendar.MINUTE, 0);
         myCalender.set(Calendar.SECOND, 0);
 
@@ -40,15 +40,9 @@ public class DailyRemindController {
             // this for android 4.4 and higher
             manager.setExact(AlarmManager.RTC_WAKEUP, myCalender.getTimeInMillis(), pi);
         } else {
-            // This for old android devices (13%). Almost nobody uses it.
-            // need to check, but really no devices with old versions
-
-            // set once
-            manager.set(AlarmManager.RTC_WAKEUP, myCalender.getTimeInMillis(), pi);
-            // set repeat
             manager.setRepeating(AlarmManager.RTC_WAKEUP, myCalender.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pi);
-            manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, myCalender.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pi);
         }
+
     }
 
     public void disableDailyNotificationReminder() {

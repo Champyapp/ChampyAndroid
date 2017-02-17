@@ -440,7 +440,7 @@ public class ChallengeController {
      *                     we can refresh pending card to get new data.
      * @param alarmID - alarmManager ID. This is only for wake-up challenge. We need this for re-enable
      *            alarmManager every check-in and if we had finished our challenge then disable.
-     * @param -i - intent. We need this to redirect user to needed activity.
+     * @param i - intent. We need this to redirect user to needed activity.
      * @throws IOException - we can expect this exception because user has opportunity to check
      *                     challenge which has already checked or lost. In this case we can handle it
      */
@@ -452,19 +452,14 @@ public class ChallengeController {
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String type = response.body().getData().getChallenge().getType();
-                    int end = response.body().getData().getEnd();
-                    long now = System.currentTimeMillis() / 1000;
 
-                    if (type.equals(typeWake) && (now > end - oneDay)) {
-                        Intent alarmIntent = new Intent(activity, CustomAlarmReceiver.class);
-                        PendingIntent pi = PendingIntent.getBroadcast(
-                                context,
-                                Integer.parseInt(alarmID),
-                                alarmIntent,
-                                PendingIntent.FLAG_UPDATE_CURRENT
-                        );
-                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                        alarmManager.cancel(pi);
+                    if (type.equals(typeWake)) {
+                        int end = response.body().getData().getEnd();
+                        long now = System.currentTimeMillis() / 1000;
+                        if (now > end - oneDay) {
+                            DailyWakeUpController dwc = new DailyWakeUpController(context);
+                            dwc.disableDailyWakeUp(Integer.parseInt(alarmID));
+                        }
                     }
 
                     Snackbar snackbar = Snackbar.make(v, ("Well done!"), Snackbar.LENGTH_LONG);

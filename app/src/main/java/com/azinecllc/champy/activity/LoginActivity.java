@@ -19,7 +19,7 @@ import com.android.debug.hv.ViewServer;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.controller.DailyRemindController;
 import com.azinecllc.champy.controller.UserController;
-import com.azinecllc.champy.helper.AppSync;
+import com.azinecllc.champy.helper.CHGetFacebookFriends;
 import com.azinecllc.champy.interfaces.NewUser;
 import com.azinecllc.champy.model.user.Data;
 import com.azinecllc.champy.model.user.LoginData;
@@ -43,6 +43,7 @@ import com.google.android.gms.iid.InstanceID;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
@@ -62,11 +63,13 @@ import static com.azinecllc.champy.utils.Constants.API_URL;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     public View spinner;
+    private Retrofit retrofit;
     private String userEmail, userPicture, userName, userFBID;
     private AccessTokenTracker mTokenTracker;
     private CallbackManager mCallbackManager;
     private ProfileTracker mProfileTracker;
     private OfflineMode offlineMode;
+    private SessionManager sessionManager;
 
 
     @Override
@@ -91,6 +94,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         offlineMode = OfflineMode.getInstance();
         buttonLogin.setOnClickListener(this);
 
+        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        sessionManager = SessionManager.getInstance(getApplicationContext());
+
         ViewServer.get(this).addWindow(this);
     }
 
@@ -111,9 +117,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     try {
                         userFBID = object.getString("id");
                         userName = object.getString("first_name") + " " + object.getString("last_name");
-                        userEmail = (object.getString("email") != null)
-                                ? object.getString("email")
-                                : userFBID + "@champy.com";
+                        userEmail = (object.getString("email") != null) ? object.getString("email") : userFBID + "@champy.com";
                         try {
                             URL profile_pic = new URL("https://graph.facebook.com/" + userFBID + "/picture?type=large");
                             userPicture = profile_pic.toString();
@@ -125,18 +129,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             try {
                                 String token_android;
                                 InstanceID instanceID = InstanceID.getInstance(LoginActivity.this);
-                                token_android = instanceID.getToken(
-                                        getString(R.string.gcm_defaultSenderId),
-                                        GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+                                token_android = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
 
                                 JSONObject jsonObject = new JSONObject();
                                 jsonObject.put("token", token_android);
                                 jsonObject.put("timeZone", "-2");
                                 String json = jsonObject.toString();
 
-                                AppSync sync = new AppSync(userFBID, json, userPicture, LoginActivity.this, token_android);
-                                sync.getUserProfile();
-
+                                getUserProfile(userFBID, json, userPicture, token_android);
                                 registerUser(userFBID, userName, userEmail, json, token_android, userPicture);
                             } catch (Exception e) {
                                 Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_LONG).show();
@@ -249,15 +249,86 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    private void registerUser(String fbID, String name, String email, String gcm, String token_android, String fb_photo) throws JSONException {
+    public void getUserProfile(String facebookID, String gcm, String picture, String androidTok) throws JSONException {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("facebookId", userFBID);
-        jsonObject.put("AndroidOS", gcm);
-        String string = jsonObject.toString();
-        final String jwtString = Jwts.builder().setHeaderParam("alg", "HS256").setHeaderParam("typ", "JWT")
-                .setPayload(string).signWith(SignatureAlgorithm.HS256, "secret").compact();
+        String jwt = getToken(facebookID, gcm);
+        NewUser newUser = retrofit.create(NewUser.class);
+        Call<User> callGetUserInfo = newUser.getUserInfo(jwt);
+        callGetUserInfo.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Response<User> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
 
+                    Data data = response.body().getData();
+                    String userName = data.getName();
+                    String userID = data.get_id();
+                    String userEmail = data.getEmail();
+                    String pushN = data.getProfileOptions().getPushNotifications().toString();
+                    String challengeEnd = data.getProfileOptions().getChallengeEnd().toString();
+                    String acceptedYour = data.getProfileOptions().getAcceptedYourChallenge().toString();
+                    String newChallengeReq = data.getProfileOptions().getNewChallengeRequests().toString();
+                    String challengesForToday = data.getProfileOptions().getChallengesForToday().toString();
+
+                    sessionManager.setRefreshFriends("true");
+                    sessionManager.setRefreshPending("false");
+                    sessionManager.setRefreshOthers("true");
+                    sessionManager.createUserLoginSession(
+                            userName, userEmail, userFBID, picture, jwt, userID, pushN, newChallengeReq,
+                            acceptedYour, challengeEnd, challengesForToday, "true", gcm, androidTok
+                    );
+                    sessionManager.setChampyOptions(
+                            data.getAllChallengesCount().toString(),
+                            data.getSuccessChallenges().toString(),
+                            data.getInProgressChallenges().toString(),
+                            data.getLevel().getNumber().toString()
+                    );
+
+                    UserController userController = new UserController(sessionManager, retrofit);
+                    userController.updatePushIdentifier();
+
+                    CHGetFacebookFriends getFbFriends = new CHGetFacebookFriends(getApplicationContext(), retrofit);
+                    getFbFriends.getUserFacebookFriends(gcm);
+                    getFbFriends.getUserPending(userID, jwt);
+
+
+                    String api_path = null;
+                    if (data.getPhoto() != null) {
+                        String path = "/data/data/com.azinecllc.champy/app_imageDir/";
+                        File file = new File(path, "profile.jpg");
+                        if (!file.exists()) {
+                            com.azinecllc.champy.model.user.Photo photo = data.getPhoto();
+                            api_path = API_URL + photo.getLarge();
+                        }
+                    }
+
+                    Intent extras = new Intent(LoginActivity.this, MainActivity.class);
+                    if (api_path == null) {
+                        extras.putExtra("path_to_pic", picture);
+                        sessionManager.setUserPicture(picture);
+                    } else {
+                        extras.putExtra("path_to_pic", api_path);
+                        sessionManager.setUserPicture(api_path);
+                    }
+                    Intent goToRoleActivity = new Intent(LoginActivity.this, RoleControllerActivity.class);
+                    startActivity(goToRoleActivity);
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Toast.makeText(getApplicationContext(), R.string.service_not_available, Toast.LENGTH_SHORT).show();
+            }
+
+        });
+
+
+    }
+
+
+    private void registerUser(String fbID, String name, String email, String gcm, String androidTok, String picture) throws JSONException {
+        String jwt = getToken(fbID, gcm);
         NewUser newUser = retrofit.create(NewUser.class);
         Call<User> call = newUser.register(new LoginData(fbID, name, email));
         call.enqueue(new Callback<User>() {
@@ -266,22 +337,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 User decodedResponse = response.body();
                 if (response.isSuccess()) {
                     Data user = decodedResponse.getData(); // data == user
-                    String email = user.getEmail();
-                    String user_name = user.getName();
-                    String id = user.get_id();
+                    String userEmail = user.getEmail();
+                    String userName = user.getName();
+                    String userID = user.get_id();
                     String pushN = user.getProfileOptions().getPushNotifications().toString();
                     String newChallReq = user.getProfileOptions().getNewChallengeRequests().toString();
                     String acceptedYour = user.getProfileOptions().getAcceptedYourChallenge().toString();
                     String challengeEnd = user.getProfileOptions().getChallengeEnd().toString();
 
-                    SessionManager sessionManager = SessionManager.getInstance(getApplicationContext());
                     sessionManager.setRefreshPending("true");
                     sessionManager.setRefreshFriends("true");
                     sessionManager.setRefreshOthers ("true");
                     sessionManager.createUserLoginSession(
-                            user_name, email, userFBID, userPicture,
-                            jwtString, id, pushN, newChallReq, acceptedYour,
-                            challengeEnd, "true", "true", gcm, token_android);
+                            userName, userEmail, userFBID, userPicture, jwt, userID, pushN, newChallReq,
+                            acceptedYour, challengeEnd, "true", "true", gcm, androidTok);
 
                     sessionManager.setChampyOptions(
                             user.getAllChallengesCount().toString(),
@@ -291,7 +360,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     UserController userController = new UserController(sessionManager, retrofit);
                     userController.updatePushIdentifier();
-                    userController.uploadPhotoForAPI(fb_photo);
+                    userController.uploadPhotoForAPI(picture);
 
                     DailyRemindController drc = new DailyRemindController(getApplicationContext());
                     drc.enableDailyNotificationReminder();
@@ -305,6 +374,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             public void onFailure(Throwable t) {}
         });
 
+    }
+
+
+    private String getToken(String facebookID, String gcm) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("facebookId", facebookID);
+        jsonObject.put("AndroidOS", gcm);
+        String string = jsonObject.toString();
+        return Jwts.builder()
+                .setHeaderParam("alg", "HS256")
+                .setHeaderParam("typ", "JWT")
+                .setPayload(string)
+                .signWith(SignatureAlgorithm.HS256, "secret")
+                .compact();
     }
 
 
