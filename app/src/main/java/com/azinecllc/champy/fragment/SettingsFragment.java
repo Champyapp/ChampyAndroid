@@ -473,7 +473,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
      */
     @Nullable
     private String getPath(Uri uri) throws URISyntaxException {
-        System.out.println("я веселый метод: getPath(Uri uri)");
         if ("content".equalsIgnoreCase(uri.getScheme())) {
             String[] projection = {"_data"};
             Cursor cursor;
@@ -533,7 +532,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         String root = Environment.getExternalStorageDirectory().toString();
         File myDir = new File(root + "/android/data/com.azinecllc.champy/images");
         myDir.mkdirs();
-        //Random generator = new Random(); //int n = 100000000; //n = generator.nextInt(n);
         String fileName = "ChampyAwesomePicture.jpg";
         File file = new File(myDir, fileName);
         if (file.exists()) file.delete();
@@ -555,9 +553,9 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
      * like as Object on device. We uses this method after 'take picture' and 'choose from storage'
      * @param photo - bitmap which we get from extras.getParcelable
      */
-    public void savePhoto(Bitmap photo) {
+    private void savePhoto(Bitmap photo) {
         String root = Environment.getExternalStorageDirectory().toString(); // path
-        File myDir = new File(root + "/android/data/com.sashakhyzhun.gerzhiktattooink"); // folder
+        File myDir = new File(root + "/android/data/com.azinecllc.champy/images"); // folder
         myDir.mkdirs(); // create folder
 
         File file = new File(myDir, "profile.jpg"); // file

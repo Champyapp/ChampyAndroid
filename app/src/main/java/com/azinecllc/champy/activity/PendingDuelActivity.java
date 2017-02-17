@@ -30,10 +30,12 @@ public class PendingDuelActivity extends AppCompatActivity {
         TextView tvPendingDuels = (TextView) findViewById(R.id.tvChallengeToMySelf);
         tvPendingDuels.setTypeface(typeface);
 
+        tvNoPendingDuels = (TextView) findViewById(R.id.textViewNoPendingDuels);
         if (size == 0) {
-            tvNoPendingDuels = (TextView) findViewById(R.id.textViewNoPendingDuels);
             tvNoPendingDuels.setTypeface(typeface);
             tvNoPendingDuels.setVisibility(View.VISIBLE);
+        } else {
+            tvNoPendingDuels.setVisibility(View.INVISIBLE);
         }
 
         CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();

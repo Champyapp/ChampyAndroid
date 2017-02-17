@@ -6,8 +6,11 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -19,6 +22,7 @@ import com.android.debug.hv.ViewServer;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.controller.DailyRemindController;
 import com.azinecllc.champy.controller.UserController;
+import com.azinecllc.champy.helper.CHDownloadPhotoAndSave;
 import com.azinecllc.champy.helper.CHGetFacebookFriends;
 import com.azinecllc.champy.interfaces.NewUser;
 import com.azinecllc.champy.model.user.Data;
@@ -44,6 +48,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
@@ -349,7 +355,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     sessionManager.setRefreshFriends("true");
                     sessionManager.setRefreshOthers ("true");
                     sessionManager.createUserLoginSession(
-                            userName, userEmail, userFBID, userPicture, jwt, userID, pushN, newChallReq,
+                            userName, userEmail, userFBID, picture, jwt, userID, pushN, newChallReq,
                             acceptedYour, challengeEnd, "true", "true", gcm, androidTok);
 
                     sessionManager.setChampyOptions(
@@ -358,9 +364,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             user.getInProgressChallengesCount().toString(),
                             user.getLevel().getNumber().toString());
 
+                    // создати локальну папку, создати файл, засунути в файл фотку юзера, сохранити
+                    // папку, сохранити фотку, взяти Uri з фотки для API i залити.
+
                     UserController userController = new UserController(sessionManager, retrofit);
                     userController.updatePushIdentifier();
-                    userController.uploadPhotoForAPI(picture);
+                    //userController.uploadPhotoForAPI(saveToInternalStorage(picture));
+
+                    CHDownloadPhotoAndSave a = new CHDownloadPhotoAndSave(getApplicationContext(), retrofit);
+                    a.execute(picture);
 
                     DailyRemindController drc = new DailyRemindController(getApplicationContext());
                     drc.enableDailyNotificationReminder();
@@ -389,7 +401,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .signWith(SignatureAlgorithm.HS256, "secret")
                 .compact();
     }
-
 
 
 }
