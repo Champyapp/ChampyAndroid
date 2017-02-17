@@ -532,7 +532,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         String root = Environment.getExternalStorageDirectory().toString();
         File myDir = new File(root + "/android/data/com.azinecllc.champy/images");
         myDir.mkdirs();
-        String fileName = "ChampyAwesomePicture.jpg";
+        String fileName = "profile.jpg";
         File file = new File(myDir, fileName);
         if (file.exists()) file.delete();
         try {

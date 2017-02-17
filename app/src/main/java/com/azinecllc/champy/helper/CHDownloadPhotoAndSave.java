@@ -14,12 +14,14 @@ import com.azinecllc.champy.utils.SessionManager;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.util.Random;
 
 import retrofit.Retrofit;
 
 /**
  * Created by SashaKhyzhun on 2/17/17.
+ * Class Helper to save photo from facebook to local storage and upload it on the API.
+ * How I know only async task can do it, because we have only path to picture when we need bitmap.
+ * Here we get path to picture, create folder, create photoFile, save it and put picture into file
  */
 
 public class CHDownloadPhotoAndSave extends AsyncTask<String, Void, Bitmap> {
@@ -31,6 +33,7 @@ public class CHDownloadPhotoAndSave extends AsyncTask<String, Void, Bitmap> {
         this.context = context;
         this.retrofit = retrofit;
     }
+
 
     protected Bitmap doInBackground(String... urls) {
         String path_to_pic = urls[0];
@@ -44,6 +47,7 @@ public class CHDownloadPhotoAndSave extends AsyncTask<String, Void, Bitmap> {
         return bitmapImage;
     }
 
+
     protected void onPostExecute(Bitmap result) {
         // Do your staff here to save image
         saveToInternalStorage(result);
@@ -56,7 +60,7 @@ public class CHDownloadPhotoAndSave extends AsyncTask<String, Void, Bitmap> {
         String root = Environment.getExternalStorageDirectory().toString();
         File myDir = new File(root + "/android/data/com.azinecllc.champy/images");
         myDir.mkdirs();
-        String fileName = "ChampyAwesomePicture.jpg";
+        String fileName = "profile.jpg";
 
         File file = new File(myDir, fileName);
         if (file.exists()) {

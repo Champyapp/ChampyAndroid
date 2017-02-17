@@ -32,6 +32,7 @@ public class UserController {
     private Retrofit retrofit;
     private String userID, userToken;
 
+
     public UserController(SessionManager session, Retrofit retrofit) {
         this.session = session;
         this.retrofit = retrofit;
@@ -111,28 +112,15 @@ public class UserController {
         File userPhotoFile = new File(path);
         RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), userPhotoFile);
         Update_user update_user = retrofit.create(Update_user.class);
-
-        System.out.println("uploadPhotoForAPI userPhoto : " + path);
-        System.out.println("uploadPhotoForAPI userID    : " + userID);
-        System.out.println("uploadPhotoForAPI userToken : " + userToken);
-
         Call<User> call = update_user.update_photo(userID, userToken, requestBody);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    System.out.println("uploadPhotoForAPI is success");
-                } else {
-                    System.out.println("uploadPhotoForAPI not success: " + response.body() + " " + response.message());
-                }
             }
-
             @Override
             public void onFailure(Throwable t) {
-                System.out.println("uploadPhotoForAPI vse xyinja: " + t);
             }
         });
-
     }
 
 

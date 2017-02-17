@@ -202,6 +202,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        this.isFinishing();
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
         ViewServer.get(this).removeWindow(this);
@@ -364,15 +365,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             user.getInProgressChallengesCount().toString(),
                             user.getLevel().getNumber().toString());
 
-                    // создати локальну папку, создати файл, засунути в файл фотку юзера, сохранити
-                    // папку, сохранити фотку, взяти Uri з фотки для API i залити.
-
                     UserController userController = new UserController(sessionManager, retrofit);
                     userController.updatePushIdentifier();
-                    //userController.uploadPhotoForAPI(saveToInternalStorage(picture));
 
                     CHDownloadPhotoAndSave a = new CHDownloadPhotoAndSave(getApplicationContext(), retrofit);
-                    a.execute(picture);
+                    a.execute(picture); // async, don't forget to destroy thread.
 
                     DailyRemindController drc = new DailyRemindController(getApplicationContext());
                     drc.enableDailyNotificationReminder();
