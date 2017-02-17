@@ -24,8 +24,8 @@ import static com.azinecllc.champy.utils.Constants.path;
 
 /**
  * Created by SashaKhyzhun on 2/13/17.
+ * Class-Controller which contain all calls to API which are relevant to USER
  */
-
 public class UserController {
 
     private SessionManager session;
@@ -168,5 +168,6 @@ public class UserController {
             }
         });
     }
+
 
 }

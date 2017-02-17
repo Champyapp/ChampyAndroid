@@ -63,14 +63,14 @@ import static com.azinecllc.champy.utils.Constants.API_URL;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
-    public View spinner;
-    private Retrofit retrofit;
     private String userEmail, userPicture, userName, userFBID;
     private AccessTokenTracker mTokenTracker;
     private CallbackManager mCallbackManager;
     private ProfileTracker mProfileTracker;
-    private OfflineMode offlineMode;
     private SessionManager sessionManager;
+    private OfflineMode offlineMode;
+    private Retrofit retrofit;
+    private View spinner;
 
 
     @Override
@@ -217,6 +217,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
+    /**
+     * Initialize facebook has key. We need this, because without this facebook-login will crash.
+     */
     private void getFacebookHashKey() {
         try {
             @SuppressLint("PackageManagerGetSignatures")
@@ -230,7 +233,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-
+    /**
+     * Initialize facebook token tracker. This shit needs to track if token was changed. We never
+     * change it in Champy, but without this shit facebook-login will crash.
+     */
     private void initFacebookTokenTracker() {
         mCallbackManager = CallbackManager.Factory.create();
         mTokenTracker  = new AccessTokenTracker() {
@@ -250,7 +256,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mProfileTracker.startTracking();
     }
 
-
+    /**
+     * Method to login user in case when we have already created profile. Here we create new Session
+     * for user, set current status bar, load photo from api and store it locally. We need this because
+     * after each 'log out' we have cleaned out session manager (plus case if 2 user on once device)
+     * and after each action we redirect user to SplashScreen.
+     *
+     * @param facebookID - current user's facebook ID
+     * @param gcm        - user's Google Cloud Messaging ID
+     * @param picture    - facebook picture (path to picture)
+     * @param androidTok - unique android token for GCM. We need this to get notification from the server
+     * @throws JSONException - we can expect this exception because we can get NPE in any value
+     *                       In this case we can handle it.
+     */
     public void singInUser(String facebookID, String gcm, String picture, String androidTok) throws JSONException {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         String jwt = getToken(facebookID, gcm);
@@ -328,7 +346,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-
+    /**
+     * Method to register user in Server DataBase. Here we create new Session for user, download photo
+     * from facebook, create locally this file and upload on API. Also we enable all notifications,
+     * set status bar equals to 0, set value 'refreshFriends' true for all pages, enable daily reminder
+     * and after each action we redirect user to SplashScreen.
+     * @param fbID - current user's facebook ID
+     * @param name - current user's name from Facebook (userFirstName + " " + userLastName)
+     * @param email - userEmail from Facebook
+     * @param gcm - user's Google Cloud Messaging ID
+     * @param androidTok - unique android token for GCM. We need this to get notification from the server
+     * @param picture - current user's profile picture from Facebook (path to picture)
+     * @throws JSONException - we can expect this exception because we can get NPE in any value
+     *                         In this case we can handle it.
+     */
     private void registerUser(String fbID, String name, String email, String gcm, String androidTok, String picture) throws JSONException {
         String jwt = getToken(fbID, gcm);
         NewUser newUser = retrofit.create(NewUser.class);
@@ -380,7 +411,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-
+    /**
+     * Method to get java web token from user FB ID. This value need to make Call and create new User
+     * @param facebookID - user's facebook id
+     * @param gcm - user's Google Cloud Messaging ID
+     * @return - clear java web token;
+     * @throws JSONException - we can expect this exception because we can get NPE in any value
+     *                         In this case we can handle it.
+     */
     private String getToken(String facebookID, String gcm) throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("facebookId", facebookID);
