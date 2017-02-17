@@ -132,10 +132,6 @@ public class SessionManager {
         editor.clear();
         editor.commit();
 
-        // Disable daily notifications
-        //DailyRemindController dailyRemind = new DailyRemindController(activity);
-        //dailyRemind.disableDailyNotificationReminder();
-
         // go to login activity
         File blurred = new File(path, "blurred.png");
         blurred.delete();

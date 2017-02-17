@@ -6,11 +6,8 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
-import android.graphics.Bitmap;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -48,8 +45,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
@@ -142,7 +137,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 jsonObject.put("timeZone", "-2");
                                 String json = jsonObject.toString();
 
-                                getUserProfile(userFBID, json, userPicture, token_android);
+                                singInUser(userFBID, json, userPicture, token_android);
                                 registerUser(userFBID, userName, userEmail, json, token_android, userPicture);
                             } catch (Exception e) {
                                 Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_LONG).show();
@@ -256,7 +251,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    public void getUserProfile(String facebookID, String gcm, String picture, String androidTok) throws JSONException {
+    public void singInUser(String facebookID, String gcm, String picture, String androidTok) throws JSONException {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         String jwt = getToken(facebookID, gcm);
         NewUser newUser = retrofit.create(NewUser.class);

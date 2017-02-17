@@ -32,7 +32,14 @@ public class UserController {
     private Retrofit retrofit;
     private String userID, userToken;
 
-
+    /**
+     * Constructor for this class. I had selected only needed values to don't override it for
+     * each method
+     *
+     * @param session  - our Session Manager when we store all data locally (singleton). From this
+     *                 parameter we can get any data for user.
+     * @param retrofit - simple interface to call on API. I transmit it to avoid overriding, no more.
+     */
     public UserController(SessionManager session, Retrofit retrofit) {
         this.session = session;
         this.retrofit = retrofit;
@@ -40,7 +47,13 @@ public class UserController {
         userToken = session.getToken();
     }
 
-    // @Call to API
+    /**
+     * Method to update profile data (only for toggles). After each changes in settingsFragment we
+     * put new data inside the session manager and make call to API, when we get this information and
+     * send to the server.
+     * @param map - simple map, why map? because we store all data in map for session manager, so here
+     *              we need to get data from map. Map is very strong and useful interface in java
+     */
     public void updateProfile(HashMap<String, String> map) {
         session.toggleChallengeEnd(map.get("challengeEnd"));
         session.togglePushNotification(map.get("pushNotifications"));
@@ -62,7 +75,10 @@ public class UserController {
         });
     }
 
-    // @Call to API
+    /**
+     * Method to update user name. Here we need to make call and input new name.
+     * @param newName - new user name, from EditText field.
+     */
     public void updateUserName(String newName) {
         Update_user update_user = retrofit.create(Update_user.class);
         Call<User> call = update_user.update_user_name(userID, userToken, newName);
@@ -77,7 +93,14 @@ public class UserController {
         });
     }
 
-
+    /**
+     * Method to delete user profile. We make call to API and if response is success then we can
+     * clear our Session Manager, delete local files, clear cache and other information.
+     * @param dbHelper - our DataBase when we store all data (status bars, challenges, etc). Our
+     *                 database is singleton, we can don't transmit it, but when we create database
+     *                 we should put in the context (which we do not have). So we are select what
+     *                 transmit inside: already created dbHelper or context to create new dbHelper.
+     */
     public void deleteUserProfile(DBHelper dbHelper) {
         Update_user update_user = retrofit.create(Update_user.class);
         Call<Delete> callForDeleteUser = update_user.delete_user(userID, userToken);
@@ -88,8 +111,8 @@ public class UserController {
                     ////////// not sure what we need this ////////
                     File profile = new File(path, "profile.jpg");
                     profile.delete();
-                    File blurred = new File(path, "blurred.png");
-                    blurred.delete();
+                    //File blurred = new File(path, "blurred.png");
+                    //blurred.delete();
                     // ///////////////////////////////////////////
 
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -107,7 +130,12 @@ public class UserController {
         });
     }
 
-
+    /**
+     * Method to load new profile picture on API. Just push the file to Api (without saving locally)
+     * @param path - this is path to storage when we have already exist picture, because we should
+     *             load a file on the server. We get this path and create new file (profile picture)
+     *             after that we can make call and update this
+     */
     public void uploadPhotoForAPI(String path) {
         File userPhotoFile = new File(path);
         RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), userPhotoFile);
@@ -123,7 +151,10 @@ public class UserController {
         });
     }
 
-
+    /**
+     * Method to update user's push identifier, we use it only inside "registerUser" and "singInUser"
+     * methods, this parameter needed on server side. On the client side this is useless data.
+     */
     public void updatePushIdentifier() {
         Update_user update_user = retrofit.create(Update_user.class);
         Call<User> call = update_user.update_gcm(userID, userToken, session.getTokenAndroid(), "none");

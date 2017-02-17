@@ -5,7 +5,6 @@ public class Constants {
     public static final String path = "/data/data/com.azinecllc.champy/app_imageDir/";
 
     public static final String TAG_CHALLENGES = "challenges";
-    public static final String TAG_PENDING_DUELS = "pending duels";
     public static final String TAG_SETTINGS = "settings";
     public static final String TAG_TERMS = "terms";
     public static final String TAG_PRIVACY_POLICE = "privacy police";
