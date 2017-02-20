@@ -382,7 +382,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 case DialogInterface.BUTTON_POSITIVE:
                     if (offline.isConnectedToRemoteAPI(getActivity())) {
                         SQLiteDatabase db = dbHelper.getWritableDatabase();
-                        ChallengeController cc = new ChallengeController(context, getActivity(), userToken, userID);
+                        ChallengeController cc = new ChallengeController(context, getActivity());
 
                         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
                         if (c.moveToFirst()) {

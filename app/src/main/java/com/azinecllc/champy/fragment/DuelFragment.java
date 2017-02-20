@@ -74,9 +74,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         c.close();
 
         sessionManager = SessionManager.getInstance(getContext());
-        String token = sessionManager.getToken();
-        String userId = sessionManager.getUserId();
-        cc = new ChallengeController(getContext(), getActivity(), token, userId);
+        cc = new ChallengeController(getContext(), getActivity());
         size = sessionManager.getSelfSize();
         Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
         View line = view.findViewById(R.id.line);

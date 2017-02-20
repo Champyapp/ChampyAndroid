@@ -27,6 +27,7 @@ import com.azinecllc.champy.model.active_in_progress.Sender;
 import com.azinecllc.champy.model.duel.Duel;
 import com.azinecllc.champy.model.single_in_progress.Data;
 import com.azinecllc.champy.receiver.CustomAlarmReceiver;
+import com.azinecllc.champy.utils.SessionManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,8 +56,7 @@ import static java.lang.Math.round;
 
 public class ChallengeController {
 
-    private static final String TAG = "ChallengeController";
-    private static final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+    private Retrofit retrofit;
     private String token, userID;
     private Activity activity;
     private Context context;
@@ -70,14 +70,16 @@ public class ChallengeController {
      *
      * @param mContext - context from parent class (means class when we initiate this CC).
      * @param activity - activity from parent class (means class when we initiate this CC).
-     * @param uToken   - User's Token from SessionManager
-     * @param uID      - User's ID from SessionManager
+     * //@param uToken   - User's Token from SessionManager
+     * //@param uID      - User's ID from SessionManager
      */
-    public ChallengeController(Context mContext, Activity activity, String uToken, String uID) {
+    public ChallengeController(Context mContext, Activity activity) {
         this.activity = activity;
         this.context = mContext;
-        this.token = uToken;
-        this.userID = uID;
+        SessionManager sessionManager = SessionManager.getInstance(context);
+        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        token = sessionManager.getToken();
+        userID = sessionManager.getUserId();
     }
 
 
@@ -760,48 +762,47 @@ public class ChallengeController {
     }
 
 
-
-    /**
-     * Method for compare current time with 'i-element' in array of alarm time.
-     * @param arrayDetails - this is our array with time for alarm in seconds. When user has
-     *                     selected time and count of days for Wake-Up challenge then we take this
-     *                     data and convert this time in UnixTime and multiply for N-days.
-     *                     After this operation we have an array with time for alarm. We had
-     *                     named it 'description' but only for Wake-Up (be care with it). In this
-     *                     method we put in our array 'for' to compare current time with elements
-     *                     inside array. If current time is more than 'i[0]' then we get next 'i'
-     *                     and do it while current time will be smaller than i[n];
-     * @value details - cleaned up our array from '[1, 2, 3]' to '1, 2, 3'
-     * @value now     - current time on the device in seconds
-     */
-    private void setNewAlarmClock(String arrayDetails, String alarmID) {
-        String[] details = arrayDetails.replace("[", "").replace("]", "").split(", ");
-        long now = System.currentTimeMillis() / 1000;
-        for (int i = 0; i <= details.length - 1; i++) {
-            if (now < Integer.parseInt(details[i])) {
-                Intent intent = new Intent(context, MainActivity.class);
-                PendingIntent operation = PendingIntent.getBroadcast(
-                        context, Integer.parseInt(alarmID), intent, PendingIntent.FLAG_UPDATE_CURRENT
-                );
-                AlarmManager aManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-
-                // LOLLIPOP = 5.0 / 5.1
-                // KITKAT   = 4.4
-                // SDK_INT  = user api version
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                        aManager.set(AlarmManager.RTC_WAKEUP, Long.parseLong(details[i]) * 1000, operation);
-                    } else {
-                        aManager.setExact(AlarmManager.RTC_WAKEUP, Long.parseLong(details[i]) * 1000, operation);
-                    }
-                } else {
-                    aManager.set(AlarmManager.RTC_WAKEUP, Long.parseLong(details[i]) * 1000, operation);
-                }
-
-                break;
-            }
-        }
-    }
+//    /**
+//     * Method for compare current time with 'i-element' in array of alarm time.
+//     * @param arrayDetails - this is our array with time for alarm in seconds. When user has
+//     *                     selected time and count of days for Wake-Up challenge then we take this
+//     *                     data and convert this time in UnixTime and multiply for N-days.
+//     *                     After this operation we have an array with time for alarm. We had
+//     *                     named it 'description' but only for Wake-Up (be care with it). In this
+//     *                     method we put in our array 'for' to compare current time with elements
+//     *                     inside array. If current time is more than 'i[0]' then we get next 'i'
+//     *                     and do it while current time will be smaller than i[n];
+//     * @value details - cleaned up our array from '[1, 2, 3]' to '1, 2, 3'
+//     * @value now     - current time on the device in seconds
+//     */
+//    private void setNewAlarmClock(String arrayDetails, String alarmID) {
+//        String[] details = arrayDetails.replace("[", "").replace("]", "").split(", ");
+//        long now = System.currentTimeMillis() / 1000;
+//        for (int i = 0; i <= details.length - 1; i++) {
+//            if (now < Integer.parseInt(details[i])) {
+//                Intent intent = new Intent(context, MainActivity.class);
+//                PendingIntent operation = PendingIntent.getBroadcast(
+//                        context, Integer.parseInt(alarmID), intent, PendingIntent.FLAG_UPDATE_CURRENT
+//                );
+//                AlarmManager aManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+//
+//                // LOLLIPOP = 5.0 / 5.1
+//                // KITKAT   = 4.4
+//                // SDK_INT  = user api version
+//                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+//                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+//                        aManager.set(AlarmManager.RTC_WAKEUP, Long.parseLong(details[i]) * 1000, operation);
+//                    } else {
+//                        aManager.setExact(AlarmManager.RTC_WAKEUP, Long.parseLong(details[i]) * 1000, operation);
+//                    }
+//                } else {
+//                    aManager.set(AlarmManager.RTC_WAKEUP, Long.parseLong(details[i]) * 1000, operation);
+//                }
+//
+//                break;
+//            }
+//        }
+//    }
 
     /**
      * @param description - this is 'description' of challenges like 'No TV' or 'Wake Up at 9:00'.

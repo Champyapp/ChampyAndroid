@@ -116,9 +116,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
             buttonPlus.setVisibility(View.VISIBLE);
         }
 
-        final String token = sessionManager.getToken();
-        final String userId = sessionManager.getUserId();
-        cc = new ChallengeController(getContext(), getActivity(), token, userId);
+        cc = new ChallengeController(getContext(), getActivity());
 
         OfflineMode offlineMode = OfflineMode.getInstance();
         offlineMode.isConnectedToRemoteAPI(getActivity());

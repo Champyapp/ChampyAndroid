@@ -130,11 +130,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         }
 
 
-        SessionManager sessionManager = SessionManager.getInstance(getContext());
-        final String uID = sessionManager.getUserId();
-        final String token = sessionManager.getToken();
-        ChallengeController cc = new ChallengeController(getContext(), (Activity) getContext(), token, uID);
-
+        ChallengeController cc = new ChallengeController(getContext(), (Activity) getContext());
         /*************************** last check-in time for buttons view **************************
          * @param prog = this is last element from 'challengeProgress' array. I had created this
          *             primitive as a helper for 'progMidNight' to get data from self-improvement

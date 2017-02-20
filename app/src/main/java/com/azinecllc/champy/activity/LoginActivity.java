@@ -80,9 +80,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         getFacebookHashKey(); // must be above "setContentView"
         setContentView(R.layout.activity_login);
 
-        /************************ for API >= 23 *************************/
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-        /****************************************************************/
+//        /************************ for API >= 23 *************************/
+//        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+//        /****************************************************************/
 
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
         TextView loginText = (TextView)findViewById(R.id.login_text);

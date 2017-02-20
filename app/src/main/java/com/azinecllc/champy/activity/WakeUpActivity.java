@@ -45,12 +45,8 @@ public class WakeUpActivity extends AppCompatActivity implements View.OnClickLis
         tvDays.setTypeface(typeface);
         tvGoal.setTypeface(typeface);
 
-        SessionManager sessionManager = SessionManager.getInstance(getApplicationContext());
         offlineMode = OfflineMode.getInstance();
-
-        final String userID = sessionManager.getUserId();
-        final String token = sessionManager.getToken();
-        cc = new ChallengeController(this, this, token, userID);
+        cc = new ChallengeController(this, this);
 
         alarmTimePicker = (TimePicker) findViewById(R.id.timePicker);
 

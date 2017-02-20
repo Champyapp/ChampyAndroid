@@ -36,7 +36,7 @@ public class UserController {
      * Constructor for this class. I had selected only needed values to don't override it for
      * each method
      *
-     * @param session  - our Session Manager when we store all data locally (singleton). From this
+     * @param session - our Session Manager when we store all data locally (singleton). From this
      *                 parameter we can get any data for user.
      * @param retrofit - simple interface to call on API. I transmit it to avoid overriding, no more.
      */
@@ -68,7 +68,6 @@ public class UserController {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
             }
-
             @Override
             public void onFailure(Throwable t) {
             }
@@ -86,7 +85,6 @@ public class UserController {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
             }
-
             @Override
             public void onFailure(Throwable t) {
             }

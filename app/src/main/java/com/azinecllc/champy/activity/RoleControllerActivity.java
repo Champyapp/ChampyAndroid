@@ -71,7 +71,7 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
                 final String uID = sessionManager.getUserId();
                 final String token = sessionManager.getToken();
 
-                ChallengeController cc = new ChallengeController(getApplicationContext(), this, token, uID);
+                ChallengeController cc = new ChallengeController(getApplicationContext(), this);
                 cc.refreshCardsForPendingDuel(goTo);
 
             } else {

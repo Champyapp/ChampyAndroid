@@ -271,12 +271,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void call(Object... args) {
             Log.i(TAG, "Sockets call: modifiedChallenges");
-            ChallengeController cc = new ChallengeController(
-                    context,
-                    MainActivity.this,
-                    sessionManager.getToken(),
-                    sessionManager.getUserId());
-
+            ChallengeController cc = new ChallengeController(context, MainActivity.this);
             cc.refreshCardsForPendingDuel(null);
             setCounterForPendingDuels();
         }

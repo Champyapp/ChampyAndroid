@@ -51,9 +51,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sessionManager = SessionManager.getInstance(getContext());
-        String token = sessionManager.getToken();
-        String userId = sessionManager.getUserId();
-        cc = new ChallengeController(getContext(), getActivity(), token, userId);
+        cc = new ChallengeController(getContext(), getActivity());
         inProgressCount = Integer.parseInt(sessionManager.getChampyOptions().get("challenges"));
         dbHelper = DBHelper.getInstance(getContext());
         db = dbHelper.getWritableDatabase();
