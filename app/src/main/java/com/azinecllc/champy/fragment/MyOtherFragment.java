@@ -84,7 +84,7 @@ public class MyOtherFragment extends Fragment {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getContext());
         offlineMode = OfflineMode.getInstance();
-        //sessionManager = SessionManager.getInstance(getContext());
+        sessionManager = SessionManager.getInstance(getContext());
         retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         cv = new ContentValues();
         dbHelper = DBHelper.getInstance(getContext());
@@ -96,7 +96,7 @@ public class MyOtherFragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.item_recycler, container, false);
 
-        sessionManager = SessionManager.getInstance(getContext());
+        //sessionManager = SessionManager.getInstance(getContext());
         friends = new ArrayList<>();
         Cursor c = db.query("mytable", null, null, null, null, null, null);
         if (c.moveToFirst()) {

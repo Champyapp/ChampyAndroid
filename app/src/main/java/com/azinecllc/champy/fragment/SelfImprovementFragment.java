@@ -199,7 +199,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
 
             case R.id.imageButtonPlus:
                 daysCount = Integer.parseInt(etDays.getText().toString());
-                if (daysCount < 1000) {
+                if (daysCount < 100) {
                     newDaysCount = daysCount + 1;
                     etDays.setText(String.valueOf(newDaysCount));
                 }

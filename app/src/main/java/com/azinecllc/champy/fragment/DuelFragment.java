@@ -74,6 +74,8 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
         c.close();
 
         sessionManager = SessionManager.getInstance(getContext());
+        String token = sessionManager.getToken();
+        String userId = sessionManager.getUserId();
         cc = new ChallengeController(getContext(), getActivity());
         size = sessionManager.getSelfSize();
         Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
@@ -193,7 +195,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
             case R.id.imageButtonPlus:
                 int daysCount = Integer.parseInt(etDays.getText().toString());
                 int newDaysCount;
-                if (daysCount < 1000) {
+                if (daysCount < 100) {
                     newDaysCount = daysCount + 1;
                     etDays.setText(String.valueOf(newDaysCount));
                 }

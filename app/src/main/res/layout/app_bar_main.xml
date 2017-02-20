@@ -10,6 +10,15 @@
     android:fitsSystemWindows="true"
     tools:context=".activity.MainActivity">
 
+    <!-- background for user photo -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/main_background"
+        android:scaleType="centerCrop" />
+
+    <include layout="@layout/item_blur" />
+
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,14 +32,6 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
-
-    <!-- background for user photo -->
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/main_background"
-        android:scaleType="centerCrop" />
-    <include layout="@layout/item_blur" />
 
 
     <RelativeLayout

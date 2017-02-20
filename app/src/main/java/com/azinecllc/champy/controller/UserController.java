@@ -1,14 +1,18 @@
 package com.azinecllc.champy.controller;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.azinecllc.champy.activity.RoleControllerActivity;
 import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.interfaces.Update_user;
 import com.azinecllc.champy.model.user.Delete;
 import com.azinecllc.champy.model.user.Profile_data;
 import com.azinecllc.champy.model.user.User;
 import com.azinecllc.champy.utils.SessionManager;
+import com.facebook.login.LoginManager;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.RequestBody;
 
@@ -20,6 +24,9 @@ import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
 
+import static com.azinecllc.champy.activity.MainActivity.CURRENT_TAG;
+import static com.azinecllc.champy.activity.MainActivity.navItemIndex;
+import static com.azinecllc.champy.utils.Constants.TAG_CHALLENGES;
 import static com.azinecllc.champy.utils.Constants.path;
 
 /**
@@ -98,8 +105,10 @@ public class UserController {
      *                 database is singleton, we can don't transmit it, but when we create database
      *                 we should put in the context (which we do not have). So we are select what
      *                 transmit inside: already created dbHelper or context to create new dbHelper.
+     * @param activity - transmitted activity to make SessionManager.Logout and redirect the user
+     *                 after all action to Login Activity across Splash screen.
      */
-    public void deleteUserProfile(DBHelper dbHelper) {
+    public void deleteUserProfile(DBHelper dbHelper, Activity activity) {
         Update_user update_user = retrofit.create(Update_user.class);
         Call<Delete> callForDeleteUser = update_user.delete_user(userID, userToken);
         callForDeleteUser.enqueue(new Callback<Delete>() {
@@ -120,6 +129,13 @@ public class UserController {
                     db.delete("friends", null, null);
                     db.delete("updated", null, null);
                     db.delete("myChallenges", null, null);
+
+                    CURRENT_TAG = TAG_CHALLENGES;
+                    navItemIndex = 0;
+                    session.logout(activity);
+                    //reminder.disableDailyNotificationReminder();
+                    LoginManager.getInstance().logOut();
+                    activity.startActivity(new Intent(activity, RoleControllerActivity.class));
                 }
             }
             @Override

@@ -32,7 +32,8 @@ public class PrivacyPoliceFragment extends Fragment {
 
         tvPrivacyPolice = (TextView) viewPrivacy.findViewById(R.id.textViewPrivacyPolice);
         tvPrivacyPolice.setVisibility(View.INVISIBLE);
-        new LoadText().execute();
+
+        new LoadText().execute(); // background thread, don't forget close it.
 
         ProgressBar progressBar = (ProgressBar) viewPrivacy.findViewById(R.id.progressBar2);
         progressBar.setVisibility(View.INVISIBLE);

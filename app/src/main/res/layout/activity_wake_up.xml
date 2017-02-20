@@ -1,15 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context=".activity.WakeUpActivity">
+    tools:context=".activity.SelfImprovementActivity"
+    android:background="@drawable/gradient_self"
+    android:id="@+id/wake_up">
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/imageViewLogo"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ic_wakeup_white"
+        android:layout_marginTop="24dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/i_challenge_myself_to"
+        android:id="@+id/tvChallengeToMySelf"
+        android:textColor="@android:color/white"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_below="@+id/tvWakeUpChallenge"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/wake_up_n_challenge"
+        android:textColor="@color/color_white"
+        android:textAlignment="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textAllCaps="true"
+        android:id="@+id/tvWakeUpChallenge"
+        android:layout_below="@id/imageViewLogo"
+        android:layout_marginTop="16dp" />
 
 
-    <include layout="@layout/fragment_wake_up" />
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvChallengeToMySelf"
+        android:layout_above="@+id/imageButtonAccept"
+        card_view:cardUseCompatPadding="true"
+        card_view:cardCornerRadius="8dp">
+
+        <RelativeLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/goal_text"
+                android:text="@string/wake_up_at"
+                android:textColor="@color/color_text_aqua"
+                android:textAlignment="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="15dp" />
+
+            <TimePicker
+                tools:targetApi="lollipop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/timePicker"
+                android:layout_below="@+id/goal_text"
+                android:layout_above="@+id/tvEveryDayWakeUp"
+                android:layout_centerHorizontal="true"
+                android:timePickerMode="spinner" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvEveryDayWakeUp"
+                android:text="@string/everyday_for_next"
+                android:textAlignment="center"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_above="@+id/etDays"
+                android:layout_centerHorizontal="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/etDays"
+                android:text="@string/twenty_one"
+                android:textAlignment="center"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/color_text_aqua"
+                android:layout_above="@+id/tvDays"
+                android:layout_centerHorizontal="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvDays"
+                android:text="@string/days"
+                android:textAlignment="center"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/color_text_aqua"
+                android:paddingBottom="20dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true" />
+
+            <ImageButton
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/button_plus"
+                android:id="@+id/imageButtonPlus"
+                android:visibility="visible"
+                android:layout_below="@+id/tvEveryDayWakeUp"
+                android:layout_toRightOf="@+id/tvEveryDayWakeUp"
+                android:layout_toEndOf="@+id/tvEveryDayWakeUp" />
+
+            <ImageButton
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/button_minus"
+                android:id="@+id/imageButtonMinus"
+                android:visibility="visible"
+                android:layout_below="@+id/tvEveryDayWakeUp"
+                android:layout_toLeftOf="@+id/tvEveryDayWakeUp"
+                android:layout_toStartOf="@+id/tvEveryDayWakeUp" />
 
 
-</android.support.design.widget.CoordinatorLayout>
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <ImageButton
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/imageButtonAccept"
+        android:background="@drawable/button_accept"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp" />
+
+</RelativeLayout>

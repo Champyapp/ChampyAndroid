@@ -81,7 +81,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     private DailyRemindController reminder;
     private TextView tvChangeName, tvUserName;
     private HashMap<String, String> map = new HashMap<>();
-    private String userName, userID, userToken, userPicture;
+    private String userName, userPicture;
     private HashMap<String, String> userDetails = new HashMap<>();
     private Retrofit retrofit;
     public Uri picUri;
@@ -96,9 +96,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         session = SessionManager.getInstance(context);
         dbHelper = DBHelper.getInstance(context);
         offline = OfflineMode.getInstance();
-        userID = session.getUserId();
         userName = session.getUserName();
-        userToken = session.getToken();
         userPicture = session.getUserPicture();
         userDetails = session.getUserDetails();
         userController = new UserController(session, retrofit);
@@ -180,6 +178,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                             session.setUserName(userNewName);
                             userController.updateUserName(userNewName); // call
                             tvUserName.setText(userNewName);
+                            etNewName.setText(userNewName);
                             TextView drawerUserName = (TextView) getActivity().findViewById(R.id.drawer_tv_user_name);
                             drawerUserName.setText(userNewName);
                         }
@@ -372,7 +371,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     /**
      * Method to avoid bug on APi. Before deleting an account we need to surrender all challenge.
      * In case if we doesn't do it another opponent always will have one challenge in progress.
-     *
      * @Костыль
      */
     private void surrenderAllChallengesDialog() {
@@ -427,23 +425,13 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
      * @Костыль
      */
     private void deleteAccountDialog() {
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case DialogInterface.BUTTON_POSITIVE:
-                        userController.deleteUserProfile(dbHelper);
-                        CURRENT_TAG = TAG_CHALLENGES;
-                        navItemIndex = 0;
-                        session.logout(getActivity());
-                        //reminder.disableDailyNotificationReminder();
-                        LoginManager.getInstance().logOut();
-                        startActivity(new Intent(getContext(), RoleControllerActivity.class));
-                        break;
-
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        break;
-                }
+        DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    userController.deleteUserProfile(dbHelper, getActivity());
+                    break;
+                case DialogInterface.BUTTON_NEGATIVE:
+                    break;
             }
         };
 
