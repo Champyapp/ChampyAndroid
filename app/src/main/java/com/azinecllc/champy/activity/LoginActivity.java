@@ -9,11 +9,9 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.debug.hv.ViewServer;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.controller.DailyRemindController;
 import com.azinecllc.champy.controller.UserController;
@@ -25,17 +23,14 @@ import com.azinecllc.champy.model.user.LoginData;
 import com.azinecllc.champy.model.user.User;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
-import com.facebook.AccessToken;
-import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
-import com.facebook.Profile;
-import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 
@@ -47,7 +42,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Collections;
+import java.util.Arrays;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -62,12 +57,9 @@ import static com.azinecllc.champy.utils.Constants.API_URL;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private String userEmail, userPicture, userName, userFBID;
-    private AccessTokenTracker mTokenTracker;
     private CallbackManager mCallbackManager;
-    private ProfileTracker mProfileTracker;
     private SessionManager sessionManager;
     private OfflineMode offlineMode;
-    private Retrofit retrofit;
     private View spinner;
 
 
@@ -78,31 +70,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         getFacebookHashKey(); // must be above "setContentView"
         setContentView(R.layout.activity_login);
 
-//        /************************ for API >= 23 *************************/
-//        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-//        /****************************************************************/
-
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
         TextView loginText = (TextView)findViewById(R.id.login_text);
         spinner = findViewById(R.id.loadingPanel);
         loginText.setTypeface(typeface);
 
-        initFacebookTokenTracker();
-
-        ImageButton buttonLogin = (ImageButton)findViewById(R.id.login_button);
+        //initFacebookTokenTracker();
         offlineMode = OfflineMode.getInstance();
-        buttonLogin.setOnClickListener(this);
-
-        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         sessionManager = SessionManager.getInstance(getApplicationContext());
 
-        ViewServer.get(this).addWindow(this);
+        mCallbackManager = CallbackManager.Factory.create();
+        LoginButton buttonLogin = (LoginButton) findViewById(R.id.login_button);
+        buttonLogin.setReadPermissions(Arrays.asList("public_profile", "email", "user_friends"));
+        buttonLogin.setOnClickListener(this);
+
     }
 
     @Override
     public void onClick(View v) {
-        offlineMode.isConnectedToRemoteAPI(this);
-        LoginManager.getInstance().logInWithReadPermissions(this, Collections.singletonList("public_profile, email, user_friends"));
+        if (!offlineMode.isConnectedToRemoteAPI(this)) {
+            return;
+        }
         LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -111,12 +99,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     return;
                 }
 
+                // if (userFBID.isExist) { signIn(); } else { register(); }
+
                 GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), (object, response) -> {
                     spinner.setVisibility(View.VISIBLE);
                     try {
                         userFBID = object.getString("id");
                         userName = object.getString("first_name") + " " + object.getString("last_name");
-                        userEmail = (object.getString("email") != null) ? object.getString("email") : userFBID + "@champy.com";
+                        userEmail = (object.getString("email") != null) ? object.getString("email") : userFBID + "@facebook.com";
                         try {
                             URL profile_pic = new URL("https://graph.facebook.com/" + userFBID + "/picture?type=large");
                             userPicture = profile_pic.toString();
@@ -126,9 +116,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                         new Thread(() -> {
                             try {
-                                String token_android;
                                 InstanceID instanceID = InstanceID.getInstance(LoginActivity.this);
-                                token_android = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+                                String token_android = instanceID.getToken(
+                                        getString(R.string.gcm_defaultSenderId),
+                                        GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
 
                                 JSONObject jsonObject = new JSONObject();
                                 jsonObject.put("token", token_android);
@@ -161,24 +152,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onError(FacebookException exception) {
-                Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, "Login status: Failed", Toast.LENGTH_LONG).show();
             }
         });
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //Profile profile = Profile.getCurrentProfile();
-        ViewServer.get(this).setFocusedWindow(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        mTokenTracker.stopTracking();
-        mProfileTracker.stopTracking();
     }
 
     @Override
@@ -198,7 +175,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         this.isFinishing();
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
-        ViewServer.get(this).removeWindow(this);
     }
 
     @Override
@@ -231,28 +207,28 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    /**
-     * Initialize facebook token tracker. This shit needs to track if token was changed. We never
-     * change it in Champy, but without this shit facebook-login will crash.
-     */
-    private void initFacebookTokenTracker() {
-        mCallbackManager = CallbackManager.Factory.create();
-        mTokenTracker  = new AccessTokenTracker() {
-            @Override
-            protected void onCurrentAccessTokenChanged(AccessToken oldToken, AccessToken newToken) {}
-        };
-        mProfileTracker = new ProfileTracker() {
-            @Override
-            protected void onCurrentProfileChanged(Profile oldprofile, Profile newprofile) {
-                if (newprofile != null) {
-                    userName = newprofile.getName();
-                    userFBID = newprofile.getId();
-                }
-            }
-        };
-        mTokenTracker.startTracking();
-        mProfileTracker.startTracking();
-    }
+//    /**
+//     * Initialize facebook token tracker. This shit needs to track if token was changed. We never
+//     * change it in Champy, but without this shit facebook-login will crash.
+//     */
+//    private void initFacebookTokenTracker() {
+//        mCallbackManager = CallbackManager.Factory.create();
+//        mTokenTracker  = new AccessTokenTracker() {
+//            @Override
+//            protected void onCurrentAccessTokenChanged(AccessToken oldToken, AccessToken newToken) {}
+//        };
+//        mProfileTracker = new ProfileTracker() {
+//            @Override
+//            protected void onCurrentProfileChanged(Profile oldprofile, Profile newprofile) {
+//                if (newprofile != null) {
+//                    userName = newprofile.getName();
+//                    userFBID = newprofile.getId();
+//                }
+//            }
+//        };
+//        mTokenTracker.startTracking();
+//        mProfileTracker.startTracking();
+//    }
 
     /**
      * Method to login user in case when we have already created profile. Here we create new Session
@@ -360,6 +336,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      */
     private void registerUser(String fbID, String name, String email, String gcm, String androidTok, String picture) throws JSONException {
         String jwt = getToken(fbID, gcm);
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         NewUser newUser = retrofit.create(NewUser.class);
         Call<User> call = newUser.register(new LoginData(fbID, name, email));
         call.enqueue(new Callback<User>() {
