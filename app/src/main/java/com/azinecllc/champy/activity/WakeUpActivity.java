@@ -12,7 +12,6 @@ import android.widget.TimePicker;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.utils.OfflineMode;
-import com.azinecllc.champy.utils.SessionManager;
 
 public class WakeUpActivity extends AppCompatActivity implements View.OnClickListener {
 

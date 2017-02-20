@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Build;
 
 import com.azinecllc.champy.receiver.CustomAlarmReceiver;
-import com.azinecllc.champy.receiver.CustomNotifyReceiver;
 
 import java.util.Calendar;
 import java.util.Date;

@@ -20,7 +20,6 @@ import com.azinecllc.champy.utils.SessionManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
-import java.io.File;
 import java.util.List;
 
 import retrofit.Call;
@@ -30,7 +29,6 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 import static com.azinecllc.champy.utils.Constants.API_URL;
-import static com.azinecllc.champy.utils.Constants.path;
 import static java.lang.Math.round;
 
 public class DuelActivity extends AppCompatActivity {

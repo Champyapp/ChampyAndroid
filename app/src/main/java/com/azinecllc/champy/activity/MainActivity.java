@@ -47,9 +47,9 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 import static com.azinecllc.champy.utils.Constants.API_URL;
 import static com.azinecllc.champy.utils.Constants.TAG_CHALLENGES;
+import static com.azinecllc.champy.utils.Constants.TAG_PRIVACY_POLICE;
 import static com.azinecllc.champy.utils.Constants.TAG_SETTINGS;
 import static com.azinecllc.champy.utils.Constants.TAG_TERMS;
-import static com.azinecllc.champy.utils.Constants.TAG_PRIVACY_POLICE;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
 

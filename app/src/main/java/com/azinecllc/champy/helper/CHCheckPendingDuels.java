@@ -3,11 +3,7 @@ package com.azinecllc.champy.helper;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.design.widget.NavigationView;
-import android.view.Menu;
-import android.view.View;
 
-import com.azinecllc.champy.R;
 import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.utils.SessionManager;
 

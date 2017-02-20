@@ -3,7 +3,6 @@ package com.azinecllc.champy.controller;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.azinecllc.champy.activity.RoleControllerActivity;
 import com.azinecllc.champy.data.DBHelper;

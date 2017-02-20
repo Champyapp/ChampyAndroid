@@ -3,37 +3,18 @@ package com.azinecllc.champy.service;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
-import android.widget.Toast;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.RoleControllerActivity;
-import com.azinecllc.champy.data.DBHelper;
-import com.azinecllc.champy.interfaces.ActiveInProgress;
-import com.azinecllc.champy.model.active_in_progress.Challenge;
-import com.azinecllc.champy.model.active_in_progress.Datum;
-import com.azinecllc.champy.model.active_in_progress.Recipient;
-import com.azinecllc.champy.model.active_in_progress.Sender;
 import com.azinecllc.champy.utils.SessionManager;
 import com.google.android.gms.gcm.GcmListenerService;
 
 import java.util.HashMap;
-import java.util.List;
-
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.GsonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
-
-import static com.azinecllc.champy.utils.Constants.API_URL;
-import static com.azinecllc.champy.utils.Constants.update;
 
 public class MyGcmListenerService extends GcmListenerService {
 

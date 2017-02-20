@@ -20,7 +20,6 @@ import android.widget.Toast;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.utils.OfflineMode;
-import com.azinecllc.champy.utils.SessionManager;
 import com.facebook.FacebookSdk;
 
 import java.io.IOException;

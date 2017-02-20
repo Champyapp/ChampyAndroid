@@ -31,7 +31,6 @@ import android.widget.Toast;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.AboutActivity;
 import com.azinecllc.champy.activity.ContactUsActivity;
-import com.azinecllc.champy.activity.RoleControllerActivity;
 import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.controller.DailyRemindController;
 import com.azinecllc.champy.controller.UserController;
@@ -40,7 +39,6 @@ import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.facebook.login.LoginManager;
 import com.soundcloud.android.crop.Crop;
 
 import java.io.File;
@@ -56,13 +54,10 @@ import retrofit.Retrofit;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.app.Activity.RESULT_OK;
-import static com.azinecllc.champy.activity.MainActivity.CURRENT_TAG;
-import static com.azinecllc.champy.activity.MainActivity.navItemIndex;
 import static com.azinecllc.champy.utils.Constants.API_URL;
 import static com.azinecllc.champy.utils.Constants.CAMERA_REQUEST;
 import static com.azinecllc.champy.utils.Constants.CROP_PIC;
 import static com.azinecllc.champy.utils.Constants.SELECT_FILE;
-import static com.azinecllc.champy.utils.Constants.TAG_CHALLENGES;
 import static com.azinecllc.champy.utils.Constants.path;
 
 /**
