@@ -21,7 +21,7 @@ import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
 
-public class DuelFragment extends Fragment implements View.OnClickListener {
+public class ChallengeDuelFragment extends Fragment implements View.OnClickListener {
 
     private static final String ARG_PAGE = "ARG_PAGE";
     private int position, size, days = 21, o = 0;
@@ -36,10 +36,10 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
     private Cursor c;
 
 
-    public static DuelFragment newInstance(int page) {
+    public static ChallengeDuelFragment newInstance(int page) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
-        DuelFragment fragment = new DuelFragment();
+        ChallengeDuelFragment fragment = new ChallengeDuelFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -47,7 +47,7 @@ public class DuelFragment extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.item_card, container, false);
+        final View view = inflater.inflate(R.layout.item_card_self_and_duel, container, false);
         DBHelper dbHelper = DBHelper.getInstance(getContext());
         Bundle extras = getActivity().getIntent().getExtras();
         Bundle args = this.getArguments();

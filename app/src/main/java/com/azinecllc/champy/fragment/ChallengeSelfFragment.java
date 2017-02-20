@@ -21,7 +21,7 @@ import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
 
-public class SelfImprovementFragment extends Fragment implements View.OnClickListener {
+public class ChallengeSelfFragment extends Fragment implements View.OnClickListener {
 
     public static final String ARG_PAGE = "ARG_PAGE";
     public int position, size, daysCount, newDaysCount, days = 21, o = 0;
@@ -37,10 +37,10 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
     public Cursor c;
     public SQLiteDatabase db;
 
-    public static SelfImprovementFragment newInstance(int page) {
+    public static ChallengeSelfFragment newInstance(int page) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
-        SelfImprovementFragment fragment = new SelfImprovementFragment();
+        ChallengeSelfFragment fragment = new ChallengeSelfFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -48,7 +48,7 @@ public class SelfImprovementFragment extends Fragment implements View.OnClickLis
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.item_card, container, false);
+        final View view = inflater.inflate(R.layout.item_card_self_and_duel, container, false);
         dbHelper = DBHelper.getInstance(getContext());
         db = dbHelper.getWritableDatabase();
         final Bundle bundle = this.getArguments();

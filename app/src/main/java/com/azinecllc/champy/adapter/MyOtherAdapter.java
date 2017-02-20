@@ -33,7 +33,7 @@ import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> {
+public class MyOtherAdapter extends RecyclerView.Adapter<MyOtherAdapter.ViewHolder> {
 
     private List<FriendModel> mContacts;
     private Retrofit retrofit;
@@ -46,7 +46,7 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
 
 
     // Pass in the contact array into the constructor
-    public OtherAdapter(List<FriendModel> contacts, Context c, Activity a, Retrofit r) {
+    public MyOtherAdapter(List<FriendModel> contacts, Context c, Activity a, Retrofit r) {
         mContacts = contacts;
         this.context = c;
         this.activity = a;
@@ -88,7 +88,7 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(OtherAdapter.ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(MyOtherAdapter.ViewHolder viewHolder, final int position) {
         // Get the data model based on position
         final FriendModel contact = mContacts.get(position);
 

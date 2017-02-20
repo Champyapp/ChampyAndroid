@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +18,6 @@ import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.MainActivity;
 import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.model.SelfImprovement_model;
-import com.azinecllc.champy.utils.SessionManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,7 +41,7 @@ public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
         View tempView = convertView;
         if(tempView == null) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            tempView = inflater.inflate(R.layout.single_card_fragment_self, null, false);
+            tempView = inflater.inflate(R.layout.single_card_fragment, null, false);
         }
 
         final SelfImprovement_model currentCard = arrayList.get(position);

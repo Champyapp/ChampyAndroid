@@ -3,11 +3,8 @@ package com.azinecllc.champy.fragment;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,12 +12,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.adapter.FriendsActivityPagerAdapter;
-import com.azinecllc.champy.adapter.FriendsAdapter;
+import com.azinecllc.champy.adapter.MyFriendsAdapter;
 import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.model.FriendModel;
 import com.azinecllc.champy.model.friend.Datum;
@@ -28,19 +23,15 @@ import com.azinecllc.champy.model.friend.Friend_;
 import com.azinecllc.champy.model.friend.Owner;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 
-import java.io.File;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import jp.wasabeef.glide.transformations.CropSquareTransformation;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
@@ -48,7 +39,6 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 import static com.azinecllc.champy.utils.Constants.API_URL;
-import static com.azinecllc.champy.utils.Constants.path;
 
 public class MyFriendsFragment extends Fragment {
 
@@ -109,7 +99,7 @@ public class MyFriendsFragment extends Fragment {
         c.close();
 
         RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-        FriendsAdapter adapter = new FriendsAdapter(friends, getContext(), getActivity(), (view1, position) -> {
+        MyFriendsAdapter adapter = new MyFriendsAdapter(friends, getContext(), getActivity(), (view1, position) -> {
             FriendModel friend = friends.get(position);
         });
 
@@ -252,7 +242,7 @@ public class MyFriendsFragment extends Fragment {
                         c.close();
 
                         RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-                        final FriendsAdapter adapter = new FriendsAdapter(newfriends, getContext(), getActivity(), (view1, position) -> {
+                        final MyFriendsAdapter adapter = new MyFriendsAdapter(newfriends, getContext(), getActivity(), (view1, position) -> {
                             FriendModel friend = newfriends.get(position);
                         });
 

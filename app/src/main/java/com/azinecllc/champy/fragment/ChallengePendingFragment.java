@@ -22,7 +22,7 @@ import com.azinecllc.champy.utils.SessionManager;
 
 import java.io.IOException;
 
-public class PendingDuelFragment extends Fragment implements View.OnClickListener {
+public class ChallengePendingFragment extends Fragment implements View.OnClickListener {
 
     public static final String ARG_PAGE = "ARG_PAGE";
     public int position, size, inProgressCount, days = 21, o = 0;
@@ -39,10 +39,10 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
     public Cursor c;
     public SQLiteDatabase db;
 
-    public static PendingDuelFragment newInstance(int page) {
+    public static ChallengePendingFragment newInstance(int page) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
-        PendingDuelFragment fragment = new PendingDuelFragment();
+        ChallengePendingFragment fragment = new ChallengePendingFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,7 +60,7 @@ public class PendingDuelFragment extends Fragment implements View.OnClickListene
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.item_pending_duel, container, false);
+        View view = inflater.inflate(R.layout.item_card_pending_duel, container, false);
 
         final Bundle args = this.getArguments();
         c = db.query("pending_duel", null, null, null, null, null, null);

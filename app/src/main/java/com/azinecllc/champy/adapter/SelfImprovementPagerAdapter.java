@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
-import com.azinecllc.champy.fragment.SelfImprovementFragment;
+import com.azinecllc.champy.fragment.ChallengeSelfFragment;
 
 public class SelfImprovementPagerAdapter extends FragmentStatePagerAdapter {
 
@@ -30,7 +30,7 @@ public class SelfImprovementPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return SelfImprovementFragment.newInstance(position);
+        return ChallengeSelfFragment.newInstance(position);
     }
 
     @Override

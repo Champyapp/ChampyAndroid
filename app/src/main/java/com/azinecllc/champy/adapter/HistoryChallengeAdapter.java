@@ -22,7 +22,7 @@ public class HistoryChallengeAdapter extends RecyclerView.Adapter<HistoryChallen
     private Typeface typeFace;
     private TextView tvPoint;
 
-    public HistoryChallengeAdapter (List<HistoryChallenge> contacts, Context context){
+    public HistoryChallengeAdapter(List<HistoryChallenge> contacts, Context context) {
         mContacts = contacts;
         mContext = context;
     }

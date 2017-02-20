@@ -1,11 +1,10 @@
 package com.azinecllc.champy.adapter;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,13 +13,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.activity.DuelActivity;
+import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.interfaces.CustomItemClickListener;
-import com.azinecllc.champy.model.FriendModel;
-import com.azinecllc.champy.utils.Constants;
+import com.azinecllc.champy.interfaces.Friends;
+import com.azinecllc.champy.model.Pending_friend;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
 import com.bumptech.glide.Glide;
@@ -36,21 +34,23 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
+import static com.azinecllc.champy.utils.Constants.API_URL;
 
-    private List<FriendModel> mContacts;
-    private SessionManager sessionManager;
-    private OfflineMode offlineMode;
+public class MyPendingAdapter extends RecyclerView.Adapter<MyPendingAdapter.ViewHolder> {
+
+    private List<Pending_friend> mContacts;
     private String token, id;
-    private int inProgressCounter;
     private Context context;
     private Activity activity;
+    private SessionManager sessionManager;
+    private Retrofit retrofit;
+    private OfflineMode offlineMode;
     private ArrayList<Integer> selected = new ArrayList<>();
 
-    public FriendsAdapter(List<FriendModel> contacts, Context context, Activity activity, CustomItemClickListener itemOnClick) {
+
+    public MyPendingAdapter(List<Pending_friend> contacts, Context context, Activity activity) {
         mContacts = contacts;
         this.context = context;
-        CustomItemClickListener listener = itemOnClick;
         this.activity = activity;
     }
 
@@ -58,17 +58,20 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
+
         // Inflate the custom layout
         View contactView = inflater.inflate(R.layout.item_friends, parent, false);
 
         TextView tvUserName = (TextView)contactView.findViewById(R.id.userName);
         Typeface typeFace = Typeface.createFromAsset(context.getAssets(), "fonts/bebasneue.ttf");
         tvUserName.setTypeface(typeFace);
+
         // Return a new holder instance
         final ViewHolder viewHolder = new ViewHolder(contactView);
         viewHolder.simple.setVisibility(View.VISIBLE);
         viewHolder.info.setVisibility(View.GONE);
 
+        // отвечает за клик по другу в списке
         contactView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,7 +81,9 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                 } else {
                     int oldSelected = selected.get(0);
                     selected.clear();
-                    if (viewHolder.getAdapterPosition() == oldSelected) selected.add(-1);
+                    if (viewHolder.getAdapterPosition() == oldSelected) {
+                        selected.add(-1);
+                    }
                     notifyItemChanged(oldSelected);
                     notifyItemChanged(viewHolder.getAdapterPosition());
                     selected.clear();
@@ -90,25 +95,26 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         offlineMode = OfflineMode.getInstance();
         token = sessionManager.getToken();
         id = sessionManager.getUserId();
-        inProgressCounter = Integer.parseInt(sessionManager.getChampyOptions().get("challenges"));
+
+        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+
 
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(final FriendsAdapter.ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(final MyPendingAdapter.ViewHolder viewHolder, final int position) {
         // Get the data model based on position
-        final FriendModel contact = mContacts.get(position);
+        final Pending_friend contact = mContacts.get(position);
         // Set item views based on the data model
+        Typeface typeFace = Typeface.createFromAsset(context.getAssets(), "fonts/bebasneue.ttf");
         TextView tvUserName = viewHolder.nameTextView;
         tvUserName.setText(contact.getName());
-        Typeface typeFace = Typeface.createFromAsset(context.getAssets(), "fonts/bebasneue.ttf");
 
         /**
          * below close view
          */
-
-        // Initialisation circle image views & photo
+        // Initialisation view elements for close state
         ImageView ivFriendPicture = viewHolder.friendImage;
         ImageView imageViewInProg = viewHolder.challenges;
         ImageView imageViewTotal  = viewHolder.total;
@@ -124,7 +130,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         counterTotalClose.setText(contact.getmTotal());
         counterWinsClose.setText(contact.getmWins());
 
-        // Setting typeface for counters;
+        // Setting typeface for counters
         counterInProgClose.setTypeface(typeFace);
         counterTotalClose.setTypeface(typeFace);
         counterWinsClose.setTypeface(typeFace);
@@ -133,59 +139,60 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
          * below open view
          */
 
-        // Initialisation circle image views & photo
+        // Initialisation views elements for open state
         ImageView imageViewUserAvatar = (ImageView) viewHolder.itemView.findViewById(R.id.imageViewUserAvatar);
-        ImageView imageViewInProgOpen = viewHolder.mchallenges;
-        ImageView imageViewTotalOpen  = viewHolder.mtotal;
-        ImageView imageViewWinsOpen   = viewHolder.mwins;
+        ImageView imageViewInProgOpen = viewHolder.mChallenges;
+        ImageView imageViewTotalOpen  = viewHolder.mTotal;
+        ImageView imageViewWinsOpen   = viewHolder.mWins;
 
-        // Initialisation text views
-        TextView tvChallenges = (TextView) viewHolder.itemView.findViewById(R.id.textViewChallenges);
-        TextView tvTotal      = (TextView) viewHolder.itemView.findViewById(R.id.textViewTotal);
-        TextView tvWins       = (TextView) viewHolder.itemView.findViewById(R.id.textViewWins);
+        // Initialisation simple text
+        TextView tvInProg = (TextView) viewHolder.itemView.findViewById(R.id.textViewChallenges);
+        TextView tvTotal  = (TextView) viewHolder.itemView.findViewById(R.id.textViewTotal);
+        TextView tvWins   = (TextView) viewHolder.itemView.findViewById(R.id.textViewWins);
 
-        // Initialisation open counter
-        TextView counterInProgressOpen = (TextView) viewHolder.itemView.findViewById(R.id.info_inProgress);
-        TextView counterTotalOpen      = (TextView) viewHolder.itemView.findViewById(R.id.info_total);
-        TextView counterWinsOpen       = (TextView) viewHolder.itemView.findViewById(R.id.info_wins);
+        // Initialisation counter
+        TextView counterInProgOpen = (TextView) viewHolder.itemView.findViewById(R.id.info_inProgress);
+        TextView counterTotalOpen  = (TextView) viewHolder.itemView.findViewById(R.id.info_total);
+        TextView counterWinsOpen   = (TextView) viewHolder.itemView.findViewById(R.id.info_wins);
 
-        // Setting value for open counter
-        counterInProgressOpen.setText(contact.getmChallenges());
+        // response for openView by counters in close view
+        counterInProgOpen.setText(contact.getmChallenges());
         counterTotalOpen.setText(contact.getmTotal());
         counterWinsOpen.setText(contact.getmWins());
 
-        // User name initialisation, setting value & typeface
+        // User name init, set view & typeface
         TextView tvUserName2 = (TextView) viewHolder.itemView.findViewById(R.id.textViewChallengesCounter);
         tvUserName2.setText(contact.getName());
         tvUserName2.setTypeface(typeFace);
 
-        // Setting typeface for simple text
-        tvChallenges.setTypeface(typeFace);
+        // typeface for text views
+        tvInProg.setTypeface(typeFace);
         tvTotal.setTypeface(typeFace);
         tvWins.setTypeface(typeFace);
 
-        // Setting typeface for open counters
-        counterInProgressOpen.setTypeface(typeFace);
+        // typeface for counters
+        counterInProgOpen.setTypeface(typeFace);
         counterTotalOpen.setTypeface(typeFace);
         counterWinsOpen.setTypeface(typeFace);
 
 
         // при нажатии нужно переобъявлять view, поэтому делаем это.
-        // response for view in open state
+        // отвечает за вид в развернутом состоянии
         if (selected.contains(position)) {
-
-            Glide.with(context).load(R.drawable.ic_score_wins) .override(40, 40).into(imageViewWinsOpen);
-            Glide.with(context).load(R.drawable.ic_score_prog) .override(40, 40).into(imageViewInProgOpen);
+            Glide.with(context).load(R.drawable.ic_score_wins).override(40, 40).into(imageViewWinsOpen);
+            Glide.with(context).load(R.drawable.ic_score_prog).override(40, 40).into(imageViewInProgOpen);
             Glide.with(context).load(R.drawable.ic_score_total).override(40, 40).into(imageViewTotalOpen);
 
             Glide.with(context)
                     .load(R.drawable.stat_circle_00027)
                     .placeholder(R.drawable.ic_champy_circle)
                     .into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleChall));
+
             Glide.with(context)
                     .load(R.drawable.stat_circle_00027)
                     .placeholder(R.drawable.ic_champy_circle)
                     .into((ImageView)viewHolder.itemView.findViewById(R.id.imageViewBgForCircleWins));
+
             Glide.with(context)
                     .load(R.drawable.stat_circle_00027)
                     .placeholder(R.drawable.ic_champy_circle)
@@ -202,13 +209,22 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                     .dontAnimate()
                     .into(imageViewUserAvatar);
 
+            // response for visible of button 'add' (owner = myself);
+            if (contact.getOwner().equals("true")) {
+                viewHolder.add.setVisibility(View.GONE);
+                viewHolder.block.setVisibility(View.VISIBLE);
+            } else {
+                viewHolder.add.setVisibility(View.VISIBLE);
+                viewHolder.block.setVisibility(View.VISIBLE);
+            }
+
             // made our "open-view" is visible and 'close-view' invisible
             viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.VISIBLE);
             viewHolder.itemView.findViewById(R.id.row_friends_list_close).setVisibility(View.GONE);
         }
         else {
-            Glide.with(context).load(R.drawable.ic_score_wins) .override(40, 40).into(imageViewWins);
             Glide.with(context).load(R.drawable.ic_score_prog) .override(40, 40).into(imageViewInProg);
+            Glide.with(context).load(R.drawable.ic_score_wins) .override(40, 40).into(imageViewWins);
             Glide.with(context).load(R.drawable.ic_score_total).override(40, 40).into(imageViewTotal);
 
             Glide.with(context)
@@ -223,74 +239,69 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                     .into(ivFriendPicture);
 
             // made our "close-view" is visible and 'open-view' invisible
-            viewHolder.itemView.findViewById(R.id.row_friends_list_open).setVisibility(View.GONE);
+            viewHolder.itemView.findViewById(R.id.row_friends_list_open) .setVisibility(View.GONE);
             viewHolder.itemView.findViewById(R.id.row_friends_list_close).setVisibility(View.VISIBLE);
         }
 
-        // button button_block user in All pages
         viewHolder.block.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (offlineMode.isConnectedToRemoteAPI(activity)) {
-                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    final String friend = mContacts.get(position).getID();
+                    com.azinecllc.champy.interfaces.Friends friends = retrofit.create(com.azinecllc.champy.interfaces.Friends.class);
+                    Call<com.azinecllc.champy.model.friend.Friend> call = friends.removeFriend(id, friend, token);
+                    call.enqueue(new Callback<com.azinecllc.champy.model.friend.Friend>() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            switch (which) {
-                                case DialogInterface.BUTTON_POSITIVE:
-                                    String friend = mContacts.get(position).getID();
-                                    Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-
-                                    com.azinecllc.champy.interfaces.Friends friends = retrofit.create(com.azinecllc.champy.interfaces.Friends.class);
-                                    Call<com.azinecllc.champy.model.friend.Friend> call = friends.removeFriend(id, friend, token);
-                                    call.enqueue(new Callback<com.azinecllc.champy.model.friend.Friend>() {
-                                        @Override
-                                        public void onResponse(Response<com.azinecllc.champy.model.friend.Friend> response, Retrofit retrofit) {
-                                            //final String myLog = (response.isSuccess()) ? "Status: Removed" : "Status: " + response.toString();
-                                            //Log.d(TAG, "onResponse: " + myLog);
-                                        }
-
-                                        @Override
-                                        public void onFailure(Throwable t) {
-                                        }
-                                    });
-                                    sessionManager.setRefreshFriends("false");
-                                    mContacts.remove(position);
-                                    notifyItemRemoved(position);
-                                    selected.clear();
-                                    break;
-                                case DialogInterface.BUTTON_NEGATIVE:
-                                    break;
-                            }
+                        public void onResponse(Response<com.azinecllc.champy.model.friend.Friend> response, Retrofit retrofit) {
                         }
-                    };
-                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setMessage("Do you want to delete this user from your friends list?")
-                            .setTitle("Are you sure")
-                            .setIcon(R.mipmap.nav_friends)
-                            .setPositiveButton("Yes", dialogClickListener)
-                            .setNegativeButton("No", dialogClickListener)
-                            .show();
+                        @Override
+                        public void onFailure(Throwable t) {}
+                    });
+
+                    // Should be false to not recreate or duplicate
+                    sessionManager.setRefreshPending("false");
+                    mContacts.remove(position);
+                    notifyItemRemoved(position);
+                    selected.clear();
                 }
             }
         });
 
-        ImageButton imageButtonAdd = viewHolder.add;
-        imageButtonAdd.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.button_duel));
-        imageButtonAdd.setOnClickListener(new View.OnClickListener() {
+        viewHolder.add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (offlineMode.isConnectedToRemoteAPI(activity) && inProgressCounter < 10) {
-                    Intent intent = new Intent(context, DuelActivity.class);
-                    intent.putExtra("photo", contact.getPicture());
-                    intent.putExtra("name", contact.getName());
-                    intent.putExtra("id", contact.getID());
-                    context.startActivity(intent);
-                } else {
-                    Toast.makeText(context, R.string.challenges_to_much, Toast.LENGTH_SHORT).show();
+                if (offlineMode.isConnectedToRemoteAPI(activity)) {
+                    String friend = mContacts.get(position).getID();
+                    if (friend != null) {
+                        sessionManager.setRefreshFriends("false");
+                        sessionManager.setRefreshPending("false");
+                        com.azinecllc.champy.interfaces.Friends friends = retrofit.create(Friends.class);
+                        Call<com.azinecllc.champy.model.friend.Friend> call = friends.acceptFriendRequest(id, friend, token);
+                        call.enqueue(new Callback<com.azinecllc.champy.model.friend.Friend>() {
+                            @Override
+                            public void onResponse(Response<com.azinecllc.champy.model.friend.Friend> response, Retrofit retrofit) {
+                                if (response.isSuccess()) {
+                                    DBHelper dbHelper = DBHelper.getInstance(context);
+                                    SQLiteDatabase db = dbHelper.getWritableDatabase();
+                                    ContentValues cv  = new ContentValues();
+
+                                    cv.put("name", mContacts.get(position).getName());
+                                    cv.put("photo", mContacts.get(position).getPicture());
+                                    cv.put("user_id", mContacts.get(position).getID());
+                                    db.insert("friends", null, cv);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Throwable t) { }
+                        });
+                        mContacts.remove(position);
+                        notifyItemRemoved(position);
+                        selected.clear();
+                    }
                 }
             }
         });
-
 
     }
 
@@ -302,53 +313,44 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        // Your holder should contain a member variable
-        // for any view that will be set as you render a row
         TextView nameTextView;
-
         ImageView friendImage;
         public ImageView challenges;
         public ImageView wins;
         public ImageView total;
         ImageButton block;
         public ImageButton add;
-
-        ImageView mchallenges;
-        ImageView mwins;
-        ImageView mtotal;
-
+        ImageView mChallenges;
+        ImageView mWins;
+        ImageView mTotal;
         RelativeLayout simple;
         public RelativeLayout info;
-
         ImageView dop;
 
-        // We also create a constructor that accepts the entire item row
-        // and does the view lookups to find each subview
         ViewHolder(View itemView) {
-            // Stores the itemView in a public final member variable that can be used
-            // to access the context from any ViewHolder instance.
             super(itemView);
 
-            nameTextView = (TextView)  itemView.findViewById(R.id.userName);
+            nameTextView = (TextView) itemView.findViewById(R.id.userName);
             friendImage  = (ImageView) itemView.findViewById(R.id.picture);
             challenges   = (ImageView) itemView.findViewById(R.id.imageView_challenges_logo);
             wins         = (ImageView) itemView.findViewById(R.id.imageView_wins_logo);
             total        = (ImageView) itemView.findViewById(R.id.imageView_total_logo);
             dop          = (ImageView) itemView.findViewById(R.id.imageViewUserAvatar);
 
-            mchallenges  = (ImageView) itemView.findViewById(R.id.imageViewBgChallenges);
-            mwins        = (ImageView) itemView.findViewById(R.id.imageViewBgWins);
-            mtotal       = (ImageView) itemView.findViewById(R.id.imageViewBgTotal);
+            mChallenges  = (ImageView) itemView.findViewById(R.id.imageViewBgChallenges);
+            mWins        = (ImageView) itemView.findViewById(R.id.imageViewBgWins);
+            mTotal       = (ImageView) itemView.findViewById(R.id.imageViewBgTotal);
 
-            block        = (ImageButton) itemView.findViewById(R.id.imageButtonBlockUser);
-            add          = (ImageButton) itemView.findViewById(R.id.imageButtonAddUser);
+            simple       = (RelativeLayout)itemView.findViewById(R.id.row_friends_list_close);
+            info         = (RelativeLayout)itemView.findViewById(R.id.row_friends_list_open);
 
-            simple       = (RelativeLayout) itemView.findViewById(R.id.row_friends_list_close);
-            info         = (RelativeLayout) itemView.findViewById(R.id.row_friends_list_open);
+            block        = (ImageButton)itemView.findViewById(R.id.imageButtonBlockUser);
+            add          = (ImageButton)itemView.findViewById(R.id.imageButtonAddUser);
 
         }
 
     }
+
 
 
 }

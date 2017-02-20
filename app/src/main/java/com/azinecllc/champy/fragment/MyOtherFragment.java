@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.adapter.OtherAdapter;
+import com.azinecllc.champy.adapter.MyOtherAdapter;
 import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.helper.CHCheckTableForExist;
 import com.azinecllc.champy.interfaces.NewUser;
@@ -63,7 +63,7 @@ public class MyOtherFragment extends Fragment {
     private List<FriendModel> friends;
     private OfflineMode offlineMode;
     private RecyclerView rvContacts;
-    private OtherAdapter adapter;
+    private MyOtherAdapter adapter;
     private SQLiteDatabase db;
     private Retrofit retrofit;
     private DBHelper dbHelper;
@@ -124,7 +124,7 @@ public class MyOtherFragment extends Fragment {
 
 
         rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-        adapter = new OtherAdapter(friends, getContext(), getActivity(), retrofit);
+        adapter = new MyOtherAdapter(friends, getContext(), getActivity(), retrofit);
 
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         rvContacts.setAdapter(adapter);

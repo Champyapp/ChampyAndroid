@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.adapter.PendingAdapter;
+import com.azinecllc.champy.adapter.MyPendingAdapter;
 import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.model.Pending_friend;
 import com.azinecllc.champy.model.friend.Datum;
@@ -97,7 +97,7 @@ public class MyPendingFragment extends Fragment {
         c.close();
 
         final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-        final PendingAdapter adapter = new PendingAdapter(pendingFriends, getContext(), getActivity(), (view1, position) -> {
+        final MyPendingAdapter adapter = new MyPendingAdapter(pendingFriends, getContext(), getActivity(), (view1, position) -> {
             Pending_friend friend = pendingFriends.get(position);
         });
 
@@ -250,7 +250,7 @@ public class MyPendingFragment extends Fragment {
                         c.close();
 
                         RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-                        final PendingAdapter adapter = new PendingAdapter(newfriends, getContext(), getActivity(), (view1, position) -> {
+                        final MyPendingAdapter adapter = new MyPendingAdapter(newfriends, getContext(), getActivity(), (view1, position) -> {
                             Pending_friend friend = newfriends.get(position);
                         });
                         rvContacts.setAdapter(adapter);

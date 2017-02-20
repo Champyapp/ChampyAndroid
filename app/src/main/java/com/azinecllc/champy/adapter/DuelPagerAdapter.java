@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
-import com.azinecllc.champy.fragment.DuelFragment;
+import com.azinecllc.champy.fragment.ChallengeDuelFragment;
 
 public class DuelPagerAdapter extends FragmentStatePagerAdapter {
 
@@ -30,7 +30,7 @@ public class DuelPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return DuelFragment.newInstance(position);
+        return ChallengeDuelFragment.newInstance(position);
     }
 
     @Override

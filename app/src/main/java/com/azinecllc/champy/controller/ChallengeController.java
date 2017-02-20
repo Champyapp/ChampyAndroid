@@ -88,7 +88,7 @@ public class ChallengeController {
      * Method to create new Self-Improvement challenge and send call to API with Retrofit2.
      * We create new challenge and try to send it 'in progress'. This is only for custom cards.
      * @param description - this is value of challenge description. We get it from EditText in
-     *                    SelfImprovementFragment Ofc we check if this value isActive or isEmpty
+     *                    ChallengeSelfFragment Ofc we check if this value isActive or isEmpty
      * @param days - this is count of duration by challenge. Like with 'description': we get value
      *             from EditText and pass value here. After that we convert current value of days
      *             to UnixTime because API works only with it and push it up.
@@ -167,7 +167,7 @@ public class ChallengeController {
      * Method to create new Duel challenge and make call to API with Retrofit2.
      * We create new challenge and try to sent it 'in progress'. This is only for custom cards.
      * @param description - this is value of challenge description. We get it from EditText in
-     *                      DuelFragment.class, before sending we check if this value isActive
+     *                      ChallengeDuelFragment.class, before sending we check if this value isActive
      *                      or Empty
      * @param days - this is count of duration by challenge. Like with 'description': we get value
      *               from EditText and pass value here. After that we convert current value of days
