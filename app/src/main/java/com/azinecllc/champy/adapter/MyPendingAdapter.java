@@ -43,15 +43,17 @@ public class MyPendingAdapter extends RecyclerView.Adapter<MyPendingAdapter.View
     private Context context;
     private Activity activity;
     private SessionManager sessionManager;
+    private CustomItemClickListener listener;
     private Retrofit retrofit;
     private OfflineMode offlineMode;
     private ArrayList<Integer> selected = new ArrayList<>();
 
 
-    public MyPendingAdapter(List<Pending_friend> contacts, Context context, Activity activity) {
+    public MyPendingAdapter(List<Pending_friend> contacts, Context context, Activity activity, CustomItemClickListener listener) {
         mContacts = contacts;
         this.context = context;
         this.activity = activity;
+        this.listener = listener;
     }
 
     @Override
