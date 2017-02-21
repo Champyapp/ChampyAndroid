@@ -51,18 +51,15 @@ import static com.azinecllc.champy.utils.Constants.TAG_PRIVACY_POLICE;
 import static com.azinecllc.champy.utils.Constants.TAG_SETTINGS;
 import static com.azinecllc.champy.utils.Constants.TAG_TERMS;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static String CURRENT_TAG = TAG_CHALLENGES;
     public static int navItemIndex = 0;
 
     private static final String TAG = "MainActivity";
 
-    private boolean isFabOpen = false;
     private SessionManager sessionManager;
     private DrawerLayout drawer;
-    private FloatingActionButton fabPlus, fabWake, fabSelf, fabDuel;
-    private Animation fab_open, fab_close, rotate_forward, rotate_backward;
     private NavigationView navigationView;
     private Socket mSocket;
 
@@ -126,19 +123,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         drawerUserName.setText(userName);
         drawerUserEmail.setText(userEmail);
 
-        fabPlus = (FloatingActionButton) findViewById(R.id.fabPlus);
-        fabSelf = (FloatingActionButton) findViewById(R.id.fabSelf);
-        fabDuel = (FloatingActionButton) findViewById(R.id.fabDuel);
-        fabWake = (FloatingActionButton) findViewById(R.id.fabWake);
-        fab_open = AnimationUtils.loadAnimation(this, R.anim.fab_open);
-        fab_close = AnimationUtils.loadAnimation(this, R.anim.fab_close);
-        rotate_forward = AnimationUtils.loadAnimation(this, R.anim.rotate_forward);
-        rotate_backward = AnimationUtils.loadAnimation(this, R.anim.rotate_backward);
-        fabPlus.setOnClickListener(v -> animateFAB());
-        fabSelf.setOnClickListener(this);
-        fabDuel.setOnClickListener(this);
-        fabWake.setOnClickListener(this);
-
         // PENDING DUEL MENU IN DRAWER
         setCounterForPendingDuels();
 
@@ -195,25 +179,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    @Override
-    public void onClick(View v) {
-        if (Integer.parseInt(sessionManager.getChampyOptions().get("challenges")) < 10) {
-            switch (v.getId()) {
-                case R.id.fabSelf:
-                    startActivity(new Intent(this, SelfImprovementActivity.class));
-                    break;
-                case R.id.fabDuel:
-                    new Handler().postDelayed(() -> startActivity(new Intent(this, FriendsActivity.class)), 250);
-                    break;
-                case R.id.fabWake:
-                    startActivity(new Intent(this, WakeUpActivity.class));
-                    break;
-            }
-            animateFAB();
-        } else {
-            Toast.makeText(this, R.string.challenges_to_much, Toast.LENGTH_LONG).show();
-        }
-    }
+
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -321,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mHandler.post(runnable); // If 'runnable' is not null, then add to the message queue
         drawer.closeDrawers();   // Closing drawer on item click
         invalidateOptionsMenu(); // refresh toolbar menu
-        toggleFab();             // show or hide the fab button
+        //toggleFab();             // show or hide the fab button
     }
 
     /**
@@ -334,49 +300,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         runOnUiThread(() -> view.setText(count > 0 ? String.valueOf(getString(R.string.plus) + count) : null));
     }
 
-    /**
-     * Method which includes two method below. This method works like a toggle, on-off system.
-     */
-    private void animateFAB() {
-        if (isFabOpen) {
-            closeFab();
-        } else {
-            openFab();
-        }
-    }
 
-    /**
-     * Method to animate fab button, and make visible all sub buttons,
-     */
-    private void closeFab() {
-        fabPlus.startAnimation(rotate_backward);
-        fabWake.startAnimation(fab_close);
-        fabSelf.startAnimation(fab_close);
-        fabDuel.startAnimation(fab_close);
-        isFabOpen = false;
-    }
-
-    /**
-     * Method to animate fab button, and make invisible all sub buttons,
-     */
-    private void openFab() {
-        fabPlus.startAnimation(rotate_forward);
-        fabWake.startAnimation(fab_open);
-        fabSelf.startAnimation(fab_open);
-        fabDuel.startAnimation(fab_open);
-        isFabOpen = true;
-    }
-
-    /**
-     * Method to set visible for FabPlus if current fragment != main
-     */
-    private void toggleFab() {
-        if (navItemIndex == 0) {
-            fabPlus.show();
-        } else {
-            fabPlus.hide();
-        }
-    }
+//    /**
+//     * Method to set visible for FabPlus if current fragment != main
+//     */
+//    private void toggleFab() {
+//        if (navItemIndex == 0) {
+//            fabPlus.show();
+//        } else {
+//            fabPlus.hide();
+//        }
+//    }
 
 
 

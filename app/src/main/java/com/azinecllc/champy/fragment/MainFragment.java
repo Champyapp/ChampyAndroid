@@ -37,13 +37,16 @@ import static java.lang.Math.round;
  * Created by SashaKhyzhun on 2/7/17.
  */
 
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment implements View.OnClickListener {
 
     private Typeface typeface;
     private MainActivityCardsAdapter adapter;
     private SessionManager sessionManager;
     private int challengesInteger, winsInteger, totalInteger;
+    private boolean isFabOpen = false;
     private String userName;
+    private FloatingActionButton fabPlus, fabWake, fabSelf, fabDuel;
+    private Animation fab_open, fab_close, rotate_forward, rotate_backward;
 
 
     @Override
@@ -173,8 +176,84 @@ public class MainFragment extends Fragment {
         imageViewTotalLogo.startAnimation(alphaAnimation);
 
 
+        fabPlus = (FloatingActionButton) view.findViewById(R.id.fabPlus);
+        fabSelf = (FloatingActionButton) view.findViewById(R.id.fabSelf);
+        fabDuel = (FloatingActionButton) view.findViewById(R.id.fabDuel);
+        fabWake = (FloatingActionButton) view.findViewById(R.id.fabWake);
+        fab_open = AnimationUtils.loadAnimation(getContext(), R.anim.fab_open);
+        fab_close = AnimationUtils.loadAnimation(getContext(), R.anim.fab_close);
+        rotate_forward = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_forward);
+        rotate_backward = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_backward);
+
+        fabPlus.setOnClickListener(v -> animateFAB());
+        fabSelf.setOnClickListener(this);
+        fabDuel.setOnClickListener(this);
+        fabWake.setOnClickListener(this);
+
         return view;
     }
 
+    @Override
+    public void onClick(View v) {
+        if (Integer.parseInt(sessionManager.getChampyOptions().get("challenges")) < 10) {
+            switch (v.getId()) {
+                case R.id.fabSelf:
+                    startActivity(new Intent(getContext(), SelfImprovementActivity.class));
+                    break;
+                case R.id.fabDuel:
+                    new Handler().postDelayed(() -> startActivity(new Intent(getContext(), FriendsActivity.class)), 250);
+                    break;
+                case R.id.fabWake:
+                    startActivity(new Intent(getContext(), WakeUpActivity.class));
+                    break;
+            }
+            animateFAB();
+        } else {
+            Toast.makeText(getContext(), R.string.challenges_to_much, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /**
+     * Method-toggle to control visibility of the sub buttons. This method works like a on-off system.
+     */
+    private void animateFAB() {
+        if (isFabOpen) {
+            //closeFab();
+            fabPlus.startAnimation(rotate_backward);
+            fabWake.startAnimation(fab_close);
+            fabSelf.startAnimation(fab_close);
+            fabDuel.startAnimation(fab_close);
+            isFabOpen = false;
+        } else {
+            //openFab();
+            fabPlus.startAnimation(rotate_forward);
+            fabWake.startAnimation(fab_open);
+            fabSelf.startAnimation(fab_open);
+            fabDuel.startAnimation(fab_open);
+            isFabOpen = true;
+        }
+    }
+
+//    /**
+//     * Method to animate fab button, and make visible all sub buttons,
+//     */
+//    private void closeFab() {
+//        fabPlus.startAnimation(rotate_backward);
+//        fabWake.startAnimation(fab_close);
+//        fabSelf.startAnimation(fab_close);
+//        fabDuel.startAnimation(fab_close);
+//        isFabOpen = false;
+//    }
+
+//    /**
+//     * Method to animate fab button, and make invisible all sub buttons,
+//     */
+//    private void openFab() {
+//        fabPlus.startAnimation(rotate_forward);
+//        fabWake.startAnimation(fab_open);
+//        fabSelf.startAnimation(fab_open);
+//        fabDuel.startAnimation(fab_open);
+//        isFabOpen = true;
+//    }
 
 }
