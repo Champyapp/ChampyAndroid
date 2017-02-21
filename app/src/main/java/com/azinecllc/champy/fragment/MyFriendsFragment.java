@@ -72,28 +72,20 @@ public class MyFriendsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.item_recycler, container, false);
+        View view = inflater.inflate(R.layout.item_recycler, container, false);
 
-        final List<FriendModel> friends = new ArrayList<>();
+        List<FriendModel> friends = new ArrayList<>();
         Cursor c = db.query("friends", null, null, null, null, null, null);
         if (c.moveToFirst()) {
-            int idColIndex = c.getColumnIndex("id");
-            int nameColIndex = c.getColumnIndex("name");
-            int photoColIndex = c.getColumnIndex("photo");
-            int index = c.getColumnIndex("user_id");
-            int winsCount = c.getColumnIndex("successChallenges");
-            int allCount = c.getColumnIndex("allChallengesCount");
-            int inProgressCount = c.getColumnIndex("inProgressChallengesCount");
-            int level = c.getColumnIndex("level");
             do {
                 friends.add(new FriendModel(
-                        c.getString(nameColIndex),
-                        API_URL + c.getString(photoColIndex),
-                        c.getString(index),
-                        c.getString(inProgressCount),
-                        c.getString(winsCount),
-                        c.getString(allCount),
-                        c.getString(level)));
+                        c.getString(c.getColumnIndex("name")),
+                        API_URL + c.getString(c.getColumnIndex("photo")),
+                        c.getString(c.getColumnIndex("user_id")),
+                        c.getString(c.getColumnIndex("successChallenges")),
+                        c.getString(c.getColumnIndex("allChallengesCount")),
+                        c.getString(c.getColumnIndex("allChallengesCount")),
+                        c.getString(c.getColumnIndex("level"))));
             } while (c.moveToNext());
         }
         c.close();
@@ -220,22 +212,14 @@ public class MyFriendsFragment extends Fragment {
                         final List<FriendModel> newfriends = new ArrayList<>();
                         Cursor c = db.query("friends", null, null, null, null, null, null);
                         if (c.moveToFirst()) {
-                            int nameColIndex = c.getColumnIndex("name");
-                            int photoColIndex = c.getColumnIndex("photo");
-                            int idColIndex = c.getColumnIndex("id");
-                            int index = c.getColumnIndex("user_id");
-                            int winsCount = c.getColumnIndex("successChallenges");
-                            int allCount = c.getColumnIndex("allChallengesCount");
-                            int inProgress = c.getColumnIndex("inProgressChallengesCount");
-                            int level = c.getColumnIndex("level");
                             do {
                                 newfriends.add(new FriendModel(
-                                        c.getString(nameColIndex),
-                                        API_URL + c.getString(photoColIndex),
-                                        c.getString(index),
-                                        "" + c.getString(inProgress),
-                                        "" + c.getString(winsCount),
-                                        "" + c.getString(allCount),
+                                        c.getString(c.getColumnIndex("name")),
+                                        API_URL + c.getString(c.getColumnIndex("photo")),
+                                        c.getString(c.getColumnIndex("user_id")),
+                                        c.getString(c.getColumnIndex("inProgressChallengesCount")),
+                                        c.getString(c.getColumnIndex("successChallenges")),
+                                        c.getString(c.getColumnIndex("allChallengesCount")),
                                         "0"));
                             } while (c.moveToNext());
                         }

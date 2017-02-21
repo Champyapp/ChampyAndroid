@@ -37,8 +37,6 @@ import static com.azinecllc.champy.utils.Constants.TAG_TERMS;
 
 public class FriendsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private SessionManager sessionManager;
-    private NavigationView navigationView;
     private DrawerLayout drawer;
     private Context context;
 
@@ -50,10 +48,10 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        sessionManager = SessionManager.getInstance(context);
+        SessionManager sessionManager = SessionManager.getInstance(context);
 
         // MAKE BACKGROUND (great again)
-        final String userPicture = sessionManager.getUserPicture();
+        String userPicture = sessionManager.getUserPicture();
         ImageView background = (ImageView) findViewById(R.id.friends_background);
         Glide.with(this)
                 .load(userPicture)
@@ -72,7 +70,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         };
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         // VIEW PAGER

@@ -164,16 +164,17 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                     tvEnterYourName.setVisibility(View.VISIBLE);
                     lineOfTheNed.setVisibility(View.VISIBLE);
                     etNewName.setVisibility(View.VISIBLE);
-                    etNewName.setText(userName);
+                    etNewName.setText(session.getUserName());
 
                     buttonOK.setVisibility(View.VISIBLE);
                     buttonOK.setOnClickListener(v1 -> {
-                        if (!etNewName.getText().toString().trim().equals(session.getUserName())) {
+                        if (!etNewName.getText().toString().trim().equals(session.getUserName())
+                                && !etNewName.getText().toString().trim().isEmpty()) {
                             String userNewName = etNewName.getText().toString().trim();
                             session.setUserName(userNewName);
                             userController.updateUserName(userNewName); // call
-                            tvUserName.setText(userNewName);
-                            etNewName.setText(userNewName);
+                            tvUserName.setText(session.getUserName());
+                            etNewName.setText(session.getUserName());
                             TextView drawerUserName = (TextView) getActivity().findViewById(R.id.drawer_tv_user_name);
                             drawerUserName.setText(userNewName);
                         }

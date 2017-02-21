@@ -53,22 +53,17 @@ import static com.azinecllc.champy.utils.Constants.TAG_TERMS;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
 
-    public static final String TAG = "MainActivity";
     public static String CURRENT_TAG = TAG_CHALLENGES;
     public static int navItemIndex = 0;
 
-    private String[] activityTitles;
-    private boolean isFabOpen = false;
+    private static final String TAG = "MainActivity";
 
+    private boolean isFabOpen = false;
     private SessionManager sessionManager;
     private DrawerLayout drawer;
-
     private FloatingActionButton fabPlus, fabWake, fabSelf, fabDuel;
     private Animation fab_open, fab_close, rotate_forward, rotate_backward;
-
     private NavigationView navigationView;
-    private Handler mHandler;
-    private Context context;
     private Socket mSocket;
 
 
@@ -86,8 +81,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
-                InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                InputMethodManager input = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                if (getWindow().getCurrentFocus() != null)
+                    input.hideSoftInputFromWindow(getWindow().getCurrentFocus().getWindowToken(), 0);
             }
         };
         drawer.setDrawerListener(drawerToggle);
@@ -174,8 +170,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStop() {
         super.onStop();
-        Date now = new Date(System.currentTimeMillis());
-        Log.i(TAG, "onStop: Sockets disconnected " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds());
         //mSocket.disconnect();
         mSocket.off("InProgressChallenge:accepted", modifiedChallenges);
         mSocket.off("InProgressChallenge:new", modifiedChallenges);
@@ -271,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void call(Object... args) {
             Log.i(TAG, "Sockets call: modifiedChallenges");
-            ChallengeController cc = new ChallengeController(context, MainActivity.this);
+            ChallengeController cc = new ChallengeController(getApplicationContext(), MainActivity.this);
             cc.refreshCardsForPendingDuel(null);
             setCounterForPendingDuels();
         }
@@ -309,28 +303,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                // Sometimes, when fragment has huge data, screen seems hanging when switching between
-                // navigation menus So using runnable, the fragment is loaded with cross fade effect
-                // This effect can be seen in GMail app
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                // update the main content by replacing fragments
-                Fragment fragment = getHomeFragment();
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-                fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
-                fragmentTransaction.commitAllowingStateLoss();
-            }
+        Runnable runnable = () -> {
+            // update the main content by replacing fragments
+            Fragment fragment = getHomeFragment();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+            fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
+            fragmentTransaction.commitAllowingStateLoss();
         };
 
-        activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
+        String[] activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
         navigationView.getMenu().getItem(navItemIndex);   // selecting appropriate nav menu item
-        //noinspection ConstantConditions
-        getSupportActionBar().setTitle(activityTitles[navItemIndex]); // set toolbar title
-
-        mHandler = new Handler();
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(activityTitles[navItemIndex]); // set toolbar title
+        }
+        Handler mHandler = new Handler();
         mHandler.post(runnable); // If 'runnable' is not null, then add to the message queue
         drawer.closeDrawers();   // Closing drawer on item click
         invalidateOptionsMenu(); // refresh toolbar menu
