@@ -158,17 +158,17 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                 startActivity(new Intent(this, PendingDuelActivity.class));
                 break;
             case R.id.nav_settings:
-                navItemIndex = 2;
+                navItemIndex = 1;
                 CURRENT_TAG = TAG_SETTINGS;
                 startActivity(intent);
                 break;
             case R.id.nav_terms:
-                navItemIndex = 3;
+                navItemIndex = 2;
                 CURRENT_TAG = TAG_TERMS;
                 startActivity(intent);
                 break;
             case R.id.nav_privacy_policy:
-                navItemIndex = 4;
+                navItemIndex = 3;
                 CURRENT_TAG = TAG_PRIVACY_POLICE;
                 startActivity(intent);
                 break;

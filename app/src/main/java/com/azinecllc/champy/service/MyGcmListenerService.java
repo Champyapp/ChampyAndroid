@@ -38,7 +38,7 @@ public class MyGcmListenerService extends GcmListenerService {
             String name = user.get("name");
             String message = data.getString("gcm.notification.body");
             String title = data.getString("gcm.notification.title");
-            //Log.d(TAG, "From: " + from + " " + name + "\nMessage: " + message);
+            System.out.print("From: " + from + " " + name + "\nMessage: " + message);
 
             if (message != null && !message.toLowerCase().contains(name.toLowerCase()))
                 sendNotification(message, title);
