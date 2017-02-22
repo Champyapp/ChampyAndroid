@@ -108,36 +108,34 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         userFBID = object.getString("id");
                         userName = object.getString("first_name") + " " + object.getString("last_name");
                         userEmail = (object.getString("email") != null) ? object.getString("email") : userFBID + "@facebook.com";
-                        try {
-                            URL profile_pic = new URL("https://graph.facebook.com/" + userFBID + "/picture?type=large");
-                            userPicture = profile_pic.toString();
-                        } catch (MalformedURLException e) {
-                            e.printStackTrace();
-                        }
-
-                        new Thread(() -> {
-                            try {
-                                InstanceID instanceID = InstanceID.getInstance(LoginActivity.this);
-                                String token_android = instanceID.getToken(
-                                        getString(R.string.gcm_defaultSenderId),
-                                        GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-
-                                JSONObject jsonObject = new JSONObject();
-                                jsonObject.put("token", token_android);
-                                jsonObject.put("timeZone", "-2");
-                                String json = jsonObject.toString();
-
-                                System.out.println("THIS IS FINISH, BITCH");
-                                singInUser(userFBID, json, userPicture, token_android);
-                                registerUser(userFBID, userName, userEmail, json, token_android, userPicture);
-                            } catch (Exception e) {
-                                Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_LONG).show();
-                            }
-                        }).start();
+                        System.out.println("OBJECT: " + object.getString("email"));
                     } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_LONG).show();
+                        userEmail = userFBID + "@facebook.com";
                     }
+
+                    try {
+                        URL profile_pic = new URL("https://graph.facebook.com/" + userFBID + "/picture?type=large");
+                        userPicture = profile_pic.toString();
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+
+                    new Thread(() -> {
+                        try {
+                            InstanceID instanceID = InstanceID.getInstance(LoginActivity.this);
+                            String token_android = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+
+                            JSONObject jsonObject = new JSONObject();
+                            jsonObject.put("token", token_android);
+                            jsonObject.put("timeZone", "-2");
+                            String json = jsonObject.toString();
+
+                            singInUser(userFBID, json, userPicture, token_android);
+                            registerUser(userFBID, userName, userEmail, json, token_android, userPicture);
+                        } catch (Exception e) {
+                            Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_LONG).show();
+                        }
+                    }).start();
                 });
                 Bundle parameters = new Bundle();
                 parameters.putString("fields", "id, first_name, last_name, email, gender, birthday, location");
