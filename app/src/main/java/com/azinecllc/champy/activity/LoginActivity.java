@@ -8,6 +8,7 @@ import android.content.pm.Signature;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -126,6 +127,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 jsonObject.put("timeZone", "-2");
                                 String json = jsonObject.toString();
 
+                                System.out.println("THIS IS FINISH, BITCH");
                                 singInUser(userFBID, json, userPicture, token_android);
                                 registerUser(userFBID, userName, userEmail, json, token_android, userPicture);
                             } catch (Exception e) {
