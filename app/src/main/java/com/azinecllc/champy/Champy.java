@@ -2,6 +2,7 @@ package com.azinecllc.champy;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.res.Configuration;
 
 import com.facebook.FacebookSdk;
 
@@ -38,13 +39,37 @@ public class Champy extends Application {
         return instance;
     }
 
+
+    // Called when the application is starting, before any other application objects have been created.
+    // Overriding this method is totally optional!
     @Override
     public void onCreate() {
         super.onCreate();
         FacebookSdk.sdkInitialize(getApplicationContext());
-        System.out.println("CHAMPY! CHAMPY! CHAMPY! CHAMPY! CHAMPY! CHAMPY! CHAMPY! CHAMPY! CHAMPY!");
+        System.out.println("CHAMPY! onCreate");
         instance = this;
     }
+
+    // Called by the system when the device configuration changes while your component is running.
+    // Overriding this method is totally optional!
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        System.out.println("CHAMPY! onConfigurationChanged");
+    }
+
+    // This is called when the overall system is running low on memory,
+    // and would like actively running processes to tighten their belts.
+    // Overriding this method is totally optional!
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        System.out.println("CHAMPY! onLowMemory");
+    }
+
+
+
+
 
     public static Context getContext() {
         return instance;

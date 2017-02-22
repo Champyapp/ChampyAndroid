@@ -40,13 +40,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="com.azinecllc.champy.activity.LoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppLoginTheme" />
-
         <activity
             android:name="com.azinecllc.champy.activity.ContactUsActivity"
             android:label="Contact Us"
@@ -139,6 +137,8 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
+
+        <!--<service android:name="com.azinecllc.champy.service.MySocketService" />-->
 
     </application>
 

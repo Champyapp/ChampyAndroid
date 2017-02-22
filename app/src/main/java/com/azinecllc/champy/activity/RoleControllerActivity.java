@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.azinecllc.champy.Champy;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.utils.OfflineMode;
@@ -27,10 +26,6 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
     private ImageView imageReload;
     private View spinner;
     private Intent goTo;
-
-
-    Champy champy = Champy.getInstance();
-
 
 
     @Override
@@ -74,12 +69,8 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
     private void checkIfLoggedInAndMakeRedirect(Intent goTo) {
         if (offlineMode.isConnectedToRemoteAPI(this)) {
             if (sessionManager.isUserLoggedIn()) {
-                final String uID = sessionManager.getUserId();
-                final String token = sessionManager.getToken();
-
                 ChallengeController cc = new ChallengeController(getApplicationContext(), this);
                 cc.refreshCardsForPendingDuel(goTo);
-
             } else {
                 startActivity(new Intent(this, LoginActivity.class));
             }
