@@ -47,6 +47,7 @@ public class LoginActivityTest {
     private TextView tvLoginText;
     private ImageButton buttonLogin;
 
+    // TODO: 2/22/17 Fix it
 
     @Before
     public void setup() throws Exception {

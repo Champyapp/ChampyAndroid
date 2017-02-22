@@ -18,6 +18,7 @@ public class PendingDuelActivity extends AppCompatActivity {
     private int size;
     private View spinner;
     private TextView tvNoPendingDuels;
+    private Typeface typeface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,17 +27,9 @@ public class PendingDuelActivity extends AppCompatActivity {
 
         new ProgressTask().execute();
 
-        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
+        typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         TextView tvPendingDuels = (TextView) findViewById(R.id.tvChallengeToMySelf);
         tvPendingDuels.setTypeface(typeface);
-
-        tvNoPendingDuels = (TextView) findViewById(R.id.textViewNoPendingDuels);
-        if (size == 0) {
-            tvNoPendingDuels.setTypeface(typeface);
-            tvNoPendingDuels.setVisibility(View.VISIBLE);
-        } else {
-            tvNoPendingDuels.setVisibility(View.INVISIBLE);
-        }
 
         CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();
         checker.getPendingCount(getApplicationContext());
@@ -80,6 +73,17 @@ public class PendingDuelActivity extends AppCompatActivity {
                     viewPager.setPageMargin(20);
                     viewPager.setClipToPadding(false);
                     viewPager.setPadding(90, 0, 90, 0);
+
+                    tvNoPendingDuels = (TextView) findViewById(R.id.textViewNoPendingDuels);
+                    System.out.println("PENDING SIZE: " + size);
+                    if (size == 0) {
+                        tvNoPendingDuels.setTypeface(typeface);
+                        tvNoPendingDuels.setVisibility(View.VISIBLE);
+                        System.out.println("tvNoPendingDuels should be visible");
+                    } else {
+                        tvNoPendingDuels.setVisibility(View.INVISIBLE);
+                        System.out.println("tvNoPendingDuels should be invisible");
+                    }
                 }
             });
             return null;

@@ -52,7 +52,6 @@ public class CHGetFacebookFriends {
         NewUser newUser = retrofit.create(NewUser.class);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        db.delete("mytable", null, null);
         ContentValues cv = new ContentValues();
         CHCheckTableForExist checkTableForExist = new CHCheckTableForExist(db);
         GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONArrayCallback() {
@@ -78,6 +77,8 @@ public class CHGetFacebookFriends {
                             @Override
                             public void onResponse(Response<User> response, Retrofit retrofit) {
                                 if (response.isSuccess()) {
+                                    db.delete("mytable", null, null);
+
                                     Data data = response.body().getData();
                                     String photo;
                                     if (data.getPhoto() != null) {

@@ -46,11 +46,11 @@ public class MyOtherAdapter extends RecyclerView.Adapter<MyOtherAdapter.ViewHold
 
 
     // Pass in the contact array into the constructor
-    public MyOtherAdapter(List<FriendModel> contacts, Context c, Activity a, Retrofit r) {
+    public MyOtherAdapter(List<FriendModel> contacts, Context ctx, Activity activity, Retrofit retrofit) {
         mContacts = contacts;
-        this.context = c;
-        this.activity = a;
-        this.retrofit = r;
+        this.context = ctx;
+        this.activity = activity;
+        this.retrofit = retrofit;
     }
 
     @Override
