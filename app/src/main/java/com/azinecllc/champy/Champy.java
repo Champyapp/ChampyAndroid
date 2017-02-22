@@ -32,13 +32,17 @@ import com.facebook.FacebookSdk;
 
 public class Champy extends Application {
 
-    private static Champy instance;
+    private static Champy instance = null;
+
+    public static Champy getInstance() {
+        return instance;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
         FacebookSdk.sdkInitialize(getApplicationContext());
-        System.out.println("CHAMPY CHAMPY CHAMPY CHAMPY CHAMPY CHAMPY CHAMPY CHAMPY CHAMPY CHAMPY");
+        System.out.println("CHAMPY! CHAMPY! CHAMPY! CHAMPY! CHAMPY! CHAMPY! CHAMPY! CHAMPY! CHAMPY!");
         instance = this;
     }
 

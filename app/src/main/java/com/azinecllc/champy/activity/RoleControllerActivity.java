@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.azinecllc.champy.Champy;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.utils.OfflineMode;
@@ -26,6 +27,11 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
     private ImageView imageReload;
     private View spinner;
     private Intent goTo;
+
+
+    Champy champy = Champy.getInstance();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
