@@ -27,7 +27,7 @@
         android:gravity="center"
         app:tabGravity="fill"
         app:tabTextColor="#FFE0E0E0"
-        app:tabSelectedTextColor="#FFFFFFFF"
+        app:tabSelectedTextColor="@color/color_white"
         app:tabIndicatorColor="#339997"
         android:fillViewport="false" />
 
@@ -36,7 +36,6 @@
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#00000000"
         android:visibility="visible"
         android:clickable="false"
         android:layout_alignParentLeft="true"

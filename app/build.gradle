@@ -29,16 +29,29 @@ android {
     }
 
     productFlavors {
-        // на случай платной версии
+//        ChampyProduction {
+//            applicationId = "com.azinecllc.champy"
+//            versionCode 8
+//            versionName "1.0"
+//
+//            applicationVariants.all { variant ->
+//                variant.outputs.each { output ->
+//                    def file = file(name)
+//                    output.outputFile = new File(file.parent, name + "-" + versionName + ".apk")
+//                }
+//            }
+//        }
     }
+
     signingConfigs {
         release {
-            keyAlias '**********'
-            keyPassword '**********'
+            keyAlias 'Champy'
+            keyPassword 'Azinec2014'
             storeFile file('/Users/SashaKhyzhun/Work/AndroidStudioProjects/KeyStore/champykeystore.jks')
-            storePassword '**********'
+            storePassword 'Azinec2014'
         }
     }
+
     buildTypes {
         release {
             minifyEnabled true                      // Включаем обфускaцию
@@ -48,7 +61,14 @@ android {
         }
         debug {
             minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug      // Указываем отлaдочный конфиг для подписывания
+        }
+        unitTests {
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 

@@ -12,6 +12,8 @@ import com.facebook.login.LoginManager;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import static com.azinecllc.champy.activity.MainActivity.CURRENT_TAG;
 import static com.azinecllc.champy.activity.MainActivity.navItemIndex;
@@ -81,6 +83,13 @@ public class SessionManager {
         editor.commit();
     }
 
+//    public void setWakeUpTime(String hour, String min, String requestCode, String inProgressID) {
+//        editor.putString("hour", hour);
+//        editor.putString("min", min);
+//        editor.putString("requestCode", requestCode);
+//        editor.putString("inProgressID", inProgressID);
+//    }
+
     public void toggleNewChallengeRequest(String t) {
         editor.putString("newChallReq", t);
         editor.commit();
@@ -93,6 +102,16 @@ public class SessionManager {
 
     public void toggleChallengesForToday(String t) {
         editor.putString("challengesForToday", t);
+        editor.commit();
+    }
+
+    public void togglePushNotification(String t) {
+        editor.putString("pushN", t);
+        editor.commit();
+    }
+
+    public void toggleChallengeEnd(String t) {
+        editor.putString("challengeEnd", t);
         editor.commit();
     }
 
@@ -111,36 +130,9 @@ public class SessionManager {
         editor.commit();
     }
 
-    public void togglePushNotification(String t) {
-        editor.putString("pushN", t);
-        editor.commit();
-    }
-
-    public void set_duel_pending(String count) {
+    public void setDuelPending(String count) {
         editor.putString("duel_pending", count);
         editor.commit();
-    }
-
-    public void toggleChallengeEnd(String t){
-        editor.putString("challengeEnd", t);
-        editor.commit();
-    }
-
-    public void logout(Activity activity) {
-        LoginManager.getInstance().logOut();
-        // Clearing all user data from Shared Preferences
-        editor.clear();
-        editor.commit();
-
-        // go to login activity
-        File blurred = new File(path, "blurred.png");
-        blurred.delete();
-        File profile = new File(path, "profile.jpg");
-        profile.delete();
-        CURRENT_TAG = TAG_CHALLENGES;
-        navItemIndex = 0;
-        Intent intent = new Intent(activity, RoleControllerActivity.class);
-        activity.startActivity(intent);
     }
 
     public void setUserPicture(String url) {
@@ -156,6 +148,23 @@ public class SessionManager {
     public void setSelfSize(int size) {
         editor.putInt("SelfSize", size);
         editor.commit();
+    }
+
+    public void logout(Activity activity) {
+        LoginManager.getInstance().logOut();
+        // Clearing all user data from Shared Preferences
+        editor.clear();
+        editor.commit();
+
+        // go to login activity
+        //File blurred = new File(path, "blurred.png");
+        //blurred.delete();
+        File profile = new File(path, "profile.jpg");
+        profile.delete();
+        CURRENT_TAG = TAG_CHALLENGES;
+        navItemIndex = 0;
+        Intent intent = new Intent(activity, RoleControllerActivity.class);
+        activity.startActivity(intent);
     }
 
 
@@ -204,12 +213,12 @@ public class SessionManager {
         return pref.getString("token", "");
     }
 
-    public String getGCM() {
-        return pref.getString(KEY_GCM, "");
-    }
-
     public String getUserId() {
         return pref.getString("id", "");
+    }
+
+    public String getGCM() {
+        return pref.getString(KEY_GCM, "");
     }
 
     public int getSelfSize() {
@@ -243,5 +252,15 @@ public class SessionManager {
 
         return user;
     }
+
+
+//    public HashMap<String, String> getWakeUpDetails() {
+//        HashMap<String, String> wakeUpOptions = new HashMap<>();
+//        wakeUpOptions.put("hour",         pref.getString("hour",          ""));
+//        wakeUpOptions.put("min",          pref.getString("min",           ""));
+//        wakeUpOptions.put("requestCode",  pref.getString("requestCode",   ""));
+//        wakeUpOptions.put("inProgressID", pref.getString("inProgressID",  ""));
+//        return wakeUpOptions;
+//    }
 
 }

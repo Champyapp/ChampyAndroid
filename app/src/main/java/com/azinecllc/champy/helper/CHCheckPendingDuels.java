@@ -36,7 +36,7 @@ public class CHCheckPendingDuels {
         }
         c.close();
         SessionManager sessionManager = SessionManager.getInstance(context);
-        sessionManager.set_duel_pending(""+ countOfPendingDuel);
+        sessionManager.setDuelPending("" + countOfPendingDuel);
         return countOfPendingDuel;
     }
 

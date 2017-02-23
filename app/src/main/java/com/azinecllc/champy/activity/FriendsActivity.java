@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.azinecllc.champy.Champy;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.FriendsActivityPagerAdapter;
 import com.azinecllc.champy.helper.CHCheckPendingDuels;
@@ -38,7 +39,6 @@ import static com.azinecllc.champy.utils.Constants.TAG_TERMS;
 public class FriendsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawer;
-    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +48,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        SessionManager sessionManager = SessionManager.getInstance(context);
+        SessionManager sessionManager = SessionManager.getInstance(getApplicationContext());
 
         // MAKE BACKGROUND (great again)
         String userPicture = sessionManager.getUserPicture();
@@ -76,7 +76,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         // VIEW PAGER
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setOffscreenPageLimit(2);
-        FriendsActivityPagerAdapter adapterViewPager = new FriendsActivityPagerAdapter(getSupportFragmentManager(), context);
+        FriendsActivityPagerAdapter adapterViewPager = new FriendsActivityPagerAdapter(getSupportFragmentManager(), getApplicationContext());
         viewPager.setAdapter(adapterViewPager);
 
 
@@ -132,7 +132,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         drawerUserName.setText(userName);
 
         CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();
-        int count = checker.getPendingCount(context);
+        int count = checker.getPendingCount(getApplicationContext());
         if (count != 0) {
             TextView view = (TextView) navigationView.getMenu().findItem(R.id.nav_pending_duels).getActionView();
             view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
@@ -203,7 +203,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
     protected void onDestroy() {
         super.onDestroy();
         this.isFinishing();
-        Glide.get(context).clearMemory();
+        Glide.get(getApplicationContext()).clearMemory();
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
     }
