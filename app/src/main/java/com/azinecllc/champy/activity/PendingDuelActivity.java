@@ -27,7 +27,7 @@ public class PendingDuelActivity extends AppCompatActivity {
 
         new ProgressTask().execute();
 
-        typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
+        typeface = Typeface.createFromAsset(getResources().getAssets(), "fonts/bebasneue.ttf");
         TextView tvPendingDuels = (TextView) findViewById(R.id.tvChallengeToMySelf);
         tvPendingDuels.setTypeface(typeface);
 
@@ -64,7 +64,11 @@ public class PendingDuelActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     SessionManager sessionManager = SessionManager.getInstance(getApplicationContext());
-                    size = Integer.parseInt(sessionManager.get_duel_pending());
+                    try {
+                        size = Integer.parseInt(sessionManager.get_duel_pending());
+                    } catch (NumberFormatException e) {
+                        size = 0;
+                    }
                     PendingDuelsAdapter pagerAdapter = new PendingDuelsAdapter(getSupportFragmentManager());
                     ViewPager viewPager = (ViewPager) findViewById(R.id.pager_pending_duel);
                     pagerAdapter.setCount(size);

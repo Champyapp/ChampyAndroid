@@ -6,13 +6,17 @@ import android.graphics.Color;
 import android.opengl.Visibility;
 import android.os.Build;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.azinecllc.champy.BuildConfig;
 import com.azinecllc.champy.R;
@@ -40,10 +44,7 @@ import static org.junit.Assert.*;
 public class FriendsActivityTest {
 
     private Activity activity;
-    private ImageView background;
-    private TabLayout tabLayout;
     private DBHelper dbHelper;
-    private Context context;
     private CHCheckPendingDuels chCheckPendingDuels;
 
     @Before
@@ -51,7 +52,6 @@ public class FriendsActivityTest {
         activity = Robolectric.setupActivity(FriendsActivity.class);
         dbHelper = DBHelper.getInstance(activity);
         chCheckPendingDuels = CHCheckPendingDuels.getInstance();
-        //sessionManager = SessionManager.getInstance(context);
     }
 
     @After
@@ -64,17 +64,62 @@ public class FriendsActivityTest {
     @Test
     public void testForActivity() throws Exception {
         assertNotNull(activity);
+        System.out.println("Activity != null. Success");
     }
 
     @Test
-    public void testForToolbar() throws Exception {
+    public void testForToolbarDrawerAndActionBar() throws Exception {
         Toolbar toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
         assertNotNull(toolbar);
+        assertTrue(toolbar.getTitle().equals("Friends"));
+        System.out.println("Toolbar.text = 'Friends'. Success");
+
+        DrawerLayout drawer = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
+        assertNotNull(drawer);
+        assertEquals(R.id.drawer_layout, drawer.getId());
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(activity, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        assertNotNull(toggle);
+
+    }
+
+    @Test
+    public void testForNavigationView() throws Exception {
+        NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
+        assertNotNull(navigationView);
+        assertEquals(navigationView.getId(), R.id.nav_view);
+
+        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
+        assertNotNull(headerLayout);
+        assertEquals(View.VISIBLE, headerLayout.getVisibility());
+
+        ImageView drawerImageProfile = (ImageView) headerLayout.findViewById(R.id.drawer_user_photo);
+        assertNotNull(drawerImageProfile);
+        assertEquals(drawerImageProfile.getId(), R.id.drawer_user_photo);
+        assertEquals(View.VISIBLE, drawerImageProfile.getVisibility());
+
+        ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.drawer_background);
+        assertNotNull(drawerBackground);
+        assertEquals(drawerBackground.getId(), R.id.drawer_background);
+        assertEquals(View.VISIBLE, drawerBackground.getVisibility());
+
+        TextView drawerUserEmail = (TextView) headerLayout.findViewById(R.id.drawer_tv_user_email);
+        assertNotNull(drawerUserEmail);
+        assertEquals(drawerUserEmail.getId(), R.id.drawer_tv_user_email);
+        assertEquals(View.VISIBLE, drawerUserEmail.getVisibility());
+
+        TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.drawer_tv_user_name);
+        assertNotNull(drawerUserName);
+        assertEquals(drawerUserName.getId(), R.id.drawer_tv_user_name);
+        assertEquals(View.VISIBLE, drawerUserName.getVisibility());
+        System.out.println("navigation view tests: Success");
+
+
     }
 
     @Test
     public void testFriendsBackground() throws Exception {
-        background = (ImageView) activity.findViewById(R.id.friends_background);
+        ImageView background = (ImageView) activity.findViewById(R.id.friends_background);
         assertNotNull(background);
         assertEquals(R.id.friends_background, background.getId());
         assertEquals(View.VISIBLE, background.getVisibility());
@@ -89,7 +134,7 @@ public class FriendsActivityTest {
 
     @Test
     public void testTabLayout() throws Exception {
-        tabLayout = (TabLayout) activity.findViewById(R.id.sliding_tabs_friends);
+        TabLayout tabLayout = (TabLayout) activity.findViewById(R.id.sliding_tabs_friends);
         assertNotNull(tabLayout);
         assertEquals(R.id.sliding_tabs_friends, tabLayout.getId());
         //assertEquals(R.color.color_white, tabLayout.getTabTextColors());
@@ -112,9 +157,40 @@ public class FriendsActivityTest {
 
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) viewPager.getLayoutParams();
         assertEquals(false, lp.alignWithParent);
+        assertEquals(2, viewPager.getOffscreenPageLimit());
+        assertNotNull(viewPager.getAdapter());
+
     }
 
+    @Test
+    public void testForCHCheckPendingDuels() throws Exception {
+        chCheckPendingDuels = CHCheckPendingDuels.getInstance();
+        assertNotNull(chCheckPendingDuels);
 
+        int count = chCheckPendingDuels.getPendingCount(activity);
+        assertNotNull(count);
+
+        NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
+        assertNotNull(navigationView);
+
+        TextView view = (TextView) navigationView.getMenu().findItem(R.id.nav_pending_duels).getActionView();
+        assertNotNull(navigationView);
+        System.out.println("PendingDuels Count: " + count);
+
+        if (count > 0) {
+            view.setText(String.format("%s%s", activity.getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
+            assertEquals("", view.getText());
+            // failed
+        } else {
+            // success
+            assertEquals("", view.getText());
+        }
+
+        assertTrue(count == 0);
+
+        assertNotNull(view);
+
+    }
 
 
 }

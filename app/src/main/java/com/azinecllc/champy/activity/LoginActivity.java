@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
-        getFacebookHashKey(); // must be above "setContentView"
+        //getFacebookHashKey(); // must be above "setContentView"
         setContentView(R.layout.activity_login);
 
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");

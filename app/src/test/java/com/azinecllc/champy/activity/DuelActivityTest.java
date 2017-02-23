@@ -2,6 +2,7 @@ package com.azinecllc.champy.activity;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -38,7 +39,7 @@ public class DuelActivityTest {
 
     @Before
     public void setup() throws Exception {
-        activity = Robolectric.buildActivity(DuelActivity.class).create().get();
+        activity = Robolectric.setupActivity(DuelActivity.class);
         x = round(activity.getWindowManager().getDefaultDisplay().getWidth() / 2);
     }
 

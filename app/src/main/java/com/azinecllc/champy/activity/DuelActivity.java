@@ -81,7 +81,7 @@ public class DuelActivity extends AppCompatActivity {
 
         TextView tvIChallengeMyFriendTo = (TextView) findViewById(R.id.tvIChallengeMyFriendTo);
         TextView textViewYouVsFriend = (TextView) findViewById(R.id.tvYouVsFriend);
-        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
 
         textViewYouVsFriend.setText(String.format("%s", getString(R.string.duel_with) + name));
         textViewYouVsFriend.setTypeface(typeface);

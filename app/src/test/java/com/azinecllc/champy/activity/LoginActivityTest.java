@@ -1,22 +1,15 @@
 package com.azinecllc.champy.activity;
 
-import android.annotation.SuppressLint;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.Environment;
 import android.view.Gravity;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.azinecllc.champy.BuildConfig;
 import com.azinecllc.champy.R;
-import com.facebook.FacebookSdk;
+import com.facebook.login.widget.LoginButton;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -24,16 +17,9 @@ import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
-import org.w3c.dom.Text;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
-import static android.content.pm.PackageManager.GET_SIGNATURES;
-import static com.facebook.FacebookSdk.getApplicationContext;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.when;
-import static org.robolectric.RuntimeEnvironment.getPackageManager;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by SashaKhyzhun on 1/12/17.
@@ -45,16 +31,15 @@ public class LoginActivityTest {
     private LoginActivity activity;
     private ImageView champyLogo;
     private TextView tvLoginText;
-    private ImageButton buttonLogin;
+    private LoginButton buttonLogin;
 
-    // TODO: 2/22/17 Fix it
 
     @Before
     public void setup() throws Exception {
-        activity = Robolectric.buildActivity(LoginActivity.class).create().get();
+        activity = Robolectric.setupActivity(LoginActivity.class);
         champyLogo  = (ImageView)   activity.findViewById(R.id.imageViewChampy);
         tvLoginText = (TextView)    activity.findViewById(R.id.login_text);
-        buttonLogin = (ImageButton) activity.findViewById(R.id.login_button);
+        buttonLogin = (LoginButton) activity.findViewById(R.id.login_button);
     }
 
     @Test
@@ -95,20 +80,6 @@ public class LoginActivityTest {
         Drawable background = buttonLogin.getBackground();
         assertNotNull(background);
         //assertEquals(R.drawable.button_facebook, background);
-    }
-
-    @Test
-    public void testGetHashKey() throws Exception {
-        try {
-            @SuppressLint("PackageManagerGetSignatures") // check package name..
-                    PackageInfo info = getPackageManager().getPackageInfo("com.azinecllc.champy", PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-            }
-        } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
     }
 
 //    @Test

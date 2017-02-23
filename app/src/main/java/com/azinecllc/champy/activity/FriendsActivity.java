@@ -126,8 +126,8 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                 .skipMemoryCache(true)
                 .into(drawerImageProfile);
 
-        final String userEmail = sessionManager.getUserEmail();
-        final String userName = sessionManager.getUserName();
+        String userEmail = sessionManager.getUserEmail();
+        String userName = sessionManager.getUserName();
         drawerUserEmail.setText(userEmail);
         drawerUserName.setText(userName);
 
