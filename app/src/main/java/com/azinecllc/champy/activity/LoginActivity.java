@@ -191,22 +191,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    /**
-     * Initialize facebook has key. We need this, because without this facebook-login will crash.
-     */
-    private void getFacebookHashKey() {
-        try {
-            @SuppressLint("PackageManagerGetSignatures")
-            PackageInfo info = getPackageManager().getPackageInfo("com.azinecllc.champy", PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-            }
-        } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-    }
-
+//    /**
+//     * Initialize facebook has key. We need this, because without this facebook-login will crash.
+//     */
+//    private void getFacebookHashKey() {
+//        try {
+//            @SuppressLint("PackageManagerGetSignatures")
+//            PackageInfo info = getPackageManager().getPackageInfo("com.azinecllc.champy", PackageManager.GET_SIGNATURES);
+//            for (Signature signature : info.signatures) {
+//                MessageDigest md = MessageDigest.getInstance("SHA");
+//                md.update(signature.toByteArray());
+//            }
+//        } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
 //    /**
 //     * Initialize facebook token tracker. This shit needs to track if token was changed. We never
 //     * change it in Champy, but without this shit facebook-login will crash.

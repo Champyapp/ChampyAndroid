@@ -26,6 +26,7 @@ import com.azinecllc.champy.utils.SessionManager;
 
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -81,6 +82,24 @@ public class FriendsActivityTest {
         } catch (Exception e) {
             throw new RuntimeException();
         }
+    }
+
+    @Test
+    public void testForAppBarLayout() throws Exception {
+        AppBarLayout appBarLayout = (AppBarLayout) activity.findViewById(R.id.appbar_friends);
+        Assert.assertNotNull(appBarLayout);
+        assertTrue(View.VISIBLE == appBarLayout.getVisibility());
+        Assert.assertEquals(R.id.appbar_friends, appBarLayout.getId());
+    }
+
+    @Test
+    public void testForToolbar() throws Exception {
+        Toolbar toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
+        Assert.assertNotNull(toolbar);
+        Assert.assertEquals("Friends", toolbar.getTitle());
+        System.out.println("Expected: Friends | actual: " + toolbar.getTitle());
+        assertTrue(R.id.toolbar == toolbar.getId());
+        System.out.println("Expected: R.id.toolbar | actual: " + toolbar.getId());
     }
 
     @Test

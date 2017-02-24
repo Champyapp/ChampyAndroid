@@ -36,7 +36,6 @@ public class AboutActivity extends AppCompatActivity {
                 @Override
                 public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 }
-
                 @Override
                 public void onPageFinished(WebView view, String url) {
                     spinner.setVisibility(View.GONE);
@@ -44,8 +43,6 @@ public class AboutActivity extends AppCompatActivity {
             });
             webView.loadUrl(azinecUrl);
         });
-
-
 
     }
 

@@ -10,7 +10,7 @@
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/toolbar_contact_us"
+        android:id="@+id/appbar_contact_us"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
@@ -24,17 +24,17 @@
 
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/input_layout_name"
+        android:id="@+id/input_layout_subject"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_below="@+id/toolbar_contact_us"
+        android:layout_below="@+id/appbar_contact_us"
         android:textColorHint="@android:color/white">
 
         <EditText
-            android:id="@+id/input_name"
+            android:id="@+id/input_subject"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
@@ -46,18 +46,18 @@
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/input_layout_email"
+        android:id="@+id/input_layout_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        android:layout_below="@+id/input_layout_name"
+        android:layout_below="@+id/input_layout_subject"
         android:textColorHint="@android:color/white">
 
         <EditText
-            android:id="@+id/input_email"
+            android:id="@+id/input_message"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="textEmailAddress"

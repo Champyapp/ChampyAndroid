@@ -29,10 +29,10 @@ public class ContactUsActivity extends AppCompatActivity implements View.OnClick
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        inputLayoutSubject = (TextInputLayout)findViewById(R.id.input_layout_name);
-        inputLayoutMessage = (TextInputLayout)findViewById(R.id.input_layout_email);
-        inputSubject = (EditText)findViewById(R.id.input_name);
-        inputMessage = (EditText)findViewById(R.id.input_email);
+        inputLayoutSubject = (TextInputLayout) findViewById(R.id.input_layout_subject);
+        inputLayoutMessage = (TextInputLayout) findViewById(R.id.input_layout_message);
+        inputSubject = (EditText) findViewById(R.id.input_subject);
+        inputMessage = (EditText) findViewById(R.id.input_message);
 
         Button buttonSend = (Button) findViewById(R.id.buttonSend);
         inputSubject.addTextChangedListener(new MyTextWatcher(inputSubject));
@@ -137,10 +137,10 @@ public class ContactUsActivity extends AppCompatActivity implements View.OnClick
 
         public void afterTextChanged(Editable editable) {
             switch (view.getId()) {
-                case R.id.input_name:
+                case R.id.input_subject:
                     validateSubject();
                     break;
-                case R.id.input_email:
+                case R.id.input_message:
                     validateMessage();
                     break;
             }

@@ -16,22 +16,18 @@ import static org.junit.Assert.*;
 @Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.LOLLIPOP)
 public class ChampyTest {
 
-    private Champy champy;
-
     @Test
     public void getInstance() throws Exception {
-        champy = Champy.getInstance();
-        assertNull(champy);
-        System.out.println("Expected: null | actual: " + champy);
-    }
-
-    @Test
-    public void onCreate() throws Exception {
-        System.out.println(champy);
+        Champy champy = Champy.getInstance();
+        assertNotNull(champy);
+        System.out.println("Expected: notnull | actual: " + champy);
     }
 
     @Test
     public void getContext() throws Exception {
+        Champy champy = Champy.getInstance();
+        assertNotNull(champy.getApplicationContext());
+        System.out.println(champy.getApplicationContext());
 
     }
 
