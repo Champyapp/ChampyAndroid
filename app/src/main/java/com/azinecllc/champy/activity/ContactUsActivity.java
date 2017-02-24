@@ -122,7 +122,6 @@ public class ContactUsActivity extends AppCompatActivity implements View.OnClick
 
 
     private class MyTextWatcher implements TextWatcher {
-
         private View view;
 
         private MyTextWatcher(View view) {

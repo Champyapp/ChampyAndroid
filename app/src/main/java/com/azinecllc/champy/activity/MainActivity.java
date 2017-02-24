@@ -287,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mHandler.post(runnable); // If 'runnable' is not null, then add to the message queue
         drawer.closeDrawers();   // Closing drawer on item click
         invalidateOptionsMenu(); // refresh toolbar menu
-        //toggleFab();             // show or hide the fab button
+        //toggleFab();           // show or hide the fab button
     }
 
     /**

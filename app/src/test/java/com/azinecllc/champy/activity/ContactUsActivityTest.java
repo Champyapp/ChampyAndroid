@@ -2,13 +2,17 @@ package com.azinecllc.champy.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.azinecllc.champy.BuildConfig;
@@ -31,19 +35,13 @@ import static org.junit.Assert.*;
 public class ContactUsActivityTest {
 
     private TextInputLayout inputLayoutSubject, inputLayoutMessage;
+    private String[] recipient = {"sasha.khyzhun@gmail.com"};
     private EditText etSubject, etMessage;
     private Activity activity;
 
     @Before
     public void setup() throws Exception {
         activity = Robolectric.setupActivity(ContactUsActivity.class);
-
-        inputLayoutSubject = (TextInputLayout) activity.findViewById(R.id.input_layout_subject);
-        inputLayoutMessage = (TextInputLayout) activity.findViewById(R.id.input_layout_message);
-
-        etSubject = (EditText) activity.findViewById(R.id.input_subject);
-        etMessage = (EditText) activity.findViewById(R.id.input_message);
-
     }
 
     @Test
@@ -89,101 +87,205 @@ public class ContactUsActivityTest {
     }
 
     @Test
-    public void onClick() throws Exception {
+    public void testForButtonSend() throws Exception {
+        Button button = (Button) activity.findViewById(R.id.buttonSend);
+        assertNotNull(button);
+        assertTrue(button.isClickable());
+        assertTrue(R.id.buttonSend == button.getId());
+
+        assertEquals("Send", button.getText());
+
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) button.getLayoutParams();
+        assertEquals(8, lp.leftMargin);
+        assertEquals(8, lp.rightMargin);
+        assertEquals(24, lp.bottomMargin);
 
     }
 
     @Test
     public void sendSucceedFeedback() throws Exception {
+        inputLayoutSubject = (TextInputLayout) activity.findViewById(R.id.input_layout_subject);
+        inputLayoutMessage = (TextInputLayout) activity.findViewById(R.id.input_layout_message);
+
+        etSubject = (EditText) activity.findViewById(R.id.input_subject);
+        etMessage = (EditText) activity.findViewById(R.id.input_message);
         etSubject.setText("My Subject");
         etMessage.setText("My Message");
 
-        if (etSubject.getText().toString().trim().isEmpty()) {
-            inputLayoutSubject.setError("Complete your subject");
-            assertEquals("Should be not empty", "My Subject", etSubject.getText().toString().trim());
+        if (!validateSubject(etSubject)) {
+            assertNotEquals("", etSubject.getText().toString().trim());
+            System.out.println("subject is empty");
         } else {
-            inputLayoutSubject.setErrorEnabled(false);
-            assertEquals("Should be not empty", "My Subject", etSubject.getText().toString().trim());
+            assertEquals("My Subject", etSubject.getText().toString().trim());
+            System.out.println("subject is not empty");
         }
-
-
-        if (etMessage.getText().toString().trim().isEmpty()) {
-            inputLayoutMessage.setError("Complete your message");
-            assertEquals("Should be not empty", "My Message", etMessage.getText().toString().trim());
+        if (!validateMessage(etMessage)) {
+            assertEquals("My Message", etMessage.getText().toString().trim());
+            System.out.println("message is empty");
         } else {
-            inputLayoutMessage.setErrorEnabled(false);
-            assertEquals("Should be not empty", "My Message", etMessage.getText().toString().trim());
+            assertNotEquals("", etMessage.getText().toString().trim());
+            System.out.println("message is not empty");
         }
-
-        System.out.println("sendSucceedFeedback: errorSbj = " + inputLayoutSubject.getError());
-        System.out.println("sendSucceedFeedback: errorMsg = " + inputLayoutMessage.getError());
-
 
         Intent email = new Intent(Intent.ACTION_SEND_MULTIPLE, Uri.parse("mailto:"));
         email.setType("message/rfc822");
-        email.putExtra(Intent.EXTRA_EMAIL, new String[]{"sasha.khyzhun@gmail.com"});
+        email.putExtra(Intent.EXTRA_EMAIL, recipient);
         email.putExtra(Intent.EXTRA_SUBJECT, etSubject.getText().toString());
         email.putExtra(Intent.EXTRA_TEXT, etMessage.getText().toString());
 
-        try {
-            if (!etSubject.getText().toString().isEmpty() && !etMessage.getText().toString().isEmpty()) {
-                // vse ok
-            }
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(activity, "No email client installed.", Toast.LENGTH_SHORT).show();
+        assertTrue(!etSubject.getText().toString().trim().isEmpty());
+        assertTrue(!etMessage.getText().toString().trim().isEmpty());
+
+        assertNotNull(email.getExtras().get(Intent.EXTRA_EMAIL));
+        assertNotNull(email.getExtras().get(Intent.EXTRA_SUBJECT));
+        assertNotNull(email.getExtras().get(Intent.EXTRA_TEXT));
+
+        assertEquals(recipient, email.getExtras().get(Intent.EXTRA_EMAIL));
+        assertEquals("My Subject", email.getExtras().get(Intent.EXTRA_SUBJECT));
+        assertEquals("My Message", email.getExtras().get(Intent.EXTRA_TEXT));
+
+        System.out.println("");
+        if (etSubject.getText().toString().isEmpty()) {
+            System.out.println("subject is empty, can't send a feedback");
+            return;
+        }
+        if (etMessage.getText().toString().isEmpty()) {
+            System.out.println("message is empty, can't send a feedback");
+            return;
+        }
+        System.out.println("subject & message is not empty, we CAN send feedback");
+    }
+
+    @Test
+    public void sendFeedbackWithoutSubject() throws Exception {
+        inputLayoutSubject = (TextInputLayout) activity.findViewById(R.id.input_layout_subject);
+        inputLayoutMessage = (TextInputLayout) activity.findViewById(R.id.input_layout_message);
+
+        etSubject = (EditText) activity.findViewById(R.id.input_subject);
+        etMessage = (EditText) activity.findViewById(R.id.input_message);
+        etSubject.setText("");
+        etMessage.setText("My Message");
+
+        if (!validateSubject(etSubject)) {
+            assertEquals("", etSubject.getText().toString().trim());
+            System.out.println("subject is empty (vse ok)");
+        } else {
+            assertNotEquals("My Subject", etSubject.getText().toString().trim());
+            System.out.println("subject is not empty");
         }
 
-        System.out.println("bI");
-    }
+        if (!validateMessage(etMessage)) {
+            assertEquals("My Message", etMessage.getText().toString().trim());
+            System.out.println("message is empty (vse ok)");
+        } else {
+            assertNotEquals("", etMessage.getText().toString().trim());
+            System.out.println("message is not empty");
+        }
 
+        Intent email = new Intent(Intent.ACTION_SEND_MULTIPLE, Uri.parse("mailto:"));
+        email.setType("message/rfc822");
+        email.putExtra(Intent.EXTRA_EMAIL, recipient);
+        email.putExtra(Intent.EXTRA_SUBJECT, etSubject.getText().toString());
+        email.putExtra(Intent.EXTRA_TEXT, etMessage.getText().toString());
 
-//    private void sendEmail(EditText et_sub, EditText et_msg) {
-//        Intent email = new Intent(Intent.ACTION_SEND_MULTIPLE, Uri.parse("mailto:"));
-//        email.setType("message/rfc822");
-//        email.putExtra(Intent.EXTRA_EMAIL, new String[] {"sasha.khyzhun@gmail.com"});
-//        email.putExtra(Intent.EXTRA_SUBJECT, et_sub.getText().toString());
-//        email.putExtra(Intent.EXTRA_TEXT, et_msg.getText().toString());
-//
-//        try {
-//            if (!et_sub.getText().toString().isEmpty() && !et_msg.getText().toString().isEmpty()) {
-//                // vse ok
-//            }
-//        } catch (android.content.ActivityNotFoundException ex) {
-//            Toast.makeText(activity, "No email client installed.", Toast.LENGTH_SHORT).show();
-//        }
-//    }
-//
-//    private boolean validateSubject(EditText text) {
-//        if (text.getText().toString().trim().isEmpty()) {
-//            inputLayoutSubject.setError("Complete your subject");
-//            return false;
-//        } else {
-//            inputLayoutSubject.setErrorEnabled(false);
-//        }
-//        return true;
-//    }
-//
-//
-//    private boolean validateMessage(EditText text) {
-//        String email = text.getText().toString().trim();
-//        if (email.isEmpty()) {
-//            inputLayoutMessage.setError("Complete your message");
-//            return false;
-//        } else {
-//            inputLayoutMessage.setErrorEnabled(false);
-//        }
-//        return true;
-//    }
+        assertTrue(etSubject.getText().toString().trim().isEmpty());
+        assertTrue(!etMessage.getText().toString().trim().isEmpty());
 
+        assertNotNull(email.getExtras().get(Intent.EXTRA_EMAIL));
+        assertNotNull(email.getExtras().get(Intent.EXTRA_SUBJECT));
+        assertNotNull(email.getExtras().get(Intent.EXTRA_TEXT));
 
-    @Test
-    public void onBackPressed() throws Exception {
+        assertEquals(recipient, email.getExtras().get(Intent.EXTRA_EMAIL));
+        assertEquals("", email.getExtras().get(Intent.EXTRA_SUBJECT));
+        assertEquals("My Message", email.getExtras().get(Intent.EXTRA_TEXT));
 
+        System.out.println("");
+        if (etSubject.getText().toString().isEmpty()) {
+            System.out.println("subject is empty, can't send a feedback");
+            return;
+        }
+        if (etMessage.getText().toString().isEmpty()) {
+            System.out.println("message is empty, can't send a feedback");
+            return;
+        }
+        System.out.println("subject & message is not empty, we CAN send feedback");
     }
 
     @Test
-    public void onDestroy() throws Exception {
+    public void sendFeedbackWithoutMessage() throws Exception {
+        inputLayoutSubject = (TextInputLayout) activity.findViewById(R.id.input_layout_subject);
+        inputLayoutMessage = (TextInputLayout) activity.findViewById(R.id.input_layout_message);
 
+        etSubject = (EditText) activity.findViewById(R.id.input_subject);
+        etMessage = (EditText) activity.findViewById(R.id.input_message);
+        etSubject.setText("My Subject");
+        etMessage.setText("");
+
+        if (!validateSubject(etSubject)) {
+            assertNotEquals("", etSubject.getText().toString().trim());
+            System.out.println("subject is empty");
+        } else {
+            assertEquals("My Subject", etSubject.getText().toString().trim());
+            System.out.println("subject is not empty");
+        }
+        if (!validateMessage(etMessage)) {
+            assertEquals("", etMessage.getText().toString().trim());
+            System.out.println("message is empty (vse ok)");
+        } else {
+            assertNotEquals("My Message", etMessage.getText().toString().trim());
+            System.out.println("message is not empty");
+        }
+
+        Intent email = new Intent(Intent.ACTION_SEND_MULTIPLE, Uri.parse("mailto:"));
+        email.setType("message/rfc822");
+        email.putExtra(Intent.EXTRA_EMAIL, recipient);
+        email.putExtra(Intent.EXTRA_SUBJECT, etSubject.getText().toString());
+        email.putExtra(Intent.EXTRA_TEXT, etMessage.getText().toString());
+
+        assertTrue(!etSubject.getText().toString().trim().isEmpty());
+        assertTrue(etMessage.getText().toString().trim().isEmpty());
+
+        assertNotNull(email.getExtras().get(Intent.EXTRA_EMAIL));
+        assertNotNull(email.getExtras().get(Intent.EXTRA_SUBJECT));
+        assertNotNull(email.getExtras().get(Intent.EXTRA_TEXT));
+
+        assertEquals(recipient, email.getExtras().get(Intent.EXTRA_EMAIL));
+        assertEquals("My Subject", email.getExtras().get(Intent.EXTRA_SUBJECT));
+        assertEquals("", email.getExtras().get(Intent.EXTRA_TEXT));
+        System.out.println("");
+        if (etSubject.getText().toString().isEmpty()) {
+            System.out.println("subject is empty, can't send a feedback");
+            return;
+        }
+        if (etMessage.getText().toString().isEmpty()) {
+            System.out.println("message is empty, can't send a feedback");
+            return;
+        }
+        System.out.println("subject & message is not empty, we CAN send feedback");
     }
+
+
+    private boolean validateSubject(EditText subject) {
+        if (subject.getText().toString().trim().isEmpty()) {
+            inputLayoutSubject.setError("Complete your subject");
+            return false;
+        } else {
+            inputLayoutSubject.setErrorEnabled(false);
+        }
+        return true;
+    }
+
+
+    private boolean validateMessage(EditText message) {
+        String email = message.getText().toString().trim();
+        if (email.isEmpty()) {
+            inputLayoutMessage.setError("Complete your message");
+            return false;
+        } else {
+            inputLayoutMessage.setErrorEnabled(false);
+        }
+        return true;
+    }
+
 
 }

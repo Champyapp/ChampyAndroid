@@ -1,9 +1,6 @@
 package com.azinecllc.champy.activity;
 
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.Color;
-import android.opengl.Visibility;
 import android.os.Build;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
@@ -12,7 +9,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -25,7 +21,6 @@ import com.azinecllc.champy.helper.CHCheckPendingDuels;
 import com.azinecllc.champy.utils.SessionManager;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,11 +36,11 @@ import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.*;
 
 /**
- * Created by SashaKhyzhun on 1/13/17.
+ * Created by SashaKhyzhun on 2/24/17.
  */
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.LOLLIPOP)
-public class FriendsActivityTest {
+public class HistoryActivityTest {
 
     private Activity activity;
     private DBHelper dbHelper;
@@ -54,7 +49,7 @@ public class FriendsActivityTest {
 
     @Before
     public void setup() throws Exception {
-        activity = Robolectric.buildActivity(FriendsActivity.class).create().get();
+        activity = Robolectric.buildActivity(HistoryActivity.class).create().get();
         dbHelper = DBHelper.getInstance(activity);
         sessionManager = SessionManager.getInstance(activity);
         chCheckPendingDuels = CHCheckPendingDuels.getInstance();
@@ -72,20 +67,32 @@ public class FriendsActivityTest {
         resetSingleton(CHCheckPendingDuels.class, "instance");
     }
 
+    // after each test we need to destroy singletons
+    public void resetSingleton(Class clazz, String fieldName) {
+        Field instance;
+        try {
+            instance = clazz.getDeclaredField(fieldName);
+            instance.setAccessible(true);
+            instance.set(null, null);
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+    }
+
     @Test
     public void testForAppBarLayout() throws Exception {
-        AppBarLayout appBarLayout = (AppBarLayout) activity.findViewById(R.id.appbar_friends);
+        AppBarLayout appBarLayout = (AppBarLayout) activity.findViewById(R.id.appbar_history);
         Assert.assertNotNull(appBarLayout);
         assertTrue(View.VISIBLE == appBarLayout.getVisibility());
-        Assert.assertEquals(R.id.appbar_friends, appBarLayout.getId());
+        Assert.assertEquals(R.id.appbar_history, appBarLayout.getId());
     }
 
     @Test
     public void testForToolbar() throws Exception {
         Toolbar toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
         Assert.assertNotNull(toolbar);
-        Assert.assertEquals("Friends", toolbar.getTitle());
-        System.out.println("Expected: Friends | actual: " + toolbar.getTitle());
+        Assert.assertEquals("History", toolbar.getTitle());
+        System.out.println("Expected: History | actual: " + toolbar.getTitle());
         assertTrue(R.id.toolbar == toolbar.getId());
         System.out.println("Expected: R.id.toolbar | actual: " + toolbar.getId());
     }
@@ -94,8 +101,8 @@ public class FriendsActivityTest {
     public void testForToolbarDrawerAndActionBar() throws Exception {
         Toolbar toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
         assertNotNull(toolbar);
-        assertTrue(toolbar.getTitle().equals("Friends"));
-        System.out.println("Toolbar.text = 'Friends'. Success");
+        assertTrue(toolbar.getTitle().equals("History"));
+        System.out.println("Toolbar.text = 'History'. Success");
 
         DrawerLayout drawer = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
         assertNotNull(drawer);
@@ -141,10 +148,10 @@ public class FriendsActivityTest {
     }
 
     @Test
-    public void testFriendsBackground() throws Exception {
-        ImageView background = (ImageView) activity.findViewById(R.id.friends_background);
+    public void testHistoryBackground() throws Exception {
+        ImageView background = (ImageView) activity.findViewById(R.id.history_background);
         assertNotNull(background);
-        assertEquals(R.id.friends_background, background.getId());
+        assertEquals(R.id.history_background, background.getId());
         assertEquals(View.VISIBLE, background.getVisibility());
         assertTrue(ImageView.ScaleType.CENTER_CROP == background.getScaleType());
     }
@@ -158,32 +165,24 @@ public class FriendsActivityTest {
 
     @Test
     public void testTabLayout() throws Exception {
-        TabLayout tabLayout = (TabLayout) activity.findViewById(R.id.sliding_tabs_friends);
+        TabLayout tabLayout = (TabLayout) activity.findViewById(R.id.sliding_tabs_history);
         assertNotNull(tabLayout);
-        assertEquals(R.id.sliding_tabs_friends, tabLayout.getId());
-        //assertEquals(R.color.color_white, tabLayout.getTabTextColors());
+        assertEquals(R.id.sliding_tabs_history, tabLayout.getId());
         assertEquals(3, tabLayout.getTabCount());
     }
 
-    @Test
-    public void testCheckSpinner() throws Exception {
-        View spinner = activity.findViewById(R.id.loadingPanel);
-        assertNotNull(spinner);
-        assertEquals(View.VISIBLE, spinner.getVisibility());
-    }
 
     @Test
     public void testViewPager() throws Exception {
-        ViewPager viewPager = (ViewPager) activity.findViewById(R.id.viewpager);
+        ViewPager viewPager = (ViewPager) activity.findViewById(R.id.viewpager_history);
         assertNotNull(viewPager);
 
         assertEquals(View.VISIBLE, viewPager.getVisibility());
 
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) viewPager.getLayoutParams();
         assertEquals(false, lp.alignWithParent);
-        assertEquals(2, viewPager.getOffscreenPageLimit());
+        assertEquals(3, viewPager.getOffscreenPageLimit());
         assertNotNull(viewPager.getAdapter());
-
     }
 
     @Test
@@ -211,17 +210,4 @@ public class FriendsActivityTest {
         assertNotNull(view);
 
     }
-
-    // after each test we need to destroy singletons
-    public void resetSingleton(Class clazz, String fieldName) {
-        Field instance;
-        try {
-            instance = clazz.getDeclaredField(fieldName);
-            instance.setAccessible(true);
-            instance.set(null, null);
-        } catch (Exception e) {
-            throw new RuntimeException();
-        }
-    }
-
 }

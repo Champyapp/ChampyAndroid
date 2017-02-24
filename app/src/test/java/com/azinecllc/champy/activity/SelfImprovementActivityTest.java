@@ -57,6 +57,7 @@ public class SelfImprovementActivityTest {
     @Test
     public void testNotNullActivity() throws Exception {
         assertNotNull(activity);
+        assertEquals("SelfImprovementActivity", activity.getClass().getSimpleName());
     }
 
     @Test
@@ -77,7 +78,7 @@ public class SelfImprovementActivityTest {
 
     }
 
-    @Test // SIC = self-improvement challenge
+    @Test
     public void testTextViewSIC() throws Exception {
         TextView tvSIC = (TextView) activity.findViewById(R.id.tvSIC);
         assertNotNull(tvSIC);
@@ -140,7 +141,6 @@ public class SelfImprovementActivityTest {
         assertEquals(8, lp.bottomMargin);
 
     }
-
 
     @After
     public void killSingleton() throws Exception {

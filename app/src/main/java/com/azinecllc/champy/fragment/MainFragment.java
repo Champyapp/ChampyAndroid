@@ -59,9 +59,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         String wins = sessionManager.getChampyOptions().get("wins");
         String total = sessionManager.getChampyOptions().get("total");
         userName = sessionManager.getUserName();
-        challengesInteger = Integer.parseInt(challenges);
-        winsInteger = Integer.parseInt(wins);
-        totalInteger = Integer.parseInt(total);
+        challengesInteger = (!challenges.equals("")) ? Integer.parseInt(challenges) : 0;
+        winsInteger = (!wins.equals("")) ? Integer.parseInt(wins) : 0;
+        totalInteger = (!total.equals("")) ? Integer.parseInt(total) : 0;
     }
 
     @Nullable

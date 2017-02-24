@@ -2,10 +2,8 @@ package com.azinecllc.champy.activity;
 
 import android.app.Activity;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -23,7 +21,6 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
-import static java.lang.Math.acos;
 import static java.lang.Math.round;
 import static org.junit.Assert.*;
 
@@ -47,7 +44,6 @@ public class DuelActivityTest {
     public void testForActivityNotNull() throws Exception {
         assertNotNull(activity);
     }
-
 
     @Test
     public void testForImageViewMyImage() throws Exception {
@@ -84,8 +80,8 @@ public class DuelActivityTest {
     }
 
     @Test
-    public void testImageViewBG() throws Exception {
-        ImageView bg = (ImageView) activity.findViewById(R.id.imageView19);
+    public void testForGradientOntoPhotos() throws Exception {
+        ImageView bg = (ImageView) activity.findViewById(R.id.imageViewGradient);
         assertNotNull(bg);
 
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) bg.getLayoutParams();
@@ -93,7 +89,7 @@ public class DuelActivityTest {
         assertEquals(0.8, bg.getAlpha(), 1);
         System.out.println("bg | Expected alpha: 0.8, Actual alpha: " + bg.getAlpha());
 
-        assertEquals(R.id.imageView19, bg.getId());
+        assertEquals(R.id.imageViewGradient, bg.getId());
         System.out.println("bg | Expected id: R.id.imageView19, Actual id: " + bg.getId());
 
         assertEquals(0, lp.topMargin);
@@ -104,10 +100,7 @@ public class DuelActivityTest {
         System.out.println("bg | Expected bottomMargin: 0, Actual bottomMargin: " + lp.bottomMargin);
         System.out.println("bg | Expected rightMargin:  0, Actual rightMargin:  " + lp.rightMargin);
         System.out.println("bg | Expected leftMargin:   0, Actual leftMargin:   " + lp.leftMargin);
-
-
     }
-
 
     @Test
     public void testTextViewIChallengeToMySelf() throws Exception {
@@ -151,7 +144,6 @@ public class DuelActivityTest {
         System.out.println("tvYouVsFriend | Expected rightMargin: 8, Actual rightMargin: " + lp.topMargin);
     }
 
-
     @Test
     public void testProgressBar() throws Exception {
         View spinner = activity.findViewById(R.id.loadingPanel);
@@ -177,7 +169,7 @@ public class DuelActivityTest {
         System.out.println("viewPager | Expected PaddingBot:    0, Actual PaddingBot:   " + viewPager.getPaddingBottom());
     }
 
-
+    @Test
     public void testForImageButtonAccept() throws Exception {
         ImageButton imageButton = (ImageButton) activity.findViewById(R.id.ok);
         assertNotNull(imageButton);

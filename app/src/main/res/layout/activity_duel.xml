@@ -33,7 +33,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/imageView19"
+        android:id="@+id/imageViewGradient"
         android:background="@drawable/gradient_self"
         android:alpha="0.8"
         android:layout_alignParentTop="true"

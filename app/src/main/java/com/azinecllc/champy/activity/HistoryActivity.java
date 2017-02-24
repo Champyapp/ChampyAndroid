@@ -38,7 +38,6 @@ import static com.azinecllc.champy.utils.Constants.TAG_TERMS;
 
 public class HistoryActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private SessionManager sessionManager;
     private DrawerLayout drawer;
     private Context context;
 
@@ -50,7 +49,7 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        sessionManager = SessionManager.getInstance(getApplicationContext());
+        SessionManager sessionManager = SessionManager.getInstance(getApplicationContext());
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
@@ -103,8 +102,8 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .bitmapTransform(new BlurTransformation(this, 25))
                 .into(drawerBackground);
-        final String userEmail = sessionManager.getUserEmail();
-        final String userName = sessionManager.getUserName();
+        String userEmail = sessionManager.getUserEmail();
+        String userName = sessionManager.getUserName();
         drawerUserName.setText(userName);
         drawerUserEmail.setText(userEmail);
 

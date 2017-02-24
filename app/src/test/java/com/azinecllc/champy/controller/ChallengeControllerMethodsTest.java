@@ -29,6 +29,7 @@ import static org.mockito.Mockito.when;
  * Created by SashaKhyzhun on 12/27/16.
  */
 public class ChallengeControllerMethodsTest {
+
     @Mock
     Context mockContext;
     @Mock
@@ -102,7 +103,7 @@ public class ChallengeControllerMethodsTest {
                 System.out.println(System.currentTimeMillis()/1000 + " < " + Integer.parseInt(details[i]));
                 System.out.println("next alarm will be at: " + Long.parseLong(details[i]) * 1000);
                 System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-                Assert.assertEquals("GOOD", "OK", "OK");
+                Assert.assertEquals("No next items", "OK", "OK");
                 break;
             }
 
