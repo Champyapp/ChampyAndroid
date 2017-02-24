@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.azinecllc.champy.BuildConfig;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.data.DBHelper;
+import com.azinecllc.champy.helper.CHCheckPendingDuels;
+import com.azinecllc.champy.utils.SessionManager;
 
 import org.junit.After;
 import org.junit.Before;
@@ -20,6 +22,9 @@ import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
+
+
+import java.lang.reflect.Field;
 
 import static org.junit.Assert.*;
 
@@ -32,12 +37,15 @@ public class PendingDuelActivityTest {
 
     private Activity activity;
     private DBHelper dbHelper;
-
+    private SessionManager sessionManager;
+    private CHCheckPendingDuels checkPendingDuels;
 
     @Before
     public void setup() throws Exception {
-        activity = Robolectric.buildActivity(PendingDuelActivity.class).create().get();
+        activity = Robolectric.setupActivity(PendingDuelActivity.class);
         dbHelper = DBHelper.getInstance(activity);
+        sessionManager = SessionManager.getInstance(activity);
+        checkPendingDuels = CHCheckPendingDuels.getInstance();
     }
 
     @Test
@@ -100,10 +108,26 @@ public class PendingDuelActivityTest {
         assertEquals(0, viewPager.getPaddingBottom());
     }
 
-    @After
-    public void killSingleton() throws Exception {
-        dbHelper.close();
-        System.out.println("Killed singleton!");
-    }
+//    @After
+//    public void killSingleton() throws Exception {
+//        //resetSingleton(DBHelper.class, "instance");
+//        //dbHelper.close();
+//        //sessionManager = null;
+//        //checkPendingDuels = null;
+//
+//        System.out.println("Killed singleton!");
+//    }
+//
+//    private static void resetSingleton(Class clazz, String mInstance) {
+//        Field instance;
+//        try {
+//            instance = clazz.getDeclaredField(mInstance);
+//            instance.setAccessible(true);
+//            instance.set(null, null);
+//        } catch (Exception e) {
+//            throw new RuntimeException();
+//        }
+//    }
+
 
 }

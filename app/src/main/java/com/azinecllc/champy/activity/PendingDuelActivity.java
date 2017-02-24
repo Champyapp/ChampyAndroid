@@ -31,8 +31,8 @@ public class PendingDuelActivity extends AppCompatActivity {
         TextView tvPendingDuels = (TextView) findViewById(R.id.tvChallengeToMySelf);
         tvPendingDuels.setTypeface(typeface);
 
-        CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();
-        checker.getPendingCount(getApplicationContext());
+        //CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();
+        //checker.getPendingCount(getApplicationContext());
 
         spinner.setVisibility(View.INVISIBLE);
     }
@@ -65,9 +65,9 @@ public class PendingDuelActivity extends AppCompatActivity {
                 public void run() {
                     SessionManager sessionManager = SessionManager.getInstance(getApplicationContext());
                     try {
-                        size = Integer.parseInt(sessionManager.get_duel_pending());
+                        size = sessionManager.getDuelPending();
                     } catch (NumberFormatException e) {
-                        size = 0;
+                        size = 0; // eat it, bitch >:(
                     }
                     PendingDuelsAdapter pagerAdapter = new PendingDuelsAdapter(getSupportFragmentManager());
                     ViewPager viewPager = (ViewPager) findViewById(R.id.pager_pending_duel);

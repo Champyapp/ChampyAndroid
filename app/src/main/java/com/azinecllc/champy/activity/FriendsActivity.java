@@ -131,12 +131,12 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         drawerUserEmail.setText(userEmail);
         drawerUserName.setText(userName);
 
-        CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();
-        int count = checker.getPendingCount(getApplicationContext());
-        if (count != 0) {
-            TextView view = (TextView) navigationView.getMenu().findItem(R.id.nav_pending_duels).getActionView();
-            view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
-        }
+//        CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();
+//        int count = checker.getPendingCount(this);
+//        if (count != 0) {
+//            TextView view = (TextView) navigationView.getMenu().findItem(R.id.nav_pending_duels).getActionView();
+//            view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
+//        }
 
     }
 

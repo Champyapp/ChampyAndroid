@@ -173,6 +173,10 @@ public class SessionManager {
         return pref.getBoolean(IS_USER_LOGIN, false);
     }
 
+    public int getDuelPending() {
+        return Integer.parseInt(pref.getString("duel_pending", ""));
+    }
+
     public String getRefreshPending() {
         return pref.getString("pendingRefresh", "");
     }
@@ -187,10 +191,6 @@ public class SessionManager {
 
     public String getTokenAndroid() {
         return pref.getString("token_android", "");
-    }
-
-    public String get_duel_pending() {
-        return pref.getString("duel_pending", "");
     }
 
     public String getFacebookId() {

@@ -25,12 +25,15 @@ import com.azinecllc.champy.helper.CHCheckPendingDuels;
 import com.azinecllc.champy.utils.SessionManager;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
+
+import java.lang.reflect.Field;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
@@ -45,26 +48,39 @@ public class FriendsActivityTest {
 
     private Activity activity;
     private DBHelper dbHelper;
+    private SessionManager sessionManager;
     private CHCheckPendingDuels chCheckPendingDuels;
 
     @Before
     public void setup() throws Exception {
-        activity = Robolectric.setupActivity(FriendsActivity.class);
+        activity = Robolectric.buildActivity(FriendsActivity.class).create().get();
         dbHelper = DBHelper.getInstance(activity);
+        sessionManager = SessionManager.getInstance(activity);
         chCheckPendingDuels = CHCheckPendingDuels.getInstance();
-    }
-
-    @After
-    public void killSingleton() throws Exception {
-        dbHelper.close();
-        chCheckPendingDuels = null;
-        System.out.println("Killed singletons!");
     }
 
     @Test
     public void testForActivity() throws Exception {
         assertNotNull(activity);
-        System.out.println("Activity != null. Success");
+    }
+
+    @After
+    public void finishComponentTesting() throws Exception {
+        resetSingleton(DBHelper.class, "instance");
+        resetSingleton(SessionManager.class, "instance");
+        resetSingleton(CHCheckPendingDuels.class, "instance");
+    }
+
+    //
+    public void resetSingleton(Class clazz, String fieldName) {
+        Field instance;
+        try {
+            instance = clazz.getDeclaredField(fieldName);
+            instance.setAccessible(true);
+            instance.set(null, null);
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
     @Test
@@ -145,7 +161,7 @@ public class FriendsActivityTest {
     public void testCheckSpinner() throws Exception {
         View spinner = activity.findViewById(R.id.loadingPanel);
         assertNotNull(spinner);
-        assertEquals(View.INVISIBLE, spinner.getVisibility());
+        assertEquals(View.VISIBLE, spinner.getVisibility());
     }
 
     @Test
@@ -179,15 +195,11 @@ public class FriendsActivityTest {
 
         if (count > 0) {
             view.setText(String.format("%s%s", activity.getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
-            assertEquals("", view.getText());
-            // failed
+            assertEquals("", view.getText()); // failed
         } else {
-            // success
-            assertEquals("", view.getText());
+            assertEquals("", view.getText()); // success
         }
-
         assertTrue(count == 0);
-
         assertNotNull(view);
 
     }

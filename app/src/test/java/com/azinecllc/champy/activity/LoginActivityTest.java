@@ -82,29 +82,5 @@ public class LoginActivityTest {
         //assertEquals(R.drawable.button_facebook, background);
     }
 
-//    @Test
-//    public void onCreate() throws Exception {
-//
-//    }
-//
-//    @Test
-//    public void onClick() throws Exception {
-//
-//    }
-//
-//    @Test
-//    public void onResume() throws Exception {
-//
-//    }
-//
-//    @Test
-//    public void onStop() throws Exception {
-//
-//    }
-//
-//    @Test
-//    public void onBackPressed() throws Exception {
-//
-//    }
 
 }
