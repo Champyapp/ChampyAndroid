@@ -42,7 +42,7 @@ public class PendingDuelActivityTest {
 
     @Before
     public void setup() throws Exception {
-        activity = Robolectric.setupActivity(PendingDuelActivity.class);
+        activity = Robolectric.buildActivity(PendingDuelActivity.class).create().get();
         dbHelper = DBHelper.getInstance(activity);
         sessionManager = SessionManager.getInstance(activity);
         checkPendingDuels = CHCheckPendingDuels.getInstance();
@@ -81,6 +81,7 @@ public class PendingDuelActivityTest {
         System.out.println("tvPendingDuels | TextSize expected: 22d, actual: " + tvPendingDuels.getTextSize());
 
         assertEquals(Color.WHITE, tvPendingDuels.getTextColors().getDefaultColor());
+        assertEquals(Color.WHITE, tvPendingDuels.getCurrentTextColor());
         System.out.println("tvPendingDuels | Color expected: WHITE, actual: " + tvPendingDuels.getTextColors().getDefaultColor());
 
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) tvPendingDuels.getLayoutParams();

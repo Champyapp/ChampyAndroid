@@ -41,7 +41,7 @@ public class ContactUsActivityTest {
 
     @Before
     public void setup() throws Exception {
-        activity = Robolectric.setupActivity(ContactUsActivity.class);
+        activity = Robolectric.buildActivity(ContactUsActivity.class).create().get();
     }
 
     @Test

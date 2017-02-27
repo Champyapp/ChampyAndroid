@@ -60,8 +60,8 @@
         android:textIsSelectable="true"
         android:textSize="28sp"
         android:layout_centerInParent="@+id/imageView_challenges_animation"
-        android:gravity="center_vertical|center_horizontal"
-        android:textColor="#ffffff"
+        android:gravity="center"
+        android:textColor="@color/color_white"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/imageView_challenges_animation"
@@ -78,7 +78,7 @@
         android:layout_alignStart="@+id/imageView_wins_animation"
         android:gravity="center_vertical|center_horizontal"
         android:textSize="28sp"
-        android:textColor="#ffffff"
+        android:textColor="@color/color_white"
         android:layout_alignRight="@+id/imageView_wins_animation"
         android:layout_alignEnd="@+id/imageView_wins_animation"
         android:layout_below="@+id/welcomeUserName"
@@ -92,13 +92,13 @@
         android:layout_alignStart="@+id/imageView_total_animation"
         android:textSize="28sp"
         android:gravity="center_vertical|center_horizontal"
-        android:textColor="#ffffff"
+        android:textColor="@color/color_white"
         android:layout_alignRight="@+id/imageView_total_animation"
         android:layout_alignEnd="@+id/imageView_total_animation"
         android:layout_below="@+id/welcomeUserName"
         android:layout_alignBottom="@+id/imageView_total_logo" />
 
-     <!-- icons inside circles -->
+    <!-- Logo inside circles -->
     <ImageView
         android:layout_width="20dp"
         android:layout_height="20dp"
@@ -140,14 +140,14 @@
         android:layout_height="wrap_content"
         android:id="@+id/textViewChallenges"
         android:textSize="16sp"
-        android:textColor="#ffffff"
+        android:textColor="@color/color_white"
+        android:gravity="center"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:layout_below="@+id/imageView_challenges_animation"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:gravity="center_vertical|center_horizontal"
         android:layout_marginLeft="@dimen/activity_vertical_margin"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
         android:layout_alignRight="@+id/imageView_challenges_animation"
         android:layout_alignEnd="@+id/imageView_challenges_animation"
         android:layout_above="@+id/cards" />
@@ -157,31 +157,31 @@
         android:layout_height="wrap_content"
         android:id="@+id/textViewWins"
         android:textSize="16sp"
+        android:textColor="@color/color_white"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:gravity="center"
         android:layout_below="@+id/imageView_wins_animation"
         android:layout_alignLeft="@+id/imageView_wins_animation"
         android:layout_alignStart="@+id/imageView_wins_animation"
         android:layout_alignRight="@+id/imageView_wins_animation"
-        android:layout_alignEnd="@+id/imageView_wins_animation"
-        android:gravity="center_vertical|center_horizontal"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:textColor="#ffffff" />
+        android:layout_alignEnd="@+id/imageView_wins_animation" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textViewTotal"
         android:textSize="16sp"
+        android:textColor="@color/color_white"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:gravity="center"
         android:layout_below="@+id/imageView_total_animation"
         android:layout_alignRight="@+id/imageView_total_animation"
         android:layout_alignEnd="@+id/imageView_total_animation"
         android:layout_alignBottom="@+id/textViewWins"
         android:layout_alignLeft="@+id/imageView_total_animation"
-        android:layout_alignStart="@+id/imageView_total_animation"
-        android:gravity="center_vertical|center_horizontal"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:textColor="#ffffff" />
+        android:layout_alignStart="@+id/imageView_total_animation" />
 
     <!-- our cards -->
     <RelativeLayout

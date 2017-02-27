@@ -50,7 +50,7 @@ public class MainActivityTest {
 
     @Before
     public void setup() throws Exception {
-        activity = Robolectric.setupActivity(MainActivity.class);
+        activity = Robolectric.buildActivity(MainActivity.class).create().get();
     }
 
     @After
@@ -64,46 +64,6 @@ public class MainActivityTest {
     public void testForNotNullActivity() throws Exception {
         assertNotNull(activity);
         assertEquals("MainActivity", activity.getClass().getSimpleName());
-    }
-
-    @Test
-    public void testForAppBarLayout() throws Exception {
-        AppBarLayout appBarLayout = (AppBarLayout) activity.findViewById(R.id.appbar_main);
-        Assert.assertNotNull(appBarLayout);
-        assertTrue(View.VISIBLE == appBarLayout.getVisibility());
-        Assert.assertEquals(R.id.appbar_main, appBarLayout.getId());
-    }
-
-    @Test
-    public void testForToolbar() throws Exception {
-        Toolbar toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
-        Assert.assertNotNull(toolbar);
-        Assert.assertEquals("Challenges", toolbar.getTitle());
-        System.out.println("Expected: Challenges | actual: " + toolbar.getTitle());
-        assertTrue(R.id.toolbar == toolbar.getId());
-        System.out.println("Expected: R.id.toolbar | actual: " + toolbar.getId());
-    }
-
-    @Test
-    public void testFriendsBackground() throws Exception {
-        ImageView background = (ImageView) activity.findViewById(R.id.main_background);
-        assertNotNull(background);
-        assertEquals(R.id.main_background, background.getId());
-        assertEquals(View.VISIBLE, background.getVisibility());
-        assertTrue(ImageView.ScaleType.CENTER_CROP == background.getScaleType());
-    }
-
-    @Test
-    public void testItemBlurIsNotNull() throws Exception {
-        View view = activity.findViewById(R.id.item_blur);
-        assertNotNull(view);
-        assertEquals(View.VISIBLE, view.getVisibility());
-    }
-
-    @Test
-    public void testForFragmentHolder() throws Exception {
-        RelativeLayout fragmentHolder = (RelativeLayout) activity.findViewById(R.id.frame);
-        assertNotNull(fragmentHolder);
     }
 
     @Test
@@ -136,6 +96,72 @@ public class MainActivityTest {
         assertEquals(drawerUserName.getId(), R.id.drawer_tv_user_name);
         assertEquals(View.VISIBLE, drawerUserName.getVisibility());
         System.out.println("navigation view tests: Success");
+
+    }
+
+    @Test
+    public void testMainBackground() throws Exception {
+        ImageView background = (ImageView) activity.findViewById(R.id.main_background);
+        assertNotNull(background);
+        assertEquals(R.id.main_background, background.getId());
+        assertEquals(View.VISIBLE, background.getVisibility());
+        assertTrue(ImageView.ScaleType.CENTER_CROP == background.getScaleType());
+    }
+
+    @Test
+    public void testItemBlurIsNotNull() throws Exception {
+        View view = activity.findViewById(R.id.item_blur);
+        assertNotNull(view);
+        assertEquals(View.VISIBLE, view.getVisibility());
+    }
+
+    @Test
+    public void testForAppBarLayout() throws Exception {
+        AppBarLayout appBarLayout = (AppBarLayout) activity.findViewById(R.id.appbar_main);
+        Assert.assertNotNull(appBarLayout);
+        assertTrue(View.VISIBLE == appBarLayout.getVisibility());
+        Assert.assertEquals(R.id.appbar_main, appBarLayout.getId());
+    }
+
+    @Test
+    public void testForToolbar() throws Exception {
+        Toolbar toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
+        Assert.assertNotNull(toolbar);
+        Assert.assertEquals("Challenges", toolbar.getTitle());
+        System.out.println("Expected: Challenges | actual: " + toolbar.getTitle());
+        assertTrue(R.id.toolbar == toolbar.getId());
+        System.out.println("Expected: R.id.toolbar | actual: " + toolbar.getId());
+    }
+
+    @Test
+    public void testForFragmentHolder() throws Exception {
+        RelativeLayout fragmentHolder = (RelativeLayout) activity.findViewById(R.id.frame);
+        assertNotNull(fragmentHolder);
+    }
+
+    @Test
+    public void testForCHCheckPendingDuels() throws Exception {
+        CHCheckPendingDuels chCheckPendingDuels = CHCheckPendingDuels.getInstance();
+        assertNotNull(chCheckPendingDuels);
+
+        int count = chCheckPendingDuels.getPendingCount(activity);
+        assertNotNull(count);
+
+        NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
+        assertNotNull(navigationView);
+
+        TextView view = (TextView) navigationView.getMenu().findItem(R.id.nav_pending_duels).getActionView();
+        assertNotNull(navigationView);
+        System.out.println("PendingDuels Count: " + count);
+
+        if (count > 0) {
+            view.setText(String.format("%s%s", activity.getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
+            assertEquals("", view.getText()); // failed
+        } else {
+            assertEquals("", view.getText()); // success
+        }
+        assertTrue(count == 0);
+        assertNotNull(view);
 
     }
 

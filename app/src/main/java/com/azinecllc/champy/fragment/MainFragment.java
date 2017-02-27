@@ -25,7 +25,7 @@ import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.FriendsActivity;
 import com.azinecllc.champy.activity.SelfImprovementActivity;
 import com.azinecllc.champy.activity.WakeUpActivity;
-import com.azinecllc.champy.adapter.MainActivityCardsAdapter;
+import com.azinecllc.champy.adapter.CardAdapter;
 import com.azinecllc.champy.model.SelfImprovement_model;
 import com.azinecllc.champy.utils.CustomPagerBase;
 import com.azinecllc.champy.utils.SessionManager;
@@ -39,12 +39,11 @@ import static java.lang.Math.round;
 
 public class MainFragment extends Fragment implements View.OnClickListener {
 
-    private Typeface typeface;
-    private MainActivityCardsAdapter adapter;
-    private SessionManager sessionManager;
     private int challengesInteger, winsInteger, totalInteger;
     private boolean isFabOpen = false;
     private String userName;
+    private Typeface typeface;
+    private SessionManager sessionManager;
     private FloatingActionButton fabPlus, fabWake, fabSelf, fabDuel;
     private Animation fab_open, fab_close, rotate_forward, rotate_backward;
 
@@ -53,12 +52,13 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        typeface = android.graphics.Typeface.createFromAsset(getContext().getAssets(), "fonts/bebasneue.ttf");
+        typeface = Typeface.createFromAsset(getResources().getAssets(), "fonts/bebasneue.ttf");
         sessionManager = SessionManager.getInstance(getContext());
         String challenges = sessionManager.getChampyOptions().get("challenges");
         String wins = sessionManager.getChampyOptions().get("wins");
         String total = sessionManager.getChampyOptions().get("total");
         userName = sessionManager.getUserName();
+
         challengesInteger = (!challenges.equals("")) ? Integer.parseInt(challenges) : 0;
         winsInteger = (!wins.equals("")) ? Integer.parseInt(wins) : 0;
         totalInteger = (!total.equals("")) ? Integer.parseInt(total) : 0;
@@ -68,7 +68,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-        adapter = new MainActivityCardsAdapter(getContext(), SelfImprovement_model.generate(getContext()));
+        CardAdapter adapter = new CardAdapter(getContext(), SelfImprovement_model.generate(getContext()));
         if (adapter.dataCount() > 0) {
             RelativeLayout cards = (RelativeLayout) view.findViewById(R.id.cards);
             CustomPagerBase pager = new CustomPagerBase(getActivity(), cards, adapter);

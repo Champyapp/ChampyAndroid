@@ -1,5 +1,6 @@
 package com.azinecllc.champy.activity;
 
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.view.View;
@@ -75,6 +76,8 @@ public class SplashActivityTest {
         assertEquals(25, 25, tvChampy.getTextSize());
         assertEquals(R.id.tvChampy, tvChampy.getId());
 
+        assertEquals(Color.WHITE, tvChampy.getCurrentTextColor());
+
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams)tvChampy.getLayoutParams();
         assertEquals(25, lp.topMargin);
 
@@ -97,6 +100,8 @@ public class SplashActivityTest {
 
         lostInternet.setVisibility(View.VISIBLE);
         assertEquals("Lost internet connection", lostInternet.getText());
+
+        assertEquals(Color.WHITE, lostInternet.getCurrentTextColor());
 
         lostInternet.setTypeface(typeface);
         assertEquals(typeface, lostInternet.getTypeface());

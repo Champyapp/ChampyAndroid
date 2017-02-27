@@ -272,6 +272,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Runnable runnable = () -> {
             // update the main content by replacing fragments
             Fragment fragment = getHomeFragment();
+
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
             fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);

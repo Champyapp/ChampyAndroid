@@ -36,7 +36,7 @@ public class DuelActivityTest {
 
     @Before
     public void setup() throws Exception {
-        activity = Robolectric.setupActivity(DuelActivity.class);
+        activity = Robolectric.buildActivity(DuelActivity.class).create().get();
         x = round(activity.getWindowManager().getDefaultDisplay().getWidth() / 2);
     }
 
@@ -112,6 +112,7 @@ public class DuelActivityTest {
                 "Expected testSize: 22, " +
                 "Actual textSize: " + tvChallengeFriends.getTextSize());
         assertEquals(Color.WHITE, tvChallengeFriends.getTextColors().getDefaultColor());
+        assertEquals(Color.WHITE, tvChallengeFriends.getCurrentTextColor());
 
         assertEquals("I challenge my friend to", tvChallengeFriends.getText());
         System.out.println("tvChallengeFriends | " +
@@ -134,6 +135,7 @@ public class DuelActivityTest {
                 "Expected testSize:   18, " +
                 "Actual textSize: " + tvYouVsFriend.getTextSize());
         assertEquals(Color.WHITE, tvYouVsFriend.getTextColors().getDefaultColor());
+        assertEquals(Color.WHITE, tvYouVsFriend.getCurrentTextColor());
 
         assertNotNull(tvYouVsFriend.getText().toString());
 

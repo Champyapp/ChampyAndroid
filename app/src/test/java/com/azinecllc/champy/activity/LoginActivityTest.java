@@ -36,7 +36,7 @@ public class LoginActivityTest {
 
     @Before
     public void setup() throws Exception {
-        activity = Robolectric.setupActivity(LoginActivity.class);
+        activity = Robolectric.buildActivity(LoginActivity.class).create().get();
         champyLogo  = (ImageView)   activity.findViewById(R.id.imageViewChampy);
         tvLoginText = (TextView)    activity.findViewById(R.id.login_text);
         buttonLogin = (LoginButton) activity.findViewById(R.id.login_button);

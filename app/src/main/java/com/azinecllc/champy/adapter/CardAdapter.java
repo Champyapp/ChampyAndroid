@@ -26,12 +26,12 @@ import java.util.Date;
 
 import static com.azinecllc.champy.utils.Constants.oneDay;
 
-public class MainActivityCardsAdapter extends MainActivityCardPagerAdapter {
+public class CardAdapter extends MainActivityCardPagerAdapter {
 
     private ArrayList<SelfImprovement_model> arrayList;
     private Snackbar snackbar;
 
-    public MainActivityCardsAdapter(Context context, ArrayList<SelfImprovement_model> mArrayList) {
+    public CardAdapter(Context context, ArrayList<SelfImprovement_model> mArrayList) {
         super(context);
         this.arrayList = mArrayList;
     }

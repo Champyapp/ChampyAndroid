@@ -46,7 +46,7 @@ public class Champy extends Application {
     public void onCreate() {
         super.onCreate();
         FacebookSdk.sdkInitialize(getApplicationContext());
-        System.out.println("CHAMPY! onCreate");
+        //System.out.println("CHAMPY! onCreate");
         instance = this;
     }
 

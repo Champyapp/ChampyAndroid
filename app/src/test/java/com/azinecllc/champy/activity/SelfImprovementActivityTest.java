@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Build;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.View;
@@ -86,6 +87,7 @@ public class SelfImprovementActivityTest {
         assertEquals(16d, tvSIC.getTextSize(), 0);
 
         assertEquals(Color.WHITE, tvSIC.getTextColors().getDefaultColor());
+        assertEquals(Color.WHITE, tvSIC.getCurrentTextColor());
 
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) tvSIC.getLayoutParams();
         assertEquals(16, lp.topMargin);
@@ -99,6 +101,7 @@ public class SelfImprovementActivityTest {
         assertEquals(22d, tvChallengeToMySelf.getTextSize(), 0);
 
         assertEquals(Color.WHITE, tvChallengeToMySelf.getTextColors().getDefaultColor());
+        assertEquals(Color.WHITE, tvChallengeToMySelf.getCurrentTextColor());
 
         assertEquals("I challenge myself to", tvChallengeToMySelf.getText());
 

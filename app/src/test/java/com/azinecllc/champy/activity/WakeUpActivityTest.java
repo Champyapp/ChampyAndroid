@@ -64,6 +64,7 @@ public class WakeUpActivityTest {
         assertEquals(22, tvWakeUpChallenge.getTextSize(), 0);
 
         assertEquals(Color.WHITE, tvWakeUpChallenge.getTextColors().getDefaultColor());
+        assertEquals(Color.WHITE, tvWakeUpChallenge.getCurrentTextColor());
 
         assertEquals("I challenge myself to", tvWakeUpChallenge.getText());
 
@@ -80,6 +81,7 @@ public class WakeUpActivityTest {
         assertEquals(22d, tvChallengeToMySelf.getTextSize(), 0);
 
         assertEquals(Color.WHITE, tvChallengeToMySelf.getTextColors().getDefaultColor());
+        assertEquals(Color.WHITE, tvChallengeToMySelf.getCurrentTextColor());
 
         assertEquals("wake up \\nchallenge", tvChallengeToMySelf.getText());
 
@@ -95,7 +97,6 @@ public class WakeUpActivityTest {
 
         assertEquals(22, goalText.getTextSize(), 0);
 
-        //assertEquals(R.color.colorTextAqua, goalText.getTextColors().getDefaultColor());
 
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) goalText.getLayoutParams();
         assertEquals("WAKE UP AT", goalText.getText());
