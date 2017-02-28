@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -284,8 +285,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     String api_path = null;
                     if (data.getPhoto() != null) {
+                        String root = Environment.getExternalStorageDirectory().toString(); // path
                         String path = "/data/data/com.azinecllc.champy/app_imageDir/";
-                        File file = new File(path, "profile.jpg");
+                        File file = new File(root + path, "profile.jpg");
                         if (!file.exists()) {
                             com.azinecllc.champy.model.user.Photo photo = data.getPhoto();
                             api_path = API_URL + photo.getLarge();

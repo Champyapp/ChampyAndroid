@@ -264,7 +264,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                     e.printStackTrace();
                 }
                 getActivity().recreate();
-
             } else if (requestCode == SELECT_FILE) {
                 Uri selectedImageUri = data.getData();
                 performCrop(selectedImageUri); // this thing starts activity for result 'CROP_PIC'
@@ -273,7 +272,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 Bitmap thePic = extras.getParcelable("data"); // get the cropped bitmap
                 savePhotoToStorage(thePic);
             }
-            System.out.println("request: " + requestCode);
         }
 
     }
@@ -542,31 +540,31 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         userController.uploadPhotoForAPI(uri.toString());
         session.setUserPicture(uri.toString());
 
-//        Glide.with(this)
-//                .load(uri)
-//                .bitmapTransform(new CropCircleTransformation(context))
-//                .diskCacheStrategy(DiskCacheStrategy.NONE)
-//                .skipMemoryCache(true)
-//                .override(130, 130)
-//                .into(userImageProfile);
-//        Glide.with(this)
-//                .load(uri)
-//                .bitmapTransform(new CropCircleTransformation(context))
-//                .diskCacheStrategy(DiskCacheStrategy.NONE)
-//                .skipMemoryCache(true)
-//                .into((ImageView) getActivity().findViewById(R.id.drawer_user_photo));
-//        Glide.with(this)
-//                .load(uri)
-//                .bitmapTransform(new BlurTransformation(context, 25))
-//                .diskCacheStrategy(DiskCacheStrategy.NONE)
-//                .skipMemoryCache(true)
-//                .into((ImageView) getActivity().findViewById(R.id.drawer_background));
-//        Glide.with(this)
-//                .load(uri)
-//                .bitmapTransform(new BlurTransformation(context, 25))
-//                .diskCacheStrategy(DiskCacheStrategy.NONE)
-//                .skipMemoryCache(true)
-//                .into((ImageView) getActivity().findViewById(R.id.main_background));
+        Glide.with(this)
+                .load(uri)
+                .bitmapTransform(new CropCircleTransformation(context))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .override(130, 130)
+                .into(userImageProfile);
+        Glide.with(this)
+                .load(uri)
+                .bitmapTransform(new CropCircleTransformation(context))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into((ImageView) getActivity().findViewById(R.id.drawer_user_photo));
+        Glide.with(this)
+                .load(uri)
+                .bitmapTransform(new BlurTransformation(context, 25))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into((ImageView) getActivity().findViewById(R.id.drawer_background));
+        Glide.with(this)
+                .load(uri)
+                .bitmapTransform(new BlurTransformation(context, 25))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into((ImageView) getActivity().findViewById(R.id.main_background));
 
         FileOutputStream out = null;
         try {
