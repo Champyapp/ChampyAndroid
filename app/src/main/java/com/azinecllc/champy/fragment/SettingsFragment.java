@@ -78,7 +78,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     private HashMap<String, String> map = new HashMap<>();
     private String userName, userPicture;
     private HashMap<String, String> userDetails = new HashMap<>();
-    private Retrofit retrofit;
     public Uri picUri;
 
     @Override
@@ -86,7 +85,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         context = getContext();
 
-        retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bebasneue.ttf");
         session = SessionManager.getInstance(context);
         dbHelper = DBHelper.getInstance(context);
@@ -251,29 +250,34 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
             if (requestCode == CAMERA_REQUEST) {
                 Bundle extras = data.getExtras();
                 Bitmap thePic = extras.getParcelable("data"); // get the cropped bitmap
-                savePhoto(thePic);
-                userController.uploadPhotoForAPI(saveToStorageFromCamera(thePic));
+                savePhotoToStorage(thePic);
+                userController.uploadPhotoForAPI(getPicturePathFromStorage(thePic));
+                getActivity().recreate();
             } else if (requestCode == Crop.REQUEST_PICK) {
                 // this thing starts activity for result 'REQUEST_CROP'
                 Uri destination = Uri.fromFile(new File(getContext().getCacheDir(), "cropped"));
                 Crop.of(data.getData(), destination).asSquare().withMaxSize(300, 300).start(context, this);
             } else if (requestCode == Crop.REQUEST_CROP) {
                 try {
-                    handleCrop(resultCode, data); //this thing starts activity for result 'CROP_PIC'
+                    handleCrop(resultCode, data);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                getActivity().recreate();
+
+            } else if (requestCode == SELECT_FILE) {
+                Uri selectedImageUri = data.getData();
+                performCrop(selectedImageUri); // this thing starts activity for result 'CROP_PIC'
             } else if (requestCode == CROP_PIC) {
                 Bundle extras = data.getExtras();
                 Bitmap thePic = extras.getParcelable("data"); // get the cropped bitmap
-                savePhoto(thePic);
-            } else if (requestCode == SELECT_FILE) {
-                Uri selectedImageUri = data.getData();
-                performCrop(selectedImageUri);
+                savePhotoToStorage(thePic);
             }
-
+            System.out.println("request: " + requestCode);
         }
+
     }
+
 
     @Override
     public void onDestroy() {
@@ -500,7 +504,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
             userController.uploadPhotoForAPI(path);
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), uri);
-            savePhoto(bitmap); // my method which saves picture to storage
+            savePhotoToStorage(bitmap); // my method which saves picture to storage
 
         } else if (resultCode == Crop.RESULT_ERROR) {
             Toast.makeText(context, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
@@ -509,37 +513,11 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
 
     /**
-     * Method to save photo in cache-folder in an Internal storage on the device. We use this method
-     * only after 'take a picture from camera' because we need to create this picture into storage.
-     * @param finalBitmap - this is parcelable data from intent (extras.getParcelable("data"))
-     * @return the actually path to picture with witch we can upload this photo to API.
-     */
-    private String saveToStorageFromCamera(Bitmap finalBitmap) {
-        String root = Environment.getExternalStorageDirectory().toString();
-        File myDir = new File(root + "/android/data/com.azinecllc.champy/images");
-        myDir.mkdirs();
-        String fileName = "profile.jpg";
-        File file = new File(myDir, fileName);
-        if (file.exists()) file.delete();
-        try {
-            FileOutputStream out = new FileOutputStream(file);
-            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-            out.flush();
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return (Uri.fromFile(file).getPath());
-    }
-
-
-    /**
      * Method to save photo in storage from camera. Actually this method creates folder and file
      * like as Object on device. We uses this method after 'take picture' and 'choose from storage'
      * @param photo - bitmap which we get from extras.getParcelable
      */
-    private void savePhoto(Bitmap photo) {
+    private void savePhotoToStorage(Bitmap photo) {
         String root = Environment.getExternalStorageDirectory().toString(); // path
         File myDir = new File(root + "/android/data/com.azinecllc.champy/images"); // folder
         myDir.mkdirs(); // create folder
@@ -561,33 +539,34 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         }
 
         Uri uri = Uri.fromFile(file);
+        userController.uploadPhotoForAPI(uri.toString());
         session.setUserPicture(uri.toString());
 
-        Glide.with(this)
-                .load(uri.toString())
-                .bitmapTransform(new CropCircleTransformation(context))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .override(130, 130)
-                .into(userImageProfile);
-        Glide.with(this)
-                .load(uri.toString())
-                .bitmapTransform(new CropCircleTransformation(context))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into((ImageView) getActivity().findViewById(R.id.drawer_user_photo));
-        Glide.with(this)
-                .load(uri.toString())
-                .bitmapTransform(new BlurTransformation(context, 25))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into((ImageView) getActivity().findViewById(R.id.drawer_background));
-        Glide.with(this)
-                .load(uri.toString())
-                .bitmapTransform(new BlurTransformation(context, 25))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into((ImageView) getActivity().findViewById(R.id.main_background));
+//        Glide.with(this)
+//                .load(uri)
+//                .bitmapTransform(new CropCircleTransformation(context))
+//                .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                .skipMemoryCache(true)
+//                .override(130, 130)
+//                .into(userImageProfile);
+//        Glide.with(this)
+//                .load(uri)
+//                .bitmapTransform(new CropCircleTransformation(context))
+//                .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                .skipMemoryCache(true)
+//                .into((ImageView) getActivity().findViewById(R.id.drawer_user_photo));
+//        Glide.with(this)
+//                .load(uri)
+//                .bitmapTransform(new BlurTransformation(context, 25))
+//                .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                .skipMemoryCache(true)
+//                .into((ImageView) getActivity().findViewById(R.id.drawer_background));
+//        Glide.with(this)
+//                .load(uri)
+//                .bitmapTransform(new BlurTransformation(context, 25))
+//                .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                .skipMemoryCache(true)
+//                .into((ImageView) getActivity().findViewById(R.id.main_background));
 
         FileOutputStream out = null;
         try {
@@ -615,9 +594,36 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                     out.close(); // closing stream
                 }
             } catch (IOException e) {
-                e.printStackTrace(); }
+                e.printStackTrace();
+            }
         }
 
+    }
+
+    /**
+     * Method to get photo from cache-folder in an Internal storage on the device. We use this method
+     * only after 'take a picture from camera' because we need to create this picture into storage.
+     *
+     * @param finalBitmap - this is parcelable data from intent (extras.getParcelable("data"))
+     * @return the actually path to picture with witch we can upload this photo to API.
+     */
+    private String getPicturePathFromStorage(Bitmap finalBitmap) {
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root + "/android/data/com.azinecllc.champy/images");
+        myDir.mkdirs();
+        String fileName = "profile.jpg";
+        File file = new File(myDir, fileName);
+        if (file.exists()) file.delete();
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return (Uri.fromFile(file).getPath());
     }
 
     /**

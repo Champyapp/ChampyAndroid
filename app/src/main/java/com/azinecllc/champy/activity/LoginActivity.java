@@ -1,14 +1,11 @@
 package com.azinecllc.champy.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,7 +13,7 @@ import android.widget.Toast;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.controller.DailyRemindController;
 import com.azinecllc.champy.controller.UserController;
-import com.azinecllc.champy.helper.CHDownloadPhotoAndSave;
+import com.azinecllc.champy.helper.CHSaveAndUploadPhoto;
 import com.azinecllc.champy.helper.CHGetFacebookFriends;
 import com.azinecllc.champy.interfaces.NewUser;
 import com.azinecllc.champy.model.user.Data;
@@ -41,8 +38,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 import io.jsonwebtoken.Jwts;
@@ -53,6 +48,7 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static com.azinecllc.champy.utils.Constants.API_URL;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -85,6 +81,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         buttonLogin.setReadPermissions(Arrays.asList("public_profile", "email", "user_friends"));
         buttonLogin.setOnClickListener(this);
 
+        if (!checkWriteExternalPermission()) {
+            ActivityCompat.requestPermissions(this, new String[]{READ_EXTERNAL_STORAGE}, 1);
+        }
     }
 
     @Override
@@ -100,15 +99,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     return;
                 }
 
-                // if (userFBID.isExist) { signIn(); } else { register(); }
-
                 GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), (object, response) -> {
                     spinner.setVisibility(View.VISIBLE);
                     try {
                         userFBID = object.getString("id");
                         userName = object.getString("first_name") + " " + object.getString("last_name");
                         userEmail = (object.getString("email") != null) ? object.getString("email") : userFBID + "@facebook.com";
-                        System.out.println("OBJECT: " + object.getString("email"));
                     } catch (JSONException e) {
                         userEmail = userFBID + "@facebook.com";
                     }
@@ -123,7 +119,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     new Thread(() -> {
                         try {
                             InstanceID instanceID = InstanceID.getInstance(LoginActivity.this);
-                            String token_android = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+                            String token_android = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
+                                    GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
 
                             JSONObject jsonObject = new JSONObject();
                             jsonObject.put("token", token_android);
@@ -177,18 +174,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Runtime.getRuntime().gc();
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case 1: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted, yay! Do the contacts-related task you need to do.
-                } //else { //permission denied, boo! Disable the functionality that depends on this permission.}
-                return;
-            }
-        }
-    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+//        switch (requestCode) {
+//            case 1: {
+//                // If request is cancelled, the result arrays are empty.
+//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    // permission was granted, yay! Do the contacts-related task you need to do.
+//                } //else { //permission denied, boo! Disable the functionality that depends on this permission.}
+//                return;
+//            }
+//        }
+//    }
 
 
 //    /**
@@ -369,7 +366,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     UserController userController = new UserController(sessionManager, retrofit);
                     userController.updatePushIdentifier();
 
-                    CHDownloadPhotoAndSave a = new CHDownloadPhotoAndSave(getApplicationContext(), retrofit);
+                    CHSaveAndUploadPhoto a = new CHSaveAndUploadPhoto(getApplicationContext(), retrofit);
                     a.execute(picture); // async, don't forget to destroy thread.
 
                     DailyRemindController drc = new DailyRemindController(getApplicationContext());
@@ -405,6 +402,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .setPayload(string)
                 .signWith(SignatureAlgorithm.HS256, "secret")
                 .compact();
+    }
+
+    /**
+     * Method which returns boolean value of granted permission. To work with storage we need to
+     * have this permission and we had to check it in runtime
+     *
+     * @return value of granted permission
+     */
+    private boolean checkWriteExternalPermission() {
+        int res = checkCallingOrSelfPermission(READ_EXTERNAL_STORAGE);
+        return (res == PackageManager.PERMISSION_GRANTED);
     }
 
 

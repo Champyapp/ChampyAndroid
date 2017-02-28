@@ -3,6 +3,7 @@ package com.azinecllc.champy.controller;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Environment;
 
 import com.azinecllc.champy.activity.RoleControllerActivity;
 import com.azinecllc.champy.data.DBHelper;
@@ -115,8 +116,9 @@ public class UserController {
             public void onResponse(Response<Delete> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     ////////// not sure what we need this ////////
-                    File profile = new File(path, "profile.jpg");
-                    profile.delete();
+                    //String root = Environment.getExternalStorageDirectory().toString();
+                    //File avatar = new File(root + "/android/data/com.azinecllc.champy/images", "profile.jpg");
+                    //avatar.delete();
                     //File blurred = new File(path, "blurred.png");
                     //blurred.delete();
                     // ///////////////////////////////////////////

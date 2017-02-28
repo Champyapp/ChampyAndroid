@@ -25,12 +25,11 @@ import com.facebook.FacebookSdk;
 import java.io.IOException;
 
 /**
- * This is Wake-Up activity when our activity_alarm_receiver manager starts ring
+ * This is Wake-Up activity when our Alarm Receiver manager starts to ring
  */
 public class AlarmReceiverActivity extends Activity implements View.OnClickListener {
 
     private MediaPlayer mMediaPlayer;
-    private ChallengeController cc;
     private String inProgressID;
     private int requestCode;
     public Context context;
@@ -52,11 +51,14 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_alarm_receiver);
-        playSound(this, getAlarmUri());
-
+        try {
+            playSound(this, getAlarmUri());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         TextView tvWakeUpChallenge = (TextView) findViewById(R.id.tvWakeUpChallenge);
         TextView tvWakeUp = (TextView) findViewById(R.id.wakeup_text);
-        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
         tvWakeUpChallenge.setTypeface(typeface);
         tvWakeUp.setTypeface(typeface);
 
@@ -65,8 +67,6 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
         window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-        cc = new ChallengeController(getApplicationContext(), AlarmReceiverActivity.this);
 
         ImageButton buttonDoneForToday = (ImageButton) findViewById(R.id.buttonWakeUpDoneForToday);
         ImageButton buttonSurrender = (ImageButton) findViewById(R.id.buttonWakeUpSurrender);
@@ -88,6 +88,7 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
     public void onClick(View v) {
         Intent intent = new Intent(this, RoleControllerActivity.class);
         OfflineMode offlineMode = OfflineMode.getInstance();
+        ChallengeController cc = new ChallengeController(getApplicationContext(), AlarmReceiverActivity.this);
 
         switch (v.getId()) {
             case R.id.buttonWakeUpDoneForToday:
@@ -128,19 +129,19 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
     }
 
 
-    private void playSound(Context context, Uri alert) {
+    private void playSound(Context context, Uri alert) throws Exception {
         mMediaPlayer = new MediaPlayer();
         mMediaPlayer.setLooping(true);
         try {
             mMediaPlayer.setDataSource(context, alert);
-            final AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+            AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
             if (audioManager.getStreamVolume(AudioManager.STREAM_ALARM) != 0) {
                 mMediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
                 mMediaPlayer.prepare();
                 mMediaPlayer.start();
             }
-        } catch (IOException e) {
-            //System.out.println("OOPS");
+        } catch (IOException | IllegalArgumentException e) {
+            //System.out.println("OOPS"); //eat it, bitch
         }
     }
 

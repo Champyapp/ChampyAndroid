@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Environment;
 import android.util.Log;
 
 import com.azinecllc.champy.activity.RoleControllerActivity;
@@ -159,8 +160,9 @@ public class SessionManager {
         // go to login activity
         //File blurred = new File(path, "blurred.png");
         //blurred.delete();
-        File profile = new File(path, "profile.jpg");
-        profile.delete();
+        String root = Environment.getExternalStorageDirectory().toString();
+        File avatar = new File(root + "/android/data/com.azinecllc.champy/images", "profile.jpg");
+        avatar.delete();
         CURRENT_TAG = TAG_CHALLENGES;
         navItemIndex = 0;
         Intent intent = new Intent(activity, RoleControllerActivity.class);

@@ -13,6 +13,7 @@ import com.azinecllc.champy.utils.SessionManager;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 import retrofit.Retrofit;
@@ -24,12 +25,12 @@ import retrofit.Retrofit;
  * Here we get path to picture, create folder, create photoFile, save it and put picture into file
  */
 
-public class CHDownloadPhotoAndSave extends AsyncTask<String, Void, Bitmap> {
+public class CHSaveAndUploadPhoto extends AsyncTask<String, Void, Bitmap> {
 
     private Context context;
     private Retrofit retrofit;
 
-    public CHDownloadPhotoAndSave(Context context, Retrofit retrofit) {
+    public CHSaveAndUploadPhoto(Context context, Retrofit retrofit) {
         this.context = context;
         this.retrofit = retrofit;
     }
@@ -63,9 +64,25 @@ public class CHDownloadPhotoAndSave extends AsyncTask<String, Void, Bitmap> {
         String fileName = "profile.jpg";
 
         File file = new File(myDir, fileName);
-        if (file.exists()) {
+        if (!file.exists()) {
+            try {
+                file.createNewFile(); // create
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
             file.delete();
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+
+        SessionManager ss = SessionManager.getInstance(context);
+        UserController userController = new UserController(ss, retrofit);
+        userController.uploadPhotoForAPI(Uri.fromFile(file).getPath()); // here we can upload photo.
+
         try {
             FileOutputStream out = new FileOutputStream(file);
             bitmapImage.compress(Bitmap.CompressFormat.JPEG, 90, out);
@@ -74,10 +91,6 @@ public class CHDownloadPhotoAndSave extends AsyncTask<String, Void, Bitmap> {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        SessionManager ss = SessionManager.getInstance(context);
-        UserController userController = new UserController(ss, retrofit);
-        userController.uploadPhotoForAPI(Uri.fromFile(file).getPath());
 
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
         File myPath = new File(directory, "profile.jpg"); // Create imageDir
