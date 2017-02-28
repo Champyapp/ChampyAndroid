@@ -29,10 +29,6 @@ public class Data {
         return this.additionalProperties;
     }
 
-    public Integer getInProgressChallengesCount() {
-        return inProgressChallengesCount;
-    }
-
     public Integer getInProgressChallenges() {
         return inProgressChallengesCount;
     }

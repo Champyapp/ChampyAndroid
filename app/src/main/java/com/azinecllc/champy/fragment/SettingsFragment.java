@@ -211,7 +211,8 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                     });
                     tvTakeAPicture.setOnClickListener(view -> {
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        File f = new File(path, "profile.jpg");
+                        String root = Environment.getExternalStorageDirectory().toString(); // path
+                        File f = new File(root + path, "profile.jpg");
                         picUri = Uri.fromFile(f);
                         startActivityForResult(intent, CAMERA_REQUEST);
                         layoutButtons.setVisibility(View.GONE);
@@ -252,7 +253,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 Bitmap thePic = extras.getParcelable("data"); // get the cropped bitmap
                 savePhotoToStorage(thePic);
                 userController.uploadPhotoForAPI(getPicturePathFromStorage(thePic));
-                getActivity().recreate();
+                //getActivity().recreate();
             } else if (requestCode == Crop.REQUEST_PICK) {
                 // this thing starts activity for result 'REQUEST_CROP'
                 Uri destination = Uri.fromFile(new File(getContext().getCacheDir(), "cropped"));
@@ -263,7 +264,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                getActivity().recreate();
+                //getActivity().recreate();
             } else if (requestCode == SELECT_FILE) {
                 Uri selectedImageUri = data.getData();
                 performCrop(selectedImageUri); // this thing starts activity for result 'CROP_PIC'
@@ -275,7 +276,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         }
 
     }
-
 
     @Override
     public void onDestroy() {

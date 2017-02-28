@@ -236,12 +236,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      *
      * @param facebookID - current user's facebook ID
      * @param gcm        - user's Google Cloud Messaging ID
-     * @param picture    - facebook picture (path to picture)
+     * @param pictureFB    - facebook picture (path to picture)
      * @param androidTok - unique android token for GCM. We need this to get notification from the server
      * @throws JSONException - we can expect this exception because we can get NPE in any value
      *                       In this case we can handle it.
      */
-    public void singInUser(String facebookID, String gcm, String picture, String androidTok) throws JSONException {
+    public void singInUser(String facebookID, String gcm, String pictureFB, String androidTok) throws JSONException {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         String jwt = getToken(facebookID, gcm);
         NewUser newUser = retrofit.create(NewUser.class);
@@ -250,29 +250,38 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-
                     Data data = response.body().getData();
-                    String userName = data.getName();
                     String userID = data.get_id();
+                    String userName = data.getName();
                     String userEmail = data.getEmail();
                     String pushN = data.getProfileOptions().getPushNotifications().toString();
                     String challengeEnd = data.getProfileOptions().getChallengeEnd().toString();
                     String acceptedYour = data.getProfileOptions().getAcceptedYourChallenge().toString();
                     String newChallengeReq = data.getProfileOptions().getNewChallengeRequests().toString();
                     String challengesForToday = data.getProfileOptions().getChallengesForToday().toString();
+                    String total = data.getAllChallengesCount().toString();
+                    String wins = data.getSuccessChallenges().toString();
+                    String inProgress = data.getInProgressChallenges().toString();
+                    String userPicture = (data.getPhoto() != null) ? API_URL + data.getPhoto().getLarge() : pictureFB;
+//                    String pictureAPI = null;
+//                    if (data.getPhoto() != null) {
+//                        String root = Environment.getExternalStorageDirectory().toString(); // path
+//                        String path = "/data/data/com.azinecllc.champy/app_imageDir/";
+//                        File photoFile = new File(root + path, "profile.jpg");
+//                        // не достаточно ли просто провеить (data.getPhoto != null) ?
+//                        if (!photoFile.exists()) {
+//                            com.azinecllc.champy.model.user.Photo photo = data.getPhoto();
+//                            pictureAPI = API_URL + photo.getLarge();
+//                        }
+//                    }
 
                     sessionManager.setRefreshFriends("true");
                     sessionManager.setRefreshPending("false");
                     sessionManager.setRefreshOthers("true");
+                    sessionManager.setChampyOptions(total, wins, inProgress, "0");
                     sessionManager.createUserLoginSession(
-                            userName, userEmail, userFBID, picture, jwt, userID, pushN, newChallengeReq,
+                            userName, userEmail, userFBID, userPicture, jwt, userID, pushN, newChallengeReq,
                             acceptedYour, challengeEnd, challengesForToday, "true", gcm, androidTok
-                    );
-                    sessionManager.setChampyOptions(
-                            data.getAllChallengesCount().toString(),
-                            data.getSuccessChallenges().toString(),
-                            data.getInProgressChallenges().toString(),
-                            data.getLevel().getNumber().toString()
                     );
 
                     UserController userController = new UserController(sessionManager, retrofit);
@@ -282,29 +291,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     getFbFriends.getUserFacebookFriends(gcm);
                     getFbFriends.getUserPending(userID, jwt);
 
-
-                    String api_path = null;
-                    if (data.getPhoto() != null) {
-                        String root = Environment.getExternalStorageDirectory().toString(); // path
-                        String path = "/data/data/com.azinecllc.champy/app_imageDir/";
-                        File file = new File(root + path, "profile.jpg");
-                        if (!file.exists()) {
-                            com.azinecllc.champy.model.user.Photo photo = data.getPhoto();
-                            api_path = API_URL + photo.getLarge();
-                        }
-                    }
-
-                    Intent extras = new Intent(LoginActivity.this, MainActivity.class);
-                    if (api_path == null) {
-                        extras.putExtra("path_to_pic", picture);
-                        sessionManager.setUserPicture(picture);
-                    } else {
-                        extras.putExtra("path_to_pic", api_path);
-                        sessionManager.setUserPicture(api_path);
-                    }
                     Intent goToRoleActivity = new Intent(LoginActivity.this, RoleControllerActivity.class);
                     startActivity(goToRoleActivity);
-
 
                 }
             }
@@ -362,7 +350,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     sessionManager.setChampyOptions(
                             user.getAllChallengesCount().toString(),
                             user.getSuccessChallenges().toString(),
-                            user.getInProgressChallengesCount().toString(),
+                            user.getInProgressChallenges().toString(),
                             user.getLevel().getNumber().toString());
 
                     UserController userController = new UserController(sessionManager, retrofit);

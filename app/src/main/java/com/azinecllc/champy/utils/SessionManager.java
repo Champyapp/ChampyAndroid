@@ -161,8 +161,10 @@ public class SessionManager {
         //File blurred = new File(path, "blurred.png");
         //blurred.delete();
         String root = Environment.getExternalStorageDirectory().toString();
-        File avatar = new File(root + "/android/data/com.azinecllc.champy/images", "profile.jpg");
+        String path = "/android/data/com.azinecllc.champy/images";
+        File avatar = new File(root + path, "profile.jpg");
         avatar.delete();
+
         CURRENT_TAG = TAG_CHALLENGES;
         navItemIndex = 0;
         Intent intent = new Intent(activity, RoleControllerActivity.class);
