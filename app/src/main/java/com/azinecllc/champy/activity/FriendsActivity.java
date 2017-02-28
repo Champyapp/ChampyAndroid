@@ -53,8 +53,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         // MAKE BACKGROUND (great again)
         String userPicture = sessionManager.getUserPicture();
         ImageView background = (ImageView) findViewById(R.id.friends_background);
-        Glide.with(this)
-                .load(userPicture)
+        Glide.with(this).load(userPicture)
                 .bitmapTransform(new BlurTransformation(getApplicationContext(), 25))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)

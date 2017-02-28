@@ -540,26 +540,26 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         userController.uploadPhotoForAPI(uri.toString());
         session.setUserPicture(uri.toString());
 
-        Glide.with(this)
+        Glide.with(getActivity())
                 .load(uri)
                 .bitmapTransform(new CropCircleTransformation(context))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .override(130, 130)
                 .into(userImageProfile);
-        Glide.with(this)
+        Glide.with(getActivity())
                 .load(uri)
                 .bitmapTransform(new CropCircleTransformation(context))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into((ImageView) getActivity().findViewById(R.id.drawer_user_photo));
-        Glide.with(this)
+        Glide.with(getActivity())
                 .load(uri)
                 .bitmapTransform(new BlurTransformation(context, 25))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into((ImageView) getActivity().findViewById(R.id.drawer_background));
-        Glide.with(this)
+        Glide.with(getActivity())
                 .load(uri)
                 .bitmapTransform(new BlurTransformation(context, 25))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)

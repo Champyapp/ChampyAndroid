@@ -13,6 +13,10 @@ import com.azinecllc.champy.adapter.PendingDuelsAdapter;
 import com.azinecllc.champy.helper.CHCheckPendingDuels;
 import com.azinecllc.champy.utils.SessionManager;
 
+import static com.azinecllc.champy.activity.MainActivity.CURRENT_TAG;
+import static com.azinecllc.champy.activity.MainActivity.navItemIndex;
+import static com.azinecllc.champy.utils.Constants.TAG_CHALLENGES;
+
 public class PendingDuelActivity extends AppCompatActivity {
 
     private int size;
@@ -48,6 +52,8 @@ public class PendingDuelActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        //navItemIndex = 0;
+        //CURRENT_TAG = TAG_CHALLENGES;
     }
 
 
@@ -79,7 +85,6 @@ public class PendingDuelActivity extends AppCompatActivity {
                     viewPager.setPadding(90, 0, 90, 0);
 
                     tvNoPendingDuels = (TextView) findViewById(R.id.textViewNoPendingDuels);
-                    System.out.println("PENDING SIZE: " + size);
                     if (size == 0) {
                         tvNoPendingDuels.setTypeface(typeface);
                         tvNoPendingDuels.setVisibility(View.VISIBLE);

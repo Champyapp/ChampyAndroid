@@ -96,7 +96,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.drawer_tv_user_name);
 
         // GET PHOTO AND MAKE BLUR
-        drawerBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
         sessionManager = SessionManager.getInstance(getApplicationContext());
         String userPicture = sessionManager.getUserPicture();
         String userEmail = sessionManager.getUserEmail();
