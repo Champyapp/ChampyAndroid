@@ -3,9 +3,7 @@ package com.azinecllc.champy.activity;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Build;
-import android.text.Layout;
 import android.view.Gravity;
-import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,7 +19,8 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by SashaKhyzhun on 1/27/17.

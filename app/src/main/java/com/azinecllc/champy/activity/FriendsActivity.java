@@ -1,6 +1,5 @@
 package com.azinecllc.champy.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -128,12 +127,10 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         drawerUserEmail.setText(userEmail);
         drawerUserName.setText(userName);
 
-//        CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();
-//        int count = checker.getPendingCount(this);
-//        if (count != 0) {
-//            TextView view = (TextView) navigationView.getMenu().findItem(R.id.nav_pending_duels).getActionView();
-//            view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
-//        }
+        if (!sessionManager.getDuelPending().isEmpty()) {
+            TextView view = (TextView) navigationView.getMenu().findItem(R.id.nav_pending_duels).getActionView();
+            view.setText(String.format("%s%s", getString(R.string.plus), sessionManager.getDuelPending()));
+        }
 
     }
 

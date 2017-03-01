@@ -15,7 +15,6 @@ import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.helper.CHCheckPendingDuels;
 import com.azinecllc.champy.utils.SessionManager;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,10 +22,8 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
-
-import java.lang.reflect.Field;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by SashaKhyzhun on 1/30/17.
@@ -38,14 +35,12 @@ public class PendingDuelActivityTest {
     private Activity activity;
     private DBHelper dbHelper;
     private SessionManager sessionManager;
-    private CHCheckPendingDuels checkPendingDuels;
 
     @Before
     public void setup() throws Exception {
         activity = Robolectric.buildActivity(PendingDuelActivity.class).create().get();
         dbHelper = DBHelper.getInstance(activity);
         sessionManager = SessionManager.getInstance(activity);
-        checkPendingDuels = CHCheckPendingDuels.getInstance();
     }
 
     @Test

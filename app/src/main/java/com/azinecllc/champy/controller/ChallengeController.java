@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.MainActivity;
 import com.azinecllc.champy.data.DBHelper;
+import com.azinecllc.champy.helper.CHCheckPendingDuels;
 import com.azinecllc.champy.helper.CHGetUserProgressBarInfo;
 import com.azinecllc.champy.interfaces.ActiveInProgress;
 import com.azinecllc.champy.interfaces.CreateChallenge;
@@ -583,7 +584,12 @@ public class ChallengeController {
                         }
                     }
 
-                    generateCardsForMainActivity(intent);
+                    CHCheckPendingDuels checkPendingDuels = new CHCheckPendingDuels();
+                    checkPendingDuels.setPendingCount(context);
+
+                    if (intent != null) {
+                        generateCardsForMainActivity(intent);
+                    }
 
                 } else {
                     Toast.makeText(activity, activity.getString(R.string.service_not_available), Toast.LENGTH_LONG).show();

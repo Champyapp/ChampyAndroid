@@ -1,13 +1,9 @@
 package com.azinecllc.champy.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -19,21 +15,16 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.controller.ChallengeController;
-import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.fragment.MainFragment;
 import com.azinecllc.champy.fragment.PrivacyPoliceFragment;
 import com.azinecllc.champy.fragment.SettingsFragment;
 import com.azinecllc.champy.fragment.TermsFragment;
-import com.azinecllc.champy.helper.CHCheckPendingDuels;
 import com.azinecllc.champy.utils.SessionManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -43,7 +34,6 @@ import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 
 import java.net.URISyntaxException;
-import java.util.Date;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -235,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Log.i(TAG, "Sockets call: modifiedChallenges");
             ChallengeController cc = new ChallengeController(getApplicationContext(), MainActivity.this);
             cc.refreshCardsForPendingDuel(null);
-            setCounterForPendingDuels();
+            setCounterForPendingDuels(); // not good solution
         }
     };
 
@@ -274,7 +264,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Runnable runnable = () -> {
             // update the main content by replacing fragments
             Fragment fragment = getHomeFragment();
-
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
             fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
@@ -293,37 +282,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //toggleFab();           // show or hide the fab button
     }
 
+
     /**
      * Method to check pending counter and after that set value for navigation drawer menu
      */
     private void setCounterForPendingDuels() {
         // SETTING CURRENT PENDING COUNT
-//        DBHelper dbHelper = DBHelper.getInstance(getApplicationContext());
-//        SQLiteDatabase db = dbHelper.getWritableDatabase();
-//        Cursor c = db.query("pending_duel", null, null, null, null, null, null);
-//        int count = 0;
-//        if (c.moveToFirst()) {
-//            do {
-//                count++;
-//            } while (c.moveToNext());
-//        }
-//        c.close();
-//        sessionManager.setDuelPending("" + count);
-//
-//        if (sessionManager.getDuelPending() != 0) {
-//            int mCount = count;
-//            runOnUiThread(() -> {
-//                TextView view = (TextView) navigationView.getMenu().findItem(R.id.nav_pending_duels).getActionView();
-//                view.setText(String.format("%s%s", getString(R.string.plus), (mCount > 0 ? String.valueOf(mCount) : null)));
-//            });
-//        }
-////        CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();
-////        int count = checker.getPendingCount(getApplicationContext());
-////        TextView view = (TextView) navigationView.getMenu().findItem(R.id.nav_pending_duels).getActionView();
-////        runOnUiThread(() -> view.setText(count > 0 ? String.valueOf(getString(R.string.plus) + count) : null));
+        if (!sessionManager.getDuelPending().isEmpty()) {
+            TextView view = (TextView) navigationView.getMenu().findItem(R.id.nav_pending_duels).getActionView();
+            runOnUiThread(() -> view.setText(String.format("%s%s", getString(R.string.plus), sessionManager.getDuelPending())));
+        }
+
     }
-
-
+//
+//
 //    /**
 //     * Method to set visible for FabPlus if current fragment != main
 //     */

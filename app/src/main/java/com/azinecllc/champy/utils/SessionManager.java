@@ -177,8 +177,8 @@ public class SessionManager {
         return pref.getBoolean(IS_USER_LOGIN, false);
     }
 
-    public int getDuelPending() {
-        return Integer.parseInt(pref.getString("duel_pending", ""));
+    public String getDuelPending() {
+        return (pref.getString("duel_pending", ""));
     }
 
     public String getRefreshPending() {

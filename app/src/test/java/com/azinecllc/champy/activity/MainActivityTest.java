@@ -59,7 +59,6 @@ public class MainActivityTest {
     public void finishComponentTesting() throws Exception {
         resetSingleton(DBHelper.class, "instance");
         resetSingleton(SessionManager.class, "instance");
-        resetSingleton(CHCheckPendingDuels.class, "instance");
     }
 
     @Test
@@ -143,8 +142,6 @@ public class MainActivityTest {
 
     @Test
     public void testForCHCheckPendingDuels() throws Exception {
-        //CHCheckPendingDuels chCheckPendingDuels = CHCheckPendingDuels.getInstance();
-        //assertNotNull(chCheckPendingDuels);
         int min = 0;
         int max = 10;
         Random random = new Random();

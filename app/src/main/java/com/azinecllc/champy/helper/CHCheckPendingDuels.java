@@ -13,19 +13,7 @@ import com.azinecllc.champy.utils.SessionManager;
  */
 public class CHCheckPendingDuels {
 
-    private static CHCheckPendingDuels instance = null;
-
-    private CHCheckPendingDuels() {}
-
-    public static CHCheckPendingDuels getInstance() {
-        if (instance == null) {
-            instance = new CHCheckPendingDuels();
-        }
-        return instance;
-    }
-
-    // TODO: 3/1/17 Change this class.
-    public int getPendingCount(Context context) {
+    public void setPendingCount(Context context) {
         DBHelper dbHelper = DBHelper.getInstance(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("pending_duel", null, null, null, null, null, null);
@@ -37,8 +25,7 @@ public class CHCheckPendingDuels {
         }
         c.close();
         SessionManager sessionManager = SessionManager.getInstance(context);
-        sessionManager.setDuelPending("" + countOfPendingDuel);
-        return countOfPendingDuel;
+        sessionManager.setDuelPending(String.valueOf(countOfPendingDuel));
     }
 
     //public void hideItem(View view) {

@@ -20,7 +20,6 @@ import android.widget.TextView;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.HistoryPagerAdapter;
-import com.azinecllc.champy.helper.CHCheckPendingDuels;
 import com.azinecllc.champy.utils.SessionManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -108,11 +107,9 @@ public class HistoryActivity extends AppCompatActivity implements NavigationView
         drawerUserEmail.setText(userEmail);
 
         // SETTING CURRENT PENDING COUNT
-        CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();
-        int count = checker.getPendingCount(getApplicationContext());
-        if (count != 0) {
+        if (!sessionManager.getDuelPending().isEmpty()) {
             TextView view = (TextView) navigationView.getMenu().findItem(R.id.nav_pending_duels).getActionView();
-            view.setText(String.format("%s%s", getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
+            view.setText(String.format("%s%s", getString(R.string.plus), sessionManager.getDuelPending()));
         }
 
     }

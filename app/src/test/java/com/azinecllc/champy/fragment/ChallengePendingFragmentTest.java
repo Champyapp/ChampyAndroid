@@ -22,7 +22,9 @@ import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by SashaKhyzhun on 3/1/17.
@@ -153,7 +155,6 @@ public class ChallengePendingFragmentTest {
         assertEquals(35, imageButton.getLayoutParams().height);
         assertEquals(35, imageButton.getLayoutParams().width);
     }
-
 
     @After
     public void testAfter() throws Exception {

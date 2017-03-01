@@ -1,5 +1,6 @@
 package com.azinecllc.champy.activity;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,6 +12,10 @@ import android.widget.TextView;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.PendingDuelsAdapter;
 import com.azinecllc.champy.utils.SessionManager;
+
+import static com.azinecllc.champy.activity.MainActivity.CURRENT_TAG;
+import static com.azinecllc.champy.activity.MainActivity.navItemIndex;
+import static com.azinecllc.champy.utils.Constants.TAG_CHALLENGES;
 
 public class PendingDuelActivity extends AppCompatActivity {
 
@@ -47,8 +52,9 @@ public class PendingDuelActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        //navItemIndex = 0;
-        //CURRENT_TAG = TAG_CHALLENGES;
+        navItemIndex = 0;
+        CURRENT_TAG = TAG_CHALLENGES;
+        startActivity(new Intent(this, MainActivity.class));
     }
 
 
@@ -66,7 +72,7 @@ public class PendingDuelActivity extends AppCompatActivity {
                 public void run() {
                     SessionManager sessionManager = SessionManager.getInstance(getApplicationContext());
                     try {
-                        size = sessionManager.getDuelPending();
+                        size = Integer.parseInt(sessionManager.getDuelPending());
                     } catch (NumberFormatException e) {
                         size = 0; // eat it, bitch >:(
                     }
@@ -83,8 +89,10 @@ public class PendingDuelActivity extends AppCompatActivity {
                     if (size == 0) {
                         tvNoPendingDuels.setTypeface(typeface);
                         tvNoPendingDuels.setVisibility(View.VISIBLE);
+                        System.out.println("tvNoPendingDuels should be visible");
                     } else {
                         tvNoPendingDuels.setVisibility(View.INVISIBLE);
+                        System.out.println("tvNoPendingDuels should be invisible");
                     }
                 }
             });

@@ -12,8 +12,6 @@ import android.widget.TextView;
 
 import com.azinecllc.champy.BuildConfig;
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.activity.DuelActivity;
-import com.azinecllc.champy.activity.PendingDuelActivity;
 import com.azinecllc.champy.activity.SelfImprovementActivity;
 
 import org.junit.Before;
@@ -24,7 +22,9 @@ import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by SashaKhyzhun on 3/1/17.

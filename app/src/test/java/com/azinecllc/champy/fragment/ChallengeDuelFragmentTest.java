@@ -1,9 +1,7 @@
 package com.azinecllc.champy.fragment;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.os.Build;
-import android.text.InputType;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +22,9 @@ import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by SashaKhyzhun on 2/28/17.

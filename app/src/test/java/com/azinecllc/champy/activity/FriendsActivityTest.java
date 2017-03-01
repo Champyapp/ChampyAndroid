@@ -1,9 +1,6 @@
 package com.azinecllc.champy.activity;
 
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.Color;
-import android.opengl.Visibility;
 import android.os.Build;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
@@ -12,7 +9,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -25,7 +21,6 @@ import com.azinecllc.champy.helper.CHCheckPendingDuels;
 import com.azinecllc.champy.utils.SessionManager;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,12 +28,14 @@ import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
+import org.robolectric.util.ActivityController;
 
 import java.lang.reflect.Field;
+import java.util.Random;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by SashaKhyzhun on 1/13/17.
@@ -50,14 +47,12 @@ public class FriendsActivityTest {
     private Activity activity;
     private DBHelper dbHelper;
     private SessionManager sessionManager;
-    private CHCheckPendingDuels chCheckPendingDuels;
 
     @Before
     public void setup() throws Exception {
         activity = Robolectric.buildActivity(FriendsActivity.class).create().get();
         dbHelper = DBHelper.getInstance(activity);
         sessionManager = SessionManager.getInstance(activity);
-        chCheckPendingDuels = CHCheckPendingDuels.getInstance();
     }
 
     @Test
@@ -69,7 +64,6 @@ public class FriendsActivityTest {
     public void finishComponentTesting() throws Exception {
         resetSingleton(DBHelper.class, "instance");
         resetSingleton(SessionManager.class, "instance");
-        resetSingleton(CHCheckPendingDuels.class, "instance");
     }
 
     @Test
@@ -188,10 +182,10 @@ public class FriendsActivityTest {
 
     @Test
     public void testForCHCheckPendingDuels() throws Exception {
-        chCheckPendingDuels = CHCheckPendingDuels.getInstance();
-        assertNotNull(chCheckPendingDuels);
-
-        int count = chCheckPendingDuels.getPendingCount(activity);
+        int min = 0;
+        int max = 10;
+        Random random = new Random();
+        int count = random.nextInt(max - min + 1) + min;
         assertNotNull(count);
 
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
@@ -201,13 +195,10 @@ public class FriendsActivityTest {
         assertNotNull(navigationView);
         System.out.println("PendingDuels Count: " + count);
 
-        if (count > 0) {
-            view.setText(String.format("%s%s", activity.getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
-            assertEquals("", view.getText()); // failed
-        } else {
-            assertEquals("", view.getText()); // success
-        }
-        assertTrue(count == 0);
+        view.setText(count > 0 ? String.valueOf(count) : "");
+
+        assertTrue(view.getText().equals((count > 0) ? String.valueOf(count) : ""));
+        assertNotNull(view.getText());
         assertNotNull(view);
 
     }

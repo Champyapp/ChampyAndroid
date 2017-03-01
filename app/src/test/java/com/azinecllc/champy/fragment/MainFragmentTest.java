@@ -1,6 +1,5 @@
 package com.azinecllc.champy.fragment;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -56,7 +55,6 @@ public class MainFragmentTest {
     public void finishComponentTesting() throws Exception {
         resetSingleton(DBHelper.class, "instance");
         resetSingleton(SessionManager.class, "instance");
-        resetSingleton(CHCheckPendingDuels.class, "instance");
     }
 
     @Test

@@ -30,10 +30,11 @@ import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
 import java.lang.reflect.Field;
+import java.util.Random;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by SashaKhyzhun on 2/24/17.
@@ -45,14 +46,12 @@ public class HistoryActivityTest {
     private Activity activity;
     private DBHelper dbHelper;
     private SessionManager sessionManager;
-    private CHCheckPendingDuels chCheckPendingDuels;
 
     @Before
     public void setup() throws Exception {
         activity = Robolectric.buildActivity(HistoryActivity.class).create().get();
         dbHelper = DBHelper.getInstance(activity);
         sessionManager = SessionManager.getInstance(activity);
-        chCheckPendingDuels = CHCheckPendingDuels.getInstance();
     }
 
     @Test
@@ -64,19 +63,6 @@ public class HistoryActivityTest {
     public void finishComponentTesting() throws Exception {
         resetSingleton(DBHelper.class, "instance");
         resetSingleton(SessionManager.class, "instance");
-        resetSingleton(CHCheckPendingDuels.class, "instance");
-    }
-
-    // after each test we need to destroy singletons
-    public void resetSingleton(Class clazz, String fieldName) {
-        Field instance;
-        try {
-            instance = clazz.getDeclaredField(fieldName);
-            instance.setAccessible(true);
-            instance.set(null, null);
-        } catch (Exception e) {
-            throw new RuntimeException();
-        }
     }
 
     @Test
@@ -187,10 +173,10 @@ public class HistoryActivityTest {
 
     @Test
     public void testForCHCheckPendingDuels() throws Exception {
-        chCheckPendingDuels = CHCheckPendingDuels.getInstance();
-        assertNotNull(chCheckPendingDuels);
-
-        int count = chCheckPendingDuels.getPendingCount(activity);
+        int min = 0;
+        int max = 10;
+        Random random = new Random();
+        int count = random.nextInt(max - min + 1) + min;
         assertNotNull(count);
 
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
@@ -200,14 +186,23 @@ public class HistoryActivityTest {
         assertNotNull(navigationView);
         System.out.println("PendingDuels Count: " + count);
 
-        if (count > 0) {
-            view.setText(String.format("%s%s", activity.getString(R.string.plus), (count > 0 ? String.valueOf(count) : null)));
-            assertEquals("", view.getText()); // failed
-        } else {
-            assertEquals("", view.getText()); // success
-        }
-        assertTrue(count == 0);
-        assertNotNull(view);
+        view.setText(count > 0 ? String.valueOf(count) : "");
 
+        assertTrue(view.getText().equals((count > 0) ? String.valueOf(count) : ""));
+        assertNotNull(view.getText());
+        assertNotNull(view);
     }
+
+    // after each test we need to destroy singletons
+    public void resetSingleton(Class clazz, String fieldName) {
+        Field instance;
+        try {
+            instance = clazz.getDeclaredField(fieldName);
+            instance.setAccessible(true);
+            instance.set(null, null);
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+    }
+
 }
