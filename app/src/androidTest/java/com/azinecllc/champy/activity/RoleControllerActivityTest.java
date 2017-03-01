@@ -1,6 +1,5 @@
 package com.azinecllc.champy.activity;
 
-
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -32,7 +31,11 @@ public class RoleControllerActivityTest {
     @Test
     public void roleControllerActivityTest() {
         ViewInteraction loginButton = onView(
-                allOf(withId(R.id.login_button), withText("Log in with Facebook"), withContentDescription("Logged in as: %1$s"), isDisplayed()));
+                allOf(withId(R.id.login_button),
+                        withText("Log in with Facebook"),
+                        withContentDescription("Logged in as: %1$s"),
+                        isDisplayed()));
+
         loginButton.perform(click());
 
         ViewInteraction imageButton = onView(
@@ -44,13 +47,18 @@ public class RoleControllerActivityTest {
         imageButton.perform(click());
 
         ViewInteraction appCompatCheckedTextView = onView(
-                allOf(withId(R.id.design_menu_item_text), withText("Settings"), isDisplayed()));
+                allOf(withId(R.id.design_menu_item_text),
+                        withText("Settings"),
+                        isDisplayed()));
+
         appCompatCheckedTextView.perform(click());
 
         ViewInteraction appCompatTextView = onView(
-                allOf(withId(R.id.textViewLogout), withText("Logout"),
+                allOf(withId(R.id.textViewLogout),
+                        withText("Logout"),
                         withParent(allOf(withId(R.id.settings_layout),
                                 withParent(withId(R.id.scrollView))))));
+
         appCompatTextView.perform(scrollTo(), click());
 
     }

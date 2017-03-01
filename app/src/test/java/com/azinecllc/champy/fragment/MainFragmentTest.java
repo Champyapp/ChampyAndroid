@@ -1,8 +1,6 @@
 package com.azinecllc.champy.fragment;
 
-import android.animation.TypeEvaluator;
-import android.animation.ValueAnimator;
-import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -10,8 +8,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -30,36 +26,30 @@ import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
-import org.w3c.dom.Text;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.Random;
-import java.util.zip.Inflater;
 
-import static com.azinecllc.champy.Champy.getContext;
-import static com.azinecllc.champy.utils.Constants.TAG_CHALLENGES;
+import static com.facebook.FacebookSdk.getApplicationContext;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
-import static org.junit.Assert.*;
+import static junit.framework.Assert.assertTrue;
 
 /**
- * Created by SashaKhyzhun on 2/27/17.
+ * Created by SashaKhyzhun on 3/1/17.
  */
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.LOLLIPOP)
-public class MainFragmentTest extends MainActivity {
+public class MainFragmentTest {
 
-    private SessionManager sessionManager;
-    private MainFragment fragment;
     private View view;
+    private MainFragment fragment;
+    private MainActivity activity;
 
     @Before
     public void setUp() throws Exception {
-        MainActivity activity = Robolectric.buildActivity(MainActivity.class).create().get();
+        activity = Robolectric.buildActivity(MainActivity.class).create().get();
         fragment = new MainFragment();
         view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.fragment_main, null);
-        sessionManager = SessionManager.getInstance(fragment.getContext());
     }
 
     @After
@@ -70,6 +60,12 @@ public class MainFragmentTest extends MainActivity {
     }
 
     @Test
+    public void testForActivity() throws Exception {
+        assertNotNull(activity);
+        assertEquals("MainActivity", activity.getClass().getSimpleName());
+    }
+
+    @Test
     public void testForFragment() throws Exception {
         assertNotNull(fragment);
         assertEquals("MainFragment", fragment.getClass().getSimpleName());
@@ -77,6 +73,7 @@ public class MainFragmentTest extends MainActivity {
 
     @Test
     public void testForSessionManagerData() throws Exception {
+        SessionManager sessionManager = SessionManager.getInstance(fragment.getContext());
         assertNotNull(sessionManager);
 
         System.out.println("session manager is not null");
@@ -97,7 +94,7 @@ public class MainFragmentTest extends MainActivity {
 
     @Test
     public void testForTypeface() throws Exception {
-        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
+        Typeface typeface = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/bebasneue.ttf");
         assertNotNull(typeface);
         System.out.println("typeface is not null");
     }
@@ -207,7 +204,6 @@ public class MainFragmentTest extends MainActivity {
         assertTrue(R.id.textViewTotalCounter == tvCounterTotal.getId());
         assertEquals(Gravity.CENTER, tvCounterTotal.getGravity());
     }
-
 
     @Test
     public void testForLogoInProgress() throws Exception {

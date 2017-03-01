@@ -24,8 +24,8 @@ public class ResetService extends IntentService {
 
         /**
          * создати в бд табличку wake-up, зберігати туда всі "години, мінути, реквест коди і ID-шки"
-         * челендів, а потім робити dwc.enable(a, b, c, d); задопомогою курсота (так як достаються
-         * данні в SelfImprovementActivity.class, наприклад);
+         * челенджів, а потім робити dwc.enable(a, b, c, d); задопомогою курсота (так як достаються
+         * дані в SelfImprovementActivity.class, наприклад);
          *
          * ps. не забути поміняти DB_VERSION при Update-і!
          */

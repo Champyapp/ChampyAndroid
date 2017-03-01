@@ -17,10 +17,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.azinecllc.champy.Champy;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.FriendsActivityPagerAdapter;
-import com.azinecllc.champy.helper.CHCheckPendingDuels;
 import com.azinecllc.champy.utils.SessionManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;

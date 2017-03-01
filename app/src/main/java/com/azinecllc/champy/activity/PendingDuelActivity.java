@@ -10,12 +10,7 @@ import android.widget.TextView;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.PendingDuelsAdapter;
-import com.azinecllc.champy.helper.CHCheckPendingDuels;
 import com.azinecllc.champy.utils.SessionManager;
-
-import static com.azinecllc.champy.activity.MainActivity.CURRENT_TAG;
-import static com.azinecllc.champy.activity.MainActivity.navItemIndex;
-import static com.azinecllc.champy.utils.Constants.TAG_CHALLENGES;
 
 public class PendingDuelActivity extends AppCompatActivity {
 
@@ -88,10 +83,8 @@ public class PendingDuelActivity extends AppCompatActivity {
                     if (size == 0) {
                         tvNoPendingDuels.setTypeface(typeface);
                         tvNoPendingDuels.setVisibility(View.VISIBLE);
-                        System.out.println("tvNoPendingDuels should be visible");
                     } else {
                         tvNoPendingDuels.setVisibility(View.INVISIBLE);
-                        System.out.println("tvNoPendingDuels should be invisible");
                     }
                 }
             });

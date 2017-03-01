@@ -24,6 +24,7 @@ public class CHCheckPendingDuels {
         return instance;
     }
 
+    // TODO: 3/1/17 Change this class.
     public int getPendingCount(Context context) {
         DBHelper dbHelper = DBHelper.getInstance(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();

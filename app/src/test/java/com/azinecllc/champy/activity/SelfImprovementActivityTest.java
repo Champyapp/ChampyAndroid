@@ -21,6 +21,7 @@ import com.azinecllc.champy.adapter.SelfImprovementPagerAdapter;
 import com.azinecllc.champy.data.DBHelper;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -134,6 +135,8 @@ public class SelfImprovementActivityTest {
     public void testForImageButtonAccept() throws Exception {
         ImageButton imageButton = (ImageButton) activity.findViewById(R.id.imageButtonAccept);
         assertNotNull(imageButton);
+
+        assertTrue(imageButton.isClickable());
 
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) imageButton.getLayoutParams();
         assertEquals(60, lp.width);

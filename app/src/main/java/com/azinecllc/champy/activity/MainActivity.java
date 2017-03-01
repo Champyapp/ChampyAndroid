@@ -3,6 +3,8 @@ package com.azinecllc.champy.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -26,6 +28,7 @@ import android.widget.Toast;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.controller.ChallengeController;
+import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.fragment.MainFragment;
 import com.azinecllc.champy.fragment.PrivacyPoliceFragment;
 import com.azinecllc.champy.fragment.SettingsFragment;
@@ -294,10 +297,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * Method to check pending counter and after that set value for navigation drawer menu
      */
     private void setCounterForPendingDuels() {
-        CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();
-        int count = checker.getPendingCount(getApplicationContext());
-        TextView view = (TextView) navigationView.getMenu().findItem(R.id.nav_pending_duels).getActionView();
-        runOnUiThread(() -> view.setText(count > 0 ? String.valueOf(getString(R.string.plus) + count) : null));
+        // SETTING CURRENT PENDING COUNT
+//        DBHelper dbHelper = DBHelper.getInstance(getApplicationContext());
+//        SQLiteDatabase db = dbHelper.getWritableDatabase();
+//        Cursor c = db.query("pending_duel", null, null, null, null, null, null);
+//        int count = 0;
+//        if (c.moveToFirst()) {
+//            do {
+//                count++;
+//            } while (c.moveToNext());
+//        }
+//        c.close();
+//        sessionManager.setDuelPending("" + count);
+//
+//        if (sessionManager.getDuelPending() != 0) {
+//            int mCount = count;
+//            runOnUiThread(() -> {
+//                TextView view = (TextView) navigationView.getMenu().findItem(R.id.nav_pending_duels).getActionView();
+//                view.setText(String.format("%s%s", getString(R.string.plus), (mCount > 0 ? String.valueOf(mCount) : null)));
+//            });
+//        }
+////        CHCheckPendingDuels checker = CHCheckPendingDuels.getInstance();
+////        int count = checker.getPendingCount(getApplicationContext());
+////        TextView view = (TextView) navigationView.getMenu().findItem(R.id.nav_pending_duels).getActionView();
+////        runOnUiThread(() -> view.setText(count > 0 ? String.valueOf(getString(R.string.plus) + count) : null));
     }
 
 
