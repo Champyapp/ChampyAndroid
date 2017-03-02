@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.azinecllc.champy.BuildConfig;
@@ -246,11 +247,220 @@ public class SettingsFragmentTest {
         assertTrue(View.GONE == line.getVisibility());
     }
 
+    @Test
+    public void testForTextViewDeleteAccount() throws Exception {
+        TextView tvDeleteAcc = (TextView) view.findViewById(R.id.delete_acc);
+        assertNotNull(tvDeleteAcc);
+        assertEquals(Color.WHITE, tvDeleteAcc.getCurrentTextColor());
+        assertEquals("Delete Account", tvDeleteAcc.getText());
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) tvDeleteAcc.getLayoutParams();
+        assertEquals(8, lp.topMargin);
+        assertEquals(16, lp.leftMargin);
+        assertEquals(16, lp.rightMargin);
+        assertTrue(tvDeleteAcc.isClickable());
+    }
 
+    @Test
+    public void testForLine2() throws Exception {
+        View line = view.findViewById(R.id.view2);
+        assertNotNull(line);
+        assertTrue(View.GONE == line.getVisibility());
+    }
 
+    @Test
+    public void testForTextViewLogout() throws Exception {
+        TextView textView = (TextView) view.findViewById(R.id.textViewLogout);
+        assertNotNull(textView);
+        assertEquals(Color.WHITE, textView.getCurrentTextColor());
+        assertEquals("Logout", textView.getText());
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) textView.getLayoutParams();
+        assertEquals(8, lp.topMargin);
+        assertEquals(16, lp.leftMargin);
+        assertEquals(16, lp.rightMargin);
+        assertTrue(textView.isClickable());
+    }
 
+    @Test
+    public void testForLine12() throws Exception {
+        View line = view.findViewById(R.id.view12);
+        assertNotNull(line);
+        assertTrue(View.GONE == line.getVisibility());
+    }
 
-//    @Test public void test() throws Exception {}
+    @Test
+    public void testForTextViewNotifications() throws Exception {
+        TextView textView = (TextView) view.findViewById(R.id.tvNotifications);
+        assertNotNull(textView);
+        assertEquals(Color.WHITE, textView.getCurrentTextColor());
+        assertEquals("Notifications:", textView.getText());
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) textView.getLayoutParams();
+        assertEquals(8, lp.topMargin);
+        assertEquals(16, lp.leftMargin);
+        assertEquals(16, lp.rightMargin);
+        assertTrue(textView.isClickable());
+    }
+
+    @Test
+    public void testForSwitchNotifications() throws Exception {
+        Switch switchPushNoti = (Switch) view.findViewById(R.id.switchPushNotifications);
+        assertNotNull(switchPushNoti);
+        assertEquals("Push Notifications", switchPushNoti.getText());
+        assertTrue(switchPushNoti.isChecked());
+
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) switchPushNoti.getLayoutParams();
+        assertEquals(8, lp.topMargin);
+        assertEquals(16, lp.leftMargin);
+        assertEquals(16, lp.rightMargin);
+    }
+
+    @Test
+    public void testForLine3() throws Exception {
+        View line = view.findViewById(R.id.view3);
+        assertNotNull(line);
+        assertTrue(View.GONE == line.getVisibility());
+    }
+
+    @Test
+    public void testForSwitchNewChallengeRequests() throws Exception {
+        Switch switchAcceptedYourChallenge = (Switch) view.findViewById(R.id.switchNewChallengeRequest);
+        assertNotNull(switchAcceptedYourChallenge);
+        assertEquals("New Challenge Requests", switchAcceptedYourChallenge.getText());
+        assertTrue(switchAcceptedYourChallenge.isChecked());
+
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) switchAcceptedYourChallenge.getLayoutParams();
+        assertEquals(8, lp.topMargin);
+        assertEquals(16, lp.leftMargin);
+        assertEquals(16, lp.rightMargin);
+    }
+
+    @Test
+    public void testForLine4() throws Exception {
+        View line = view.findViewById(R.id.view4);
+        assertNotNull(line);
+        assertTrue(View.VISIBLE == line.getVisibility());
+    }
+
+    @Test
+    public void testForSwitchAcceptedYourChallenge() throws Exception {
+        Switch switchAcceptedYourChallenge = (Switch) view.findViewById(R.id.switchAcceptedYourChallenge);
+        assertNotNull(switchAcceptedYourChallenge);
+        assertEquals("Accepted Your Challenge", switchAcceptedYourChallenge.getText());
+        assertTrue(switchAcceptedYourChallenge.isChecked());
+
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) switchAcceptedYourChallenge.getLayoutParams();
+        assertEquals(8, lp.topMargin);
+        assertEquals(16, lp.leftMargin);
+        assertEquals(16, lp.rightMargin);
+    }
+
+    @Test
+    public void testForLine5() throws Exception {
+        View line = view.findViewById(R.id.view5);
+        assertNotNull(line);
+        assertTrue(View.VISIBLE == line.getVisibility());
+    }
+
+    @Test
+    public void testForSwitchChallengeEnd() throws Exception {
+        Switch switchAcceptedYourChallenge = (Switch) view.findViewById(R.id.switchChallengeEnd);
+        assertNotNull(switchAcceptedYourChallenge);
+        assertEquals("Challenge End", switchAcceptedYourChallenge.getText());
+        assertTrue(switchAcceptedYourChallenge.isChecked());
+
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) switchAcceptedYourChallenge.getLayoutParams();
+        assertEquals(8, lp.topMargin);
+        assertEquals(16, lp.leftMargin);
+        assertEquals(16, lp.rightMargin);
+    }
+
+    @Test
+    public void testForLine6() throws Exception {
+        View line = view.findViewById(R.id.view6);
+        assertNotNull(line);
+        assertTrue(View.VISIBLE == line.getVisibility());
+    }
+
+    @Test
+    public void testForSwitchDailyReminder() throws Exception {
+        Switch switchAcceptedYourChallenge = (Switch) view.findViewById(R.id.switchChallengesForToday);
+        assertNotNull(switchAcceptedYourChallenge);
+        assertEquals("Daily Reminder", switchAcceptedYourChallenge.getText());
+        assertTrue(switchAcceptedYourChallenge.isChecked());
+
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) switchAcceptedYourChallenge.getLayoutParams();
+        assertEquals(8, lp.topMargin);
+        assertEquals(16, lp.leftMargin);
+        assertEquals(16, lp.rightMargin);
+    }
+
+    @Test
+    public void testForLineViewLine() throws Exception {
+        View line = view.findViewById(R.id.viewLine);
+        assertNotNull(line);
+        assertTrue(View.VISIBLE == line.getVisibility());
+    }
+
+    @Test
+    public void testForTextViewLegal() throws Exception {
+        TextView textView = (TextView) view.findViewById(R.id.tvLegal);
+        assertNotNull(textView);
+
+        assertEquals(Color.WHITE, textView.getCurrentTextColor());
+        assertEquals("Legal:", textView.getText());
+
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) textView.getLayoutParams();
+        assertEquals(16, lp.topMargin);
+        assertEquals(8, lp.leftMargin);
+        assertEquals(8, lp.rightMargin);
+
+        assertFalse(textView.isClickable());
+    }
+
+    @Test
+    public void testForTextViewAbout() throws Exception {
+        TextView textView = (TextView) view.findViewById(R.id.about);
+        assertNotNull(textView);
+
+        assertEquals(Color.WHITE, textView.getCurrentTextColor());
+        assertEquals("About", textView.getText());
+
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) textView.getLayoutParams();
+        assertEquals(8, lp.topMargin);
+        assertEquals(16, lp.leftMargin);
+        assertEquals(16, lp.rightMargin);
+
+        assertTrue(textView.isClickable());
+    }
+
+    @Test
+    public void testForLine8() throws Exception {
+        View line = view.findViewById(R.id.view8);
+        assertNotNull(line);
+        assertTrue(View.VISIBLE == line.getVisibility());
+    }
+
+    @Test
+    public void testForTextViewContactUs() throws Exception {
+        TextView textView = (TextView) view.findViewById(R.id.contact_us);
+        assertNotNull(textView);
+
+        assertEquals(Color.WHITE, textView.getCurrentTextColor());
+        assertEquals("Contact Us", textView.getText());
+
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) textView.getLayoutParams();
+        assertEquals(8, lp.topMargin);
+        assertEquals(16, lp.leftMargin);
+        assertEquals(16, lp.rightMargin);
+
+        assertTrue(textView.isClickable());
+    }
+
+    @Test
+    public void testForLine9() throws Exception {
+        View line = view.findViewById(R.id.view9);
+        assertNotNull(line);
+        assertTrue(View.VISIBLE == line.getVisibility());
+    }
 
 
 }
