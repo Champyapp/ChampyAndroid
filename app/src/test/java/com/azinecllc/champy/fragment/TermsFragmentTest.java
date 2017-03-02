@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.azinecllc.champy.BuildConfig;
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.activity.FriendsActivity;
 import com.azinecllc.champy.activity.MainActivity;
 
 import org.junit.Before;
@@ -27,16 +26,16 @@ import static org.junit.Assert.*;
  */
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.LOLLIPOP)
-public class PrivacyPoliceFragmentTest {
+public class TermsFragmentTest {
 
     private View view;
-    private PrivacyPoliceFragment fragment;
+    private TermsFragment fragment;
     private MainActivity activity;
 
     @Before
     public void setUp() throws Exception {
         activity = Robolectric.buildActivity(MainActivity.class).create().get();
-        fragment = new PrivacyPoliceFragment();
+        fragment = new TermsFragment();
         view = LayoutInflater.from(activity.getApplicationContext()).inflate(R.layout.fragment_privacy, null);
     }
 
@@ -49,7 +48,7 @@ public class PrivacyPoliceFragmentTest {
     @Test
     public void testForFragment() throws Exception {
         assertNotNull(fragment);
-        assertEquals("PrivacyPoliceFragment", fragment.getClass().getSimpleName());
+        assertEquals("TermsFragment", fragment.getClass().getSimpleName());
     }
 
     @Test
@@ -69,7 +68,7 @@ public class PrivacyPoliceFragmentTest {
     }
 
     @Test
-    public void testForTextViewPrivacyPolice() throws Exception {
+    public void testForTextViewTerms() throws Exception {
         TextView textView = (TextView) view.findViewById(R.id.textViewPrivacyPolice);
         assertNotNull(textView);
         assertTrue(R.id.textViewPrivacyPolice == textView.getId());
@@ -82,8 +81,5 @@ public class PrivacyPoliceFragmentTest {
         ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         assertNotNull(progressBar);
     }
-
-
-
 
 }
