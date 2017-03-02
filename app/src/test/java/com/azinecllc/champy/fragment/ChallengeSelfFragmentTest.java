@@ -21,7 +21,6 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -41,7 +40,7 @@ public class ChallengeSelfFragmentTest {
     public void setUp() throws Exception {
         activity = Robolectric.buildActivity(SelfImprovementActivity.class).create().get();
         fragment = new ChallengeSelfFragment();
-        view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_card_self_and_duel, null);
+        view = LayoutInflater.from(activity.getApplicationContext()).inflate(R.layout.item_card_self_and_duel, null);
     }
 
     @Test
