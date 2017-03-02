@@ -198,8 +198,8 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 }
 
                 LinearLayout layoutButtons = (LinearLayout) getActivity().findViewById(R.id.layoutButtons);
-                TextView tvTakeAPicture = (TextView) getActivity().findViewById(R.id.textViewTakeAPicture);
-                TextView tvChooseFrom = (TextView) getActivity().findViewById(R.id.textViewChooseFromGallery);
+                TextView tvTakeAPicture = (TextView) getActivity().findViewById(R.id.buttonTakeAPicture);
+                TextView tvChooseFrom = (TextView) getActivity().findViewById(R.id.buttonChooseFromGallery);
 
                 if (layoutButtons.getVisibility() == View.GONE) {
                     layoutButtons.setVisibility(View.VISIBLE);

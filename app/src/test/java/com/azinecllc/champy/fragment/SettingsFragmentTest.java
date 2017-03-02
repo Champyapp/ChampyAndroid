@@ -1,10 +1,11 @@
 package com.azinecllc.champy.fragment;
 
 import android.graphics.Color;
-import android.opengl.Visibility;
 import android.os.Build;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -113,7 +114,7 @@ public class SettingsFragmentTest {
     }
 
     @Test
-    public void testForLine1() throws Exception {
+    public void testForLine11() throws Exception {
         View line = view.findViewById(R.id.view11);
         assertNotNull(line);
         assertTrue(View.GONE == line.getVisibility());
@@ -163,6 +164,90 @@ public class SettingsFragmentTest {
         assertEquals(16, lp.rightMargin);
         assertEquals(16, lp.leftMargin);
     }
+
+    @Test
+    public void testForButtonOK() throws Exception {
+        Button button = (Button) view.findViewById(R.id.buttonOk);
+        assertNotNull(button);
+
+        assertEquals("OK", button.getText());
+        assertTrue(R.id.buttonOk == button.getId());
+        assertEquals(Color.WHITE, button.getCurrentTextColor());
+        assertEquals(View.GONE, button.getVisibility());
+        assertTrue(Gravity.CENTER == button.getGravity());
+    }
+
+    @Test
+    public void testForLine() throws Exception {
+        View line = view.findViewById(R.id.view11);
+        assertNotNull(line);
+        assertTrue(View.VISIBLE == line.getVisibility());
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) line.getLayoutParams();
+        assertEquals(1, lp.height);
+        assertEquals(8, lp.topMargin);
+    }
+
+    @Test
+    public void testForLayoutProfilePicture() throws Exception {
+        LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.layoutProfilePicture);
+        assertNotNull(linearLayout);
+        assertTrue(View.VISIBLE == linearLayout.getVisibility());
+        assertEquals(LinearLayout.VERTICAL, linearLayout.getOrientation());
+    }
+
+    @Test
+    public void testForTextViewProfilePictures() throws Exception {
+        TextView avatar = (TextView) view.findViewById(R.id.avatar);
+        assertNotNull(avatar);
+        assertEquals(Color.WHITE, avatar.getCurrentTextColor());
+        assertEquals("Profile Picture", avatar.getText());
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) avatar.getLayoutParams();
+        assertEquals(8, lp.topMargin);
+        assertEquals(16, lp.leftMargin);
+        assertEquals(16, lp.rightMargin);
+    }
+
+    @Test
+    public void testForButtonTakeAPicture() throws Exception {
+        Button button = (Button) view.findViewById(R.id.buttonTakeAPicture);
+        assertNotNull(button);
+
+        assertEquals("Take a picture", button.getText());
+        assertTrue(R.id.buttonTakeAPicture == button.getId());
+        assertEquals(Color.WHITE, button.getCurrentTextColor());
+        assertEquals(View.GONE, button.getVisibility());
+
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) button.getLayoutParams();
+        assertEquals(16, lp.topMargin);
+        assertEquals(16, lp.leftMargin);
+        assertEquals(16, lp.rightMargin);
+    }
+
+    @Test
+    public void testForButtonChooseFromGallery() throws Exception {
+        Button button = (Button) view.findViewById(R.id.buttonChooseFromGallery);
+        assertNotNull(button);
+
+        assertEquals("Take a picture", button.getText());
+        assertTrue(R.id.buttonChooseFromGallery == button.getId());
+        assertEquals(Color.WHITE, button.getCurrentTextColor());
+        assertEquals(View.GONE, button.getVisibility());
+
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) button.getLayoutParams();
+        assertEquals(16, lp.topMargin);
+        assertEquals(16, lp.leftMargin);
+        assertEquals(16, lp.rightMargin);
+    }
+
+    @Test
+    public void testForLine1() throws Exception {
+        View line = view.findViewById(R.id.view1);
+        assertNotNull(line);
+        assertTrue(View.GONE == line.getVisibility());
+    }
+
+
+
 
 
 //    @Test public void test() throws Exception {}
