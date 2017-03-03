@@ -2,6 +2,7 @@ package com.azinecllc.champy.fragment;
 
 import android.os.Build;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,14 +10,26 @@ import android.view.View;
 import com.azinecllc.champy.BuildConfig;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.HistoryActivity;
+import com.azinecllc.champy.model.HistoryChallenge;
+import com.azinecllc.champy.model.SelfImprovement_model;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.PriorityQueue;
+
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -64,5 +77,6 @@ public class HistoryFailedFragmentTest {
         assertNotNull(recyclerView);
         assertTrue(R.id.rvContacts == recyclerView.getId());
     }
+
 
 }

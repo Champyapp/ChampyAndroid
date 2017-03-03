@@ -42,7 +42,7 @@ public class SettingsFragmentTest {
     public void setUp() throws Exception {
         activity = Robolectric.buildActivity(MainActivity.class).create().get();
         fragment = new SettingsFragment();
-        view = LayoutInflater.from(activity.getApplicationContext()).inflate(R.layout.fragment_privacy, null);
+        view = LayoutInflater.from(activity.getApplicationContext()).inflate(R.layout.fragment_settings, null);
     }
 
     @Test
@@ -129,7 +129,7 @@ public class SettingsFragmentTest {
         assertEquals("Name", tvName.getText());
         assertEquals(View.VISIBLE, tvName.getVisibility());
 
-        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) tvName.getLayoutParams();
+        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) tvName.getLayoutParams();
         assertEquals(16, lp.leftMargin);
         assertEquals(16, lp.rightMargin);
         assertTrue(tvName.isClickable());
@@ -150,7 +150,7 @@ public class SettingsFragmentTest {
         assertEquals(Color.WHITE, tvEnterNewName.getCurrentTextColor());
         assertEquals("Enter new name", tvEnterNewName.getText());
         assertEquals(View.GONE, tvEnterNewName.getVisibility());
-        assertTrue(tvEnterNewName.isClickable());
+        assertFalse(tvEnterNewName.isClickable());
     }
 
     @Test
@@ -161,7 +161,7 @@ public class SettingsFragmentTest {
         assertEquals(Color.WHITE, editText.getCurrentTextColor());
         assertEquals(View.GONE, editText.getVisibility());
 
-        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) editText.getLayoutParams();
+        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) editText.getLayoutParams();
         assertEquals(16, lp.rightMargin);
         assertEquals(16, lp.leftMargin);
     }
@@ -182,10 +182,10 @@ public class SettingsFragmentTest {
     public void testForLine() throws Exception {
         View line = view.findViewById(R.id.view11);
         assertNotNull(line);
-        assertTrue(View.VISIBLE == line.getVisibility());
-        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) line.getLayoutParams();
+        assertTrue(View.GONE == line.getVisibility());
+        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) line.getLayoutParams();
         assertEquals(1, lp.height);
-        assertEquals(8, lp.topMargin);
+        assertEquals(0, lp.topMargin);
     }
 
     @Test
@@ -202,7 +202,7 @@ public class SettingsFragmentTest {
         assertNotNull(avatar);
         assertEquals(Color.WHITE, avatar.getCurrentTextColor());
         assertEquals("Profile Picture", avatar.getText());
-        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) avatar.getLayoutParams();
+        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) avatar.getLayoutParams();
         assertEquals(8, lp.topMargin);
         assertEquals(16, lp.leftMargin);
         assertEquals(16, lp.rightMargin);
@@ -218,7 +218,7 @@ public class SettingsFragmentTest {
         assertEquals(Color.WHITE, button.getCurrentTextColor());
         assertEquals(View.GONE, button.getVisibility());
 
-        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) button.getLayoutParams();
+        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) button.getLayoutParams();
         assertEquals(16, lp.topMargin);
         assertEquals(16, lp.leftMargin);
         assertEquals(16, lp.rightMargin);
@@ -229,12 +229,12 @@ public class SettingsFragmentTest {
         Button button = (Button) view.findViewById(R.id.buttonChooseFromGallery);
         assertNotNull(button);
 
-        assertEquals("Take a picture", button.getText());
+        assertEquals("Choose from Gallery", button.getText());
         assertTrue(R.id.buttonChooseFromGallery == button.getId());
         assertEquals(Color.WHITE, button.getCurrentTextColor());
         assertEquals(View.GONE, button.getVisibility());
 
-        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) button.getLayoutParams();
+        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) button.getLayoutParams();
         assertEquals(16, lp.topMargin);
         assertEquals(16, lp.leftMargin);
         assertEquals(16, lp.rightMargin);
@@ -244,7 +244,7 @@ public class SettingsFragmentTest {
     public void testForLine1() throws Exception {
         View line = view.findViewById(R.id.view1);
         assertNotNull(line);
-        assertTrue(View.GONE == line.getVisibility());
+        assertTrue(View.VISIBLE == line.getVisibility());
     }
 
     @Test
@@ -264,7 +264,7 @@ public class SettingsFragmentTest {
     public void testForLine2() throws Exception {
         View line = view.findViewById(R.id.view2);
         assertNotNull(line);
-        assertTrue(View.GONE == line.getVisibility());
+        assertTrue(View.VISIBLE == line.getVisibility());
     }
 
     @Test
@@ -284,7 +284,7 @@ public class SettingsFragmentTest {
     public void testForLine12() throws Exception {
         View line = view.findViewById(R.id.view12);
         assertNotNull(line);
-        assertTrue(View.GONE == line.getVisibility());
+        assertTrue(View.VISIBLE == line.getVisibility());
     }
 
     @Test
@@ -294,10 +294,10 @@ public class SettingsFragmentTest {
         assertEquals(Color.WHITE, textView.getCurrentTextColor());
         assertEquals("Notifications:", textView.getText());
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) textView.getLayoutParams();
-        assertEquals(8, lp.topMargin);
-        assertEquals(16, lp.leftMargin);
-        assertEquals(16, lp.rightMargin);
-        assertTrue(textView.isClickable());
+        assertEquals(16, lp.topMargin);
+        assertEquals(8, lp.leftMargin);
+        assertEquals(8, lp.rightMargin);
+        assertFalse(textView.isClickable());
     }
 
     @Test
@@ -317,7 +317,7 @@ public class SettingsFragmentTest {
     public void testForLine3() throws Exception {
         View line = view.findViewById(R.id.view3);
         assertNotNull(line);
-        assertTrue(View.GONE == line.getVisibility());
+        assertTrue(View.VISIBLE == line.getVisibility());
     }
 
     @Test

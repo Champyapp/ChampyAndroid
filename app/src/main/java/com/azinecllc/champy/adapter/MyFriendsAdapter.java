@@ -264,7 +264,7 @@ public class MyFriendsAdapter extends RecyclerView.Adapter<MyFriendsAdapter.View
                     };
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setMessage("Do you want to delete this user from your friends list?")
-                            .setTitle("Are you sure")
+                            .setTitle(R.string.are_you_sure)
                             .setIcon(R.mipmap.nav_friends)
                             .setPositiveButton("Yes", dialogClickListener)
                             .setNegativeButton("No", dialogClickListener)

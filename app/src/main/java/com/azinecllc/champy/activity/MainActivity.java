@@ -288,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     private void setCounterForPendingDuels() {
         // SETTING CURRENT PENDING COUNT
-        if (!sessionManager.getDuelPending().isEmpty()) {
+        if (!sessionManager.getDuelPending().equals("0")) {
             TextView view = (TextView) navigationView.getMenu().findItem(R.id.nav_pending_duels).getActionView();
             runOnUiThread(() -> view.setText(String.format("%s%s", getString(R.string.plus), sessionManager.getDuelPending())));
         }

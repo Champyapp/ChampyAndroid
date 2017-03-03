@@ -213,12 +213,11 @@ public class MyOtherFragment extends Fragment {
                     StrictMode.setThreadPolicy(policy);
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
                     db.delete("mytable", null, null);
-                    GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken
-                            .getCurrentAccessToken(), new GraphRequest.GraphJSONArrayCallback() {
+                    GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONArrayCallback() {
                         @Override
                         public void onCompleted(JSONArray array, GraphResponse response) {
                             if (array.length() == 0) {
-                                Toast.makeText(getContext(), R.string.noOneHasInstalledChampy, Toast.LENGTH_LONG).show();
+                                //Toast.makeText(getContext(), R.string.noOneHasInstalledChampy, Toast.LENGTH_LONG).show();
                                 swipeRefreshLayout.setRefreshing(false);
                                 return;
                             }

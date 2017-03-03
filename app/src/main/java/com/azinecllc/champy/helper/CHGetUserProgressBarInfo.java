@@ -31,8 +31,8 @@ public class CHGetUserProgressBarInfo {
 
     public void getUserProgressBarInfo() {
         SessionManager sessionManager = SessionManager.getInstance(context);
-        final String token = sessionManager.getToken();
-        final Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        String token = sessionManager.getToken();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
         NewUser newUser = retrofit.create(NewUser.class);
         Call<User> userCall = newUser.getUserInfo(token);

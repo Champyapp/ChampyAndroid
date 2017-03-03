@@ -515,6 +515,9 @@ public class ChallengeController {
                         generateCardsForMainActivity(intent);
                     }
 
+                } else {
+                    Toast.makeText(activity, activity.getString(R.string.service_not_available), Toast.LENGTH_LONG).show();
+                    generateCardsForMainActivity(new Intent(context, MainActivity.class));
                 }
             }
 
@@ -587,9 +590,7 @@ public class ChallengeController {
                     CHCheckPendingDuels checkPendingDuels = new CHCheckPendingDuels();
                     checkPendingDuels.setPendingCount(context);
 
-                    if (intent != null) {
-                        generateCardsForMainActivity(intent);
-                    }
+                    generateCardsForMainActivity(intent);
 
                 } else {
                     Toast.makeText(activity, activity.getString(R.string.service_not_available), Toast.LENGTH_LONG).show();

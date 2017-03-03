@@ -127,7 +127,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         drawerUserEmail.setText(userEmail);
         drawerUserName.setText(userName);
 
-        if (!sessionManager.getDuelPending().isEmpty()) {
+        if (!sessionManager.getDuelPending().equals("0")) {
             TextView view = (TextView) navigationView.getMenu().findItem(R.id.nav_pending_duels).getActionView();
             view.setText(String.format("%s%s", getString(R.string.plus), sessionManager.getDuelPending()));
         }

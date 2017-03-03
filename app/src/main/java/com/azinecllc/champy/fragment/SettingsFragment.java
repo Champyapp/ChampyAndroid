@@ -1,5 +1,6 @@
 package com.azinecllc.champy.fragment;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -20,6 +21,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -167,16 +169,16 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
                     buttonOK.setVisibility(View.VISIBLE);
                     buttonOK.setOnClickListener(v1 -> {
-                        if (!etNewName.getText().toString().trim().equals(session.getUserName())
-                                && !etNewName.getText().toString().trim().isEmpty()) {
-                            String userNewName = etNewName.getText().toString().trim();
-                            session.setUserName(userNewName);
-                            userController.updateUserName(userNewName); // call
-                            tvUserName.setText(session.getUserName());
-                            etNewName.setText(session.getUserName());
+                        String newName = etNewName.getText().toString().trim();
+                        if (!newName.equals(session.getUserName()) && !newName.isEmpty()) {
+                            session.setUserName(newName);
+                            userController.updateUserName(newName); // call
+                            tvUserName.setText(newName);
+                            etNewName.setText(newName);
                             TextView drawerUserName = (TextView) getActivity().findViewById(R.id.drawer_tv_user_name);
-                            drawerUserName.setText(userNewName);
+                            drawerUserName.setText(newName);
                         }
+                        hideKeyboard();
                         layoutEditText.setVisibility(View.GONE);
                         tvEnterYourName.setVisibility(View.GONE);
                         etNewName.setVisibility(View.GONE);
@@ -408,7 +410,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(R.string.areYouSure)
+        builder.setTitle(R.string.are_you_sure)
                 .setMessage("If you continue you will lose all your challenges")
                 .setCancelable(false)
                 .setPositiveButton("Continue", dialogClickListener)
@@ -434,14 +436,13 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(R.string.areYouSure)
+        builder.setTitle(R.string.are_you_sure)
                 .setMessage(R.string.youWantToDeleteYourAcc)
                 .setCancelable(false)
                 .setPositiveButton(R.string.yes, dialogClickListener)
                 .setNegativeButton(R.string.no, dialogClickListener)
                 .show();
     }
-
 
     /**
      * Method which returns boolean value of granted permission. To work with storage we need to
@@ -452,7 +453,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         int res = getActivity().checkCallingOrSelfPermission(READ_EXTERNAL_STORAGE);
         return (res == PackageManager.PERMISSION_GRANTED);
     }
-
 
     /**
      * Methods to get absolute path to picture from internal storage.
@@ -483,7 +483,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         return null;
     }
 
-
     /**
      * Method witch handling crop the picture. Here we get photo path, cropped it and upload on API
      * @param resultCode - code from intent 'start activity for result' must be 'OK'
@@ -508,7 +507,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
             Toast.makeText(context, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
-
 
     /**
      * Method to save photo in storage from camera. Actually this method creates folder and file
@@ -646,6 +644,17 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         catch (ActivityNotFoundException e) {
             Toast toast = Toast.makeText(getContext(), "This device doesn't support the crop action!", Toast.LENGTH_LONG);
             toast.show();
+        }
+    }
+
+    /**
+     * Method to hide keyboard automatically after click on the button 'OK' with or without
+     * some changes.
+     */
+    private void hideKeyboard() {
+        InputMethodManager input = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+        if (getActivity().getWindow().getCurrentFocus() != null) {
+            input.hideSoftInputFromWindow(getActivity().getWindow().getCurrentFocus().getWindowToken(), 0);
         }
     }
 

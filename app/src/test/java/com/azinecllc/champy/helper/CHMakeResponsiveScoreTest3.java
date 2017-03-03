@@ -74,10 +74,6 @@ public class CHMakeResponsiveScoreTest3 {
         }
         System.out.println(mockImageView);
 
-        //CHMakeResponsiveScore makeResponsiveScore = CHMakeResponsiveScore.getInstance();
-        //makeResponsiveScore.makeResponsiveScore(mockMainActivity, 720);
-
-
     }
 
     @Test
