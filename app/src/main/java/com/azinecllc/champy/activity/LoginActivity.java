@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -105,31 +106,36 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     try {
                         userFBID = object.getString("id");
                         userName = object.getString("first_name") + " " + object.getString("last_name");
-                        userEmail = (object.getString("email") != null) ? object.getString("email") : userFBID + "@facebook.com";
+                        try {
+                            URL profile_pic = new URL("https://graph.facebook.com/" + userFBID + "/picture?type=large");
+                            userPicture = profile_pic.toString();
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                        }
                     } catch (JSONException e) {
-                        userEmail = userFBID + "@facebook.com";
+                        e.printStackTrace();
                     }
 
                     try {
-                        URL profile_pic = new URL("https://graph.facebook.com/" + userFBID + "/picture?type=large");
-                        userPicture = profile_pic.toString();
-                    } catch (MalformedURLException e) {
+                        userEmail = (object.getString("email") != null) ? object.getString("email") : userFBID + "@facebook.com";
+                    } catch (JSONException e) {
+                        userEmail = userFBID + "@facebook.com";
                         e.printStackTrace();
                     }
 
                     new Thread(() -> {
                         try {
                             InstanceID instanceID = InstanceID.getInstance(LoginActivity.this);
-                            String token_android = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
+                            String androidToken = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
                                     GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
 
                             JSONObject jsonObject = new JSONObject();
-                            jsonObject.put("token", token_android);
+                            jsonObject.put("token", androidToken);
                             jsonObject.put("timeZone", "-2");
-                            String json = jsonObject.toString();
+                            String gcm = jsonObject.toString();
 
-                            singInUser(userFBID, json, userPicture, token_android);
-                            registerUser(userFBID, userName, userEmail, json, token_android, userPicture);
+                            singInUser(userFBID, gcm, userPicture, androidToken);
+                            registerUser(userFBID, userName, userEmail, gcm, androidToken, userPicture);
                         } catch (Exception e) {
                             Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_LONG).show();
                         }
@@ -347,16 +353,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             userName, userEmail, userFBID, picture, jwt, userID, pushN, newChallReq,
                             acceptedYour, challengeEnd, "true", "true", gcm, androidTok);
 
+                    Log.i("TAG", "onResponse: " + picture);
                     sessionManager.setChampyOptions(
                             user.getAllChallengesCount().toString(),
                             user.getSuccessChallenges().toString(),
                             user.getInProgressChallenges().toString(),
                             user.getLevel().getNumber().toString());
 
-                    UserController userController = new UserController(sessionManager, retrofit);
-                    userController.updatePushIdentifier();
+//                    UserController userController = new UserController(sessionManager, retrofit);
+//                    userController.updatePushIdentifier();
 
-                    // here I upload photo on API and update push identifier
+                    /** here I upload photo on API and update push identifier */
                     CHSaveAndUploadPhoto a = new CHSaveAndUploadPhoto(getApplicationContext(), retrofit);
                     a.execute(picture); // async, don't forget to destroy thread.
 

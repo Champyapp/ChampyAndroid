@@ -75,6 +75,7 @@ public class UserController {
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
+                System.out.println("uploadProfile response: " + ((response.isSuccess()) ? "success" : response.message()));
             }
             @Override
             public void onFailure(Throwable t) {
@@ -92,6 +93,7 @@ public class UserController {
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
+                System.out.println("updateUserName response: " + ((response.isSuccess()) ? "success" : response.message()));
             }
             @Override
             public void onFailure(Throwable t) {
@@ -116,6 +118,7 @@ public class UserController {
             @Override
             public void onResponse(Response<Delete> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
+                    System.out.println("deleteProfile response: " + ((response.isSuccess()) ? "success" : response.message()));
                     ////////// not sure what we need this ////////
                     //String root = Environment.getExternalStorageDirectory().toString();
                     //File avatar = new File(root + "/android/data/com.azinecllc.champy/images", "profile.jpg");
@@ -155,19 +158,17 @@ public class UserController {
     public void uploadPhotoForAPI(String path) {
         System.out.println("I'm uploadPhotoForAPI method :)");
         File userPhotoFile = new File(path);
-        System.out.println("path : " + path);
-        System.out.println("file : " + userPhotoFile);
         RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), userPhotoFile);
         Update_user update_user = retrofit.create(Update_user.class);
         Call<User> call = update_user.update_photo(userID, userToken, requestBody);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
-                System.out.println("uploadPhoto response: " + ((response.isSuccess()) ? "success" : response.message()));
+                System.out.println("uploadPhotoForAPI response: " + ((response.isSuccess()) ? "success" : response.message()));
             }
             @Override
             public void onFailure(Throwable t) {
-                System.out.println("uploadPhoto response VSE HUYNYA: " + t.getMessage());
+                System.out.println("uploadPhoto response failed: " + t.getMessage() + t.getCause());
             }
         });
     }
@@ -182,6 +183,7 @@ public class UserController {
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
+                System.out.println("updatePushIdentifier" + (response.isSuccess() ? "success" : response.message()));
             }
 
             @Override

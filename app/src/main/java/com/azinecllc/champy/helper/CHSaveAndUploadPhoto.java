@@ -64,26 +64,9 @@ public class CHSaveAndUploadPhoto extends AsyncTask<String, Void, Bitmap> {
         String fileName = "profile.jpg";
 
         File file = new File(myDir, fileName);
-        if (!file.exists()) {
-            try {
-                file.createNewFile(); // create
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
+        if (file.exists()) {
             file.delete();
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
-
-        SessionManager ss = SessionManager.getInstance(context);
-        UserController userController = new UserController(ss, retrofit);
-        userController.uploadPhotoForAPI(Uri.fromFile(file).getPath()); // here we can upload photo.
-        userController.updatePushIdentifier();
-
         try {
             FileOutputStream out = new FileOutputStream(file);
             bitmapImage.compress(Bitmap.CompressFormat.JPEG, 90, out);
@@ -92,6 +75,11 @@ public class CHSaveAndUploadPhoto extends AsyncTask<String, Void, Bitmap> {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        SessionManager ss = SessionManager.getInstance(context);
+        UserController userController = new UserController(ss, retrofit);
+        userController.uploadPhotoForAPI(Uri.fromFile(file).getPath());
+        userController.updatePushIdentifier();
 
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
         File myPath = new File(directory, "profile.jpg"); // Create imageDir
