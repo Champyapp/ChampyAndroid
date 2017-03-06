@@ -177,6 +177,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                             etNewName.setText(newName);
                             TextView drawerUserName = (TextView) getActivity().findViewById(R.id.drawer_tv_user_name);
                             drawerUserName.setText(newName);
+                            userController.updateProfile(map);
                         }
                         hideKeyboard();
                         layoutEditText.setVisibility(View.GONE);
@@ -219,7 +220,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                         startActivityForResult(intent, CAMERA_REQUEST);
                         layoutButtons.setVisibility(View.GONE);
                     });
-
                 } else {
                     layoutButtons.setVisibility(View.GONE);
                     tvTakeAPicture.setVisibility(View.INVISIBLE);
@@ -234,17 +234,18 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.textViewLogout:
+                userController.updateProfile(map);
                 session.logout(getActivity());
                 break;
             case R.id.about:
+                userController.updateProfile(map);
                 startActivity(new Intent(context, AboutActivity.class));
                 break;
             case R.id.contact_us:
+                userController.updateProfile(map);
                 startActivity(new Intent(context, ContactUsActivity.class));
                 break;
-
         }
-        userController.updateProfile(map);
     }
 
     @Override

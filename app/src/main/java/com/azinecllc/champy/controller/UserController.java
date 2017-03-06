@@ -40,6 +40,7 @@ public class UserController {
     private Retrofit retrofit;
     private String userID, userToken;
 
+
     /**
      * Constructor for this class. I had selected only needed values to don't override it for
      * each method
@@ -54,6 +55,7 @@ public class UserController {
         userID = session.getUserId();
         userToken = session.getToken();
     }
+
 
     /**
      * Method to update profile data (only for toggles). After each changes in settingsFragment we
@@ -83,6 +85,7 @@ public class UserController {
         });
     }
 
+
     /**
      * Method to update user name. Here we need to make call and input new name.
      * @param newName - new user name, from EditText field.
@@ -100,6 +103,7 @@ public class UserController {
             }
         });
     }
+
 
     /**
      * Method to delete user profile. We make call to API and if response is success then we can
@@ -149,6 +153,7 @@ public class UserController {
         });
     }
 
+
     /**
      * Method to load new profile picture on API. Just push the file to Api (without saving locally)
      * @param path - this is path to storage when we have already exist picture, because we should
@@ -156,7 +161,6 @@ public class UserController {
      *             after that we can make call and update this
      */
     public void uploadPhotoForAPI(String path) {
-        System.out.println("I'm uploadPhotoForAPI method :)");
         File userPhotoFile = new File(path);
         RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), userPhotoFile);
         Update_user update_user = retrofit.create(Update_user.class);
@@ -172,6 +176,7 @@ public class UserController {
             }
         });
     }
+
 
     /**
      * Method to update user's push identifier, we use it only inside "registerUser" and "singInUser"
