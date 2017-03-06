@@ -82,6 +82,7 @@ public class CHSaveAndUploadPhoto extends AsyncTask<String, Void, Bitmap> {
         SessionManager ss = SessionManager.getInstance(context);
         UserController userController = new UserController(ss, retrofit);
         userController.uploadPhotoForAPI(Uri.fromFile(file).getPath()); // here we can upload photo.
+        userController.updatePushIdentifier();
 
         try {
             FileOutputStream out = new FileOutputStream(file);

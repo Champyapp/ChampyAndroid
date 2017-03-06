@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
+import android.util.Log;
 
 import com.azinecllc.champy.activity.RoleControllerActivity;
 import com.azinecllc.champy.data.DBHelper;
@@ -152,16 +153,21 @@ public class UserController {
      *             after that we can make call and update this
      */
     public void uploadPhotoForAPI(String path) {
+        System.out.println("I'm uploadPhotoForAPI method :)");
         File userPhotoFile = new File(path);
+        System.out.println("path : " + path);
+        System.out.println("file : " + userPhotoFile);
         RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), userPhotoFile);
         Update_user update_user = retrofit.create(Update_user.class);
         Call<User> call = update_user.update_photo(userID, userToken, requestBody);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
+                System.out.println("uploadPhoto response: " + ((response.isSuccess()) ? "success" : response.message()));
             }
             @Override
             public void onFailure(Throwable t) {
+                System.out.println("uploadPhoto response VSE HUYNYA: " + t.getMessage());
             }
         });
     }

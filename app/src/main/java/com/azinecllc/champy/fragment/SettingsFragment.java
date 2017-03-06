@@ -253,7 +253,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
             if (requestCode == CAMERA_REQUEST) {
                 Bundle extras = data.getExtras();
                 Bitmap thePic = extras.getParcelable("data"); // get the cropped bitmap
-                savePhotoToStorage(thePic);
+                savePhotoToStorageAndMakeBG(thePic);
                 userController.uploadPhotoForAPI(getPicturePathFromStorage(thePic));
                 //getActivity().recreate();
             } else if (requestCode == Crop.REQUEST_PICK) {
@@ -273,7 +273,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
             } else if (requestCode == CROP_PIC) {
                 Bundle extras = data.getExtras();
                 Bitmap thePic = extras.getParcelable("data"); // get the cropped bitmap
-                savePhotoToStorage(thePic);
+                savePhotoToStorageAndMakeBG(thePic);
             }
         }
 
@@ -455,35 +455,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     }
 
     /**
-     * Methods to get absolute path to picture from internal storage.
-     * @param uri - this is data from intent: data.getData();
-     * @return absolute path to picture from storage
-     */
-    @Nullable
-    private String getPath(Uri uri) throws URISyntaxException {
-        if ("content".equalsIgnoreCase(uri.getScheme())) {
-            String[] projection = {"_data"};
-            Cursor cursor;
-
-            try {
-                cursor = getContext().getContentResolver().query(uri, projection, null, null, null);
-                int column_index = cursor.getColumnIndexOrThrow("_data");
-                if (cursor.moveToFirst()) {
-                    return cursor.getString(column_index);
-                }
-                cursor.close(); // added this line, if something went wrong than just delete this line;
-
-            } catch (Exception e) {
-                // Eat it
-            }
-        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            return uri.getPath();
-        }
-
-        return null;
-    }
-
-    /**
      * Method witch handling crop the picture. Here we get photo path, cropped it and upload on API
      * @param resultCode - code from intent 'start activity for result' must be 'OK'
      * @param result - code from intent which shows for us specify request, must be 'REQUEST_CROP'
@@ -501,7 +472,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
             userController.uploadPhotoForAPI(path);
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), uri);
-            savePhotoToStorage(bitmap); // my method which saves picture to storage
+            savePhotoToStorageAndMakeBG(bitmap); // my method which saves picture to storage
 
         } else if (resultCode == Crop.RESULT_ERROR) {
             Toast.makeText(context, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
@@ -513,7 +484,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
      * like as Object on device. We uses this method after 'take picture' and 'choose from storage'
      * @param photo - bitmap which we get from extras.getParcelable
      */
-    private void savePhotoToStorage(Bitmap photo) {
+    private void savePhotoToStorageAndMakeBG(Bitmap photo) {
         String root = Environment.getExternalStorageDirectory().toString(); // path
         File myDir = new File(root + "/android/data/com.azinecllc.champy/images"); // folder
         myDir.mkdirs(); // create folder
@@ -535,7 +506,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         }
 
         Uri uri = Uri.fromFile(file);
-        userController.uploadPhotoForAPI(uri.toString());
+        //userController.uploadPhotoForAPI(uri.toString());
         session.setUserPicture(uri.toString());
 
         Glide.with(getActivity())
@@ -645,6 +616,36 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
             Toast toast = Toast.makeText(getContext(), "This device doesn't support the crop action!", Toast.LENGTH_LONG);
             toast.show();
         }
+    }
+
+    /**
+     * Methods to get absolute path to picture from internal storage.
+     *
+     * @param uri - this is data from intent: data.getData();
+     * @return absolute path to picture from storage
+     */
+    @Nullable
+    private String getPath(Uri uri) throws URISyntaxException {
+        if ("content".equalsIgnoreCase(uri.getScheme())) {
+            String[] projection = {"_data"};
+            Cursor cursor;
+
+            try {
+                cursor = getContext().getContentResolver().query(uri, projection, null, null, null);
+                int column_index = cursor.getColumnIndexOrThrow("_data");
+                if (cursor.moveToFirst()) {
+                    return cursor.getString(column_index);
+                }
+                cursor.close(); // added this line, if something went wrong than just delete this line;
+
+            } catch (Exception e) {
+                // Eat it
+            }
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
+
+        return null;
     }
 
     /**
