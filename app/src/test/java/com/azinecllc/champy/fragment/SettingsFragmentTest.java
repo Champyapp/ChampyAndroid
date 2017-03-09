@@ -455,12 +455,12 @@ public class SettingsFragmentTest {
         assertTrue(textView.isClickable());
     }
 
-    @Test
-    public void testForLine9() throws Exception {
-        View line = view.findViewById(R.id.view9);
-        assertNotNull(line);
-        assertTrue(View.VISIBLE == line.getVisibility());
-    }
+//    @Test
+//    public void testForLine9() throws Exception {
+//        View line = view.findViewById(R.id.view9);
+//        assertNotNull(line);
+//        assertTrue(View.VISIBLE == line.getVisibility());
+//    }
 
 
 }

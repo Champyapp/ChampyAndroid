@@ -63,9 +63,9 @@ import static com.azinecllc.champy.utils.Constants.SELECT_FILE;
 import static com.azinecllc.champy.utils.Constants.path;
 
 /**
- * Created by SashaKhyzhun on 2/7/17.
+ * @autor SashaKhyzhun
+ * Created on 2/7/17.
  */
-
 public class SettingsFragment extends Fragment implements View.OnClickListener {
 
     private Context context;

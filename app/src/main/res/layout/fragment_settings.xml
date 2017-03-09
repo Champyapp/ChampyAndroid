@@ -481,18 +481,6 @@
                 android:layout_marginBottom="8dp"
                 android:clickable="true" />
 
-            <!-- Line after menu item 'Contact Us' -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#339997"
-                android:id="@+id/view9"
-                android:layout_marginTop="8dp"
-                android:visibility="visible"
-                android:layout_below="@+id/contact_us"
-                android:layout_alignRight="@+id/layoutChangeName"
-                android:layout_alignEnd="@+id/layoutChangeName" />
-
         </RelativeLayout>
 
     </ScrollView>
