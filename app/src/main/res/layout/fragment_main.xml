@@ -218,7 +218,9 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/fabWake"
         android:layout_alignLeft="@+id/fabWake"
-        android:layout_alignStart="@+id/fabWake" />
+        android:layout_alignStart="@+id/fabWake"
+        android:layout_alignRight="@+id/fabWake"
+        android:layout_alignEnd="@+id/fabWake" />
 
     <android.support.design.widget.FloatingActionButton
         app:backgroundTint="@color/color_text_aqua"

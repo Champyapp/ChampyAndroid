@@ -360,7 +360,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             user.getInProgressChallenges().toString(),
                             user.getLevel().getNumber().toString());
 
-
                     /** here I upload photo on API and update push identifier */
                     CHSaveAndUploadPhoto a = new CHSaveAndUploadPhoto(getApplicationContext(), retrofit);
                     a.execute(picture); // async, don't forget to destroy thread.
