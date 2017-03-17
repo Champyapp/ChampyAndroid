@@ -5,10 +5,12 @@
 general:
     artifacts:
         - /home/ubuntu/ChampyAndroid/app/build/outputs/apk/
+        - Users/SashaKhyzhun/Work/AndroidStudioProjects/ChampyAndroid/app/build/outputs/apk/app-debug.apk
 
 machine:
     environment:
-        ANDROID_HOME: /usr/local/android-sdk-linux
+        #ANDROID_HOME: /usr/local/android-sdk-linux
+        ANDROID_HOME: /home/ubuntu/android
 
 dependencies:
     pre:
@@ -23,5 +25,5 @@ dependencies:
 test:
     override:
         - ./gradlew assembleDebug
-    #- adb install path/to/build.apk
+    #- adb install path/to/build.apk (for emulator)
 
