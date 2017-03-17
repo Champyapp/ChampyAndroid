@@ -5,25 +5,23 @@
 general:
     artifacts:
         - /home/ubuntu/ChampyAndroid/app/build/outputs/apk/
-        - Users/SashaKhyzhun/Work/AndroidStudioProjects/ChampyAndroid/app/build/outputs/apk/app-debug.apk
 
 machine:
     environment:
-        #ANDROID_HOME: /usr/local/android-sdk-linux
-        ANDROID_HOME: /home/ubuntu/android
+        ANDROID_HOME: /usr/local/android-sdk-linux
 
 dependencies:
     pre:
         - chmod +x gradlew
     override:
         - echo y | android update sdk --no-ui --all --filter "platform-tools, tools"
-        - echo y | android update sdk --no-ui --all --filter "android-24, build-tools-25.0.2"
+        - echo y | android update sdk --no-ui --all --filter "android-23, build-tools-25.0.2"
         - echo y | android update sdk --no-ui --all --filter "extra-android-m2repository"
         - echo y | android update sdk --no-ui --all --filter "extra-android-support"
         - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
 
 test:
     override:
-        - ./gradlew assembleDebug
-    #- adb install path/to/build.apk (for emulator)
+        - (./gradlew assembleDebug):
+            timeout: 360
 
