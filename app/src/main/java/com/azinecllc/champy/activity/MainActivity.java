@@ -93,13 +93,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String userPicture = sessionManager.getUserPicture();
         String userEmail = sessionManager.getUserEmail();
         String userName = sessionManager.getUserName();
-        ImageView background = (ImageView) findViewById(R.id.main_background);
-        Glide.with(this)
-                .load(userPicture)
-                .bitmapTransform(new BlurTransformation(getApplicationContext(), 25))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(background);
+//        ImageView background = (ImageView) findViewById(R.id.main_background);
+//        Glide.with(this)
+//                .load(userPicture)
+//                .bitmapTransform(new BlurTransformation(getApplicationContext(), 25))
+//                .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                .skipMemoryCache(true)
+//                .into(background);
         Glide.with(this)
                 .load(userPicture)
                 .bitmapTransform(new CropCircleTransformation(this))
@@ -116,42 +116,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerUserEmail.setText(userEmail);
 
         // PENDING DUEL MENU IN DRAWER
-        setCounterForPendingDuels();
+        //setCounterForPendingDuels();
 
         loadHomeFragment();
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.i(TAG, "onStart: ");
-
-        try {
-            mSocket = IO.socket(API_URL);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-
-        mSocket.on("connect", onConnect);
-        mSocket.on("connected", onConnected);
-        mSocket.on("InProgressChallenge:accepted", modifiedChallenges);
-        mSocket.on("InProgressChallenge:new", modifiedChallenges);
-        mSocket.on("InProgressChallenge:won", modifiedChallenges);
-        //mSocket.on("InProgressChallenge:updated", modifiedChallenges);
-
-        mSocket.connect();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        //mSocket.disconnect();
-        mSocket.off("InProgressChallenge:accepted", modifiedChallenges);
-        mSocket.off("InProgressChallenge:new", modifiedChallenges);
-        mSocket.off("InProgressChallenge:won", modifiedChallenges);
-
-    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        Log.i(TAG, "onStart: ");
+//
+//        try {
+//            mSocket = IO.socket(API_URL);
+//        } catch (URISyntaxException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        mSocket.on("connect", onConnect);
+//        mSocket.on("connected", onConnected);
+//        mSocket.on("InProgressChallenge:accepted", modifiedChallenges);
+//        mSocket.on("InProgressChallenge:new", modifiedChallenges);
+//        mSocket.on("InProgressChallenge:won", modifiedChallenges);
+//        //mSocket.on("InProgressChallenge:updated", modifiedChallenges);
+//
+//        mSocket.connect();
+//    }
+//
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        //mSocket.disconnect();
+//        mSocket.off("InProgressChallenge:accepted", modifiedChallenges);
+//        mSocket.off("InProgressChallenge:new", modifiedChallenges);
+//        mSocket.off("InProgressChallenge:won", modifiedChallenges);
+//
+//    }
 
     @Override
     protected void onDestroy() {
@@ -183,9 +183,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_friends:
                 new Handler().postDelayed(() -> startActivity(new Intent(this, FriendsActivity.class)), 250);
                 break;
-            case R.id.nav_history:
-                new Handler().postDelayed(() -> startActivity(new Intent(this, HistoryActivity.class)), 250);
-                break;
             case R.id.nav_pending_duels:
                 new Handler().postDelayed(() -> startActivity(new Intent(this, PendingDuelActivity.class)), 250);
                 break;
@@ -208,26 +205,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-
-    private Emitter.Listener onConnect = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-            Log.i(TAG, "Sockets call: onConnect");
-            mSocket.emit("ready", sessionManager.getToken());
-        }
-    };
-
-    private Emitter.Listener onConnected = args -> Log.i(TAG, "Sockets call: onConnected!");
-
-    private Emitter.Listener modifiedChallenges = new Emitter.Listener() {
-        @Override
-        public void call(Object... args) {
-            Log.i(TAG, "Sockets call: modifiedChallenges");
-            ChallengeController cc = new ChallengeController(getApplicationContext(), MainActivity.this);
-            cc.refreshCardsForPendingDuel(null);
-            setCounterForPendingDuels(); // not good solution
-        }
-    };
+//    private Emitter.Listener onConnect = new Emitter.Listener() {
+//        @Override
+//        public void call(final Object... args) {
+//            Log.i(TAG, "Sockets call: onConnect");
+//            mSocket.emit("ready", sessionManager.getToken());
+//        }
+//    };
+//
+//    private Emitter.Listener onConnected = args -> Log.i(TAG, "Sockets call: onConnected!");
+//
+//    private Emitter.Listener modifiedChallenges = new Emitter.Listener() {
+//        @Override
+//        public void call(Object... args) {
+//            Log.i(TAG, "Sockets call: modifiedChallenges");
+//            ChallengeController cc = new ChallengeController(getApplicationContext(), MainActivity.this);
+//            cc.refreshCardsForPendingDuel(null);
+//            setCounterForPendingDuels(); // not good solution
+//        }
+//    };
 
 
 
@@ -283,17 +279,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    /**
-     * Method to check pending counter and after that set value for navigation drawer menu
-     */
-    private void setCounterForPendingDuels() {
-        // SETTING CURRENT PENDING COUNT
-        if (!sessionManager.getDuelPending().equals("0")) {
-            TextView view = (TextView) navigationView.getMenu().findItem(R.id.nav_pending_duels).getActionView();
-            runOnUiThread(() -> view.setText(String.format("%s%s", getString(R.string.plus), sessionManager.getDuelPending())));
-        }
-
-    }
+//    /**
+//     * Method to check pending counter and after that set value for navigation drawer menu
+//     */
+//    private void setCounterForPendingDuels() {
+//        // SETTING CURRENT PENDING COUNT
+//        if (!sessionManager.getDuelPending().equals("0")) {
+//            TextView view = (TextView) navigationView.getMenu().findItem(R.id.nav_pending_duels).getActionView();
+//            runOnUiThread(() -> view.setText(String.format("%s%s", getString(R.string.plus), sessionManager.getDuelPending())));
+//        }
+//
+//    }
 //
 //
 //    /**

@@ -145,9 +145,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                 break;
             case R.id.nav_friends:
                 break;
-            case R.id.nav_history:
-                new Handler().postDelayed(() -> startActivity(new Intent(this, HistoryActivity.class)), 250);
-                break;
             case R.id.nav_pending_duels:
                 startActivity(new Intent(this, PendingDuelActivity.class));
                 break;

@@ -529,12 +529,12 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into((ImageView) getActivity().findViewById(R.id.drawer_background));
-        Glide.with(getActivity())
-                .load(uri)
-                .bitmapTransform(new BlurTransformation(context, 25))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into((ImageView) getActivity().findViewById(R.id.main_background));
+//        Glide.with(getActivity())
+//                .load(uri)
+//                .bitmapTransform(new BlurTransformation(context, 25))
+//                .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                .skipMemoryCache(true)
+//                .into((ImageView) getActivity().findViewById(R.id.main_background));
 
         FileOutputStream out = null;
         try {

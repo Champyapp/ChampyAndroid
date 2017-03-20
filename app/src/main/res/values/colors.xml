@@ -25,6 +25,7 @@
     <color name="champy_gradient_start">#338083</color>
     <color name="champy_gradient_center">#346972</color>
     <color name="champy_gradient_end">#365060</color>
+    <color name="black">#000</color>
 
 
 </resources>

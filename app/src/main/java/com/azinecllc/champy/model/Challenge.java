@@ -8,7 +8,7 @@ import com.azinecllc.champy.data.DBHelper;
 
 import java.util.ArrayList;
 
-public class SelfImprovement_model {
+public class Challenge {
 
     private String goal;
     private String days;
@@ -146,9 +146,10 @@ public class SelfImprovement_model {
     }
 
     // constructor :P
-    private SelfImprovement_model(String mGoal, String mDays, String mType, String mId, String mStatus,
-                                  String mChallengeName, String versus, String recipient, String senderProgress,
-                                  String wakeUpTime, String constDuration, String needsToCheck) {
+    private Challenge(String mGoal, String mDays, String mType, String mId, String mStatus,
+                      String mChallengeName, String versus, String recipient, String senderProgress,
+                      String wakeUpTime, String constDuration, String needsToCheck) {
+
         this.goal = mGoal;
         this.days = mDays;
         this.type = mType;
@@ -166,10 +167,10 @@ public class SelfImprovement_model {
 
 
     // this method generates InProgress for History and for cards in MainActivity
-    public static ArrayList<SelfImprovement_model> generate(Context context) {
+    public static ArrayList<Challenge> generate(Context context) {
         DBHelper dbHelper = DBHelper.getInstance(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ArrayList<SelfImprovement_model> arrayList = new ArrayList<>();
+        ArrayList<Challenge> arrayList = new ArrayList<>();
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
 
         if (c.moveToFirst()) {
@@ -188,7 +189,7 @@ public class SelfImprovement_model {
             int needsToCheckSender= c.getColumnIndex("needsToCheck");
 
             do {
-                if (c.getString(status).equals("started")) arrayList.add (new SelfImprovement_model(
+                if (c.getString(status).equals("started")) arrayList.add(new Challenge(
                         c.getString(coldescription),
                         c.getString(colduration),
                         c.getString(nameColIndex),
@@ -208,10 +209,10 @@ public class SelfImprovement_model {
     }
 
     // generate Wins in History
-    public static ArrayList<SelfImprovement_model> generateWins(Context context) {
+    public static ArrayList<Challenge> generateWins(Context context) {
         DBHelper dbHelper = DBHelper.getInstance(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ArrayList<SelfImprovement_model> arrayList = new ArrayList<>();
+        ArrayList<Challenge> arrayList = new ArrayList<>();
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
 
         if (c.moveToFirst()) {
@@ -231,7 +232,7 @@ public class SelfImprovement_model {
 
             do {
                 if (c.getString(colrecipient).equals("true") && c.getString(status).equals("failedBySender")) {
-                        arrayList.add(new SelfImprovement_model(
+                    arrayList.add(new Challenge(
                                 c.getString(coldescription),
                                 c.getString(colduration),
                                 c.getString(nameColIndex),
@@ -247,7 +248,7 @@ public class SelfImprovement_model {
                 }
                 if (c.getString(colrecipient).equals("false")) {
                     if (c.getString(status).equals("failedByRecipient")) {
-                        arrayList.add(new SelfImprovement_model(
+                        arrayList.add(new Challenge(
                                 c.getString(coldescription),
                                 c.getString(colduration),
                                 c.getString(nameColIndex),
@@ -262,7 +263,7 @@ public class SelfImprovement_model {
                                 c.getString(needsToCheckSender)));
                     }
                     else if (c.getString(status).equals("finished")) {
-                        arrayList.add(new SelfImprovement_model(
+                        arrayList.add(new Challenge(
                                 c.getString(coldescription),
                                 c.getString(colduration),
                                 c.getString(nameColIndex),
@@ -285,10 +286,10 @@ public class SelfImprovement_model {
     }
 
     // generate Fails in History
-    public static ArrayList<SelfImprovement_model> generateFailed(Context context) {
+    public static ArrayList<Challenge> generateFailed(Context context) {
         DBHelper dbHelper = DBHelper.getInstance(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ArrayList<SelfImprovement_model> arrayList = new ArrayList<>();
+        ArrayList<Challenge> arrayList = new ArrayList<>();
         Cursor c = db.query("myChallenges", null, null, null, null, null, null);
 
         if (c.moveToFirst()) {
@@ -309,7 +310,7 @@ public class SelfImprovement_model {
             do {
                 if (c.getString(colrecipient).equals("true")) {
                     if (c.getString(status).equals("failedByRecipient")) {
-                        arrayList.add(new SelfImprovement_model(
+                        arrayList.add(new Challenge(
                                 c.getString(coldescription),
                                 c.getString(colduration),
                                 c.getString(nameColIndex),
@@ -326,7 +327,7 @@ public class SelfImprovement_model {
                 }
                 if (c.getString(colrecipient).equals("false")) {
                     if (c.getString(status).equals("failedBySender")) {
-                        arrayList.add(new SelfImprovement_model(
+                        arrayList.add(new Challenge(
                                 c.getString(coldescription),
                                 c.getString(colduration),
                                 c.getString(nameColIndex),

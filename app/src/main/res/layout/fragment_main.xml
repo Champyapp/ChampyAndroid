@@ -9,191 +9,36 @@
     android:splitMotionEvents="false"
     android:id="@+id/content_main">
 
-    <!-- text "welcome username" -->
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/image_view_circle_logo"
+        android:background="@drawable/round_corner"
+        android:layout_above="@+id/tv_noting_here_yet"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="50dp" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/welcomeUserName"
-        android:textAllCaps="true"
-        android:textSize="20sp"
-        android:textColor="@android:color/white"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:id="@+id/tv_noting_here_yet"
+        android:text="@string/nothing_here_yet"
+        android:textColor="@color/black"
         android:gravity="center"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp" />
+        android:layout_centerInParent="true" />
 
-    <!-- circles -->
-    <ImageView
-        android:id="@+id/imageView_challenges_animation"
-        android:background="@drawable/stat_circle_00027"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:layout_below="@+id/welcomeUserName"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp" />
-
-    <ImageView
-        android:id="@+id/imageView_wins_animation"
-        android:background="@drawable/stat_circle_00027"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:layout_below="@+id/welcomeUserName"
-        android:layout_centerHorizontal="true" />
-
-    <ImageView
-        android:id="@+id/imageView_total_animation"
-        android:background="@drawable/stat_circle_00027"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:layout_below="@+id/welcomeUserName"
-        android:layout_toRightOf="@+id/imageView_wins_animation"
-        android:layout_toEndOf="@+id/imageView_wins_animation"
-        android:layout_marginLeft="35dp"
-        android:layout_marginStart="35dp" />
-
-    <!-- android:background="@drawable/animation_score" for anim-->
-    <!-- Counters -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewChallengesCounter"
-        android:textIsSelectable="true"
-        android:textSize="28sp"
-        android:layout_centerInParent="@+id/imageView_challenges_animation"
-        android:gravity="center"
-        android:textColor="@color/color_white"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/imageView_challenges_animation"
-        android:layout_alignEnd="@+id/imageView_challenges_animation"
-        android:layout_marginLeft="@dimen/activity_vertical_margin"
-        android:layout_below="@+id/welcomeUserName"
-        android:layout_alignBottom="@+id/imageView_challenges_logo" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewWinsCounter"
-        android:layout_alignLeft="@+id/imageView_wins_animation"
-        android:layout_alignStart="@+id/imageView_wins_animation"
-        android:gravity="center_vertical|center_horizontal"
-        android:textSize="28sp"
-        android:textColor="@color/color_white"
-        android:layout_alignRight="@+id/imageView_wins_animation"
-        android:layout_alignEnd="@+id/imageView_wins_animation"
-        android:layout_below="@+id/welcomeUserName"
-        android:layout_alignBottom="@+id/imageView_wins_logo" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewTotalCounter"
-        android:layout_alignLeft="@+id/imageView_total_animation"
-        android:layout_alignStart="@+id/imageView_total_animation"
-        android:textSize="28sp"
-        android:gravity="center_vertical|center_horizontal"
-        android:textColor="@color/color_white"
-        android:layout_alignRight="@+id/imageView_total_animation"
-        android:layout_alignEnd="@+id/imageView_total_animation"
-        android:layout_below="@+id/welcomeUserName"
-        android:layout_alignBottom="@+id/imageView_total_logo" />
-
-    <!-- Logo inside circles -->
-    <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:id="@+id/imageView_challenges_logo"
-        android:src="@drawable/ic_score_prog"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="10dp"
-        android:layout_alignBottom="@+id/imageView_challenges_animation"
-        android:layout_alignRight="@+id/imageView_challenges_animation"
-        android:layout_alignEnd="@+id/imageView_challenges_animation"
-        android:layout_marginLeft="@dimen/activity_vertical_margin"/>
-
-    <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:id="@+id/imageView_wins_logo"
-        android:src="@drawable/ic_score_wins"
-        android:layout_alignLeft="@+id/imageView_wins_animation"
-        android:layout_alignStart="@+id/imageView_wins_animation"
-        android:layout_alignTop="@+id/imageView_challenges_logo"
-        android:layout_alignRight="@+id/imageView_wins_animation"
-        android:layout_alignEnd="@+id/imageView_wins_animation" />
-
-    <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:id="@+id/imageView_total_logo"
-        android:src="@drawable/ic_score_total"
-        android:layout_alignRight="@+id/imageView_total_animation"
-        android:layout_alignEnd="@+id/imageView_total_animation"
-        android:layout_alignTop="@+id/imageView_wins_logo"
-        android:layout_alignLeft="@+id/imageView_total_animation"
-        android:layout_alignStart="@+id/imageView_total_animation" />
-
-    <!-- text in progress / ic_score_wins / ic_score_total -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewChallenges"
-        android:textSize="16sp"
-        android:textColor="@color/color_white"
-        android:gravity="center"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:layout_below="@+id/imageView_challenges_animation"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="@dimen/activity_vertical_margin"
-        android:layout_alignRight="@+id/imageView_challenges_animation"
-        android:layout_alignEnd="@+id/imageView_challenges_animation"
-        android:layout_above="@+id/cards" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewWins"
-        android:textSize="16sp"
-        android:textColor="@color/color_white"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:gravity="center"
-        android:layout_below="@+id/imageView_wins_animation"
-        android:layout_alignLeft="@+id/imageView_wins_animation"
-        android:layout_alignStart="@+id/imageView_wins_animation"
-        android:layout_alignRight="@+id/imageView_wins_animation"
-        android:layout_alignEnd="@+id/imageView_wins_animation" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewTotal"
-        android:textSize="16sp"
-        android:textColor="@color/color_white"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:gravity="center"
-        android:layout_below="@+id/imageView_total_animation"
-        android:layout_alignRight="@+id/imageView_total_animation"
-        android:layout_alignEnd="@+id/imageView_total_animation"
-        android:layout_alignBottom="@+id/textViewWins"
-        android:layout_alignLeft="@+id/imageView_total_animation"
-        android:layout_alignStart="@+id/imageView_total_animation" />
-
-    <!-- our cards -->
-    <RelativeLayout
-        android:id="@+id/cards"
-        android:paddingTop="10dp"
+    <ListView
+        android:id="@+id/card_list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/textViewWins"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:focusable="false">
-    </RelativeLayout>
+        android:layout_height="wrap_content"
+        android:listSelector="@android:color/transparent"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="@null"
+        android:dividerHeight="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
 
     <android.support.design.widget.FloatingActionButton
         app:backgroundTint="@color/color_text_aqua"
@@ -205,7 +50,9 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/fabDuel"
         android:layout_alignLeft="@+id/fabDuel"
-        android:layout_alignStart="@+id/fabDuel" />
+        android:layout_alignStart="@+id/fabDuel"
+        android:layout_alignRight="@+id/fabDuel"
+        android:layout_alignEnd="@+id/fabDuel" />
 
     <android.support.design.widget.FloatingActionButton
         app:backgroundTint="@color/color_text_aqua"
@@ -232,7 +79,9 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/fabPlus"
         android:layout_alignLeft="@+id/fabPlus"
-        android:layout_alignStart="@+id/fabPlus" />
+        android:layout_alignStart="@+id/fabPlus"
+        android:layout_alignRight="@+id/fabPlus"
+        android:layout_alignEnd="@+id/fabPlus" />
 
     <android.support.design.widget.FloatingActionButton
         app:backgroundTint="@color/color_text_aqua"

@@ -115,10 +115,10 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
                         goTo = new Intent(this, FriendsActivity.class);
                         goTo.putExtra("friend_request", "friend_request_removed");
                         break;
-                    case "challenge_request_win":
-                        goTo = new Intent(this, HistoryActivity.class);
-                        goTo.putExtra("challenge_request_win", "true");
-                        break;
+//                    case "challenge_request_win":
+//                        goTo = new Intent(this, HistoryActivity.class);
+//                        goTo.putExtra("challenge_request_win", "true");
+//                        break;
                     case "challenge_request_confirmed":
                         goTo = new Intent(this, MainActivity.class);
                         break;
