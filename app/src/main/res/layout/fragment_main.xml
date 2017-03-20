@@ -6,7 +6,6 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:paddingTop="16dp"
-    android:paddingBottom="16dp"
     android:orientation="vertical"
     android:id="@+id/item_parent_layout"
     android:descendantFocusability="beforeDescendants">
@@ -42,11 +41,11 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="27% complete"
+                android:text="0% complete"
                 android:textColor="#fff"
                 android:id="@+id/tv_percent_complete"
                 android:layout_above="@+id/card_progress_bar"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentLeft="true" />
 
             <ProgressBar
                 android:id="@+id/card_progress_bar"
@@ -55,7 +54,7 @@
                 android:progress="28"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentLeft="true" />
 
         </RelativeLayout>
 

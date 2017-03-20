@@ -685,7 +685,6 @@ public class ChallengeController {
 
                         long lastCheck = 0;
                         String prog[] = new String[progress.size()];
-
                         if (challenge_status.equals("started")) {
                             for (int j = 0; j < progress.size(); j++) {
                                 try {

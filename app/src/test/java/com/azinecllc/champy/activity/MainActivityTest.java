@@ -101,15 +101,6 @@ public class MainActivityTest {
     }
 
     @Test
-    public void testMainBackground() throws Exception {
-        ImageView background = (ImageView) activity.findViewById(R.id.main_background);
-        assertNotNull(background);
-        assertEquals(R.id.main_background, background.getId());
-        assertEquals(View.VISIBLE, background.getVisibility());
-        assertTrue(ImageView.ScaleType.CENTER_CROP == background.getScaleType());
-    }
-
-    @Test
     public void testItemBlurIsNotNull() throws Exception {
         View view = activity.findViewById(R.id.item_blur);
         assertNotNull(view);

@@ -9,7 +9,6 @@ import android.view.View;
 import com.azinecllc.champy.BuildConfig;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.FriendsActivity;
-import com.azinecllc.champy.activity.HistoryActivity;
 
 import org.junit.Before;
 import org.junit.Test;

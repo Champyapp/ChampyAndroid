@@ -3,6 +3,7 @@ package com.azinecllc.champy.model;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 
 import com.azinecllc.champy.data.DBHelper;
 
@@ -17,12 +18,13 @@ public class Challenge {
     private String status;
     private String type;
     private String name;
-    private String challengeName;
+    private String color;
     private String versus;
     private String recipient;
     private String progress;
     private String wakeUpTime;
     private String needsToCheck;
+    private String challengeName;
     private String constDuration;
 
     /**
@@ -62,6 +64,10 @@ public class Challenge {
 
     public void setVersus(String versus) {
         this.versus = versus;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public void setGoal(String goal) {
@@ -125,6 +131,10 @@ public class Challenge {
         return status;
     }
 
+    public String getColor() {
+        return color;
+    }
+
     public String getName() {
         return name;
     }
@@ -148,7 +158,7 @@ public class Challenge {
     // constructor :P
     private Challenge(String mGoal, String mDays, String mType, String mId, String mStatus,
                       String mChallengeName, String versus, String recipient, String senderProgress,
-                      String wakeUpTime, String constDuration, String needsToCheck) {
+                      String wakeUpTime, String constDuration, String needsToCheck /*String color*/) {
 
         this.goal = mGoal;
         this.days = mDays;
@@ -162,6 +172,7 @@ public class Challenge {
         this.wakeUpTime = wakeUpTime;
         this.constDuration = constDuration;
         this.needsToCheck = needsToCheck;
+        //this.color = color;
 
     }
 
@@ -189,163 +200,166 @@ public class Challenge {
             int needsToCheckSender= c.getColumnIndex("needsToCheck");
 
             do {
-                if (c.getString(status).equals("started")) arrayList.add(new Challenge(
-                        c.getString(coldescription),
-                        c.getString(colduration),
-                        c.getString(nameColIndex),
-                        c.getString(colchallenge_id),
-                        "started",
-                        c.getString(challengeName),
-                        c.getString(colversus),
-                        c.getString(colrecipient),
-                        c.getString(colsencerprogress),
-                        c.getString(wakeUpTimeCol),
-                        c.getString(colConstDuration),
-                        c.getString(needsToCheckSender)));
-            } while (c.moveToNext());
-        }
-        c.close();
-        return  arrayList;
-    }
-
-    // generate Wins in History
-    public static ArrayList<Challenge> generateWins(Context context) {
-        DBHelper dbHelper = DBHelper.getInstance(context);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ArrayList<Challenge> arrayList = new ArrayList<>();
-        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-
-        if (c.moveToFirst()) {
-            int idColIndex        = c.getColumnIndex("id");
-            int nameColIndex      = c.getColumnIndex("name");
-            int coldescription    = c.getColumnIndex("description");
-            int colduration       = c.getColumnIndex("duration");
-            int colchallenge_id   = c.getColumnIndex("challenge_id");
-            int status            = c.getColumnIndex("status");
-            int challengeName     = c.getColumnIndex("challengeName");
-            int colversus         = c.getColumnIndex("versus");
-            int colrecipient      = c.getColumnIndex("recipient");
-            int colsencerprogress = c.getColumnIndex("myProgress");
-            int wakeUpTimeCol     = c.getColumnIndex("wakeUpTime");
-            int colConstDuration  = c.getColumnIndex("constDuration");
-            int needsToCheckSender= c.getColumnIndex("needsToCheck");
-
-            do {
-                if (c.getString(colrecipient).equals("true") && c.getString(status).equals("failedBySender")) {
+                if (c.getString(status).equals("started") || c.getString(status).equals("pending")) {
                     arrayList.add(new Challenge(
-                                c.getString(coldescription),
-                                c.getString(colduration),
-                                c.getString(nameColIndex),
-                                c.getString(colchallenge_id),
-                                "finished",
-                                c.getString(challengeName),
-                                c.getString(colversus),
-                                c.getString(colrecipient),
-                                c.getString(colsencerprogress),
-                                c.getString(wakeUpTimeCol),
-                                c.getString(colConstDuration),
-                                c.getString(needsToCheckSender)));
-                }
-                if (c.getString(colrecipient).equals("false")) {
-                    if (c.getString(status).equals("failedByRecipient")) {
-                        arrayList.add(new Challenge(
-                                c.getString(coldescription),
-                                c.getString(colduration),
-                                c.getString(nameColIndex),
-                                c.getString(colchallenge_id),
-                                "finished",
-                                c.getString(challengeName),
-                                c.getString(colversus),
-                                c.getString(colrecipient),
-                                c.getString(colsencerprogress),
-                                c.getString(wakeUpTimeCol),
-                                c.getString(colConstDuration),
-                                c.getString(needsToCheckSender)));
-                    }
-                    else if (c.getString(status).equals("finished")) {
-                        arrayList.add(new Challenge(
-                                c.getString(coldescription),
-                                c.getString(colduration),
-                                c.getString(nameColIndex),
-                                c.getString(colchallenge_id),
-                                "finished",
-                                c.getString(challengeName),
-                                c.getString(colversus),
-                                c.getString(colrecipient),
-                                c.getString(colsencerprogress),
-                                c.getString(wakeUpTimeCol),
-                                c.getString(colConstDuration),
-                                c.getString(needsToCheckSender)));
-                    }
-                }
-
-            } while (c.moveToNext());
-        }
-        c.close();
-        return arrayList;
-    }
-
-    // generate Fails in History
-    public static ArrayList<Challenge> generateFailed(Context context) {
-        DBHelper dbHelper = DBHelper.getInstance(context);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ArrayList<Challenge> arrayList = new ArrayList<>();
-        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
-
-        if (c.moveToFirst()) {
-            int idColIndex        = c.getColumnIndex("id");
-            int nameColIndex      = c.getColumnIndex("name");
-            int coldescription    = c.getColumnIndex("description");
-            int colduration       = c.getColumnIndex("duration");
-            int colchallenge_id   = c.getColumnIndex("challenge_id");
-            int status            = c.getColumnIndex("status");
-            int challengeName     = c.getColumnIndex("challengeName");
-            int colversus         = c.getColumnIndex("versus");
-            int colrecipient      = c.getColumnIndex("recipient"); // check recipient
-            int colsencerprogress = c.getColumnIndex("myProgress");
-            int wakeUpTimeCol     = c.getColumnIndex("wakeUpTime");
-            int colConstDuration  = c.getColumnIndex("constDuration");
-            int needsToCheckSender= c.getColumnIndex("needsToCheck");
-
-            do {
-                if (c.getString(colrecipient).equals("true")) {
-                    if (c.getString(status).equals("failedByRecipient")) {
-                        arrayList.add(new Challenge(
-                                c.getString(coldescription),
-                                c.getString(colduration),
-                                c.getString(nameColIndex),
-                                c.getString(colchallenge_id),
-                                "failed",
-                                c.getString(challengeName),
-                                c.getString(colversus),
-                                c.getString(colrecipient),
-                                c.getString(colsencerprogress),
-                                c.getString(wakeUpTimeCol),
-                                c.getString(colConstDuration),
-                                c.getString(needsToCheckSender)));
-                    }
-                }
-                if (c.getString(colrecipient).equals("false")) {
-                    if (c.getString(status).equals("failedBySender")) {
-                        arrayList.add(new Challenge(
-                                c.getString(coldescription),
-                                c.getString(colduration),
-                                c.getString(nameColIndex),
-                                c.getString(colchallenge_id),
-                                "failed",
-                                c.getString(challengeName),
-                                c.getString(colversus),
-                                c.getString(colrecipient),
-                                c.getString(colsencerprogress),
-                                c.getString(wakeUpTimeCol),
-                                c.getString(colConstDuration),
-                                c.getString(needsToCheckSender)));
-                    }
+                            c.getString(coldescription),
+                            c.getString(colduration),
+                            c.getString(nameColIndex),
+                            c.getString(colchallenge_id),
+                            "started",
+                            c.getString(challengeName),
+                            c.getString(colversus),
+                            c.getString(colrecipient),
+                            c.getString(colsencerprogress),
+                            c.getString(wakeUpTimeCol),
+                            c.getString(colConstDuration),
+                            c.getString(needsToCheckSender)
+                    ));
                 }
             } while (c.moveToNext());
         }
         c.close();
         return  arrayList;
     }
+
+//    // generate Wins in History
+//    public static ArrayList<Challenge> generateWins(Context context) {
+//        DBHelper dbHelper = DBHelper.getInstance(context);
+//        SQLiteDatabase db = dbHelper.getWritableDatabase();
+//        ArrayList<Challenge> arrayList = new ArrayList<>();
+//        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
+//
+//        if (c.moveToFirst()) {
+//            int idColIndex        = c.getColumnIndex("id");
+//            int nameColIndex      = c.getColumnIndex("name");
+//            int coldescription    = c.getColumnIndex("description");
+//            int colduration       = c.getColumnIndex("duration");
+//            int colchallenge_id   = c.getColumnIndex("challenge_id");
+//            int status            = c.getColumnIndex("status");
+//            int challengeName     = c.getColumnIndex("challengeName");
+//            int colversus         = c.getColumnIndex("versus");
+//            int colrecipient      = c.getColumnIndex("recipient");
+//            int colsencerprogress = c.getColumnIndex("myProgress");
+//            int wakeUpTimeCol     = c.getColumnIndex("wakeUpTime");
+//            int colConstDuration  = c.getColumnIndex("constDuration");
+//            int needsToCheckSender= c.getColumnIndex("needsToCheck");
+//
+//            do {
+//                if (c.getString(colrecipient).equals("true") && c.getString(status).equals("failedBySender")) {
+//                    arrayList.add(new Challenge(
+//                                c.getString(coldescription),
+//                                c.getString(colduration),
+//                                c.getString(nameColIndex),
+//                                c.getString(colchallenge_id),
+//                                "finished",
+//                                c.getString(challengeName),
+//                                c.getString(colversus),
+//                                c.getString(colrecipient),
+//                                c.getString(colsencerprogress),
+//                                c.getString(wakeUpTimeCol),
+//                                c.getString(colConstDuration),
+//                                c.getString(needsToCheckSender)));
+//                }
+//                if (c.getString(colrecipient).equals("false")) {
+//                    if (c.getString(status).equals("failedByRecipient")) {
+//                        arrayList.add(new Challenge(
+//                                c.getString(coldescription),
+//                                c.getString(colduration),
+//                                c.getString(nameColIndex),
+//                                c.getString(colchallenge_id),
+//                                "finished",
+//                                c.getString(challengeName),
+//                                c.getString(colversus),
+//                                c.getString(colrecipient),
+//                                c.getString(colsencerprogress),
+//                                c.getString(wakeUpTimeCol),
+//                                c.getString(colConstDuration),
+//                                c.getString(needsToCheckSender)));
+//                    }
+//                    else if (c.getString(status).equals("finished")) {
+//                        arrayList.add(new Challenge(
+//                                c.getString(coldescription),
+//                                c.getString(colduration),
+//                                c.getString(nameColIndex),
+//                                c.getString(colchallenge_id),
+//                                "finished",
+//                                c.getString(challengeName),
+//                                c.getString(colversus),
+//                                c.getString(colrecipient),
+//                                c.getString(colsencerprogress),
+//                                c.getString(wakeUpTimeCol),
+//                                c.getString(colConstDuration),
+//                                c.getString(needsToCheckSender)));
+//                    }
+//                }
+//
+//            } while (c.moveToNext());
+//        }
+//        c.close();
+//        return arrayList;
+//    }
+//
+//    // generate Fails in History
+//    public static ArrayList<Challenge> generateFailed(Context context) {
+//        DBHelper dbHelper = DBHelper.getInstance(context);
+//        SQLiteDatabase db = dbHelper.getWritableDatabase();
+//        ArrayList<Challenge> arrayList = new ArrayList<>();
+//        Cursor c = db.query("myChallenges", null, null, null, null, null, null);
+//
+//        if (c.moveToFirst()) {
+//            int idColIndex        = c.getColumnIndex("id");
+//            int nameColIndex      = c.getColumnIndex("name");
+//            int coldescription    = c.getColumnIndex("description");
+//            int colduration       = c.getColumnIndex("duration");
+//            int colchallenge_id   = c.getColumnIndex("challenge_id");
+//            int status            = c.getColumnIndex("status");
+//            int challengeName     = c.getColumnIndex("challengeName");
+//            int colversus         = c.getColumnIndex("versus");
+//            int colrecipient      = c.getColumnIndex("recipient"); // check recipient
+//            int colsencerprogress = c.getColumnIndex("myProgress");
+//            int wakeUpTimeCol     = c.getColumnIndex("wakeUpTime");
+//            int colConstDuration  = c.getColumnIndex("constDuration");
+//            int needsToCheckSender= c.getColumnIndex("needsToCheck");
+//
+//            do {
+//                if (c.getString(colrecipient).equals("true")) {
+//                    if (c.getString(status).equals("failedByRecipient")) {
+//                        arrayList.add(new Challenge(
+//                                c.getString(coldescription),
+//                                c.getString(colduration),
+//                                c.getString(nameColIndex),
+//                                c.getString(colchallenge_id),
+//                                "failed",
+//                                c.getString(challengeName),
+//                                c.getString(colversus),
+//                                c.getString(colrecipient),
+//                                c.getString(colsencerprogress),
+//                                c.getString(wakeUpTimeCol),
+//                                c.getString(colConstDuration),
+//                                c.getString(needsToCheckSender)));
+//                    }
+//                }
+//                if (c.getString(colrecipient).equals("false")) {
+//                    if (c.getString(status).equals("failedBySender")) {
+//                        arrayList.add(new Challenge(
+//                                c.getString(coldescription),
+//                                c.getString(colduration),
+//                                c.getString(nameColIndex),
+//                                c.getString(colchallenge_id),
+//                                "failed",
+//                                c.getString(challengeName),
+//                                c.getString(colversus),
+//                                c.getString(colrecipient),
+//                                c.getString(colsencerprogress),
+//                                c.getString(wakeUpTimeCol),
+//                                c.getString(colConstDuration),
+//                                c.getString(needsToCheckSender)));
+//                    }
+//                }
+//            } while (c.moveToNext());
+//        }
+//        c.close();
+//        return  arrayList;
+//    }
 
 }

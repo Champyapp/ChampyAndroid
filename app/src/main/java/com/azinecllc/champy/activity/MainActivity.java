@@ -297,7 +297,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //toggleFab();           // show or hide the fab button
     }
 
-
+    /**
+     * Method-toggle to control visibility of the sub buttons. This method works like a on-off system.
+     */
     private void animateFAB() {
         if (isFabOpen) {
             //closeFab();

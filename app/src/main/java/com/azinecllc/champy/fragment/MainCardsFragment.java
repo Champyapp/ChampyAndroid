@@ -1,5 +1,6 @@
 package com.azinecllc.champy.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -83,8 +84,18 @@ public class MainCardsFragment extends Fragment {
             String description = challenge.getGoal();
             String duration = challenge.getDays();
             String versus = challenge.getVersus();
-            //String streak = challenge.get
-            cardsList.add(new Cards(challengeName, constDuration, "", "21%", "", ""));
+            //String color = challenge.getColor();
+
+            cardsList.add(new Cards(
+                    challengeName,
+                    constDuration,
+                    "",
+                    "21%",
+                    "",
+                    "",
+                    String.valueOf(Color.RED)
+            ));
+
         }
 
         RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
@@ -92,10 +103,6 @@ public class MainCardsFragment extends Fragment {
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
 
     }
-
-    /**
-     * Method-toggle to control visibility of the sub buttons. This method works like a on-off system.
-     */
 
 
 }

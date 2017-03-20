@@ -67,11 +67,16 @@
 
     <ImageView
         android:id="@+id/image_view_circle_logo"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:background="@drawable/round_corner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/stat_circle_00027"
+        android:scaleType="center"
+        android:layout_below="@+id/appbar_main"
         android:layout_above="@+id/tv_noting_here_yet"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:id="@+id/tv_noting_here_yet"
@@ -79,8 +84,10 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/nothing_here_yet"
+        android:textStyle="bold"
         android:textColor="@color/black"
-        android:layout_centerInParent="true"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 

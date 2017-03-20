@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import com.azinecllc.champy.model.Cards;
 import com.azinecllc.champy.utils.SessionManager;
 
 import java.util.List;
+import java.util.Random;
 
 import static com.azinecllc.champy.Champy.getContext;
 
@@ -39,7 +41,7 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View contactView = inflater.inflate(R.layout.item_card_list, parent, false);
+        View contactView = inflater.inflate(R.layout.fragment_main, parent, false);
         sessionManager = SessionManager.getInstance(getContext());
 
         return new ViewHolder(contactView);
@@ -49,19 +51,27 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
     public void onBindViewHolder(final MainCardAdapter.ViewHolder viewHolder, int position) {
         Cards itemCard = mCards.get(position);
 
-        TextView challengeName = viewHolder.challengeName;
-        TextView challengeDays = viewHolder.challengeDays;
+        Random r = new Random();
+        int low = 0;
+        int high = 100;
+
+
+        String mockStreak = String.valueOf(r.nextInt(high - low) + low);
+        String mockPercent = String.valueOf(r.nextInt(high - low) + low);
+        String mockDays = String.valueOf(r.nextInt(high - low) + low);
 
         String name = itemCard.getChallengeName();
         String days = itemCard.getChallengeDays();
         String streak = itemCard.getChallengeStreak();
         String percent = itemCard.getChallengePercent();
 
-        //tvPoint.setText(String.format("%s", "228" + " days")); //constDuration + " days");
-        challengeName.setText(name);
-        challengeDays.setText(days);
 
-        TextView challengeType = (TextView) viewHolder.itemView.findViewById(R.id.counterWins);
+        viewHolder.challengeName.setText(name);
+        viewHolder.challengeDays.setText(mockDays);
+        viewHolder.challengeStreak.setText(mockStreak);
+        viewHolder.challengePercent.setText(mockPercent);
+        //viewHolder.cardLayout.setBackgroundColor(Color.RED);
+
 
         viewHolder.itemParentLayout.setOnClickListener(this);
 
@@ -85,6 +95,7 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
         private TextView challengeStreak;
         private TextView challengePercent;
         private RelativeLayout itemParentLayout;
+        private LinearLayout cardLayout;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -92,6 +103,7 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
             challengeDays = (TextView) itemView.findViewById(R.id.text_view_day_n);
             challengeStreak = (TextView) itemView.findViewById(R.id.text_view_streak_n);
             challengePercent = (TextView) itemView.findViewById(R.id.tv_percent_complete);
+            cardLayout = (LinearLayout) itemView.findViewById(R.id.card_layout);
             itemParentLayout = (RelativeLayout) itemView.findViewById(R.id.item_parent_layout);
         }
 

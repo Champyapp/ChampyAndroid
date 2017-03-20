@@ -41,13 +41,13 @@ import static junit.framework.Assert.assertTrue;
 public class MainFragmentTest {
 
     private View view;
-    private MainFragment fragment;
+    private MainCardsFragment fragment;
     private MainActivity activity;
 
     @Before
     public void setUp() throws Exception {
         activity = Robolectric.buildActivity(MainActivity.class).create().get();
-        fragment = new MainFragment();
+        fragment = new MainCardsFragment();
         view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.fragment_main, null);
     }
 
@@ -60,7 +60,7 @@ public class MainFragmentTest {
     @Test
     public void testForActivity() throws Exception {
         assertNotNull(activity);
-        assertEquals("MainActivity", activity.getClass().getSimpleName());
+        assertEquals("MainCardsFragment", activity.getClass().getSimpleName());
     }
 
     @Test
@@ -95,112 +95,6 @@ public class MainFragmentTest {
         Typeface typeface = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/bebasneue.ttf");
         assertNotNull(typeface);
         System.out.println("typeface is not null");
-    }
-
-    @Test
-    public void testForWelcomeText() throws Exception {
-        TextView textViewWelcome = (TextView) view.findViewById(R.id.welcomeUserName);
-        assertNotNull(textViewWelcome);
-
-        assertEquals(20, textViewWelcome.getTextSize(), 0);
-
-        assertEquals(10, textViewWelcome.getPaddingTop());
-        assertEquals(10, textViewWelcome.getPaddingBottom());
-
-        assertEquals(Gravity.CENTER, textViewWelcome.getGravity());
-
-        assertTrue(R.id.welcomeUserName == textViewWelcome.getId());
-        assertTrue(View.VISIBLE == textViewWelcome.getVisibility());
-
-        assertEquals("", textViewWelcome.getText());
-    }
-
-    @Test
-    public void testForCircleInProgress() throws Exception {
-        ImageView ivInProgress = (ImageView) view.findViewById(R.id.imageView_challenges_animation);
-        assertNotNull(ivInProgress);
-        System.out.println(ivInProgress);
-
-        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) ivInProgress.getLayoutParams();
-        assertNotNull(lp);
-
-        assertEquals(90, lp.height);
-        assertEquals(90, lp.width);
-
-
-        assertEquals(16, lp.leftMargin);
-
-        assertTrue(R.id.imageView_challenges_animation == ivInProgress.getId());
-    }
-
-    @Test
-    public void testForCircleWins() throws Exception {
-        ImageView ivWins = (ImageView) view.findViewById(R.id.imageView_wins_animation);
-        assertNotNull(ivWins);
-
-        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) ivWins.getLayoutParams();
-        assertNotNull(lp);
-
-        assertEquals(90, lp.height);
-        assertEquals(90, lp.width);
-
-        assertTrue(R.id.imageView_wins_animation == ivWins.getId());
-        //assertEquals(Gravity.CENTER_HORIZONTAL, ivWins.getLayoutParams());
-    }
-
-    @Test
-    public void testForCircleTotal() throws Exception {
-        ImageView ivTotal = (ImageView) view.findViewById(R.id.imageView_total_animation);
-        assertNotNull(ivTotal);
-
-        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) ivTotal.getLayoutParams();
-        assertNotNull(lp);
-
-        assertEquals(90, lp.height);
-        assertEquals(90, lp.width);
-
-        assertEquals(35, lp.leftMargin);
-
-        assertTrue(R.id.imageView_total_animation == ivTotal.getId());
-    }
-
-    @Test
-    public void testForCounterInProgress() throws Exception {
-        TextView tvCounterInProgress = (TextView) view.findViewById(R.id.textViewChallengesCounter);
-        assertNotNull(tvCounterInProgress);
-
-        assertEquals(28, tvCounterInProgress.getTextSize(), 0);
-
-        assertEquals(Color.WHITE, tvCounterInProgress.getCurrentTextColor());
-        assertEquals(Color.WHITE, tvCounterInProgress.getTextColors().getDefaultColor());
-        assertTrue(R.id.textViewChallengesCounter == tvCounterInProgress.getId());
-        assertEquals(Gravity.CENTER, tvCounterInProgress.getGravity());
-    }
-
-    @Test
-    public void testForCounterWins() throws Exception {
-        TextView tvCounterWins = (TextView) view.findViewById(R.id.textViewWinsCounter);
-        assertNotNull(tvCounterWins);
-
-        assertEquals(28, tvCounterWins.getTextSize(), 0);
-
-        assertEquals(Color.WHITE, tvCounterWins.getCurrentTextColor());
-        assertEquals(Color.WHITE, tvCounterWins.getTextColors().getDefaultColor());
-        assertTrue(R.id.textViewWinsCounter == tvCounterWins.getId());
-        assertEquals(Gravity.CENTER, tvCounterWins.getGravity());
-    }
-
-    @Test
-    public void testForCounterTotal() throws Exception {
-        TextView tvCounterTotal = (TextView) view.findViewById(R.id.textViewTotalCounter);
-        assertNotNull(tvCounterTotal);
-
-        assertEquals(28, tvCounterTotal.getTextSize(), 0);
-
-        assertEquals(Color.WHITE, tvCounterTotal.getCurrentTextColor());
-        assertEquals(Color.WHITE, tvCounterTotal.getTextColors().getDefaultColor());
-        assertTrue(R.id.textViewTotalCounter == tvCounterTotal.getId());
-        assertEquals(Gravity.CENTER, tvCounterTotal.getGravity());
     }
 
     @Test
@@ -284,13 +178,6 @@ public class MainFragmentTest {
         assertEquals(Gravity.CENTER, textViewTotal.getGravity());
     }
 
-    @Test
-    public void testForCardsLayout() throws Exception {
-        RelativeLayout cards = (RelativeLayout) view.findViewById(R.id.cards);
-        assertNotNull(cards);
-        assertEquals(10, cards.getPaddingTop());
-        assertTrue(R.id.cards == cards.getId());
-    }
 
     @Test
     public void testForFabSelf() throws Exception {
