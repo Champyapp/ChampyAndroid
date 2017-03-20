@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -10,14 +10,6 @@
     android:fitsSystemWindows="true"
     tools:context=".activity.MainActivity">
 
-    <!--&lt;!&ndash; background for user photo &ndash;&gt;-->
-    <!--<ImageView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:id="@+id/main_background"-->
-    <!--android:scaleType="centerCrop" />-->
-
-    <!--<include layout="@layout/item_blur" />-->
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -39,9 +31,87 @@
         android:id="@+id/frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_below="@+id/appbar_main">
+
     </RelativeLayout>
 
+    <android.support.design.widget.FloatingActionButton
+        app:backgroundTint="@color/color_text_aqua"
+        android:background="@drawable/ic_duel_yellow"
+        android:id="@+id/fabDuel"
+        android:src="@drawable/fab_duel"
+        android:scaleType="center"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/fabWake"
+        android:layout_alignLeft="@+id/fabWake"
+        android:layout_alignStart="@+id/fabWake"
+        android:layout_alignRight="@+id/fabWake"
+        android:layout_alignEnd="@+id/fabWake" />
+
+    <android.support.design.widget.FloatingActionButton
+        app:backgroundTint="@color/color_text_aqua"
+        android:id="@+id/fabWake"
+        android:src="@drawable/fab_wake"
+        android:visibility="invisible"
+        android:scaleType="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/fabPlus"
+        android:layout_alignLeft="@+id/fabPlus"
+        android:layout_alignStart="@+id/fabPlus"
+        android:layout_alignRight="@+id/fabPlus"
+        android:layout_alignEnd="@+id/fabPlus" />
+
+    <ImageView
+        android:id="@+id/image_view_circle_logo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/round_corner"
+        android:layout_above="@+id/tv_noting_here_yet"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/tv_noting_here_yet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/nothing_here_yet"
+        android:textColor="@color/black"
+        android:layout_centerInParent="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabSelf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/fabDuel"
+        android:layout_alignEnd="@+id/fabDuel"
+        android:layout_alignLeft="@+id/fabDuel"
+        android:layout_alignRight="@+id/fabDuel"
+        android:layout_alignStart="@+id/fabDuel"
+        android:scaleType="center"
+        android:src="@drawable/fab_self"
+        android:visibility="invisible"
+        app:backgroundTint="@color/color_text_aqua" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabPlus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:scaleType="center"
+        android:src="@drawable/fab_plus"
+        android:visibility="visible"
+        app:backgroundTint="@color/color_text_aqua"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="16dp" />
 
 
-</android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -12,16 +13,16 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.controller.ChallengeController;
-import com.azinecllc.champy.fragment.MainFragment;
+import com.azinecllc.champy.fragment.MainCardsFragment;
 import com.azinecllc.champy.fragment.PrivacyPoliceFragment;
 import com.azinecllc.champy.fragment.SettingsFragment;
 import com.azinecllc.champy.fragment.TermsFragment;
@@ -29,16 +30,12 @@ import com.azinecllc.champy.utils.SessionManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.FacebookSdk;
-import com.github.nkzawa.emitter.Emitter;
-import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
-
-import java.net.URISyntaxException;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
-import static com.azinecllc.champy.utils.Constants.API_URL;
+import static com.azinecllc.champy.Champy.getContext;
 import static com.azinecllc.champy.utils.Constants.TAG_CHALLENGES;
 import static com.azinecllc.champy.utils.Constants.TAG_PRIVACY_POLICE;
 import static com.azinecllc.champy.utils.Constants.TAG_SETTINGS;
@@ -51,6 +48,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private static final String TAG = "MainActivity";
 
+    private FloatingActionButton fabPlus, fabWake, fabSelf, fabDuel;
+    private Animation fab_open, fab_close, rotate_forward, rotate_backward;
+    private boolean isFabOpen = false;
+    private TextView nothingHere;
+    private ImageView circleLogo;
     private SessionManager sessionManager;
     private DrawerLayout drawer;
     private NavigationView navigationView;
@@ -88,18 +90,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView drawerUserEmail = (TextView) headerLayout.findViewById(R.id.drawer_tv_user_email);
         TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.drawer_tv_user_name);
 
+        nothingHere = (TextView) findViewById(R.id.tv_noting_here_yet);
+        circleLogo = (ImageView) findViewById(R.id.image_view_circle_logo);
+        fabPlus = (FloatingActionButton) findViewById(R.id.fabPlus);
+        fabSelf = (FloatingActionButton) findViewById(R.id.fabSelf);
+        fabDuel = (FloatingActionButton) findViewById(R.id.fabDuel);
+        fabWake = (FloatingActionButton) findViewById(R.id.fabWake);
+        fab_open = AnimationUtils.loadAnimation(getContext(), R.anim.fab_open);
+        fab_close = AnimationUtils.loadAnimation(getContext(), R.anim.fab_close);
+        rotate_forward = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_forward);
+        rotate_backward = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_backward);
+
         // GET PHOTO AND MAKE BLUR
         sessionManager = SessionManager.getInstance(getApplicationContext());
         String userPicture = sessionManager.getUserPicture();
         String userEmail = sessionManager.getUserEmail();
         String userName = sessionManager.getUserName();
-//        ImageView background = (ImageView) findViewById(R.id.main_background);
-//        Glide.with(this)
-//                .load(userPicture)
-//                .bitmapTransform(new BlurTransformation(getApplicationContext(), 25))
-//                .diskCacheStrategy(DiskCacheStrategy.NONE)
-//                .skipMemoryCache(true)
-//                .into(background);
         Glide.with(this)
                 .load(userPicture)
                 .bitmapTransform(new CropCircleTransformation(this))
@@ -114,6 +120,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .into(drawerBackground);
         drawerUserName.setText(userName);
         drawerUserEmail.setText(userEmail);
+
+
+        if (Integer.parseInt(sessionManager.getChampyOptions().get("challenges")) > 0) {
+            circleLogo.setVisibility(View.INVISIBLE);
+            nothingHere.setVisibility(View.INVISIBLE);
+        }
+
+
+        fabPlus.setOnClickListener(v -> animateFAB());
+        fabSelf.setOnClickListener(v -> startActivity(new Intent(this, SelfImprovementActivity.class)));
+        fabDuel.setOnClickListener(v -> startActivity(new Intent(this, FriendsActivity.class)));
+        fabWake.setOnClickListener(v -> startActivity(new Intent(this, WakeUpActivity.class)));
+
 
         // PENDING DUEL MENU IN DRAWER
         //setCounterForPendingDuels();
@@ -234,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Fragment getHomeFragment() {
         switch (navItemIndex) {
             case 0:
-                return new MainFragment();
+                return new MainCardsFragment();
             case 1:
                 return new SettingsFragment();
             case 2:
@@ -242,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case 3:
                 return new PrivacyPoliceFragment();
             default:
-                return new MainFragment();
+                return new MainCardsFragment();
         }
     }
 
@@ -278,6 +297,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //toggleFab();           // show or hide the fab button
     }
 
+
+    private void animateFAB() {
+        if (isFabOpen) {
+            //closeFab();
+            fabPlus.startAnimation(rotate_backward);
+            fabWake.startAnimation(fab_close);
+            fabSelf.startAnimation(fab_close);
+            fabDuel.startAnimation(fab_close);
+            isFabOpen = false;
+        } else {
+            //openFab();
+            fabPlus.startAnimation(rotate_forward);
+            fabWake.startAnimation(fab_open);
+            fabSelf.startAnimation(fab_open);
+            fabDuel.startAnimation(fab_open);
+            isFabOpen = true;
+        }
+    }
 
 //    /**
 //     * Method to check pending counter and after that set value for navigation drawer menu
