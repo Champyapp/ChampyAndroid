@@ -206,7 +206,7 @@ public class Challenge {
                             c.getString(colduration),
                             c.getString(nameColIndex),
                             c.getString(colchallenge_id),
-                            "started",
+                            c.getString(status), //was just 'started'
                             c.getString(challengeName),
                             c.getString(colversus),
                             c.getString(colrecipient),

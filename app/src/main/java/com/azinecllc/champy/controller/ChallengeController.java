@@ -304,9 +304,9 @@ public class ChallengeController {
         CreateChallenge createChallenge = retrofit.create(CreateChallenge.class);
         Call<com.azinecllc.champy.model.create_challenge.CreateChallenge> call = createChallenge
                 .createChallenge(
-                        wakeUpTime,
-                        typeWake,
                         wakeUpName,
+                        typeWake,
+                        wakeUpTime,
                         Arrays.toString(details),
                         duration,
                         token

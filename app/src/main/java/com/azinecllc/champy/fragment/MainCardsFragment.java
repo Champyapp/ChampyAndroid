@@ -20,6 +20,7 @@ import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class MainCardsFragment extends Fragment {
 
@@ -86,15 +87,20 @@ public class MainCardsFragment extends Fragment {
             String versus = challenge.getVersus();
             //String color = challenge.getColor();
 
-            cardsList.add(new Cards(
-                    challengeName,
-                    constDuration,
-                    "",
-                    "21%",
-                    "",
-                    "",
-                    String.valueOf(Color.RED)
-            ));
+            Random random = new Random();
+            int r = random.nextInt(256), g = random.nextInt(256), b = random.nextInt(256);
+            int low = 0;
+            int high = 100;
+
+            String mockName = challengeName.replaceAll("a", "YO");
+            String mockDays = String.valueOf(random.nextInt(high - low) + low);
+            String mockStreak = String.valueOf(random.nextInt(high - low) + low);
+            String mockPercent = String.valueOf(random.nextInt(high - low) + low);
+            String mockVersus = versus.replaceAll("a", "YO");
+            String mockColor = String.valueOf(Color.argb(255, r, g, b));
+
+            System.out.println(versus);
+            cardsList.add(new Cards(mockName, mockDays, mockStreak, mockPercent, mockVersus, mockColor));
 
         }
 

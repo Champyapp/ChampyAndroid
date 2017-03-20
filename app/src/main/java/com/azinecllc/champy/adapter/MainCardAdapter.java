@@ -1,6 +1,7 @@
 package com.azinecllc.champy.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,13 +13,8 @@ import android.widget.TextView;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.interfaces.OnCardClickListener;
 import com.azinecllc.champy.model.Cards;
-import com.azinecllc.champy.utils.SessionManager;
 
 import java.util.List;
-import java.util.Random;
-
-import static com.azinecllc.champy.Champy.getContext;
-
 
 /**
  * @autor SashaKhyzhun
@@ -27,13 +23,12 @@ import static com.azinecllc.champy.Champy.getContext;
 
 public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHolder> implements View.OnClickListener {
 
-    private List<Cards> mCards;
+    private List<Cards> mCardsList;
     private Context mContext;
     private OnCardClickListener onCardClickListener;
-    private SessionManager sessionManager;
 
     public MainCardAdapter(List<Cards> cardsList, Context context) {
-        mCards = cardsList;
+        mCardsList = cardsList;
         mContext = context;
     }
 
@@ -42,35 +37,28 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View contactView = inflater.inflate(R.layout.fragment_main, parent, false);
-        sessionManager = SessionManager.getInstance(getContext());
 
         return new ViewHolder(contactView);
     }
 
     @Override
     public void onBindViewHolder(final MainCardAdapter.ViewHolder viewHolder, int position) {
-        Cards itemCard = mCards.get(position);
-
-        Random r = new Random();
-        int low = 0;
-        int high = 100;
-
-
-        String mockStreak = String.valueOf(r.nextInt(high - low) + low);
-        String mockPercent = String.valueOf(r.nextInt(high - low) + low);
-        String mockDays = String.valueOf(r.nextInt(high - low) + low);
+        Cards itemCard = mCardsList.get(position);
 
         String name = itemCard.getChallengeName();
         String days = itemCard.getChallengeDays();
         String streak = itemCard.getChallengeStreak();
         String percent = itemCard.getChallengePercent();
-
+        System.out.println("MainCardAdapter MockData: | name: " + name
+                + " days: " + days
+                + " streak: " + streak
+                + " percent: " + percent);
 
         viewHolder.challengeName.setText(name);
-        viewHolder.challengeDays.setText(mockDays);
-        viewHolder.challengeStreak.setText(mockStreak);
-        viewHolder.challengePercent.setText(mockPercent);
-        //viewHolder.cardLayout.setBackgroundColor(Color.RED);
+        viewHolder.challengeDays.setText(days);
+        viewHolder.challengeStreak.setText(streak);
+        viewHolder.challengePercent.setText(String.format("%s%% complete", percent));
+        viewHolder.cardLayout.setBackgroundColor(Integer.parseInt(itemCard.getChallengeColor()));
 
 
         viewHolder.itemParentLayout.setOnClickListener(this);
@@ -80,7 +68,7 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return mCards.size();
+        return mCardsList.size();
     }
 
     @Override

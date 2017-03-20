@@ -4,19 +4,18 @@ public class Cards {
 
     private String challengeName;
     private String challengeDays;
-    private String challengeStreak;
-    private String challengePercent;
+    private String challengeStreak;  //
+    private String challengePercent; //
+    private String challengeEnd;     //
     private String challengeEnemy;
-    private String challengeEnd;
     private String challengeColor;
 
-    public Cards(String name, String days, String streak, String percent, String enemy, String end, String color) {
+    public Cards(String name, String days, String streak, String percent, String enemy, String color) {
         this.challengeName = name;
         this.challengeDays = days;
         this.challengeStreak = streak;
         this.challengePercent = percent;
         this.challengeEnemy = enemy;
-        this.challengeEnd = end;
         this.challengeColor = color;
     }
 
