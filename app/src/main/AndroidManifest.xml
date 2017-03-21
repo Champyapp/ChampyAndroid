@@ -31,27 +31,37 @@
 
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/app_id" />
 
-        <!-- Activities For Login. AppLoginTheme -->
+
+        <activity
+            android:name=".activity.CardDetailActivity"
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.CreateChallengeActivity"
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="true" />
+
+
         <activity android:name="com.azinecllc.champy.activity.RoleControllerActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppLoginTheme">
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name="com.azinecllc.champy.activity.LoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppLoginTheme" />
+            android:theme="@style/AppTheme" />
         <activity
             android:name="com.azinecllc.champy.activity.ContactUsActivity"
             android:label="Contact Us"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
-        <!-- Basic Activities. AppTheme.NoActionBar -->
         <activity android:name="com.azinecllc.champy.activity.MainActivity"
             android:label="@string/challenges"
             android:screenOrientation="portrait"
@@ -67,30 +77,28 @@
             android:name="com.azinecllc.champy.activity.AboutActivity"
             android:label="@string/about"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeAboutUs" />
-
-        <!--Activity which works with challenge. AppCreateChallengeTheme -->
+            android:theme="@style/AppTheme" />
         <activity
             android:name="com.azinecllc.champy.activity.SelfImprovementActivity"
             android:label="@string/title_activity_self_improvement"
             android:screenOrientation="portrait"
             android:hardwareAccelerated="true"
-            android:theme="@style/AppCreateChallengeTheme" />
+            android:theme="@style/AppTheme" />
         <activity android:name="com.azinecllc.champy.activity.WakeUpActivity"
             android:label="@string/title_activity_wake_up"
             android:screenOrientation="portrait"
-            android:theme="@style/AppCreateChallengeTheme" />
+            android:theme="@style/AppTheme" />
         <activity android:name="com.azinecllc.champy.activity.AlarmReceiverActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppCreateChallengeTheme" />
+            android:theme="@style/AppTheme" />
         <activity android:name="com.azinecllc.champy.activity.DuelActivity"
             android:label="@string/title_activity_duel"
             android:screenOrientation="portrait"
-            android:theme="@style/AppCreateChallengeTheme" />
+            android:theme="@style/AppTheme" />
         <activity android:name="com.azinecllc.champy.activity.PendingDuelActivity"
             android:label="@string/title_activity_pending_duel"
             android:screenOrientation="portrait"
-            android:theme="@style/AppCreateChallengeTheme" />
+            android:theme="@style/AppTheme" />
 
         <!-- Activity not from Champy -->
         <activity
@@ -109,19 +117,16 @@
             <!--<action android:name="android.intent.action.BOOT_COMPLETED" />-->
             <!--</intent-filter>-->
         </receiver>
-
         <receiver android:name="com.azinecllc.champy.receiver.CustomNotifyReceiver">
             <!--<intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>-->
         </receiver>
-
         <receiver android:name=".receiver.RestartReceivers">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
         <receiver android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND" >
@@ -132,15 +137,12 @@
         </receiver>
 
         <!-- SERVICES -->
-
         <service android:name=".service.ResetService" />
-
         <service android:name="com.azinecllc.champy.service.MyGcmListenerService" android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
-
         <!--<service android:name="com.azinecllc.champy.service.MySocketService" />-->
 
     </application>

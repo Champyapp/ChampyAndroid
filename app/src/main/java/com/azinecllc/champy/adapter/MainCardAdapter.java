@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.interfaces.OnCardClickListener;
@@ -80,8 +81,14 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
             viewHolder.challengePercent.setVisibility(View.INVISIBLE);
 
             viewHolder.buttonDecline.setVisibility(View.VISIBLE);
+            viewHolder.buttonDecline.setOnClickListener(v -> {
+                Toast.makeText(mContext, "Decline", Toast.LENGTH_SHORT).show();
+            });
             if (isRecipient) {
                 viewHolder.buttonAccept.setVisibility(View.VISIBLE);
+                viewHolder.buttonAccept.setOnClickListener(v -> {
+                    Toast.makeText(mContext, "Accept", Toast.LENGTH_SHORT).show();
+                });
             }
         }
 
@@ -138,15 +145,18 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
             tvDay = (TextView) itemView.findViewById(R.id.text_view_day);
             tvStreak = (TextView) itemView.findViewById(R.id.text_view_streak);
         }
+
     }
 
+    /**
+     * My custom OnCardClickListener interface
+     *
+     * @param onCardClickListener -
+     */
     public void setOnCardClickListener(OnCardClickListener onCardClickListener) {
         this.onCardClickListener = onCardClickListener;
     }
 
-    public String getSykaText() {
-        return "Syka Blyat'";
-    }
 
 
 }
