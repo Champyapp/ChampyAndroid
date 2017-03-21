@@ -22,6 +22,10 @@ import com.azinecllc.champy.utils.SessionManager;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static com.azinecllc.champy.utils.Constants.typeDuel;
+import static com.azinecllc.champy.utils.Constants.typeSelf;
+import static com.azinecllc.champy.utils.Constants.typeWake;
+
 public class MainCardsFragment extends Fragment {
 
     private SwipeRefreshLayout gSwipeRefreshLayout;
@@ -82,13 +86,14 @@ public class MainCardsFragment extends Fragment {
             /** True Data */
             Challenge challenge = challengesArrayList.get(i);
             String challengeName = challenge.getChallengeName();
+            String versus = challenge.getVersus();
             String constDuration = challenge.getConstDuration();
             String recipient = challenge.getRecipient();
             String description = challenge.getGoal();
             String duration = challenge.getDays();
-            String versus = challenge.getVersus();
             String status = challenge.getStatus();
             String isRecipient = challenge.getRecipient();
+            String type = challenge.getType();
             //String color = challenge.getColor();
 
             /** Mock Data */
@@ -97,27 +102,33 @@ public class MainCardsFragment extends Fragment {
             int low = 0;
             int high = 100;
 
-            String mockName = challengeName.replaceAll("a", "YO");
+            String mockName = challengeName.replaceAll("e", "e");
             String mockDays = String.valueOf(random.nextInt(high - low) + low);
             String mockStreak = String.valueOf(random.nextInt(high - low) + low);
             String mockPercent = String.valueOf(random.nextInt(high - low) + low);
-            String mockVersus = versus.replaceAll("a", "YO");
+            String mockVersus = versus.replaceAll("a", "a");
             String mockColor = String.valueOf(Color.argb(255, r, g, b));
 
             String[] mockStatuses = {"pending", "started", /*"failed"*/};
             String[] mockRecipients = {"true", "false"};
+            String[] mockTypes = {typeSelf, typeDuel, typeWake};
             String mockStatus = mockStatuses[(int) (Math.random() * mockStatuses.length)];
             String mockIsRecipient = mockRecipients[(int) (Math.random() * mockRecipients.length)];
+            String mockType = mockTypes[(int) (Math.random() * mockTypes.length)];
+
 
             System.out.println("MainCardFragment MockData: | name: " + mockName
                     + " days: " + mockDays
                     + " streak: " + mockStreak
                     + " percent: " + mockPercent
                     + " status: " + mockStatus
-                    + " recipient: " + mockIsRecipient);
+                    + " isRecipient: " + mockIsRecipient
+                    + " type: " + mockType
+                    + " versus: " + mockVersus
+            );
 
             /** Fill the model */
-            cardsList.add(new Cards(mockName, mockDays, mockStreak, mockPercent, mockVersus, mockColor, mockStatus, mockIsRecipient));
+            cardsList.add(new Cards(mockName, mockDays, mockStreak, mockPercent, mockVersus, mockColor, mockStatus, mockIsRecipient, mockType));
 
         }
 

@@ -36,34 +36,33 @@
                 android:text="Challenge name"
                 android:textColor="@color/color_white"
                 android:textStyle="bold"
-                android:layout_above="@+id/tv_percent_complete"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                 android:layout_alignParentTop="true" />
 
             <TextView
+                android:id="@+id/tv_percent_complete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="0% complete"
                 android:textColor="@color/color_white"
-                android:id="@+id/tv_percent_complete"
-                android:layout_above="@+id/card_progress_bar"
-                android:layout_alignParentLeft="true" />
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:layout_above="@+id/card_progress_bar" />
 
             <ProgressBar
                 android:id="@+id/card_progress_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:progress="28"
+                android:progress="100"
                 style="?android:attr/progressBarStyleHorizontal"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true" />
+                android:layout_alignParentBottom="true" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:id="@+id/button_decline"
                 android:text="Decline"
-                android:textSize="24sp"
                 android:textColor="@color/color_white"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                 android:gravity="center"
                 android:visibility="invisible"
                 android:layout_alignParentBottom="true"
@@ -90,6 +89,7 @@
                     android:text="Streak"
                     android:textColor="@color/color_white"
                     android:textStyle="bold"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                     android:layout_weight="0.5"
                     android:textAlignment="center" />
 
@@ -100,15 +100,16 @@
                     android:text="Day"
                     android:textColor="@color/color_white"
                     android:textStyle="bold"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                     android:layout_weight="0.5"
                     android:textAlignment="center" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layout_numbers"
                 android:layout_below="@+id/layout_text"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/linearLayout">
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/text_view_streak_n"
@@ -117,7 +118,7 @@
                     android:layout_weight="0.5"
                     android:text="0"
                     android:textSize="36sp"
-                    android:textColor="#fff"
+                    android:textColor="@color/color_white"
                     android:textAlignment="center" />
 
                 <TextView
@@ -126,18 +127,18 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:text="0"
-                    android:textColor="#fff"
-                    android:textAlignment="center"
-                    android:textSize="36sp" />
+                    android:textSize="36sp"
+                    android:textColor="@color/color_white"
+                    android:textAlignment="center" />
             </LinearLayout>
 
             <TextView
+                android:id="@+id/button_accept"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:id="@+id/button_accept"
                 android:text="Accept"
-                android:textSize="24sp"
                 android:textColor="@color/color_white"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                 android:gravity="center"
                 android:visibility="invisible"
                 android:layout_alignParentBottom="true"

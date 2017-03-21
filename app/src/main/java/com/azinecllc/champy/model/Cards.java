@@ -11,16 +11,18 @@ public class Cards {
     private String challengeColor;
     private String challengeStatus;
     private String challengeIsRecipient;
+    private String challengeType;
 
-    public Cards(String name, String days, String streak, String percent, String enemy, String color, String status, String isRecipient) {
+    public Cards(String name, String days, String streak, String percent, String versus, String color, String status, String isRecipient, String type) {
         this.challengeName = name;
         this.challengeDays = days;
         this.challengeStreak = streak;
         this.challengePercent = percent;
-        this.challengeVersus = enemy;
+        this.challengeVersus = versus;
         this.challengeColor = color;
         this.challengeStatus = status;
         this.challengeIsRecipient = isRecipient;
+        this.challengeType = type;
     }
 
 
@@ -61,6 +63,14 @@ public class Cards {
         this.challengeIsRecipient = challengeIsRecipient;
     }
 
+    public void setChallengeType(String challengeType) {
+        this.challengeType = challengeType;
+    }
+
+
+    public String getChallengeType() {
+        return challengeType;
+    }
 
     public String getChallengeIsRecipient() {
         return challengeIsRecipient;

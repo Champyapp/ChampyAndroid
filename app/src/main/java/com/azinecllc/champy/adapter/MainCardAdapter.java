@@ -19,6 +19,8 @@ import com.azinecllc.champy.model.Cards;
 
 import java.util.List;
 
+import static com.azinecllc.champy.utils.Constants.typeDuel;
+
 /**
  * @autor SashaKhyzhun
  * Created on 3/20/17.
@@ -48,31 +50,36 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
     public void onBindViewHolder(final MainCardAdapter.ViewHolder viewHolder, int position) {
         Cards itemCard = mCardsList.get(position);
 
-        String name = itemCard.getChallengeName();
-        String days = itemCard.getChallengeDays();
-        String streak = itemCard.getChallengeStreak();
-        String percent = itemCard.getChallengePercent();
-        String status = itemCard.getChallengeStatus();
-        String recipient = itemCard.getChallengeIsRecipient();
-        System.out.println("");
+        String days = itemCard.getChallengeDays();                  // 21
+        String streak = itemCard.getChallengeStreak();              // <?>
+        String percent = itemCard.getChallengePercent();            // <?>
+        String status = itemCard.getChallengeStatus();              // started-pending
+        String recipient = itemCard.getChallengeIsRecipient();      // true / false
+        String type = itemCard.getChallengeType();                  // self-duel-wake
+        String versus = itemCard.getChallengeVersus();              // versus name
+        String name = (type.equals(typeDuel)) ? itemCard.getChallengeName() + " with " + versus : itemCard.getChallengeName();
+
+        System.out.println("_________________________________________");
         System.out.println("MainCardAdapter  MockData: | name: " + name
                 + " days: " + days
                 + " streak: " + streak
                 + " percent: " + percent
                 + " status: " + status
                 + " recipient: " + recipient
+                + " type: " + type
+                + " versus: " + versus
         );
 
         boolean isRecipient = Boolean.parseBoolean(recipient);
         if (status.equals("pending")) {
-            viewHolder.buttonDecline.setVisibility(View.VISIBLE);
-
             viewHolder.tvDay.setVisibility(View.INVISIBLE);
             viewHolder.tvStreak.setVisibility(View.INVISIBLE);
             viewHolder.progressBar.setVisibility(View.INVISIBLE);
             viewHolder.challengeDays.setVisibility(View.INVISIBLE);
             viewHolder.challengeStreak.setVisibility(View.INVISIBLE);
             viewHolder.challengePercent.setVisibility(View.INVISIBLE);
+
+            viewHolder.buttonDecline.setVisibility(View.VISIBLE);
             if (isRecipient) {
                 viewHolder.buttonAccept.setVisibility(View.VISIBLE);
             }
