@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,27 +10,33 @@
     android:paddingBottom="16dp">
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/text_view_challenge_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Challenge Name"
         android:textAlignment="center"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-        android:textColor="@color/black"
-        android:textStyle="bold" />
+        android:textColor="@color/black" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:src="@drawable/ic_duel_blue" />
+        android:paddingTop="32dp"
+        android:paddingBottom="32dp"
+        android:src="@drawable/ic_duel_blue"
+        android:layout_below="@+id/text_view_challenge_name"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_below="@+id/imageView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/linearLayout">
 
         <LinearLayout
             android:id="@+id/layout_full_text"
@@ -111,48 +117,62 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/mockSlider"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:text="Предположим тут слайдер"
         android:textColor="@color/gray"
-        android:gravity="center" />
+        android:gravity="center"
+        android:layout_below="@+id/linearLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <View
+        android:id="@+id/line1"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
-        android:background="#d4d4d4" />
+        android:background="#d4d4d4"
+        android:layout_below="@+id/mockSlider" />
 
     <TextView
+        android:id="@+id/text_view_challenge_rules"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Challenge Rules"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp"
         android:textColor="@color/black"
+        android:layout_below="@+id/line1"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
     <View
+        android:id="@+id/line2"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
-        android:background="#d4d4d4" />
+        android:background="#d4d4d4"
+        android:layout_below="@+id/text_view_challenge_rules" />
 
     <Switch
-        android:id="@+id/switchChallengeEnd"
+        android:id="@+id/switch_reminder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:checked="true"
         android:text="Reminder"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-        android:textColor="@color/black" />
+        android:textColor="@color/black"
+        android:checked="true"
+        android:layout_below="@+id/line2" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:background="#d4d4d4"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
-        android:background="#d4d4d4" />
+        android:layout_below="@+id/switch_reminder" />
 
     <TextView
         android:id="@+id/textView"
@@ -161,6 +181,7 @@
         android:text="Check In"
         android:textAlignment="center"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-        android:textColor="@color/blue" />
+        android:textColor="@color/blue"
+        android:layout_alignParentBottom="true" />
 
-</LinearLayout>
+</RelativeLayout>

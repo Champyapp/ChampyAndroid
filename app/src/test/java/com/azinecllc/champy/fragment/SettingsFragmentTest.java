@@ -362,7 +362,7 @@ public class SettingsFragmentTest {
 
     @Test
     public void testForSwitchChallengeEnd() throws Exception {
-        Switch switchAcceptedYourChallenge = (Switch) view.findViewById(R.id.switchChallengeEnd);
+        Switch switchAcceptedYourChallenge = (Switch) view.findViewById(R.id.switch_reminder);
         assertNotNull(switchAcceptedYourChallenge);
         assertEquals("Challenge End", switchAcceptedYourChallenge.getText());
         assertTrue(switchAcceptedYourChallenge.isChecked());

@@ -371,7 +371,7 @@
             <Switch
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/switchChallengeEnd"
+                android:id="@+id/switch_reminder"
                 android:text="@string/challenge_end"
                 android:textColor="@color/color_white"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
@@ -391,7 +391,7 @@
                 android:background="#339997"
                 android:layout_marginTop="8dp"
                 android:visibility="visible"
-                android:layout_below="@+id/switchChallengeEnd" />
+                android:layout_below="@+id/switch_reminder" />
 
             <!-- Switch with text 'Daily Reminder' -->
             <Switch

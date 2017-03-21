@@ -342,7 +342,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
             userController.updateProfile(map);
         });
 
-        Switch switchForChallengesEnd = (Switch) view.findViewById(R.id.switchChallengeEnd);
+        Switch switchForChallengesEnd = (Switch) view.findViewById(R.id.switch_reminder);
         switchForChallengesEnd.setChecked(Boolean.parseBoolean(challengeEnd));
         switchForChallengesEnd.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
