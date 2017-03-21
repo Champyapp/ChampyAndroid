@@ -129,10 +129,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
 
-        fabPlus.setOnClickListener(v -> animateFAB());
-        fabSelf.setOnClickListener(v -> startActivity(new Intent(this, SelfImprovementActivity.class)));
-        fabDuel.setOnClickListener(v -> startActivity(new Intent(this, FriendsActivity.class)));
-        fabWake.setOnClickListener(v -> startActivity(new Intent(this, WakeUpActivity.class)));
+        fabPlus.setOnClickListener(v -> startActivity(new Intent(this, CreateChallengeActivity.class)));
+        //fabSelf.setOnClickListener(v -> startActivity(new Intent(this, SelfImprovementActivity.class)));
+        //fabDuel.setOnClickListener(v -> startActivity(new Intent(this, FriendsActivity.class)));
+        //fabWake.setOnClickListener(v -> startActivity(new Intent(this, WakeUpActivity.class)));
 
 
         // PENDING DUEL MENU IN DRAWER
@@ -141,37 +141,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         loadHomeFragment();
 
     }
-
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        Log.i(TAG, "onStart: ");
-//
-//        try {
-//            mSocket = IO.socket(API_URL);
-//        } catch (URISyntaxException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        mSocket.on("connect", onConnect);
-//        mSocket.on("connected", onConnected);
-//        mSocket.on("InProgressChallenge:accepted", modifiedChallenges);
-//        mSocket.on("InProgressChallenge:new", modifiedChallenges);
-//        mSocket.on("InProgressChallenge:won", modifiedChallenges);
-//        //mSocket.on("InProgressChallenge:updated", modifiedChallenges);
-//
-//        mSocket.connect();
-//    }
-//
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        //mSocket.disconnect();
-//        mSocket.off("InProgressChallenge:accepted", modifiedChallenges);
-//        mSocket.off("InProgressChallenge:new", modifiedChallenges);
-//        mSocket.off("InProgressChallenge:won", modifiedChallenges);
-//
-//    }
 
     @Override
     protected void onDestroy() {
@@ -225,25 +194,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-//    private Emitter.Listener onConnect = new Emitter.Listener() {
-//        @Override
-//        public void call(final Object... args) {
-//            Log.i(TAG, "Sockets call: onConnect");
-//            mSocket.emit("ready", sessionManager.getToken());
-//        }
-//    };
-//
-//    private Emitter.Listener onConnected = args -> Log.i(TAG, "Sockets call: onConnected!");
-//
-//    private Emitter.Listener modifiedChallenges = new Emitter.Listener() {
-//        @Override
-//        public void call(Object... args) {
-//            Log.i(TAG, "Sockets call: modifiedChallenges");
-//            ChallengeController cc = new ChallengeController(getApplicationContext(), MainActivity.this);
-//            cc.refreshCardsForPendingDuel(null);
-//            setCounterForPendingDuels(); // not good solution
-//        }
-//    };
 
 
 
@@ -298,26 +248,77 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //toggleFab();           // show or hide the fab button
     }
 
-    /**
-     * Method-toggle to control visibility of the sub buttons. This method works like a on-off system.
-     */
-    private void animateFAB() {
-        if (isFabOpen) {
-            //closeFab();
-            fabPlus.startAnimation(rotate_backward);
-            fabWake.startAnimation(fab_close);
-            fabSelf.startAnimation(fab_close);
-            fabDuel.startAnimation(fab_close);
-            isFabOpen = false;
-        } else {
-            //openFab();
-            fabPlus.startAnimation(rotate_forward);
-            fabWake.startAnimation(fab_open);
-            fabSelf.startAnimation(fab_open);
-            fabDuel.startAnimation(fab_open);
-            isFabOpen = true;
-        }
-    }
+    //    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        Log.i(TAG, "onStart: ");
+//
+//        try {
+//            mSocket = IO.socket(API_URL);
+//        } catch (URISyntaxException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        mSocket.on("connect", onConnect);
+//        mSocket.on("connected", onConnected);
+//        mSocket.on("InProgressChallenge:accepted", modifiedChallenges);
+//        mSocket.on("InProgressChallenge:new", modifiedChallenges);
+//        mSocket.on("InProgressChallenge:won", modifiedChallenges);
+//        //mSocket.on("InProgressChallenge:updated", modifiedChallenges);
+//
+//        mSocket.connect();
+//    }
+//
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        //mSocket.disconnect();
+//        mSocket.off("InProgressChallenge:accepted", modifiedChallenges);
+//        mSocket.off("InProgressChallenge:new", modifiedChallenges);
+//        mSocket.off("InProgressChallenge:won", modifiedChallenges);
+//
+//    }
+
+    //    private Emitter.Listener onConnect = new Emitter.Listener() {
+//        @Override
+//        public void call(final Object... args) {
+//            Log.i(TAG, "Sockets call: onConnect");
+//            mSocket.emit("ready", sessionManager.getToken());
+//        }
+//    };
+//
+//    private Emitter.Listener onConnected = args -> Log.i(TAG, "Sockets call: onConnected!");
+//
+//    private Emitter.Listener modifiedChallenges = new Emitter.Listener() {
+//        @Override
+//        public void call(Object... args) {
+//            Log.i(TAG, "Sockets call: modifiedChallenges");
+//            ChallengeController cc = new ChallengeController(getApplicationContext(), MainActivity.this);
+//            cc.refreshCardsForPendingDuel(null);
+//            setCounterForPendingDuels(); // not good solution
+//        }
+//    };
+
+//    /**
+//     * Method-toggle to control visibility of the sub buttons. This method works like a on-off system.
+//     */
+//    private void animateFAB() {
+//        if (isFabOpen) {
+//            //closeFab();
+//            fabPlus.startAnimation(rotate_backward);
+//            fabWake.startAnimation(fab_close);
+//            fabSelf.startAnimation(fab_close);
+//            fabDuel.startAnimation(fab_close);
+//            isFabOpen = false;
+//        } else {
+//            //openFab();
+//            fabPlus.startAnimation(rotate_forward);
+//            fabWake.startAnimation(fab_open);
+//            fabSelf.startAnimation(fab_open);
+//            fabDuel.startAnimation(fab_open);
+//            isFabOpen = true;
+//        }
+//    }
 
 //    /**
 //     * Method to check pending counter and after that set value for navigation drawer menu
