@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.MyFriendsAdapter;
 import com.azinecllc.champy.data.DBHelper;
+import com.azinecllc.champy.interfaces.CustomRecyclerClickListener;
 import com.azinecllc.champy.model.FriendModel;
 import com.azinecllc.champy.model.friend.Datum;
 import com.azinecllc.champy.model.friend.Friend_;
@@ -91,10 +92,12 @@ public class MyFriendsFragment extends Fragment {
         c.close();
 
         RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-        MyFriendsAdapter adapter = new MyFriendsAdapter(friends, getContext(), getActivity(), (view1, position) -> {
-            FriendModel friend = friends.get(position);
+        MyFriendsAdapter adapter = new MyFriendsAdapter(friends, getContext(), getActivity(), new CustomRecyclerClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                FriendModel friend = friends.get(position);
+            }
         });
-
 
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         rvContacts.setAdapter(adapter);

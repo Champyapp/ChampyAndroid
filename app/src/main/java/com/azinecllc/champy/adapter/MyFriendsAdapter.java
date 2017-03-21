@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.DuelActivity;
-import com.azinecllc.champy.interfaces.CustomItemClickListener;
+import com.azinecllc.champy.interfaces.CustomRecyclerClickListener;
 import com.azinecllc.champy.model.FriendModel;
 import com.azinecllc.champy.utils.Constants;
 import com.azinecllc.champy.utils.OfflineMode;
@@ -43,15 +43,16 @@ public class MyFriendsAdapter extends RecyclerView.Adapter<MyFriendsAdapter.View
     private OfflineMode offlineMode;
     private String token, id;
     private int inProgressCounter;
-    private CustomItemClickListener listener;
+    private CustomRecyclerClickListener listener;
     private Context context;
     private Activity activity;
     private ArrayList<Integer> selected = new ArrayList<>();
 
-    public MyFriendsAdapter(List<FriendModel> contacts, Context context, Activity activity, CustomItemClickListener itemOnClick) {
+    public MyFriendsAdapter(List<FriendModel> contacts, Context context, Activity activity, CustomRecyclerClickListener itemOnClick) {
         mContacts = contacts;
         this.context = context;
-        CustomItemClickListener listener = itemOnClick;
+        /*CustomRecyclerClickListener*/
+        listener = itemOnClick;
         this.activity = activity;
     }
 
@@ -300,7 +301,7 @@ public class MyFriendsAdapter extends RecyclerView.Adapter<MyFriendsAdapter.View
     }
 
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
         TextView nameTextView;

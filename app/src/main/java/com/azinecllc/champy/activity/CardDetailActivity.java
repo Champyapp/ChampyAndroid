@@ -1,8 +1,8 @@
 package com.azinecllc.champy.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -46,6 +46,10 @@ public class CardDetailActivity extends AppCompatActivity {
         buttonBack = (ImageView) findViewById(R.id.image_view_back);
         buttonShare = (ImageView) findViewById(R.id.image_view_share);
 
+        Bundle extras = getIntent().getExtras();
+        String challengeName = extras.getString("mockName");
+
+        tvChallengeName.setText(challengeName);
 
     }
 

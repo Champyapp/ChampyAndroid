@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.data.DBHelper;
-import com.azinecllc.champy.interfaces.CustomItemClickListener;
+import com.azinecllc.champy.interfaces.CustomRecyclerClickListener;
 import com.azinecllc.champy.interfaces.Friends;
 import com.azinecllc.champy.model.Pending_friend;
 import com.azinecllc.champy.utils.OfflineMode;
@@ -43,13 +43,13 @@ public class MyPendingAdapter extends RecyclerView.Adapter<MyPendingAdapter.View
     private Context context;
     private Activity activity;
     private SessionManager sessionManager;
-    private CustomItemClickListener listener;
+    private CustomRecyclerClickListener listener;
     private Retrofit retrofit;
     private OfflineMode offlineMode;
     private ArrayList<Integer> selected = new ArrayList<>();
 
 
-    public MyPendingAdapter(List<Pending_friend> contacts, Context context, Activity activity, CustomItemClickListener listener) {
+    public MyPendingAdapter(List<Pending_friend> contacts, Context context, Activity activity, CustomRecyclerClickListener listener) {
         mContacts = contacts;
         this.context = context;
         this.activity = activity;

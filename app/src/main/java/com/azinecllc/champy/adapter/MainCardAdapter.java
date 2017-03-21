@@ -1,6 +1,7 @@
 package com.azinecllc.champy.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
@@ -15,11 +16,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.azinecllc.champy.R;
+import com.azinecllc.champy.activity.CardDetailActivity;
 import com.azinecllc.champy.interfaces.OnCardClickListener;
 import com.azinecllc.champy.model.Cards;
 
 import java.util.List;
 
+import static com.azinecllc.champy.Champy.getContext;
 import static com.azinecllc.champy.utils.Constants.typeDuel;
 
 /**
@@ -145,12 +148,19 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
             tvDay = (TextView) itemView.findViewById(R.id.text_view_day);
             tvStreak = (TextView) itemView.findViewById(R.id.text_view_streak);
         }
-
+//        @Override
+//        public void onClick(View v) {
+//            Intent intent = new Intent(getContext(), CardDetailActivity.class);
+//            intent.putExtra("mockName", challengeName.getText());
+//            intent.putExtra("mockStreak", challengeStreak.getText());
+//            intent.putExtra("mockPercent", challengePercent.getText());
+//            intent.putExtra("mockDays", tvDay.getText());
+//            getContext().startActivity(intent);
+//        }
     }
 
     /**
      * My custom OnCardClickListener interface
-     *
      * @param onCardClickListener -
      */
     public void setOnCardClickListener(OnCardClickListener onCardClickListener) {
