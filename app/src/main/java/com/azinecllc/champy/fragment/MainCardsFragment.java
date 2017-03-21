@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.CardDetailActivity;
@@ -26,7 +27,7 @@ import static com.azinecllc.champy.utils.Constants.typeDuel;
 import static com.azinecllc.champy.utils.Constants.typeSelf;
 import static com.azinecllc.champy.utils.Constants.typeWake;
 
-public class MainCardsFragment extends Fragment implements OnCardClickListener {
+public class MainCardsFragment extends Fragment /*implements OnCardClickListener */ {
 
     private SwipeRefreshLayout gSwipeRefreshLayout;
     private OfflineMode offlineMode;
@@ -58,6 +59,19 @@ public class MainCardsFragment extends Fragment implements OnCardClickListener {
 
         loadInProgressCards(view);
 
+        adapter.setOnCardClickListener(new OnCardClickListener() {
+            @Override
+            public void onClick(View v, Cards item) {
+                Toast.makeText(getContext(), item.getChallengeName(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), CardDetailActivity.class);
+                intent.putExtra("mockName", item.getChallengeName());
+                intent.putExtra("mockStreak", item.getChallengeStreak());
+                intent.putExtra("mockPercent", item.getChallengePercent());
+                intent.putExtra("mockDays", item.getChallengeDays());
+                startActivity(intent);
+            }
+        });
+
         gSwipeRefreshLayout.setOnRefreshListener(() -> {
             if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
                 cardsList.clear();
@@ -69,15 +83,15 @@ public class MainCardsFragment extends Fragment implements OnCardClickListener {
         return view;
     }
 
-    @Override
-    public void onClick() {
+//    @Override
+//    public void onClick() {
 //        Intent intent = new Intent(getContext(), CardDetailActivity.class);
 //        intent.putExtra("mockName", mockName);
 //        intent.putExtra("mockStreak", mockStreak);
 //        intent.putExtra("mockPercent", mockPercent);
 //        intent.putExtra("mockDays", mockDays);
 //        startActivity(intent);
-    }
+//    }
 
     @Override
     public void onDestroy() {
@@ -144,7 +158,6 @@ public class MainCardsFragment extends Fragment implements OnCardClickListener {
         RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
         rvContacts.setAdapter(adapter);
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter.setOnCardClickListener(this);
     }
 
 //    /**

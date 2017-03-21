@@ -1,14 +1,11 @@
 package com.azinecllc.champy.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -16,13 +13,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.activity.CardDetailActivity;
 import com.azinecllc.champy.interfaces.OnCardClickListener;
 import com.azinecllc.champy.model.Cards;
 
 import java.util.List;
 
-import static com.azinecllc.champy.Champy.getContext;
 import static com.azinecllc.champy.utils.Constants.typeDuel;
 
 /**
@@ -30,7 +25,7 @@ import static com.azinecllc.champy.utils.Constants.typeDuel;
  * Created on 3/20/17.
  */
 
-public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHolder> implements View.OnClickListener {
+public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHolder> /*implements View.OnClickListener*/ {
 
     private List<Cards> mCardsList;
     private Context mContext;
@@ -45,9 +40,9 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View contactView = inflater.inflate(R.layout.fragment_main, parent, false);
+        View cardView = inflater.inflate(R.layout.fragment_main, parent, false);
 
-        return new ViewHolder(contactView);
+        return new ViewHolder(cardView);
     }
 
     @Override
@@ -61,17 +56,12 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
         String recipient = itemCard.getChallengeIsRecipient();      // true / false
         String type = itemCard.getChallengeType();                  // self-duel-wake
         String versus = itemCard.getChallengeVersus();              // versus name
-        String name = (type.equals(typeDuel)) ? itemCard.getChallengeName() + " with " + versus : itemCard.getChallengeName();
+        String name = itemCard.getChallengeName();                  // no tv
 
         System.out.println("_________________________________________");
-        System.out.println("MainCardAdapter  MockData: | name: " + name
-                + " days: " + days
-                + " streak: " + streak
-                + " percent: " + percent
-                + " status: " + status
-                + " recipient: " + recipient
-                + " type: " + type
-                + " versus: " + versus
+        System.out.println("MainCardAdapter  MockData: | name: " + name + " days: " + days
+                + " streak: " + streak + " percent: " + percent + " status: " + status
+                + " recipient: " + recipient + " type: " + type + " versus: " + versus
         );
 
         boolean isRecipient = Boolean.parseBoolean(recipient);
@@ -87,12 +77,12 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
             viewHolder.buttonDecline.setOnClickListener(v -> {
                 Toast.makeText(mContext, "Decline", Toast.LENGTH_SHORT).show();
             });
-            if (isRecipient) {
-                viewHolder.buttonAccept.setVisibility(View.VISIBLE);
-                viewHolder.buttonAccept.setOnClickListener(v -> {
-                    Toast.makeText(mContext, "Accept", Toast.LENGTH_SHORT).show();
-                });
-            }
+
+            viewHolder.buttonAccept.setVisibility(View.VISIBLE);
+            viewHolder.buttonAccept.setOnClickListener(v -> {
+                Toast.makeText(mContext, "Accept", Toast.LENGTH_SHORT).show();
+            });
+
         }
 
         viewHolder.challengeName.setText(name);
@@ -106,7 +96,12 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
         gd.setCornerRadius(25);
         viewHolder.cardLayout.setBackgroundDrawable(gd);
 
-        viewHolder.itemParentLayout.setOnClickListener(this);
+        viewHolder.cardLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCardClickListener.onClick(v, itemCard);
+            }
+        });
 
     }
 
@@ -116,10 +111,10 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
         return mCardsList.size();
     }
 
-    @Override
-    public void onClick(View v) {
-        onCardClickListener.onClick();
-    }
+//    @Override
+//    public void onClick(View v) {
+//        onCardClickListener.onClick();
+//    }
 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -134,19 +129,20 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
         private RelativeLayout itemParentLayout;
         private LinearLayout cardLayout;
         private ProgressBar progressBar;
-        ViewHolder(View itemView) {
-            super(itemView);
-            challengeName = (TextView) itemView.findViewById(R.id.tv_challenge_name);
-            challengeDays = (TextView) itemView.findViewById(R.id.text_view_day_n);
-            challengeStreak = (TextView) itemView.findViewById(R.id.text_view_streak_n);
-            challengePercent = (TextView) itemView.findViewById(R.id.tv_percent_complete);
-            cardLayout = (LinearLayout) itemView.findViewById(R.id.card_layout);
-            itemParentLayout = (RelativeLayout) itemView.findViewById(R.id.item_parent_layout);
-            progressBar = (ProgressBar) itemView.findViewById(R.id.card_progress_bar);
-            buttonAccept = (TextView) itemView.findViewById(R.id.button_accept);
-            buttonDecline = (TextView) itemView.findViewById(R.id.button_decline);
-            tvDay = (TextView) itemView.findViewById(R.id.text_view_day);
-            tvStreak = (TextView) itemView.findViewById(R.id.text_view_streak);
+
+        ViewHolder(View cardView) {
+            super(cardView);
+            challengeName = (TextView) cardView.findViewById(R.id.tv_challenge_name);
+            challengeDays = (TextView) cardView.findViewById(R.id.text_view_day_n);
+            challengeStreak = (TextView) cardView.findViewById(R.id.text_view_streak_n);
+            challengePercent = (TextView) cardView.findViewById(R.id.tv_percent_complete);
+            cardLayout = (LinearLayout) cardView.findViewById(R.id.card_layout);
+            itemParentLayout = (RelativeLayout) cardView.findViewById(R.id.item_parent_layout);
+            progressBar = (ProgressBar) cardView.findViewById(R.id.card_progress_bar);
+            buttonAccept = (TextView) cardView.findViewById(R.id.button_accept);
+            buttonDecline = (TextView) cardView.findViewById(R.id.button_decline);
+            tvDay = (TextView) cardView.findViewById(R.id.text_view_day);
+            tvStreak = (TextView) cardView.findViewById(R.id.text_view_streak);
         }
 //        @Override
 //        public void onClick(View v) {
