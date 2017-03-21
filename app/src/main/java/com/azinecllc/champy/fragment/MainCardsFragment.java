@@ -78,6 +78,8 @@ public class MainCardsFragment extends Fragment {
     private void loadInProgressCards(View view) {
         ArrayList<Challenge> challengesArrayList = Challenge.generate(getContext());
         for (int i = 0; i < challengesArrayList.size(); i++) {
+
+            /** True Data */
             Challenge challenge = challengesArrayList.get(i);
             String challengeName = challenge.getChallengeName();
             String constDuration = challenge.getConstDuration();
@@ -85,8 +87,11 @@ public class MainCardsFragment extends Fragment {
             String description = challenge.getGoal();
             String duration = challenge.getDays();
             String versus = challenge.getVersus();
+            String status = challenge.getStatus();
+            String isRecipient = challenge.getRecipient();
             //String color = challenge.getColor();
 
+            /** Mock Data */
             Random random = new Random();
             int r = random.nextInt(256), g = random.nextInt(256), b = random.nextInt(256);
             int low = 0;
@@ -99,8 +104,20 @@ public class MainCardsFragment extends Fragment {
             String mockVersus = versus.replaceAll("a", "YO");
             String mockColor = String.valueOf(Color.argb(255, r, g, b));
 
-            System.out.println(versus);
-            cardsList.add(new Cards(mockName, mockDays, mockStreak, mockPercent, mockVersus, mockColor));
+            String[] mockStatuses = {"pending", "started", /*"failed"*/};
+            String[] mockRecipients = {"true", "false"};
+            String mockStatus = mockStatuses[(int) (Math.random() * mockStatuses.length)];
+            String mockIsRecipient = mockRecipients[(int) (Math.random() * mockRecipients.length)];
+
+            System.out.println("MainCardFragment MockData: | name: " + mockName
+                    + " days: " + mockDays
+                    + " streak: " + mockStreak
+                    + " percent: " + mockPercent
+                    + " status: " + mockStatus
+                    + " recipient: " + mockIsRecipient);
+
+            /** Fill the model */
+            cardsList.add(new Cards(mockName, mockDays, mockStreak, mockPercent, mockVersus, mockColor, mockStatus, mockIsRecipient));
 
         }
 
@@ -109,6 +126,28 @@ public class MainCardsFragment extends Fragment {
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
 
     }
+
+//    /**
+//     * Method to animate fab button, and make visible all sub buttons,
+//     */
+//    private void closeFab() {
+//        fabPlus.startAnimation(rotate_backward);
+//        fabWake.startAnimation(fab_close);
+//        fabSelf.startAnimation(fab_close);
+//        fabDuel.startAnimation(fab_close);
+//        isFabOpen = false;
+//    }
+
+//    /**
+//     * Method to animate fab button, and make invisible all sub buttons,
+//     */
+//    private void openFab() {
+//        fabPlus.startAnimation(rotate_forward);
+//        fabWake.startAnimation(fab_open);
+//        fabSelf.startAnimation(fab_open);
+//        fabDuel.startAnimation(fab_open);
+//        isFabOpen = true;
+//    }
 
 
 }

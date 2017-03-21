@@ -34,7 +34,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Challenge name"
-                android:textColor="#fff"
+                android:textColor="@color/color_white"
+                android:textStyle="bold"
                 android:layout_above="@+id/tv_percent_complete"
                 android:layout_alignParentTop="true" />
 
@@ -42,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="0% complete"
-                android:textColor="#fff"
+                android:textColor="@color/color_white"
                 android:id="@+id/tv_percent_complete"
                 android:layout_above="@+id/card_progress_bar"
                 android:layout_alignParentLeft="true" />
@@ -56,15 +57,29 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:id="@+id/button_decline"
+                android:text="Decline"
+                android:textSize="24sp"
+                android:textColor="@color/color_white"
+                android:gravity="center"
+                android:visibility="invisible"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
         </RelativeLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/layout_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -73,7 +88,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Streak"
-                    android:textColor="#fff"
+                    android:textColor="@color/color_white"
+                    android:textStyle="bold"
                     android:layout_weight="0.5"
                     android:textAlignment="center" />
 
@@ -82,14 +98,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Day"
-                    android:textColor="#fff"
+                    android:textColor="@color/color_white"
+                    android:textStyle="bold"
                     android:layout_weight="0.5"
                     android:textAlignment="center" />
             </LinearLayout>
 
             <LinearLayout
+                android:layout_below="@+id/layout_text"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:id="@+id/linearLayout">
 
                 <TextView
                     android:id="@+id/text_view_streak_n"
@@ -112,8 +131,21 @@
                     android:textSize="36sp" />
             </LinearLayout>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:id="@+id/button_accept"
+                android:text="Accept"
+                android:textSize="24sp"
+                android:textColor="@color/color_white"
+                android:gravity="center"
+                android:visibility="invisible"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
 
-        </LinearLayout>
+        </RelativeLayout>
+
 
     </LinearLayout>
 

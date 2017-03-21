@@ -4,19 +4,23 @@ public class Cards {
 
     private String challengeName;
     private String challengeDays;
-    private String challengeStreak;  //
-    private String challengePercent; //
+    private String challengeStreak;
+    private String challengePercent;
     private String challengeEnd;     //
-    private String challengeEnemy;
+    private String challengeVersus;
     private String challengeColor;
+    private String challengeStatus;
+    private String challengeIsRecipient;
 
-    public Cards(String name, String days, String streak, String percent, String enemy, String color) {
+    public Cards(String name, String days, String streak, String percent, String enemy, String color, String status, String isRecipient) {
         this.challengeName = name;
         this.challengeDays = days;
         this.challengeStreak = streak;
         this.challengePercent = percent;
-        this.challengeEnemy = enemy;
+        this.challengeVersus = enemy;
         this.challengeColor = color;
+        this.challengeStatus = status;
+        this.challengeIsRecipient = isRecipient;
     }
 
 
@@ -37,8 +41,8 @@ public class Cards {
         this.challengePercent = challengePercent;
     }
 
-    public void setChallengeEnemy(String challengeEnemy) {
-        this.challengeEnemy = challengeEnemy;
+    public void setChallengeVersus(String challengeVersus) {
+        this.challengeVersus = challengeVersus;
     }
 
     public void setChallengeEnd(String challengeEnd) {
@@ -49,6 +53,22 @@ public class Cards {
         this.challengeColor = challengeColor;
     }
 
+    public void setChallengeStatus(String challengeStatus) {
+        this.challengeStatus = challengeStatus;
+    }
+
+    public void setChallengeIsRecipient(String challengeIsRecipient) {
+        this.challengeIsRecipient = challengeIsRecipient;
+    }
+
+
+    public String getChallengeIsRecipient() {
+        return challengeIsRecipient;
+    }
+
+    public String getChallengeStatus() {
+        return challengeStatus;
+    }
 
     public String getChallengeName() {
         return challengeName;
@@ -66,8 +86,8 @@ public class Cards {
         return challengePercent;
     }
 
-    public String getChallengeEnemy() {
-        return challengeEnemy;
+    public String getChallengeVersus() {
+        return challengeVersus;
     }
 
     public String getChallengeEnd() {
