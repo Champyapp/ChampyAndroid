@@ -100,12 +100,6 @@ public class MainActivityTest {
 
     }
 
-    @Test
-    public void testItemBlurIsNotNull() throws Exception {
-        View view = activity.findViewById(R.id.item_blur);
-        assertNotNull(view);
-        assertEquals(View.VISIBLE, view.getVisibility());
-    }
 
     @Test
     public void testForAppBarLayout() throws Exception {

@@ -122,7 +122,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerUserEmail.setText(userEmail);
 
 
-        if (Integer.parseInt(sessionManager.getChampyOptions().get("challenges")) > 0) {
+        //int inProgress = Integer.parseInt(sessionManager.getChampyOptions().get("challenges"));
+        if (!sessionManager.getChampyOptions().get("challenges").isEmpty()) {
             circleLogo.setVisibility(View.INVISIBLE);
             nothingHere.setVisibility(View.INVISIBLE);
         }
