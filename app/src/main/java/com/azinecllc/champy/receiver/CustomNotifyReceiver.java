@@ -14,7 +14,6 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.activity.FriendsActivity;
 import com.azinecllc.champy.activity.MainActivity;
 import com.azinecllc.champy.controller.DailyRemindController;
 import com.azinecllc.champy.utils.SessionManager;

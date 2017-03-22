@@ -1,9 +1,8 @@
 package com.azinecllc.champy.interfaces;
 
 import android.view.View;
-import android.widget.Adapter;
 
-import com.azinecllc.champy.model.Cards;
+import com.azinecllc.champy.model.CardChallenges;
 
 /**
  * @autor SashaKhyzhun
@@ -11,5 +10,5 @@ import com.azinecllc.champy.model.Cards;
  */
 
 public interface OnCardClickListener {
-    void onClick(View v, Cards item);
+    void onClick(View v, CardChallenges item);
 }

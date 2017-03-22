@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.azinecllc.champy.R;
+import com.azinecllc.champy.fragment.FriendsFragment;
 import com.azinecllc.champy.fragment.MainCardsFragment;
 import com.azinecllc.champy.fragment.PrivacyPoliceFragment;
 import com.azinecllc.champy.fragment.SettingsFragment;
@@ -37,6 +38,7 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 import static com.azinecllc.champy.Champy.getContext;
 import static com.azinecllc.champy.utils.Constants.TAG_CHALLENGES;
+import static com.azinecllc.champy.utils.Constants.TAG_FRIENDS;
 import static com.azinecllc.champy.utils.Constants.TAG_PRIVACY_POLICE;
 import static com.azinecllc.champy.utils.Constants.TAG_SETTINGS;
 import static com.azinecllc.champy.utils.Constants.TAG_TERMS;
@@ -93,9 +95,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         nothingHere = (TextView) findViewById(R.id.tv_noting_here_yet);
         circleLogo = (ImageView) findViewById(R.id.image_view_circle_logo);
         fabPlus = (FloatingActionButton) findViewById(R.id.fabPlus);
-        fabSelf = (FloatingActionButton) findViewById(R.id.fabSelf);
-        fabDuel = (FloatingActionButton) findViewById(R.id.fabDuel);
-        fabWake = (FloatingActionButton) findViewById(R.id.fabWake);
+//        fabSelf = (FloatingActionButton) findViewById(R.id.fabSelf);
+//        fabDuel = (FloatingActionButton) findViewById(R.id.fabDuel);
+//        fabWake = (FloatingActionButton) findViewById(R.id.fabWake);
         fab_open = AnimationUtils.loadAnimation(getContext(), R.anim.fab_open);
         fab_close = AnimationUtils.loadAnimation(getContext(), R.anim.fab_close);
         rotate_forward = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_forward);
@@ -170,21 +172,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 CURRENT_TAG = TAG_CHALLENGES;
                 break;
             case R.id.nav_friends:
-                new Handler().postDelayed(() -> startActivity(new Intent(this, FriendsActivity.class)), 250);
-                break;
-            case R.id.nav_pending_duels:
-                new Handler().postDelayed(() -> startActivity(new Intent(this, PendingDuelActivity.class)), 250);
+                navItemIndex = 1;
+                CURRENT_TAG = TAG_FRIENDS;
                 break;
             case R.id.nav_settings:
-                navItemIndex = 1;
+                navItemIndex = 2;
                 CURRENT_TAG = TAG_SETTINGS;
                 break;
             case R.id.nav_terms:
-                navItemIndex = 2;
+                navItemIndex = 3;
                 CURRENT_TAG = TAG_TERMS;
                 break;
             case R.id.nav_privacy_policy:
-                navItemIndex = 3;
+                navItemIndex = 4;
                 CURRENT_TAG = TAG_PRIVACY_POLICE;
                 break;
         }
@@ -206,10 +206,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case 0:
                 return new MainCardsFragment();
             case 1:
-                return new SettingsFragment();
+                return new FriendsFragment();
             case 2:
-                return new TermsFragment();
+                return new SettingsFragment();
             case 3:
+                return new TermsFragment();
+            case 4:
                 return new PrivacyPoliceFragment();
             default:
                 return new MainCardsFragment();
@@ -245,7 +247,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mHandler.post(runnable); // If 'runnable' is not null, then add to the message queue
         drawer.closeDrawers();   // Closing drawer on item click
         invalidateOptionsMenu(); // refresh toolbar menu
-        //toggleFab();           // show or hide the fab button
+        toggleFab();           // show or hide the fab button
+    }
+
+    /**
+     * Method to set visible for FabPlus if current fragment != main
+     */
+    private void toggleFab() {
+        if (navItemIndex == 0) {
+            fabPlus.show();
+        } else {
+            fabPlus.hide();
+        }
     }
 
     //    @Override
@@ -333,17 +346,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //    }
 //
 //
-//    /**
-//     * Method to set visible for FabPlus if current fragment != main
-//     */
-//    private void toggleFab() {
-//        if (navItemIndex == 0) {
-//            fabPlus.show();
-//        } else {
-//            fabPlus.hide();
-//        }
-//    }
-
 
 
 }

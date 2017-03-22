@@ -36,41 +36,14 @@
 
     </RelativeLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        app:backgroundTint="@color/color_text_aqua"
-        android:background="@drawable/ic_duel_yellow"
-        android:id="@+id/fabDuel"
-        android:src="@drawable/fab_duel"
-        android:scaleType="center"
-        android:visibility="invisible"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/fabWake"
-        android:layout_alignLeft="@+id/fabWake"
-        android:layout_alignStart="@+id/fabWake"
-        android:layout_alignRight="@+id/fabWake"
-        android:layout_alignEnd="@+id/fabWake" />
-
-    <android.support.design.widget.FloatingActionButton
-        app:backgroundTint="@color/color_text_aqua"
-        android:id="@+id/fabWake"
-        android:src="@drawable/fab_wake"
-        android:visibility="invisible"
-        android:scaleType="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/fabPlus"
-        android:layout_alignLeft="@+id/fabPlus"
-        android:layout_alignStart="@+id/fabPlus"
-        android:layout_alignRight="@+id/fabPlus"
-        android:layout_alignEnd="@+id/fabPlus" />
 
     <ImageView
         android:id="@+id/image_view_circle_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/stat_circle_00027"
-        android:scaleType="center"
+        android:src="@drawable/ic_duel_blue"
+        android:scaleX="0.5"
+        android:scaleY="0.5"
         android:layout_below="@+id/appbar_main"
         android:layout_above="@+id/tv_noting_here_yet"
         android:layout_alignParentRight="true"
@@ -91,19 +64,6 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabSelf"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/fabDuel"
-        android:layout_alignEnd="@+id/fabDuel"
-        android:layout_alignLeft="@+id/fabDuel"
-        android:layout_alignRight="@+id/fabDuel"
-        android:layout_alignStart="@+id/fabDuel"
-        android:scaleType="center"
-        android:src="@drawable/fab_self"
-        android:visibility="invisible"
-        app:backgroundTint="@color/color_text_aqua" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabPlus"

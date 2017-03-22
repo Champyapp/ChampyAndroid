@@ -16,7 +16,7 @@ import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.CardDetailActivity;
 import com.azinecllc.champy.adapter.MainCardAdapter;
 import com.azinecllc.champy.interfaces.OnCardClickListener;
-import com.azinecllc.champy.model.Cards;
+import com.azinecllc.champy.model.CardChallenges;
 import com.azinecllc.champy.model.Challenge;
 import com.azinecllc.champy.utils.OfflineMode;
 
@@ -31,7 +31,7 @@ public class MainCardsFragment extends Fragment {
 
     private SwipeRefreshLayout gSwipeRefreshLayout;
     private OfflineMode offlineMode;
-    private ArrayList<Cards> cardsList;
+    private ArrayList<CardChallenges> cardChallengesList;
     private MainCardAdapter adapter;
 
     /**
@@ -47,9 +47,8 @@ public class MainCardsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         offlineMode = OfflineMode.getInstance();
-        cardsList = new ArrayList<Cards>();
-        adapter = new MainCardAdapter(cardsList, getContext());
-
+        cardChallengesList = new ArrayList<CardChallenges>();
+        adapter = new MainCardAdapter(cardChallengesList, getContext());
     }
 
 
@@ -62,8 +61,7 @@ public class MainCardsFragment extends Fragment {
 
         adapter.setOnCardClickListener(new OnCardClickListener() {
             @Override
-            public void onClick(View v, Cards item) {
-                Toast.makeText(getContext(), item.getChallengeName(), Toast.LENGTH_SHORT).show();
+            public void onClick(View v, CardChallenges item) {
                 Intent intent = new Intent(getContext(), CardDetailActivity.class);
                 intent.putExtra("mockName", item.getChallengeName());
                 intent.putExtra("mockStreak", item.getChallengeStreak());
@@ -75,7 +73,7 @@ public class MainCardsFragment extends Fragment {
 
         gSwipeRefreshLayout.setOnRefreshListener(() -> {
             if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
-                cardsList.clear();
+                cardChallengesList.clear();
                 loadInProgressCards(view);
             }
         });
@@ -143,7 +141,7 @@ public class MainCardsFragment extends Fragment {
 //                    + " streak: " + mockStreak + " percent: " + mockPercent + " status: " + mockStatus
 //                    + " isRecipient: " + mockIsRecipient + " type: " + mockType + " versus: " + mockVersus);
             /** Fill the model */
-            cardsList.add(new Cards(mockName, mockDays, mockStreak, mockPercent, mockVersus, mockColor, mockStatus, mockIsRecipient, mockType));
+            cardChallengesList.add(new CardChallenges(mockName, mockDays, mockStreak, mockPercent, mockVersus, mockColor, mockStatus, mockIsRecipient, mockType));
 
         }
         gSwipeRefreshLayout.setRefreshing(false);

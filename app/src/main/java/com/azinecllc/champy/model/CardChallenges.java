@@ -1,6 +1,6 @@
 package com.azinecllc.champy.model;
 
-public class Cards {
+public class CardChallenges {
 
     private String challengeName;
     private String challengeDay;
@@ -13,7 +13,8 @@ public class Cards {
     private String challengeIsRecipient;
     private String challengeType;
 
-    public Cards(String name, String day, String streak, String percent, String versus, String color, String status, String isRecipient, String type) {
+    public CardChallenges(String name, String day, String streak, String percent, String versus,
+                          String color, String status, String isRecipient, String type) {
         this.challengeName = name;
         this.challengeDay = day;
         this.challengeStreak = streak;

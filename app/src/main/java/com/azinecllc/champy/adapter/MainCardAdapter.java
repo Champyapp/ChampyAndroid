@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.interfaces.OnCardClickListener;
-import com.azinecllc.champy.model.Cards;
+import com.azinecllc.champy.model.CardChallenges;
 
 import java.util.List;
 
@@ -25,12 +25,12 @@ import java.util.List;
 
 public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHolder> {
 
-    private List<Cards> mCardsList;
+    private List<CardChallenges> mCardChallengesList;
     private Context mContext;
     private OnCardClickListener onCardClickListener;
 
-    public MainCardAdapter(List<Cards> cardsList, Context context) {
-        mCardsList = cardsList;
+    public MainCardAdapter(List<CardChallenges> cardChallengesList, Context context) {
+        mCardChallengesList = cardChallengesList;
         mContext = context;
     }
 
@@ -39,14 +39,14 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View cardView = inflater.inflate(R.layout.fragment_main, parent, false);
+        View cardView = inflater.inflate(R.layout.item_card_challenges, parent, false);
 
         return new ViewHolder(cardView);
     }
 
     @Override
     public void onBindViewHolder(final MainCardAdapter.ViewHolder viewHolder, int position) {
-        Cards itemCard = mCardsList.get(position);
+        CardChallenges itemCard = mCardChallengesList.get(position);
 
         String days = itemCard.getChallengeDay();                   // 21
         String streak = itemCard.getChallengeStreak();              // <?>
@@ -108,7 +108,7 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return mCardsList.size();
+        return mCardChallengesList.size();
     }
 
 

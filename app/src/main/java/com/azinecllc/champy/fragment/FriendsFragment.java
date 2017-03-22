@@ -9,17 +9,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.adapter.MyOtherAdapter;
+import com.azinecllc.champy.adapter.FriendsAdapter;
 import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.helper.CHCheckTableForExist;
 import com.azinecllc.champy.interfaces.NewUser;
+import com.azinecllc.champy.interfaces.OnCardClickListener;
+import com.azinecllc.champy.model.CardChallenges;
 import com.azinecllc.champy.model.FriendModel;
 import com.azinecllc.champy.model.user.Data;
 import com.azinecllc.champy.model.user.User;
@@ -30,17 +31,13 @@ import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.github.nkzawa.emitter.Emitter;
-import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import io.jsonwebtoken.Jwts;
@@ -53,17 +50,17 @@ import retrofit.Retrofit;
 
 import static com.azinecllc.champy.utils.Constants.API_URL;
 
-public class MyOtherFragment extends Fragment {
+public class FriendsFragment extends Fragment {
 
     public static final String TAG = "OtherFriendsss";
     private static final String ARG_PAGE = "ARG_PAGE";
     private SwipeRefreshLayout gSwipeRefreshLayout;
     private CHCheckTableForExist checkTableForExist;
     private SessionManager sessionManager;
-    private List<FriendModel> friends;
+    private List<FriendModel> friendsList;
     private OfflineMode offlineMode;
     private RecyclerView rvContacts;
-    private MyOtherAdapter adapter;
+    private FriendsAdapter adapter;
     private SQLiteDatabase db;
     private Retrofit retrofit;
     private DBHelper dbHelper;
@@ -71,10 +68,10 @@ public class MyOtherFragment extends Fragment {
     private Socket mSocket;
     private View gView;
 
-    public static MyOtherFragment newInstance(int page) {
+    public static FriendsFragment newInstance(int page) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
-        MyOtherFragment fragment = new MyOtherFragment();
+        FriendsFragment fragment = new FriendsFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -94,10 +91,9 @@ public class MyOtherFragment extends Fragment {
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.item_recycler, container, false);
+        View itemView = inflater.inflate(R.layout.item_recycler, container, false);
 
-        //sessionManager = SessionManager.getInstance(getContext());
-        friends = new ArrayList<>();
+        friendsList = new ArrayList<>();
         Cursor c = db.query("mytable", null, null, null, null, null, null);
         if (c.moveToFirst()) {
             int nameColIndex = c.getColumnIndex("name");
@@ -110,7 +106,7 @@ public class MyOtherFragment extends Fragment {
             int idColIndex = c.getColumnIndex("id");
             do {
                 if (!checkTableForExist.isInOtherTable(c.getString(index)))
-                    friends.add(new FriendModel(
+                    friendsList.add(new FriendModel(
                             c.getString(nameColIndex),
                             c.getString(photoColIndex),
                             c.getString(index),
@@ -123,76 +119,84 @@ public class MyOtherFragment extends Fragment {
         c.close();
 
 
-        rvContacts = (RecyclerView) view.findViewById(R.id.recycler_view);
-        adapter = new MyOtherAdapter(friends, getContext(), getActivity(), retrofit);
+        rvContacts = (RecyclerView) itemView.findViewById(R.id.recycler_view);
+        adapter = new FriendsAdapter(friendsList, getContext(), getActivity(), retrofit);
 
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         rvContacts.setAdapter(adapter);
 
-        gSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_to_refresh);
+        adapter.setOnCardClickListener(new OnCardClickListener() {
+            @Override
+            public void onClick(View v, CardChallenges item) {
+
+            }
+        });
+
+
+        gSwipeRefreshLayout = (SwipeRefreshLayout) itemView.findViewById(R.id.swipe_to_refresh);
         gSwipeRefreshLayout.setOnRefreshListener(() -> refreshOtherView(gSwipeRefreshLayout, gView));
-        this.gView = view;
+        this.gView = itemView;
 
         if (sessionManager.getRefreshOthers().equals("true")) {
             refreshOtherView(gSwipeRefreshLayout, gView);
         }
 
-        return view;
+        return itemView;
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.i(TAG, "onStart: ");
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        Log.i(TAG, "onStart: ");
+//
+//        try {
+//            mSocket = IO.socket(API_URL);
+//        } catch (URISyntaxException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        mSocket.on("connect", onConnect);
+//        mSocket.on("connected", onConnected);
+//
+//        mSocket.on("Relationship:new:accepted", modifiedRelationship);
+//        mSocket.on("Relationship:new:removed", modifiedRelationship);
+//        mSocket.on("Relationship:created:accepted", modifiedRelationship);
+//        mSocket.on("Relationship:created:removed", modifiedRelationship);
+//
+//        mSocket.connect();
+//
+//    }
 
-        try {
-            mSocket = IO.socket(API_URL);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-
-        mSocket.on("connect", onConnect);
-        mSocket.on("connected", onConnected);
-
-        mSocket.on("Relationship:new:accepted", modifiedRelationship);
-        mSocket.on("Relationship:new:removed", modifiedRelationship);
-        mSocket.on("Relationship:created:accepted", modifiedRelationship);
-        mSocket.on("Relationship:created:removed", modifiedRelationship);
-
-        mSocket.connect();
-
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Date now = new Date(System.currentTimeMillis());
-        Log.i(TAG, "onStop: Sockets disconnected "
-                + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds());
-
-        mSocket.disconnect();
-        //mSocket.off();
-        //mSocket.off("connect", onConnect);
-        //mSocket.off("connected", onConnected);
-        mSocket.off("Relationship:new:accepted", modifiedRelationship);
-        mSocket.off("Relationship:new:removed", modifiedRelationship);
-        mSocket.off("Relationship:created:accepted", modifiedRelationship);
-        mSocket.off("Relationship:created:removed", modifiedRelationship);
-
-    }
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+////        Date now = new Date(System.currentTimeMillis());
+////        Log.i(TAG, "onStop: Sockets disconnected "
+////                + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds());
+////
+////        mSocket.disconnect();
+////        //mSocket.off();
+////        //mSocket.off("connect", onConnect);
+////        //mSocket.off("connected", onConnected);
+////        mSocket.off("Relationship:new:accepted", modifiedRelationship);
+////        mSocket.off("Relationship:new:removed", modifiedRelationship);
+////        mSocket.off("Relationship:created:accepted", modifiedRelationship);
+////        mSocket.off("Relationship:created:removed", modifiedRelationship);
+//
+//    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         Glide.clear(gView);
         cv.clear();
-        friends.clear();
+        friendsList.clear();
         gView.destroyDrawingCache();
         cv = null;
         gView = null;
         adapter = null;
-        friends = null;
+        friendsList = null;
         //mSocket = null;
         retrofit = null;
         checkTableForExist = null;
@@ -207,7 +211,7 @@ public class MyOtherFragment extends Fragment {
             swipeRefreshLayout.post(new Runnable() {
                 @Override
                 public void run() {
-                    friends.clear();
+                    friendsList.clear();
                     NewUser newUser = retrofit.create(NewUser.class);
                     StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
                     StrictMode.setThreadPolicy(policy);
@@ -265,7 +269,7 @@ public class MyOtherFragment extends Fragment {
                                                 // отображаем друзей в списке
                                                 if (!checkTableForExist.isInOtherTable(data.get_id())) {
                                                     db.insert("mytable", null, cv);
-                                                    friends.add(new FriendModel(name, photo, data.get_id(),
+                                                    friendsList.add(new FriendModel(name, photo, data.get_id(),
                                                             data.getInProgressChallenges().toString(),
                                                             data.getSuccessChallenges().toString(),
                                                             data.getAllChallengesCount().toString(),
@@ -301,28 +305,28 @@ public class MyOtherFragment extends Fragment {
     }
 
 
-    private Emitter.Listener onConnect = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-            Log.i(TAG, "Sockets call: onConnect");
-            mSocket.emit("ready", sessionManager.getToken());
-        }
-    };
-
-    private Emitter.Listener onConnected = args -> Log.d(TAG, "Sockets call: onConnected~");
-
-    protected Emitter.Listener modifiedRelationship = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Log.i(TAG, "Sockets run: modifiedRelationship");
-                    refreshOtherView(gSwipeRefreshLayout, gView);
-                }
-            });
-        }
-    };
+//    private Emitter.Listener onConnect = new Emitter.Listener() {
+//        @Override
+//        public void call(final Object... args) {
+//            Log.i(TAG, "Sockets call: onConnect");
+//            mSocket.emit("ready", sessionManager.getToken());
+//        }
+//    };
+//
+//    private Emitter.Listener onConnected = args -> Log.d(TAG, "Sockets call: onConnected~");
+//
+//    protected Emitter.Listener modifiedRelationship = new Emitter.Listener() {
+//        @Override
+//        public void call(final Object... args) {
+//            getActivity().runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Log.i(TAG, "Sockets run: modifiedRelationship");
+//                    refreshOtherView(gSwipeRefreshLayout, gView);
+//                }
+//            });
+//        }
+//    };
 
 
 }
