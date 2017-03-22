@@ -129,7 +129,26 @@
     <string name="lost_inet_wake_up">If you would like to check your wake-up challenge, please connect to the Internet, then open Champy and make it done for today there.</string>
     <string name="loginText">\'\'it\'s your thinking that \n decides whether you\'re \n going to succeed or fail\'\' - \n henry ford</string>
     <string name="foreveralonetext">You don\'t seem to be that guy</string>
-    <string name="foreveralonetext2">get extra motivation and have fun challenging your \n friends. improve together and compete to become the \n ultimate champy!</string>
+    <string name="foreveralonetext2">get extra motivation and have fun challenging your
+                                    \n
+                                    friends. improve together and compete to become the
+                                    \n
+                                    ultimate champy!</string>
+
     <string name="nothing_here_yet">Nothing here yet,\n let\'s create a New Challenge!</string>
+
+    <string name="challenge_rules">Challenges last 21 days or 4 streaks. Streaks
+                                   get longer with progress.
+                                   \n\nThe 1 streak is 1 day, the second is 3 days,
+                                   the third is 7 and the fourth streak is 10 days
+                                   long. You have the possibility to skip every
+                                   first day of any streak starting from the
+                                   second one.
+                                   \n\nChallenges start by checking off the first day
+                                   after their creation. Unchecked challenges
+                                   are considered failed and get deleted
+                                   automatically, unless you are at the end of a
+                                   streak.
+                                   \n\nYou win the challenge by completing all 4streaks.</string>
 
 </resources>

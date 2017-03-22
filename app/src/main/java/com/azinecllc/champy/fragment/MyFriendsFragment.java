@@ -91,7 +91,7 @@ public class MyFriendsFragment extends Fragment {
         }
         c.close();
 
-        RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
+        RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.recycler_view);
         MyFriendsAdapter adapter = new MyFriendsAdapter(friends, getContext(), getActivity(), new CustomRecyclerClickListener() {
             @Override
             public void onItemClick(View v, int position) {
@@ -228,7 +228,7 @@ public class MyFriendsFragment extends Fragment {
                         }
                         c.close();
 
-                        RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
+                        RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.recycler_view);
                         final MyFriendsAdapter adapter = new MyFriendsAdapter(newfriends, getContext(), getActivity(), (view1, position) -> {
                             FriendModel friend = newfriends.get(position);
                         });

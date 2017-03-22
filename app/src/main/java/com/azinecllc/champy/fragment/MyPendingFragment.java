@@ -96,8 +96,8 @@ public class MyPendingFragment extends Fragment {
         }
         c.close();
 
-        final RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-        final MyPendingAdapter adapter = new MyPendingAdapter(pendingFriends, getContext(), getActivity(), (view1, position) -> {
+        RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.recycler_view);
+        MyPendingAdapter adapter = new MyPendingAdapter(pendingFriends, getContext(), getActivity(), (view1, position) -> {
             Pending_friend friend = pendingFriends.get(position);
         });
 
@@ -249,7 +249,7 @@ public class MyPendingFragment extends Fragment {
                         }
                         c.close();
 
-                        RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
+                        RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.recycler_view);
                         final MyPendingAdapter adapter = new MyPendingAdapter(newfriends, getContext(), getActivity(), (view1, position) -> {
                             Pending_friend friend = newfriends.get(position);
                         });

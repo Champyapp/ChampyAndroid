@@ -196,14 +196,33 @@
         android:layout_marginTop="8dp"
         android:layout_below="@+id/switch_reminder" />
 
-    <TextView
-        android:id="@+id/text_view_check_in"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Check In"
-        android:textAlignment="center"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-        android:textColor="@color/blue"
-        android:layout_alignParentBottom="true" />
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:id="@+id/text_view_skip_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="Skip a Day"
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:textColor="@color/blue" />
+
+        <TextView
+            android:id="@+id/text_view_check_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="Check In"
+            android:textStyle="bold"
+            android:textColor="@color/blue"
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+    </LinearLayout>
+
 
 </RelativeLayout>

@@ -41,6 +41,11 @@
             android:name=".activity.CreateChallengeActivity"
             android:screenOrientation="portrait"
             android:hardwareAccelerated="true" />
+        <activity
+            android:name=".activity.ChallengeRulesActivity"
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppTheme" />
 
 
         <activity android:name="com.azinecllc.champy.activity.RoleControllerActivity"

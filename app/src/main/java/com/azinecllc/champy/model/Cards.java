@@ -3,7 +3,7 @@ package com.azinecllc.champy.model;
 public class Cards {
 
     private String challengeName;
-    private String challengeDays;
+    private String challengeDay;
     private String challengeStreak;
     private String challengePercent;
     private String challengeEnd;     //
@@ -13,9 +13,9 @@ public class Cards {
     private String challengeIsRecipient;
     private String challengeType;
 
-    public Cards(String name, String days, String streak, String percent, String versus, String color, String status, String isRecipient, String type) {
+    public Cards(String name, String day, String streak, String percent, String versus, String color, String status, String isRecipient, String type) {
         this.challengeName = name;
-        this.challengeDays = days;
+        this.challengeDay = day;
         this.challengeStreak = streak;
         this.challengePercent = percent;
         this.challengeVersus = versus;
@@ -31,8 +31,8 @@ public class Cards {
         this.challengeName = challengeName;
     }
 
-    public void setChallengeDays(String challengeDays) {
-        this.challengeDays = challengeDays;
+    public void setChallengeDay(String challengeDay) {
+        this.challengeDay = challengeDay;
     }
 
     public void setChallengeStreak(String challengeStreak) {
@@ -84,8 +84,8 @@ public class Cards {
         return challengeName;
     }
 
-    public String getChallengeDays() {
-        return challengeDays;
+    public String getChallengeDay() {
+        return challengeDay;
     }
 
     public String getChallengeStreak() {

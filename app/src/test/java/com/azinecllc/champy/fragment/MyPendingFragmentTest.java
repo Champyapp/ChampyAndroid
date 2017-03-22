@@ -9,7 +9,6 @@ import android.view.View;
 import com.azinecllc.champy.BuildConfig;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.FriendsActivity;
-import com.azinecllc.champy.adapter.MyOtherAdapter;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -60,9 +59,9 @@ public class MyPendingFragmentTest {
 
     @Test
     public void onCreateView() throws Exception {
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.rvContacts);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         assertNotNull(recyclerView);
-        assertTrue(R.id.rvContacts == recyclerView.getId());
+        assertTrue(R.id.recycler_view == recyclerView.getId());
     }
 
 

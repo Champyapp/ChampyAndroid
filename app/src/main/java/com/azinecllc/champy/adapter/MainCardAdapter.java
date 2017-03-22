@@ -18,14 +18,12 @@ import com.azinecllc.champy.model.Cards;
 
 import java.util.List;
 
-import static com.azinecllc.champy.utils.Constants.typeDuel;
-
 /**
  * @autor SashaKhyzhun
  * Created on 3/20/17.
  */
 
-public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHolder> /*implements View.OnClickListener*/ {
+public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHolder> {
 
     private List<Cards> mCardsList;
     private Context mContext;
@@ -35,6 +33,7 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
         mCardsList = cardsList;
         mContext = context;
     }
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -49,7 +48,7 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
     public void onBindViewHolder(final MainCardAdapter.ViewHolder viewHolder, int position) {
         Cards itemCard = mCardsList.get(position);
 
-        String days = itemCard.getChallengeDays();                  // 21
+        String days = itemCard.getChallengeDay();                   // 21
         String streak = itemCard.getChallengeStreak();              // <?>
         String percent = itemCard.getChallengePercent();            // <?>
         String status = itemCard.getChallengeStatus();              // started-pending
@@ -64,7 +63,6 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
                 + " recipient: " + recipient + " type: " + type + " versus: " + versus
         );
 
-        boolean isRecipient = Boolean.parseBoolean(recipient);
         if (status.equals("pending")) {
             viewHolder.tvDay.setVisibility(View.INVISIBLE);
             viewHolder.tvStreak.setVisibility(View.INVISIBLE);
@@ -82,6 +80,8 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
             viewHolder.buttonAccept.setOnClickListener(v -> {
                 Toast.makeText(mContext, "Accept", Toast.LENGTH_SHORT).show();
             });
+
+            if (recipient.equals("false")) viewHolder.buttonAccept.setVisibility(View.INVISIBLE);
 
         }
 
@@ -111,11 +111,6 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
         return mCardsList.size();
     }
 
-//    @Override
-//    public void onClick(View v) {
-//        onCardClickListener.onClick();
-//    }
-
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView challengeName;
@@ -144,15 +139,6 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
             tvDay = (TextView) cardView.findViewById(R.id.text_view_day);
             tvStreak = (TextView) cardView.findViewById(R.id.text_view_streak);
         }
-//        @Override
-//        public void onClick(View v) {
-//            Intent intent = new Intent(getContext(), CardDetailActivity.class);
-//            intent.putExtra("mockName", challengeName.getText());
-//            intent.putExtra("mockStreak", challengeStreak.getText());
-//            intent.putExtra("mockPercent", challengePercent.getText());
-//            intent.putExtra("mockDays", tvDay.getText());
-//            getContext().startActivity(intent);
-//        }
     }
 
     /**

@@ -123,7 +123,7 @@ public class MyOtherFragment extends Fragment {
         c.close();
 
 
-        rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
+        rvContacts = (RecyclerView) view.findViewById(R.id.recycler_view);
         adapter = new MyOtherAdapter(friends, getContext(), getActivity(), retrofit);
 
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));

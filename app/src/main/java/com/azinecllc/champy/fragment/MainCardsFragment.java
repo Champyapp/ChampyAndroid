@@ -27,7 +27,7 @@ import static com.azinecllc.champy.utils.Constants.typeDuel;
 import static com.azinecllc.champy.utils.Constants.typeSelf;
 import static com.azinecllc.champy.utils.Constants.typeWake;
 
-public class MainCardsFragment extends Fragment /*implements OnCardClickListener */ {
+public class MainCardsFragment extends Fragment {
 
     private SwipeRefreshLayout gSwipeRefreshLayout;
     private OfflineMode offlineMode;
@@ -47,10 +47,11 @@ public class MainCardsFragment extends Fragment /*implements OnCardClickListener
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         offlineMode = OfflineMode.getInstance();
-        cardsList = new ArrayList<>();
+        cardsList = new ArrayList<Cards>();
         adapter = new MainCardAdapter(cardsList, getContext());
 
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,7 +68,7 @@ public class MainCardsFragment extends Fragment /*implements OnCardClickListener
                 intent.putExtra("mockName", item.getChallengeName());
                 intent.putExtra("mockStreak", item.getChallengeStreak());
                 intent.putExtra("mockPercent", item.getChallengePercent());
-                intent.putExtra("mockDays", item.getChallengeDays());
+                intent.putExtra("mockDay", item.getChallengeDay());
                 startActivity(intent);
             }
         });
@@ -138,26 +139,17 @@ public class MainCardsFragment extends Fragment /*implements OnCardClickListener
             String mockStatus = mockStatuses[(int) (Math.random() * mockStatuses.length)];
             String mockIsRecipient = mockRecipients[(int) (Math.random() * mockRecipients.length)];
             String mockType = mockTypes[(int) (Math.random() * mockTypes.length)];
-
-
-            System.out.println("MainCardFragment MockData: | name: " + mockName
-                    + " days: " + mockDays
-                    + " streak: " + mockStreak
-                    + " percent: " + mockPercent
-                    + " status: " + mockStatus
-                    + " isRecipient: " + mockIsRecipient
-                    + " type: " + mockType
-                    + " versus: " + mockVersus
-            );
-
+//            System.out.println("MainCardFragment MockData: | name: " + mockName + " days: " + mockDays
+//                    + " streak: " + mockStreak + " percent: " + mockPercent + " status: " + mockStatus
+//                    + " isRecipient: " + mockIsRecipient + " type: " + mockType + " versus: " + mockVersus);
             /** Fill the model */
             cardsList.add(new Cards(mockName, mockDays, mockStreak, mockPercent, mockVersus, mockColor, mockStatus, mockIsRecipient, mockType));
 
         }
         gSwipeRefreshLayout.setRefreshing(false);
-        RecyclerView rvContacts = (RecyclerView) view.findViewById(R.id.rvContacts);
-        rvContacts.setAdapter(adapter);
-        rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
+        RecyclerView rvCards = (RecyclerView) view.findViewById(R.id.recycler_view);
+        rvCards.setAdapter(adapter);
+        rvCards.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
 //    /**

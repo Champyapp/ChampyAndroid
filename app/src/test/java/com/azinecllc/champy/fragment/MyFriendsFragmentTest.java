@@ -59,9 +59,9 @@ public class MyFriendsFragmentTest {
 
     @Test
     public void onCreateView() throws Exception {
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.rvContacts);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         assertNotNull(recyclerView);
-        assertTrue(R.id.rvContacts == recyclerView.getId());
+        assertTrue(R.id.recycler_view == recyclerView.getId());
     }
 
 
