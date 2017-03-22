@@ -71,17 +71,23 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
             viewHolder.challengeStreak.setVisibility(View.INVISIBLE);
             viewHolder.challengePercent.setVisibility(View.INVISIBLE);
 
-            viewHolder.buttonDecline.setVisibility(View.VISIBLE);
+
+            if (recipient.equals("true")) {
+                viewHolder.buttonDecline.setVisibility(View.VISIBLE);
+                viewHolder.buttonAccept.setVisibility(View.VISIBLE);
+            } else {
+                viewHolder.buttonCancel.setVisibility(View.VISIBLE);
+            }
+
             viewHolder.buttonDecline.setOnClickListener(v -> {
                 Toast.makeText(mContext, "Decline", Toast.LENGTH_SHORT).show();
             });
-
-            viewHolder.buttonAccept.setVisibility(View.VISIBLE);
             viewHolder.buttonAccept.setOnClickListener(v -> {
                 Toast.makeText(mContext, "Accept", Toast.LENGTH_SHORT).show();
             });
-
-            if (recipient.equals("false")) viewHolder.buttonAccept.setVisibility(View.INVISIBLE);
+            viewHolder.buttonCancel.setOnClickListener(v -> {
+                Toast.makeText(mContext, "Cancel", Toast.LENGTH_SHORT).show();
+            });
 
         }
 
@@ -119,11 +125,12 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
         private TextView challengePercent;
         private TextView buttonAccept;
         private TextView buttonDecline;
+        private TextView buttonCancel;
         private TextView tvDay;
         private TextView tvStreak;
-        private RelativeLayout itemParentLayout;
-        private LinearLayout cardLayout;
+        private RelativeLayout cardLayout;
         private ProgressBar progressBar;
+        //private RelativeLayout itemParentLayout;
 
         ViewHolder(View cardView) {
             super(cardView);
@@ -131,13 +138,14 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
             challengeDays = (TextView) cardView.findViewById(R.id.text_view_day_n);
             challengeStreak = (TextView) cardView.findViewById(R.id.text_view_streak_n);
             challengePercent = (TextView) cardView.findViewById(R.id.tv_percent_complete);
-            cardLayout = (LinearLayout) cardView.findViewById(R.id.card_layout);
-            itemParentLayout = (RelativeLayout) cardView.findViewById(R.id.item_parent_layout);
-            progressBar = (ProgressBar) cardView.findViewById(R.id.card_progress_bar);
             buttonAccept = (TextView) cardView.findViewById(R.id.button_accept);
             buttonDecline = (TextView) cardView.findViewById(R.id.button_decline);
+            buttonCancel = (TextView) cardView.findViewById(R.id.button_cancel);
             tvDay = (TextView) cardView.findViewById(R.id.text_view_day);
             tvStreak = (TextView) cardView.findViewById(R.id.text_view_streak);
+            progressBar = (ProgressBar) cardView.findViewById(R.id.card_progress_bar);
+            cardLayout = (RelativeLayout) cardView.findViewById(R.id.card_layout);
+            //itemParentLayout = (RelativeLayout) cardView.findViewById(R.id.item_parent_layout);
         }
     }
 

@@ -33,10 +33,7 @@ public class MainCardsFragment extends Fragment {
     private OfflineMode offlineMode;
     private ArrayList<CardChallenges> cardChallengesList;
     private MainCardAdapter adapter;
-
-    /**
-     * Mock params
-     */
+    /*** Mock params */
     private String mockName;
     private String mockDays;
     private String mockStreak;
