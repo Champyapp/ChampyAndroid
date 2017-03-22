@@ -16,7 +16,7 @@
         android:layout_height="100dp"
         android:orientation="horizontal"
         android:id="@+id/card_layout"
-        android:background="@drawable/card_background_selector"
+        android:background="#cdced2"
         android:paddingBottom="8dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"

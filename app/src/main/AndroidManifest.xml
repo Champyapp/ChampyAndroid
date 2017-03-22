@@ -46,9 +46,8 @@
             android:screenOrientation="portrait"
             android:hardwareAccelerated="true"
             android:theme="@style/AppTheme" />
-
-
-        <activity android:name="com.azinecllc.champy.activity.RoleControllerActivity"
+        <activity
+            android:name=".activity.RoleControllerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <intent-filter>
@@ -56,54 +55,33 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="com.azinecllc.champy.activity.LoginActivity"
+            android:name=".activity.LoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name="com.azinecllc.champy.activity.ContactUsActivity"
+            android:name=".activity.ContactUsActivity"
             android:label="Contact Us"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-        <activity android:name="com.azinecllc.champy.activity.MainActivity"
+        <activity
+            android:name=".activity.MainActivity"
             android:label="@string/challenges"
             android:screenOrientation="portrait"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustPan"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.azinecllc.champy.activity.FriendsActivity"
-            android:label="@string/friends"
-            android:screenOrientation="portrait"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.azinecllc.champy.activity.AboutActivity"
+            android:name=".activity.AboutActivity"
             android:label="@string/about"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name="com.azinecllc.champy.activity.SelfImprovementActivity"
-            android:label="@string/title_activity_self_improvement"
-            android:screenOrientation="portrait"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppTheme" />
-        <activity android:name="com.azinecllc.champy.activity.WakeUpActivity"
-            android:label="@string/title_activity_wake_up"
+            android:name=".activity.AlarmReceiverActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-        <activity android:name="com.azinecllc.champy.activity.AlarmReceiverActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-        <activity android:name="com.azinecllc.champy.activity.DuelActivity"
-            android:label="@string/title_activity_duel"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-        <activity android:name="com.azinecllc.champy.activity.PendingDuelActivity"
-            android:label="@string/title_activity_pending_duel"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+
 
         <!-- Activity not from Champy -->
         <activity
