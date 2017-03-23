@@ -58,12 +58,12 @@ public class MainCardsFragment extends Fragment {
 
         adapter.setOnCardClickListener(new OnCardClickListener() {
             @Override
-            public void onClick(View v, CardChallenges item) {
+            public void onClick(View v, CardChallenges selectedItem) {
                 Intent intent = new Intent(getContext(), CardDetailActivity.class);
-                intent.putExtra("mockName", item.getChallengeName());
-                intent.putExtra("mockStreak", item.getChallengeStreak());
-                intent.putExtra("mockPercent", item.getChallengePercent());
-                intent.putExtra("mockDay", item.getChallengeDay());
+                intent.putExtra("mockName", selectedItem.getChallengeName());
+                intent.putExtra("mockStreak", selectedItem.getChallengeStreak());
+                intent.putExtra("mockPercent", selectedItem.getChallengePercent());
+                intent.putExtra("mockDay", selectedItem.getChallengeDay());
                 startActivity(intent);
             }
         });
@@ -79,15 +79,6 @@ public class MainCardsFragment extends Fragment {
         return view;
     }
 
-//    @Override
-//    public void onClick() {
-//        Intent intent = new Intent(getContext(), CardDetailActivity.class);
-//        intent.putExtra("mockName", mockName);
-//        intent.putExtra("mockStreak", mockStreak);
-//        intent.putExtra("mockPercent", mockPercent);
-//        intent.putExtra("mockDays", mockDays);
-//        startActivity(intent);
-//    }
 
     @Override
     public void onDestroy() {

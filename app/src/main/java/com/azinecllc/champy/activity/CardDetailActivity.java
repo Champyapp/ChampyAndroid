@@ -127,15 +127,6 @@ public class CardDetailActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 
     /**
      * Work around

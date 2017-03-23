@@ -4,13 +4,12 @@
     android:shape="rectangle" >
 
     <gradient
-        android:startColor="@color/champy_gradient_start"
-        android:centerColor="@color/champy_gradient_center"
-        android:endColor="@color/champy_gradient_end"
+        android:startColor="#d2d2d2"
+        android:centerColor="#d2d2d2"
+        android:endColor="#d2d2d2"
         android:type="linear"
         android:angle="90"/>
 
-    <corners
-        android:radius="0dp"/>
+    <corners android:radius="90dp" />
 
 </shape>

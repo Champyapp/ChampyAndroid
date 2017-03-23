@@ -18,6 +18,7 @@ import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.FriendsAdapter;
 import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.helper.CHCheckTableForExist;
+import com.azinecllc.champy.interfaces.CustomRecyclerClickListener;
 import com.azinecllc.champy.interfaces.NewUser;
 import com.azinecllc.champy.interfaces.OnCardClickListener;
 import com.azinecllc.champy.model.CardChallenges;
@@ -125,17 +126,19 @@ public class FriendsFragment extends Fragment {
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         rvContacts.setAdapter(adapter);
 
-        adapter.setOnCardClickListener(new OnCardClickListener() {
+        adapter.setOnRecyclerClickListener(new CustomRecyclerClickListener() {
             @Override
-            public void onClick(View v, CardChallenges item) {
-
+            public void onItemClick(View v, FriendModel currentFriend) {
+                Toast.makeText(getContext(), currentFriend.getName(), Toast.LENGTH_SHORT).show();
             }
         });
 
 
         gSwipeRefreshLayout = (SwipeRefreshLayout) itemView.findViewById(R.id.swipe_to_refresh);
+        //gSwipeRefreshLayout.setEnabled(false);
         gSwipeRefreshLayout.setOnRefreshListener(() -> refreshOtherView(gSwipeRefreshLayout, gView));
         this.gView = itemView;
+
 
         if (sessionManager.getRefreshOthers().equals("true")) {
             refreshOtherView(gSwipeRefreshLayout, gView);
@@ -189,17 +192,17 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Glide.clear(gView);
-        cv.clear();
-        friendsList.clear();
-        gView.destroyDrawingCache();
-        cv = null;
-        gView = null;
-        adapter = null;
-        friendsList = null;
+        //Glide.clear(gView);
+        //cv.clear();
+        //friendsList.clear();
+        //gView.destroyDrawingCache();
+        //cv = null;
+        //gView = null;
+        //adapter = null;
+        //friendsList = null;
         //mSocket = null;
-        retrofit = null;
-        checkTableForExist = null;
+        //retrofit = null;
+        //checkTableForExist = null;
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
     }
@@ -221,7 +224,6 @@ public class FriendsFragment extends Fragment {
                         @Override
                         public void onCompleted(JSONArray array, GraphResponse response) {
                             if (array.length() == 0) {
-                                //Toast.makeText(getContext(), R.string.noOneHasInstalledChampy, Toast.LENGTH_LONG).show();
                                 swipeRefreshLayout.setRefreshing(false);
                                 return;
                             }

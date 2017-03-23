@@ -57,11 +57,11 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
         String versus = itemCard.getChallengeVersus();              // versus name
         String name = itemCard.getChallengeName();                  // no tv
 
-        System.out.println("_________________________________________");
-        System.out.println("MainCardAdapter  MockData: | name: " + name + " days: " + days
-                + " streak: " + streak + " percent: " + percent + " status: " + status
-                + " recipient: " + recipient + " type: " + type + " versus: " + versus
-        );
+//        System.out.println("_________________________________________");
+//        System.out.println("MainCardAdapter  MockData: | name: " + name + " days: " + days
+//                + " streak: " + streak + " percent: " + percent + " status: " + status
+//                + " recipient: " + recipient + " type: " + type + " versus: " + versus
+//        );
 
         if (status.equals("pending")) {
             viewHolder.tvDay.setVisibility(View.INVISIBLE);

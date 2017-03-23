@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.data.DBHelper;
+import com.azinecllc.champy.interfaces.CustomRecyclerClickListener;
 import com.azinecllc.champy.interfaces.Friends;
 import com.azinecllc.champy.interfaces.OnCardClickListener;
 import com.azinecllc.champy.model.FriendModel;
@@ -47,7 +48,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     private Activity activity;
     private Context context;
     private ArrayList<Integer> selected = new ArrayList<>();
-    private OnCardClickListener onCardClickListener;
+    private CustomRecyclerClickListener onCardClickListener;
 
 
     // Pass in the contact array into the constructor
@@ -203,8 +204,8 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         }
     }
 
-    public void setOnCardClickListener(OnCardClickListener onCardClickListener) {
-        this.onCardClickListener = onCardClickListener;
+    public void setOnRecyclerClickListener(CustomRecyclerClickListener recyclerClickListener) {
+        this.onCardClickListener = recyclerClickListener;
     }
 
 }
