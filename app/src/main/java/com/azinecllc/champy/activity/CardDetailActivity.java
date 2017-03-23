@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -20,23 +19,36 @@ import com.azinecllc.champy.R;
 
 public class CardDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private TextView tvOK;
-    private TextView tvShare;
-    private TextView tvCheckIn;
-    private TextView tvSkipDay;
-    private TextView tvChallengeDay;
-    private TextView tvChallengeRules;
-    private TextView tvChallengeName;
-    private TextView tvChallengeStreak;
-    private TextView tvYouCompletedDayN;
-    private TextView tvChallengeCompletion;
-
-    private Switch switchReminder;
-
+    // Layout Top Buttons
     private ImageView buttonBack;
     private ImageView buttonShare;
+    private TextView tvChallengeName;
 
+    // Challenge icon
+    private ImageView ivChallenge;
+
+    // Layout Statistics
+    private TextView tvChallengeDayN;
+    private TextView tvChallengeStreakN;
+    private TextView tvChallengeCompletionN;
+
+    // Slider Layout
+    //private View viewSliderStick;
+    //private ImageView ivCircleDay;
+
+
+    // Views below slider
+    private TextView tvChallengeRules;
+    private Switch switchReminder;
+    // Bottom Layout of buttons
+    private TextView tvCheckIn;
+    private TextView tvSkipDay;
+    // Layout after click 'check in'
     private RelativeLayout layoutGreatJob;
+    private TextView tvYouCompletedDayN;
+    private TextView tvOK;
+    private TextView tvShare;
+
 
     private String challengeDay;
 
@@ -46,35 +58,47 @@ public class CardDetailActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_detail);
 
-        tvOK = (TextView) findViewById(R.id.text_view_ok);
-        tvShare = (TextView) findViewById(R.id.text_view_share);
-        tvCheckIn = (TextView) findViewById(R.id.text_view_check_in);
-        tvSkipDay = (TextView) findViewById(R.id.text_view_skip_day);
-        tvChallengeDay = (TextView) findViewById(R.id.text_view_day_n);
-        tvChallengeName = (TextView) findViewById(R.id.text_view_challenge_name);
-        tvChallengeRules = (TextView) findViewById(R.id.text_view_challenge_rules);
-        tvChallengeStreak = (TextView) findViewById(R.id.text_view_streak_n);
-        tvYouCompletedDayN = (TextView) findViewById(R.id.text_view_you_completed_day_n);
-        tvChallengeCompletion = (TextView) findViewById(R.id.text_view_completion_n);
-
-        switchReminder = (Switch) findViewById(R.id.switch_reminder);
-
+        // Layout Top Buttons
         buttonBack = (ImageView) findViewById(R.id.image_view_back);
         buttonShare = (ImageView) findViewById(R.id.image_view_share);
+        tvChallengeName = (TextView) findViewById(R.id.text_view_challenge_name);
 
+        // Layout Statistics
+        tvChallengeDayN = (TextView) findViewById(R.id.text_view_day_n);
+        tvChallengeStreakN = (TextView) findViewById(R.id.text_view_streak_n);
+        tvChallengeCompletionN = (TextView) findViewById(R.id.text_view_completion_n);
+
+        // Layout Slider
+        //viewSliderStick = findViewById(R.id.view_slider_stick);
+        //ivCircleDay = (ImageView) findViewById(R.id.image_view_circle_day);
+
+
+        // Views Below slider
+        tvChallengeRules = (TextView) findViewById(R.id.text_view_challenge_rules);
+        switchReminder = (Switch) findViewById(R.id.switch_reminder);
+
+        // Layout bottom buttons
+        tvCheckIn = (TextView) findViewById(R.id.text_view_check_in);
+        tvSkipDay = (TextView) findViewById(R.id.text_view_skip_day);
+
+        // Layout after click 'Check in'
         layoutGreatJob = (RelativeLayout) findViewById(R.id.layout_item_check_in);
+        tvYouCompletedDayN = (TextView) findViewById(R.id.text_view_you_completed_day_n);
+        tvOK = (TextView) findViewById(R.id.text_view_ok);
+        tvShare = (TextView) findViewById(R.id.text_view_share);
+
 
 
         Bundle extras = getIntent().getExtras();
-        challengeDay = extras.getString("mockDay");
+        challengeDay = String.valueOf(21); //extras.getString("mockDay");
         String challengeName = extras.getString("mockName");
         String challengeStreak = extras.getString("mockStreak");
         String challengePercent = extras.getString("mockPercent");
 
-        tvChallengeDay.setText(challengeDay);
+        tvChallengeDayN.setText(challengeDay);
         tvChallengeName.setText(challengeName);
-        tvChallengeStreak.setText(challengeStreak);
-        tvChallengeCompletion.setText(String.format("%s%%", challengePercent));
+        tvChallengeStreakN.setText(challengeStreak);
+        tvChallengeCompletionN.setText(String.format("%s%%", challengePercent));
 
         tvOK.setOnClickListener(this);
         tvShare.setOnClickListener(this);

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -41,6 +42,7 @@
             android:src="@mipmap/nav_share" />
     </LinearLayout>
 
+    <!-- Challenge icon -->
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
@@ -52,7 +54,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <!-- Layout with Statictycs -->
+    <!-- Layout with Statistics -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -64,7 +66,7 @@
         android:paddingRight="16dp"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
-        android:id="@+id/linearLayout">
+        android:id="@+id/layout_statistics">
 
         <LinearLayout
             android:id="@+id/layout_full_text"
@@ -144,8 +146,8 @@
 
     </LinearLayout>
 
-
-    <HorizontalScrollView
+    <!-- Streaks Slider... -->
+    <!--<HorizontalScrollView
         android:id="@+id/scroll_view_slider"
         android:layout_width="match_parent"
         android:layout_height="100dp"
@@ -179,7 +181,7 @@
                     android:layout_alignLeft="@+id/layout_circles"
                     android:layout_alignStart="@+id/layout_circles" />
 
-                <!-- Circles -->
+                &lt;!&ndash; Circles &ndash;&gt;
                 <LinearLayout
                     android:id="@+id/layout_circles"
                     android:layout_width="wrap_content"
@@ -198,8 +200,7 @@
                         android:layout_marginLeft="4dp"
                         android:layout_marginEnd="4dp"
                         android:layout_marginRight="4dp"
-                        android:paddingRight="4dp"
-                        android:background="@drawable/gradient_champy" />
+                        android:background="@drawable/circle" />
 
                 </LinearLayout>
 
@@ -235,13 +236,23 @@
             <View
                 android:id="@+id/view_slider_stick"
                 android:layout_width="1dp"
+                android:visibility="invisible"
                 android:layout_height="match_parent"
                 android:background="@color/black" />
 
         </LinearLayout>
 
-    </HorizontalScrollView>
+    </HorizontalScrollView>-->
 
+    <android.support.v7.widget.RecyclerView
+        android:layout_below="@+id/layout_statistics"
+        android:id="@+id/recycler_view_slider"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:divider="@null"
+        android:orientation="horizontal"
+        app:reverseLayout="true"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 
     <View
         android:id="@+id/line1"
@@ -254,7 +265,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginEnd="8dp"
         android:background="#d4d4d4"
-        android:layout_below="@+id/scroll_view_slider" />
+        android:layout_below="@+id/recycler_view_slider" />
 
     <TextView
         android:id="@+id/text_view_challenge_rules"
@@ -348,15 +359,10 @@
         android:background="@color/black"
         android:alpha="0.6"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <!--<ImageView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:src="@drawable/ic_duel_white"-->
-        <!--android:layout_above="@+id/text_view_great_job"-->
-        <!--android:paddingBottom="25dp"-->
-        <!--/>-->
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <TextView
             android:id="@+id/text_view_great_job"
