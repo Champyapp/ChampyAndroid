@@ -5,306 +5,313 @@
     android:layout_height="match_parent"
     android:background="@color/color_white">
 
-    <!--&lt;!&ndash; Top Layout with buttons and challenge name&ndash;&gt;-->
-    <!--<LinearLayout-->
-    <!--android:id="@+id/layout_top"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:orientation="horizontal"-->
-    <!--android:paddingLeft="16dp"-->
-    <!--android:paddingRight="16dp"-->
-    <!--android:paddingTop="16dp"-->
-    <!--android:paddingBottom="16dp">-->
+    <!-- Top Layout with buttons and challenge name-->
+    <LinearLayout
+        android:id="@+id/layout_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp">
 
-    <!--<ImageView-->
-    <!--android:id="@+id/image_view_back"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_weight="10"-->
-    <!--android:src="@drawable/ic_ab_back_holo_light_am" />-->
+        <ImageView
+            android:id="@+id/image_view_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:src="@drawable/ic_ab_back_holo_light_am" />
 
-    <!--<TextView-->
-    <!--android:id="@+id/text_view_challenge_name"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_weight="80"-->
-    <!--android:text="Challenge Name"-->
-    <!--android:textAlignment="center"-->
-    <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"-->
-    <!--android:textColor="@color/black" />-->
+        <TextView
+            android:id="@+id/text_view_challenge_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="80"
+            android:text="Challenge Name"
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:textColor="@color/black" />
 
-    <!--<ImageView-->
-    <!--android:id="@+id/image_view_share"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_weight="10"-->
-    <!--android:src="@mipmap/nav_share" />-->
-    <!--</LinearLayout>-->
+        <ImageView
+            android:id="@+id/image_view_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:src="@mipmap/nav_share" />
 
-    <!--&lt;!&ndash; Challenge icon &ndash;&gt;-->
-    <!--<ImageView-->
-    <!--android:id="@+id/imageView"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="150dp"-->
-    <!--android:paddingTop="32dp"-->
-    <!--android:paddingBottom="32dp"-->
-    <!--android:src="@drawable/ic_sleep_before_midnight"-->
-    <!--android:layout_below="@+id/layout_top"-->
-    <!--android:layout_alignParentLeft="true"-->
-    <!--android:layout_alignParentStart="true" />-->
+    </LinearLayout>
 
-    <!--&lt;!&ndash; Layout with Statistics &ndash;&gt;-->
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:orientation="vertical"-->
-    <!--android:layout_below="@+id/imageView"-->
-    <!--android:layout_alignParentLeft="true"-->
-    <!--android:layout_alignParentStart="true"-->
-    <!--android:id="@+id/layout_statistics">-->
+    <!-- Challenge icon -->
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:paddingTop="32dp"
+        android:paddingBottom="32dp"
+        android:src="@drawable/ic_sleep_before_midnight"
+        android:layout_below="@+id/layout_top"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
-    <!--<LinearLayout-->
-    <!--android:id="@+id/layout_full_text"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:paddingBottom="8dp">-->
+    <!-- Layout with Statistics -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/imageView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/layout_statistics">
 
-    <!--<TextView-->
-    <!--android:id="@+id/text_view_streak"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_weight="33"-->
-    <!--android:text="Streak"-->
-    <!--android:textColor="@color/gray"-->
-    <!--android:textAlignment="center"-->
-    <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />-->
+        <LinearLayout
+            android:id="@+id/layout_full_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp">
 
-    <!--<TextView-->
-    <!--android:id="@+id/text_view_completion"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_weight="33"-->
-    <!--android:text="Completion"-->
-    <!--android:textColor="@color/gray"-->
-    <!--android:textAlignment="center"-->
-    <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />-->
+            <TextView
+                android:id="@+id/text_view_streak"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="33"
+                android:text="Streak"
+                android:textColor="@color/gray"
+                android:textAlignment="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
-    <!--<TextView-->
-    <!--android:id="@+id/text_view_day"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_weight="33"-->
-    <!--android:text="Day"-->
-    <!--android:textColor="@color/gray"-->
-    <!--android:textAlignment="center"-->
-    <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />-->
-    <!--</LinearLayout>-->
+            <TextView
+                android:id="@+id/text_view_completion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="33"
+                android:text="Completion"
+                android:textColor="@color/gray"
+                android:textAlignment="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
-    <!--<LinearLayout-->
-    <!--android:id="@+id/layout_full_numbers"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content">-->
+            <TextView
+                android:id="@+id/text_view_day"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="33"
+                android:text="Day"
+                android:textColor="@color/gray"
+                android:textAlignment="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
-    <!--<TextView-->
-    <!--android:id="@+id/text_view_streak_n"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_weight="33"-->
-    <!--android:text="2"-->
-    <!--android:textSize="36sp"-->
-    <!--android:textColor="@color/gray"-->
-    <!--android:textAlignment="center"-->
-    <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />-->
+        </LinearLayout>
 
-    <!--<TextView-->
-    <!--android:id="@+id/text_view_completion_n"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_weight="33"-->
-    <!--android:text="28%"-->
-    <!--android:textSize="36sp"-->
-    <!--android:textColor="@color/gray"-->
-    <!--android:textAlignment="center"-->
-    <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />-->
+        <LinearLayout
+            android:id="@+id/layout_full_numbers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <!--<TextView-->
-    <!--android:id="@+id/text_view_day_n"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_weight="33"-->
-    <!--android:text="7"-->
-    <!--android:textSize="36sp"-->
-    <!--android:textColor="@color/gray"-->
-    <!--android:textAlignment="center"-->
-    <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />-->
-    <!--</LinearLayout>-->
+            <TextView
+                android:id="@+id/text_view_streak_n"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="33"
+                android:text="2"
+                android:textSize="36sp"
+                android:textColor="@color/gray"
+                android:textAlignment="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
-    <!--</LinearLayout>-->
+            <TextView
+                android:id="@+id/text_view_completion_n"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="33"
+                android:text="28%"
+                android:textSize="36sp"
+                android:textColor="@color/gray"
+                android:textAlignment="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+
+            <TextView
+                android:id="@+id/text_view_day_n"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="33"
+                android:text="7"
+                android:textSize="36sp"
+                android:textColor="@color/gray"
+                android:textAlignment="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="125dp"
+        android:layout_height="wrap_content"
         android:id="@+id/main_rv"
+        android:layout_below="@+id/layout_statistics"
+        android:layout_marginTop="16dp"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
-    <!--<View-->
-    <!--android:id="@+id/line1"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="1dp"-->
-    <!--android:layout_marginBottom="8dp"-->
-    <!--android:layout_marginTop="8dp"-->
-    <!--android:layout_marginLeft="8dp"-->
-    <!--android:layout_marginStart="8dp"-->
-    <!--android:layout_marginRight="8dp"-->
-    <!--android:layout_marginEnd="8dp"-->
-    <!--android:background="#d4d4d4"-->
-    <!--android:layout_below="@+id/main_rv" />-->
+    <View
+        android:id="@+id/line1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="#d4d4d4"
+        android:layout_below="@+id/main_rv" />
 
-    <!--<TextView-->
-    <!--android:id="@+id/text_view_challenge_rules"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="Challenge Rules"-->
-    <!--android:paddingBottom="2dp"-->
-    <!--android:paddingTop="2dp"-->
-    <!--android:layout_marginLeft="16dp"-->
-    <!--android:layout_marginStart="16dp"-->
-    <!--android:layout_marginRight="16dp"-->
-    <!--android:layout_marginEnd="16dp"-->
-    <!--android:textColor="@color/black"-->
-    <!--android:layout_below="@+id/line1"-->
-    <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />-->
+    <TextView
+        android:id="@+id/text_view_challenge_rules"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Challenge Rules"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/black"
+        android:layout_below="@+id/line1"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
-    <!--<View-->
-    <!--android:id="@+id/line2"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="1dp"-->
-    <!--android:layout_marginBottom="8dp"-->
-    <!--android:layout_marginTop="8dp"-->
-    <!--android:layout_marginLeft="8dp"-->
-    <!--android:layout_marginStart="8dp"-->
-    <!--android:layout_marginRight="8dp"-->
-    <!--android:layout_marginEnd="8dp"-->
-    <!--android:background="#d4d4d4"-->
-    <!--android:layout_below="@+id/text_view_challenge_rules" />-->
+    <View
+        android:id="@+id/line2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="#d4d4d4"
+        android:layout_below="@+id/text_view_challenge_rules" />
 
-    <!--<Switch-->
-    <!--android:id="@+id/switch_reminder"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="Reminder"-->
-    <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"-->
-    <!--android:textColor="@color/black"-->
-    <!--android:layout_marginLeft="16dp"-->
-    <!--android:layout_marginStart="16dp"-->
-    <!--android:layout_marginRight="16dp"-->
-    <!--android:layout_marginEnd="16dp"-->
-    <!--android:checked="true"-->
-    <!--android:layout_below="@+id/line2" />-->
+    <Switch
+        android:id="@+id/switch_reminder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Reminder"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        android:textColor="@color/black"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
+        android:checked="true"
+        android:layout_below="@+id/line2" />
 
-    <!--<View-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="1dp"-->
-    <!--android:background="#d4d4d4"-->
-    <!--android:layout_marginBottom="8dp"-->
-    <!--android:layout_marginTop="8dp"-->
-    <!--android:layout_marginLeft="8dp"-->
-    <!--android:layout_marginStart="8dp"-->
-    <!--android:layout_marginRight="8dp"-->
-    <!--android:layout_marginEnd="8dp"-->
-    <!--android:layout_below="@+id/switch_reminder" />-->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#d4d4d4"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_below="@+id/switch_reminder" />
 
-    <!--&lt;!&ndash; Bottom Layout with Buttons &ndash;&gt;-->
-    <!--<LinearLayout-->
-    <!--android:id="@+id/layout_buttons"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:orientation="horizontal"-->
-    <!--android:layout_alignParentBottom="true"-->
-    <!--android:layout_alignParentLeft="true"-->
-    <!--android:layout_alignParentStart="true">-->
-    <!--<TextView-->
-    <!--android:id="@+id/text_view_skip_day"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="35dp"-->
-    <!--android:layout_weight="0.5"-->
-    <!--android:gravity="center"-->
-    <!--android:text="Skip a Day"-->
-    <!--android:textAlignment="center"-->
-    <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"-->
-    <!--android:textColor="@color/blue" />-->
-    <!--<TextView-->
-    <!--android:id="@+id/text_view_check_in"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="35dp"-->
-    <!--android:layout_weight="0.5"-->
-    <!--android:gravity="center"-->
-    <!--android:text="Check In"-->
-    <!--android:textColor="@color/blue"-->
-    <!--android:textAlignment="center"-->
-    <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />-->
-    <!--</LinearLayout>-->
+    <!-- Bottom Layout with Buttons -->
+    <LinearLayout
+        android:id="@+id/layout_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
-    <!--&lt;!&ndash; layout 'Great Job!' &ndash;&gt;-->
-    <!--<RelativeLayout-->
-    <!--android:id="@+id/layout_item_check_in"-->
-    <!--android:visibility="invisible"-->
-    <!--android:background="@color/black"-->
-    <!--android:alpha="0.6"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_alignParentTop="true"-->
-    <!--android:layout_alignParentLeft="true"-->
-    <!--android:layout_alignParentStart="true">-->
+        <TextView
+            android:id="@+id/text_view_skip_day"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:text="Skip a Day"
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:textColor="@color/blue" />
 
-    <!--<TextView-->
-    <!--android:id="@+id/text_view_great_job"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="Great Job!"-->
-    <!--android:textColor="@color/color_white"-->
-    <!--android:textSize="36sp"-->
-    <!--android:textAlignment="center"-->
-    <!--android:layout_marginBottom="25dp"-->
-    <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"-->
-    <!--android:layout_above="@+id/text_view_you_completed_day_n" />-->
+        <TextView
+            android:id="@+id/text_view_check_in"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:text="Check In"
+            android:textColor="@color/blue"
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+    </LinearLayout>
 
-    <!--<TextView-->
-    <!--android:id="@+id/text_view_you_completed_day_n"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="You Completed Day N of your\nChallenge"-->
-    <!--android:textColor="@color/color_white"-->
-    <!--android:textAlignment="center"-->
-    <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"-->
-    <!--android:layout_centerVertical="true"-->
-    <!--android:layout_centerHorizontal="true" />-->
+    <!-- layout 'Great Job!' -->
+    <RelativeLayout
+        android:id="@+id/layout_item_check_in"
+        android:visibility="invisible"
+        android:background="@color/black"
+        android:alpha="0.6"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
-    <!--<TextView-->
-    <!--android:id="@+id/text_view_ok"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="OK"-->
-    <!--android:textColor="@color/color_white"-->
-    <!--android:textAlignment="center"-->
-    <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"-->
-    <!--android:layout_marginTop="32dp"-->
-    <!--android:layout_below="@+id/text_view_you_completed_day_n" />-->
+        <TextView
+            android:id="@+id/text_view_great_job"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Great Job!"
+            android:textColor="@color/color_white"
+            android:textSize="36sp"
+            android:textAlignment="center"
+            android:layout_marginBottom="25dp"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:layout_above="@+id/text_view_you_completed_day_n" />
 
-    <!--<TextView-->
-    <!--android:id="@+id/text_view_share"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="35dp"-->
-    <!--android:text="Share"-->
-    <!--android:textColor="@color/color_white"-->
-    <!--android:textAlignment="center"-->
-    <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"-->
-    <!--android:layout_alignParentBottom="true"-->
-    <!--android:layout_centerHorizontal="true" />-->
+        <TextView
+            android:id="@+id/text_view_you_completed_day_n"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="You Completed Day N of your\nChallenge"
+            android:textColor="@color/color_white"
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
 
-    <!--</RelativeLayout>-->
+        <TextView
+            android:id="@+id/text_view_ok"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="OK"
+            android:textColor="@color/color_white"
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:layout_marginTop="32dp"
+            android:layout_below="@+id/text_view_you_completed_day_n" />
+
+        <TextView
+            android:id="@+id/text_view_share"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="Share"
+            android:textColor="@color/color_white"
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
 
 
 </RelativeLayout>

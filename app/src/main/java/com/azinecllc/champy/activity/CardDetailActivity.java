@@ -186,14 +186,14 @@ public class CardDetailActivity extends AppCompatActivity implements View.OnClic
 
     private void initItems() {
         SectionModel sectionModel1 = new SectionModel();
-        sectionModel1.setLabel("First Section");
+        sectionModel1.setLabel("Streak 1");
         items = new ArrayList<>();
         items.add(1);
         sectionModel1.setItems(items);
 //        items.clear();
 
         SectionModel sectionModel2 = new SectionModel();
-        sectionModel2.setLabel("Second Section");
+        sectionModel2.setLabel("Streak 2");
         items = new ArrayList<>();
         items.add(2);
         items.add(3);
@@ -202,7 +202,7 @@ public class CardDetailActivity extends AppCompatActivity implements View.OnClic
 //        items.clear();
 
         SectionModel sectionModel3 = new SectionModel();
-        sectionModel3.setLabel("Third Section");
+        sectionModel3.setLabel("Streak 3");
         items = new ArrayList<>();
         items.add(5);
         items.add(6);
@@ -215,7 +215,7 @@ public class CardDetailActivity extends AppCompatActivity implements View.OnClic
 //        items.clear();
 
         SectionModel sectionModel4 = new SectionModel();
-        sectionModel4.setLabel("Fourth Section");
+        sectionModel4.setLabel("Streak 4");
         items = new ArrayList<>();
         items.add(12);
         items.add(13);
