@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.azinecllc.champy.R;
@@ -36,6 +37,8 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.itemLabelTextView.setText(String.valueOf(mItems.get(position).toString()));
+
+
     }
 
     @Override
@@ -46,10 +49,14 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
     class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView itemLabelTextView;
+        private TextView tvStatus;
+        private ImageView ivStatus;
 
         public ViewHolder(View itemView) {
             super(itemView);
             itemLabelTextView = (TextView) itemView.findViewById(R.id.item_label);
+            tvStatus = (TextView) itemView.findViewById(R.id.text_view_status);
+            ivStatus = (ImageView) itemView.findViewById(R.id.image_view_status);
         }
     }
 }

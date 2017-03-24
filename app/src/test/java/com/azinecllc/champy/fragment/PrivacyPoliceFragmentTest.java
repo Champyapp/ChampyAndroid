@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.azinecllc.champy.BuildConfig;
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.activity.FriendsActivity;
 import com.azinecllc.champy.activity.MainActivity;
 
 import org.junit.Before;

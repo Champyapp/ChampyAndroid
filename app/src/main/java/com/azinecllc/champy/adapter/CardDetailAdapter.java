@@ -30,7 +30,7 @@ public class CardDetailAdapter extends RecyclerView.Adapter<CardDetailAdapter.Vi
 
     @Override
     public CardDetailAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_main, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_streak, parent, false);
         return new ViewHolder(view);
     }
 

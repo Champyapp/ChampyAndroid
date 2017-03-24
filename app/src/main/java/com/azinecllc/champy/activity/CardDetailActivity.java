@@ -241,6 +241,7 @@ public class CardDetailActivity extends AppCompatActivity implements View.OnClic
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
+        // мб добавити в конструктор ще один ліст, який буде містити статус
         mainAdapter = new CardDetailAdapter(this, sections);
         recyclerView.setAdapter(mainAdapter);
     }

@@ -102,9 +102,9 @@ android {
 dependencies {
 
     // Test JUnit
-//    testCompile 'junit:junit:4.12'
-//    testCompile 'org.robolectric:robolectric:3.0'
-//    testCompile 'org.mockito:mockito-core:1.9.5'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.robolectric:robolectric:3.0'
+    testCompile 'org.mockito:mockito-core:1.9.5'
 
     // Test Support Library
 //    androidTestCompile 'com.android.support:support-annotations:23.1.1'

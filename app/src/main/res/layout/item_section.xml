@@ -2,16 +2,46 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="15dp">
+    android:layout_marginTop="0dp"
+    android:layout_marginBottom="16dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:id="@+id/item_label"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:textSize="12sp"
         android:text="1"
-        android:textColor="@android:color/black" />
+        android:textSize="12sp"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:layout_centerVertical="true"
+        android:textColor="@color/black"
+        android:background="@drawable/circle" />
+
+    <TextView
+        android:id="@+id/text_view_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/item_label"
+        android:text="In progress"
+        android:textSize="12sp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+        android:layout_marginTop="16dp"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/image_view_status"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_below="@+id/item_label"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/button_ic_done"
+        android:visibility="invisible"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/text_view_status"
+        android:layout_alignEnd="@+id/text_view_status" />
 
 </RelativeLayout>

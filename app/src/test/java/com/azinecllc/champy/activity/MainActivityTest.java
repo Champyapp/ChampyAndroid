@@ -125,27 +125,7 @@ public class MainActivityTest {
         assertNotNull(fragmentHolder);
     }
 
-    @Test
-    public void testForCHCheckPendingDuels() throws Exception {
-        int min = 0;
-        int max = 10;
-        Random random = new Random();
-        int count = random.nextInt(max - min + 1) + min;
-        assertNotNull(count);
 
-        NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
-        assertNotNull(navigationView);
-
-        TextView view = (TextView) navigationView.getMenu().findItem(R.id.nav_pending_duels).getActionView();
-        assertNotNull(navigationView);
-        System.out.println("PendingDuels Count: " + count);
-
-        view.setText(count > 0 ? String.valueOf(count) : "");
-
-        assertTrue(view.getText().equals((count > 0) ? String.valueOf(count) : ""));
-        assertNotNull(view.getText());
-        assertNotNull(view);
-    }
 
     // after each test we need to destroy singletons
     public void resetSingleton(Class clazz, String fieldName) {
