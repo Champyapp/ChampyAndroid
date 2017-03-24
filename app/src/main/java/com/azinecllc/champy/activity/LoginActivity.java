@@ -123,23 +123,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         e.printStackTrace();
                     }
 
-                    new Thread(() -> {
-                        try {
-                            InstanceID instanceID = InstanceID.getInstance(LoginActivity.this);
-                            String androidToken = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
-                                    GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                InstanceID instanceID = InstanceID.getInstance(LoginActivity.this);
+                                String androidToken = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
+                                        GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
 
-                            JSONObject jsonObject = new JSONObject();
-                            jsonObject.put("token", androidToken);
-                            jsonObject.put("timeZone", "-2");
-                            String gcm = jsonObject.toString();
+                                JSONObject jsonObject = new JSONObject();
+                                jsonObject.put("token", androidToken);
+                                jsonObject.put("timeZone", "-2");
+                                String gcm = jsonObject.toString();
 
-                            singInUser(userFBID, gcm, userPicture, androidToken);
-                            registerUser(userFBID, userName, userEmail, gcm, androidToken, userPicture);
-                        } catch (Exception e) {
-                            Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_LONG).show();
+                                singInUser(userFBID, gcm, userPicture, androidToken);
+                                registerUser(userFBID, userName, userEmail, gcm, androidToken, userPicture);
+                            } catch (Exception e) {
+                                Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_LONG).show();
+                            }
                         }
                     }).start();
+
                 });
                 Bundle parameters = new Bundle();
                 parameters.putString("fields", "id, first_name, last_name, email, gender, birthday, location");

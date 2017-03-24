@@ -35,10 +35,7 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        //holder.itemLabelTextView.setText(String.valueOf(mItems.get(position).toString()));
-        holder.itemLabelTextView.setText('Q');
-        holder.itemLabelTextView.setTextColor(Color.BLACK);
-        holder.itemLabelTextView.setVisibility(View.VISIBLE);
+        holder.itemLabelTextView.setText(String.valueOf(mItems.get(position).toString()));
     }
 
     @Override
