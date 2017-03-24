@@ -82,17 +82,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                 viewHolder.layoutInfo.setVisibility(View.INVISIBLE);
                 viewHolder.tvUserName.setVisibility(View.VISIBLE);
             }
-//            if (selected.isEmpty()) {
-//                selected.add(viewHolder.getAdapterPosition());
-//                notifyItemChanged(viewHolder.getAdapterPosition());
-//            } else {
-//                int oldSelected = selected.get(0);
-//                selected.clear();
-//                if (viewHolder.getAdapterPosition() == oldSelected) selected.add(-1);
-//                notifyItemChanged(oldSelected);
-//                notifyItemChanged(viewHolder.getAdapterPosition());
-//                selected.clear();
-//            }
+
         });
 
         return viewHolder;

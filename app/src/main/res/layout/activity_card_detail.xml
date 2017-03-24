@@ -62,10 +62,6 @@
         android:layout_below="@+id/imageView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
         android:id="@+id/layout_statistics">
 
         <LinearLayout
@@ -146,113 +142,14 @@
 
     </LinearLayout>
 
-    <!-- Streaks Slider... -->
-    <!--<HorizontalScrollView
-        android:id="@+id/scroll_view_slider"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_below="@+id/linearLayout"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RelativeLayout
-                android:id="@+id/layout_slider_streak_holder"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/text_view_streak_number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Streak N"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                    android:layout_alignRight="@+id/layout_circles"
-                    android:layout_alignEnd="@+id/layout_circles"
-                    android:layout_alignLeft="@+id/layout_circles"
-                    android:layout_alignStart="@+id/layout_circles" />
-
-                &lt;!&ndash; Circles &ndash;&gt;
-                <LinearLayout
-                    android:id="@+id/layout_circles"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:layout_below="@+id/text_view_streak_number"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:id="@+id/image_view_circle_day"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginEnd="4dp"
-                        android:layout_marginRight="4dp"
-                        android:background="@drawable/circle" />
-
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="In Progress"
-                    android:textSize="12sp"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                    android:layout_marginTop="8dp"
-                    android:layout_below="@+id/layout_circles"
-                    android:layout_alignRight="@+id/layout_circles"
-                    android:layout_alignEnd="@+id/layout_circles"
-                    android:layout_alignLeft="@+id/layout_circles"
-                    android:layout_alignStart="@+id/layout_circles" />
-
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:src="@drawable/button_ic_done"
-                    android:visibility="invisible"
-                    android:layout_below="@+id/layout_circles"
-                    android:layout_marginTop="8dp"
-                    android:layout_alignRight="@+id/layout_circles"
-                    android:layout_alignEnd="@+id/layout_circles"
-                    android:layout_alignLeft="@+id/layout_circles"
-                    android:layout_alignStart="@+id/layout_circles" />
-
-
-            </RelativeLayout>
-
-            <View
-                android:id="@+id/view_slider_stick"
-                android:layout_width="1dp"
-                android:visibility="invisible"
-                android:layout_height="match_parent"
-                android:background="@color/black" />
-
-        </LinearLayout>
-
-    </HorizontalScrollView>-->
 
     <android.support.v7.widget.RecyclerView
-        android:layout_below="@+id/layout_statistics"
-        android:id="@+id/recycler_view_slider"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:divider="@null"
-        android:orientation="horizontal"
-        app:reverseLayout="true"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+        android:layout_height="125dp"
+        android:id="@+id/main_rv"
+        android:layout_below="@+id/layout_statistics"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
 
     <View
         android:id="@+id/line1"
@@ -265,7 +162,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginEnd="8dp"
         android:background="#d4d4d4"
-        android:layout_below="@+id/recycler_view_slider" />
+        android:layout_below="@+id/main_rv" />
 
     <TextView
         android:id="@+id/text_view_challenge_rules"

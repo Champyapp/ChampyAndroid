@@ -3,6 +3,7 @@ package com.azinecllc.champy.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -33,8 +34,7 @@ public class CardDetailActivity extends AppCompatActivity implements View.OnClic
     private TextView tvChallengeCompletionN;
 
     // Slider Layout
-    //private View viewSliderStick;
-    //private ImageView ivCircleDay;
+    private RecyclerView recyclerView;
 
 
     // Views below slider
@@ -53,6 +53,7 @@ public class CardDetailActivity extends AppCompatActivity implements View.OnClic
     private String challengeDay;
 
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,8 +70,7 @@ public class CardDetailActivity extends AppCompatActivity implements View.OnClic
         tvChallengeCompletionN = (TextView) findViewById(R.id.text_view_completion_n);
 
         // Layout Slider
-        //viewSliderStick = findViewById(R.id.view_slider_stick);
-        //ivCircleDay = (ImageView) findViewById(R.id.image_view_circle_day);
+        recyclerView = (RecyclerView) findViewById(R.id.main_rv);
 
 
         // Views Below slider
@@ -94,6 +94,7 @@ public class CardDetailActivity extends AppCompatActivity implements View.OnClic
         String challengeName = extras.getString("mockName");
         String challengeStreak = extras.getString("mockStreak");
         String challengePercent = extras.getString("mockPercent");
+
 
         tvChallengeDayN.setText(challengeDay);
         tvChallengeName.setText(challengeName);
