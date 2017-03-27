@@ -1,6 +1,5 @@
 package com.azinecllc.champy.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.CardDetailAdapter;
@@ -51,7 +49,7 @@ public class CardDetailActivity extends AppCompatActivity implements View.OnClic
     // Slider Layout
     private RecyclerView recyclerView;
     private CardDetailAdapter mainAdapter;
-    private List<SectionModel> sections;
+    private List<SectionModel> sectionsList;
     private List<Integer> items;
 
 
@@ -184,6 +182,9 @@ public class CardDetailActivity extends AppCompatActivity implements View.OnClic
         tvChallengeRules.setClickable(true);
     }
 
+    /**
+     * Work around
+     */
     private void initItems() {
         SectionModel sectionModel1 = new SectionModel();
         sectionModel1.setLabel("Streak 1");
@@ -230,19 +231,22 @@ public class CardDetailActivity extends AppCompatActivity implements View.OnClic
         sectionModel4.setItems(items);
 //        items.clear();
 
-        sections = new ArrayList<>();
-        sections.add(sectionModel1);
-        sections.add(sectionModel2);
-        sections.add(sectionModel3);
-        sections.add(sectionModel4);
+        sectionsList = new ArrayList<>();
+        sectionsList.add(sectionModel1);
+        sectionsList.add(sectionModel2);
+        sectionsList.add(sectionModel3);
+        sectionsList.add(sectionModel4);
     }
 
+    /**
+     * Work around
+     */
     private void init() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
         // мб добавити в конструктор ще один ліст, який буде містити статус
-        mainAdapter = new CardDetailAdapter(this, sections);
+        mainAdapter = new CardDetailAdapter(this, sectionsList);
         recyclerView.setAdapter(mainAdapter);
     }
 

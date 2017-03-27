@@ -20,7 +20,6 @@ public class SectionModel {
         this.label = label;
     }
 
-
     public List<Integer> getItems() {
         return items;
     }
