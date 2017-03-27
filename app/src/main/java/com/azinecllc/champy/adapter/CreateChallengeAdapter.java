@@ -41,8 +41,6 @@ public class CreateChallengeAdapter extends RecyclerView.Adapter<CreateChallenge
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         CreateChallengeModel challenge = mChallenges.get(position);
-        System.out.println("duration: " + challenge.getChallengeDuration());
-        System.out.println();
 
         holder.challengeName.setText(challenge.getChallengeName());
         holder.challengeDays.setText(String.valueOf(challenge.getChallengeDuration()));

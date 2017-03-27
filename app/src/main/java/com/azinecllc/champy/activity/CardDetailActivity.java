@@ -96,7 +96,7 @@ public class CardDetailActivity extends AppCompatActivity implements View.OnClic
 
 
         Bundle extras = getIntent().getExtras();
-        challengeDay = String.valueOf(21); //extras.getString("mockDay");
+        challengeDay = extras.getString("mockDay"); //String.valueOf(21);
         String challengeName = extras.getString("mockName");
         String challengeStreak = extras.getString("mockStreak");
         String challengePercent = extras.getString("mockPercent");

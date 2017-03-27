@@ -114,22 +114,34 @@ public class MainCardsFragment extends Fragment {
             String mockColor = String.valueOf(Color.argb(255, r, g, b));
 
             String[] mockNames = {"Smoke Weed", "Don't Sleep", "Drink a beer", "Love Translit", "Igratu cs", "Don't die"};
-            String[] mockVersuz = {"Eminem", "Dr.Dre", "Chuck Norris"};
+            String[] mockVersus = {"Eminem", "Dr.Dre", "Chuck Norris"};
             String[] mockStatuses = {"pending", "started", /*"failed"*/};
             String[] mockRecipients = {"true", "false"};
             String[] mockTypes = {typeSelf, typeDuel, typeWake};
 
-            String mockName = mockNames[(int) (Math.random() * mockNames.length)];
-            String mockVersus = mockVersuz[(int) (Math.random() * mockVersuz.length)];
-            String mockStatus = mockStatuses[(int) (Math.random() * mockStatuses.length)];
-            String mockIsRecipient = mockRecipients[(int) (Math.random() * mockRecipients.length)];
-            String mockType = mockTypes[(int) (Math.random() * mockTypes.length)];
-            String mockName2 = (mockType.equals(typeDuel)) ? mockName + " with " + mockVersus : mockName;
-//            System.out.println("MainCardFragment MockData: | name: " + mockName + " days: " + mockDays
-//                    + " streak: " + mockStreak + " percent: " + mockPercent + " status: " + mockStatus
-//                    + " isRecipient: " + mockIsRecipient + " type: " + mockType + " versus: " + mockVersus);
+            String randomName = mockNames[(int) (Math.random() * mockNames.length)];
+            String randomVersus = mockVersus[(int) (Math.random() * mockVersus.length)];
+            String randomStatus = mockStatuses[(int) (Math.random() * mockStatuses.length)];
+            String randIsRecipient = mockRecipients[(int) (Math.random() * mockRecipients.length)];
+            String randomType = mockTypes[(int) (Math.random() * mockTypes.length)];
+
+            String mockName = (randomType.equals(typeDuel)) ? randomName + " with " + randomVersus : randomName;
+
+            System.out.println("VISIBLE: " + View.VISIBLE);
+            System.out.println("INVISIBLE: " + View.INVISIBLE);
+
             /** Fill the model */
-            cardChallengesList.add(new CardChallenges(mockName2, mockDays, mockStreak, mockPercent, mockVersus, mockColor, mockStatus, mockIsRecipient, mockType));
+            cardChallengesList.add(new CardChallenges(
+                    mockName,
+                    mockDays,
+                    mockStreak,
+                    mockPercent,
+                    randomVersus,
+                    mockColor,
+                    randomStatus,
+                    randIsRecipient,
+                    randomType
+            ));
 
         }
         gSwipeRefreshLayout.setRefreshing(false);

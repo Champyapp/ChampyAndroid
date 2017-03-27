@@ -63,6 +63,17 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
 //                + " recipient: " + recipient + " type: " + type + " versus: " + versus
 //        );
 
+        System.out.println("___________________________________");
+        System.out.println("day       : " + days);
+        System.out.println("streak    : " + streak);
+        System.out.println("percent   : " + percent);
+        System.out.println("status    : " + status);
+        System.out.println("recipient : " + recipient);
+        System.out.println("name      : " + name);
+        System.out.println("type      : " + type);
+        System.out.println("versus    : " + versus);
+        System.out.println("___________________________________");
+
         if (status.equals("pending")) {
             viewHolder.tvDay.setVisibility(View.INVISIBLE);
             viewHolder.tvStreak.setVisibility(View.INVISIBLE);
@@ -77,18 +88,18 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
             } else {
                 viewHolder.buttonCancel.setVisibility(View.VISIBLE);
             }
-
-            viewHolder.buttonDecline.setOnClickListener(v -> {
-                Toast.makeText(mContext, "Decline", Toast.LENGTH_SHORT).show();
-            });
-            viewHolder.buttonAccept.setOnClickListener(v -> {
-                Toast.makeText(mContext, "Accept", Toast.LENGTH_SHORT).show();
-            });
-            viewHolder.buttonCancel.setOnClickListener(v -> {
-                Toast.makeText(mContext, "Cancel", Toast.LENGTH_SHORT).show();
-            });
-
         }
+
+
+        viewHolder.buttonDecline.setOnClickListener(v -> {
+            Toast.makeText(mContext, "Decline", Toast.LENGTH_SHORT).show();
+        });
+        viewHolder.buttonAccept.setOnClickListener(v -> {
+            Toast.makeText(mContext, "Accept", Toast.LENGTH_SHORT).show();
+        });
+        viewHolder.buttonCancel.setOnClickListener(v -> {
+            Toast.makeText(mContext, "Cancel", Toast.LENGTH_SHORT).show();
+        });
 
         viewHolder.challengeName.setText(name);
         viewHolder.challengeDays.setText(days);
