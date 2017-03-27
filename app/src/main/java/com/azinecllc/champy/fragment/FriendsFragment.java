@@ -21,7 +21,6 @@ import com.azinecllc.champy.helper.CHCheckTableForExist;
 import com.azinecllc.champy.interfaces.CustomRecyclerClickListener;
 import com.azinecllc.champy.interfaces.NewUser;
 import com.azinecllc.champy.interfaces.OnCardClickListener;
-import com.azinecllc.champy.model.CardChallenges;
 import com.azinecllc.champy.model.FriendModel;
 import com.azinecllc.champy.model.user.Data;
 import com.azinecllc.champy.model.user.User;

@@ -4,16 +4,11 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.azinecllc.champy.R;
@@ -21,7 +16,6 @@ import com.azinecllc.champy.adapter.CreateChallengeAdapter;
 import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.model.CardChallenges;
 import com.azinecllc.champy.model.CreateChallengeModel;
-import com.azinecllc.champy.model.create_challenge.CreateChallenge;
 import com.azinecllc.champy.model.self.Datum;
 import com.azinecllc.champy.model.self.SelfImprovement;
 import com.azinecllc.champy.utils.OfflineMode;
@@ -33,8 +27,6 @@ import java.util.List;
 import retrofit.Call;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static com.azinecllc.champy.utils.Constants.API_URL;
 

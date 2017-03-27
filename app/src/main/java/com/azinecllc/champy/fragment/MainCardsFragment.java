@@ -108,36 +108,33 @@ public class MainCardsFragment extends Fragment {
 
             /** Mock params */
 
-            String mockDays = String.valueOf(random.nextInt(high - low) + low);
-            String mockStreak = String.valueOf(random.nextInt(high - low) + low);
-            String mockPercent = String.valueOf(random.nextInt(high - low) + low);
-            String mockColor = String.valueOf(Color.argb(255, r, g, b));
+            String randomDays = String.valueOf(random.nextInt(high - low) + low);
+            String randomStreak = String.valueOf(random.nextInt(high - low) + low);
+            String randomPercent = String.valueOf(random.nextInt(high - low) + low);
+            String randomColor = String.valueOf(Color.argb(255, r, g, b));
 
             String[] mockNames = {"Smoke Weed", "Don't Sleep", "Drink a beer", "Love Translit", "Igratu cs", "Don't die"};
-            String[] mockVersus = {"Eminem", "Dr.Dre", "Chuck Norris"};
+            String[] mockVersus = {"", "Dr.Dre", "Chuck Norris"};
             String[] mockStatuses = {"pending", "started", /*"failed"*/};
             String[] mockRecipients = {"true", "false"};
             String[] mockTypes = {typeSelf, typeDuel, typeWake};
 
             String randomName = mockNames[(int) (Math.random() * mockNames.length)];
             String randomVersus = mockVersus[(int) (Math.random() * mockVersus.length)];
+            String randomType = mockTypes[(int) (Math.random() * mockTypes.length)];
             String randomStatus = mockStatuses[(int) (Math.random() * mockStatuses.length)];
             String randIsRecipient = mockRecipients[(int) (Math.random() * mockRecipients.length)];
-            String randomType = mockTypes[(int) (Math.random() * mockTypes.length)];
 
             String mockName = (randomType.equals(typeDuel)) ? randomName + " with " + randomVersus : randomName;
-
-            System.out.println("VISIBLE: " + View.VISIBLE);
-            System.out.println("INVISIBLE: " + View.INVISIBLE);
 
             /** Fill the model */
             cardChallengesList.add(new CardChallenges(
                     mockName,
-                    mockDays,
-                    mockStreak,
-                    mockPercent,
+                    randomDays,
+                    randomStreak,
+                    randomPercent,
                     randomVersus,
-                    mockColor,
+                    randomColor,
                     randomStatus,
                     randIsRecipient,
                     randomType

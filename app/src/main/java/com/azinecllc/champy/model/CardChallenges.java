@@ -27,6 +27,47 @@ public class CardChallenges {
     }
 
 
+    public String getChallengeType() {
+        return challengeType;
+    }
+
+    public String getChallengeIsRecipient() {
+        return challengeIsRecipient;
+    }
+
+    public String getChallengeStatus() {
+        return challengeStatus;
+    }
+
+    public String getChallengeName() {
+        return challengeName;
+    }
+
+    public String getChallengeDay() {
+        return challengeDay;
+    }
+
+    public String getChallengeStreak() {
+        return challengeStreak;
+    }
+
+    public String getChallengePercent() {
+        return challengePercent;
+    }
+
+    public String getChallengeVersus() {
+        return challengeVersus;
+    }
+
+    public String getChallengeEnd() {
+        return challengeEnd;
+    }
+
+    public String getChallengeColor() {
+        return challengeColor;
+    }
+
+
 
     public void setChallengeName(String challengeName) {
         this.challengeName = challengeName;
@@ -68,44 +109,4 @@ public class CardChallenges {
         this.challengeType = challengeType;
     }
 
-
-    public String getChallengeType() {
-        return challengeType;
-    }
-
-    public String getChallengeIsRecipient() {
-        return challengeIsRecipient;
-    }
-
-    public String getChallengeStatus() {
-        return challengeStatus;
-    }
-
-    public String getChallengeName() {
-        return challengeName;
-    }
-
-    public String getChallengeDay() {
-        return challengeDay;
-    }
-
-    public String getChallengeStreak() {
-        return challengeStreak;
-    }
-
-    public String getChallengePercent() {
-        return challengePercent;
-    }
-
-    public String getChallengeVersus() {
-        return challengeVersus;
-    }
-
-    public String getChallengeEnd() {
-        return challengeEnd;
-    }
-
-    public String getChallengeColor() {
-        return challengeColor;
-    }
 }

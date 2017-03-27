@@ -25,6 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="80"
             android:text="Challenge Rules"
+            android:textStyle="bold"
             android:textAlignment="center"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             android:textColor="@color/black" />
@@ -44,7 +45,7 @@
         android:layout_height="match_parent"
         android:text="@string/challenge_rules"
         android:textColor="@color/black"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:textSize="16sp"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
 
