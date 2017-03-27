@@ -45,14 +45,10 @@ public class CardDetailAdapter extends RecyclerView.Adapter<CardDetailAdapter.Vi
         }
 
         holder.sectionLabelTextView.setText(section.getLabel());
-        initSectionRV(holder, section);
-    }
 
-    private void initSectionRV(ViewHolder holder, SectionModel section) {
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
         holder.sectionRecyclerView.setLayoutManager(layoutManager);
-
         SectionAdapter sectionAdapter = new SectionAdapter(mContext, section.getItems());
         holder.sectionRecyclerView.setAdapter(sectionAdapter);
     }

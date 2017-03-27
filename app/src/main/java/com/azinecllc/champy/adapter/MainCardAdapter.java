@@ -50,12 +50,12 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
 
         String days = itemCard.getChallengeDay();                   // 21
         String streak = itemCard.getChallengeStreak();              // <?>
-        String percent = itemCard.getChallengePercent();            // <?>
+        String percent = itemCard.getChallengePercent();            // <n%>
         String status = itemCard.getChallengeStatus();              // started-pending
         String recipient = itemCard.getChallengeIsRecipient();      // true / false
+        String name = itemCard.getChallengeName();                  // no tv
         String type = itemCard.getChallengeType();                  // self-duel-wake
         String versus = itemCard.getChallengeVersus();              // versus name
-        String name = itemCard.getChallengeName();                  // no tv
 
 //        System.out.println("_________________________________________");
 //        System.out.println("MainCardAdapter  MockData: | name: " + name + " days: " + days
@@ -70,7 +70,6 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
             viewHolder.challengeDays.setVisibility(View.INVISIBLE);
             viewHolder.challengeStreak.setVisibility(View.INVISIBLE);
             viewHolder.challengePercent.setVisibility(View.INVISIBLE);
-
 
             if (recipient.equals("true")) {
                 viewHolder.buttonDecline.setVisibility(View.VISIBLE);

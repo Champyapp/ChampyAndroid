@@ -121,17 +121,10 @@ public class FriendsFragment extends Fragment {
 
 
         rvContacts = (RecyclerView) itemView.findViewById(R.id.recycler_view);
-        adapter = new FriendsAdapter(friendsList, getContext(), getActivity(), retrofit);
+        adapter = new FriendsAdapter(friendsList, getContext());
 
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         rvContacts.setAdapter(adapter);
-
-        adapter.setOnRecyclerClickListener(new CustomRecyclerClickListener() {
-            @Override
-            public void onItemClick(View v, FriendModel currentFriend) {
-                Toast.makeText(getContext(), currentFriend.getName(), Toast.LENGTH_SHORT).show();
-            }
-        });
 
 
         gSwipeRefreshLayout = (SwipeRefreshLayout) itemView.findViewById(R.id.swipe_to_refresh);
@@ -208,7 +201,7 @@ public class FriendsFragment extends Fragment {
     }
 
 
-    private void refreshOtherView(final SwipeRefreshLayout swipeRefreshLayout, final View view) {
+    private void refreshOtherView(SwipeRefreshLayout swipeRefreshLayout, View view) {
         if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
             swipeRefreshLayout.setRefreshing(true);
             swipeRefreshLayout.post(new Runnable() {

@@ -42,21 +42,17 @@ import retrofit.Retrofit;
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
 
     private List<FriendModel> mContacts;
-    private Retrofit retrofit;
     private SQLiteDatabase db;
     private ContentValues cv;
-    private Activity activity;
     private Context context;
     private ArrayList<Integer> selected = new ArrayList<>();
     private CustomRecyclerClickListener onCardClickListener;
 
 
     // Pass in the contact array into the constructor
-    public FriendsAdapter(List<FriendModel> contacts, Context ctx, Activity activity, Retrofit retrofit) {
+    public FriendsAdapter(List<FriendModel> contacts, Context ctx) {
         mContacts = contacts;
         this.context = ctx;
-        this.activity = activity;
-        this.retrofit = retrofit;
     }
 
     @Override

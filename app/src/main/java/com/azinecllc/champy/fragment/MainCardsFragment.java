@@ -33,12 +33,6 @@ public class MainCardsFragment extends Fragment {
     private OfflineMode offlineMode;
     private ArrayList<CardChallenges> cardChallengesList;
     private MainCardAdapter adapter;
-    /*** Mock params */
-    private String mockName;
-    private String mockDays;
-    private String mockStreak;
-    private String mockPercent;
-    private String mockVersus;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,19 +85,19 @@ public class MainCardsFragment extends Fragment {
     private void loadInProgressCards(View view) {
         gSwipeRefreshLayout.setRefreshing(true);
         ArrayList<Challenge> challengesArrayList = Challenge.generate(getContext());
-        for (int i = 0; i < challengesArrayList.size(); i++) {
+        for (int i = 0; i < /*challengesArrayList.size()*/ 10; i++) {
 
             /** True Data */
-            Challenge challenge = challengesArrayList.get(i);
-            String challengeName = challenge.getChallengeName();
-            String versus = challenge.getVersus();
-            String constDuration = challenge.getConstDuration();
-            String recipient = challenge.getRecipient();
-            String description = challenge.getGoal();
-            String duration = challenge.getDays();
-            String status = challenge.getStatus();
-            String isRecipient = challenge.getRecipient();
-            String type = challenge.getType();
+            //Challenge challenge = challengesArrayList.get(i);
+            //String challengeName = challenge.getChallengeName();
+            //String versus = challenge.getVersus();
+            //String constDuration = challenge.getConstDuration();
+            //String recipient = challenge.getRecipient();
+            //String description = challenge.getGoal();
+            //String duration = challenge.getDays();
+            //String status = challenge.getStatus();
+            //String isRecipient = challenge.getRecipient();
+            //String type = challenge.getType();
             //String color = challenge.getColor();
 
             /** Mock Data */
@@ -112,24 +106,30 @@ public class MainCardsFragment extends Fragment {
             int low = 0;
             int high = 100;
 
-            mockName = challengeName.replaceAll("e", "e");
-            mockDays = String.valueOf(random.nextInt(high - low) + low);
-            mockStreak = String.valueOf(random.nextInt(high - low) + low);
-            mockPercent = String.valueOf(random.nextInt(high - low) + low);
-            mockVersus = versus.replaceAll("a", "a");
+            /** Mock params */
+
+            String mockDays = String.valueOf(random.nextInt(high - low) + low);
+            String mockStreak = String.valueOf(random.nextInt(high - low) + low);
+            String mockPercent = String.valueOf(random.nextInt(high - low) + low);
             String mockColor = String.valueOf(Color.argb(255, r, g, b));
 
+            String[] mockNames = {"Smoke Weed", "Don't Sleep", "Drink a beer", "Love Translit", "Igratu cs", "Don't die"};
+            String[] mockVersuz = {"Eminem", "Dr.Dre", "Chuck Norris"};
             String[] mockStatuses = {"pending", "started", /*"failed"*/};
             String[] mockRecipients = {"true", "false"};
             String[] mockTypes = {typeSelf, typeDuel, typeWake};
+
+            String mockName = mockNames[(int) (Math.random() * mockNames.length)];
+            String mockVersus = mockVersuz[(int) (Math.random() * mockVersuz.length)];
             String mockStatus = mockStatuses[(int) (Math.random() * mockStatuses.length)];
             String mockIsRecipient = mockRecipients[(int) (Math.random() * mockRecipients.length)];
             String mockType = mockTypes[(int) (Math.random() * mockTypes.length)];
+            String mockName2 = (mockType.equals(typeDuel)) ? mockName + " with " + mockVersus : mockName;
 //            System.out.println("MainCardFragment MockData: | name: " + mockName + " days: " + mockDays
 //                    + " streak: " + mockStreak + " percent: " + mockPercent + " status: " + mockStatus
 //                    + " isRecipient: " + mockIsRecipient + " type: " + mockType + " versus: " + mockVersus);
             /** Fill the model */
-            cardChallengesList.add(new CardChallenges(mockName, mockDays, mockStreak, mockPercent, mockVersus, mockColor, mockStatus, mockIsRecipient, mockType));
+            cardChallengesList.add(new CardChallenges(mockName2, mockDays, mockStreak, mockPercent, mockVersus, mockColor, mockStatus, mockIsRecipient, mockType));
 
         }
         gSwipeRefreshLayout.setRefreshing(false);

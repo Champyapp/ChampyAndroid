@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -20,6 +21,7 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.fragment.FriendsFragment;
@@ -131,7 +133,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
 
-        fabPlus.setOnClickListener(v -> startActivity(new Intent(this, CreateChallengeActivity.class)));
+        fabPlus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "fab", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getContext(), CreateChallengeActivity.class));
+            }
+        });
+
         //fabSelf.setOnClickListener(v -> startActivity(new Intent(this, SelfImprovementActivity.class)));
         //fabDuel.setOnClickListener(v -> startActivity(new Intent(this, FriendsActivity.class)));
         //fabWake.setOnClickListener(v -> startActivity(new Intent(this, WakeUpActivity.class)));
@@ -140,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // PENDING DUEL MENU IN DRAWER
         //setCounterForPendingDuels();
 
-        loadHomeFragment();
+        loadCurrentFragment();
 
     }
 
@@ -158,14 +167,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         navItemIndex = 0;
         CURRENT_TAG = TAG_CHALLENGES;
-        loadHomeFragment();
+        loadCurrentFragment();
 
     }
 
 
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_challenges:
                 navItemIndex = 0;
@@ -189,40 +198,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
         }
         drawer.closeDrawer(GravityCompat.START);
-        loadHomeFragment();
+        loadCurrentFragment();
         return true;
     }
 
-
-
-
-
-    /**
-     * Method provider which returns respected fragment that user selected from navigation menu.
-     * I transmit needed fragment to method 'loadHomeFragment' which will show it.
-     */
-    private Fragment getHomeFragment() {
-        switch (navItemIndex) {
-            case 0:
-                return new MainCardsFragment();
-            case 1:
-                return new FriendsFragment();
-            case 2:
-                return new SettingsFragment();
-            case 3:
-                return new TermsFragment();
-            case 4:
-                return new PrivacyPoliceFragment();
-            default:
-                return new MainCardsFragment();
-        }
-    }
 
     /**
      * Method which shows selected fragment from drawer and loads it in UI Thread, because we need to
      * avoid large object and freezes. In this method I also was set current title for toolbar.
      */
-    private void loadHomeFragment() {
+    private void loadCurrentFragment() {
         // if user select the current navigation menu again, just close the navigation drawer
         if (getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
             drawer.closeDrawers();
@@ -247,8 +232,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mHandler.post(runnable); // If 'runnable' is not null, then add to the message queue
         drawer.closeDrawers();   // Closing drawer on item click
         invalidateOptionsMenu(); // refresh toolbar menu
-        toggleFab();           // show or hide the fab button
+        toggleFab();             // show or hide the fab button
     }
+
+    /**
+     * Method provider which returns respected fragment that user selected from navigation menu.
+     * I transmit needed fragment to method 'loadCurrentFragment' which will show it.
+     */
+    private Fragment getHomeFragment() {
+        switch (navItemIndex) {
+            case 0:
+                return new MainCardsFragment();
+            case 1:
+                return new FriendsFragment();
+            case 2:
+                return new SettingsFragment();
+            case 3:
+                return new TermsFragment();
+            case 4:
+                return new PrivacyPoliceFragment();
+            default:
+                return new MainCardsFragment();
+        }
+    }
+
 
     /**
      * Method to set visible for FabPlus if current fragment != main
