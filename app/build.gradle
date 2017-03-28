@@ -147,6 +147,7 @@ dependencies {
     compile 'com.getbase:floatingactionbutton:1.10.1'               // Fab (Simple & Circular)
     compile 'io.reactivex:rxandroid:1.0.1'                          // RxAndroid
     compile 'io.reactivex:rxjava:1.0.14'                            // RxAndroid
+    compile 'com.jakewharton:butterknife:8.5.1'                     // ButterKnife
     compile('com.github.nkzawa:socket.io-client:0.3.0') {           // Sockets
         exclude group: 'org.json', module: 'json'
     }
@@ -154,14 +155,15 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-v4'
     }
 
-    // RetroLambda & GCM Services
-    apply plugin: 'me.tatarka.retrolambda'
-    apply plugin: 'com.google.gms.google-services'
-    //apply plugin: 'com.google.gms.google-services'
+    apply plugin: 'me.tatarka.retrolambda'                          // RetroLambda
+    apply plugin: 'com.google.gms.google-services'                  // GMS
+    apply plugin: 'com.jakewharton.butterknife'                     // ButterKnife
 
     // JUnit 5
     apply plugin: "com.android.application"
     apply plugin: "de.mannodermaus.android-junit5"
+
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 
 
 }

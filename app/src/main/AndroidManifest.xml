@@ -33,6 +33,11 @@
 
 
         <activity
+            android:name=".activity.CreateChallengeDetailsActivity"
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="true"
+            android:theme="@style/ChallengeDetail" />
+        <activity
             android:name=".activity.CardDetailActivity"
             android:screenOrientation="portrait"
             android:hardwareAccelerated="true"

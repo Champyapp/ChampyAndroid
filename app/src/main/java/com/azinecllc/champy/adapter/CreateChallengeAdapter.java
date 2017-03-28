@@ -1,6 +1,7 @@
 package com.azinecllc.champy.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.azinecllc.champy.R;
+import com.azinecllc.champy.activity.CreateChallengeDetailsActivity;
 import com.azinecllc.champy.interfaces.RecyclerCardClickListener;
 import com.azinecllc.champy.interfaces.RecyclerChallengesClickListener;
 import com.azinecllc.champy.model.CreateChallengeModel;
@@ -57,7 +59,9 @@ public class CreateChallengeAdapter extends RecyclerView.Adapter<CreateChallenge
         holder.cardLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Mamke privet", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, CreateChallengeDetailsActivity.class);
+                intent.putExtra("name", challenge.getChallengeName());
+                context.startActivity(intent);
             }
         });
 

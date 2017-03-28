@@ -34,18 +34,19 @@
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             android:textColor="@color/black" />
 
-        <ImageView
-            android:id="@+id/image_view_share"
+        <TextView
+            android:id="@+id/text_view_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="10"
-            android:src="@mipmap/nav_share" />
+            android:text="Cancel"
+            android:textAlignment="center"
+            android:textColor="@color/blue" />
 
     </LinearLayout>
 
     <!-- Challenge icon -->
     <ImageView
-        android:id="@+id/image_view_challenge_logo"
+        android:id="@+id/image_view_challenge_icon"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:paddingTop="32dp"
@@ -59,8 +60,9 @@
         android:id="@+id/text_view_challenge_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/image_view_challenge_logo"
-        android:padding="8dp"
+        android:layout_below="@+id/image_view_challenge_icon"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:text="Sleep Before Midnight"
         android:textSize="36sp"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
@@ -70,7 +72,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/text_view_challenge_name"
-        android:padding="8dp"
+        android:layout_above="@+id/line1"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:text="Get to bed before midnight to have full 7 to 8 hours of sleep."
         android:textSize="18sp"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
@@ -148,7 +152,7 @@
         android:id="@+id/switch_reminder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Reminder"
+        android:text="Daily Reminder"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         android:textColor="@color/black"
         android:layout_marginLeft="16dp"

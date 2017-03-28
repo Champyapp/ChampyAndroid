@@ -86,7 +86,7 @@ public class CardDetailActivity extends AppCompatActivity implements View.OnClic
 
         // Layout bottom buttons
         tvCheckIn = (TextView) findViewById(R.id.text_view_check_in);
-        tvSkipDay = (TextView) findViewById(R.id.tv_create_challenge);
+        tvSkipDay = (TextView) findViewById(R.id.text_view_skip_day);
 
         // Layout after click 'Check in'
         layoutGreatJob = (RelativeLayout) findViewById(R.id.layout_item_check_in);

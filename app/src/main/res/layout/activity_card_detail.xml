@@ -45,7 +45,7 @@
 
     <!-- Challenge icon -->
     <ImageView
-        android:id="@+id/image_view_challenge_logo"
+        android:id="@+id/image_view_challenge_icon"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:paddingTop="32dp"
@@ -60,7 +60,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_below="@+id/image_view_challenge_logo"
+        android:layout_below="@+id/image_view_challenge_icon"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:id="@+id/layout_statistics">
@@ -233,7 +233,7 @@
         android:layout_alignParentStart="true">
 
         <TextView
-            android:id="@+id/tv_create_challenge"
+            android:id="@+id/text_view_skip_day"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_weight="0.5"
