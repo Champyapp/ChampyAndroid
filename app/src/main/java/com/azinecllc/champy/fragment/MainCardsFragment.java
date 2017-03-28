@@ -10,12 +10,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.CardDetailActivity;
 import com.azinecllc.champy.adapter.MainCardAdapter;
-import com.azinecllc.champy.interfaces.OnCardClickListener;
+import com.azinecllc.champy.interfaces.RecyclerCardClickListener;
 import com.azinecllc.champy.model.CardChallenges;
 import com.azinecllc.champy.model.Challenge;
 import com.azinecllc.champy.utils.OfflineMode;
@@ -50,7 +49,7 @@ public class MainCardsFragment extends Fragment {
 
         loadInProgressCards(view);
 
-        adapter.setOnCardClickListener(new OnCardClickListener() {
+        adapter.setOnCardClickListener(new RecyclerCardClickListener() {
             @Override
             public void onClick(View v, CardChallenges selectedItem) {
                 Intent intent = new Intent(getContext(), CardDetailActivity.class);

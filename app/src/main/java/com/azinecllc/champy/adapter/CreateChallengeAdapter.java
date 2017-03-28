@@ -1,18 +1,21 @@
 package com.azinecllc.champy.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.interfaces.OnCardClickListener;
+import com.azinecllc.champy.interfaces.RecyclerCardClickListener;
+import com.azinecllc.champy.interfaces.RecyclerChallengesClickListener;
 import com.azinecllc.champy.model.CreateChallengeModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,7 +25,7 @@ import java.util.List;
 
 public class CreateChallengeAdapter extends RecyclerView.Adapter<CreateChallengeAdapter.ViewHolder> {
 
-    private OnCardClickListener onCardClickListener;
+    private RecyclerChallengesClickListener onCardClickListener;
     private List<CreateChallengeModel> mChallenges;
     private Context context;
 
@@ -45,6 +48,18 @@ public class CreateChallengeAdapter extends RecyclerView.Adapter<CreateChallenge
         holder.challengeName.setText(challenge.getChallengeName());
         holder.challengeDays.setText(String.valueOf(challenge.getChallengeDuration()));
         holder.challengeStreak.setText(String.valueOf(challenge.getChallengeStreak()));
+
+        GradientDrawable gd = new GradientDrawable();
+        gd.setColor(Color.parseColor("#cdced2")); // origin: #cdced2
+        gd.setCornerRadius(25);
+        holder.cardLayout.setBackgroundDrawable(gd);
+
+        holder.cardLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "Mamke privet", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
@@ -69,11 +84,11 @@ public class CreateChallengeAdapter extends RecyclerView.Adapter<CreateChallenge
     }
 
     /**
-     * My custom OnCardClickListener interface
+     * My custom RecyclerCardClickListener interface
      *
      * @param onCardClickListener -
      */
-    public void setOnCardClickListener(OnCardClickListener onCardClickListener) {
+    public void setOnCardClickListener(RecyclerChallengesClickListener onCardClickListener) {
         this.onCardClickListener = onCardClickListener;
     }
 

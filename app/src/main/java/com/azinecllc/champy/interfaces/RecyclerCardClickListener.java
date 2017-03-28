@@ -9,6 +9,6 @@ import com.azinecllc.champy.model.CardChallenges;
  * Created on 3/20/17.
  */
 
-public interface OnCardClickListener {
+public interface RecyclerCardClickListener {
     void onClick(View v, CardChallenges item);
 }

@@ -67,7 +67,7 @@ public class CardDetailActivity extends AppCompatActivity implements View.OnClic
         // Layout Top Buttons
         buttonBack = (ImageView) findViewById(R.id.image_view_back);
         buttonShare = (ImageView) findViewById(R.id.image_view_share);
-        tvChallengeName = (TextView) findViewById(R.id.text_view_challenge_name);
+        tvChallengeName = (TextView) findViewById(R.id.tv_create_challenge);
 
         // Layout Statistics
         tvChallengeDayN = (TextView) findViewById(R.id.text_view_day_n);
@@ -86,7 +86,7 @@ public class CardDetailActivity extends AppCompatActivity implements View.OnClic
 
         // Layout bottom buttons
         tvCheckIn = (TextView) findViewById(R.id.text_view_check_in);
-        tvSkipDay = (TextView) findViewById(R.id.text_view_skip_day);
+        tvSkipDay = (TextView) findViewById(R.id.tv_create_challenge);
 
         // Layout after click 'Check in'
         layoutGreatJob = (RelativeLayout) findViewById(R.id.layout_item_check_in);
@@ -123,7 +123,7 @@ public class CardDetailActivity extends AppCompatActivity implements View.OnClic
             case R.id.text_view_challenge_rules:
                 startActivity(new Intent(this, ChallengeRulesActivity.class));
                 break;
-            case R.id.text_view_skip_day:
+            case R.id.tv_create_challenge:
                 Toast.makeText(this, "Skip a Day", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.text_view_check_in:

@@ -6,14 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.interfaces.OnCardClickListener;
+import com.azinecllc.champy.interfaces.RecyclerCardClickListener;
 import com.azinecllc.champy.model.CardChallenges;
 
 import java.util.List;
@@ -27,7 +26,7 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
 
     private List<CardChallenges> mCardChallengesList;
     private Context mContext;
-    private OnCardClickListener onCardClickListener;
+    private RecyclerCardClickListener onCardClickListener;
 
     public MainCardAdapter(List<CardChallenges> cardChallengesList, Context context) {
         mCardChallengesList = cardChallengesList;
@@ -160,10 +159,10 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
     }
 
     /**
-     * My custom OnCardClickListener interface
+     * My custom RecyclerCardClickListener interface
      * @param onCardClickListener -
      */
-    public void setOnCardClickListener(OnCardClickListener onCardClickListener) {
+    public void setOnCardClickListener(RecyclerCardClickListener onCardClickListener) {
         this.onCardClickListener = onCardClickListener;
     }
 

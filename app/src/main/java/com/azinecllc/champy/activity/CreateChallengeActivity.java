@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.CreateChallengeAdapter;
 import com.azinecllc.champy.data.DBHelper;
+import com.azinecllc.champy.interfaces.RecyclerCardClickListener;
+import com.azinecllc.champy.interfaces.RecyclerChallengesClickListener;
 import com.azinecllc.champy.model.CardChallenges;
 import com.azinecllc.champy.model.CreateChallengeModel;
 import com.azinecllc.champy.model.self.Datum;
@@ -22,7 +24,6 @@ import com.azinecllc.champy.model.self.SelfImprovement;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
 
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,6 +105,7 @@ public class CreateChallengeActivity extends AppCompatActivity {
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_to_refresh);
         mSwipeRefreshLayout.setEnabled(false);
+
         //mSwipeRefreshLayout.setOnRefreshListener(() -> refreshChallengesView(mSwipeRefreshLayout, mView));
 
 //        RecyclerView rvCards = (RecyclerView) view.findViewById(R.id.recycler_view);
@@ -126,7 +128,8 @@ public class CreateChallengeActivity extends AppCompatActivity {
     // get standard self-improvement challenges
     private void getChallenges(/*SwipeRefreshLayout swipeRefreshLayout, View view*/) {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
-        com.azinecllc.champy.interfaces.SelfImprovement selfImprovement = retrofit.create(com.azinecllc.champy.interfaces.SelfImprovement.class);
+        com.azinecllc.champy.interfaces.SelfImprovement selfImprovement = retrofit
+                .create(com.azinecllc.champy.interfaces.SelfImprovement.class);
         Call<SelfImprovement> call = selfImprovement.getChallenges(sessionManager.getToken());
         call.enqueue(new retrofit.Callback<SelfImprovement>() {
             @Override
@@ -166,19 +169,23 @@ public class CreateChallengeActivity extends AppCompatActivity {
                             //data_size++;
                         }
                     }
+
+//                    cv.put("name", "Wake Up Challenge");
+//                    cv.put("description", "Wake Up Every day at 6 am");
+//                    cv.put("duration", "86400");
+//                    cv.put("challenge_id", "567d51c48322f85870fd931d  (d?) <---");
+//                    db.insert("selfimprovement", null, cv);
+//                    challengeModelList.add(new CreateChallengeModel(
+//                            "Wake Up Challenge",
+//                            "Wake Up Every day at 6 am",
+//                            "567d51c48322f85870fd931d",
+//                            86400 / 24 / 60 / 60,
+//                            /*datum.getStreak()*/ 4
+//                    Make it again with step challenge
+//                    ));
+
                     rvChallenges.setAdapter(adapter);
                     System.out.println("== the end ==");
-//                    sessionManager.setSelfSize(data_size);
-//                    int size = sessionManager.getSelfSize();
-//                    SelfImprovementPagerAdapter pagerAdapter = new SelfImprovementPagerAdapter(getSupportFragmentManager());
-//                    ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-//                    pagerAdapter.setCount(size);
-//                    viewPager.setAdapter(pagerAdapter);
-//                    viewPager.setOffscreenPageLimit(1);
-//                    viewPager.setPageMargin(20);
-//                    viewPager.setClipToPadding(false);
-//                    viewPager.setPadding(90, 0, 90, 0);
-//                    spinner.setVisibility(View.INVISIBLE);
                 }
             }
 
