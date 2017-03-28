@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.azinecllc.champy.adapter.FriendsAdapter;
 import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.helper.CHCheckTableForExist;
 import com.azinecllc.champy.interfaces.NewUser;
+import com.azinecllc.champy.interfaces.RecyclerFriendsClickListener;
 import com.azinecllc.champy.model.FriendModel;
 import com.azinecllc.champy.model.user.Data;
 import com.azinecllc.champy.model.user.User;
@@ -117,7 +119,7 @@ public class FriendsFragment extends Fragment {
 
 
         rvContacts = (RecyclerView) itemView.findViewById(R.id.recycler_view);
-        adapter = new FriendsAdapter(friendsList, getContext());
+        adapter = new FriendsAdapter(friendsList, getContext(), getActivity());
 
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         rvContacts.setAdapter(adapter);

@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SessionManager sessionManager;
     private DrawerLayout drawer;
     private NavigationView navigationView;
-    private Socket mSocket;
+    //private Socket mSocket;
 
 
     @Override
@@ -70,6 +70,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        if (getIntent().getExtras() != null) {
+            String extrasTag = getIntent().getExtras().getString("tag");
+            if (extrasTag != null && extrasTag.equals("friends")) {
+                navItemIndex = 1;
+                CURRENT_TAG = TAG_FRIENDS;
+            }
+        }
 
         // DRAWER
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -137,17 +145,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(new Intent(getContext(), CreateChallengeActivity.class));
         });
 
-        if (getIntent().getExtras() != null) {
-            System.out.println("getIntent().getExtras() != null");
-            String extrasTag = getIntent().getExtras().getString("tag");
-            System.out.println("extras: " + extrasTag);
-            if (extrasTag != null && extrasTag.equals("friends")) {
-                System.out.println("extras != null && extras.equals('friends')");
-                navItemIndex = 1;
-                CURRENT_TAG = TAG_FRIENDS;
-                loadCurrentFragment();
-            }
-        }
 
         // PENDING DUEL MENU IN DRAWER
         //setCounterForPendingDuels();

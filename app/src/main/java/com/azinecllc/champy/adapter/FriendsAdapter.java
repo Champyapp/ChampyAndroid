@@ -1,7 +1,9 @@
 package com.azinecllc.champy.adapter;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -13,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.interfaces.RecyclerFriendsClickListener;
@@ -33,14 +36,16 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     private SQLiteDatabase db;
     private ContentValues cv;
     private Context context;
+    private Activity activity;
     private ArrayList<Integer> selected = new ArrayList<>();
     private RecyclerFriendsClickListener onCardClickListener;
 
 
     // Pass in the contact array into the constructor
-    public FriendsAdapter(List<FriendModel> contacts, Context ctx) {
+    public FriendsAdapter(List<FriendModel> contacts, Context ctx, Activity activity) {
         mContacts = contacts;
         this.context = ctx;
+        this.activity = activity;
     }
 
     @Override
@@ -59,13 +64,24 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
         // click on same contact
         contactView.setOnClickListener(v -> {
-            if (viewHolder.layoutInfo.getVisibility() == View.INVISIBLE) {
-                viewHolder.layoutInfo.setVisibility(View.VISIBLE);
-                viewHolder.tvUserName.setVisibility(View.INVISIBLE);
+            if (activity.getCallingActivity() != null) {
+                System.out.println("activity for result");
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("name", viewHolder.tvUserName.getText());
+                System.out.println("result: " + viewHolder.tvUserName.getText());
+                activity.setResult(Activity.RESULT_OK, returnIntent);
+                activity.finish();
             } else {
-                viewHolder.layoutInfo.setVisibility(View.INVISIBLE);
-                viewHolder.tvUserName.setVisibility(View.VISIBLE);
+                System.out.println("simple starts activity");
+                if (viewHolder.layoutInfo.getVisibility() == View.INVISIBLE) {
+                    viewHolder.layoutInfo.setVisibility(View.VISIBLE);
+                    viewHolder.tvUserName.setVisibility(View.INVISIBLE);
+                } else {
+                    viewHolder.layoutInfo.setVisibility(View.INVISIBLE);
+                    viewHolder.tvUserName.setVisibility(View.VISIBLE);
+                }
             }
+
 
         });
 
@@ -156,7 +172,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     }
 
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView ivUserPhoto;
         private TextView tvUserName;
         private TextView tvStreak;

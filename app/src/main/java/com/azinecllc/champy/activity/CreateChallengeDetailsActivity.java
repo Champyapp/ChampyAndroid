@@ -84,5 +84,16 @@ public class CreateChallengeDetailsActivity extends AppCompatActivity {
         Toast.makeText(this, "Create Challenge", Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null) {
+            System.out.println("data == null");
+            return;
+        }
+        String name = data.getStringExtra("name");
+        System.out.println("name: " + name);
+        tvChallengeAFriend.setText(name);
+    }
+
 
 }
