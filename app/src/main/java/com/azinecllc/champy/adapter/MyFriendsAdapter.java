@@ -18,7 +18,7 @@
 //
 //import com.azinecllc.champy.R;
 //import com.azinecllc.champy.activity.DuelActivity;
-//import com.azinecllc.champy.interfaces.CustomRecyclerClickListener;
+//import com.azinecllc.champy.interfaces.RecyclerFriendsClickListener;
 //import com.azinecllc.champy.model.FriendModel;
 //import com.azinecllc.champy.utils.Constants;
 //import com.azinecllc.champy.utils.OfflineMode;
@@ -43,15 +43,15 @@
 //    private OfflineMode offlineMode;
 //    private String token, id;
 //    private int inProgressCounter;
-//    private CustomRecyclerClickListener listener;
+//    private RecyclerFriendsClickListener listener;
 //    private Context context;
 //    private Activity activity;
 //    private ArrayList<Integer> selected = new ArrayList<>();
 //
-//    public MyFriendsAdapter(List<FriendModel> contacts, Context context, Activity activity, CustomRecyclerClickListener itemOnClick) {
+//    public MyFriendsAdapter(List<FriendModel> contacts, Context context, Activity activity, RecyclerFriendsClickListener itemOnClick) {
 //        mContacts = contacts;
 //        this.context = context;
-//        /*CustomRecyclerClickListener*/
+//        /*RecyclerFriendsClickListener*/
 //        listener = itemOnClick;
 //        this.activity = activity;
 //    }

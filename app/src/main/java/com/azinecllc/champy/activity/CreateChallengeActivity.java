@@ -8,6 +8,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
@@ -21,6 +22,7 @@ import com.azinecllc.champy.model.self.SelfImprovement;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
 
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +56,8 @@ public class CreateChallengeActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_challenge);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         offlineMode = OfflineMode.getInstance();
         sessionManager = SessionManager.getInstance(this);
@@ -65,7 +69,9 @@ public class CreateChallengeActivity extends AppCompatActivity {
 
         challengeModelList = new ArrayList<>();
         Cursor c = db.query("selfimprovement", null, null, null, null, null, null);
+
         if (c.moveToFirst()) {
+            System.out.println("c.moveToFirst()");
             int nameColIndex = c.getColumnIndex("name");
             int coldescription = c.getColumnIndex("description");
             int colchallenge_id = c.getColumnIndex("challenge_id");
@@ -84,7 +90,11 @@ public class CreateChallengeActivity extends AppCompatActivity {
             } finally {
                 c.close();
             }
+        } else {
+            System.out.println("c.moveToPrevious()");
+            getChallenges();
         }
+
 
         rvChallenges = (RecyclerView) findViewById(R.id.recycler_view);
         adapter = new CreateChallengeAdapter(challengeModelList, this);
@@ -114,7 +124,7 @@ public class CreateChallengeActivity extends AppCompatActivity {
 
 
     // get standard self-improvement challenges
-    private void refreshChallengesView(SwipeRefreshLayout swipeRefreshLayout, View view) {
+    private void getChallenges(/*SwipeRefreshLayout swipeRefreshLayout, View view*/) {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         com.azinecllc.champy.interfaces.SelfImprovement selfImprovement = retrofit.create(com.azinecllc.champy.interfaces.SelfImprovement.class);
         Call<SelfImprovement> call = selfImprovement.getChallenges(sessionManager.getToken());
@@ -130,7 +140,6 @@ public class CreateChallengeActivity extends AppCompatActivity {
                         com.azinecllc.champy.model.self.Datum datum = data.get(i);
                         String datumType = datum.getType().getName();
 
-
                         if (datumType.equals("self improvement") && datum.getCreatedBy() == null) {
 
                             if (datum.getName().equals("Taking stares")) {
@@ -140,29 +149,25 @@ public class CreateChallengeActivity extends AppCompatActivity {
                                 datum.setName("Reading Books");
                             }
 
-
                             cv.put("name", datum.getName());
                             cv.put("description", datum.getDescription());
                             cv.put("duration", datum.getDuration());
                             cv.put("challenge_id", datum.get_id());
                             db.insert("selfimprovement", null, cv);
 
-                            System.out.println("datum.getDuration(): " + datum.getDuration());
-                            int duration = datum.getDuration() / 24 / 60 / 60;
-                            System.out.println("my duration: " + duration);
                             challengeModelList.add(new CreateChallengeModel(
                                     datum.getName(),
                                     datum.getDescription(),
                                     datum.get_id(),
-                                    duration,
+                                    datum.getDuration() / 24 / 60 / 60,
                                     /*datum.getStreak()*/ 4
                             ));
-
-                            rvChallenges.setAdapter(adapter);
-                            swipeRefreshLayout.setRefreshing(false);
+                            //swipeRefreshLayout.setRefreshing(false);
                             //data_size++;
                         }
                     }
+                    rvChallenges.setAdapter(adapter);
+                    System.out.println("== the end ==");
 //                    sessionManager.setSelfSize(data_size);
 //                    int size = sessionManager.getSelfSize();
 //                    SelfImprovementPagerAdapter pagerAdapter = new SelfImprovementPagerAdapter(getSupportFragmentManager());

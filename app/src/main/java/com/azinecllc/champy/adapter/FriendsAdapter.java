@@ -1,30 +1,22 @@
 package com.azinecllc.champy.adapter;
 
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.data.DBHelper;
-import com.azinecllc.champy.interfaces.CustomRecyclerClickListener;
-import com.azinecllc.champy.interfaces.Friends;
-import com.azinecllc.champy.interfaces.OnCardClickListener;
+import com.azinecllc.champy.interfaces.RecyclerFriendsClickListener;
 import com.azinecllc.champy.model.FriendModel;
-import com.azinecllc.champy.utils.OfflineMode;
-import com.azinecllc.champy.utils.SessionManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.FacebookSdk;
@@ -34,10 +26,6 @@ import java.util.List;
 import java.util.Random;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
 
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
 
@@ -46,7 +34,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     private ContentValues cv;
     private Context context;
     private ArrayList<Integer> selected = new ArrayList<>();
-    private CustomRecyclerClickListener onCardClickListener;
+    private RecyclerFriendsClickListener onCardClickListener;
 
 
     // Pass in the contact array into the constructor
@@ -190,7 +178,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         }
     }
 
-    public void setOnRecyclerClickListener(CustomRecyclerClickListener recyclerClickListener) {
+    public void setOnRecyclerClickListener(RecyclerFriendsClickListener recyclerClickListener) {
         this.onCardClickListener = recyclerClickListener;
     }
 

@@ -29,6 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="80"
             android:text="Challenge Name"
+            android:textStyle="bold"
             android:textAlignment="center"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             android:textColor="@color/black" />

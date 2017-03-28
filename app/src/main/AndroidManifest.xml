@@ -43,7 +43,7 @@
             android:screenOrientation="portrait"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustPan"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.ChallengeRulesActivity"
             android:screenOrientation="portrait"
