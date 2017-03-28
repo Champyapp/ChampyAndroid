@@ -50,7 +50,7 @@ public class CreateChallengeDetailsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         Bundle extras = getIntent().getExtras();
-        String challengeName = (extras.getString("name", "nil").isEmpty()) ? "null" : extras.getString("name");
+        String challengeName = extras.getString("name", "null");
         tvChallengeName.setText(challengeName);
 
 
@@ -73,9 +73,10 @@ public class CreateChallengeDetailsActivity extends AppCompatActivity {
 
     @OnClick(R.id.text_view_challenge_a_friend)
     public void onClickChallengeAFriend() {
-        //Intent intent = new Intent(this, FriendsActivity.class);
-        //startActivityForResult(intent);
-        Toast.makeText(this, "Challenge A Friends", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("tag", "friends");
+        startActivityForResult(intent, 1);
+//        Toast.makeText(this, "Challenge A Friends", Toast.LENGTH_SHORT).show();
     }
 
     @OnClick(R.id.text_view_create_challenge)

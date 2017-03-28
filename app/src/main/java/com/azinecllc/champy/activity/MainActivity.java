@@ -133,18 +133,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
 
-        fabPlus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), "fab", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getContext(), CreateChallengeActivity.class));
-            }
+        fabPlus.setOnClickListener(v -> {
+            startActivity(new Intent(getContext(), CreateChallengeActivity.class));
         });
 
-        //fabSelf.setOnClickListener(v -> startActivity(new Intent(this, SelfImprovementActivity.class)));
-        //fabDuel.setOnClickListener(v -> startActivity(new Intent(this, FriendsActivity.class)));
-        //fabWake.setOnClickListener(v -> startActivity(new Intent(this, WakeUpActivity.class)));
-
+        if (getIntent().getExtras() != null) {
+            System.out.println("getIntent().getExtras() != null");
+            String extrasTag = getIntent().getExtras().getString("tag");
+            System.out.println("extras: " + extrasTag);
+            if (extrasTag != null && extrasTag.equals("friends")) {
+                System.out.println("extras != null && extras.equals('friends')");
+                navItemIndex = 1;
+                CURRENT_TAG = TAG_FRIENDS;
+                loadCurrentFragment();
+            }
+        }
 
         // PENDING DUEL MENU IN DRAWER
         //setCounterForPendingDuels();
