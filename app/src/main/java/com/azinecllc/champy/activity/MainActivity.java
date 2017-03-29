@@ -73,9 +73,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (getIntent().getExtras() != null) {
             String extrasTag = getIntent().getExtras().getString("tag");
-            if (extrasTag != null && extrasTag.equals("friends")) {
-                navItemIndex = 1;
-                CURRENT_TAG = TAG_FRIENDS;
+            int extrasIndex = getIntent().getExtras().getInt("index");
+            if (extrasTag != null) {
+                System.out.println("main activity extras tag: " + extrasTag);
+                System.out.println("main activity extras ind: " + extrasIndex);
+                navItemIndex = extrasIndex;
+                CURRENT_TAG = extrasTag;
             }
         }
 
@@ -164,6 +167,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        }
+
+        if (navItemIndex == 1 && getCallingActivity() != null) {
+            System.out.println("activity for result");
+            Intent returnIntent = new Intent();
+            setResult(Activity.RESULT_CANCELED, returnIntent);
+            finish();
         }
         navItemIndex = 0;
         CURRENT_TAG = TAG_CHALLENGES;

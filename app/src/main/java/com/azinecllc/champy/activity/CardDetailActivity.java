@@ -93,7 +93,7 @@ public class CardDetailActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         challengeDay = extras.getString("mockDay"); //String.valueOf(21);
         String challengeName = extras.getString("mockName");
-        String challengeStreak = extras.getString("mockStreak");
+        String challengeStreak = extras.getString("mockStreak"); // "4";
         String challengePercent = extras.getString("mockPercent");
 
 

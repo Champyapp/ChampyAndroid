@@ -49,17 +49,17 @@ public class MainCardsFragment extends Fragment {
 
         loadInProgressCards(view);
 
-        adapter.setOnCardClickListener(new RecyclerCardClickListener() {
-            @Override
-            public void onClick(View v, CardChallenges selectedItem) {
-                Intent intent = new Intent(getContext(), CardDetailActivity.class);
-                intent.putExtra("mockName", selectedItem.getChallengeName());
-                intent.putExtra("mockStreak", selectedItem.getChallengeStreak());
-                intent.putExtra("mockPercent", selectedItem.getChallengePercent());
-                intent.putExtra("mockDay", selectedItem.getChallengeDay());
-                startActivity(intent);
-            }
-        });
+//        adapter.setOnCardClickListener(new RecyclerCardClickListener() {
+//            @Override
+//            public void onClick(View v, CardChallenges selectedItem) {
+//                Intent intent = new Intent(getContext(), CardDetailActivity.class);
+//                intent.putExtra("mockName", selectedItem.getChallengeName());
+//                intent.putExtra("mockStreak", selectedItem.getChallengeStreak());
+//                intent.putExtra("mockPercent", selectedItem.getChallengePercent());
+//                intent.putExtra("mockDay", selectedItem.getChallengeDay());
+//                startActivity(intent);
+//            }
+//        });
 
         gSwipeRefreshLayout.setOnRefreshListener(() -> {
             if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
@@ -86,7 +86,7 @@ public class MainCardsFragment extends Fragment {
         ArrayList<Challenge> challengesArrayList = Challenge.generate(getContext());
         for (int i = 0; i < /*challengesArrayList.size()*/ 10; i++) {
 
-            /** True Data */
+            ///** True Data */
             //Challenge challenge = challengesArrayList.get(i);
             //String challengeName = challenge.getChallengeName();
             //String versus = challenge.getVersus();

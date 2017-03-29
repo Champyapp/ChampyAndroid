@@ -114,7 +114,7 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
         viewHolder.cardLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onCardClickListener.onClick(v, itemCard);
+                Toast.makeText(mContext, itemCard.getChallengeName(), Toast.LENGTH_SHORT).show();
             }
         });
 

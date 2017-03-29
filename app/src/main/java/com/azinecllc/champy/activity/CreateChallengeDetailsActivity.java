@@ -83,7 +83,8 @@ public class CreateChallengeDetailsActivity extends AppCompatActivity {
     @OnClick(R.id.text_view_challenge_a_friend)
     public void onClickChallengeAFriend() {
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("tag", "friends");
+        intent.putExtra("tag", "TAG_FRIENDS");
+        intent.putExtra("index", 1);
         startActivityForResult(intent, 1);
     }
 
@@ -97,6 +98,10 @@ public class CreateChallengeDetailsActivity extends AppCompatActivity {
     public void onClickGotIt() {
         Toast.makeText(this, "Got it...", Toast.LENGTH_SHORT).show();
         enableChildClicks();
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("tag", "TAG_CHALLENGES");
+        intent.putExtra("index", 0);
+        startActivity(intent);
     }
 
     @OnClick(R.id.text_view_share)
@@ -113,16 +118,31 @@ public class CreateChallengeDetailsActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data == null) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (intent == null) {
             System.out.println("data == null");
             return;
         }
-        String name = data.getStringExtra("name");
-        System.out.println("name: " + name);
-        tvChallengeAFriend.setText(name);
+
+        switch (resultCode) {
+            case RESULT_OK:
+                String name = intent.getStringExtra("name");
+                tvChallengeAFriend.setText(name);
+                break;
+            default:
+                break;
+        }
+
     }
 
+    @Override
+    public void onBackPressed() {
+        if (layoutCreated.getVisibility() == View.VISIBLE) {
+            enableChildClicks();
+            return;
+        }
+        super.onBackPressed();
+    }
 
     /**
      * Method to enable all childes onClickListeners into parent layout
