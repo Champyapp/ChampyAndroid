@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         };
 
         String[] activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
-        navigationView.getMenu().getItem(navItemIndex);   // selecting appropriate nav menu item
+        //navigationView.getMenu().getItem(navItemIndex);   // selecting appropriate nav menu item
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(activityTitles[navItemIndex]); // set toolbar title
         }

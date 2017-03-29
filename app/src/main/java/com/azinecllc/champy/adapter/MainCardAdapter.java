@@ -1,6 +1,7 @@
 package com.azinecllc.champy.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.azinecllc.champy.R;
+import com.azinecllc.champy.activity.CardDetailActivity;
 import com.azinecllc.champy.interfaces.RecyclerCardClickListener;
 import com.azinecllc.champy.model.CardChallenges;
 
@@ -114,7 +116,12 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
         viewHolder.cardLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, itemCard.getChallengeName(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(mContext, CardDetailActivity.class);
+                intent.putExtra("mockName", itemCard.getChallengeName());
+                intent.putExtra("mockStreak", itemCard.getChallengeStreak());
+                intent.putExtra("mockPercent", itemCard.getChallengePercent());
+                intent.putExtra("mockDay", itemCard.getChallengeDay());
+                mContext.startActivity(intent);
             }
         });
 

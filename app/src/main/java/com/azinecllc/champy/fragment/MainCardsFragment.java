@@ -1,6 +1,5 @@
 package com.azinecllc.champy.fragment;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,9 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.activity.CardDetailActivity;
 import com.azinecllc.champy.adapter.MainCardAdapter;
-import com.azinecllc.champy.interfaces.RecyclerCardClickListener;
 import com.azinecllc.champy.model.CardChallenges;
 import com.azinecllc.champy.model.Challenge;
 import com.azinecllc.champy.utils.OfflineMode;
@@ -112,7 +109,7 @@ public class MainCardsFragment extends Fragment {
             String randomPercent = String.valueOf(random.nextInt(high - low) + low);
             String randomColor = String.valueOf(Color.argb(255, r, g, b));
 
-            String[] mockNames = {"Smoke Weed", "Don't Sleep", "Drink a beer", "Love Translit", "Igratu cs", "Don't die"};
+            String[] mockNames = {"Smoke Weed", "Love Cats", "Drink a beer", "Love Translit", "Igratu cs", "Don't die"};
             String[] mockVersus = {"", "Dr.Dre", "Chuck Norris"};
             String[] mockStatuses = {"pending", "started", /*"failed"*/};
             String[] mockRecipients = {"true", "false"};
