@@ -23,19 +23,19 @@
         android:layout_centerHorizontal="true" />
 
     <View
+        android:id="@+id/border"
         android:layout_width="1dp"
         android:layout_height="wrap_content"
-        android:id="@+id/border"
         android:background="@android:color/black"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignBottom="@+id/rv_streak" />
+        android:layout_alignBottom="@+id/image_view_streak_status" />
 
     <TextView
+        android:id="@+id/text_view_streak_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/text_view_streak_status"
         android:layout_centerHorizontal="true"
         android:textSize="12sp"
         android:text="In Progress"
@@ -47,9 +47,9 @@
         android:layout_marginEnd="16dp" />
 
     <ImageView
+        android:id="@+id/image_view_streak_status"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:id="@+id/image_view_streak_status"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/rv_streak"
         android:src="@drawable/button_ic_done"

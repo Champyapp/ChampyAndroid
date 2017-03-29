@@ -48,13 +48,25 @@ public class StreakAdapter extends RecyclerView.Adapter<StreakAdapter.ViewHolder
         holder.sectionLabelTextView.setText(streakModel.getLabel());
         holder.tvStreakStatus.setText(streakModel.getStatus());
 
-//        if (streakModel.getStatus().equals("finished")) {
-//            holder.ivStreakStatus.setVisibility(View.VISIBLE);
-//            holder.tvStreakStatus.setVisibility(View.INVISIBLE);
-//        } else {
-//            holder.ivStreakStatus.setVisibility(View.INVISIBLE);
-//            holder.tvStreakStatus.setVisibility(View.VISIBLE);
+//        switch (streakModel.getStatus()) {
+//            case "finished":
+//                System.out.println("finished");
+//                break;
+//            case "in progress":
+//                System.out.println("in progress");
+//                break;
+//            case "pending":
+//                System.out.println("pending");
+//                break;
 //        }
+
+        if (streakModel.getStatus().equals("finished")) {
+            holder.ivStreakStatus.setVisibility(View.VISIBLE);
+            holder.tvStreakStatus.setVisibility(View.INVISIBLE);
+        } else {
+            holder.ivStreakStatus.setVisibility(View.INVISIBLE);
+            holder.tvStreakStatus.setVisibility(View.VISIBLE);
+        }
 
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);

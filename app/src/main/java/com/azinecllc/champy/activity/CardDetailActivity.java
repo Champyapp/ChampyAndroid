@@ -216,6 +216,7 @@ public class CardDetailActivity extends AppCompatActivity {
 
         StreakModel streak3 = new StreakModel();
         streak3.setLabel("Streak 3");
+        streak3.setStatus("pending");
         items = new ArrayList<>();
         items.add(5);
         items.add(6);
@@ -228,6 +229,7 @@ public class CardDetailActivity extends AppCompatActivity {
 
         StreakModel streak4 = new StreakModel();
         streak4.setLabel("Streak 4");
+        streak4.setStatus("pending");
         items = new ArrayList<>();
         items.add(12);
         items.add(13);
@@ -255,7 +257,6 @@ public class CardDetailActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
-        // мб добавити в конструктор ще один ліст, який буде містити статус
         mainAdapter = new StreakAdapter(this, streaksList);
         recyclerView.setAdapter(mainAdapter);
     }
