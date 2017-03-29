@@ -5,12 +5,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.R2;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,6 +41,15 @@ public class CreateChallengeDetailsActivity extends AppCompatActivity {
     ImageView ivChallengeIcon;
     @BindView(R.id.switch_reminder)
     Switch switchDailyReminder;
+
+    @BindView(R.id.layout_challenge_created)
+    View layoutCreated;
+    @BindView(R.id.layout_create_challenge)
+    RelativeLayout layoutCreateChallenge;
+    @BindView(R.id.text_view_got_it)
+    TextView tvGotIt;
+    @BindView(R.id.text_view_share)
+    TextView tvShare;
 
 
     @Override
@@ -76,13 +85,32 @@ public class CreateChallengeDetailsActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("tag", "friends");
         startActivityForResult(intent, 1);
-//        Toast.makeText(this, "Challenge A Friends", Toast.LENGTH_SHORT).show();
     }
 
     @OnClick(R.id.text_view_create_challenge)
     public void onClickCreateChallenge() {
-        Toast.makeText(this, "Create Challenge", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Creating Challenge...", Toast.LENGTH_SHORT).show();
+        disableChildClicks();
     }
+
+    @OnClick(R.id.text_view_got_it)
+    public void onClickGotIt() {
+        Toast.makeText(this, "Got it...", Toast.LENGTH_SHORT).show();
+        enableChildClicks();
+    }
+
+    @OnClick(R.id.text_view_share)
+    public void onClickShare() {
+        Toast.makeText(this, "Share...", Toast.LENGTH_SHORT).show();
+        enableChildClicks();
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+        sendIntent.setType("text/plain");
+        startActivity(sendIntent);
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -93,6 +121,25 @@ public class CreateChallengeDetailsActivity extends AppCompatActivity {
         String name = data.getStringExtra("name");
         System.out.println("name: " + name);
         tvChallengeAFriend.setText(name);
+    }
+
+
+    private void enableChildClicks() {
+        layoutCreateChallenge = (RelativeLayout) findViewById(R.id.layout_create_challenge);
+        for (int i = 0; i < layoutCreateChallenge.getChildCount(); i++) {
+            View child = layoutCreateChallenge.getChildAt(i);
+            child.setEnabled(true);
+        }
+        layoutCreated.setVisibility(View.GONE);
+    }
+
+    private void disableChildClicks() {
+        layoutCreateChallenge = (RelativeLayout) findViewById(R.id.layout_create_challenge);
+        for (int i = 0; i < layoutCreateChallenge.getChildCount(); i++) {
+            View child = layoutCreateChallenge.getChildAt(i);
+            child.setEnabled(false);
+        }
+        layoutCreated.setVisibility(View.VISIBLE);
     }
 
 

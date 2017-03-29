@@ -152,4 +152,9 @@
                                    streak.
                                    \n\nYou win the challenge by completing all 4 streaks.</string>
 
+    <string name="challenge_created_large_text">You just created a Challenge.
+                                                Check in tomorrow to complete your first
+                                                Streak and get started. Every journey
+                                                starts with the first step.</string>
+
 </resources>
