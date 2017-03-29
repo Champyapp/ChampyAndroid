@@ -6,7 +6,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/section_label"
+        android:id="@+id/text_view_streak_n"
         android:layout_centerHorizontal="true"
         android:textSize="12sp"
         android:text="Streak N"
@@ -19,17 +19,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/section_rv"
-        android:layout_below="@+id/section_label"
+        android:layout_below="@+id/text_view_streak_n"
         android:layout_centerHorizontal="true" />
 
     <View
         android:layout_width="1dp"
-        android:layout_height="75dp"
+        android:layout_height="wrap_content"
         android:id="@+id/border"
         android:background="@android:color/black"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true">
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@+id/section_rv">
 
     </View>
 

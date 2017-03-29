@@ -124,6 +124,9 @@ public class CreateChallengeDetailsActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Method to enable all childes onClickListeners into parent layout
+     */
     private void enableChildClicks() {
         layoutCreateChallenge = (RelativeLayout) findViewById(R.id.layout_create_challenge);
         for (int i = 0; i < layoutCreateChallenge.getChildCount(); i++) {
@@ -134,6 +137,10 @@ public class CreateChallengeDetailsActivity extends AppCompatActivity {
         layoutCreated.setVisibility(View.GONE);
     }
 
+
+    /**
+     * Method to disable all childes onClickListeners into parent layout
+     */
     private void disableChildClicks() {
         layoutCreateChallenge = (RelativeLayout) findViewById(R.id.layout_create_challenge);
         for (int i = 0; i < layoutCreateChallenge.getChildCount(); i++) {

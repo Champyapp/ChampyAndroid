@@ -1,23 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="0dp"
-    android:layout_marginBottom="16dp"
-    android:layout_marginLeft="0dp"
-    android:layout_marginRight="0dp">
+    android:layout_height="wrap_content">
 
     <TextView
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:id="@+id/item_label"
         android:layout_centerHorizontal="true"
-        android:text="1"
-        android:textSize="12sp"
+        android:text="N"
+        android:textSize="18sp"
+        android:textColor="@color/color_white"
         android:textAlignment="center"
         android:gravity="center"
-        android:layout_centerVertical="true"
-        android:textColor="@color/black"
+        android:layout_marginTop="4dp"
         android:background="@drawable/circle" />
 
     <TextView
@@ -25,10 +21,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/item_label"
+        android:padding="4dp"
         android:text="In progress"
         android:textSize="12sp"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-        android:layout_marginTop="16dp"
         android:visibility="invisible" />
 
     <ImageView
@@ -36,11 +32,10 @@
         android:layout_width="15dp"
         android:layout_height="15dp"
         android:layout_below="@+id/item_label"
-        android:layout_marginTop="16dp"
         android:src="@drawable/button_ic_done"
         android:visibility="invisible"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="4dp"
         android:layout_alignRight="@+id/text_view_status"
         android:layout_alignEnd="@+id/text_view_status" />
 

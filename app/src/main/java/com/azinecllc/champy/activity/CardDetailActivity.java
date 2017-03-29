@@ -68,6 +68,7 @@ public class CardDetailActivity extends AppCompatActivity {
     @BindView(R.id.text_view_share)
     TextView tvShare;
 
+
     // Slider Layout
     private CardDetailAdapter mainAdapter;
     private List<SectionModel> sectionsList;
@@ -120,11 +121,13 @@ public class CardDetailActivity extends AppCompatActivity {
 
     @OnClick(R.id.text_view_challenge_rules)
     public void onClickRules() {
+        // that's all
         startActivity(new Intent(this, ChallengeRulesActivity.class));
     }
 
     @OnClick(R.id.text_view_skip_day)
     public void onClickSkipADay() {
+        // Here should be communication with api method
         Toast.makeText(this, "Skip a Day", Toast.LENGTH_SHORT).show();
     }
 

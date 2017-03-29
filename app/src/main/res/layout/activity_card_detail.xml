@@ -157,6 +157,7 @@
         android:layout_below="@+id/layout_statistics"
         android:layout_above="@+id/line1"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 

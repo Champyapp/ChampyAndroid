@@ -66,7 +66,7 @@ public class CardDetailAdapter extends RecyclerView.Adapter<CardDetailAdapter.Vi
 
         public ViewHolder(View itemView) {
             super(itemView);
-            sectionLabelTextView = (TextView) itemView.findViewById(R.id.section_label);
+            sectionLabelTextView = (TextView) itemView.findViewById(R.id.text_view_streak_n);
             sectionRecyclerView = (RecyclerView) itemView.findViewById(R.id.section_rv);
             borderView = itemView.findViewById(R.id.border);
         }
