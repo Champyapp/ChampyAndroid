@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -19,37 +20,55 @@ import com.azinecllc.champy.model.SectionModel;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * @autor SashaKhyzhun
  * Created on 3/21/17.
  */
 
-public class CardDetailActivity extends AppCompatActivity implements View.OnClickListener {
+public class CardDetailActivity extends AppCompatActivity {
 
-    // Layout Top Buttons
-    private ImageView buttonBack;
-    private ImageView buttonShare;
-    private TextView tvChallengeName;
-    // Challenge icon
-    private ImageView ivChallenge;
-    // Layout Statistics
-    private TextView tvChallengeDayN;
-    private TextView tvChallengeStreakN;
-    private TextView tvChallengeCompletionN;
-    // Views below slider
-    private TextView tvChallengeRules;
-    private Switch switchReminder;
-    // Bottom Layout of buttons
-    private TextView tvCheckIn;
-    private TextView tvSkipDay;
-    // Layout after click 'check in'
-    private RelativeLayout layoutGreatJob;
-    private TextView tvYouCompletedDayN;
-    private TextView tvOK;
-    private TextView tvShare;
+    @BindView(R.id.layout_card_detail)
+    RelativeLayout layoutCardDetails;
+    @BindView(R.id.image_view_back)
+    ImageView buttonBack;
+    @BindView(R.id.image_view_share)
+    ImageView buttonShare;
+    @BindView(R.id.tv_challenge_name)
+    TextView tvChallengeName;
+    @BindView(R.id.image_view_challenge_icon)
+    ImageView ivChallengeIcon;
+    @BindView(R.id.text_view_day_n)
+    TextView tvChallengeDayN;
+    @BindView(R.id.text_view_streak_n)
+    TextView tvChallengeStreakN;
+    @BindView(R.id.text_view_completion_n)
+    TextView tvChallengeCompletionN;
+    @BindView(R.id.tv_streaks)
+    RecyclerView recyclerView;
+    @BindView(R.id.text_view_challenge_rules)
+    TextView tvChallengeRules;
+    @BindView(R.id.switch_reminder)
+    Switch switchReminder;
+    @BindView(R.id.layout_buttons)
+    LinearLayout layoutButtons;
+    @BindView(R.id.text_view_check_in)
+    TextView tvCheckIn;
+    @BindView(R.id.text_view_skip_day)
+    TextView tvSkipDay;
+    @BindView(R.id.layout_check_in)
+    RelativeLayout layoutGreatJob;
+    @BindView(R.id.text_view_you_completed_day_n)
+    TextView tvYouCompletedDayN;
+    @BindView(R.id.text_view_ok)
+    TextView tvOK;
+    @BindView(R.id.text_view_share)
+    TextView tvShare;
 
     // Slider Layout
-    private RecyclerView recyclerView;
     private CardDetailAdapter mainAdapter;
     private List<SectionModel> sectionsList;
     private List<Integer> items;
@@ -63,36 +82,11 @@ public class CardDetailActivity extends AppCompatActivity implements View.OnClic
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_detail);
-
-        // Layout Top Buttons
-        buttonBack = (ImageView) findViewById(R.id.image_view_back);
-        buttonShare = (ImageView) findViewById(R.id.image_view_share);
-        tvChallengeName = (TextView) findViewById(R.id.tv_create_challenge);
-
-        // Layout Statistics
-        tvChallengeDayN = (TextView) findViewById(R.id.text_view_day_n);
-        tvChallengeStreakN = (TextView) findViewById(R.id.text_view_streak_n);
-        tvChallengeCompletionN = (TextView) findViewById(R.id.text_view_completion_n);
+        ButterKnife.bind(this);
 
         // Layout Slider
-        recyclerView = (RecyclerView) findViewById(R.id.main_rv);
         initItems();
         init();
-
-
-        // Views Below slider
-        tvChallengeRules = (TextView) findViewById(R.id.text_view_challenge_rules);
-        switchReminder = (Switch) findViewById(R.id.switch_reminder);
-
-        // Layout bottom buttons
-        tvCheckIn = (TextView) findViewById(R.id.text_view_check_in);
-        tvSkipDay = (TextView) findViewById(R.id.text_view_skip_day);
-
-        // Layout after click 'Check in'
-        layoutGreatJob = (RelativeLayout) findViewById(R.id.layout_item_check_in);
-        tvYouCompletedDayN = (TextView) findViewById(R.id.text_view_you_completed_day_n);
-        tvOK = (TextView) findViewById(R.id.text_view_ok);
-        tvShare = (TextView) findViewById(R.id.text_view_share);
 
 
         Bundle extras = getIntent().getExtras();
@@ -107,85 +101,86 @@ public class CardDetailActivity extends AppCompatActivity implements View.OnClic
         tvChallengeStreakN.setText(challengeStreak);
         tvChallengeCompletionN.setText(String.format("%s%%", challengePercent));
 
-        tvOK.setOnClickListener(this);
-        tvShare.setOnClickListener(this);
-        tvCheckIn.setOnClickListener(this);
-        tvSkipDay.setOnClickListener(this);
-        buttonBack.setOnClickListener(this);
-        buttonShare.setOnClickListener(this);
-        tvChallengeRules.setOnClickListener(this);
-
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.text_view_challenge_rules:
-                startActivity(new Intent(this, ChallengeRulesActivity.class));
-                break;
-            case R.id.tv_create_challenge:
-                Toast.makeText(this, "Skip a Day", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.text_view_check_in:
-                Toast.makeText(this, "Check In", Toast.LENGTH_SHORT).show();
-                layoutGreatJob.setVisibility(View.VISIBLE);
-                tvYouCompletedDayN.setText("You Completed Day " + challengeDay + " Of Your\nChallenge");
-                disableClicks();
-                break;
-            case R.id.image_view_share:
-                Toast.makeText(this, "Sharing...", Toast.LENGTH_SHORT).show();
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
-                sendIntent.setType("text/plain");
-                startActivity(sendIntent);
-                break;
-            case R.id.image_view_back:
-                finish();
-                break;
-            case R.id.text_view_ok:
-                Toast.makeText(this, "Ok...", Toast.LENGTH_SHORT).show();
-                layoutGreatJob.setVisibility(View.INVISIBLE);
-                enableClicks();
-                break;
-            case R.id.text_view_share:
-                Toast.makeText(this, "Share...", Toast.LENGTH_SHORT).show();
-                layoutGreatJob.setVisibility(View.INVISIBLE);
-                enableClicks();
-
-                Intent sendIntent2 = new Intent();
-                sendIntent2.setAction(Intent.ACTION_SEND);
-                sendIntent2.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
-                sendIntent2.setType("text/plain");
-                startActivity(sendIntent2);
-                break;
-        }
-
+    @OnClick(R.id.image_view_back)
+    public void onClickBack() {
+        finish();
     }
+
+    @OnClick(R.id.image_view_share)
+    public void onClickShare() {
+        Toast.makeText(this, "Sharing...", Toast.LENGTH_SHORT).show();
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+        sendIntent.setType("text/plain");
+        startActivity(sendIntent);
+    }
+
+    @OnClick(R.id.text_view_challenge_rules)
+    public void onClickRules() {
+        startActivity(new Intent(this, ChallengeRulesActivity.class));
+    }
+
+    @OnClick(R.id.text_view_skip_day)
+    public void onClickSkipADay() {
+        Toast.makeText(this, "Skip a Day", Toast.LENGTH_SHORT).show();
+    }
+
+    @OnClick(R.id.text_view_check_in)
+    public void onClickCheckIn() {
+        Toast.makeText(this, "Check In", Toast.LENGTH_SHORT).show();
+        tvYouCompletedDayN.setText("You Completed Day " + challengeDay + " Of Your\nChallenge");
+        disableClicks();
+    }
+
+    @OnClick(R.id.text_view_ok)
+    public void onClickOK() {
+        Toast.makeText(this, "Ok...", Toast.LENGTH_SHORT).show();
+        enableClicks();
+    }
+
+    @OnClick(R.id.text_view_share)
+    public void onClickShareCheckIn() {
+        Toast.makeText(this, "Share...", Toast.LENGTH_SHORT).show();
+        enableClicks();
+
+        Intent sendIntent2 = new Intent();
+        sendIntent2.setAction(Intent.ACTION_SEND);
+        sendIntent2.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+        sendIntent2.setType("text/plain");
+        startActivity(sendIntent2);
+    }
+
+
 
 
     /**
-     * Work around
+     * Method to disable all childes onClickListeners into parent layout
      */
     private void disableClicks() {
-        tvCheckIn.setClickable(false);
-        tvSkipDay.setClickable(false);
-        buttonBack.setClickable(false);
-        buttonShare.setClickable(false);
-        switchReminder.setClickable(false);
-        tvChallengeRules.setClickable(false);
+        layoutGreatJob.setVisibility(View.VISIBLE);
+
+        for (int i = 0; i < layoutCardDetails.getChildCount(); i++) {
+            View child = layoutCardDetails.getChildAt(i);
+            child.setEnabled(false);
+        }
+        tvSkipDay.setEnabled(false);
+        tvCheckIn.setEnabled(false);
     }
 
     /**
-     * Work around
+     * Method to enable all childes onClickListeners into parent layout
      */
     private void enableClicks() {
-        tvCheckIn.setClickable(true);
-        tvSkipDay.setClickable(true);
-        buttonBack.setClickable(true);
-        buttonShare.setClickable(true);
-        switchReminder.setClickable(true);
-        tvChallengeRules.setClickable(true);
+        for (int i = 0; i < layoutCardDetails.getChildCount(); i++) {
+            View child = layoutCardDetails.getChildAt(i);
+            child.setEnabled(true);
+        }
+        tvSkipDay.setEnabled(true);
+        tvCheckIn.setEnabled(true);
+        layoutGreatJob.setVisibility(View.GONE);
     }
 
     /**

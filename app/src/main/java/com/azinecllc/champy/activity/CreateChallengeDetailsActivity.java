@@ -130,6 +130,7 @@ public class CreateChallengeDetailsActivity extends AppCompatActivity {
             View child = layoutCreateChallenge.getChildAt(i);
             child.setEnabled(true);
         }
+
         layoutCreated.setVisibility(View.GONE);
     }
 
