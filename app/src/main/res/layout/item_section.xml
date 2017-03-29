@@ -1,42 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="8dp">
 
     <TextView
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:id="@+id/item_label"
+        android:id="@+id/tv_day_n"
         android:layout_centerHorizontal="true"
         android:text="N"
         android:textSize="18sp"
         android:textColor="@color/color_white"
         android:textAlignment="center"
         android:gravity="center"
-        android:layout_marginTop="4dp"
         android:background="@drawable/circle" />
-
-    <TextView
-        android:id="@+id/text_view_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/item_label"
-        android:padding="4dp"
-        android:text="In progress"
-        android:textSize="12sp"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-        android:visibility="invisible" />
-
-    <ImageView
-        android:id="@+id/image_view_status"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:layout_below="@+id/item_label"
-        android:src="@drawable/button_ic_done"
-        android:visibility="invisible"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="4dp"
-        android:layout_alignRight="@+id/text_view_status"
-        android:layout_alignEnd="@+id/text_view_status" />
 
 </RelativeLayout>

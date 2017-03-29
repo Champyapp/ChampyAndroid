@@ -14,8 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.adapter.CardDetailAdapter;
-import com.azinecllc.champy.model.SectionModel;
+import com.azinecllc.champy.adapter.StreakAdapter;
+import com.azinecllc.champy.model.StreakModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,8 +70,8 @@ public class CardDetailActivity extends AppCompatActivity {
 
 
     // Slider Layout
-    private CardDetailAdapter mainAdapter;
-    private List<SectionModel> sectionsList;
+    private StreakAdapter mainAdapter;
+    private List<StreakModel> streaksList;
     private List<Integer> items;
 
 
@@ -86,7 +86,7 @@ public class CardDetailActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         // Layout Slider
-        initItems();
+        initFirstStreak();
         init();
 
 
@@ -157,7 +157,14 @@ public class CardDetailActivity extends AppCompatActivity {
     }
 
 
-
+    @Override
+    public void onBackPressed() {
+        if (layoutGreatJob.getVisibility() == View.VISIBLE) {
+            enableClicks();
+            return;
+        }
+        super.onBackPressed();
+    }
 
     /**
      * Method to disable all childes onClickListeners into parent layout
@@ -189,25 +196,26 @@ public class CardDetailActivity extends AppCompatActivity {
     /**
      * Work around
      */
-    private void initItems() {
-        SectionModel sectionModel1 = new SectionModel();
-        sectionModel1.setLabel("Streak 1");
+    private void initFirstStreak() {
+        StreakModel streak1 = new StreakModel();
+        streak1.setLabel("Streak 1");
+        streak1.setStatus("finished");
         items = new ArrayList<>();
         items.add(1);
-        sectionModel1.setItems(items);
-//        items.clear();
 
-        SectionModel sectionModel2 = new SectionModel();
-        sectionModel2.setLabel("Streak 2");
+        streak1.setItems(items);
+
+        StreakModel streak2 = new StreakModel();
+        streak2.setLabel("Streak 2");
+        streak2.setStatus("in progress");
         items = new ArrayList<>();
         items.add(2);
         items.add(3);
         items.add(4);
-        sectionModel2.setItems(items);
-//        items.clear();
+        streak2.setItems(items);
 
-        SectionModel sectionModel3 = new SectionModel();
-        sectionModel3.setLabel("Streak 3");
+        StreakModel streak3 = new StreakModel();
+        streak3.setLabel("Streak 3");
         items = new ArrayList<>();
         items.add(5);
         items.add(6);
@@ -216,11 +224,10 @@ public class CardDetailActivity extends AppCompatActivity {
         items.add(9);
         items.add(10);
         items.add(11);
-        sectionModel3.setItems(items);
-//        items.clear();
+        streak3.setItems(items);
 
-        SectionModel sectionModel4 = new SectionModel();
-        sectionModel4.setLabel("Streak 4");
+        StreakModel streak4 = new StreakModel();
+        streak4.setLabel("Streak 4");
         items = new ArrayList<>();
         items.add(12);
         items.add(13);
@@ -232,14 +239,13 @@ public class CardDetailActivity extends AppCompatActivity {
         items.add(19);
         items.add(20);
         items.add(21);
-        sectionModel4.setItems(items);
-//        items.clear();
+        streak4.setItems(items);
 
-        sectionsList = new ArrayList<>();
-        sectionsList.add(sectionModel1);
-        sectionsList.add(sectionModel2);
-        sectionsList.add(sectionModel3);
-        sectionsList.add(sectionModel4);
+        streaksList = new ArrayList<>();
+        streaksList.add(streak1);
+        streaksList.add(streak2);
+        streaksList.add(streak3);
+        streaksList.add(streak4);
     }
 
     /**
@@ -250,7 +256,7 @@ public class CardDetailActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         // мб добавити в конструктор ще один ліст, який буде містити статус
-        mainAdapter = new CardDetailAdapter(this, sectionsList);
+        mainAdapter = new StreakAdapter(this, streaksList);
         recyclerView.setAdapter(mainAdapter);
     }
 

@@ -6,10 +6,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.model.SectionModel;
+import com.azinecllc.champy.model.StreakModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,44 +19,54 @@ import java.util.List;
  * Created by SashaKhyzhun on 3/23/17.
  */
 
-public class CardDetailAdapter extends RecyclerView.Adapter<CardDetailAdapter.ViewHolder> {
+public class StreakAdapter extends RecyclerView.Adapter<StreakAdapter.ViewHolder> {
 
     private Context mContext;
-    private List<SectionModel> mSections = new ArrayList<>();
+    private List<StreakModel> mStreaks = new ArrayList<>();
 
-    public CardDetailAdapter(Context context, List<SectionModel> items) {
+    public StreakAdapter(Context context, List<StreakModel> items) {
         mContext = context;
-        mSections = items;
+        mStreaks = items;
     }
 
     @Override
-    public CardDetailAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public StreakAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_streak, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        SectionModel section = mSections.get(position);
+        StreakModel streakModel = mStreaks.get(position);
 
-        if (position == mSections.size() - 1) {
+        if (position == mStreaks.size() - 1) {
             holder.borderView.setVisibility(View.INVISIBLE);
         } else {
             holder.borderView.setVisibility(View.VISIBLE);
         }
 
-        holder.sectionLabelTextView.setText(section.getLabel());
+        holder.sectionLabelTextView.setText(streakModel.getLabel());
+        holder.tvStreakStatus.setText(streakModel.getStatus());
+
+//        if (streakModel.getStatus().equals("finished")) {
+//            holder.ivStreakStatus.setVisibility(View.VISIBLE);
+//            holder.tvStreakStatus.setVisibility(View.INVISIBLE);
+//        } else {
+//            holder.ivStreakStatus.setVisibility(View.INVISIBLE);
+//            holder.tvStreakStatus.setVisibility(View.VISIBLE);
+//        }
 
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
         holder.sectionRecyclerView.setLayoutManager(layoutManager);
-        SectionAdapter sectionAdapter = new SectionAdapter(mContext, section.getItems());
+
+        SectionAdapter sectionAdapter = new SectionAdapter(mContext, streakModel.getItems());
         holder.sectionRecyclerView.setAdapter(sectionAdapter);
     }
 
     @Override
     public int getItemCount() {
-        return mSections.size();
+        return mStreaks.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -63,12 +74,17 @@ public class CardDetailAdapter extends RecyclerView.Adapter<CardDetailAdapter.Vi
         private TextView sectionLabelTextView;
         private RecyclerView sectionRecyclerView;
         private View borderView;
+        private TextView tvStreakStatus;
+        private ImageView ivStreakStatus;
 
         public ViewHolder(View itemView) {
             super(itemView);
             sectionLabelTextView = (TextView) itemView.findViewById(R.id.text_view_streak_n);
-            sectionRecyclerView = (RecyclerView) itemView.findViewById(R.id.section_rv);
+            sectionRecyclerView = (RecyclerView) itemView.findViewById(R.id.rv_streak);
             borderView = itemView.findViewById(R.id.border);
+            tvStreakStatus = (TextView) itemView.findViewById(R.id.text_view_streak_status);
+            ivStreakStatus = (ImageView) itemView.findViewById(R.id.image_view_streak_status);
+
         }
     }
 }

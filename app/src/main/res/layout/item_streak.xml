@@ -18,7 +18,7 @@
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/section_rv"
+        android:id="@+id/rv_streak"
         android:layout_below="@+id/text_view_streak_n"
         android:layout_centerHorizontal="true" />
 
@@ -30,8 +30,34 @@
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignBottom="@+id/section_rv">
+        android:layout_alignBottom="@+id/rv_streak" />
 
-    </View>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_view_streak_status"
+        android:layout_centerHorizontal="true"
+        android:textSize="12sp"
+        android:text="In Progress"
+        android:layout_below="@+id/rv_streak"
+        android:visibility="invisible"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp" />
+
+    <ImageView
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:id="@+id/image_view_streak_status"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/rv_streak"
+        android:src="@drawable/button_ic_done"
+        android:visibility="invisible"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp" />
+
 
 </RelativeLayout>

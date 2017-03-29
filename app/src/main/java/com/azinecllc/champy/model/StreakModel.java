@@ -3,11 +3,7 @@ package com.azinecllc.champy.model;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by bobyk on 3/23/17.
- */
-
-public class SectionModel {
+public class StreakModel {
 
     private String label;
     private String status;
