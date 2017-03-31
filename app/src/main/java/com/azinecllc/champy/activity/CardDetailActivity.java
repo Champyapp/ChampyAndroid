@@ -86,8 +86,12 @@ public class CardDetailActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         // Layout Slider
+        streaksList = new ArrayList<>();
         initFirstStreak();
-        init();
+        initSecondStreak();
+        initThirdStreak();
+        initFourthStreak();
+        initLayoutForStreaks();
 
 
         Bundle extras = getIntent().getExtras();
@@ -202,9 +206,12 @@ public class CardDetailActivity extends AppCompatActivity {
         streak1.setStatus("finished");
         items = new ArrayList<>();
         items.add(1);
-
         streak1.setItems(items);
+        streaksList.add(streak1);
+    }
 
+    // TODO: 3/29/17 Переписати ці 4 метода як один з фором, собственно придумати алгорим для цього.
+    private void initSecondStreak() {
         StreakModel streak2 = new StreakModel();
         streak2.setLabel("Streak 2");
         streak2.setStatus("in progress");
@@ -213,7 +220,11 @@ public class CardDetailActivity extends AppCompatActivity {
         items.add(3);
         items.add(4);
         streak2.setItems(items);
+        streaksList.add(streak2);
+    }
 
+
+    private void initThirdStreak() {
         StreakModel streak3 = new StreakModel();
         streak3.setLabel("Streak 3");
         streak3.setStatus("pending");
@@ -226,7 +237,11 @@ public class CardDetailActivity extends AppCompatActivity {
         items.add(10);
         items.add(11);
         streak3.setItems(items);
+        streaksList.add(streak3);
+    }
 
+
+    private void initFourthStreak() {
         StreakModel streak4 = new StreakModel();
         streak4.setLabel("Streak 4");
         streak4.setStatus("pending");
@@ -242,18 +257,13 @@ public class CardDetailActivity extends AppCompatActivity {
         items.add(20);
         items.add(21);
         streak4.setItems(items);
-
-        streaksList = new ArrayList<>();
-        streaksList.add(streak1);
-        streaksList.add(streak2);
-        streaksList.add(streak3);
         streaksList.add(streak4);
     }
 
     /**
      * Work around
      */
-    private void init() {
+    private void initLayoutForStreaks() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
 

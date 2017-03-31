@@ -16,4 +16,7 @@
         android:gravity="center"
         android:background="@drawable/circle" />
 
+    <!--#cdced2-->
+    <!--android:background="@drawable/circle"-->
+
 </RelativeLayout>

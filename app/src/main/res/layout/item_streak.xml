@@ -48,8 +48,8 @@
 
     <ImageView
         android:id="@+id/image_view_streak_status"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/rv_streak"
         android:src="@drawable/button_ic_done"

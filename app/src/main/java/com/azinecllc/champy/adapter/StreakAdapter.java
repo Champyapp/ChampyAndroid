@@ -89,7 +89,7 @@ public class StreakAdapter extends RecyclerView.Adapter<StreakAdapter.ViewHolder
         private TextView tvStreakStatus;
         private ImageView ivStreakStatus;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             sectionLabelTextView = (TextView) itemView.findViewById(R.id.text_view_streak_n);
             sectionRecyclerView = (RecyclerView) itemView.findViewById(R.id.rv_streak);

@@ -73,7 +73,7 @@ public class PrivacyPoliceFragmentTest {
         assertNotNull(textView);
         assertTrue(R.id.textViewPrivacyPolice == textView.getId());
         assertTrue(View.VISIBLE == textView.getVisibility());
-        assertEquals(Color.WHITE, textView.getCurrentTextColor());
+        assertEquals(Color.BLACK, textView.getCurrentTextColor());
     }
 
     @Test
