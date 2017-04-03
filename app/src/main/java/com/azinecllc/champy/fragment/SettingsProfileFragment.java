@@ -1,6 +1,5 @@
 package com.azinecllc.champy.fragment;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,10 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.azinecllc.champy.R;
+import com.azinecllc.champy.utils.ExpandableHeightListView;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * @autor SashaKhyzhun
@@ -32,17 +30,52 @@ public class SettingsProfileFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_settings_profile, container, false);
 
-        Integer[] intColors = new Integer[]{
-                Color.RED,
-                Color.parseColor("#FFCF670C"),
-                Color.YELLOW,
-                Color.GREEN,
-                Color.BLUE,
-                Color.parseColor("#FF7209DA"),
-                Color.parseColor("#FFEC03DC")
-        };
+//        ExpandableHeightListView listView = (ExpandableHeightListView) view.findViewById(R.id.list_view_colors);
+//
+////        Integer[] intColors = new Integer[]{
+////                Color.RED,
+////                Color.parseColor("#FFCF670C"),
+////                Color.YELLOW,
+////                Color.GREEN,
+////                Color.BLUE,
+////                Color.parseColor("#FF7209DA"),
+////                Color.parseColor("#FFEC03DC")
+////        };
+//        String[] stringColors = new String[]{
+//                "Red",
+//                "Orange",
+//                "Yellow",
+//                "Green",
+//                "Blue",
+//                "Purple",
+//                "Pink"
+//        };
+////
+//        ArrayAdapter<String> adapterColorText = new ArrayAdapter<String>(
+//                getContext(),
+//                android.R.layout.simple_list_item_1,
+////                R.id.text_view_color,
+//                stringColors
+//        );
+//
+////        ArrayAdapter<Integer> adapterColor = new ArrayAdapter<Integer>(
+////                getContext(),
+////                R.layout.item_list_view_colors,
+////                R.id.image_view_color,
+////                intColors
+////        );
+//
+//
+//
+//        //listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+//        listView.setAdapter(adapterColorText);
+//        listView.setExpanded(true);
+////        listView.setAdapter(adapterColor);
+
+        ExpandableHeightListView expandableListView = (ExpandableHeightListView) view.findViewById(R.id.expandable_listview);
+
         String[] stringColors = new String[]{
                 "Red",
                 "Orange",
@@ -53,26 +86,12 @@ public class SettingsProfileFragment extends Fragment {
                 "Pink"
         };
 
-        ArrayAdapter<String> adapterColorText = new ArrayAdapter<String>(
-                getContext(),
-                R.layout.item_list_view_colors,
-                R.id.text_view_color,
-                stringColors
-        );
+        ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, stringColors);
 
-//        ArrayAdapter<Integer> adapterColor = new ArrayAdapter<Integer>(
-//                getContext(),
-//                R.layout.item_list_view_colors,
-//                R.id.image_view_color,
-//                intColors
-//        );
+        expandableListView.setAdapter(itemsAdapter);
 
-
-        ListView listView = (ListView) view.findViewById(R.id.list_view_colors);
-        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        listView.setAdapter(adapterColorText);
-//        listView.setAdapter(adapterColor);
-
+        // This actually do the magic
+        expandableListView.setExpanded(true);
 
         return view;
     }

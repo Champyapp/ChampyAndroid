@@ -1,26 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".activity.MainActivity"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:windowEnableSplitTouch="false"
-    android:splitMotionEvents="false">
-
-
-    <!--<ScrollView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:id="@+id/scrollView">-->
+    android:layout_height="match_parent">
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/settings_layout">
-
+        android:orientation="vertical">
         <!-- Top Photo Layout-->
         <RelativeLayout
             android:layout_width="match_parent"
@@ -92,58 +78,52 @@
 
         <include layout="@layout/item_line" />
 
-        <ListView
-            android:id="@+id/list_view_colors"
+
+        <com.azinecllc.champy.utils.ExpandableHeightListView
+            android:id="@+id/expandable_listview"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp" />
+
+        <Switch
+            android:id="@+id/switch_facebook"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@string/facebook"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp" />
 
-        <!--<include layout="@layout/item_line" />-->
+        <include layout="@layout/item_line" />
 
-        <!--<Switch-->
-        <!--android:id="@+id/switch_facebook"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="@string/facebook"-->
-        <!--android:layout_marginLeft="16dp"-->
-        <!--android:layout_marginRight="16dp"-->
-        <!--android:layout_marginTop="8dp"-->
-        <!--android:layout_marginBottom="8dp"-->
-        <!--/>-->
+        <TextView
+            android:id="@+id/tv_logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Log Out"
+            android:textColor="@color/blue"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp" />
 
-        <!--<include layout="@layout/item_line" />-->
+        <include layout="@layout/item_line" />
 
-        <!--<TextView-->
-        <!--android:id="@+id/tv_logout"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Log Out"-->
-        <!--android:textColor="@color/blue"-->
-        <!--android:layout_marginTop="8dp"-->
-        <!--android:layout_marginBottom="8dp"-->
-        <!--android:layout_marginLeft="16dp"-->
-        <!--android:layout_marginRight="16dp"-->
-        <!--/>-->
-
-        <!--<include layout="@layout/item_line" />-->
-
-        <!--<TextView-->
-        <!--android:id="@+id/tv_delete_account"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Delete Account"-->
-        <!--android:textColor="@color/blue"-->
-        <!--android:layout_marginTop="8dp"-->
-        <!--android:layout_marginBottom="8dp"-->
-        <!--android:layout_marginLeft="16dp"-->
-        <!--android:layout_marginRight="16dp"-->
-        <!--/>-->
+        <TextView
+            android:id="@+id/tv_delete_account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Delete Account"
+            android:textColor="@color/blue"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp" />
 
 
     </LinearLayout>
 
-    <!--</ScrollView>-->
 
-</LinearLayout>
+</ScrollView>
+

@@ -148,6 +148,7 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.0.1'                          // RxAndroid
     compile 'io.reactivex:rxjava:1.0.14'                            // RxAndroid
     compile 'com.jakewharton:butterknife:8.5.1'                     // ButterKnife
+    //compile 'com.github.paolorotolo:expandableheightlistview:1.0.0' // ListView inside ScrollView
     compile('com.github.nkzawa:socket.io-client:0.3.0') {           // Sockets
         exclude group: 'org.json', module: 'json'
     }
