@@ -53,7 +53,7 @@ public class MainCardsFragment extends Fragment {
 //                intent.putExtra("mockName", selectedItem.getChallengeName());
 //                intent.putExtra("mockStreak", selectedItem.getChallengeStreak());
 //                intent.putExtra("mockPercent", selectedItem.getChallengePercent());
-//                intent.putExtra("mockDay", selectedItem.getChallengeDay());
+//                intent.putExtra("mockDay", selectedItem.getChallengeDuration());
 //                startActivity(intent);
 //            }
 //        });
@@ -81,6 +81,7 @@ public class MainCardsFragment extends Fragment {
     private void loadInProgressCards(View view) {
         gSwipeRefreshLayout.setRefreshing(true);
         ArrayList<Challenge> challengesArrayList = Challenge.generate(getContext());
+
         for (int i = 0; i < /*challengesArrayList.size()*/ 10; i++) {
 
             ///** True Data */
@@ -102,11 +103,18 @@ public class MainCardsFragment extends Fragment {
             int low = 0;
             int high = 100;
 
-            /** Mock params */
-
-            String randomDays = String.valueOf(random.nextInt(high - low) + low);
-            String randomStreak = String.valueOf(random.nextInt(high - low) + low);
-            String randomPercent = String.valueOf(random.nextInt(high - low) + low);
+            /** Mock params
+             *
+             * 21 days = 100%
+             * 5 day = x %
+             *
+             * x = (5 * 100) / 21;
+             *
+             * */
+            String randomCurrentDays = String.valueOf(random.nextInt(20 - 1) + 1);
+            String randomDuration = "21";
+            String randomStreak = "4"; //String.valueOf(random.nextInt(high - low) + low);
+            String randomPercent = String.valueOf((Integer.parseInt(randomCurrentDays) * 100) / Integer.parseInt(randomDuration));
             String randomColor = String.valueOf(Color.argb(255, r, g, b));
 
             String[] mockNames = {"Smoke Weed", "Love Cats", "Drink a beer", "Love Translit", "Igratu cs", "Don't die"};
@@ -126,14 +134,15 @@ public class MainCardsFragment extends Fragment {
             /** Fill the model */
             cardChallengesList.add(new CardChallenges(
                     mockName,
-                    randomDays,
+                    randomDuration,
                     randomStreak,
                     randomPercent,
                     randomVersus,
                     randomColor,
                     randomStatus,
                     randIsRecipient,
-                    randomType
+                    randomType,
+                    randomCurrentDays
             ));
 
         }

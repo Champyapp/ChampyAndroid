@@ -617,13 +617,13 @@ public class ChallengeController {
         DBHelper dbHelper = DBHelper.getInstance(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues cv  = new ContentValues();
-        db.delete("myChallenges", null, null);
         ActiveInProgress activeInProgress = retrofit.create(ActiveInProgress.class);
         Call<com.azinecllc.champy.model.active_in_progress.ActiveInProgress> call1 = activeInProgress.getActiveInProgress(userID, update, token);
         call1.enqueue(new Callback<com.azinecllc.champy.model.active_in_progress.ActiveInProgress>() {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.active_in_progress.ActiveInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
+                    db.delete("myChallenges", null, null);
                     List<Datum> data = response.body().getData();
                     for (int i = 0; i < data.size(); i++) {
                         com.azinecllc.champy.model.active_in_progress.Datum datum = data.get(i);

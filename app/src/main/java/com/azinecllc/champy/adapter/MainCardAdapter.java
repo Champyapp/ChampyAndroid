@@ -49,7 +49,8 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
     public void onBindViewHolder(final MainCardAdapter.ViewHolder viewHolder, int position) {
         CardChallenges itemCard = mCardChallengesList.get(position);
 
-        String days = itemCard.getChallengeDay();                   // 21
+        String duration = itemCard.getChallengeDuration();          // 21
+        String day = itemCard.getCurrentDay();                      // current day
         String streak = itemCard.getChallengeStreak();              // <?>
         String percent = itemCard.getChallengePercent();            // <n%>
         String status = itemCard.getChallengeStatus();              // started-pending
@@ -65,7 +66,8 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
 //        );
 
         System.out.println("___________________________________");
-        System.out.println("day       : " + days);
+        System.out.println("duration  : " + duration);
+        System.out.println("day       : " + day);
         System.out.println("streak    : " + streak);
         System.out.println("percent   : " + percent);
         System.out.println("status    : " + status);
@@ -103,7 +105,7 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
         });
 
         viewHolder.challengeName.setText(name);
-        viewHolder.challengeDays.setText(days);
+        viewHolder.challengeDays.setText(day);
         viewHolder.challengeStreak.setText(streak);
         viewHolder.challengePercent.setText(String.format("%s%% complete", percent));
         viewHolder.progressBar.setProgress(Integer.parseInt(percent));
@@ -120,7 +122,7 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
                 intent.putExtra("mockName", itemCard.getChallengeName());
                 intent.putExtra("mockStreak", itemCard.getChallengeStreak());
                 intent.putExtra("mockPercent", itemCard.getChallengePercent());
-                intent.putExtra("mockDay", itemCard.getChallengeDay());
+                intent.putExtra("mockDay", itemCard.getChallengeDuration());
                 mContext.startActivity(intent);
             }
         });

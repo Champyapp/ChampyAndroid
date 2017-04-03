@@ -3,7 +3,7 @@ package com.azinecllc.champy.model;
 public class CardChallenges {
 
     private String challengeName;
-    private String challengeDay;
+    private String challengeDuration;
     private String challengeStreak;
     private String challengePercent;
     private String challengeEnd;     //
@@ -12,11 +12,12 @@ public class CardChallenges {
     private String challengeStatus;
     private String challengeIsRecipient;
     private String challengeType;
+    private String currentDay;
 
-    public CardChallenges(String name, String day, String streak, String percent, String versus,
-                          String color, String status, String isRecipient, String type) {
+    public CardChallenges(String name, String duration, String streak, String percent, String versus,
+                          String color, String status, String isRecipient, String type, String curDay) {
         this.challengeName = name;
-        this.challengeDay = day;
+        this.challengeDuration = duration;
         this.challengeStreak = streak;
         this.challengePercent = percent;
         this.challengeVersus = versus;
@@ -24,6 +25,7 @@ public class CardChallenges {
         this.challengeStatus = status;
         this.challengeIsRecipient = isRecipient;
         this.challengeType = type;
+        this.currentDay = curDay;
     }
 
 
@@ -43,8 +45,8 @@ public class CardChallenges {
         return challengeName;
     }
 
-    public String getChallengeDay() {
-        return challengeDay;
+    public String getChallengeDuration() {
+        return challengeDuration;
     }
 
     public String getChallengeStreak() {
@@ -67,14 +69,21 @@ public class CardChallenges {
         return challengeColor;
     }
 
+    public String getCurrentDay() {
+        return currentDay;
+    }
 
+
+    public void setCurrentDay(String currentDay) {
+        this.currentDay = currentDay;
+    }
 
     public void setChallengeName(String challengeName) {
         this.challengeName = challengeName;
     }
 
-    public void setChallengeDay(String challengeDay) {
-        this.challengeDay = challengeDay;
+    public void setChallengeDuration(String challengeDuration) {
+        this.challengeDuration = challengeDuration;
     }
 
     public void setChallengeStreak(String challengeStreak) {

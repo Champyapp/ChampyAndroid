@@ -90,11 +90,10 @@ public class Challenge {
         this.id = id;
     }
 
+
     /**
      * getters
      */
-
-
     public String getConstDuration() {
         return constDuration;
     }
