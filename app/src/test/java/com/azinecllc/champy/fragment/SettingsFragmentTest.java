@@ -94,7 +94,7 @@ public class SettingsFragmentTest {
 
     @Test
     public void testForTextViewGeneral() throws Exception {
-        TextView tvGeneral = (TextView) view.findViewById(R.id.tvGeneral);
+        TextView tvGeneral = (TextView) view.findViewById(R.id.text_view_name);
         assertNotNull(tvGeneral);
         assertEquals(Color.WHITE, tvGeneral.getCurrentTextColor());
         assertEquals("General:", tvGeneral.getText());

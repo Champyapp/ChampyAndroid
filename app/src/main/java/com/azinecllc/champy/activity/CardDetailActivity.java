@@ -73,8 +73,6 @@ public class CardDetailActivity extends AppCompatActivity {
     private StreakAdapter mainAdapter;
     private List<StreakModel> streaksList;
     private List<Integer> items;
-
-
     private String challengeDay;
 
 
@@ -197,9 +195,6 @@ public class CardDetailActivity extends AppCompatActivity {
         layoutGreatJob.setVisibility(View.GONE);
     }
 
-    /**
-     * Work around
-     */
     private void initFirstStreak() {
         StreakModel streak1 = new StreakModel();
         streak1.setLabel("Streak 1");
@@ -210,7 +205,6 @@ public class CardDetailActivity extends AppCompatActivity {
         streaksList.add(streak1);
     }
 
-    // TODO: 3/29/17 Переписати ці 4 метода як один з фором, собственно придумати алгорим для цього.
     private void initSecondStreak() {
         StreakModel streak2 = new StreakModel();
         streak2.setLabel("Streak 2");
@@ -222,7 +216,6 @@ public class CardDetailActivity extends AppCompatActivity {
         streak2.setItems(items);
         streaksList.add(streak2);
     }
-
 
     private void initThirdStreak() {
         StreakModel streak3 = new StreakModel();
@@ -239,7 +232,6 @@ public class CardDetailActivity extends AppCompatActivity {
         streak3.setItems(items);
         streaksList.add(streak3);
     }
-
 
     private void initFourthStreak() {
         StreakModel streak4 = new StreakModel();
@@ -260,9 +252,6 @@ public class CardDetailActivity extends AppCompatActivity {
         streaksList.add(streak4);
     }
 
-    /**
-     * Work around
-     */
     private void initLayoutForStreaks() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);

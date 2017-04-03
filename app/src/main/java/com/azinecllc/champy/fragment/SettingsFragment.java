@@ -124,7 +124,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         TextView tvNotif = (TextView) viewSettings.findViewById(R.id.tvNotifications);
         TextView tvLegal = (TextView) viewSettings.findViewById(R.id.tvLegal);
         TextView tvLogout = (TextView) viewSettings.findViewById(R.id.textViewLogout);
-        TextView tvGeneral = (TextView) viewSettings.findViewById(R.id.tvGeneral);
+        TextView tvGeneral = (TextView) viewSettings.findViewById(R.id.text_view_name);
         TextView contactUs = (TextView) viewSettings.findViewById(R.id.contact_us);
 
         tvUserName = (TextView) viewSettings.findViewById(R.id.tv_user_name);

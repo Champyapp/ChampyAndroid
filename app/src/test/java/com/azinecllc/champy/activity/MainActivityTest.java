@@ -1,14 +1,10 @@
 package com.azinecllc.champy.activity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Build;
-import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -17,7 +13,6 @@ import android.widget.TextView;
 import com.azinecllc.champy.BuildConfig;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.data.DBHelper;
-import com.azinecllc.champy.helper.CHCheckPendingDuels;
 import com.azinecllc.champy.utils.SessionManager;
 
 import org.junit.After;
@@ -30,13 +25,7 @@ import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
 import java.lang.reflect.Field;
-import java.util.Random;
 
-import static com.azinecllc.champy.utils.Constants.TAG_CHALLENGES;
-import static com.azinecllc.champy.utils.Constants.TAG_PRIVACY_POLICE;
-import static com.azinecllc.champy.utils.Constants.TAG_SETTINGS;
-import static com.azinecllc.champy.utils.Constants.TAG_TERMS;
-import static com.facebook.FacebookSdk.getApplicationContext;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.*;

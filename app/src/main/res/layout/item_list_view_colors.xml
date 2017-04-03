@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/item_list_view_colors">
+
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/round_corner"
+        android:id="@+id/image_view_color" />
+
+    <TextView
+        android:id="@+id/text_view_color"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Color"
+        android:textColor="@color/black"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_toLeftOf="@+id/image_view_selected_color"
+        android:layout_toStartOf="@+id/image_view_selected_color"
+        android:layout_alignBottom="@+id/image_view_color"
+        android:layout_toRightOf="@+id/image_view_color"
+        android:layout_toEndOf="@+id/image_view_color"
+        android:layout_alignTop="@+id/image_view_color" />
+
+    <ImageView
+        android:id="@+id/image_view_selected_color"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:src="@drawable/button_ic_done"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@+id/text_view_color"
+        android:layout_alignTop="@+id/text_view_color" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/image_view_color"
+        android:layout_marginTop="8dp"
+        android:background="@color/gray" />
+
+
+</RelativeLayout>

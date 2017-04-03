@@ -6,7 +6,9 @@ public class Constants {
 
     public static final String TAG_CHALLENGES = "challenges";
     public static final String TAG_FRIENDS = "friends";
-    public static final String TAG_SETTINGS = "settings";
+    public static final String TAG_SETTINGS_PROFILE = "settings profile";
+    public static final String TAG_SETTINGS_NOTIFICATIONS = "settings notifications";
+    public static final String TAG_SETTINGS_HELP_AND_FEEDBACK = "settings help & feedback";
     public static final String TAG_TERMS = "terms";
     public static final String TAG_PRIVACY_POLICE = "privacy police";
 

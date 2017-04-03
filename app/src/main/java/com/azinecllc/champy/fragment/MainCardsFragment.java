@@ -118,7 +118,7 @@ public class MainCardsFragment extends Fragment {
             String randomColor = String.valueOf(Color.argb(255, r, g, b));
 
             String[] mockNames = {"Smoke Weed", "Love Cats", "Drink a beer", "Love Translit", "Igratu cs", "Don't die"};
-            String[] mockVersus = {"", "Dr.Dre", "Chuck Norris"};
+            String[] mockVersus = {"Dr.Dre", "Chuck Norris"};
             String[] mockStatuses = {"pending", "started", /*"failed"*/};
             String[] mockRecipients = {"true", "false"};
             String[] mockTypes = {typeSelf, typeDuel, typeWake};

@@ -21,19 +21,19 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.azinecllc.champy.R;
+import com.azinecllc.champy.fragment.SettingsHelpFragment;
+import com.azinecllc.champy.fragment.SettingsNotificationsFragment;
+import com.azinecllc.champy.fragment.SettingsProfileFragment;
 import com.azinecllc.champy.fragment.FriendsFragment;
 import com.azinecllc.champy.fragment.MainCardsFragment;
 import com.azinecllc.champy.fragment.PrivacyPoliceFragment;
-import com.azinecllc.champy.fragment.SettingsFragment;
 import com.azinecllc.champy.fragment.TermsFragment;
 import com.azinecllc.champy.utils.SessionManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.FacebookSdk;
-import com.github.nkzawa.socketio.client.Socket;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -42,7 +42,9 @@ import static com.azinecllc.champy.Champy.getContext;
 import static com.azinecllc.champy.utils.Constants.TAG_CHALLENGES;
 import static com.azinecllc.champy.utils.Constants.TAG_FRIENDS;
 import static com.azinecllc.champy.utils.Constants.TAG_PRIVACY_POLICE;
-import static com.azinecllc.champy.utils.Constants.TAG_SETTINGS;
+import static com.azinecllc.champy.utils.Constants.TAG_SETTINGS_HELP_AND_FEEDBACK;
+import static com.azinecllc.champy.utils.Constants.TAG_SETTINGS_NOTIFICATIONS;
+import static com.azinecllc.champy.utils.Constants.TAG_SETTINGS_PROFILE;
 import static com.azinecllc.champy.utils.Constants.TAG_TERMS;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -194,16 +196,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 navItemIndex = 1;
                 CURRENT_TAG = TAG_FRIENDS;
                 break;
-            case R.id.nav_settings:
+            case R.id.nav_settings_profile:
                 navItemIndex = 2;
-                CURRENT_TAG = TAG_SETTINGS;
+                CURRENT_TAG = TAG_SETTINGS_PROFILE;
+                break;
+            case R.id.nav_settings_notifications:
+                navItemIndex = 3;
+                CURRENT_TAG = TAG_SETTINGS_NOTIFICATIONS;
+                break;
+            case R.id.nav_settings_help_and_feedback:
+                navItemIndex = 4;
+                CURRENT_TAG = TAG_SETTINGS_HELP_AND_FEEDBACK;
                 break;
             case R.id.nav_terms:
-                navItemIndex = 3;
+                navItemIndex = 5;
                 CURRENT_TAG = TAG_TERMS;
                 break;
             case R.id.nav_privacy_policy:
-                navItemIndex = 4;
+                navItemIndex = 6;
                 CURRENT_TAG = TAG_PRIVACY_POLICE;
                 break;
         }
@@ -256,10 +266,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case 1:
                 return new FriendsFragment();
             case 2:
-                return new SettingsFragment();
+                return new SettingsProfileFragment();
             case 3:
-                return new TermsFragment();
+                return new SettingsNotificationsFragment();
             case 4:
+                return new SettingsHelpFragment();
+            case 5:
+                return new TermsFragment();
+            case 6:
                 return new PrivacyPoliceFragment();
             default:
                 return new MainCardsFragment();

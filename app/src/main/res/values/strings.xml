@@ -49,7 +49,6 @@
     <string name="privacy_policy">Privacy Policy</string>
 
     <string name="name">Name</string>
-    <string name="general">General:</string>
     <string name="challenge_end">Challenge End</string>
     <string name="notifications">Notifications:</string>
     <string name="delete_account">Delete Account</string>
@@ -156,5 +155,7 @@
                                                 Check in tomorrow to complete your first
                                                 Streak and get started. Every journey
                                                 starts with the first step.</string>
+    <string name="color">Color</string>
+    <string name="facebook">Facebook</string>
 
 </resources>
