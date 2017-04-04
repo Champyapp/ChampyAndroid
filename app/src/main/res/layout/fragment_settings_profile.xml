@@ -87,7 +87,7 @@
 
         <include layout="@layout/item_line" />
 
-        <include layout="@layout/q" />
+        <include layout="@layout/item_colors" />
 
         <include layout="@layout/item_line" />
 
@@ -97,7 +97,6 @@
             android:layout_height="wrap_content"
             android:text="@string/facebook"
             android:enabled="true"
-            android:theme="@style/ChallengeDetail"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="8dp"

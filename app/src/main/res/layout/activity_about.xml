@@ -17,18 +17,29 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/color_blue_site"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:popupTheme="@style/ChampyMainTheme" />
 
     </android.support.design.widget.AppBarLayout>
 
 
-    <WebView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/webView" />
+    <!--<WebView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:id="@+id/webView" />-->
 
-    <include layout="@layout/item_progress_bar" />
+    <!--<include layout="@layout/item_progress_bar" />-->
+
+    <ScrollView
+        android:layout_margin="16dp"
+        android:layout_below="@+id/appbar_about"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/text_view_about"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </ScrollView>
 
 
 </RelativeLayout>

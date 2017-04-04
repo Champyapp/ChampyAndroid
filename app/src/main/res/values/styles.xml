@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="ChampyMainTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/primary_green</item>
         <item name="colorPrimaryDark">@color/primary_dark_green</item>
         <item name="colorAccent">@color/accent_orange</item>
@@ -14,7 +14,7 @@
         <item name="windowActionBar">false</item>
     </style>
 
-    <style name="ChallengeDetail" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="ChampySecondaryTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/primary_indigo</item>
         <item name="colorPrimaryDark">@color/primary_dark_indigo</item>
         <item name="colorAccent">@color/accent_indigo</item>
@@ -28,7 +28,7 @@
     </style>
 
 
-    <style name="AppTheme.NoActionBar">
+    <style name="ChampyMainTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>

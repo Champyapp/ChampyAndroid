@@ -48,8 +48,7 @@
             android:padding="16dp"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:theme="@style/ChallengeDetail" />
+            android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
 
@@ -97,8 +96,7 @@
             android:padding="16dp"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:theme="@style/ChallengeDetail" />
+            android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
 

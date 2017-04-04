@@ -1,13 +1,13 @@
 <resources>>
 
-    <style name="AppTheme.NoActionBar">
+    <style name="ChampyMainTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
-    <style name="AppTheme.ActionBar.Transparent" parent="AppTheme">
+    <style name="AppTheme.ActionBar.Transparent" parent="ChampyMainTheme">
         <item name="colorPrimary">@android:color/transparent</item>
     </style>
 
