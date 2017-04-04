@@ -1,20 +1,26 @@
 package com.azinecllc.champy.fragment;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.MainCardAdapter;
 import com.azinecllc.champy.model.CardChallenges;
 import com.azinecllc.champy.model.Challenge;
 import com.azinecllc.champy.utils.OfflineMode;
+import com.azinecllc.champy.utils.SessionManager;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -25,14 +31,23 @@ import static com.azinecllc.champy.utils.Constants.typeWake;
 
 public class MainCardsFragment extends Fragment {
 
+    public static final String TAG = "MainCardFragment";
     private SwipeRefreshLayout gSwipeRefreshLayout;
     private OfflineMode offlineMode;
     private ArrayList<CardChallenges> cardChallengesList;
     private MainCardAdapter adapter;
 
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.i(TAG, "onAttach: ");
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TAG, "onCreate: ");
         offlineMode = OfflineMode.getInstance();
         cardChallengesList = new ArrayList<CardChallenges>();
         adapter = new MainCardAdapter(cardChallengesList, getContext());
@@ -42,21 +57,17 @@ public class MainCardsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.item_recycler, container, false);
+        Log.i(TAG, "onCreateView: ");
         gSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_to_refresh);
 
-        loadInProgressCards(view);
+//        SessionManager sessionManager = SessionManager.getInstance(getContext());
+//        if (sessionManager.getChampyOptions().get("challenges").isEmpty()) {
+//            TextView textView = new TextView(getContext());
+//            textView.setText("Time: "+System.currentTimeMillis());
+//        }
 
-//        adapter.setOnCardClickListener(new RecyclerCardClickListener() {
-//            @Override
-//            public void onClick(View v, CardChallenges selectedItem) {
-//                Intent intent = new Intent(getContext(), CardDetailActivity.class);
-//                intent.putExtra("mockName", selectedItem.getChallengeName());
-//                intent.putExtra("mockStreak", selectedItem.getChallengeStreak());
-//                intent.putExtra("mockPercent", selectedItem.getChallengePercent());
-//                intent.putExtra("mockDay", selectedItem.getChallengeDuration());
-//                startActivity(intent);
-//            }
-//        });
+
+        loadInProgressCards(view);
 
         gSwipeRefreshLayout.setOnRefreshListener(() -> {
             if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
@@ -70,12 +81,61 @@ public class MainCardsFragment extends Fragment {
     }
 
 
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.i(TAG, "onActivityCreated: ");
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.i(TAG, "onStart: ");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume: ");
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i(TAG, "onPause: ");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.i(TAG, "onStop: ");
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.i(TAG, "onDestroyView: ");
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.i(TAG, "onDestroy: ");
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
     }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.i(TAG, "onDetach: ");
+    }
+
+
 
 
     private void loadInProgressCards(View view) {

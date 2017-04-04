@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,7 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
 
+    public static final String TAG = "FriendsAdapter";
     private List<FriendModel> mContacts;
     private SQLiteDatabase db;
     private ContentValues cv;
@@ -56,6 +58,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         // Inflate the custom layout
         View contactView = inflater.inflate(R.layout.item_friends, parent, false);
 
+        Log.i(TAG, "onCreateViewHolder: ");
         // Return a new holder instance
         ViewHolder viewHolder = new ViewHolder(contactView);
         //viewHolder.closeView.setVisibility(View.VISIBLE);

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import java.util.List;
 
 public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHolder> {
 
+    public static final String TAG = "MainCardAdapter";
     private List<CardChallenges> mCardChallengesList;
     private Context mContext;
     private RecyclerCardClickListener onCardClickListener;
@@ -41,7 +43,7 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View cardView = inflater.inflate(R.layout.item_card_challenges, parent, false);
-
+        Log.i(TAG, "onCreateViewHolder: ");
         return new ViewHolder(cardView);
     }
 
@@ -59,23 +61,17 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
         String type = itemCard.getChallengeType();                  // self-duel-wake
         String versus = itemCard.getChallengeVersus();              // versus name
 
-//        System.out.println("_________________________________________");
-//        System.out.println("MainCardAdapter  MockData: | name: " + name + " days: " + days
-//                + " streak: " + streak + " percent: " + percent + " status: " + status
-//                + " recipient: " + recipient + " type: " + type + " versus: " + versus
-//        );
-
-        System.out.println("___________________________________");
-        System.out.println("duration  : " + duration);
-        System.out.println("day       : " + day);
-        System.out.println("streak    : " + streak);
-        System.out.println("percent   : " + percent);
-        System.out.println("status    : " + status);
-        System.out.println("recipient : " + recipient);
-        System.out.println("name      : " + name);
-        System.out.println("type      : " + type);
-        System.out.println("versus    : " + versus);
-        System.out.println("___________________________________");
+//        System.out.println("___________________________________");
+//        System.out.println("duration  : " + duration);
+//        System.out.println("day       : " + day);
+//        System.out.println("streak    : " + streak);
+//        System.out.println("percent   : " + percent);
+//        System.out.println("status    : " + status);
+//        System.out.println("recipient : " + recipient);
+//        System.out.println("name      : " + name);
+//        System.out.println("type      : " + type);
+//        System.out.println("versus    : " + versus);
+//        System.out.println("___________________________________");
 
         if (status.equals("pending")) {
             viewHolder.tvDay.setVisibility(View.INVISIBLE);

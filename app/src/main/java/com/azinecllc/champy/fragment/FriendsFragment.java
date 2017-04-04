@@ -1,10 +1,12 @@
 package com.azinecllc.champy.fragment;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -51,7 +53,7 @@ import static com.azinecllc.champy.utils.Constants.API_URL;
 
 public class FriendsFragment extends Fragment {
 
-    public static final String TAG = "OtherFriendsss";
+    public static final String TAG = "FriendsFragment";
     private static final String ARG_PAGE = "ARG_PAGE";
     private SwipeRefreshLayout gSwipeRefreshLayout;
     private CHCheckTableForExist checkTableForExist;
@@ -73,6 +75,12 @@ public class FriendsFragment extends Fragment {
         FriendsFragment fragment = new FriendsFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.i(TAG, "onAttach: ");
     }
 
     @Override
@@ -180,23 +188,61 @@ public class FriendsFragment extends Fragment {
 //
 //    }
 
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.i(TAG, "onActivityCreated: ");
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.i(TAG, "onStart: ");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume: ");
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i(TAG, "onPause: ");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.i(TAG, "onStop: ");
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.i(TAG, "onDestroyView: ");
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //Glide.clear(gView);
-        //cv.clear();
-        //friendsList.clear();
-        //gView.destroyDrawingCache();
-        //cv = null;
-        //gView = null;
-        //adapter = null;
-        //friendsList = null;
-        //mSocket = null;
-        //retrofit = null;
-        //checkTableForExist = null;
+        Log.i(TAG, "onDestroy: ");
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
     }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.i(TAG, "onDetach: ");
+    }
+
+
 
 
     private void refreshOtherView(SwipeRefreshLayout swipeRefreshLayout, View view) {

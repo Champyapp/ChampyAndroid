@@ -16,6 +16,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.MainActivityPagerAdapter;
+import com.azinecllc.champy.fragment.MainFragmentWithTabs;
 import com.azinecllc.champy.fragment.SettingsHelpFragment;
 import com.azinecllc.champy.fragment.SettingsNotificationsFragment;
 import com.azinecllc.champy.fragment.SettingsProfileFragment;
@@ -58,9 +60,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String TAG = "MainActivity";
 
     private FloatingActionButton fabPlus, fabWake, fabSelf, fabDuel;
-    private Animation fab_open, fab_close, rotate_forward, rotate_backward;
+    //private Animation fab_open, fab_close, rotate_forward, rotate_backward;
     private boolean isFabOpen = false;
-    private TextView nothingHere;
+    //private TextView nothingHere;
     private ImageView circleLogo;
     private SessionManager sessionManager;
     private DrawerLayout drawer;
@@ -76,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        Log.i(TAG, "onCreate: ");
         if (getIntent().getExtras() != null) {
             String extrasTag = getIntent().getExtras().getString("tag");
             int extrasIndex = getIntent().getExtras().getInt("index");
@@ -117,12 +120,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView drawerUserEmail = (TextView) headerLayout.findViewById(R.id.drawer_tv_user_email);
         TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.drawer_tv_user_name);
 
-        nothingHere = (TextView) findViewById(R.id.tv_noting_here_yet);
         fabPlus = (FloatingActionButton) findViewById(R.id.fabPlus);
-        fab_open = AnimationUtils.loadAnimation(getContext(), R.anim.fab_open);
-        fab_close = AnimationUtils.loadAnimation(getContext(), R.anim.fab_close);
-        rotate_forward = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_forward);
-        rotate_backward = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_backward);
+        //nothingHere = (TextView) findViewById(R.id.tv_noting_here_yet);
+//        fab_open = AnimationUtils.loadAnimation(getContext(), R.anim.fab_open);
+//        fab_close = AnimationUtils.loadAnimation(getContext(), R.anim.fab_close);
+//        rotate_forward = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_forward);
+//        rotate_backward = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_backward);
 
         // GET PHOTO AND MAKE BLUR
         sessionManager = SessionManager.getInstance(getApplicationContext());
@@ -146,9 +149,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 //        int inProgress = Integer.parseInt(sessionManager.getChampyOptions().get("challenges"));
-        if (!sessionManager.getChampyOptions().get("challenges").isEmpty()) {
-            nothingHere.setVisibility(View.INVISIBLE);
-        }
+//        if (!sessionManager.getChampyOptions().get("challenges").isEmpty()) {
+//            nothingHere.setVisibility(View.INVISIBLE);
+//        }
 
 
         fabPlus.setOnClickListener(v -> {
@@ -164,14 +167,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        Log.i(TAG, "onStart: ");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.i(TAG, "onPause: ");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume: ");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.i(TAG, "onStop: ");
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.i(TAG, "onDestroy: ");
         Runtime.getRuntime().runFinalization();
         Runtime.getRuntime().gc();
     }
 
+
     @Override
     public void onBackPressed() {
+        Log.i(TAG, "onBackPressed: ");
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         }
@@ -187,8 +217,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         loadCurrentFragment();
 
     }
-
-
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -267,7 +295,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Fragment getHomeFragment() {
         switch (navItemIndex) {
             case 0:
-                return new MainCardsFragment();
+                return new MainFragmentWithTabs();
             case 1:
                 return new FriendsFragment();
             case 2:
@@ -281,7 +309,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case 6:
                 return new PrivacyPoliceFragment();
             default:
-                return new MainCardsFragment();
+                return new MainFragmentWithTabs();
         }
     }
 

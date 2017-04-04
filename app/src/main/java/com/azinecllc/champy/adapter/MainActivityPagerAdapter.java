@@ -36,7 +36,7 @@ public class MainActivityPagerAdapter extends FragmentPagerAdapter {
             case 1:
                 return new FriendsFragment();
         }
-        return null;
+        return new MainCardsFragment();
     }
 
     @Override
