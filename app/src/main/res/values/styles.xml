@@ -2,10 +2,10 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/color_primary</item>
-        <item name="colorPrimaryDark">@color/color_primary_dark</item>
-        <item name="colorAccent">#339997</item>
-        <item name="colorControlNormal">#000</item>
+        <item name="colorPrimary">@color/primary_green</item>
+        <item name="colorPrimaryDark">@color/primary_dark_green</item>
+        <item name="colorAccent">@color/accent_orange</item>
+        <item name="colorControlNormal">@color/primary_text_black</item>
         <item name="colorControlActivated">@color/color_white</item> <!-- progress bg -->
         <item name="colorControlHighlight">#339997</item>
         <item name="android:windowEnableSplitTouch">false</item>
@@ -15,10 +15,10 @@
     </style>
 
     <style name="ChallengeDetail" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/color_primary</item>
-        <item name="colorPrimaryDark">@color/color_primary_dark</item>
-        <item name="colorAccent">#339997</item>
-        <item name="colorControlNormal">#000</item>
+        <item name="colorPrimary">@color/primary_indigo</item>
+        <item name="colorPrimaryDark">@color/primary_dark_indigo</item>
+        <item name="colorAccent">@color/accent_indigo</item>
+        <item name="colorControlNormal">@color/primary_text_indigo</item>
         <item name="colorControlActivated">#3eaf1c</item> <!-- progress bg -->
         <item name="colorControlHighlight">#339997</item>
         <item name="android:windowEnableSplitTouch">false</item>

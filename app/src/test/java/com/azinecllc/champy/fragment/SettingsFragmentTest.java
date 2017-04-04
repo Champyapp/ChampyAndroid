@@ -76,7 +76,7 @@ public class SettingsFragmentTest {
 
     @Test
     public void testForImageProfile() throws Exception {
-        ImageView imageProfile = (ImageView) view.findViewById(R.id.img_profile);
+        ImageView imageProfile = (ImageView) view.findViewById(R.id.iv_profile_picture_bg);
         assertNotNull(imageProfile);
 
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) imageProfile.getLayoutParams();

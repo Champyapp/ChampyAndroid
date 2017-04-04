@@ -104,7 +104,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View viewSettings = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        userImageProfile = (ImageView) viewSettings.findViewById(R.id.img_profile);
+        userImageProfile = (ImageView) viewSettings.findViewById(R.id.iv_profile_picture_bg);
 
         Glide.with(this)
                 .load(userPicture)

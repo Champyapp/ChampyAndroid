@@ -1,146 +1,306 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".activity.MainActivity"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:windowEnableSplitTouch="false"
-    android:splitMotionEvents="false">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-
-    <!--<ScrollView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:id="@+id/scrollView">-->
-
-    <LinearLayout
-        android:orientation="vertical"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/settings_layout">
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
 
-        <!-- Top Photo Layout-->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <!-- Image User Photo -->
-            <ImageView
-                android:id="@+id/img_profile"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:clickable="false"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_user_profile_photo" />
-            <!-- Image button change photo -->
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:src="@android:drawable/ic_menu_camera"
-                android:layout_alignBottom="@+id/img_profile"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
-        </RelativeLayout>
-
+        <ImageView
+            android:id="@+id/image_view_color_red"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/circle_red" />
         <TextView
+            android:id="@+id/text_view_color_red"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/text_view_name"
-            android:text="@string/name"
-            android:textColor="@color/gray"
-            android:layout_margin="16dp" />
-
-        <include layout="@layout/item_line" />
-
-        <TextView
-            android:id="@+id/tv_first_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="First Name"
+            android:text="Red"
             android:textColor="@color/black"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:gravity="center_vertical"
             android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp" />
+            android:layout_marginStart="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_toLeftOf="@+id/image_view_selected_red"
+            android:layout_toStartOf="@+id/image_view_selected_red"
+            android:layout_alignBottom="@+id/image_view_color_red"
+            android:layout_toRightOf="@+id/image_view_color_red"
+            android:layout_toEndOf="@+id/image_view_color_red"
+            android:layout_alignTop="@+id/image_view_color_red" />
 
-        <include layout="@layout/item_line" />
+        <ImageView
+            android:id="@+id/image_view_selected_red"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/button_ic_done"
+            android:visibility="invisible"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignBottom="@+id/text_view_color_red"
+            android:layout_alignTop="@+id/text_view_color_red" />
+    </RelativeLayout>
 
+    <include layout="@layout/item_line" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
+
+        <ImageView
+            android:id="@+id/image_view_color_orange"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/circle_orange" />
         <TextView
-            android:id="@+id/tv_last_name"
+            android:id="@+id/text_view_color_orange"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Last Name"
+            android:text="Orange"
             android:textColor="@color/black"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:gravity="center_vertical"
             android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp" />
-
-        <include layout="@layout/item_line" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/text_view_color"
-            android:text="@string/color"
-            android:textColor="@color/gray"
-            android:layout_margin="16dp" />
-
-        <include layout="@layout/item_line" />
-
-        <com.azinecllc.champy.utils.ExpandableHeightListView
-            android:id="@+id/expandable_listview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginBottom="8dp"></com.azinecllc.champy.utils.ExpandableHeightListView>
+            android:layout_marginEnd="16dp"
+            android:layout_toLeftOf="@+id/image_view_selected_orange"
+            android:layout_toStartOf="@+id/image_view_selected_orange"
+            android:layout_alignBottom="@+id/image_view_color_orange"
+            android:layout_toRightOf="@+id/image_view_color_orange"
+            android:layout_toEndOf="@+id/image_view_color_orange"
+            android:layout_alignTop="@+id/image_view_color_orange" />
 
-        <!--<include layout="@layout/item_line" />-->
+        <ImageView
+            android:id="@+id/image_view_selected_orange"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/button_ic_done"
+            android:visibility="invisible"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignBottom="@+id/text_view_color_orange"
+            android:layout_alignTop="@+id/text_view_color_orange" />
+    </RelativeLayout>
 
-        <Switch
-            android:id="@+id/switch_facebook"
+    <include layout="@layout/item_line" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
+
+        <ImageView
+            android:id="@+id/image_view_color_yellow"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/circle_yellow" />
+        <TextView
+            android:id="@+id/text_view_color_yellow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/facebook"
+            android:text="Yellow"
+            android:textColor="@color/black"
+            android:gravity="center_vertical"
             android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginEnd="16dp"
+            android:layout_toLeftOf="@+id/image_view_selected_yellow"
+            android:layout_toStartOf="@+id/image_view_selected_yellow"
+            android:layout_alignBottom="@+id/image_view_color_yellow"
+            android:layout_toRightOf="@+id/image_view_color_yellow"
+            android:layout_toEndOf="@+id/image_view_color_yellow"
+            android:layout_alignTop="@+id/image_view_color_yellow" />
 
-        <include layout="@layout/item_line" />
+        <ImageView
+            android:id="@+id/image_view_selected_yellow"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/button_ic_done"
+            android:visibility="invisible"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignBottom="@+id/text_view_color_yellow"
+            android:layout_alignTop="@+id/text_view_color_yellow" />
+    </RelativeLayout>
+
+    <include layout="@layout/item_line" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
+
+        <ImageView
+            android:id="@+id/image_view_color_green"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/circle_green" />
 
         <TextView
-            android:id="@+id/tv_logout"
+            android:id="@+id/text_view_color_green"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Log Out"
-            android:textColor="@color/blue"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:text="Green"
+            android:textColor="@color/black"
+            android:gravity="center_vertical"
             android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp" />
+            android:layout_marginStart="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_toLeftOf="@+id/image_view_selected_green"
+            android:layout_toStartOf="@+id/image_view_selected_green"
+            android:layout_alignBottom="@+id/image_view_color_green"
+            android:layout_toRightOf="@+id/image_view_color_green"
+            android:layout_toEndOf="@+id/image_view_color_green"
+            android:layout_alignTop="@+id/image_view_color_green" />
 
-        <include layout="@layout/item_line" />
+        <ImageView
+            android:id="@+id/image_view_selected_green"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/button_ic_done"
+            android:visibility="invisible"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignBottom="@+id/text_view_color_green"
+            android:layout_alignTop="@+id/text_view_color_green" />
+    </RelativeLayout>
 
+    <include layout="@layout/item_line" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
+
+        <ImageView
+            android:id="@+id/image_view_color_blue"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/circle_blue" />
         <TextView
-            android:id="@+id/tv_delete_account"
+            android:id="@+id/text_view_color_blue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Delete Account"
-            android:textColor="@color/blue"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:text="Blue"
+            android:textColor="@color/black"
+            android:gravity="center_vertical"
             android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp" />
+            android:layout_marginStart="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_toLeftOf="@+id/image_view_selected_blue"
+            android:layout_toStartOf="@+id/image_view_selected_blue"
+            android:layout_alignBottom="@+id/image_view_color_blue"
+            android:layout_toRightOf="@+id/image_view_color_blue"
+            android:layout_toEndOf="@+id/image_view_color_blue"
+            android:layout_alignTop="@+id/image_view_color_blue" />
+
+        <ImageView
+            android:id="@+id/image_view_selected_blue"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/button_ic_done"
+            android:visibility="invisible"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignBottom="@+id/text_view_color_blue"
+            android:layout_alignTop="@+id/text_view_color_blue" />
+    </RelativeLayout>
+
+    <include layout="@layout/item_line" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
+
+        <ImageView
+            android:id="@+id/image_view_color_purple"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/circle_purple" />
+        <TextView
+            android:id="@+id/text_view_color_purple"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Purple"
+            android:textColor="@color/black"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_toLeftOf="@+id/image_view_selected_purple"
+            android:layout_toStartOf="@+id/image_view_selected_purple"
+            android:layout_alignBottom="@+id/image_view_color_purple"
+            android:layout_toRightOf="@+id/image_view_color_purple"
+            android:layout_toEndOf="@+id/image_view_color_purple"
+            android:layout_alignTop="@+id/image_view_color_purple" />
+
+        <ImageView
+            android:id="@+id/image_view_selected_purple"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/button_ic_done"
+            android:visibility="invisible"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignBottom="@+id/text_view_color_purple"
+            android:layout_alignTop="@+id/text_view_color_purple" />
+    </RelativeLayout>
 
 
-    </LinearLayout>
-
-    <!--</ScrollView>-->
-
-</ScrollView>
+</LinearLayout>
