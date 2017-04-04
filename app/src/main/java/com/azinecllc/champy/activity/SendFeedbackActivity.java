@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.azinecllc.champy.R;
 
-public class ContactUsActivity extends AppCompatActivity implements View.OnClickListener {
+public class SendFeedbackActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText inputSubject, inputMessage;
     private TextInputLayout inputLayoutSubject, inputLayoutMessage;
@@ -25,7 +25,7 @@ public class ContactUsActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contact_us);
+        setContentView(R.layout.activity_send_feedback);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -83,7 +83,7 @@ public class ContactUsActivity extends AppCompatActivity implements View.OnClick
                 startActivity(Intent.createChooser(email, "Choose an email client from..."));
             }
         } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(ContactUsActivity.this, "No email client installed.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SendFeedbackActivity.this, "No email client installed.", Toast.LENGTH_SHORT).show();
         }
     }
 

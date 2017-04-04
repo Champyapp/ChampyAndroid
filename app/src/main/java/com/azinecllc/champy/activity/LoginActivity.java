@@ -369,7 +369,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     a.execute(picture); // async, don't forget to destroy thread.
 
                     DailyRemindController drc = new DailyRemindController(getApplicationContext());
-                    drc.enableDailyNotificationReminder();
+                    drc.enableDailyNotificationReminder(12);
 
                     Intent goToRoleActivity = new Intent(LoginActivity.this, RoleControllerActivity.class);
                     startActivity(goToRoleActivity);

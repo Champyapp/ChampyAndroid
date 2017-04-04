@@ -20,7 +20,7 @@ public class ResetService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Log.e("CHAMPY RESET SERVICE", "onHandleIntent");
         DailyRemindController drc = new DailyRemindController(getApplicationContext());
-        drc.enableDailyNotificationReminder();
+        drc.enableDailyNotificationReminder(12);
 
         /**
          * создати в бд табличку wake-up, зберігати туда всі "години, мінути, реквест коди і ID-шки"

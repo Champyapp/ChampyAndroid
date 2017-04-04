@@ -69,7 +69,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".activity.ContactUsActivity"
+            android:name=".activity.SendFeedbackActivity"
             android:label="Contact Us"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />

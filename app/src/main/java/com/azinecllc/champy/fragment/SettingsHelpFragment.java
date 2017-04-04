@@ -1,17 +1,20 @@
 package com.azinecllc.champy.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.utils.ExpandableHeightListView;
-
-import java.util.ArrayList;
+import com.azinecllc.champy.activity.AboutActivity;
+import com.azinecllc.champy.activity.ChallengeRulesActivity;
+import com.azinecllc.champy.activity.SendFeedbackActivity;
 
 /**
  * @autor SashaKhyzhun
@@ -30,22 +33,22 @@ public class SettingsHelpFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings_help, container, false);
 
-        ArrayList<Integer> numbersArray = new ArrayList<Integer>();
-        ExpandableHeightListView expandableListView = (ExpandableHeightListView) view.findViewById(R.id.expandable_listview);
+        TextView tvAbout = (TextView) view.findViewById(R.id.text_view_about);
+        TextView tvRules = (TextView) view.findViewById(R.id.text_view_rules_and_faq);
+        TextView tvDevInfo = (TextView) view.findViewById(R.id.text_view_developer_info);
+        TextView tvPrivacy = (TextView) view.findViewById(R.id.text_view_privacy_policy);
+        TextView tvEndUser = (TextView) view.findViewById(R.id.text_view_end_user_agreement);
 
-        int i;
-        for (i = 0; i <= 20; i++) {
-            numbersArray.add(i);
-        }
+        Button btnSendFeedBack = (Button) view.findViewById(R.id.button_send_feedback);
 
-        ArrayAdapter<Integer> itemsAdapter =
-                new ArrayAdapter<Integer>(getContext(), android.R.layout.simple_list_item_1, numbersArray);
 
-        expandableListView.setAdapter(itemsAdapter);
+        tvAbout.setOnClickListener(v -> startActivity(new Intent(getContext(), AboutActivity.class)));
+        tvRules.setOnClickListener(v -> startActivity(new Intent(getContext(), ChallengeRulesActivity.class)));
+        tvDevInfo.setOnClickListener(v -> Toast.makeText(getContext(), "Dev Info", Toast.LENGTH_SHORT).show());
+        tvPrivacy.setOnClickListener(v -> Toast.makeText(getContext(), "Privacy", Toast.LENGTH_SHORT).show());
+        tvEndUser.setOnClickListener(v -> Toast.makeText(getContext(), "End User", Toast.LENGTH_SHORT).show());
 
-        // This actually do the magic
-        expandableListView.setExpanded(true);
-
+        btnSendFeedBack.setOnClickListener(v -> startActivity(new Intent(getActivity(), SendFeedbackActivity.class)));
 
         return view;
     }

@@ -18,9 +18,9 @@ public class DailyRemindController {
     public DailyRemindController(Context context) { this.context = context; }
 
 
-    public void enableDailyNotificationReminder() {
+    public void enableDailyNotificationReminder(int hour) {
         Calendar myCalender = Calendar.getInstance();
-        myCalender.set(Calendar.HOUR_OF_DAY, 12);
+        myCalender.set(Calendar.HOUR_OF_DAY, hour);
         myCalender.set(Calendar.MINUTE, 0);
         myCalender.set(Calendar.SECOND, 0);
 
@@ -33,11 +33,17 @@ public class DailyRemindController {
         System.out.println("Notification | Current time on device  : " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds());
         System.out.println("Notification | Enable Daily Reminder on: " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
         Intent notifyIntent = new Intent(context, CustomNotifyReceiver.class);
-        PendingIntent pi = PendingIntent.getBroadcast(context, 9999, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        int requestCode = (hour == 8) ? 8888 : 9999;
+        PendingIntent pi = PendingIntent.getBroadcast(
+                context,
+                requestCode,
+                notifyIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
 
         AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // this for android 4.4 and higher
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {// this for android 4.4 and higher
             manager.setExact(AlarmManager.RTC_WAKEUP, myCalender.getTimeInMillis(), pi);
         } else {
             manager.setRepeating(AlarmManager.RTC_WAKEUP, myCalender.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pi);
@@ -45,10 +51,15 @@ public class DailyRemindController {
 
     }
 
-    public void disableDailyNotificationReminder() {
-        System.out.println("Notification | Disable Daily Reminder");
+    public void disableDailyNotificationReminder(int hour) {
+        System.out.println("Notification | Disable Daily Reminder at: " + hour + ":00:00");
         Intent alarmIntent = new Intent(context, CustomNotifyReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 9999, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                context,
+                9999,
+                alarmIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
     }

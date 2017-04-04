@@ -33,6 +33,19 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="TextLabel" parent="TextAppearance.AppCompat">
+        <!-- Hint color and label color in FALSE state -->
+        <item name="android:textColorHint">@color/color_hint</item>
+        <item name="android:textSize">20sp</item>
+        <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
+        <item name="colorAccent">@color/black</item> <!-- color of input text -->
+        <item name="colorControlNormal">@color/black
+        </item> <!-- color of bottom line in default case -->
+        <item name="colorControlActivated">@color/gray
+        </item> <!-- color of text and line in active case -->
+        <item name="android:textColorHighlight">@color/gray</item> <!-- color of selected text  -->
+        <item name="android:textColorLink">#ffd500</item> <!-- ??? -->
+    </style>
 
     <!-- For toolbar -->
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

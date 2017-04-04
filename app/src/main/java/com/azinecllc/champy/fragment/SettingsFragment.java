@@ -32,7 +32,7 @@ import android.widget.Toast;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.AboutActivity;
-import com.azinecllc.champy.activity.ContactUsActivity;
+import com.azinecllc.champy.activity.SendFeedbackActivity;
 import com.azinecllc.champy.controller.ChallengeController;
 import com.azinecllc.champy.controller.DailyRemindController;
 import com.azinecllc.champy.controller.UserController;
@@ -243,7 +243,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.contact_us:
                 userController.updateProfile(map);
-                startActivity(new Intent(context, ContactUsActivity.class));
+                startActivity(new Intent(context, SendFeedbackActivity.class));
                 break;
         }
     }
@@ -359,10 +359,10 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
             reminder = new DailyRemindController(getContext()); // here should be getContext()
             if (isChecked) {
                 map.put("challengesForToday", "true");
-                reminder.enableDailyNotificationReminder();
+                reminder.enableDailyNotificationReminder(12);
             } else {
                 map.put("challengesForToday", "false");
-                reminder.disableDailyNotificationReminder();
+                reminder.disableDailyNotificationReminder(12);
             }
             userController.updateProfile(map);
         });

@@ -39,7 +39,12 @@ public class CustomNotifyReceiver extends BroadcastReceiver {
         if (sessionManager.isUserLoggedIn()) {
             sendNotification(context);
             DailyRemindController drc = new DailyRemindController(context);
-            new Handler().postDelayed(drc::enableDailyNotificationReminder, 1000);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    drc.enableDailyNotificationReminder(12);
+                }
+            }, 1000);
         }
 
     }

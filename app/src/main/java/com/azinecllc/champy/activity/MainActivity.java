@@ -7,9 +7,11 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.azinecllc.champy.R;
+import com.azinecllc.champy.adapter.MainActivityPagerAdapter;
 import com.azinecllc.champy.fragment.SettingsHelpFragment;
 import com.azinecllc.champy.fragment.SettingsNotificationsFragment;
 import com.azinecllc.champy.fragment.SettingsProfileFragment;
@@ -98,6 +101,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.setDrawerListener(drawerToggle);
         drawerToggle.syncState();
 
+//        MainActivityPagerAdapter adapterViewPager = new MainActivityPagerAdapter(getSupportFragmentManager(), this);
+//        ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager_main);
+//        viewPager.setAdapter(adapterViewPager);
+//
+//        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout_main);
+//        tabLayout.setupWithViewPager(viewPager);
+
         // NAVIGATION VIEW
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(MainActivity.this);
@@ -108,11 +118,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.drawer_tv_user_name);
 
         nothingHere = (TextView) findViewById(R.id.tv_noting_here_yet);
-        circleLogo = (ImageView) findViewById(R.id.image_view_circle_logo);
         fabPlus = (FloatingActionButton) findViewById(R.id.fabPlus);
-//        fabSelf = (FloatingActionButton) findViewById(R.id.fabSelf);
-//        fabDuel = (FloatingActionButton) findViewById(R.id.fabDuel);
-//        fabWake = (FloatingActionButton) findViewById(R.id.fabWake);
         fab_open = AnimationUtils.loadAnimation(getContext(), R.anim.fab_open);
         fab_close = AnimationUtils.loadAnimation(getContext(), R.anim.fab_close);
         rotate_forward = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_forward);
@@ -139,9 +145,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerUserEmail.setText(userEmail);
 
 
-        //int inProgress = Integer.parseInt(sessionManager.getChampyOptions().get("challenges"));
+//        int inProgress = Integer.parseInt(sessionManager.getChampyOptions().get("challenges"));
         if (!sessionManager.getChampyOptions().get("challenges").isEmpty()) {
-            circleLogo.setVisibility(View.INVISIBLE);
             nothingHere.setVisibility(View.INVISIBLE);
         }
 

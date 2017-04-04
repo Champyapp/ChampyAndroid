@@ -32,7 +32,7 @@ import static org.junit.Assert.assertTrue;
  */
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.LOLLIPOP)
-public class ContactUsActivityTest {
+public class SendFeedbackActivityTest {
 
     private TextInputLayout inputLayoutSubject, inputLayoutMessage;
     private String[] recipient = {"sasha.khyzhun@gmail.com"};
@@ -41,13 +41,13 @@ public class ContactUsActivityTest {
 
     @Before
     public void setup() throws Exception {
-        activity = Robolectric.buildActivity(ContactUsActivity.class).create().get();
+        activity = Robolectric.buildActivity(SendFeedbackActivity.class).create().get();
     }
 
     @Test
     public void onCreate() throws Exception {
         assertNotNull(activity);
-        assertEquals("ContactUsActivity", activity.getClass().getSimpleName());
+        assertEquals("SendFeedbackActivity", activity.getClass().getSimpleName());
     }
 
     @Test

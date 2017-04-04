@@ -1,34 +1,112 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="fill_parent"
+    <ImageView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:orientation="vertical">
+        android:src="@mipmap/ic_info"
+        android:layout_marginTop="36dp" />
 
-        <TextView
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="About Champy"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="36dp" />
+
+    <include layout="@layout/item_line" />
+
+    <TextView
+        android:id="@+id/text_view_about"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="About"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+
+    <include layout="@layout/item_line" />
+
+    <TextView
+        android:id="@+id/text_view_rules_and_faq"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Rules and FAQ"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <include layout="@layout/item_line" />
+
+    <TextView
+        android:id="@+id/text_view_developer_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Developer Info"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <include layout="@layout/item_line" />
+
+    <TextView
+        android:id="@+id/text_view_privacy_policy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Privacy Policy"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <include layout="@layout/item_line" />
+
+    <TextView
+        android:id="@+id/text_view_end_user_agreement"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="End User Agreement"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <include layout="@layout/item_line" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/button_send_feedback"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:textStyle="bold"
-            android:text="@string/challenge_rules" />
-
-        <TextView
-            android:text="@string/challenge_rules"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp" />
-
-        <com.azinecllc.champy.utils.ExpandableHeightListView
-            android:id="@+id/expandable_listview"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp" />
+            android:text="Send Feedback"
+            android:textColor="@color/color_white"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
 
 
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>
 
