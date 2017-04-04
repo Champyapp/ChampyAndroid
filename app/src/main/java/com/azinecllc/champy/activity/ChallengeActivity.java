@@ -7,11 +7,9 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,20 +17,16 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.adapter.MainActivityPagerAdapter;
 import com.azinecllc.champy.fragment.MainFragmentWithTabs;
 import com.azinecllc.champy.fragment.SettingsHelpFragment;
 import com.azinecllc.champy.fragment.SettingsNotificationsFragment;
 import com.azinecllc.champy.fragment.SettingsProfileFragment;
 import com.azinecllc.champy.fragment.FriendsFragment;
-import com.azinecllc.champy.fragment.MainCardsFragment;
 import com.azinecllc.champy.fragment.PrivacyPoliceFragment;
 import com.azinecllc.champy.fragment.TermsFragment;
 import com.azinecllc.champy.utils.SessionManager;
@@ -45,19 +39,21 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 import static com.azinecllc.champy.Champy.getContext;
 import static com.azinecllc.champy.utils.Constants.TAG_CHALLENGES;
-import static com.azinecllc.champy.utils.Constants.TAG_FRIENDS;
 import static com.azinecllc.champy.utils.Constants.TAG_PRIVACY_POLICE;
 import static com.azinecllc.champy.utils.Constants.TAG_SETTINGS_HELP_AND_FEEDBACK;
 import static com.azinecllc.champy.utils.Constants.TAG_SETTINGS_NOTIFICATIONS;
 import static com.azinecllc.champy.utils.Constants.TAG_SETTINGS_PROFILE;
 import static com.azinecllc.champy.utils.Constants.TAG_TERMS;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+/**
+ * MAIN ACTIVITY
+ */
+public class ChallengeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static String CURRENT_TAG = TAG_CHALLENGES;
     public static int navItemIndex = 0;
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "ChallengeActivity";
 
     private FloatingActionButton fabPlus, fabWake, fabSelf, fabDuel;
     //private Animation fab_open, fab_close, rotate_forward, rotate_backward;
@@ -74,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_challenges);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -113,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // NAVIGATION VIEW
         navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(MainActivity.this);
+        navigationView.setNavigationItemSelectedListener(ChallengeActivity.this);
         View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.drawer_background);
         ImageView drawerUserPhoto = (ImageView) headerLayout.findViewById(R.id.drawer_user_photo);
@@ -155,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         fabPlus.setOnClickListener(v -> {
-            startActivity(new Intent(getContext(), CreateChallengeActivity.class));
+            startActivity(new Intent(getContext(), ChallengeCreateActivity.class));
         });
 
 
@@ -365,7 +361,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        @Override
 //        public void call(Object... args) {
 //            Log.i(TAG, "Sockets call: modifiedChallenges");
-//            ChallengeController cc = new ChallengeController(getApplicationContext(), MainActivity.this);
+//            ChallengeController cc = new ChallengeController(getApplicationContext(), ChallengeActivity.this);
 //            cc.refreshCardsForPendingDuel(null);
 //            setCounterForPendingDuels(); // not good solution
 //        }

@@ -1,23 +1,12 @@
 package com.azinecllc.champy.controller;
 
-import android.app.Activity;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-
-import com.azinecllc.champy.activity.MainActivity;
-import com.azinecllc.champy.data.DBHelper;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-
-import retrofit.Retrofit;
 
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;

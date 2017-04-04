@@ -1,6 +1,5 @@
 package com.azinecllc.champy.receiver;
 
-import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -8,20 +7,17 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.activity.MainActivity;
+import com.azinecllc.champy.activity.ChallengeActivity;
 import com.azinecllc.champy.controller.DailyRemindController;
 import com.azinecllc.champy.utils.SessionManager;
 import com.facebook.FacebookSdk;
 
 import java.util.Date;
-
-import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class CustomNotifyReceiver extends BroadcastReceiver {
 
@@ -56,7 +52,7 @@ public class CustomNotifyReceiver extends BroadcastReceiver {
 
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        Intent notifyIntent = new Intent(context, MainActivity.class);
+        Intent notifyIntent = new Intent(context, ChallengeActivity.class);
         notifyIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 9999, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);

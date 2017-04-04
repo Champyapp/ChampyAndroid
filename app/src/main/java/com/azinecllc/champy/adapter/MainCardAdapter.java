@@ -14,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.activity.CardDetailActivity;
+import com.azinecllc.champy.activity.ChallengeDetailActivity;
 import com.azinecllc.champy.interfaces.RecyclerCardClickListener;
 import com.azinecllc.champy.model.CardChallenges;
 
@@ -114,7 +114,7 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
         viewHolder.cardLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, CardDetailActivity.class);
+                Intent intent = new Intent(mContext, ChallengeDetailActivity.class);
                 intent.putExtra("mockName", itemCard.getChallengeName());
                 intent.putExtra("mockStreak", itemCard.getChallengeStreak());
                 intent.putExtra("mockPercent", itemCard.getChallengePercent());

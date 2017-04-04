@@ -33,17 +33,17 @@
 
 
         <activity
-            android:name=".activity.CreateChallengeDetailsActivity"
+            android:name=".activity.ChallengeCreateDetailsActivity"
             android:screenOrientation="portrait"
             android:hardwareAccelerated="true"
             android:theme="@style/ChampySecondaryTheme" />
         <activity
-            android:name=".activity.CardDetailActivity"
+            android:name=".activity.ChallengeDetailActivity"
             android:screenOrientation="portrait"
             android:hardwareAccelerated="true"
             android:theme="@style/ChampySecondaryTheme" />
         <activity
-            android:name=".activity.CreateChallengeActivity"
+            android:name=".activity.ChallengeCreateActivity"
             android:label="Create New Challenge"
             android:screenOrientation="portrait"
             android:hardwareAccelerated="true"
@@ -74,7 +74,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/ChampyMainTheme" />
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.ChallengeActivity"
             android:label="@string/challenges"
             android:screenOrientation="portrait"
             android:hardwareAccelerated="true"

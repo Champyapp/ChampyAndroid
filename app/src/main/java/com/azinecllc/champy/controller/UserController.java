@@ -3,8 +3,6 @@ package com.azinecllc.champy.controller;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Environment;
-import android.util.Log;
 
 import com.azinecllc.champy.activity.RoleControllerActivity;
 import com.azinecllc.champy.data.DBHelper;
@@ -25,10 +23,9 @@ import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-import static com.azinecllc.champy.activity.MainActivity.CURRENT_TAG;
-import static com.azinecllc.champy.activity.MainActivity.navItemIndex;
+import static com.azinecllc.champy.activity.ChallengeActivity.CURRENT_TAG;
+import static com.azinecllc.champy.activity.ChallengeActivity.navItemIndex;
 import static com.azinecllc.champy.utils.Constants.TAG_CHALLENGES;
-import static com.azinecllc.champy.utils.Constants.path;
 
 /**
  * Created by SashaKhyzhun on 2/13/17.

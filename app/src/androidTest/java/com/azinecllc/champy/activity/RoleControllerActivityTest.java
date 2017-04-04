@@ -41,7 +41,7 @@ public class RoleControllerActivityTest {
         ViewInteraction imageButton = onView(
                 allOf(withContentDescription("Open"),
                         withParent(allOf(withId(R.id.toolbar),
-                                withParent(withId(R.id.appbar_main)))),
+                                withParent(withId(R.id.appbar_challenge_detail)))),
                         isDisplayed()));
 
         imageButton.perform(click());

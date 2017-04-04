@@ -3,9 +3,8 @@ package com.azinecllc.champy.helper;
 import android.content.Context;
 import android.widget.ImageView;
 
-import com.azinecllc.champy.activity.MainActivity;
+import com.azinecllc.champy.activity.ChallengeActivity;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +28,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class CHMakeResponsiveScoreTest3 {
 
-    private MainActivity mockMainActivity;
+    private ChallengeActivity mockMainActivity;
     private Context context;
     @Mock
     ImageView circleInProgress;
@@ -39,7 +38,7 @@ public class CHMakeResponsiveScoreTest3 {
 
     @Before
     public void setup() throws Exception {
-        mockMainActivity = mock(MainActivity.class);
+        mockMainActivity = mock(ChallengeActivity.class);
         mockImageView = mock(ImageView.class);
         context = mock(Context.class);
     }

@@ -13,13 +13,10 @@ import com.facebook.login.LoginManager;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
-import static com.azinecllc.champy.activity.MainActivity.CURRENT_TAG;
-import static com.azinecllc.champy.activity.MainActivity.navItemIndex;
+import static com.azinecllc.champy.activity.ChallengeActivity.CURRENT_TAG;
+import static com.azinecllc.champy.activity.ChallengeActivity.navItemIndex;
 import static com.azinecllc.champy.utils.Constants.TAG_CHALLENGES;
-import static com.azinecllc.champy.utils.Constants.path;
 
 public class SessionManager {
 

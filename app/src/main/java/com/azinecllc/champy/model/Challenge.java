@@ -176,7 +176,7 @@ public class Challenge {
     }
 
 
-    // this method generates InProgress for History and for cards in MainActivity
+    // this method generates InProgress for History and for cards in ChallengesActivity
     public static ArrayList<Challenge> generate(Context context) {
         DBHelper dbHelper = DBHelper.getInstance(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();

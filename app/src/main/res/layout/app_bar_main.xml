@@ -8,13 +8,13 @@
     android:windowEnableSplitTouch="false"
     android:splitMotionEvents="false"
     android:fitsSystemWindows="true"
-    tools:context=".activity.MainActivity">
+    tools:context=".activity.ChallengeActivity">
 
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/appbar_main"
+        android:id="@+id/appbar_challenge_detail"
         android:theme="@style/AppTheme.AppBarOverlay">
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_below="@+id/appbar_main">
+        android:layout_below="@+id/appbar_challenge_detail">
 
     </RelativeLayout>
 

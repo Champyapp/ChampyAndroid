@@ -15,8 +15,6 @@ import android.widget.Toast;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.CreateChallengeAdapter;
 import com.azinecllc.champy.data.DBHelper;
-import com.azinecllc.champy.interfaces.RecyclerCardClickListener;
-import com.azinecllc.champy.interfaces.RecyclerChallengesClickListener;
 import com.azinecllc.champy.model.CardChallenges;
 import com.azinecllc.champy.model.CreateChallengeModel;
 import com.azinecllc.champy.model.self.Datum;
@@ -38,7 +36,7 @@ import static com.azinecllc.champy.utils.Constants.API_URL;
  * Created on 3/21/17.
  */
 
-public class CreateChallengeActivity extends AppCompatActivity {
+public class ChallengeCreateActivity extends AppCompatActivity {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private OfflineMode offlineMode;
@@ -56,7 +54,7 @@ public class CreateChallengeActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_challenge);
+        setContentView(R.layout.activity_challenge_create);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

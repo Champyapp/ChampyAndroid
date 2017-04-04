@@ -41,7 +41,7 @@ public class MainActivityTest {
 
     @Before
     public void setup() throws Exception {
-        activity = Robolectric.buildActivity(MainActivity.class).create().get();
+        activity = Robolectric.buildActivity(ChallengeActivity.class).create().get();
     }
 
     @After
@@ -53,7 +53,7 @@ public class MainActivityTest {
     @Test
     public void testForNotNullActivity() throws Exception {
         assertNotNull(activity);
-        assertEquals("MainActivity", activity.getClass().getSimpleName());
+        assertEquals("ChallengeActivity", activity.getClass().getSimpleName());
     }
 
     @Test
@@ -92,10 +92,10 @@ public class MainActivityTest {
 
     @Test
     public void testForAppBarLayout() throws Exception {
-        AppBarLayout appBarLayout = (AppBarLayout) activity.findViewById(R.id.appbar_main);
+        AppBarLayout appBarLayout = (AppBarLayout) activity.findViewById(R.id.appbar_challenge_detail);
         Assert.assertNotNull(appBarLayout);
         assertTrue(View.VISIBLE == appBarLayout.getVisibility());
-        Assert.assertEquals(R.id.appbar_main, appBarLayout.getId());
+        Assert.assertEquals(R.id.appbar_challenge_detail, appBarLayout.getId());
     }
 
     @Test

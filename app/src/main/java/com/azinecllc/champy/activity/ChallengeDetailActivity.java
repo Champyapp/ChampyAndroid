@@ -5,7 +5,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -29,18 +33,15 @@ import butterknife.OnClick;
  * Created on 3/21/17.
  */
 
-public class CardDetailActivity extends AppCompatActivity {
+public class ChallengeDetailActivity extends AppCompatActivity {
 
     @BindView(R.id.layout_card_detail)
     RelativeLayout layoutCardDetails;
-    @BindView(R.id.image_view_back)
-    ImageView buttonBack;
-    @BindView(R.id.image_view_share)
-    ImageView buttonShare;
-    @BindView(R.id.tv_challenge_name)
-    TextView tvChallengeName;
+    //@BindView(R.id.tv_challenge_name) TextView tvChallengeName;
     @BindView(R.id.image_view_challenge_icon)
     ImageView ivChallengeIcon;
+    @BindView(R.id.text_view_challenge_name)
+    TextView tvChallengeName;
     @BindView(R.id.text_view_day_n)
     TextView tvChallengeDayN;
     @BindView(R.id.text_view_streak_n)
@@ -53,12 +54,9 @@ public class CardDetailActivity extends AppCompatActivity {
     TextView tvChallengeRules;
     @BindView(R.id.switch_reminder)
     Switch switchReminder;
-    @BindView(R.id.layout_buttons)
-    LinearLayout layoutButtons;
-    @BindView(R.id.text_view_check_in)
-    TextView tvCheckIn;
-    @BindView(R.id.text_view_skip_day)
-    TextView tvSkipDay;
+    @BindView(R.id.button_check_in)
+    Button buttonCheckIn;
+    //@BindView(R.id.text_view_skip_day) TextView tvSkipDay;
     @BindView(R.id.layout_check_in)
     RelativeLayout layoutGreatJob;
     @BindView(R.id.text_view_you_completed_day_n)
@@ -80,8 +78,18 @@ public class CardDetailActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_card_detail);
+        setContentView(R.layout.activity_challenge_detail);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        Bundle extras = getIntent().getExtras();
+        String challengeName = extras.getString("mockName");
+        challengeDay = extras.getString("mockDay"); //String.valueOf(21);
+        String challengeStreak = extras.getString("mockStreak"); // "4";
+        String challengePercent = extras.getString("mockPercent");
+
         ButterKnife.bind(this);
+
 
         // Layout Slider
         streaksList = new ArrayList<>();
@@ -92,11 +100,6 @@ public class CardDetailActivity extends AppCompatActivity {
         initLayoutForStreaks();
 
 
-        Bundle extras = getIntent().getExtras();
-        challengeDay = extras.getString("mockDay"); //String.valueOf(21);
-        String challengeName = extras.getString("mockName");
-        String challengeStreak = extras.getString("mockStreak"); // "4";
-        String challengePercent = extras.getString("mockPercent");
 
 
         tvChallengeDayN.setText(challengeDay);
@@ -106,20 +109,20 @@ public class CardDetailActivity extends AppCompatActivity {
 
     }
 
-    @OnClick(R.id.image_view_back)
-    public void onClickBack() {
-        finish();
-    }
+//    @OnClick(R.id.image_view_back)
+//    public void onClickBack() {
+//        finish();
+//    }
 
-    @OnClick(R.id.image_view_share)
-    public void onClickShare() {
-        Toast.makeText(this, "Sharing...", Toast.LENGTH_SHORT).show();
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
-        sendIntent.setType("text/plain");
-        startActivity(sendIntent);
-    }
+//    @OnClick(R.id.image_view_share)
+//    public void onClickShare() {
+//        Toast.makeText(this, "Sharing...", Toast.LENGTH_SHORT).show();
+//        Intent sendIntent = new Intent();
+//        sendIntent.setAction(Intent.ACTION_SEND);
+//        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+//        sendIntent.setType("text/plain");
+//        startActivity(sendIntent);
+//    }
 
     @OnClick(R.id.text_view_challenge_rules)
     public void onClickRules() {
@@ -127,13 +130,13 @@ public class CardDetailActivity extends AppCompatActivity {
         startActivity(new Intent(this, ChallengeRulesActivity.class));
     }
 
-    @OnClick(R.id.text_view_skip_day)
-    public void onClickSkipADay() {
-        // Here should be communication with api method
-        Toast.makeText(this, "Skip a Day", Toast.LENGTH_SHORT).show();
-    }
+//    @OnClick(R.id.text_view_skip_day)
+//    public void onClickSkipADay() {
+//        // Here should be communication with api method
+//        Toast.makeText(this, "Skip a Day", Toast.LENGTH_SHORT).show();
+//    }
 
-    @OnClick(R.id.text_view_check_in)
+    @OnClick(R.id.button_check_in)
     public void onClickCheckIn() {
         Toast.makeText(this, "Check In", Toast.LENGTH_SHORT).show();
         tvYouCompletedDayN.setText("You Completed Day " + challengeDay + " Of Your\nChallenge");
@@ -178,8 +181,8 @@ public class CardDetailActivity extends AppCompatActivity {
             View child = layoutCardDetails.getChildAt(i);
             child.setEnabled(false);
         }
-        tvSkipDay.setEnabled(false);
-        tvCheckIn.setEnabled(false);
+        //tvSkipDay.setEnabled(false);
+        buttonCheckIn.setEnabled(false);
     }
 
     /**
@@ -190,8 +193,8 @@ public class CardDetailActivity extends AppCompatActivity {
             View child = layoutCardDetails.getChildAt(i);
             child.setEnabled(true);
         }
-        tvSkipDay.setEnabled(true);
-        tvCheckIn.setEnabled(true);
+        //tvSkipDay.setEnabled(true);
+        buttonCheckIn.setEnabled(true);
         layoutGreatJob.setVisibility(View.GONE);
     }
 
@@ -258,6 +261,35 @@ public class CardDetailActivity extends AppCompatActivity {
 
         mainAdapter = new StreakAdapter(this, streaksList);
         recyclerView.setAdapter(mainAdapter);
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_challenge_detail, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_share) {
+            Toast.makeText(this, "Sharing...", Toast.LENGTH_SHORT).show();
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+            sendIntent.setType("text/plain");
+            startActivity(sendIntent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 

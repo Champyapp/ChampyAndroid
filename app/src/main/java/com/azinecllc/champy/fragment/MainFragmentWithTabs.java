@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.MainActivityPagerAdapter;
@@ -22,6 +23,10 @@ import com.azinecllc.champy.adapter.MainActivityPagerAdapter;
 public class MainFragmentWithTabs extends Fragment {
 
     public static final String TAG = "MainFragmentWithTabs";
+    private int[] tabIcons = {
+            R.mipmap.nav_challenges,
+            R.mipmap.nav_friends,
+    };
 
     @Override
     public void onAttach(Context context) {
@@ -45,6 +50,10 @@ public class MainFragmentWithTabs extends Fragment {
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.view_pager_main);
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tab_layout_main);
         tabLayout.setupWithViewPager(viewPager);
+//        tabLayout.getTabAt(0).setIcon(tabIcons[0]);
+//        tabLayout.getTabAt(1).setIcon(tabIcons[1]);
+
+
 
         MainActivityPagerAdapter adapterViewPager = new MainActivityPagerAdapter(getChildFragmentManager(), getContext());
         viewPager.setAdapter(adapterViewPager);

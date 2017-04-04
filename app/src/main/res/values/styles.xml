@@ -9,9 +9,11 @@
         <item name="colorControlActivated">@color/color_white</item> <!-- progress bg -->
         <item name="colorControlHighlight">#339997</item>
         <item name="android:windowEnableSplitTouch">false</item>
+        <item name="android:windowContentOverlay">@null</item>
         <item name="android:splitMotionEvents">false</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
+        <item name="elevation">0dp</item>
     </style>
 
     <style name="ChampySecondaryTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -25,6 +27,7 @@
         <item name="android:splitMotionEvents">false</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
+        <item name="elevation">0dp</item>
     </style>
 
 

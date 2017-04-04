@@ -21,7 +21,7 @@ import butterknife.OnClick;
  * Created on 3/28/17.
  */
 
-public class CreateChallengeDetailsActivity extends AppCompatActivity {
+public class ChallengeCreateDetailsActivity extends AppCompatActivity {
 
     @BindView(R.id.text_view_cancel)
     TextView tvCancel;
@@ -55,7 +55,7 @@ public class CreateChallengeDetailsActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_challenge_detail);
+        setContentView(R.layout.activity_challenge_create_detail);
         ButterKnife.bind(this);
 
         Bundle extras = getIntent().getExtras();
@@ -82,7 +82,7 @@ public class CreateChallengeDetailsActivity extends AppCompatActivity {
 
     @OnClick(R.id.text_view_challenge_a_friend)
     public void onClickChallengeAFriend() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, ChallengeActivity.class);
         intent.putExtra("tag", "TAG_FRIENDS");
         intent.putExtra("index", 6);
         startActivityForResult(intent, 1);
@@ -98,7 +98,7 @@ public class CreateChallengeDetailsActivity extends AppCompatActivity {
     public void onClickGotIt() {
         Toast.makeText(this, "Got it...", Toast.LENGTH_SHORT).show();
         enableChildClicks();
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, ChallengeActivity.class);
         intent.putExtra("tag", "TAG_CHALLENGES");
         intent.putExtra("index", 0);
         startActivity(intent);

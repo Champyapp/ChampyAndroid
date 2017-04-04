@@ -13,12 +13,10 @@ import android.util.Log;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.activity.AlarmReceiverActivity;
-import com.azinecllc.champy.activity.MainActivity;
+import com.azinecllc.champy.activity.ChallengeActivity;
 import com.azinecllc.champy.controller.DailyWakeUpController;
 import com.azinecllc.champy.utils.SessionManager;
 import com.facebook.FacebookSdk;
-
-import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class CustomAlarmReceiver extends BroadcastReceiver {
 
@@ -58,7 +56,7 @@ public class CustomAlarmReceiver extends BroadcastReceiver {
 
     private void sendNotification(Context context) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        Intent notifyIntent = new Intent(context, MainActivity.class);
+        Intent notifyIntent = new Intent(context, ChallengeActivity.class);
         notifyIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 8888, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);

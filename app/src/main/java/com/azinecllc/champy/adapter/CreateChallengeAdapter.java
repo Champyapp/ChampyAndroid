@@ -10,11 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.activity.CreateChallengeDetailsActivity;
-import com.azinecllc.champy.interfaces.RecyclerCardClickListener;
+import com.azinecllc.champy.activity.ChallengeCreateDetailsActivity;
 import com.azinecllc.champy.interfaces.RecyclerChallengesClickListener;
 import com.azinecllc.champy.model.CreateChallengeModel;
 
@@ -59,7 +57,7 @@ public class CreateChallengeAdapter extends RecyclerView.Adapter<CreateChallenge
         holder.cardLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, CreateChallengeDetailsActivity.class);
+                Intent intent = new Intent(context, ChallengeCreateDetailsActivity.class);
                 intent.putExtra("name", challenge.getChallengeName());
                 context.startActivity(intent);
             }
