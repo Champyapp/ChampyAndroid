@@ -28,13 +28,13 @@
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">
         <item>Challenges</item>
-        <item>Friends</item>
-        <item>Settings | Profile</item>
-        <item>Settings | Notifications</item>
-        <item>Settings | Helps </item>
+        <item>Profile Settings</item>
+        <item>Notifications Settings</item>
+        <item>Help And Feedback</item>
         <item>Terms</item>
         <item>Privacy Police</item>
-        <item>Champy</item>
+
+        <item>Friends</item>
     </string-array>
 
     <string name="terms">Terms</string>

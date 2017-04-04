@@ -8,10 +8,6 @@
             android:id="@+id/nav_challenges"
             android:icon="@mipmap/nav_challenges"
             android:title="@string/challenges" />
-        <item
-            android:id="@+id/nav_friends"
-            android:icon="@mipmap/nav_friends"
-            android:title="@string/friends" />
     </group>
 
 

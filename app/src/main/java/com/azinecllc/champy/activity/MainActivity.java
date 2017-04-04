@@ -198,7 +198,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Runtime.getRuntime().gc();
     }
 
-
     @Override
     public void onBackPressed() {
         Log.i(TAG, "onBackPressed: ");
@@ -206,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawer.closeDrawer(GravityCompat.START);
         }
 
-        if (navItemIndex == 1 && getCallingActivity() != null) {
+        if (navItemIndex == 6 && getCallingActivity() != null) {
             System.out.println("activity for result");
             Intent returnIntent = new Intent();
             setResult(Activity.RESULT_CANCELED, returnIntent);
@@ -225,28 +224,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 navItemIndex = 0;
                 CURRENT_TAG = TAG_CHALLENGES;
                 break;
-            case R.id.nav_friends:
-                navItemIndex = 1;
-                CURRENT_TAG = TAG_FRIENDS;
-                break;
             case R.id.nav_settings_profile:
-                navItemIndex = 2;
+                navItemIndex = 1;
                 CURRENT_TAG = TAG_SETTINGS_PROFILE;
                 break;
             case R.id.nav_settings_notifications:
-                navItemIndex = 3;
+                navItemIndex = 2;
                 CURRENT_TAG = TAG_SETTINGS_NOTIFICATIONS;
                 break;
             case R.id.nav_settings_help_and_feedback:
-                navItemIndex = 4;
+                navItemIndex = 3;
                 CURRENT_TAG = TAG_SETTINGS_HELP_AND_FEEDBACK;
                 break;
             case R.id.nav_terms:
-                navItemIndex = 5;
+                navItemIndex = 4;
                 CURRENT_TAG = TAG_TERMS;
                 break;
             case R.id.nav_privacy_policy:
-                navItemIndex = 6;
+                navItemIndex = 5;
                 CURRENT_TAG = TAG_PRIVACY_POLICE;
                 break;
         }
@@ -297,17 +292,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case 0:
                 return new MainFragmentWithTabs();
             case 1:
-                return new FriendsFragment();
-            case 2:
                 return new SettingsProfileFragment();
-            case 3:
+            case 2:
                 return new SettingsNotificationsFragment();
-            case 4:
+            case 3:
                 return new SettingsHelpFragment();
-            case 5:
+            case 4:
                 return new TermsFragment();
-            case 6:
+            case 5:
                 return new PrivacyPoliceFragment();
+            case 6:
+                return new FriendsFragment();
             default:
                 return new MainFragmentWithTabs();
         }

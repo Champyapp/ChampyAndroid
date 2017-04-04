@@ -46,12 +46,9 @@ public class MainFragmentWithTabs extends Fragment {
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tab_layout_main);
         tabLayout.setupWithViewPager(viewPager);
 
-        MainActivityPagerAdapter adapterViewPager = new MainActivityPagerAdapter(getFragmentManager(), getContext());
+        MainActivityPagerAdapter adapterViewPager = new MainActivityPagerAdapter(getChildFragmentManager(), getContext());
         viewPager.setAdapter(adapterViewPager);
 
-
-        tabLayout.getTabAt(0).setText("Challenges");
-        tabLayout.getTabAt(1).setText("Friends");
 
         return view;
 

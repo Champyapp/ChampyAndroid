@@ -27,14 +27,15 @@ public class AboutActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("About");
+
         tvAbout = (TextView) findViewById(R.id.text_view_about);
 
         runOnUiThread(() -> {
             tvAbout.setText(getResources().getString(R.string.about_large_text));
         });
 
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        toolbar.setTitle("Azinec LLC");
 
 //        spinner = findViewById(R.id.loadingPanel);
 //        spinner.setVisibility(View.VISIBLE);

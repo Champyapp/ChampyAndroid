@@ -84,7 +84,7 @@ public class CreateChallengeDetailsActivity extends AppCompatActivity {
     public void onClickChallengeAFriend() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("tag", "TAG_FRIENDS");
-        intent.putExtra("index", 1);
+        intent.putExtra("index", 6);
         startActivityForResult(intent, 1);
     }
 
