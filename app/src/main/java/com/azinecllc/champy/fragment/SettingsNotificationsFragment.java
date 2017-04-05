@@ -57,7 +57,7 @@ public class SettingsNotificationsFragment extends Fragment implements CompoundB
 
                 Toast.makeText(
                         getContext(),
-                        "Clicked On Morning Layout, Status: " + ((isChecked) ? "ON" : "OFF"),
+                        "Clicked On Morning Switch, Status: " + ((isChecked) ? "ON" : "OFF"),
                         Toast.LENGTH_SHORT)
                         .show();
 
@@ -66,7 +66,7 @@ public class SettingsNotificationsFragment extends Fragment implements CompoundB
 
                 Toast.makeText(
                         getContext(),
-                        "Clicked On Morning Layout, Status: " + ((isChecked) ? "ON" : "OFF"),
+                        "Clicked On Evening Switch, Status: " + ((isChecked) ? "ON" : "OFF"),
                         Toast.LENGTH_SHORT)
                         .show();
 

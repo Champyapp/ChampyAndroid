@@ -3,7 +3,10 @@ package com.azinecllc.champy.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
@@ -23,20 +26,16 @@ import butterknife.OnClick;
 
 public class ChallengeCreateDetailsActivity extends AppCompatActivity {
 
-    @BindView(R.id.text_view_cancel)
-    TextView tvCancel;
     @BindView(R.id.text_view_challenge_name)
     TextView tvChallengeName;
     @BindView(R.id.text_view_challenge_rules)
     TextView tvChallengeRules;
-    @BindView(R.id.text_view_create_challenge)
-    TextView tvCreateChallenge;
+    @BindView(R.id.button_create_challenge)
+    Button buttonCreateChallenge;
     @BindView(R.id.text_view_challenge_a_friend)
     TextView tvChallengeAFriend;
     @BindView(R.id.text_view_challenge_description)
     TextView tvChallengeDescription;
-    @BindView(R.id.image_view_back)
-    ImageView ivBack;
     @BindView(R.id.image_view_challenge_icon)
     ImageView ivChallengeIcon;
     @BindView(R.id.switch_reminder)
@@ -56,24 +55,20 @@ public class ChallengeCreateDetailsActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_challenge_create_detail);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.mipmap.ic_button_back);
+        toolbar.setTitle("New Challenge");
+        setSupportActionBar(toolbar);
+
         ButterKnife.bind(this);
 
         Bundle extras = getIntent().getExtras();
-        String challengeName = extras.getString("name", "null");
+        String challengeName = extras.getString("name", "");
         tvChallengeName.setText(challengeName);
 
 
     }
 
-    @OnClick(R.id.text_view_cancel)
-    public void onClickCancel(View view) {
-        Toast.makeText(this, "Cancel Button", Toast.LENGTH_SHORT).show();
-    }
-
-    @OnClick(R.id.image_view_back)
-    public void onClickBack() {
-        finish();
-    }
 
     @OnClick(R.id.text_view_challenge_rules)
     public void onClickChallengeRules() {
@@ -88,7 +83,7 @@ public class ChallengeCreateDetailsActivity extends AppCompatActivity {
         startActivityForResult(intent, 1);
     }
 
-    @OnClick(R.id.text_view_create_challenge)
+    @OnClick(R.id.button_create_challenge)
     public void onClickCreateChallenge() {
         Toast.makeText(this, "Creating Challenge...", Toast.LENGTH_SHORT).show();
         disableChildClicks();
@@ -142,6 +137,16 @@ public class ChallengeCreateDetailsActivity extends AppCompatActivity {
             return;
         }
         super.onBackPressed();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**

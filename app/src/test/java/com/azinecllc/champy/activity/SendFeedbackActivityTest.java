@@ -52,10 +52,10 @@ public class SendFeedbackActivityTest {
 
     @Test
     public void testForAppBarLayout() throws Exception {
-        AppBarLayout appBarLayout = (AppBarLayout) activity.findViewById(R.id.appbar_contact_us);
+        AppBarLayout appBarLayout = (AppBarLayout) activity.findViewById(R.id.appbar_challenge_create);
         assertNotNull(appBarLayout);
         assertTrue(View.VISIBLE == appBarLayout.getVisibility());
-        assertEquals(R.id.appbar_contact_us, appBarLayout.getId());
+        assertEquals(R.id.appbar_challenge_create, appBarLayout.getId());
     }
 
     @Test

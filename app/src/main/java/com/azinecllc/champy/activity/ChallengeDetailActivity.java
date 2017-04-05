@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.StreakAdapter;
 import com.azinecllc.champy.model.StreakModel;
+import com.azinecllc.champy.utils.CustomScrollView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,7 @@ public class ChallengeDetailActivity extends AppCompatActivity {
     @BindView(R.id.rv_streaks)
     RecyclerView recyclerView;
     @BindView(R.id.scroll_view)
-    ScrollView scrollView;
+    CustomScrollView scrollView;
     @BindView(R.id.image_view_challenge_icon)
     ImageView ivChallengeIcon;
     @BindView(R.id.text_view_day_n)
@@ -74,6 +75,9 @@ public class ChallengeDetailActivity extends AppCompatActivity {
     private List<StreakModel> streaksList;
     private List<Integer> items;
     private String challengeDay;
+    // true if we can scroll (not locked)
+    // false if we cannot scroll (locked)
+    private boolean mScrollable = true;
 
 
 
@@ -81,14 +85,16 @@ public class ChallengeDetailActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_challenge_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.mipmap.ic_button_back);
-        setSupportActionBar(toolbar);
+
         ButterKnife.bind(this);
 
         Bundle extras = getIntent().getExtras();
         String challengeName = extras.getString("mockName");
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.mipmap.ic_button_back);
         toolbar.setTitle(challengeName);
+        setSupportActionBar(toolbar);
+
         challengeDay = extras.getString("mockDay"); //String.valueOf(21);
         String challengeStreak = extras.getString("mockStreak"); // "4";
         String challengePercent = extras.getString("mockPercent");
@@ -101,7 +107,11 @@ public class ChallengeDetailActivity extends AppCompatActivity {
         initSecondStreak();
         initThirdStreak();
         initFourthStreak();
-        initLayoutForStreaks();
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        mainAdapter = new StreakAdapter(this, streaksList);
+        recyclerView.setAdapter(mainAdapter);
 
 
         tvChallengeDayN.setText(challengeDay);
@@ -156,13 +166,16 @@ public class ChallengeDetailActivity extends AppCompatActivity {
      */
     private void disableClicks() {
         layoutCheckedIn.setVisibility(View.VISIBLE);
-//        scrollView.setClickable(false);
-//        scrollView.setEnabled(false);
-//        scrollView.setScrollContainer(false);
-//        scrollView.setSmoothScrollingEnabled(false);
-//        scrollView.setHorizontalFadingEdgeEnabled(false);
-//        scrollView.setVerticalFadingEdgeEnabled(false);
 
+//        recyclerView.setClickable(false);
+//        recyclerView.setEnabled(false);
+//        recyclerView.setScrollContainer(false);
+//        recyclerView.setHorizontalFadingEdgeEnabled(false);
+//        recyclerView.setVerticalFadingEdgeEnabled(false);
+        recyclerView.setNestedScrollingEnabled(false);
+
+        recyclerView.setEnabled(false);
+        scrollView.setEnableScrolling(false);
         for (int i = 0; i < layoutContext.getChildCount(); i++) {
             View child = layoutContext.getChildAt(i);
             child.setEnabled(false);
@@ -177,6 +190,7 @@ public class ChallengeDetailActivity extends AppCompatActivity {
             View child = layoutContext.getChildAt(i);
             child.setEnabled(true);
         }
+        scrollView.setEnableScrolling(true);
         layoutCheckedIn.setVisibility(View.GONE);
     }
 
@@ -184,7 +198,7 @@ public class ChallengeDetailActivity extends AppCompatActivity {
     private void initFirstStreak() {
         StreakModel streak1 = new StreakModel();
         streak1.setLabel("Streak 1");
-        streak1.setStatus("finished");
+        streak1.setStatus("Finished");
         items = new ArrayList<>();
         items.add(1);
         streak1.setItems(items);
@@ -194,7 +208,7 @@ public class ChallengeDetailActivity extends AppCompatActivity {
     private void initSecondStreak() {
         StreakModel streak2 = new StreakModel();
         streak2.setLabel("Streak 2");
-        streak2.setStatus("in progress");
+        streak2.setStatus("In Progress");
         items = new ArrayList<>();
         items.add(2);
         items.add(3);
@@ -206,7 +220,7 @@ public class ChallengeDetailActivity extends AppCompatActivity {
     private void initThirdStreak() {
         StreakModel streak3 = new StreakModel();
         streak3.setLabel("Streak 3");
-        streak3.setStatus("pending");
+        streak3.setStatus("Pending");
         items = new ArrayList<>();
         items.add(5);
         items.add(6);
@@ -222,7 +236,7 @@ public class ChallengeDetailActivity extends AppCompatActivity {
     private void initFourthStreak() {
         StreakModel streak4 = new StreakModel();
         streak4.setLabel("Streak 4");
-        streak4.setStatus("pending");
+        streak4.setStatus("Pending");
         items = new ArrayList<>();
         items.add(12);
         items.add(13);
@@ -238,18 +252,10 @@ public class ChallengeDetailActivity extends AppCompatActivity {
         streaksList.add(streak4);
     }
 
-    private void initLayoutForStreaks() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-
-        mainAdapter = new StreakAdapter(this, streaksList);
-        recyclerView.setAdapter(mainAdapter);
-    }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_share, menu);
         return true;
     }
@@ -258,6 +264,10 @@ public class ChallengeDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
+        if (layoutCheckedIn.getVisibility() == View.VISIBLE) {
+            return super.onOptionsItemSelected(item);
+        }
+
         if (id == R.id.action_share) {
             Toast.makeText(this, "Sharing...", Toast.LENGTH_SHORT).show();
             Intent sendIntent = new Intent();

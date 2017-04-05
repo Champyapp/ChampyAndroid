@@ -7,102 +7,51 @@
     android:background="@color/color_white">
 
 
-    <ImageView
-        android:id="@+id/image_view_back"
-        android:layout_width="wrap_content"
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:src="@drawable/ic_ab_back_holo_light_am" />
+        android:id="@+id/appbar_challenge_create_detail"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-    <TextView
-        android:id="@+id/tv_challenge_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Create Challenge"
-        android:textStyle="bold"
-        android:textAlignment="center"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-        android:textColor="@color/black"
-        android:gravity="center"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:layout_alignBottom="@+id/image_view_back"
-        android:layout_alignTop="@+id/image_view_back"
-        android:layout_toRightOf="@+id/image_view_back"
-        android:layout_toEndOf="@+id/image_view_back"
-        android:layout_toLeftOf="@+id/text_view_cancel"
-        android:layout_toStartOf="@+id/text_view_cancel" />
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/primary_indigo"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    </android.support.design.widget.AppBarLayout>
 
-    <TextView
-        android:id="@+id/text_view_cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Cancel"
-        android:textAlignment="center"
-        android:textColor="@color/blue"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:gravity="center"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignBottom="@+id/tv_challenge_name" />
-
-
-    <!-- Challenge icon -->
     <ImageView
         android:id="@+id/image_view_challenge_icon"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:paddingTop="32dp"
-        android:paddingBottom="32dp"
-        android:src="@drawable/ic_sleep_before_midnight"
-        android:layout_below="@+id/tv_challenge_name"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_bg_sleep_before_midnight"
+        android:layout_below="@+id/appbar_challenge_create_detail"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/text_view_challenge_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/image_view_challenge_icon"
+        android:text="Sleep Before Midnight"
+        android:textSize="30sp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:text="Sleep Before Midnight"
-        android:textSize="36sp"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+        android:layout_marginTop="8dp" />
 
     <TextView
         android:id="@+id/text_view_challenge_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/text_view_challenge_name"
-        android:layout_above="@+id/line1"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
         android:text="Get to bed before midnight to have full 7 to 8 hours of sleep."
         android:textSize="18sp"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
-
-    <View
-        android:id="@+id/line1"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="#d4d4d4"
-        android:layout_above="@+id/text_view_challenge_rules" />
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:layout_marginTop="8dp" />
 
     <TextView
         android:id="@+id/text_view_challenge_rules"
@@ -117,7 +66,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_above="@+id/line2" />
+        android:layout_marginTop="8dp"
+        android:layout_below="@+id/text_view_challenge_description" />
 
     <View
         android:id="@+id/line2"
@@ -125,12 +75,8 @@
         android:layout_height="1dp"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginEnd="8dp"
         android:background="#d4d4d4"
-        android:layout_above="@+id/text_view_challenge_a_friend" />
+        android:layout_below="@+id/text_view_challenge_rules" />
 
     <TextView
         android:id="@+id/text_view_challenge_a_friend"
@@ -145,7 +91,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_above="@+id/line3" />
+        android:layout_below="@+id/line2" />
 
     <View
         android:id="@+id/line3"
@@ -153,12 +99,8 @@
         android:layout_height="1dp"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginEnd="8dp"
         android:background="#d4d4d4"
-        android:layout_above="@+id/switch_reminder" />
+        android:layout_below="@+id/text_view_challenge_a_friend" />
 
     <Switch
         android:id="@+id/switch_reminder"
@@ -172,7 +114,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginEnd="16dp"
         android:checked="true"
-        android:layout_above="@+id/line4" />
+        android:layout_below="@+id/line3" />
 
     <View
         android:id="@+id/line4"
@@ -181,24 +123,22 @@
         android:background="#d4d4d4"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_above="@+id/text_view_create_challenge" />
+        android:layout_below="@+id/switch_reminder" />
 
-    <TextView
-        android:id="@+id/text_view_create_challenge"
+    <Button
+        android:id="@+id/button_create_challenge"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:gravity="center"
+        android:layout_height="wrap_content"
         android:text="Create Challenge"
         android:textAlignment="center"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-        android:textColor="@color/blue"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:textColor="@color/color_white"
+        android:background="@color/primary_dark_indigo"
+        android:layout_marginLeft="36dp"
+        android:layout_marginRight="36dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_alignParentBottom="true" />
 
     <include layout="@layout/item_challenge_created" />
 

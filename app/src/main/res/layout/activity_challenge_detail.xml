@@ -30,7 +30,7 @@
         android:layout_centerHorizontal="true" />
 
 
-    <ScrollView
+    <com.azinecllc.champy.utils.CustomScrollView
         android:id="@+id/scroll_view"
         android:layout_below="@+id/image_view_challenge_icon"
         android:layout_width="match_parent"
@@ -196,7 +196,7 @@
         </RelativeLayout>
 
 
-    </ScrollView>
+    </com.azinecllc.champy.utils.CustomScrollView>
 
 
     <include layout="@layout/item_check_in" />
