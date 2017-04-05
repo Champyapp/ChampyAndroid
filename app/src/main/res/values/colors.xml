@@ -41,7 +41,7 @@
     <color name="divider_light_gray">#BDBDBD</color>
 
     <!-- REDESIGN INDIGO STYLE -->
-    <color name="primary_indigo">#094f87</color>
+    <color name="primary_indigo">#0b5999</color>
     <color name="primary_dark_indigo">#094f87</color>
     <color name="primary_light_indigo">#C5CAE9</color>
     <color name="accent_indigo">#448AFF</color>

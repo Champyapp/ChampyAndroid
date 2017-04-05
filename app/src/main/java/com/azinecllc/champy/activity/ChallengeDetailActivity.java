@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -80,6 +79,7 @@ public class ChallengeDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_challenge_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.mipmap.ic_button_back);
         setSupportActionBar(toolbar);
 
         Bundle extras = getIntent().getExtras();
@@ -267,17 +267,13 @@ public class ChallengeDetailActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_challenge_detail, menu);
+        getMenuInflater().inflate(R.menu.menu_share, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_share) {
             Toast.makeText(this, "Sharing...", Toast.LENGTH_SHORT).show();
@@ -286,6 +282,9 @@ public class ChallengeDetailActivity extends AppCompatActivity {
             sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
             sendIntent.setType("text/plain");
             startActivity(sendIntent);
+            return true;
+        } else if (id == android.R.id.home) {
+            finish();
             return true;
         }
 
