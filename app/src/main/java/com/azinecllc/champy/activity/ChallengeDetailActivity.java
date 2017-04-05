@@ -39,8 +39,6 @@ public class ChallengeDetailActivity extends AppCompatActivity {
     //@BindView(R.id.tv_challenge_name) TextView tvChallengeName;
     @BindView(R.id.image_view_challenge_icon)
     ImageView ivChallengeIcon;
-    @BindView(R.id.text_view_challenge_name)
-    TextView tvChallengeName;
     @BindView(R.id.text_view_day_n)
     TextView tvChallengeDayN;
     @BindView(R.id.text_view_streak_n)
@@ -84,6 +82,7 @@ public class ChallengeDetailActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         String challengeName = extras.getString("mockName");
+        toolbar.setTitle(challengeName);
         challengeDay = extras.getString("mockDay"); //String.valueOf(21);
         String challengeStreak = extras.getString("mockStreak"); // "4";
         String challengePercent = extras.getString("mockPercent");
@@ -103,7 +102,6 @@ public class ChallengeDetailActivity extends AppCompatActivity {
 
 
         tvChallengeDayN.setText(challengeDay);
-        tvChallengeName.setText(challengeName);
         tvChallengeStreakN.setText(challengeStreak);
         tvChallengeCompletionN.setText(String.format("%s%%", challengePercent));
 
