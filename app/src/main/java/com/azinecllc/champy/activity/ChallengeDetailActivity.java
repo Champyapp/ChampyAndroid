@@ -8,10 +8,13 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,7 +39,14 @@ public class ChallengeDetailActivity extends AppCompatActivity {
 
     @BindView(R.id.layout_card_detail)
     RelativeLayout layoutCardDetails;
-    //@BindView(R.id.tv_challenge_name) TextView tvChallengeName;
+    @BindView(R.id.layout_check_in)
+    RelativeLayout layoutCheckedIn;
+    @BindView(R.id.layout_content)
+    RelativeLayout layoutContext;
+    @BindView(R.id.rv_streaks)
+    RecyclerView recyclerView;
+    @BindView(R.id.scroll_view)
+    ScrollView scrollView;
     @BindView(R.id.image_view_challenge_icon)
     ImageView ivChallengeIcon;
     @BindView(R.id.text_view_day_n)
@@ -45,17 +55,12 @@ public class ChallengeDetailActivity extends AppCompatActivity {
     TextView tvChallengeStreakN;
     @BindView(R.id.text_view_completion_n)
     TextView tvChallengeCompletionN;
-    @BindView(R.id.tv_streaks)
-    RecyclerView recyclerView;
     @BindView(R.id.text_view_challenge_rules)
     TextView tvChallengeRules;
     @BindView(R.id.switch_reminder)
     Switch switchReminder;
     @BindView(R.id.button_check_in)
     Button buttonCheckIn;
-    //@BindView(R.id.text_view_skip_day) TextView tvSkipDay;
-    @BindView(R.id.layout_check_in)
-    RelativeLayout layoutGreatJob;
     @BindView(R.id.text_view_you_completed_day_n)
     TextView tvYouCompletedDayN;
     @BindView(R.id.text_view_ok)
@@ -79,6 +84,7 @@ public class ChallengeDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.mipmap.ic_button_back);
         setSupportActionBar(toolbar);
+        ButterKnife.bind(this);
 
         Bundle extras = getIntent().getExtras();
         String challengeName = extras.getString("mockName");
@@ -87,7 +93,6 @@ public class ChallengeDetailActivity extends AppCompatActivity {
         String challengeStreak = extras.getString("mockStreak"); // "4";
         String challengePercent = extras.getString("mockPercent");
 
-        ButterKnife.bind(this);
 
 
         // Layout Slider
@@ -99,52 +104,19 @@ public class ChallengeDetailActivity extends AppCompatActivity {
         initLayoutForStreaks();
 
 
-
-
         tvChallengeDayN.setText(challengeDay);
         tvChallengeStreakN.setText(challengeStreak);
         tvChallengeCompletionN.setText(String.format("%s%%", challengePercent));
 
     }
 
-//    @OnClick(R.id.image_view_back)
-//    public void onClickBack() {
-//        finish();
-//    }
-
-//    @OnClick(R.id.image_view_share)
-//    public void onClickShare() {
-//        Toast.makeText(this, "Sharing...", Toast.LENGTH_SHORT).show();
-//        Intent sendIntent = new Intent();
-//        sendIntent.setAction(Intent.ACTION_SEND);
-//        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
-//        sendIntent.setType("text/plain");
-//        startActivity(sendIntent);
-//    }
-
-    @OnClick(R.id.text_view_challenge_rules)
-    public void onClickRules() {
-        // that's all
-        startActivity(new Intent(this, ChallengeRulesActivity.class));
-    }
-
-//    @OnClick(R.id.text_view_skip_day)
-//    public void onClickSkipADay() {
-//        // Here should be communication with api method
-//        Toast.makeText(this, "Skip a Day", Toast.LENGTH_SHORT).show();
-//    }
 
     @OnClick(R.id.button_check_in)
     public void onClickCheckIn() {
         Toast.makeText(this, "Check In", Toast.LENGTH_SHORT).show();
         tvYouCompletedDayN.setText("You Completed Day " + challengeDay + " Of Your\nChallenge");
+        layoutCheckedIn.setVisibility(View.VISIBLE);
         disableClicks();
-    }
-
-    @OnClick(R.id.text_view_ok)
-    public void onClickOK() {
-        Toast.makeText(this, "Ok...", Toast.LENGTH_SHORT).show();
-        enableClicks();
     }
 
     @OnClick(R.id.text_view_share)
@@ -159,10 +131,20 @@ public class ChallengeDetailActivity extends AppCompatActivity {
         startActivity(sendIntent2);
     }
 
+    @OnClick(R.id.text_view_ok)
+    public void onClickOK() {
+        Toast.makeText(this, "Ok...", Toast.LENGTH_SHORT).show();
+        enableClicks();
+    }
+
+    @OnClick(R.id.text_view_challenge_rules)
+    public void onClickRules() {
+        startActivity(new Intent(this, ChallengeRulesActivity.class));
+    }
 
     @Override
     public void onBackPressed() {
-        if (layoutGreatJob.getVisibility() == View.VISIBLE) {
+        if (layoutCheckedIn.getVisibility() == View.VISIBLE) {
             enableClicks();
             return;
         }
@@ -173,28 +155,31 @@ public class ChallengeDetailActivity extends AppCompatActivity {
      * Method to disable all childes onClickListeners into parent layout
      */
     private void disableClicks() {
-        layoutGreatJob.setVisibility(View.VISIBLE);
+        layoutCheckedIn.setVisibility(View.VISIBLE);
+//        scrollView.setClickable(false);
+//        scrollView.setEnabled(false);
+//        scrollView.setScrollContainer(false);
+//        scrollView.setSmoothScrollingEnabled(false);
+//        scrollView.setHorizontalFadingEdgeEnabled(false);
+//        scrollView.setVerticalFadingEdgeEnabled(false);
 
-        for (int i = 0; i < layoutCardDetails.getChildCount(); i++) {
-            View child = layoutCardDetails.getChildAt(i);
+        for (int i = 0; i < layoutContext.getChildCount(); i++) {
+            View child = layoutContext.getChildAt(i);
             child.setEnabled(false);
         }
-        //tvSkipDay.setEnabled(false);
-        buttonCheckIn.setEnabled(false);
     }
 
     /**
      * Method to enable all childes onClickListeners into parent layout
      */
     private void enableClicks() {
-        for (int i = 0; i < layoutCardDetails.getChildCount(); i++) {
-            View child = layoutCardDetails.getChildAt(i);
+        for (int i = 0; i < layoutContext.getChildCount(); i++) {
+            View child = layoutContext.getChildAt(i);
             child.setEnabled(true);
         }
-        //tvSkipDay.setEnabled(true);
-        buttonCheckIn.setEnabled(true);
-        layoutGreatJob.setVisibility(View.GONE);
+        layoutCheckedIn.setVisibility(View.GONE);
     }
+
 
     private void initFirstStreak() {
         StreakModel streak1 = new StreakModel();

@@ -29,28 +29,30 @@
         android:layout_below="@+id/appbar_challenge_detail"
         android:layout_centerHorizontal="true" />
 
+
     <ScrollView
+        android:id="@+id/scroll_view"
         android:layout_below="@+id/image_view_challenge_icon"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:orientation="vertical"
+        <RelativeLayout
+            android:id="@+id/layout_content"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <LinearLayout
                 android:id="@+id/layout_statistics"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:layout_marginTop="16dp">
 
                 <LinearLayout
                     android:id="@+id/layout_full_text"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="8dp">
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:id="@+id/text_view_streak"
@@ -106,10 +108,10 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="33"
                         android:text="28%"
-                        android:textSize="36sp"
-                        android:textColor="@color/gray"
                         android:textAlignment="center"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                        android:textColor="@color/gray"
+                        android:textSize="36sp" />
 
                     <TextView
                         android:id="@+id/text_view_day_n"
@@ -128,11 +130,12 @@
 
 
             <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_streaks"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:id="@+id/tv_streaks"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp" />
+                android:layout_below="@+id/layout_statistics" />
+
 
             <Button
                 android:id="@+id/button_check_in"
@@ -143,9 +146,11 @@
                 android:textAlignment="center"
                 android:gravity="center"
                 android:background="@color/primary_indigo"
+                android:layout_below="@+id/rv_streaks"
                 android:layout_marginLeft="75dp"
                 android:layout_marginRight="75dp"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginTop="16dp"
+                android:layout_centerHorizontal="true" />
 
 
             <TextView
@@ -155,11 +160,12 @@
                 android:text="Challenge Rules"
                 android:paddingBottom="2dp"
                 android:paddingTop="2dp"
-                android:layout_marginTop="8dp"
+                android:layout_below="@+id/button_check_in"
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginTop="32dp"
                 android:textColor="@color/black"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
@@ -167,8 +173,9 @@
                 android:id="@+id/line2"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_below="@+id/text_view_challenge_rules"
                 android:background="#d4d4d4" />
 
             <Switch
@@ -178,21 +185,19 @@
                 android:text="Daily Reminder"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                 android:textColor="@color/black"
+                android:layout_below="@+id/line2"
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
+                android:paddingBottom="16dp"
                 android:checked="true" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
 
     </ScrollView>
-    <!-- Layout with Statistics -->
 
-
-    <!-- Bottom Layout with Buttons -->
 
     <include layout="@layout/item_check_in" />
 
