@@ -53,31 +53,31 @@ public class AboutActivityTest {
     public void testForToolbar() throws Exception {
         Toolbar toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
         assertNotNull(toolbar);
-        assertEquals("Azinec LLC", toolbar.getTitle());
-        System.out.println("Expected: Azinec LLC | actual: " + toolbar.getTitle());
+        assertEquals("About", toolbar.getTitle());
+        System.out.println("Expected: About | actual: " + toolbar.getTitle());
         assertTrue(R.id.toolbar == toolbar.getId());
         System.out.println("Expected: R.id.toolbar | actual: " + toolbar.getId());
     }
 
-    @Test
-    public void testForWebView() throws Exception {
-        WebView webView = (WebView) activity.findViewById(R.id.webView);
-        assertNotNull(webView);
-        assertTrue(R.id.webView == webView.getId());
-        System.out.println("Expected: R.id.webView | actual: " + webView.getId());
-        assertTrue(webView.getSettings().getJavaScriptEnabled());
-        System.out.println("Expected: true | actual: " + webView.getSettings().getJavaScriptEnabled());
-        assertEquals(View.VISIBLE, webView.getVisibility());
-        System.out.println("Expected: visible (0) | actual: " + webView.getVisibility());
+//    @Test
+//    public void testForWebView() throws Exception {
+//        WebView webView = (WebView) activity.findViewById(R.id.webView);
+//        assertNotNull(webView);
+//        assertTrue(R.id.webView == webView.getId());
+//        System.out.println("Expected: R.id.webView | actual: " + webView.getId());
+//        assertTrue(webView.getSettings().getJavaScriptEnabled());
+//        System.out.println("Expected: true | actual: " + webView.getSettings().getJavaScriptEnabled());
+//        assertEquals(View.VISIBLE, webView.getVisibility());
+//        System.out.println("Expected: visible (0) | actual: " + webView.getVisibility());
+//
+//    }
 
-    }
-
-    @Test
-    public void testProgressBar() throws Exception {
-        View spinner = activity.findViewById(R.id.loadingPanel);
-        assertNotNull(spinner);
-        assertEquals(View.VISIBLE, spinner.getVisibility());
-    }
+//    @Test
+//    public void testProgressBar() throws Exception {
+//        View spinner = activity.findViewById(R.id.loadingPanel);
+//        assertNotNull(spinner);
+//        assertEquals(View.VISIBLE, spinner.getVisibility());
+//    }
 
 
 }

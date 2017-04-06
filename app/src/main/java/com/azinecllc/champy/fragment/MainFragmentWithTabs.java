@@ -1,6 +1,8 @@
 package com.azinecllc.champy.fragment;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -50,6 +52,17 @@ public class MainFragmentWithTabs extends Fragment {
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.view_pager_main);
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tab_layout_main);
         tabLayout.setupWithViewPager(viewPager);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            tabLayout.setElevation(15);
+        } else {
+            //android:background="@android:drawable/dialog_holo_light_frame";
+            //tabLayout.setBackground(android.R.drawable.dialog_holo_light_frame);
+            Drawable drawable = getResources().getDrawable(android.R.drawable.dialog_holo_light_frame);
+            tabLayout.setBackground(drawable);
+
+        }
 //        tabLayout.getTabAt(0).setIcon(tabIcons[0]);
 //        tabLayout.getTabAt(1).setIcon(tabIcons[1]);
 

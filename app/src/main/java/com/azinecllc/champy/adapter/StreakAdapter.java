@@ -60,7 +60,7 @@ public class StreakAdapter extends RecyclerView.Adapter<StreakAdapter.ViewHolder
 //                break;
 //        }
 
-        if (streakModel.getStatus().equals("finished")) {
+        if (streakModel.getStatus().equals("Finished")) {
             holder.ivStreakStatus.setVisibility(View.VISIBLE);
             holder.tvStreakStatus.setVisibility(View.INVISIBLE);
         } else {

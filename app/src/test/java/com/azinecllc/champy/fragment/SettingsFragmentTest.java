@@ -92,19 +92,19 @@ public class SettingsFragmentTest {
         assertEquals(Color.WHITE, tvUserName.getCurrentTextColor());
     }
 
-    @Test
-    public void testForTextViewGeneral() throws Exception {
-        TextView tvGeneral = (TextView) view.findViewById(R.id.text_view_name);
-        assertNotNull(tvGeneral);
-        assertEquals(Color.WHITE, tvGeneral.getCurrentTextColor());
-        assertEquals("General:", tvGeneral.getText());
-
-        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) tvGeneral.getLayoutParams();
-        assertEquals(8, lp.topMargin);
-        assertEquals(8, lp.bottomMargin);
-        assertEquals(8, lp.leftMargin);
-        assertEquals(8, lp.rightMargin);
-    }
+//    @Test
+//    public void testForTextViewGeneral() throws Exception {
+//        TextView tvGeneral = (TextView) view.findViewById(R.id.text_view_name);
+//        assertNotNull(tvGeneral);
+//        assertEquals(Color.WHITE, tvGeneral.getCurrentTextColor());
+//        assertEquals("General:", tvGeneral.getText());
+//
+//        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) tvGeneral.getLayoutParams();
+//        assertEquals(8, lp.topMargin);
+//        assertEquals(8, lp.bottomMargin);
+//        assertEquals(8, lp.leftMargin);
+//        assertEquals(8, lp.rightMargin);
+//    }
 
     @Test
     public void testForLayoutChangeName() throws Exception {
