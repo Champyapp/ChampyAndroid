@@ -50,5 +50,16 @@
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
 
+    <array name="demo_colors">
+        <item>@android:color/holo_red_dark</item>
+        <item>#FFCF670C</item>
+        <item>#00ff26</item>
+        <item>#ffbf00</item>
+        <item>@color/primary_green</item>
+        <item>@color/blue</item>
+        <item>#FF7209DA</item>
+        <item>#FFEC03DC</item>
+    </array>
+
 
 </resources>

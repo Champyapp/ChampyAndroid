@@ -13,7 +13,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -35,6 +37,7 @@ import com.azinecllc.champy.utils.SessionManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.soundcloud.android.crop.Crop;
+import com.thebluealliance.spectrum.SpectrumDialog;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -64,8 +67,8 @@ import static com.azinecllc.champy.utils.Constants.path;
 
 public class SettingsProfileFragment extends Fragment {
 
-    @BindView(R.id.iv_change_photo)
-    ImageView ivChangePhoto;
+    @BindView(R.id.fabChangePhoto)
+    FloatingActionButton fabChangePhoto;
     @BindView(R.id.tv_logout)
     TextView tvLogout;
     @BindView(R.id.tv_delete_account)
@@ -74,6 +77,8 @@ public class SettingsProfileFragment extends Fragment {
     TextView tvFirstName;
     @BindView(R.id.tv_last_name)
     TextView tvLastName;
+    @BindView(R.id.tv_select_color)
+    TextView tvSelectColor;
     private SessionManager sessionManager;
     private DBHelper dbHelper;
     private OfflineMode offlineMode;
@@ -81,7 +86,7 @@ public class SettingsProfileFragment extends Fragment {
     private Retrofit retrofit;
     private UserController userController;
     private ImageView ivUserPhotoBG;
-    private ImageView ivUserPhoto;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,7 +104,7 @@ public class SettingsProfileFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_settings_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_settings_profile2, container, false);
         ButterKnife.bind(this, view);
 
 //        ExpandableHeightListView listView = (ExpandableHeightListView) view.findViewById(R.id.list_view_colors);
@@ -146,16 +151,14 @@ public class SettingsProfileFragment extends Fragment {
 //        listView.setAdapter(adapterColor);
 
         ivUserPhotoBG = (ImageView) view.findViewById(R.id.iv_profile_picture_bg);
-        ivUserPhoto = (ImageView) view.findViewById(R.id.iv_profile_picture);
 
-//        ImageView ivChangePhoto = (ImageView) view.findViewById(R.id.iv_change_photo);
+//        ImageView fabChangePhoto = (ImageView) view.findViewById(R.id.iv_change_photo);
 //        TextView tvFirstName = (TextView) view.findViewById(R.id.tv_first_name);
 //        TextView tvLastName = (TextView) view.findViewById(R.id.tv_last_name);
 //        TextView tvLogout = (TextView) view.findViewById(R.id.tv_logout);
 //        TextView tvDeleteAcc = (TextView) view.findViewById(R.id.tv_delete_account);
 
         Switch switchFB = (Switch) view.findViewById(R.id.switch_facebook);
-
 
         String userPicture = sessionManager.getUserPicture();
         String userEmail = sessionManager.getUserEmail();
@@ -166,12 +169,6 @@ public class SettingsProfileFragment extends Fragment {
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(ivUserPhotoBG);
-        Glide.with(this)
-                .load(userPicture)
-                .bitmapTransform(new CropCircleTransformation(getContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(ivUserPhoto);
 
         tvFirstName.setText(userName);
         tvLastName.setText(userEmail);
@@ -180,8 +177,28 @@ public class SettingsProfileFragment extends Fragment {
         return view;
     }
 
+    @OnClick(R.id.tv_select_color)
+    public void onClickSelectColor() {
+        new SpectrumDialog.Builder(getContext())
+                .setColors(R.array.demo_colors)
+                .setSelectedColorRes(android.R.color.holo_red_dark)
+                .setDismissOnColorSelected(false)
+                .setOutlineWidth(0)
+                .setOnColorSelectedListener(new SpectrumDialog.OnColorSelectedListener() {
+                    @Override
+                    public void onColorSelected(boolean positiveResult, @ColorInt int color) {
+                        if (positiveResult) {
+                            Toast.makeText(getContext(), "Color selected: #" + Integer.toHexString(color).toUpperCase(), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getContext(), "Dialog cancelled", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .build()
+                .show(getFragmentManager(), "dialog_demo_1");
+    }
 
-    @OnClick(R.id.iv_change_photo)
+    @OnClick(R.id.fabChangePhoto)
     public void onClickChangePhoto() {
         Toast.makeText(getContext(), "clicked on the camera", Toast.LENGTH_SHORT).show();
         if (!checkWriteExternalPermission()) {
@@ -373,13 +390,6 @@ public class SettingsProfileFragment extends Fragment {
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(ivUserPhotoBG);
-        Glide.with(getActivity())
-                .load(uri)
-                .bitmapTransform(new CropCircleTransformation(getContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .override(130, 130)
-                .into(ivUserPhoto);
 
         /////////////////////////////////////////////////////////////////////////////////
 

@@ -1,6 +1,8 @@
 package com.azinecllc.champy.activity;
 
 import android.app.Activity;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,13 +15,17 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.fragment.MainFragmentWithTabs;
@@ -39,6 +45,7 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 import static com.azinecllc.champy.Champy.getContext;
 import static com.azinecllc.champy.utils.Constants.TAG_CHALLENGES;
+import static com.azinecllc.champy.utils.Constants.TAG_FRIENDS;
 import static com.azinecllc.champy.utils.Constants.TAG_PRIVACY_POLICE;
 import static com.azinecllc.champy.utils.Constants.TAG_SETTINGS_HELP_AND_FEEDBACK;
 import static com.azinecllc.champy.utils.Constants.TAG_SETTINGS_NOTIFICATIONS;
@@ -285,6 +292,47 @@ public class ChallengeActivity extends AppCompatActivity implements NavigationVi
                 return new MainFragmentWithTabs();
         }
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu_search, menu);
+        if (navItemIndex == 6 && getCallingActivity() != null) {
+
+            MenuInflater menuInflater = getMenuInflater();
+            menuInflater.inflate(R.menu.menu_search, menu);
+
+            MenuItem searchItem = menu.findItem(R.id.action_search);
+
+            SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+
+            SearchView searchView = null;
+            if (searchItem != null) {
+                searchView = (SearchView) searchItem.getActionView();
+            }
+            if (searchView != null) {
+                searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+            }
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        //noinspection SimplifiableIfStatement
+
+        if (id == R.id.action_search) {
+            Toast.makeText(this, "Search...", Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (id == android.R.id.home) {
+            finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
 
     /**

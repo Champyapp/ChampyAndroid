@@ -1,0 +1,201 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fillViewport="true"
+    android:gravity="top">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/layout_photo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <!-- Image User Photo -->
+                <ImageView
+                    android:id="@+id/iv_profile_picture_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:clickable="false"
+                    android:src="@drawable/ic_user_profile_photo"
+                    android:scaleType="centerCrop" />
+            </RelativeLayout>
+
+
+            <TextView
+                android:id="@+id/text_view_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Information"
+                android:textColor="@color/primary_dark_green"
+                android:textStyle="bold"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="36dp"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/tv_first_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sasha Khyzhun"
+                android:textColor="@color/black"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp" />
+
+            <TextView
+                android:id="@+id/tv_last_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Username"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="8dp" />
+
+            <include layout="@layout/item_line" />
+
+
+            <TextView
+                android:id="@+id/a"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="sasha.khyzhun@gmail.com"
+                android:textColor="@color/black"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/b"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Email"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="8dp" />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="#d1d1d1" />
+
+
+            <TextView
+                android:id="@+id/text_view_settings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Settings"
+                android:textColor="@color/primary_dark_green"
+                android:textStyle="bold"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/tv_select_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select color"
+                android:textColor="@color/black"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp" />
+
+            <TextView
+                android:id="@+id/text_view_select_color_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Color for duel challenge"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="8dp" />
+
+
+            <include layout="@layout/item_line" />
+
+            <Switch
+                android:id="@+id/switch_facebook"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Connect to Facebook"
+                android:checked="true"
+                android:theme="@style/GreenSwitch"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp" />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="#d1d1d1" />
+
+
+            <TextView
+                android:id="@+id/text_view_other"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Other"
+                android:textColor="@color/primary_dark_green"
+                android:textStyle="bold"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/tv_logout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Log Out"
+                android:textColor="@color/black"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp" />
+
+            <include layout="@layout/item_line" />
+
+            <TextView
+                android:id="@+id/tv_delete_account"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Delete Account"
+                android:textColor="@color/black"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp" />
+        </LinearLayout>
+
+    </ScrollView>
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabChangePhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        android:src="@android:drawable/ic_menu_camera"
+        app:backgroundTint="@color/primary_dark_green"
+        app:layout_anchor="@id/layout_photo"
+        app:layout_anchorGravity="bottom|left|end" />
+
+
+</android.support.design.widget.CoordinatorLayout>
+
