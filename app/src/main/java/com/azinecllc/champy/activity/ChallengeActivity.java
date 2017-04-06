@@ -55,15 +55,11 @@ public class ChallengeActivity extends AppCompatActivity implements NavigationVi
 
     private static final String TAG = "ChallengeActivity";
 
-    private FloatingActionButton fabPlus, fabWake, fabSelf, fabDuel;
-    //private Animation fab_open, fab_close, rotate_forward, rotate_backward;
+    private FloatingActionButton fabPlus;
     private boolean isFabOpen = false;
-    //private TextView nothingHere;
-    private ImageView circleLogo;
     private SessionManager sessionManager;
     private DrawerLayout drawer;
     private NavigationView navigationView;
-    //private Socket mSocket;
 
 
     @Override
@@ -100,12 +96,6 @@ public class ChallengeActivity extends AppCompatActivity implements NavigationVi
         drawer.setDrawerListener(drawerToggle);
         drawerToggle.syncState();
 
-//        MainActivityPagerAdapter adapterViewPager = new MainActivityPagerAdapter(getSupportFragmentManager(), this);
-//        ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager_main);
-//        viewPager.setAdapter(adapterViewPager);
-//
-//        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout_main);
-//        tabLayout.setupWithViewPager(viewPager);
 
         // NAVIGATION VIEW
         navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -117,11 +107,6 @@ public class ChallengeActivity extends AppCompatActivity implements NavigationVi
         TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.drawer_tv_user_name);
 
         fabPlus = (FloatingActionButton) findViewById(R.id.fabPlus);
-        //nothingHere = (TextView) findViewById(R.id.tv_noting_here_yet);
-//        fab_open = AnimationUtils.loadAnimation(getContext(), R.anim.fab_open);
-//        fab_close = AnimationUtils.loadAnimation(getContext(), R.anim.fab_close);
-//        rotate_forward = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_forward);
-//        rotate_backward = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_backward);
 
         // GET PHOTO AND MAKE BLUR
         sessionManager = SessionManager.getInstance(getApplicationContext());
@@ -154,10 +139,7 @@ public class ChallengeActivity extends AppCompatActivity implements NavigationVi
             startActivity(new Intent(getContext(), ChallengeCreateActivity.class));
         });
 
-
         // PENDING DUEL MENU IN DRAWER
-        //setCounterForPendingDuels();
-
         loadCurrentFragment();
 
     }
@@ -315,92 +297,5 @@ public class ChallengeActivity extends AppCompatActivity implements NavigationVi
             fabPlus.hide();
         }
     }
-
-    //    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        Log.i(TAG, "onStart: ");
-//
-//        try {
-//            mSocket = IO.socket(API_URL);
-//        } catch (URISyntaxException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        mSocket.on("connect", onConnect);
-//        mSocket.on("connected", onConnected);
-//        mSocket.on("InProgressChallenge:accepted", modifiedChallenges);
-//        mSocket.on("InProgressChallenge:new", modifiedChallenges);
-//        mSocket.on("InProgressChallenge:won", modifiedChallenges);
-//        //mSocket.on("InProgressChallenge:updated", modifiedChallenges);
-//
-//        mSocket.connect();
-//    }
-//
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        //mSocket.disconnect();
-//        mSocket.off("InProgressChallenge:accepted", modifiedChallenges);
-//        mSocket.off("InProgressChallenge:new", modifiedChallenges);
-//        mSocket.off("InProgressChallenge:won", modifiedChallenges);
-//
-//    }
-
-    //    private Emitter.Listener onConnect = new Emitter.Listener() {
-//        @Override
-//        public void call(final Object... args) {
-//            Log.i(TAG, "Sockets call: onConnect");
-//            mSocket.emit("ready", sessionManager.getToken());
-//        }
-//    };
-//
-//    private Emitter.Listener onConnected = args -> Log.i(TAG, "Sockets call: onConnected!");
-//
-//    private Emitter.Listener modifiedChallenges = new Emitter.Listener() {
-//        @Override
-//        public void call(Object... args) {
-//            Log.i(TAG, "Sockets call: modifiedChallenges");
-//            ChallengeController cc = new ChallengeController(getApplicationContext(), ChallengeActivity.this);
-//            cc.refreshCardsForPendingDuel(null);
-//            setCounterForPendingDuels(); // not good solution
-//        }
-//    };
-
-//    /**
-//     * Method-toggle to control visibility of the sub buttons. This method works like a on-off system.
-//     */
-//    private void animateFAB() {
-//        if (isFabOpen) {
-//            //closeFab();
-//            fabPlus.startAnimation(rotate_backward);
-//            fabWake.startAnimation(fab_close);
-//            fabSelf.startAnimation(fab_close);
-//            fabDuel.startAnimation(fab_close);
-//            isFabOpen = false;
-//        } else {
-//            //openFab();
-//            fabPlus.startAnimation(rotate_forward);
-//            fabWake.startAnimation(fab_open);
-//            fabSelf.startAnimation(fab_open);
-//            fabDuel.startAnimation(fab_open);
-//            isFabOpen = true;
-//        }
-//    }
-
-//    /**
-//     * Method to check pending counter and after that set value for navigation drawer menu
-//     */
-//    private void setCounterForPendingDuels() {
-//        // SETTING CURRENT PENDING COUNT
-//        if (!sessionManager.getDuelPending().equals("0")) {
-//            TextView view = (TextView) navigationView.getMenu().findItem(R.id.nav_pending_duels).getActionView();
-//            runOnUiThread(() -> view.setText(String.format("%s%s", getString(R.string.plus), sessionManager.getDuelPending())));
-//        }
-//
-//    }
-//
-//
-
 
 }

@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.azinecllc.champy.R;
@@ -32,6 +33,7 @@ import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.login.widget.LoginButton;
 import com.github.nkzawa.socketio.client.Socket;
 
 import org.json.JSONArray;
@@ -66,16 +68,8 @@ public class FriendsFragment extends Fragment {
     private Retrofit retrofit;
     private DBHelper dbHelper;
     private ContentValues cv;
-    private Socket mSocket;
     private View gView;
 
-    public static FriendsFragment newInstance(int page) {
-        Bundle args = new Bundle();
-        args.putInt(ARG_PAGE, page);
-        FriendsFragment fragment = new FriendsFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -98,7 +92,7 @@ public class FriendsFragment extends Fragment {
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
-        View itemView = inflater.inflate(R.layout.item_recycler, container, false);
+        View itemView = inflater.inflate(R.layout.item_recycler_friends, container, false);
 
         friendsList = new ArrayList<>();
         Cursor c = db.query("mytable", null, null, null, null, null, null);
@@ -132,11 +126,25 @@ public class FriendsFragment extends Fragment {
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         rvContacts.setAdapter(adapter);
 
-
         gSwipeRefreshLayout = (SwipeRefreshLayout) itemView.findViewById(R.id.swipe_to_refresh);
-        //gSwipeRefreshLayout.setEnabled(false);
         gSwipeRefreshLayout.setOnRefreshListener(() -> refreshOtherView(gSwipeRefreshLayout, gView));
         this.gView = itemView;
+
+        ///////////////////////////////////////////////////////////////////////////////////////////
+        //  need to check sessionManager.isLoggedInWithFacebook                                  //
+        LoginButton loginButton = (LoginButton) itemView.findViewById(R.id.login_button);
+        TextView tvConnectWithFB = (TextView) itemView.findViewById(R.id.text_view_connect_facebook);
+        if (friendsList.isEmpty()) {
+            loginButton.setVisibility(View.VISIBLE);
+            tvConnectWithFB.setVisibility(View.VISIBLE);
+            gSwipeRefreshLayout.setEnabled(false);
+            loginButton.setOnClickListener(v -> Toast.makeText(getContext(), "Login", Toast.LENGTH_SHORT).show());
+        } else {
+            loginButton.setVisibility(View.GONE);
+            tvConnectWithFB.setVisibility(View.GONE);
+            gSwipeRefreshLayout.setEnabled(true);
+        }
+        ///////////////////////////////////////////////////////////////////////////////////////////
 
 
         if (sessionManager.getRefreshOthers().equals("true")) {
@@ -147,46 +155,6 @@ public class FriendsFragment extends Fragment {
 
     }
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        Log.i(TAG, "onStart: ");
-//
-//        try {
-//            mSocket = IO.socket(API_URL);
-//        } catch (URISyntaxException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        mSocket.on("connect", onConnect);
-//        mSocket.on("connected", onConnected);
-//
-//        mSocket.on("Relationship:new:accepted", modifiedRelationship);
-//        mSocket.on("Relationship:new:removed", modifiedRelationship);
-//        mSocket.on("Relationship:created:accepted", modifiedRelationship);
-//        mSocket.on("Relationship:created:removed", modifiedRelationship);
-//
-//        mSocket.connect();
-//
-//    }
-
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-////        Date now = new Date(System.currentTimeMillis());
-////        Log.i(TAG, "onStop: Sockets disconnected "
-////                + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds());
-////
-////        mSocket.disconnect();
-////        //mSocket.off();
-////        //mSocket.off("connect", onConnect);
-////        //mSocket.off("connected", onConnected);
-////        mSocket.off("Relationship:new:accepted", modifiedRelationship);
-////        mSocket.off("Relationship:new:removed", modifiedRelationship);
-////        mSocket.off("Relationship:created:accepted", modifiedRelationship);
-////        mSocket.off("Relationship:created:removed", modifiedRelationship);
-//
-//    }
 
 
     @Override
@@ -344,28 +312,6 @@ public class FriendsFragment extends Fragment {
     }
 
 
-//    private Emitter.Listener onConnect = new Emitter.Listener() {
-//        @Override
-//        public void call(final Object... args) {
-//            Log.i(TAG, "Sockets call: onConnect");
-//            mSocket.emit("ready", sessionManager.getToken());
-//        }
-//    };
-//
-//    private Emitter.Listener onConnected = args -> Log.d(TAG, "Sockets call: onConnected~");
-//
-//    protected Emitter.Listener modifiedRelationship = new Emitter.Listener() {
-//        @Override
-//        public void call(final Object... args) {
-//            getActivity().runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    Log.i(TAG, "Sockets run: modifiedRelationship");
-//                    refreshOtherView(gSwipeRefreshLayout, gView);
-//                }
-//            });
-//        }
-//    };
 
 
 }
