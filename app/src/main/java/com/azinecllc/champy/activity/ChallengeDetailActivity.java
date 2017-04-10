@@ -38,36 +38,21 @@ import butterknife.OnClick;
 
 public class ChallengeDetailActivity extends AppCompatActivity {
 
-    @BindView(R.id.layout_card_detail)
-    RelativeLayout layoutCardDetails;
-    @BindView(R.id.layout_check_in)
-    RelativeLayout layoutCheckedIn;
-    @BindView(R.id.layout_content)
-    RelativeLayout layoutContext;
-    @BindView(R.id.rv_streaks)
-    RecyclerView recyclerView;
-    @BindView(R.id.scroll_view)
-    CustomScrollView scrollView;
-    @BindView(R.id.image_view_challenge_icon)
-    ImageView ivChallengeIcon;
-    @BindView(R.id.text_view_day_n)
-    TextView tvChallengeDayN;
-    @BindView(R.id.text_view_streak_n)
-    TextView tvChallengeStreakN;
-    @BindView(R.id.text_view_completion_n)
-    TextView tvChallengeCompletionN;
-    @BindView(R.id.text_view_challenge_rules)
-    TextView tvChallengeRules;
-    @BindView(R.id.switch_reminder)
-    Switch switchReminder;
-    @BindView(R.id.button_check_in)
-    Button buttonCheckIn;
-    @BindView(R.id.text_view_you_completed_day_n)
-    TextView tvYouCompletedDayN;
-    @BindView(R.id.text_view_ok)
-    TextView tvOK;
-    @BindView(R.id.text_view_share)
-    TextView tvShare;
+    private RelativeLayout layoutCardDetails;
+    private RelativeLayout layoutCheckedIn;
+    private RelativeLayout layoutContext;
+    private RecyclerView recyclerView;
+    private CustomScrollView scrollView;
+    private ImageView ivChallengeIcon;
+    private TextView tvChallengeDayN;
+    private TextView tvChallengeStreakN;
+    private TextView tvChallengeCompletionN;
+    private TextView tvChallengeRules;
+    private TextView tvYouCompletedDayN;
+    private TextView tvOK;
+    private TextView tvShare;
+    private Switch switchReminder;
+    private Button buttonCheckIn;
 
 
     // Slider Layout
@@ -85,8 +70,7 @@ public class ChallengeDetailActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_challenge_detail);
-
-        ButterKnife.bind(this);
+        initViews();
 
         Bundle extras = getIntent().getExtras();
         String challengeName = extras.getString("mockName");
@@ -283,6 +267,28 @@ public class ChallengeDetailActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+    private void initViews() {
+        layoutCardDetails = (RelativeLayout) findViewById(R.id.layout_card_detail);
+        layoutCheckedIn = (RelativeLayout) findViewById(R.id.layout_check_in);
+        layoutContext = (RelativeLayout) findViewById(R.id.layout_content);
+        recyclerView = (RecyclerView) findViewById(R.id.rv_streaks);
+
+        scrollView = (CustomScrollView) findViewById(R.id.scroll_view);
+        switchReminder = (Switch) findViewById(R.id.switch_reminder);
+        buttonCheckIn = (Button) findViewById(R.id.button_check_in);
+        ivChallengeIcon = (ImageView) findViewById(R.id.image_view_challenge_icon);
+
+        tvOK = (TextView) findViewById(R.id.text_view_ok);
+        tvShare = (TextView) findViewById(R.id.text_view_share);
+        tvChallengeDayN = (TextView) findViewById(R.id.text_view_day_n);
+        tvChallengeStreakN = (TextView) findViewById(R.id.text_view_streak_n);
+        tvChallengeRules = (TextView) findViewById(R.id.text_view_challenge_rules);
+        tvChallengeCompletionN = (TextView) findViewById(R.id.text_view_completion_n);
+        tvYouCompletedDayN = (TextView) findViewById(R.id.text_view_you_completed_day_n);
+    }
+
 
 
 
