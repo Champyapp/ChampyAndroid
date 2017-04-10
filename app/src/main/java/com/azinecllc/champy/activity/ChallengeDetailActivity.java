@@ -93,10 +93,20 @@ public class ChallengeDetailActivity extends AppCompatActivity {
         //initSecondStreak();
         //initThirdStreak();
         //initFourthStreak();
-        initStreaks(1, "Finished", 1);
-        initStreaks(2, "In Progress", 4);
-        initStreaks(3, "Pending", 7);
-        initStreaks(4, "Pending", 11);
+
+        int streaks = 4;
+        String[] statuses = {"Finished", "In Progress", "Pending", "Pending"};
+        int[] daysInStreak = {1, 3, 7, 10};
+        int[] startOf = {1, 2, 5, 12};
+
+        for (int i = 0; i < streaks; i++) {
+            initStreaks(i + 1, statuses[i], daysInStreak[i], startOf[i]);
+        }
+
+//        initStreaks(1, "Finished", 1);
+//        initStreaks(2, "In Progress", 4);
+//        initStreaks(3, "Pending", 7);
+//        initStreaks(4, "Pending", 11);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -107,6 +117,30 @@ public class ChallengeDetailActivity extends AppCompatActivity {
         tvChallengeDayN.setText(challengeDay);
         tvChallengeStreakN.setText(challengeStreak);
         tvChallengeCompletionN.setText(String.format("%s%%", challengePercent));
+
+    }
+
+    private void initStreaks(int currStreakN, String currStreakStatus, int daysInStreak, int startOf) {
+        StreakModel streak = new StreakModel();
+        streak.setStreakLabel("Streak " + currStreakN); // 1 | 2 | 3 | 4
+        streak.setStreakStatus(currStreakStatus); // Finished | In Progress | Pending
+
+        ArrayList<StreakSection> streakSections = new ArrayList<StreakSection>();
+
+
+        for (int i = startOf; i < daysInStreak + startOf; i++) {
+
+            StreakSection section;
+//            do {
+//                int day = startOf
+            section = new StreakSection(i, "");
+//            } while (i < daysInStreak);
+
+            streakSections.add(section);
+        }
+
+        streak.setStreakSections(streakSections);
+        streaksList.add(streak);
 
     }
 
@@ -182,23 +216,6 @@ public class ChallengeDetailActivity extends AppCompatActivity {
         }
         scrollView.setEnableScrolling(true);
         layoutCheckedIn.setVisibility(View.GONE);
-    }
-
-
-    private void initStreaks(int currStreakN, String currStreakStatus, int currStreakDays) {
-        StreakModel streak = new StreakModel();
-        streak.setStreakLabel("Streak " + currStreakN); // 1 | 2 | 3 | 4
-        streak.setStreakStatus(currStreakStatus); // Finished | In Progress | Pending
-
-        ArrayList<StreakSection> streakSections = new ArrayList<StreakSection>();
-
-        for (int i = 0; i < currStreakDays; i++) {
-            streakSections.add(new StreakSection((i + 1), ""));
-        }
-
-        streak.setStreakSections(streakSections);
-        streaksList.add(streak);
-
     }
 
 
