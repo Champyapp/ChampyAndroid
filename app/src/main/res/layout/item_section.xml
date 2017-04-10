@@ -11,10 +11,11 @@
         android:layout_centerHorizontal="true"
         android:text="N"
         android:textSize="18sp"
-        android:textColor="@color/color_white"
+        android:textColor="#e4e4e4"
         android:textAlignment="center"
         android:gravity="center"
-        android:background="@drawable/circle" />
+
+        />
 
     <!--#cdced2-->
     <!--android:background="@drawable/circle"-->

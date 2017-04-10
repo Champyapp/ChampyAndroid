@@ -84,7 +84,10 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.ViewHo
             if (recipient.equals("true")) {
                 viewHolder.buttonDecline.setVisibility(View.VISIBLE);
                 viewHolder.buttonAccept.setVisibility(View.VISIBLE);
+                viewHolder.buttonCancel.setVisibility(View.INVISIBLE);
             } else {
+                viewHolder.buttonDecline.setVisibility(View.INVISIBLE);
+                viewHolder.buttonAccept.setVisibility(View.INVISIBLE);
                 viewHolder.buttonCancel.setVisibility(View.VISIBLE);
             }
         }

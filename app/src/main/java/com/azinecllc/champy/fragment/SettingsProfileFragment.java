@@ -74,8 +74,6 @@ public class SettingsProfileFragment extends Fragment {
     TextView tvDeleteAcc;
     @BindView(R.id.tv_first_name)
     TextView tvFirstName;
-    @BindView(R.id.tv_last_name)
-    TextView tvLastName;
     @BindView(R.id.tv_select_color)
     TextView tvSelectColor;
     private SessionManager sessionManager;
@@ -170,7 +168,6 @@ public class SettingsProfileFragment extends Fragment {
                 .into(ivUserPhotoBG);
 
         tvFirstName.setText(userName);
-        tvLastName.setText(userEmail);
 
 
         return view;

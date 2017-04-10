@@ -72,7 +72,7 @@ public class StreakAdapter extends RecyclerView.Adapter<StreakAdapter.ViewHolder
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
         holder.sectionRecyclerView.setLayoutManager(layoutManager);
 
-        SectionAdapter sectionAdapter = new SectionAdapter(mContext, streakModel.getItems());
+        SectionAdapter sectionAdapter = new SectionAdapter(mContext, streakModel);
         holder.sectionRecyclerView.setAdapter(sectionAdapter);
     }
 

@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.azinecllc.champy.R;
+import com.azinecllc.champy.model.StreakModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,22 +26,35 @@ import java.util.Map;
 public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHolder> {
 
     private Context mContext;
-    private List<Integer> mItemsNumber = new ArrayList<>();
+    private StreakModel streakModel;
+    private GradientDrawable gd;
 
-    public SectionAdapter(Context context, List<Integer> itemsNumber) {
+    public SectionAdapter(Context context, StreakModel streakModel) {
         mContext = context;
-        mItemsNumber = itemsNumber;
+        this.streakModel = streakModel;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_section, parent, false);
+        gd = new GradientDrawable();
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.itemLabelTextView.setText(String.valueOf(mItemsNumber.get(position)));
+        holder.itemLabelTextView.setText(String.valueOf(streakModel.getItems().get(position)));
+
+        if (streakModel.getStatus().equals("Finished")) {
+            gd.setColor(Color.parseColor("#0b5999"));
+            holder.itemLabelTextView.setTextColor(Color.WHITE);
+        } else {
+            gd.setColor((Color.WHITE));
+            holder.itemLabelTextView.setTextColor(Color.parseColor("#e4e4e4"));
+        }
+        gd.setCornerRadius(45);
+        holder.itemLabelTextView.setBackgroundDrawable(gd);
+
 
 //        GradientDrawable gd = new GradientDrawable();
 //        gd.setCornerRadius(25);
@@ -57,7 +71,7 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return mItemsNumber.size();
+        return streakModel.getItems().size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
