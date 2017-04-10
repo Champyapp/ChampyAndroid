@@ -21,6 +21,10 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
     private Context mContext;
     private StreakModel streakModel;
     private GradientDrawable gd;
+    private int colorBgFinished = Color.parseColor("#0b5999");
+    private int colorBgInProgress = Color.parseColor("#eeeeee");
+    private int colorBgPending = Color.parseColor("#e4e4e4");
+    private int colorTextPending = Color.parseColor("#e4e4e4");
 
     public SectionAdapter(Context context, StreakModel streakModel) {
         mContext = context;
@@ -31,6 +35,7 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_section, parent, false);
         gd = new GradientDrawable();
+        gd.setCornerRadius(45);
         return new ViewHolder(view);
     }
 
@@ -39,27 +44,35 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
         //holder.itemLabelTextView.setText(String.valueOf(streakModel.getStreakSections().get(position)));
         holder.itemLabelTextView.setText(String.valueOf(streakModel.getStreakSections().get(position).getDayNumber()));
 
-        if (streakModel.getStreakStatus().equals("Finished")) {
-            gd.setColor(Color.parseColor("#0b5999"));
-            holder.itemLabelTextView.setTextColor(Color.WHITE);
-        } else {
-            gd.setColor((Color.WHITE));
-            holder.itemLabelTextView.setTextColor(Color.parseColor("#e4e4e4"));
+        int dayNumber = streakModel.getStreakSections().get(position).getDayNumber();
+        int dayStatus = streakModel.getStreakSections().get(position).getDayStatus();
+        int currDay = streakModel.getStreakSections().get(position).getDayCurrent();
+        String streakStatus = streakModel.getStreakStatus();
+
+        gd.setColor((streakStatus.equals("Finished") ? colorBgFinished : Color.WHITE));
+        holder.itemLabelTextView.setTextColor((streakStatus.equals("Finished") ? Color.WHITE : colorTextPending));
+
+
+        if (streakStatus.equals("In Progress")) {
+            if (currDay > dayNumber) {
+                gd.setColor(colorBgFinished);
+            } else if (currDay == dayNumber) {
+                gd.setColor(colorBgInProgress);
+                holder.itemLabelTextView.setTextColor(mContext.getResources().getColor(R.color.primary_dark_indigo));
+            } else if (currDay < dayNumber) {
+                gd.setColor(Color.WHITE);
+            }
         }
-        gd.setCornerRadius(45);
-        holder.itemLabelTextView.setBackgroundDrawable(gd);
-
-
-//        GradientDrawable gd = new GradientDrawable();
-//        gd.setCornerRadius(25);
-//
-//        if (mItemsNumber.get(position).equals("finished")) {
-//            gd.setColor(Color.parseColor("#acacac")); // origin: #cdced2
-//        } else if (mItemsNumber.get(position).equals("in progress")) {
-//            gd.setColor(Color.parseColor("#cdced2"));
+//        else if (streakStatus.equals("Finished")) {
+//            gd.setColor(colorBgFinished);
+//            holder.itemLabelTextView.setTextColor(Color.WHITE);
+//        } else {
+//            gd.setColor(Color.WHITE);
+//            holder.itemLabelTextView.setTextColor(colorTextPending);
 //        }
 
-        //holder.itemLabelTextView.setBackgroundDrawable(gd);
+
+        holder.itemLabelTextView.setBackgroundDrawable(gd);
 
     }
 

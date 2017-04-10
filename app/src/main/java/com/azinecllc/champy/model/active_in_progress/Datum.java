@@ -13,6 +13,7 @@ public class Datum {
     private Sender sender;
     private Recipient recipient;
     private Challenge challenge;
+    private Streak streak;
     private Integer created;
     private Integer updated;
     private Boolean senderSuccess;
@@ -101,6 +102,14 @@ public class Datum {
         return this.additionalProperties;
     }
 
+    public Streak getStreak() {
+        return streak;
+    }
+
+
+    public void setStreak(Streak streak) {
+        this.streak = streak;
+    }
 
     public void setSender(Sender sender) {
         this.sender = sender;

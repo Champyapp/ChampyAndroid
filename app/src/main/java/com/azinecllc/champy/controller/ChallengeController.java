@@ -24,6 +24,7 @@ import com.azinecllc.champy.model.active_in_progress.Challenge;
 import com.azinecllc.champy.model.active_in_progress.Datum;
 import com.azinecllc.champy.model.active_in_progress.Recipient;
 import com.azinecllc.champy.model.active_in_progress.Sender;
+import com.azinecllc.champy.model.active_in_progress.Streak;
 import com.azinecllc.champy.model.duel.Duel;
 import com.azinecllc.champy.model.single_in_progress.Data;
 import com.azinecllc.champy.receiver.CustomAlarmReceiver;
@@ -631,6 +632,7 @@ public class ChallengeController {
                         Challenge challenge     = datum.getChallenge();
                         Recipient recipient     = datum.getRecipient();
                         Sender sender           = datum.getSender();
+                        //Streak streak           = datum.getStreak();
 
                         String challenge_desc   = challenge.getDescription();   // no tv
                         String challenge_detail = challenge.getDetails();       // ... + " during.."
@@ -643,17 +645,17 @@ public class ChallengeController {
                         String challenge_dur    = "";
                         String constDuration    = "";
                         List<Object> progress;
+                        //List<Object> streaks;
                         String needsToCheck;
                         String isRecipient;
                         String versus;
 
                         /************************* best practices in my life ***********************/
-                        if (challenge_name.equals("Taking stares")) {
+                        if (challenge_name.equals("Taking stares"))
                             challenge_name = "Taking Stairs";
-                        }
-                        if (challenge_name.equals("Reading a books")) {
+                        if (challenge_name.equals("Reading a books"))
                             challenge_name = "Reading Books";
-                        }
+
 
                         /**************** separation of the recipient and the sender  *************/
 
@@ -715,21 +717,6 @@ public class ChallengeController {
                             }
                         }
 
-//                        try {
-//                            String TAG = "INFO ABOUT CARD:";
-//                            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-//                            Log.d(TAG, "challType: " + challType);     // false;
-//                            Log.d(TAG, "versus: " + versus); // Wake up at 08:55
-//                            Log.d(TAG, "challenge_detail: " + challenge_detail);          // 0855
-//                            Log.d(TAG, "challenge_name: " + challenge_name);            // 58605a9645af8ed13f56b8c1
-//                            Log.d(TAG, "challenge_desc: " + challenge_desc);          // null
-//                            Log.d(TAG, "challenge_dur: " + challenge_dur);    // [1482735221, 1482821621]
-//                            Log.d(TAG, "challenge_id: " + challenge_id);          // Wake Up
-//                            Log.d(TAG, "challenge_status: " + challenge_status); // 2 days
-//                            Log.d(TAG, "isRecipient: " + isRecipient);          // 1-2 (current)
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
 
                         cv.put("name",          challType);             // Self-Improvement / Duel / Wake Up
                         cv.put("versus",        versus);                // if this is duel than versus = recipient / sender name
@@ -743,6 +730,9 @@ public class ChallengeController {
                         cv.put("myProgress",    Arrays.toString(prog)); // last update time in millis
                         cv.put("constDuration", constDuration);         // our constant value of challenge duration
                         cv.put("needsToCheck",  needsToCheck);          // method for check challenge for "needToCheck"
+
+                        //cv.put("streak", Arrays.toString());
+
                         db.insert("myChallenges", null, cv);            // db when we store all in progress and information about them
 
                     }
@@ -766,6 +756,22 @@ public class ChallengeController {
 
     }
 
+
+//                        try {
+//                            String TAG = "INFO ABOUT CARD:";
+//                            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+//                            Log.d(TAG, "challType: " + challType);     // false;
+//                            Log.d(TAG, "versus: " + versus); // Wake up at 08:55
+//                            Log.d(TAG, "challenge_detail: " + challenge_detail);          // 0855
+//                            Log.d(TAG, "challenge_name: " + challenge_name);            // 58605a9645af8ed13f56b8c1
+//                            Log.d(TAG, "challenge_desc: " + challenge_desc);          // null
+//                            Log.d(TAG, "challenge_dur: " + challenge_dur);    // [1482735221, 1482821621]
+//                            Log.d(TAG, "challenge_id: " + challenge_id);          // Wake Up
+//                            Log.d(TAG, "challenge_status: " + challenge_status); // 2 days
+//                            Log.d(TAG, "isRecipient: " + isRecipient);          // 1-2 (current)
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
 
 //    /**
 //     * Method for compare current time with 'i-element' in array of alarm time.

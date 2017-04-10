@@ -8,30 +8,33 @@ package com.azinecllc.champy.model;
 public class StreakSection {
 
     private int dayNumber;
-    private String dayStatus;
-
-
-    public StreakSection(int dayNumber, String dayStatus) {
-        this.dayNumber = dayNumber;
-        this.dayStatus = dayStatus;
-    }
+    private int dayCurrent;
+    private int dayStatus;
 
 
     public void setDayNumber(int dayNumber) {
         this.dayNumber = dayNumber;
     }
 
-    public void setDayStatus(String dayStatus) {
+    public void setCurrentDay(int dayStatus) {
+        this.dayCurrent = dayStatus;
+    }
+
+    public void setDayStatus(int dayStatus) {
         this.dayStatus = dayStatus;
     }
 
+
+    public int getDayStatus() {
+        return dayStatus;
+    }
 
     public int getDayNumber() {
         return dayNumber;
     }
 
-    public String getDayStatus() {
-        return dayStatus;
+    public int getDayCurrent() {
+        return dayCurrent;
     }
 
 

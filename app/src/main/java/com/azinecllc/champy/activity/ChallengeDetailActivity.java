@@ -25,8 +25,6 @@ import com.azinecllc.champy.utils.CustomScrollView;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.OnClick;
-
 /**
  * @autor SashaKhyzhun
  * Created on 3/21/17.
@@ -83,30 +81,22 @@ public class ChallengeDetailActivity extends AppCompatActivity {
 
         // Layout Slider
         streaksList = new ArrayList<>();
-
-        // TODO: 4/10/17 change 'finished' to List<Data>.getStreakStatus().getDayStatus();
-//        initStreaks(1, "Finished", 1, "Finished");
-//        initStreaks(2, "Finished", 3, "Finished");
-//        initStreaks(3, "In Progress", 7, "In Progress");
-//        initStreaks(4, "Pending", 7, "Pending");
+        initStreak();
+        // TODO: 4/10/17 change 'finished' to List<Data>.getStreakStatus().getDayCurrent();
+//        initStreak(1, "Finished", 1, "Finished");
+//        initStreak(2, "Finished", 3, "Finished");
+//        initStreak(3, "In Progress", 7, "In Progress");
+//        initStreak(4, "Pending", 7, "Pending");
         //initFirstStreak();
         //initSecondStreak();
         //initThirdStreak();
         //initFourthStreak();
 
-        int streaks = 4;
-        String[] statuses = {"Finished", "In Progress", "Pending", "Pending"};
-        int[] daysInStreak = {1, 3, 7, 10};
-        int[] startOf = {1, 2, 5, 12};
 
-        for (int i = 0; i < streaks; i++) {
-            initStreaks(i + 1, statuses[i], daysInStreak[i], startOf[i]);
-        }
-
-//        initStreaks(1, "Finished", 1);
-//        initStreaks(2, "In Progress", 4);
-//        initStreaks(3, "Pending", 7);
-//        initStreaks(4, "Pending", 11);
+//        initStreak(1, "Finished", 1);
+//        initStreak(2, "In Progress", 4);
+//        initStreak(3, "Pending", 7);
+//        initStreak(4, "Pending", 11);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -120,41 +110,49 @@ public class ChallengeDetailActivity extends AppCompatActivity {
 
     }
 
-    private void initStreaks(int currStreakN, String currStreakStatus, int daysInStreak, int startOf) {
-        StreakModel streak = new StreakModel();
-        streak.setStreakLabel("Streak " + currStreakN); // 1 | 2 | 3 | 4
-        streak.setStreakStatus(currStreakStatus); // Finished | In Progress | Pending
+    private void initStreak(/*int currStreakN, String currStreakStatus, int daysInStreak, int startOf*/) {
+        int countOfStreaks = 4;
+        String[] statuses = {"Finished", "In Progress", "Pending", "Pending"};
+        int[] daysInStreak = {1, 3, 7, 10};
+        int[] startOf = {1, 2, 5, 12};
+        //initStreak(i, statuses[i], daysInStreak[i], startOf[i]);
 
-        ArrayList<StreakSection> streakSections = new ArrayList<StreakSection>();
+
+        for (int i = 0; i < countOfStreaks; i++) {
 
 
-        for (int i = startOf; i < daysInStreak + startOf; i++) {
+            StreakModel streak = new StreakModel();
+            streak.setStreakLabel("Streak " + (i + 1)); // 1 | 2 | 3 | 4
+            streak.setStreakStatus(statuses[i]); // Finished | In Progress | Pending
 
-            StreakSection section;
-//            do {
-//                int day = startOf
-            section = new StreakSection(i, "");
-//            } while (i < daysInStreak);
+            ArrayList<StreakSection> streakSections = new ArrayList<StreakSection>();
 
-            streakSections.add(section);
+
+            for (int j = startOf[i]; j < daysInStreak[i] + startOf[i]; j++) { // 1 | 2 3 4 | 5 6 7...
+                StreakSection section = new StreakSection();
+                section.setDayNumber(j);
+                if (streak.getStreakStatus().equals("In Progress")) {
+                    section.setCurrentDay(3);
+                }
+                streakSections.add(section);
+            }
+
+            streak.setStreakSections(streakSections);
+            streaksList.add(streak);
+
         }
-
-        streak.setStreakSections(streakSections);
-        streaksList.add(streak);
 
     }
 
 
-    @OnClick(R.id.button_check_in)
-    public void onClickCheckIn() {
+    private void onClickCheckIn() {
         Toast.makeText(this, "Check In", Toast.LENGTH_SHORT).show();
         tvYouCompletedDayN.setText("You Completed Day " + challengeDay + " Of Your\nChallenge");
         layoutCheckedIn.setVisibility(View.VISIBLE);
         disableClicks();
     }
 
-    @OnClick(R.id.text_view_share)
-    public void onClickShareCheckIn() {
+    private void onClickShare() {
         Toast.makeText(this, "Share...", Toast.LENGTH_SHORT).show();
         enableClicks();
 
@@ -165,16 +163,16 @@ public class ChallengeDetailActivity extends AppCompatActivity {
         startActivity(sendIntent2);
     }
 
-    @OnClick(R.id.text_view_ok)
-    public void onClickOK() {
+    private void onClickOK() {
         Toast.makeText(this, "Ok...", Toast.LENGTH_SHORT).show();
         enableClicks();
     }
 
-    @OnClick(R.id.text_view_challenge_rules)
-    public void onClickRules() {
+    private void onClickRules() {
+        Toast.makeText(this, "Challenge Rules...", Toast.LENGTH_SHORT).show();
         startActivity(new Intent(this, ChallengeRulesActivity.class));
     }
+
 
     @Override
     public void onBackPressed() {
@@ -318,14 +316,21 @@ public class ChallengeDetailActivity extends AppCompatActivity {
 
         scrollView = (CustomScrollView) findViewById(R.id.scroll_view);
         switchReminder = (Switch) findViewById(R.id.switch_reminder);
+
         buttonCheckIn = (Button) findViewById(R.id.button_check_in);
+        buttonCheckIn.setOnClickListener(v -> onClickCheckIn());
+
         ivChallengeIcon = (ImageView) findViewById(R.id.image_view_challenge_icon);
 
         tvOK = (TextView) findViewById(R.id.text_view_ok);
+        tvOK.setOnClickListener(v -> onClickOK());
+
         tvShare = (TextView) findViewById(R.id.text_view_share);
+        tvShare.setOnClickListener(v -> onClickShare());
         tvChallengeDayN = (TextView) findViewById(R.id.text_view_day_n);
         tvChallengeStreakN = (TextView) findViewById(R.id.text_view_streak_n);
         tvChallengeRules = (TextView) findViewById(R.id.text_view_challenge_rules);
+        tvChallengeRules.setOnClickListener(v -> onClickRules());
         tvChallengeCompletionN = (TextView) findViewById(R.id.text_view_completion_n);
         tvYouCompletedDayN = (TextView) findViewById(R.id.text_view_you_completed_day_n);
     }

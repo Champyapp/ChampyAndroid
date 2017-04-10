@@ -4,303 +4,303 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp">
+    <!--<RelativeLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginBottom="4dp"-->
+    <!--android:layout_marginLeft="16dp"-->
+    <!--android:layout_marginRight="16dp">-->
 
-        <ImageView
-            android:id="@+id/image_view_color_red"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/circle_red" />
-        <TextView
-            android:id="@+id/text_view_color_red"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Red"
-            android:textColor="@color/black"
-            android:gravity="center_vertical"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_toLeftOf="@+id/image_view_selected_red"
-            android:layout_toStartOf="@+id/image_view_selected_red"
-            android:layout_alignBottom="@+id/image_view_color_red"
-            android:layout_toRightOf="@+id/image_view_color_red"
-            android:layout_toEndOf="@+id/image_view_color_red"
-            android:layout_alignTop="@+id/image_view_color_red" />
+    <!--<ImageView-->
+    <!--android:id="@+id/image_view_color_red"-->
+    <!--android:layout_width="32dp"-->
+    <!--android:layout_height="32dp"-->
+    <!--android:layout_marginLeft="8dp"-->
+    <!--android:layout_marginRight="8dp"-->
+    <!--android:layout_marginTop="8dp"-->
+    <!--android:background="@drawable/circle_red" />-->
+    <!--<TextView-->
+    <!--android:id="@+id/text_view_color_red"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Red"-->
+    <!--android:textColor="@color/black"-->
+    <!--android:gravity="center_vertical"-->
+    <!--android:layout_marginLeft="16dp"-->
+    <!--android:layout_marginStart="16dp"-->
+    <!--android:layout_marginRight="16dp"-->
+    <!--android:layout_marginEnd="16dp"-->
+    <!--android:layout_toLeftOf="@+id/image_view_selected_red"-->
+    <!--android:layout_toStartOf="@+id/image_view_selected_red"-->
+    <!--android:layout_alignBottom="@+id/image_view_color_red"-->
+    <!--android:layout_toRightOf="@+id/image_view_color_red"-->
+    <!--android:layout_toEndOf="@+id/image_view_color_red"-->
+    <!--android:layout_alignTop="@+id/image_view_color_red" />-->
 
-        <ImageView
-            android:id="@+id/image_view_selected_red"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:src="@drawable/button_ic_done"
-            android:visibility="invisible"
-            android:layout_marginRight="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignBottom="@+id/text_view_color_red"
-            android:layout_alignTop="@+id/text_view_color_red" />
-    </RelativeLayout>
+    <!--<ImageView-->
+    <!--android:id="@+id/image_view_selected_red"-->
+    <!--android:layout_width="16dp"-->
+    <!--android:layout_height="16dp"-->
+    <!--android:src="@drawable/button_ic_done"-->
+    <!--android:visibility="invisible"-->
+    <!--android:layout_marginRight="8dp"-->
+    <!--android:layout_marginLeft="8dp"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_alignParentEnd="true"-->
+    <!--android:layout_alignBottom="@+id/text_view_color_red"-->
+    <!--android:layout_alignTop="@+id/text_view_color_red" />-->
+    <!--</RelativeLayout>-->
 
-    <include layout="@layout/item_line" />
+    <!--<include layout="@layout/item_line" />-->
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp">
+    <!--<RelativeLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginTop="4dp"-->
+    <!--android:layout_marginBottom="4dp"-->
+    <!--android:layout_marginLeft="16dp"-->
+    <!--android:layout_marginRight="16dp">-->
 
-        <ImageView
-            android:id="@+id/image_view_color_orange"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/circle_orange" />
-        <TextView
-            android:id="@+id/text_view_color_orange"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Orange"
-            android:textColor="@color/black"
-            android:gravity="center_vertical"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_toLeftOf="@+id/image_view_selected_orange"
-            android:layout_toStartOf="@+id/image_view_selected_orange"
-            android:layout_alignBottom="@+id/image_view_color_orange"
-            android:layout_toRightOf="@+id/image_view_color_orange"
-            android:layout_toEndOf="@+id/image_view_color_orange"
-            android:layout_alignTop="@+id/image_view_color_orange" />
+    <!--<ImageView-->
+    <!--android:id="@+id/image_view_color_orange"-->
+    <!--android:layout_width="32dp"-->
+    <!--android:layout_height="32dp"-->
+    <!--android:layout_marginLeft="8dp"-->
+    <!--android:layout_marginRight="8dp"-->
+    <!--android:layout_marginTop="8dp"-->
+    <!--android:background="@drawable/circle_orange" />-->
+    <!--<TextView-->
+    <!--android:id="@+id/text_view_color_orange"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Orange"-->
+    <!--android:textColor="@color/black"-->
+    <!--android:gravity="center_vertical"-->
+    <!--android:layout_marginLeft="16dp"-->
+    <!--android:layout_marginStart="16dp"-->
+    <!--android:layout_marginRight="16dp"-->
+    <!--android:layout_marginEnd="16dp"-->
+    <!--android:layout_toLeftOf="@+id/image_view_selected_orange"-->
+    <!--android:layout_toStartOf="@+id/image_view_selected_orange"-->
+    <!--android:layout_alignBottom="@+id/image_view_color_orange"-->
+    <!--android:layout_toRightOf="@+id/image_view_color_orange"-->
+    <!--android:layout_toEndOf="@+id/image_view_color_orange"-->
+    <!--android:layout_alignTop="@+id/image_view_color_orange" />-->
 
-        <ImageView
-            android:id="@+id/image_view_selected_orange"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:src="@drawable/button_ic_done"
-            android:visibility="invisible"
-            android:layout_marginRight="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignBottom="@+id/text_view_color_orange"
-            android:layout_alignTop="@+id/text_view_color_orange" />
-    </RelativeLayout>
+    <!--<ImageView-->
+    <!--android:id="@+id/image_view_selected_orange"-->
+    <!--android:layout_width="16dp"-->
+    <!--android:layout_height="16dp"-->
+    <!--android:src="@drawable/button_ic_done"-->
+    <!--android:visibility="invisible"-->
+    <!--android:layout_marginRight="8dp"-->
+    <!--android:layout_marginLeft="8dp"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_alignParentEnd="true"-->
+    <!--android:layout_alignBottom="@+id/text_view_color_orange"-->
+    <!--android:layout_alignTop="@+id/text_view_color_orange" />-->
+    <!--</RelativeLayout>-->
 
-    <include layout="@layout/item_line" />
+    <!--<include layout="@layout/item_line" />-->
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp">
+    <!--<RelativeLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginTop="4dp"-->
+    <!--android:layout_marginBottom="4dp"-->
+    <!--android:layout_marginLeft="16dp"-->
+    <!--android:layout_marginRight="16dp">-->
 
-        <ImageView
-            android:id="@+id/image_view_color_yellow"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/circle_yellow" />
-        <TextView
-            android:id="@+id/text_view_color_yellow"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Yellow"
-            android:textColor="@color/black"
-            android:gravity="center_vertical"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_toLeftOf="@+id/image_view_selected_yellow"
-            android:layout_toStartOf="@+id/image_view_selected_yellow"
-            android:layout_alignBottom="@+id/image_view_color_yellow"
-            android:layout_toRightOf="@+id/image_view_color_yellow"
-            android:layout_toEndOf="@+id/image_view_color_yellow"
-            android:layout_alignTop="@+id/image_view_color_yellow" />
+    <!--<ImageView-->
+    <!--android:id="@+id/image_view_color_yellow"-->
+    <!--android:layout_width="32dp"-->
+    <!--android:layout_height="32dp"-->
+    <!--android:layout_marginLeft="8dp"-->
+    <!--android:layout_marginRight="8dp"-->
+    <!--android:layout_marginTop="8dp"-->
+    <!--android:background="@drawable/circle_yellow" />-->
+    <!--<TextView-->
+    <!--android:id="@+id/text_view_color_yellow"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Yellow"-->
+    <!--android:textColor="@color/black"-->
+    <!--android:gravity="center_vertical"-->
+    <!--android:layout_marginLeft="16dp"-->
+    <!--android:layout_marginStart="16dp"-->
+    <!--android:layout_marginRight="16dp"-->
+    <!--android:layout_marginEnd="16dp"-->
+    <!--android:layout_toLeftOf="@+id/image_view_selected_yellow"-->
+    <!--android:layout_toStartOf="@+id/image_view_selected_yellow"-->
+    <!--android:layout_alignBottom="@+id/image_view_color_yellow"-->
+    <!--android:layout_toRightOf="@+id/image_view_color_yellow"-->
+    <!--android:layout_toEndOf="@+id/image_view_color_yellow"-->
+    <!--android:layout_alignTop="@+id/image_view_color_yellow" />-->
 
-        <ImageView
-            android:id="@+id/image_view_selected_yellow"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:src="@drawable/button_ic_done"
-            android:visibility="invisible"
-            android:layout_marginRight="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignBottom="@+id/text_view_color_yellow"
-            android:layout_alignTop="@+id/text_view_color_yellow" />
-    </RelativeLayout>
+    <!--<ImageView-->
+    <!--android:id="@+id/image_view_selected_yellow"-->
+    <!--android:layout_width="16dp"-->
+    <!--android:layout_height="16dp"-->
+    <!--android:src="@drawable/button_ic_done"-->
+    <!--android:visibility="invisible"-->
+    <!--android:layout_marginRight="8dp"-->
+    <!--android:layout_marginLeft="8dp"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_alignParentEnd="true"-->
+    <!--android:layout_alignBottom="@+id/text_view_color_yellow"-->
+    <!--android:layout_alignTop="@+id/text_view_color_yellow" />-->
+    <!--</RelativeLayout>-->
 
-    <include layout="@layout/item_line" />
+    <!--<include layout="@layout/item_line" />-->
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp">
+    <!--<RelativeLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginTop="4dp"-->
+    <!--android:layout_marginBottom="4dp"-->
+    <!--android:layout_marginLeft="16dp"-->
+    <!--android:layout_marginRight="16dp">-->
 
-        <ImageView
-            android:id="@+id/image_view_color_green"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/circle_green" />
+    <!--<ImageView-->
+    <!--android:id="@+id/image_view_color_green"-->
+    <!--android:layout_width="32dp"-->
+    <!--android:layout_height="32dp"-->
+    <!--android:layout_marginLeft="8dp"-->
+    <!--android:layout_marginRight="8dp"-->
+    <!--android:layout_marginTop="8dp"-->
+    <!--android:background="@drawable/circle_green" />-->
 
-        <TextView
-            android:id="@+id/text_view_color_green"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Green"
-            android:textColor="@color/black"
-            android:gravity="center_vertical"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_toLeftOf="@+id/image_view_selected_green"
-            android:layout_toStartOf="@+id/image_view_selected_green"
-            android:layout_alignBottom="@+id/image_view_color_green"
-            android:layout_toRightOf="@+id/image_view_color_green"
-            android:layout_toEndOf="@+id/image_view_color_green"
-            android:layout_alignTop="@+id/image_view_color_green" />
+    <!--<TextView-->
+    <!--android:id="@+id/text_view_color_green"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Green"-->
+    <!--android:textColor="@color/black"-->
+    <!--android:gravity="center_vertical"-->
+    <!--android:layout_marginLeft="16dp"-->
+    <!--android:layout_marginStart="16dp"-->
+    <!--android:layout_marginRight="16dp"-->
+    <!--android:layout_marginEnd="16dp"-->
+    <!--android:layout_toLeftOf="@+id/image_view_selected_green"-->
+    <!--android:layout_toStartOf="@+id/image_view_selected_green"-->
+    <!--android:layout_alignBottom="@+id/image_view_color_green"-->
+    <!--android:layout_toRightOf="@+id/image_view_color_green"-->
+    <!--android:layout_toEndOf="@+id/image_view_color_green"-->
+    <!--android:layout_alignTop="@+id/image_view_color_green" />-->
 
-        <ImageView
-            android:id="@+id/image_view_selected_green"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:src="@drawable/button_ic_done"
-            android:visibility="invisible"
-            android:layout_marginRight="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignBottom="@+id/text_view_color_green"
-            android:layout_alignTop="@+id/text_view_color_green" />
-    </RelativeLayout>
+    <!--<ImageView-->
+    <!--android:id="@+id/image_view_selected_green"-->
+    <!--android:layout_width="16dp"-->
+    <!--android:layout_height="16dp"-->
+    <!--android:src="@drawable/button_ic_done"-->
+    <!--android:visibility="invisible"-->
+    <!--android:layout_marginRight="8dp"-->
+    <!--android:layout_marginLeft="8dp"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_alignParentEnd="true"-->
+    <!--android:layout_alignBottom="@+id/text_view_color_green"-->
+    <!--android:layout_alignTop="@+id/text_view_color_green" />-->
+    <!--</RelativeLayout>-->
 
-    <include layout="@layout/item_line" />
+    <!--<include layout="@layout/item_line" />-->
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp">
+    <!--<RelativeLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginTop="4dp"-->
+    <!--android:layout_marginBottom="4dp"-->
+    <!--android:layout_marginLeft="16dp"-->
+    <!--android:layout_marginRight="16dp">-->
 
-        <ImageView
-            android:id="@+id/image_view_color_blue"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/circle_blue" />
-        <TextView
-            android:id="@+id/text_view_color_blue"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Blue"
-            android:textColor="@color/black"
-            android:gravity="center_vertical"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_toLeftOf="@+id/image_view_selected_blue"
-            android:layout_toStartOf="@+id/image_view_selected_blue"
-            android:layout_alignBottom="@+id/image_view_color_blue"
-            android:layout_toRightOf="@+id/image_view_color_blue"
-            android:layout_toEndOf="@+id/image_view_color_blue"
-            android:layout_alignTop="@+id/image_view_color_blue" />
+    <!--<ImageView-->
+    <!--android:id="@+id/image_view_color_blue"-->
+    <!--android:layout_width="32dp"-->
+    <!--android:layout_height="32dp"-->
+    <!--android:layout_marginLeft="8dp"-->
+    <!--android:layout_marginRight="8dp"-->
+    <!--android:layout_marginTop="8dp"-->
+    <!--android:background="@drawable/circle_blue" />-->
+    <!--<TextView-->
+    <!--android:id="@+id/text_view_color_blue"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Blue"-->
+    <!--android:textColor="@color/black"-->
+    <!--android:gravity="center_vertical"-->
+    <!--android:layout_marginLeft="16dp"-->
+    <!--android:layout_marginStart="16dp"-->
+    <!--android:layout_marginRight="16dp"-->
+    <!--android:layout_marginEnd="16dp"-->
+    <!--android:layout_toLeftOf="@+id/image_view_selected_blue"-->
+    <!--android:layout_toStartOf="@+id/image_view_selected_blue"-->
+    <!--android:layout_alignBottom="@+id/image_view_color_blue"-->
+    <!--android:layout_toRightOf="@+id/image_view_color_blue"-->
+    <!--android:layout_toEndOf="@+id/image_view_color_blue"-->
+    <!--android:layout_alignTop="@+id/image_view_color_blue" />-->
 
-        <ImageView
-            android:id="@+id/image_view_selected_blue"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:src="@drawable/button_ic_done"
-            android:visibility="invisible"
-            android:layout_marginRight="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignBottom="@+id/text_view_color_blue"
-            android:layout_alignTop="@+id/text_view_color_blue" />
-    </RelativeLayout>
+    <!--<ImageView-->
+    <!--android:id="@+id/image_view_selected_blue"-->
+    <!--android:layout_width="16dp"-->
+    <!--android:layout_height="16dp"-->
+    <!--android:src="@drawable/button_ic_done"-->
+    <!--android:visibility="invisible"-->
+    <!--android:layout_marginRight="8dp"-->
+    <!--android:layout_marginLeft="8dp"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_alignParentEnd="true"-->
+    <!--android:layout_alignBottom="@+id/text_view_color_blue"-->
+    <!--android:layout_alignTop="@+id/text_view_color_blue" />-->
+    <!--</RelativeLayout>-->
 
-    <include layout="@layout/item_line" />
+    <!--<include layout="@layout/item_line" />-->
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp">
+    <!--<RelativeLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginTop="4dp"-->
+    <!--android:layout_marginBottom="4dp"-->
+    <!--android:layout_marginLeft="16dp"-->
+    <!--android:layout_marginRight="16dp">-->
 
-        <ImageView
-            android:id="@+id/image_view_color_purple"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/circle_purple" />
-        <TextView
-            android:id="@+id/text_view_color_purple"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Purple"
-            android:textColor="@color/black"
-            android:gravity="center_vertical"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_toLeftOf="@+id/image_view_selected_purple"
-            android:layout_toStartOf="@+id/image_view_selected_purple"
-            android:layout_alignBottom="@+id/image_view_color_purple"
-            android:layout_toRightOf="@+id/image_view_color_purple"
-            android:layout_toEndOf="@+id/image_view_color_purple"
-            android:layout_alignTop="@+id/image_view_color_purple" />
+    <!--<ImageView-->
+    <!--android:id="@+id/image_view_color_purple"-->
+    <!--android:layout_width="32dp"-->
+    <!--android:layout_height="32dp"-->
+    <!--android:layout_marginLeft="8dp"-->
+    <!--android:layout_marginRight="8dp"-->
+    <!--android:layout_marginTop="8dp"-->
+    <!--android:background="@drawable/circle_purple" />-->
+    <!--<TextView-->
+    <!--android:id="@+id/text_view_color_purple"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Purple"-->
+    <!--android:textColor="@color/black"-->
+    <!--android:gravity="center_vertical"-->
+    <!--android:layout_marginLeft="16dp"-->
+    <!--android:layout_marginStart="16dp"-->
+    <!--android:layout_marginRight="16dp"-->
+    <!--android:layout_marginEnd="16dp"-->
+    <!--android:layout_toLeftOf="@+id/image_view_selected_purple"-->
+    <!--android:layout_toStartOf="@+id/image_view_selected_purple"-->
+    <!--android:layout_alignBottom="@+id/image_view_color_purple"-->
+    <!--android:layout_toRightOf="@+id/image_view_color_purple"-->
+    <!--android:layout_toEndOf="@+id/image_view_color_purple"-->
+    <!--android:layout_alignTop="@+id/image_view_color_purple" />-->
 
-        <ImageView
-            android:id="@+id/image_view_selected_purple"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:src="@drawable/button_ic_done"
-            android:visibility="invisible"
-            android:layout_marginRight="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignBottom="@+id/text_view_color_purple"
-            android:layout_alignTop="@+id/text_view_color_purple" />
-    </RelativeLayout>
+    <!--<ImageView-->
+    <!--android:id="@+id/image_view_selected_purple"-->
+    <!--android:layout_width="16dp"-->
+    <!--android:layout_height="16dp"-->
+    <!--android:src="@drawable/button_ic_done"-->
+    <!--android:visibility="invisible"-->
+    <!--android:layout_marginRight="8dp"-->
+    <!--android:layout_marginLeft="8dp"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_alignParentEnd="true"-->
+    <!--android:layout_alignBottom="@+id/text_view_color_purple"-->
+    <!--android:layout_alignTop="@+id/text_view_color_purple" />-->
+    <!--</RelativeLayout>-->
 
 
 </LinearLayout>
