@@ -152,7 +152,7 @@ public class MainCardsFragment extends Fragment {
             //String recipient = challenge.getRecipient();
             //String description = challenge.getGoal();
             //String duration = challenge.getDays();
-            //String status = challenge.getStatus();
+            //String status = challenge.getStreakStatus();
             //String isRecipient = challenge.getRecipient();
             //String type = challenge.getType();
             //String color = challenge.getColor();

@@ -8,27 +8,23 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.StreakAdapter;
+import com.azinecllc.champy.model.StreakSection;
 import com.azinecllc.champy.model.StreakModel;
 import com.azinecllc.champy.utils.CustomScrollView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -58,7 +54,7 @@ public class ChallengeDetailActivity extends AppCompatActivity {
     // Slider Layout
     private StreakAdapter mainAdapter;
     private List<StreakModel> streaksList;
-    private List<Integer> items;
+    private List<StreakSection> streakSections;
     private String challengeDay;
     // true if we can scroll (not locked)
     // false if we cannot scroll (locked)
@@ -70,7 +66,7 @@ public class ChallengeDetailActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_challenge_detail);
-        initViews();
+        initViewElements();
 
         Bundle extras = getIntent().getExtras();
         String challengeName = extras.getString("mockName");
@@ -87,10 +83,20 @@ public class ChallengeDetailActivity extends AppCompatActivity {
 
         // Layout Slider
         streaksList = new ArrayList<>();
-        initFirstStreak();
-        initSecondStreak();
-        initThirdStreak();
-        initFourthStreak();
+
+        // TODO: 4/10/17 change 'finished' to List<Data>.getStreakStatus().getDayStatus();
+//        initStreaks(1, "Finished", 1, "Finished");
+//        initStreaks(2, "Finished", 3, "Finished");
+//        initStreaks(3, "In Progress", 7, "In Progress");
+//        initStreaks(4, "Pending", 7, "Pending");
+        //initFirstStreak();
+        //initSecondStreak();
+        //initThirdStreak();
+        //initFourthStreak();
+        initStreaks(1, "Finished", 1);
+        initStreaks(2, "In Progress", 4);
+        initStreaks(3, "Pending", 7);
+        initStreaks(4, "Pending", 11);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -179,62 +185,80 @@ public class ChallengeDetailActivity extends AppCompatActivity {
     }
 
 
-    private void initFirstStreak() {
-        StreakModel streak1 = new StreakModel();
-        streak1.setLabel("Streak 1");
-        streak1.setStatus("Finished");
-        items = new ArrayList<>();
-        items.add(1);
-        streak1.setItems(items);
-        streaksList.add(streak1);
+    private void initStreaks(int currStreakN, String currStreakStatus, int currStreakDays) {
+        StreakModel streak = new StreakModel();
+        streak.setStreakLabel("Streak " + currStreakN); // 1 | 2 | 3 | 4
+        streak.setStreakStatus(currStreakStatus); // Finished | In Progress | Pending
+
+        ArrayList<StreakSection> streakSections = new ArrayList<StreakSection>();
+
+        for (int i = 0; i < currStreakDays; i++) {
+            streakSections.add(new StreakSection((i + 1), ""));
+        }
+
+        streak.setStreakSections(streakSections);
+        streaksList.add(streak);
+
     }
 
-    private void initSecondStreak() {
-        StreakModel streak2 = new StreakModel();
-        streak2.setLabel("Streak 2");
-        streak2.setStatus("In Progress");
-        items = new ArrayList<>();
-        items.add(2);
-        items.add(3);
-        items.add(4);
-        streak2.setItems(items);
-        streaksList.add(streak2);
-    }
 
-    private void initThirdStreak() {
-        StreakModel streak3 = new StreakModel();
-        streak3.setLabel("Streak 3");
-        streak3.setStatus("Pending");
-        items = new ArrayList<>();
-        items.add(5);
-        items.add(6);
-        items.add(7);
-        items.add(8);
-        items.add(9);
-        items.add(10);
-        items.add(11);
-        streak3.setItems(items);
-        streaksList.add(streak3);
-    }
+//    private void initFirstStreak() {
+//        StreakModel streak1 = new StreakModel();
+//        streak1.setStreakLabel("Streak 1");
+//        streak1.setStreakStatus("Finished");
+//        streakSections = new ArrayList<StreakSection>();
+//        //streakSections.(1);
+//        streakSections.get(0).setDayNumber("1");
+//        streak1.setStreakSections(streakSections);
+//        streaksList.add(streak1);
+//    }
 
-    private void initFourthStreak() {
-        StreakModel streak4 = new StreakModel();
-        streak4.setLabel("Streak 4");
-        streak4.setStatus("Pending");
-        items = new ArrayList<>();
-        items.add(12);
-        items.add(13);
-        items.add(14);
-        items.add(15);
-        items.add(16);
-        items.add(17);
-        items.add(18);
-        items.add(19);
-        items.add(20);
-        items.add(21);
-        streak4.setItems(items);
-        streaksList.add(streak4);
-    }
+//    private void initSecondStreak() {
+//        StreakModel streak2 = new StreakModel();
+//        streak2.setStreakLabel("Streak 2");
+//        streak2.setStreakStatus("In Progress");
+//        streakSections = new ArrayList<>();
+//        streakSections.add(2);
+//        streakSections.add(3);
+//        streakSections.add(4);
+//        streak2.setStreakSections(streakSections);
+//        streaksList.add(streak2);
+//    }
+//
+//    private void initThirdStreak() {
+//        StreakModel streak3 = new StreakModel();
+//        streak3.setStreakLabel("Streak 3");
+//        streak3.setStreakStatus("Pending");
+//        streakSections = new ArrayList<>();
+//        streakSections.add(5);
+//        streakSections.add(6);
+//        streakSections.add(7);
+//        streakSections.add(8);
+//        streakSections.add(9);
+//        streakSections.add(10);
+//        streakSections.add(11);
+//        streak3.setStreakSections(streakSections);
+//        streaksList.add(streak3);
+//    }
+//
+//    private void initFourthStreak() {
+//        StreakModel streak4 = new StreakModel();
+//        streak4.setStreakLabel("Streak 4");
+//        streak4.setStreakStatus("Pending");
+//        streakSections = new ArrayList<>();
+//        streakSections.add(12);
+//        streakSections.add(13);
+//        streakSections.add(14);
+//        streakSections.add(15);
+//        streakSections.add(16);
+//        streakSections.add(17);
+//        streakSections.add(18);
+//        streakSections.add(19);
+//        streakSections.add(20);
+//        streakSections.add(21);
+//        streak4.setStreakSections(streakSections);
+//        streaksList.add(streak4);
+//    }
 
 
 
@@ -269,7 +293,7 @@ public class ChallengeDetailActivity extends AppCompatActivity {
     }
 
 
-    private void initViews() {
+    private void initViewElements() {
         layoutCardDetails = (RelativeLayout) findViewById(R.id.layout_card_detail);
         layoutCheckedIn = (RelativeLayout) findViewById(R.id.layout_check_in);
         layoutContext = (RelativeLayout) findViewById(R.id.layout_content);

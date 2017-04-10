@@ -5,34 +5,34 @@ import java.util.List;
 
 public class StreakModel {
 
-    private String label;
-    private String status;
-    private List<Integer> items = new ArrayList<>();
+    private String streakLabel;
+    private String streakStatus;
+    private List<StreakSection> streakSections = new ArrayList<>();
 
 
-    public void setItems(List<Integer> items) {
-        this.items = items;
+    public void setStreakSections(List<StreakSection> streakSections) {
+        this.streakSections = streakSections;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
+    public void setStreakLabel(String streakLabel) {
+        this.streakLabel = streakLabel;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStreakStatus(String streakStatus) {
+        this.streakStatus = streakStatus;
     }
 
 
-    public List<Integer> getItems() {
-        return items;
+    public List<StreakSection> getStreakSections() {
+        return streakSections;
     }
 
-    public String getLabel() {
-        return label;
+    public String getStreakLabel() {
+        return streakLabel;
     }
 
-    public String getStatus() {
-        return status;
+    public String getStreakStatus() {
+        return streakStatus;
     }
 
 }

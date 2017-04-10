@@ -45,10 +45,10 @@ public class StreakAdapter extends RecyclerView.Adapter<StreakAdapter.ViewHolder
             holder.borderView.setVisibility(View.VISIBLE);
         }
 
-        holder.sectionLabelTextView.setText(streakModel.getLabel());
-        holder.tvStreakStatus.setText(streakModel.getStatus());
+        holder.sectionLabelTextView.setText(streakModel.getStreakLabel());
+        holder.tvStreakStatus.setText(streakModel.getStreakStatus());
 
-//        switch (streakModel.getStatus()) {
+//        switch (streakModel.getStreakStatus()) {
 //            case "finished":
 //                System.out.println("finished");
 //                break;
@@ -60,7 +60,7 @@ public class StreakAdapter extends RecyclerView.Adapter<StreakAdapter.ViewHolder
 //                break;
 //        }
 
-        if (streakModel.getStatus().equals("Finished")) {
+        if (streakModel.getStreakStatus().equals("Finished")) {
             holder.ivStreakStatus.setVisibility(View.VISIBLE);
             holder.tvStreakStatus.setVisibility(View.INVISIBLE);
         } else {

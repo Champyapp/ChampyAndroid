@@ -4,20 +4,13 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.model.StreakModel;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by SashaKhyzhun on 3/23/17.
@@ -43,9 +36,10 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.itemLabelTextView.setText(String.valueOf(streakModel.getItems().get(position)));
+        //holder.itemLabelTextView.setText(String.valueOf(streakModel.getStreakSections().get(position)));
+        holder.itemLabelTextView.setText(String.valueOf(streakModel.getStreakSections().get(position).getDayNumber()));
 
-        if (streakModel.getStatus().equals("Finished")) {
+        if (streakModel.getStreakStatus().equals("Finished")) {
             gd.setColor(Color.parseColor("#0b5999"));
             holder.itemLabelTextView.setTextColor(Color.WHITE);
         } else {
@@ -71,7 +65,7 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return streakModel.getItems().size();
+        return streakModel.getStreakSections().size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
