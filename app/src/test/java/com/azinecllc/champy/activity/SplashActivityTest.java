@@ -30,7 +30,6 @@ import static org.junit.Assert.assertNotNull;
 public class SplashActivityTest {
 
     private RoleControllerActivity activity;
-    private Typeface typeface;
     private TextView lostInternet;
     private TextView tvChampy;
     private ImageView champyLogo;
@@ -40,7 +39,6 @@ public class SplashActivityTest {
     @Before
     public void setUp() throws Exception {
         activity = Robolectric.buildActivity(RoleControllerActivity.class).create().get();
-        typeface = Typeface.createFromAsset(activity.getAssets(), "fonts/bebasneue.ttf");
 
         lostInternet = (TextView)  activity.findViewById(R.id.tvLostInternetConnection);
         tvChampy     = (TextView)  activity.findViewById(R.id.tvChampy);
@@ -81,8 +79,6 @@ public class SplashActivityTest {
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams)tvChampy.getLayoutParams();
         assertEquals(25, lp.topMargin);
 
-        tvChampy.setTypeface(typeface);
-        assertEquals(typeface, tvChampy.getTypeface());
     }
 
     @Test
@@ -102,10 +98,6 @@ public class SplashActivityTest {
         assertEquals("Lost internet connection", lostInternet.getText());
 
         assertEquals(Color.WHITE, lostInternet.getCurrentTextColor());
-
-        lostInternet.setTypeface(typeface);
-        assertEquals(typeface, lostInternet.getTypeface());
-
     }
 
     @Test

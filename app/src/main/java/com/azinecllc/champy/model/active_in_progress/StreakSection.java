@@ -8,15 +8,21 @@ package com.azinecllc.champy.model.active_in_progress;
 public class StreakSection {
 
     private int dayNumber;
-    private String dayStatus;
+    private int dayStatus;
+    private int isCurrentDay;
+
 
 
     public void setDayNumber(int dayNumber) {
         this.dayNumber = dayNumber;
     }
 
-    public void setDayStatus(String dayStatus) {
+    public void setDayStatus(int dayStatus) {
         this.dayStatus = dayStatus;
+    }
+
+    public void setCurrentDay(int currentDay) {
+        isCurrentDay = currentDay;
     }
 
 
@@ -24,8 +30,12 @@ public class StreakSection {
         return dayNumber;
     }
 
-    public String getDayStatus() {
+    public int getDayStatus() {
         return dayStatus;
+    }
+
+    public int isCurrentDay() {
+        return isCurrentDay;
     }
 
 

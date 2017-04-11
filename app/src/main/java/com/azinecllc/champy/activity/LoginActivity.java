@@ -69,10 +69,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         //getFacebookHashKey(); // must be above "setContentView"
         setContentView(R.layout.activity_login);
 
-        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
         TextView loginText = (TextView)findViewById(R.id.login_text);
         spinner = findViewById(R.id.loadingPanel);
-        loginText.setTypeface(typeface);
 
         //initFacebookTokenTracker();
         offlineMode = OfflineMode.getInstance();

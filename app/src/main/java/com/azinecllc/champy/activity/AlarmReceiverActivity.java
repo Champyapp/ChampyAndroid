@@ -58,9 +58,6 @@ public class AlarmReceiverActivity extends Activity implements View.OnClickListe
         }
         TextView tvWakeUpChallenge = (TextView) findViewById(R.id.tvWakeUpChallenge);
         TextView tvWakeUp = (TextView) findViewById(R.id.wakeup_text);
-        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/bebasneue.ttf");
-        tvWakeUpChallenge.setTypeface(typeface);
-        tvWakeUp.setTypeface(typeface);
 
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);

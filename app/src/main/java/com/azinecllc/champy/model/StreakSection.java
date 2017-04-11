@@ -8,8 +8,8 @@ package com.azinecllc.champy.model;
 public class StreakSection {
 
     private int dayNumber;
-    private int dayCurrent;
     private int dayStatus;
+    private int dayCurrent;
 
 
     public void setDayNumber(int dayNumber) {

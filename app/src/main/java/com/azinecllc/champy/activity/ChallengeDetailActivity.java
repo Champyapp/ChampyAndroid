@@ -131,9 +131,11 @@ public class ChallengeDetailActivity extends AppCompatActivity {
             for (int j = startOf[i]; j < daysInStreak[i] + startOf[i]; j++) { // 1 | 2 3 4 | 5 6 7...
                 StreakSection section = new StreakSection();
                 section.setDayNumber(j);
+                ///////////
                 if (streak.getStreakStatus().equals("In Progress")) {
                     section.setCurrentDay(3);
                 }
+                //////////
                 streakSections.add(section);
             }
 

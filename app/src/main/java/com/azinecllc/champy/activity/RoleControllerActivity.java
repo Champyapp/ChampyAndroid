@@ -21,7 +21,6 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
 
     private SessionManager sessionManager;
     private OfflineMode offlineMode;
-    private Typeface typeface;
     private TextView lostInternet;
     private ImageView imageReload;
     private View spinner;
@@ -39,9 +38,7 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
         sessionManager = SessionManager.getInstance(getApplicationContext());
         offlineMode = OfflineMode.getInstance();
 
-        typeface = Typeface.createFromAsset(this.getAssets(), "fonts/bebasneue.ttf");
         TextView tvChampy = (TextView)findViewById(R.id.tvChampy);
-        tvChampy.setTypeface(typeface);
 
 
         checkIfLoggedInAndMakeRedirect(goTo);
@@ -77,7 +74,6 @@ public class RoleControllerActivity extends AppCompatActivity implements View.On
         } else {
             lostInternet = (TextView)findViewById(R.id.tvLostInternetConnection);
             lostInternet.setVisibility(View.VISIBLE);
-            lostInternet.setTypeface(typeface);
 
             imageReload = (ImageView)findViewById(R.id.imageRetry);
             imageReload.setVisibility(View.VISIBLE);
