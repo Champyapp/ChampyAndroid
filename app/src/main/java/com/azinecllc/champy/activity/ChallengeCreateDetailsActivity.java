@@ -63,7 +63,7 @@ public class ChallengeCreateDetailsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         Bundle extras = getIntent().getExtras();
-        String challengeName = extras.getString("name", "");
+        String challengeName = (extras != null) ? extras.getString("name", "") : "";
         tvChallengeName.setText(challengeName);
 
 

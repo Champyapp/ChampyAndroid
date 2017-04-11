@@ -6,6 +6,9 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.azinecllc.champy.BuildConfig;
 import com.azinecllc.champy.R;
@@ -57,6 +60,24 @@ public class AboutActivityTest {
         System.out.println("Expected: About | actual: " + toolbar.getTitle());
         assertTrue(R.id.toolbar == toolbar.getId());
         System.out.println("Expected: R.id.toolbar | actual: " + toolbar.getId());
+    }
+
+    @Test
+    public void testForScrollView() throws Exception {
+        ScrollView scrollView = (ScrollView) activity.findViewById(R.id.scroll_view);
+        assertNotNull(scrollView);
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) scrollView.getLayoutParams();
+        assertEquals(16, lp.topMargin);
+    }
+
+    @Test
+    public void testForTextView() throws Exception {
+        TextView textView = (TextView) activity.findViewById(R.id.text_view_about);
+        assertNotNull(textView);
+        if (activity != null) {
+            System.out.println("activity != null");
+            assertEquals(activity.getResources().getString(R.string.about_large_text), textView.getText());
+        }
     }
 
 //    @Test

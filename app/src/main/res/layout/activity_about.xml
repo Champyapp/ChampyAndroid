@@ -30,6 +30,7 @@
     <!--<include layout="@layout/item_progress_bar" />-->
 
     <ScrollView
+        android:id="@+id/scroll_view"
         android:layout_margin="16dp"
         android:layout_below="@+id/appbar_about"
         android:layout_width="match_parent"
