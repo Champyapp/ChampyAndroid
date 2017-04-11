@@ -67,16 +67,21 @@ public class ChallengeDetailActivity extends AppCompatActivity {
         initViewElements();
 
         Bundle extras = getIntent().getExtras();
-        String challengeName = extras.getString("mockName");
+        String challengeName = null;
+        String challengeStreak = null;
+        String challengePercent = null;
+
+        if (extras != null) {
+            challengeName = extras.getString("mockName"); // "Sleep Before Midnight"
+            challengeStreak = extras.getString("mockStreak"); // "4";
+            challengePercent = extras.getString("mockPercent"); // x = (day * 100) / n
+            challengeDay = extras.getString("mockDay"); //String.valueOf(21);
+        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.mipmap.ic_button_back);
         toolbar.setTitle(challengeName);
         setSupportActionBar(toolbar);
-
-        challengeDay = extras.getString("mockDay"); //String.valueOf(21);
-        String challengeStreak = extras.getString("mockStreak"); // "4";
-        String challengePercent = extras.getString("mockPercent");
-
 
 
         // Layout Slider

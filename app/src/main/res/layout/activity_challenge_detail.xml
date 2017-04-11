@@ -7,9 +7,9 @@
     android:background="@color/color_white">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar_challenge_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/appbar_challenge_detail"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
@@ -108,10 +108,10 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="33"
                         android:text="28%"
-                        android:textAlignment="center"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                        android:textSize="36sp"
                         android:textColor="@color/gray"
-                        android:textSize="36sp" />
+                        android:textAlignment="center"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
                     <TextView
                         android:id="@+id/text_view_day_n"
@@ -158,6 +158,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Challenge Rules"
+                android:textColor="@color/black"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                 android:paddingBottom="2dp"
                 android:paddingTop="2dp"
                 android:layout_below="@+id/button_check_in"
@@ -165,9 +167,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginTop="32dp"
-                android:textColor="@color/black"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+                android:layout_marginTop="32dp" />
 
             <View
                 android:id="@+id/line2"

@@ -1,10 +1,12 @@
 package com.azinecllc.champy.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -26,6 +28,7 @@ import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.*;
 
 /**
@@ -299,86 +302,122 @@ public class ChallengeCreateDetailsActivityTest {
         assertEquals(16, lp.bottomMargin);
     }
 
-    @Test
-    public void onClickChallengeRules() throws Exception {
-
-    }
-
-    @Test
-    public void onClickChallengeAFriend() throws Exception {
-
-    }
-
-    @Test
-    public void onClickCreateChallenge() throws Exception {
-
-    }
+//    @Test
+//    public void onClickChallengeRules() throws Exception {
+//        Intent intent = new Intent(activity, ChallengeRulesActivity.class);
+//        assertNotNull(intent);
+//        // ????!?!?!?!?!/!/!!@E!}@LE>D}>{!L>F:"Q
+//        activity.startActivity(intent);
+//    }
+//
+//    @Test
+//    public void onClickChallengeAFriend() throws Exception {
+//        Intent intent = new Intent(activity, ChallengeActivity.class);
+//        System.out.println(intent.getExtras());
+//        System.out.println(activity.getIntent().getExtras());
+//    }
 
     @Test
     public void onClickGotIt() throws Exception {
+        enableClicks();
+        Switch aSwitch = (Switch) activity.findViewById(R.id.switch_reminder);
+        TextView tvChallengeRules = (TextView) activity.findViewById(R.id.text_view_challenge_rules);
+        TextView tvChallengeAFriend = (TextView) activity.findViewById(R.id.text_view_challenge_a_friend);
 
+        assertTrue(aSwitch.isEnabled());
+        assertTrue(tvChallengeRules.isEnabled());
+        assertTrue(tvChallengeAFriend.isEnabled());
     }
 
     @Test
     public void onClickShare() throws Exception {
+        enableClicks();
+        Switch aSwitch = (Switch) activity.findViewById(R.id.switch_reminder);
+        TextView tvChallengeRules = (TextView) activity.findViewById(R.id.text_view_challenge_rules);
+        TextView tvChallengeAFriend = (TextView) activity.findViewById(R.id.text_view_challenge_a_friend);
 
+        assertTrue(aSwitch.isEnabled());
+        assertTrue(tvChallengeRules.isEnabled());
+        assertTrue(tvChallengeAFriend.isEnabled());
     }
 
     @Test
-    public void onActivityResult() throws Exception {
+    public void onClickCreateChallenge() throws Exception {
+        disableClick();
+        Switch aSwitch = (Switch) activity.findViewById(R.id.switch_reminder);
+        TextView tvChallengeRules = (TextView) activity.findViewById(R.id.text_view_challenge_rules);
+        TextView tvChallengeAFriend = (TextView) activity.findViewById(R.id.text_view_challenge_a_friend);
 
+        assertFalse(aSwitch.isEnabled());
+        assertFalse(tvChallengeRules.isEnabled());
+        assertFalse(tvChallengeAFriend.isEnabled());
     }
 
     @Test
     public void onBackPressed() throws Exception {
+        activity.finish();
+        assertTrue(activity.isFinishing());
+    }
+
+    @Test
+    public void enableChildClick() throws Exception {
+        RelativeLayout layout = (RelativeLayout) activity.findViewById(R.id.layout_create_challenge);
+        assertNotNull(layout);
+
+        for (int i = 0; i < layout.getChildCount(); i++) {
+            View child = layout.getChildAt(i);
+            child.setEnabled(true);
+            assertTrue(child.isEnabled());
+        }
+
+        RelativeLayout layoutCreated = (RelativeLayout) activity.findViewById(R.id.layout_challenge_created);
+        assertNotNull(layoutCreated);
 
     }
 
     @Test
-    public void onOptionsItemSelected() throws Exception {
+    public void disableChildClick() throws Exception {
+        RelativeLayout layout = (RelativeLayout) activity.findViewById(R.id.layout_create_challenge);
+        assertNotNull(layout);
 
+        for (int i = 0; i < layout.getChildCount(); i++) {
+            View child = layout.getChildAt(i);
+            child.setEnabled(false);
+            assertFalse(child.isEnabled());
+        }
+
+        RelativeLayout layoutCreated = (RelativeLayout) activity.findViewById(R.id.layout_challenge_created);
+        assertNotNull(layoutCreated);
     }
 
 
-    @Test
-    public void onStart() throws Exception {
+    private void enableClicks() {
+        RelativeLayout layout = (RelativeLayout) activity.findViewById(R.id.layout_create_challenge);
+        assertNotNull(layout);
+
+        for (int i = 0; i < layout.getChildCount(); i++) {
+            View child = layout.getChildAt(i);
+            child.setEnabled(true);
+            assertTrue(child.isEnabled());
+        }
+
+        RelativeLayout layoutCreated = (RelativeLayout) activity.findViewById(R.id.layout_challenge_created);
+        assertNotNull(layoutCreated);
 
     }
 
-    @Test
-    public void onStop() throws Exception {
+    private void disableClick() {
+        RelativeLayout layout = (RelativeLayout) activity.findViewById(R.id.layout_create_challenge);
+        assertNotNull(layout);
 
-    }
+        for (int i = 0; i < layout.getChildCount(); i++) {
+            View child = layout.getChildAt(i);
+            child.setEnabled(false);
+            assertFalse(child.isEnabled());
+        }
 
-    @Test
-    public void findViewById() throws Exception {
-
-    }
-
-    @Test
-    public void getExtraData() throws Exception {
-
-    }
-
-    @Test
-    public void getIntent() throws Exception {
-
-    }
-
-    @Test
-    public void getActionBar() throws Exception {
-
-    }
-
-
-    @Test
-    public void getResources() throws Exception {
-
-    }
-
-    @Test
-    public void getTheme() throws Exception {
-
+        RelativeLayout layoutCreated = (RelativeLayout) activity.findViewById(R.id.layout_challenge_created);
+        assertNotNull(layoutCreated);
     }
 
 }
