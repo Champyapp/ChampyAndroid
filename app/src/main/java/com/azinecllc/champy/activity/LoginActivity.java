@@ -288,7 +288,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     sessionManager.setRefreshOthers("true");
                     sessionManager.setChampyOptions(total, wins, inProgress, "0");
                     sessionManager.createUserLoginSession(
-                            userName, userEmail, userFBID, userPicture, jwt, userID, pushN, newChallengeReq,
+                            true, userName, userEmail, userFBID, userPicture, jwt, userID, pushN, newChallengeReq,
                             acceptedYour, challengeEnd, challengesForToday, "true", gcm, androidTok
                     );
 
@@ -352,7 +352,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     sessionManager.setRefreshFriends("true");
                     sessionManager.setRefreshOthers ("true");
                     sessionManager.createUserLoginSession(
-                            userName, userEmail, userFBID, picture, jwt, userID, pushN, newChallReq,
+                            true, userName, userEmail, userFBID, picture, jwt, userID, pushN, newChallReq,
                             acceptedYour, challengeEnd, "true", "true", gcm, androidTok);
 
                     Log.i("TAG", "onResponse: " + picture);

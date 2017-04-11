@@ -5,10 +5,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 import android.util.Log;
 
 import com.azinecllc.champy.activity.RoleControllerActivity;
+import com.azinecllc.champy.data.DBHelper;
 import com.facebook.login.LoginManager;
 
 import java.io.File;
@@ -48,11 +50,11 @@ public class SessionManager {
     }
 
     // Create login session
-    public void createUserLoginSession(String name, String email, String facebook_id, String path_to_pic, String token, String id,
-                                       String pushN, String newChallengeReq, String acceptedYour, String challengeEnd,
+    public void createUserLoginSession(boolean isLoggedIn, String name, String email, String facebook_id, String path_to_pic, String token,
+                                       String id, String pushN, String newChallengeReq, String acceptedYour, String challengeEnd,
                                        String challengesForToday, String updateDB, String gcm, String token_android) {
 
-        editor.putBoolean(IS_USER_LOGIN,        true);               // Storing login value as TRUE
+        editor.putBoolean(IS_USER_LOGIN, isLoggedIn);          // Storing login value as TRUE
         editor.putString(KEY_NAME,              name);               // Storing name in pref
         editor.putString(KEY_EMAIL,             email);              // Storing email in pref
         editor.putString(KEY_ID,                facebook_id);        // Storing facebookId
@@ -162,10 +164,14 @@ public class SessionManager {
         File avatar = new File(root + path, "profile.jpg");
         avatar.delete();
 
+        DBHelper dbHelper = DBHelper.getInstance(activity); // <-- care
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.delete("mytable", null, null);
+
         CURRENT_TAG = TAG_CHALLENGES;
         navItemIndex = 0;
-        Intent intent = new Intent(activity, RoleControllerActivity.class);
-        activity.startActivity(intent);
+        //Intent intent = new Intent(activity, RoleControllerActivity.class);
+        //activity.startActivity(intent);
     }
 
 
