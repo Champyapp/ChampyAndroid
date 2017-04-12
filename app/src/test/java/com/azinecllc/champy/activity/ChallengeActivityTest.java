@@ -26,6 +26,8 @@ import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Objects;
 import java.util.Random;
 
 import static junit.framework.Assert.assertEquals;
@@ -157,7 +159,18 @@ public class ChallengeActivityTest {
 
         assertNotNull(fab.getVisibility());
         //String randomCurrentDays = String.valueOf(random.nextInt(20 - 1) + 1);
+    }
 
+    protected <F> F getPrivateField(String fieldName, Object obj) throws NoSuchFieldException, IllegalAccessException {
+        Field field = obj.getClass().getDeclaredField(fieldName);
+        field.setAccessible(true);
+        return (F) field.get(obj);
+    }
+
+    protected <M> M getPrivateMethod(String methodName, Object obj) throws NoSuchMethodException, IllegalAccessException {
+        Method method = obj.getClass().getDeclaredMethod(methodName);
+        method.setAccessible(true);
+        return (M) obj.getClass().getMethod(method.getName(), method.getClass());
     }
 
     // after each test we need to destroy singletons
