@@ -56,7 +56,8 @@ public class ChallengeCreateActivityTest {
     @Test
     public void testForCanonicalActivityPath() throws Exception {
         assertNotNull(activity);
-        assertEquals("com.azinecllc.champy.activity.ChallengeCreateActivity", activity.getClass().getCanonicalName());
+        assertEquals("com.azinecllc.champy.activity.ChallengeCreateActivity",
+                activity.getClass().getCanonicalName());
     }
 
     @Test

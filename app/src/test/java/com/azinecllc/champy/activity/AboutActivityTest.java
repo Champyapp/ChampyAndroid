@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.azinecllc.champy.BuildConfig;
 import com.azinecllc.champy.R;
 
+import junit.framework.Assert;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,6 +44,13 @@ public class AboutActivityTest {
     public void onCreate() throws Exception {
         assertNotNull(activity);
         assertEquals("AboutActivity", activity.getClass().getSimpleName());
+    }
+
+    @Test
+    public void testForCanonicalActivityPath() throws Exception {
+        assertNotNull(activity);
+        Assert.assertEquals("com.azinecllc.champy.activity.AboutActivity",
+                activity.getClass().getCanonicalName());
     }
 
     @Test

@@ -60,6 +60,13 @@ public class ChallengeActivityTest {
     }
 
     @Test
+    public void testForCanonicalActivityPath() throws Exception {
+        Assert.assertNotNull(activity);
+        junit.framework.Assert.assertEquals("com.azinecllc.champy.activity.ChallengeActivity",
+                activity.getClass().getCanonicalName());
+    }
+
+    @Test
     public void testForNavigationView() throws Exception {
         NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
         assertNotNull(navigationView);

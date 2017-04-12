@@ -17,6 +17,8 @@ import android.widget.TextView;
 import com.azinecllc.champy.BuildConfig;
 import com.azinecllc.champy.R;
 
+import junit.framework.Assert;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,6 +48,13 @@ public class AlarmReceiverActivityTest {
     public void testForActivity() throws Exception {
         assertNotNull(activity);
         assertEquals("AlarmReceiverActivity", activity.getClass().getSimpleName());
+    }
+
+    @Test
+    public void testForCanonicalActivityPath() throws Exception {
+        assertNotNull(activity);
+        Assert.assertEquals("com.azinecllc.champy.activity.AlarmReceiverActivity",
+                activity.getClass().getCanonicalName());
     }
 
 

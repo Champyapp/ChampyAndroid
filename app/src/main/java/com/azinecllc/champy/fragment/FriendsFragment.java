@@ -73,7 +73,6 @@ import retrofit.Retrofit;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static com.azinecllc.champy.utils.Constants.API_URL;
 
-// TODO: 4/11/17 Input "Check Permission" before make login and override method onPermissionGranted()
 public class FriendsFragment extends Fragment implements View.OnClickListener {
 
     public static final String TAG = "FriendsFragment";

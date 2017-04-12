@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
 
+import com.azinecllc.champy.utils.SessionManager;
 import com.facebook.FacebookSdk;
 
 /**

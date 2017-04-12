@@ -11,6 +11,7 @@ import com.azinecllc.champy.BuildConfig;
 import com.azinecllc.champy.R;
 import com.facebook.login.widget.LoginButton;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,6 +46,14 @@ public class LoginActivityTest {
     @Test
     public void testActivityForNull() throws Exception {
         assertNotNull(activity);
+        assertEquals("LoginActivity", activity.getClass().getSimpleName());
+    }
+
+    @Test
+    public void testForCanonicalActivityPath() throws Exception {
+        Assert.assertNotNull(activity);
+        junit.framework.Assert.assertEquals("com.azinecllc.champy.activity.LoginActivity",
+                activity.getClass().getCanonicalName());
     }
 
     @Test

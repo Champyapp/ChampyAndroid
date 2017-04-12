@@ -1,6 +1,7 @@
 package com.azinecllc.champy.fragment;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,9 +26,10 @@ import com.azinecllc.champy.adapter.MainActivityPagerAdapter;
 public class MainFragmentWithTabs extends Fragment {
 
     public static final String TAG = "MainFragmentWithTabs";
+    private TabLayout tabLayout;
     private int[] tabIcons = {
-            R.mipmap.nav_challenges,
-            R.mipmap.nav_friends,
+            R.mipmap.ic_tab_friends,
+            R.mipmap.ic_tab_friends,
     };
 
     @Override
@@ -47,12 +49,25 @@ public class MainFragmentWithTabs extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main_with_tabs, container, false);
-
         Log.i(TAG, "onCreateView: ");
+
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.view_pager_main);
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tab_layout_main);
+        viewPager.setOffscreenPageLimit(2);
+        viewPager.setAdapter(new MainActivityPagerAdapter(getChildFragmentManager(), getContext()));
+
+        tabLayout = (TabLayout) view.findViewById(R.id.tab_layout_main);
         tabLayout.setupWithViewPager(viewPager);
 
+        final TabLayout.Tab tab1 = tabLayout.newTab();
+        final TabLayout.Tab tab2 = tabLayout.newTab();
+        tab1.setIcon(R.mipmap.ic_tab_friends);
+        tab2.setIcon(R.mipmap.ic_tab_friends);
+
+        tabLayout.addTab(tab1);
+        tabLayout.addTab(tab2);
+
+
+        //setupTabIcons();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             tabLayout.setElevation(15);
@@ -63,18 +78,26 @@ public class MainFragmentWithTabs extends Fragment {
             tabLayout.setBackground(drawable);
 
         }
-//        tabLayout.getTabAt(0).setIcon(tabIcons[0]);
-//        tabLayout.getTabAt(1).setIcon(tabIcons[1]);
 
-
-
-        MainActivityPagerAdapter adapterViewPager = new MainActivityPagerAdapter(getChildFragmentManager(), getContext());
-        viewPager.setAdapter(adapterViewPager);
 
 
         return view;
 
     }
+
+
+//    private void setupTabIcons() {
+//        TextView tabOne = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.item_custom_tab, null);
+//        tabOne.setCompoundDrawablesWithIntrinsicBounds(0, tabIcons[0], 0, 0);
+//        tabOne.setSelected(true); // set as default;
+//        tabLayout.getTabAt(0).select();
+//        tabLayout.getTabAt(0).setCustomView(tabOne);
+//
+//        TextView tabTwo = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.item_custom_tab, null);
+//        tabTwo.setTextColor(Color.WHITE);
+//        tabTwo.setCompoundDrawablesWithIntrinsicBounds(0, tabIcons[1], 0, 0);
+//        tabLayout.getTabAt(1).setCustomView(tabTwo);
+//    }
 
 
     @Override

@@ -129,7 +129,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Connect to Facebook"
-                android:checked="true"
+                android:checked="false"
                 android:theme="@style/GreenSwitch"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
