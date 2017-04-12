@@ -108,13 +108,19 @@ dependencies {
 
     // Test Support Library
 //    androidTestCompile 'com.android.support:support-annotations:23.1.1'
-//    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support.test:runner:0.5'
 
     // делает ClassRule.class и ActiveTestSuite (junit-dep-4.12.sources)
-//    androidTestCompile 'com.android.support.test:rules:0.5'
-//    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
-//    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2.2'
-//    androidTestCompile 'com.android.support.test.espresso:espresso-idling-resource:2.2.2'
+    androidTestCompile 'com.android.support.test:rules:0.5'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    androidTestCompile 'com.android.support.test.espresso:espresso-idling-resource:2.2.2'
+    androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.2.2') {
+        exclude group: 'com.android.support', module: 'appcompat'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+        exclude group: 'com.android.support', module: 'design'
+        exclude module: 'recyclerview-v7'
+    }
 
     // Dagger2 & Java FX
     provided 'com.google.dagger:dagger-compiler:2.0'

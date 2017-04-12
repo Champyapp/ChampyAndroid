@@ -70,9 +70,6 @@ public class MainFragmentWithTabs extends Fragment {
 //        tabLayout.addTab(tab1);
 //        tabLayout.addTab(tab2);
 
-
-        //setupTabIcons();
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             tabLayout.setElevation(15);
         } else {
@@ -80,10 +77,7 @@ public class MainFragmentWithTabs extends Fragment {
             //tabLayout.setBackground(android.R.drawable.dialog_holo_light_frame);
             Drawable drawable = getResources().getDrawable(android.R.drawable.dialog_holo_light_frame);
             tabLayout.setBackground(drawable);
-
         }
-
-
 
         return view;
 
@@ -92,15 +86,15 @@ public class MainFragmentWithTabs extends Fragment {
 
     private void setupTabIcons() {
         TextView tabOne = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.item_custom_tab, null);
-        tabOne.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+        tabOne.setCompoundDrawablesWithIntrinsicBounds(0, tabIcons[0], 0, 0);
         tabOne.setSelected(true); // set as default;
-        tabOne.setBackground(getResources().getDrawable(R.drawable.tab_challenges_selector));
+        //tabOne.setBackground(getResources().getDrawable(R.drawable.tab_challenges_selector));
         tabLayout.getTabAt(0).setCustomView(tabOne);
 
         TextView tabTwo = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.item_custom_tab, null);
         tabTwo.setTextColor(Color.WHITE);
-        tabTwo.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-        tabOne.setBackground(getResources().getDrawable(R.drawable.tab_friends_selector));
+        tabTwo.setCompoundDrawablesWithIntrinsicBounds(0, tabIcons[1], 0, 0);
+        //tabOne.setBackground(getResources().getDrawable(R.drawable.tab_friends_selector));
         tabLayout.getTabAt(1).setCustomView(tabTwo);
     }
 
