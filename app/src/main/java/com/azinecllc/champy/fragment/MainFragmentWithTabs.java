@@ -2,12 +2,14 @@ package com.azinecllc.champy.fragment;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -58,13 +60,15 @@ public class MainFragmentWithTabs extends Fragment {
         tabLayout = (TabLayout) view.findViewById(R.id.tab_layout_main);
         tabLayout.setupWithViewPager(viewPager);
 
-        final TabLayout.Tab tab1 = tabLayout.newTab();
-        final TabLayout.Tab tab2 = tabLayout.newTab();
-        tab1.setIcon(R.mipmap.ic_tab_friends);
-        tab2.setIcon(R.mipmap.ic_tab_friends);
+        setupTabIcons();
 
-        tabLayout.addTab(tab1);
-        tabLayout.addTab(tab2);
+//        final TabLayout.Tab tab1 = tabLayout.newTab();
+//        final TabLayout.Tab tab2 = tabLayout.newTab();
+//        tab1.setIcon(R.mipmap.ic_tab_friends);
+//        tab2.setIcon(R.mipmap.ic_tab_friends);
+//
+//        tabLayout.addTab(tab1);
+//        tabLayout.addTab(tab2);
 
 
         //setupTabIcons();
@@ -86,18 +90,19 @@ public class MainFragmentWithTabs extends Fragment {
     }
 
 
-//    private void setupTabIcons() {
-//        TextView tabOne = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.item_custom_tab, null);
-//        tabOne.setCompoundDrawablesWithIntrinsicBounds(0, tabIcons[0], 0, 0);
-//        tabOne.setSelected(true); // set as default;
-//        tabLayout.getTabAt(0).select();
-//        tabLayout.getTabAt(0).setCustomView(tabOne);
-//
-//        TextView tabTwo = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.item_custom_tab, null);
-//        tabTwo.setTextColor(Color.WHITE);
-//        tabTwo.setCompoundDrawablesWithIntrinsicBounds(0, tabIcons[1], 0, 0);
-//        tabLayout.getTabAt(1).setCustomView(tabTwo);
-//    }
+    private void setupTabIcons() {
+        TextView tabOne = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.item_custom_tab, null);
+        tabOne.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+        tabOne.setSelected(true); // set as default;
+        tabOne.setBackground(getResources().getDrawable(R.drawable.tab_challenges_selector));
+        tabLayout.getTabAt(0).setCustomView(tabOne);
+
+        TextView tabTwo = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.item_custom_tab, null);
+        tabTwo.setTextColor(Color.WHITE);
+        tabTwo.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+        tabOne.setBackground(getResources().getDrawable(R.drawable.tab_friends_selector));
+        tabLayout.getTabAt(1).setCustomView(tabTwo);
+    }
 
 
     @Override
