@@ -126,40 +126,7 @@ public class ChallengeActivityTest {
         assertNotNull(fragmentHolder);
     }
 
-    @Test
-    public void testForFloatingActionButton() throws Exception {
-        fab = (FloatingActionButton) activity.findViewById(R.id.fabPlus);
-        assertNotNull(fab);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            System.out.println("Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP");
-            //assertEquals(0.0, fab.getElevation());
-        }
-        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) fab.getLayoutParams();
-        assertEquals(16, lp.bottomMargin);
-        assertEquals(16, lp.leftMargin);
-        assertEquals(16, lp.rightMargin);
-    }
 
-    @Test
-    public void testForToggleFab() throws Exception {
-        fab = (FloatingActionButton) activity.findViewById(R.id.fabPlus);
-        assertNotNull(fab);
-
-        Random random = new Random();
-        int randomInt = random.nextInt(2);
-        System.out.println("randomInt: " + randomInt);
-
-        if (randomInt == 0) {
-            fab.show();
-            assertEquals(View.VISIBLE, fab.getVisibility());
-        } else {
-            fab.hide();
-        }
-
-
-        assertNotNull(fab.getVisibility());
-        //String randomCurrentDays = String.valueOf(random.nextInt(20 - 1) + 1);
-    }
 
     protected <F> F getPrivateField(String fieldName, Object obj) throws NoSuchFieldException, IllegalAccessException {
         Field field = obj.getClass().getDeclaredField(fieldName);

@@ -1,23 +1,26 @@
 package com.azinecllc.champy.fragment;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.azinecllc.champy.R;
+import com.azinecllc.champy.activity.ChallengeCreateActivity;
 import com.azinecllc.champy.adapter.MainActivityPagerAdapter;
 
 /**
@@ -28,7 +31,9 @@ import com.azinecllc.champy.adapter.MainActivityPagerAdapter;
 public class MainFragmentWithTabs extends Fragment {
 
     public static final String TAG = "MainFragmentWithTabs";
+    private FloatingActionButton fab;
     private TabLayout tabLayout;
+    private boolean isFabOpen = false;
     private int[] tabIcons = {
             R.mipmap.ic_tab_friends,
             R.mipmap.ic_tab_friends,
@@ -47,6 +52,7 @@ public class MainFragmentWithTabs extends Fragment {
         Log.i(TAG, "onCreate: ");
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -55,12 +61,33 @@ public class MainFragmentWithTabs extends Fragment {
 
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.view_pager_main);
         viewPager.setOffscreenPageLimit(2);
-        viewPager.setAdapter(new MainActivityPagerAdapter(getChildFragmentManager(), getContext()));
+        MainActivityPagerAdapter pagerAdapter = new MainActivityPagerAdapter(getChildFragmentManager(), getContext());
+        viewPager.setAdapter(pagerAdapter);
 
         tabLayout = (TabLayout) view.findViewById(R.id.tab_layout_main);
         tabLayout.setupWithViewPager(viewPager);
 
         setupTabIcons();
+
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                Log.i(TAG, "onTabSelected: " + tab.getPosition());
+                String currentTitle = (tab.getPosition() == 0) ? "Challenge" : "Friends";
+                Log.i(TAG, "onTabSelected: " + currentTitle);
+                getActivity().setTitle(currentTitle);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                Log.i(TAG, "onTabUnselected: ");
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                Log.i(TAG, "onTabReselected: ");
+            }
+        });
 
 //        final TabLayout.Tab tab1 = tabLayout.newTab();
 //        final TabLayout.Tab tab2 = tabLayout.newTab();
@@ -70,6 +97,26 @@ public class MainFragmentWithTabs extends Fragment {
 //        tabLayout.addTab(tab1);
 //        tabLayout.addTab(tab2);
 
+
+        fab = (FloatingActionButton) view.findViewById(R.id.fabPlus);
+        fab.setOnClickListener(v -> {
+            startActivity(new Intent(getContext(), ChallengeCreateActivity.class));
+        });
+
+//        layout = (RelativeLayout) view.findViewById(R.id.layout_fragment_main);
+//        layout.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+//            @Override
+//            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+//                if (scrollY > oldScrollY) {
+//                    fab.hide();
+//                } else {
+//                    fab.show();
+//                }
+//            }
+//        });
+
+
+        /** Care With THIS, ALLO */
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             tabLayout.setElevation(15);
         } else {
@@ -97,6 +144,18 @@ public class MainFragmentWithTabs extends Fragment {
         //tabOne.setBackground(getResources().getDrawable(R.drawable.tab_friends_selector));
         tabLayout.getTabAt(1).setCustomView(tabTwo);
     }
+
+
+    /**
+     * Method to set visible for FabPlus if current fragment != main
+     */
+//    private void toggleFab() {
+//        if (navItemIndex == 0) {
+//            fab.show();
+//        } else {
+//            fab.hide();
+//        }
+//    }
 
 
     @Override

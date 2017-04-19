@@ -352,8 +352,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     sessionManager.setRefreshFriends("true");
                     sessionManager.setRefreshOthers ("true");
                     sessionManager.createUserLoginSession(
-                            true, userName, userEmail, userFBID, picture, jwt, userID, pushN, newChallReq,
-                            acceptedYour, challengeEnd, "true", "true", gcm, androidTok);
+                            true, userName, userEmail, userFBID, picture,
+                            jwt, userID, pushN, newChallReq, acceptedYour,
+                            challengeEnd, "true", "true", gcm, androidTok
+                    );
 
                     Log.i("TAG", "onResponse: " + picture);
                     sessionManager.setChampyOptions(

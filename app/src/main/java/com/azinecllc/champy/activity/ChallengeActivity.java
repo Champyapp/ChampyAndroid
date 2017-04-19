@@ -62,8 +62,6 @@ public class ChallengeActivity extends AppCompatActivity implements NavigationVi
 
     private static final String TAG = "ChallengeActivity";
 
-    private FloatingActionButton fabPlus;
-    private boolean isFabOpen = false;
     private SessionManager sessionManager;
     private DrawerLayout drawer;
     private NavigationView navigationView;
@@ -113,7 +111,7 @@ public class ChallengeActivity extends AppCompatActivity implements NavigationVi
         TextView drawerUserEmail = (TextView) headerLayout.findViewById(R.id.drawer_tv_user_email);
         TextView drawerUserName = (TextView) headerLayout.findViewById(R.id.drawer_tv_user_name);
 
-        fabPlus = (FloatingActionButton) findViewById(R.id.fabPlus);
+
 
         // GET PHOTO AND MAKE BLUR
         sessionManager = SessionManager.getInstance(getApplicationContext());
@@ -140,11 +138,6 @@ public class ChallengeActivity extends AppCompatActivity implements NavigationVi
 //        if (!sessionManager.getChampyOptions().get("challenges").isEmpty()) {
 //            nothingHere.setVisibility(View.INVISIBLE);
 //        }
-
-
-        fabPlus.setOnClickListener(v -> {
-            startActivity(new Intent(getContext(), ChallengeCreateActivity.class));
-        });
 
         // PENDING DUEL MENU IN DRAWER
         loadCurrentFragment();
@@ -265,7 +258,7 @@ public class ChallengeActivity extends AppCompatActivity implements NavigationVi
         mHandler.post(runnable); // If 'runnable' is not null, then add to the message queue
         drawer.closeDrawers();   // Closing drawer on item click
         invalidateOptionsMenu(); // refresh toolbar menu
-        toggleFab();             // show or hide the fab button
+        //toggleFab();             // show or hide the fab button
     }
 
     /**
@@ -333,17 +326,5 @@ public class ChallengeActivity extends AppCompatActivity implements NavigationVi
         return super.onOptionsItemSelected(item);
     }
 
-
-
-    /**
-     * Method to set visible for FabPlus if current fragment != main
-     */
-    private void toggleFab() {
-        if (navItemIndex == 0) {
-            fabPlus.show();
-        } else {
-            fabPlus.hide();
-        }
-    }
 
 }
