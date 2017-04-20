@@ -35,7 +35,7 @@
 //    public void setUp() throws Exception {
 //        activity = Robolectric.buildActivity(FriendsActivity.class).create().get();
 //        fragment = new MyFriendsFragment();
-//        view = LayoutInflater.from(activity.getApplicationContext()).inflate(R.layout.item_recycler, null);
+//        view = LayoutInflater.from(activity.getApplicationContext()).inflate(R.layout.item_recycler_cards, null);
 //    }
 //
 //    @Test

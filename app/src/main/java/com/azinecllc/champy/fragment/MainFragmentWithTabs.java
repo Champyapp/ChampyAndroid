@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -31,9 +32,7 @@ import com.azinecllc.champy.adapter.MainActivityPagerAdapter;
 public class MainFragmentWithTabs extends Fragment {
 
     public static final String TAG = "MainFragmentWithTabs";
-    private FloatingActionButton fab;
     private TabLayout tabLayout;
-    private boolean isFabOpen = false;
     private int[] tabIcons = {
             R.mipmap.ic_tab_friends,
             R.mipmap.ic_tab_friends,
@@ -98,10 +97,7 @@ public class MainFragmentWithTabs extends Fragment {
 //        tabLayout.addTab(tab2);
 
 
-        fab = (FloatingActionButton) view.findViewById(R.id.fabPlus);
-        fab.setOnClickListener(v -> {
-            startActivity(new Intent(getContext(), ChallengeCreateActivity.class));
-        });
+        //CoordinatorLayout layout = (CoordinatorLayout) view.findViewById(R.id.layout_fragment_main);
 
 //        layout = (RelativeLayout) view.findViewById(R.id.layout_fragment_main);
 //        layout.setOnScrollChangeListener(new View.OnScrollChangeListener() {

@@ -1,9 +1,13 @@
 package com.azinecllc.champy.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,15 +16,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.azinecllc.champy.R;
+import com.azinecllc.champy.activity.ChallengeCreateActivity;
 import com.azinecllc.champy.adapter.MainCardAdapter;
 import com.azinecllc.champy.model.CardChallenges;
 import com.azinecllc.champy.model.Challenge;
 import com.azinecllc.champy.utils.OfflineMode;
-import com.azinecllc.champy.utils.SessionManager;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -32,6 +34,8 @@ import static com.azinecllc.champy.utils.Constants.typeWake;
 public class MainCardsFragment extends Fragment {
 
     public static final String TAG = "MainCardFragment";
+    private boolean isFabOpen = false;
+    private FloatingActionButton fab;
     private SwipeRefreshLayout gSwipeRefreshLayout;
     private OfflineMode offlineMode;
     private ArrayList<CardChallenges> cardChallengesList;
@@ -56,7 +60,7 @@ public class MainCardsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.item_recycler, container, false);
+        View view = inflater.inflate(R.layout.item_recycler_cards, container, false);
         Log.i(TAG, "onCreateView: ");
         gSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_to_refresh);
 
@@ -75,6 +79,18 @@ public class MainCardsFragment extends Fragment {
                 loadInProgressCards(view);
             }
         });
+
+        fab = (FloatingActionButton) view.findViewById(R.id.fabPlus);
+        fab.setOnClickListener(v -> {
+            startActivity(new Intent(getContext(), ChallengeCreateActivity.class));
+        });
+
+
+//        FabScrollBehavior behavior = new FabScrollBehavior(getContext());
+//        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
+//        params.setBehavior(behavior);
+//        fab.setLayoutParams(params);
+
 
 
         return view;
@@ -210,6 +226,25 @@ public class MainCardsFragment extends Fragment {
         RecyclerView rvCards = (RecyclerView) view.findViewById(R.id.recycler_view);
         rvCards.setAdapter(adapter);
         rvCards.setLayoutManager(new LinearLayoutManager(getContext()));
+
+
+        rvCards.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) {
+                    fab.hide();
+                } else if (dy < 0) {
+                    fab.show();
+                }
+            }
+        });
+
     }
 
 //    /**
