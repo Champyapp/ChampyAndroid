@@ -18,8 +18,8 @@ import android.widget.Toast;
 
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.adapter.StreakAdapter;
-import com.azinecllc.champy.model.StreakSection;
 import com.azinecllc.champy.model.StreakModel;
+import com.azinecllc.champy.model.StreakSection;
 import com.azinecllc.champy.utils.CustomScrollView;
 
 import java.util.ArrayList;

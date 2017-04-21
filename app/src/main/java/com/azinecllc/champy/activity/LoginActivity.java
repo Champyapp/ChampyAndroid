@@ -2,9 +2,7 @@ package com.azinecllc.champy.activity;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -15,8 +13,8 @@ import android.widget.Toast;
 import com.azinecllc.champy.R;
 import com.azinecllc.champy.controller.DailyRemindController;
 import com.azinecllc.champy.controller.UserController;
-import com.azinecllc.champy.helper.CHSaveAndUploadPhoto;
 import com.azinecllc.champy.helper.CHGetFacebookFriends;
+import com.azinecllc.champy.helper.CHSaveAndUploadPhoto;
 import com.azinecllc.champy.interfaces.NewUser;
 import com.azinecllc.champy.model.user.Data;
 import com.azinecllc.champy.model.user.LoginData;
@@ -37,7 +35,6 @@ import com.google.android.gms.iid.InstanceID;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;

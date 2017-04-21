@@ -16,9 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by SashaKhyzhun on 3/23/17.
+ * @autor SashaKhyzhun
+ * Created on 3/23/17.
+ * Adapter to control streaks. Inside each streak we have a section with days.
  */
-
 public class StreakAdapter extends RecyclerView.Adapter<StreakAdapter.ViewHolder> {
 
     private Context mContext;

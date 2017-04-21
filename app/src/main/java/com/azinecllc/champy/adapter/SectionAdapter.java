@@ -13,7 +13,9 @@ import com.azinecllc.champy.R;
 import com.azinecllc.champy.model.StreakModel;
 
 /**
- * Created by SashaKhyzhun on 3/23/17.
+ * @autor SashaKhyzhun
+ * Created on 3/23/17.
+ * Adapter to control days inside the streak.
  */
 
 public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHolder> {

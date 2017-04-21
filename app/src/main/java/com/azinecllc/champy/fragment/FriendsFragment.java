@@ -21,8 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.activity.LoginActivity;
-import com.azinecllc.champy.activity.RoleControllerActivity;
 import com.azinecllc.champy.adapter.FriendsAdapter;
 import com.azinecllc.champy.controller.DailyRemindController;
 import com.azinecllc.champy.controller.UserController;
@@ -31,7 +29,6 @@ import com.azinecllc.champy.helper.CHCheckTableForExist;
 import com.azinecllc.champy.helper.CHGetFacebookFriends;
 import com.azinecllc.champy.helper.CHSaveAndUploadPhoto;
 import com.azinecllc.champy.interfaces.NewUser;
-import com.azinecllc.champy.interfaces.RecyclerFriendsClickListener;
 import com.azinecllc.champy.model.FriendModel;
 import com.azinecllc.champy.model.user.Data;
 import com.azinecllc.champy.model.user.LoginData;
@@ -48,7 +45,6 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.github.nkzawa.socketio.client.Socket;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 
