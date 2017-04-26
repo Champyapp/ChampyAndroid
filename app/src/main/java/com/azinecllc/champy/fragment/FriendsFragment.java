@@ -34,7 +34,7 @@ import com.azinecllc.champy.model.user.Data;
 import com.azinecllc.champy.model.user.LoginData;
 import com.azinecllc.champy.model.user.User;
 import com.azinecllc.champy.utils.OfflineMode;
-import com.azinecllc.champy.utils.ProfilePictureUtil;
+import com.azinecllc.champy.utils.UserProfileUtil;
 import com.azinecllc.champy.utils.SessionManager;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -479,8 +479,9 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
                     getFbFriends.getUserFacebookFriends(gcm);
                     getFbFriends.getUserPending(userID, jwt); // todo: remove later.
 
-                    ProfilePictureUtil.setProfilePicture(getActivity(), userPicture, userName, userEmail);
-                    //ProfilePictureUtil.setBackgroundPicture(getActivity(), userPicture);
+                    UserProfileUtil.setProfilePicture(getActivity(), userPicture);
+                    UserProfileUtil.setUserNameAndEmail(getActivity(), userName, userEmail);
+                    //UserProfileUtil.setBackgroundPicture(getActivity(), userPicture);
                     //Intent goToRoleActivity = new Intent(getContext(), RoleControllerActivity.class);
                     //startActivity(goToRoleActivity);
 
@@ -503,7 +504,7 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
      * set status bar equals to 0, set value 'refreshFriends' true for all pages, enable daily reminder
      * and after each action we redirect user to SplashScreen.
      *
-     * @param fbID       - current user's facebook ID
+     * @param fbId       - current user's facebook ID
      * @param name       - current user's name from Facebook (userFirstName + " " + userLastName)
      * @param email      - userEmail from Facebook
      * @param gcm        - user's Google Cloud Messaging ID
@@ -512,11 +513,15 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
      * @throws JSONException - we can expect this exception because we can get NPE in any value
      *                       In this case we can handle it.
      */
-    private void registerUser(String fbID, String name, String email, String gcm, String androidTok, String picture) throws JSONException {
-        String jwt = getToken(fbID, gcm);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+    private void registerUser(String fbId, String name, String email,
+                              String gcm, String androidTok, String picture) throws JSONException {
+        String jwt = getToken(fbId, gcm);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
         NewUser newUser = retrofit.create(NewUser.class);
-        Call<User> call = newUser.register(new LoginData(fbID, name, email));
+        Call<User> call = newUser.register(new LoginData(fbId, name, email));
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Response<User> response, Retrofit retrofit) {
@@ -535,8 +540,9 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
                     sessionManager.setRefreshFriends("true");
                     sessionManager.setRefreshOthers("true");
                     sessionManager.createUserLoginSession(
-                            true, userName, userEmail, userFBID, picture, jwt, userID, pushN, newChallReq,
-                            acceptedYour, challengeEnd, "true", "true", gcm, androidTok);
+                            true, userName, userEmail, userFBID, picture,
+                            jwt, userID, pushN, newChallReq, acceptedYour,
+                            challengeEnd, "true", "true", gcm, androidTok);
 
                     Log.i("TAG", "onResponse: " + picture);
                     sessionManager.setChampyOptions(
@@ -552,6 +558,8 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
                     DailyRemindController drc = new DailyRemindController(getContext());
                     drc.enableDailyNotificationReminder(12);
 
+                    UserProfileUtil.setProfilePicture(getActivity(), picture);
+                    UserProfileUtil.setUserNameAndEmail(getActivity(), userName, userEmail);
                     //Intent goToRoleActivity = new Intent(getContext(), RoleControllerActivity.class);
                     //startActivity(goToRoleActivity);
                 }

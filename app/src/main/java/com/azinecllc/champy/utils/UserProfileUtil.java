@@ -1,7 +1,9 @@
 package com.azinecllc.champy.utils;
 
 import android.app.Activity;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.azinecllc.champy.R;
 import com.bumptech.glide.Glide;
@@ -15,9 +17,9 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
  * Created on 4/26/17.
  */
 
-public class ProfilePictureUtil {
+public class UserProfileUtil {
 
-    public static void setProfilePicture(Activity activity, String picture, String name, String email) {
+    public static void setProfilePicture(Activity activity, String picture) {
         Glide.with(activity)
                 .load(picture)
                 .bitmapTransform(new CropCircleTransformation(activity))
@@ -31,8 +33,14 @@ public class ProfilePictureUtil {
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into((ImageView) activity.findViewById(R.id.drawer_background));
+    }
 
+    public static void setUserNameAndEmail(Activity activity, String name, String email) {
+        TextView userName = (TextView) activity.findViewById(R.id.drawer_tv_user_name);
+        userName.setText(name);
 
+        TextView userEmail = (TextView) activity.findViewById(R.id.drawer_tv_user_email);
+        userEmail.setText(email);
     }
 
 //    public static void setBackgroundPicture(Activity activity, String picture) {

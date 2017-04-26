@@ -33,6 +33,7 @@ import com.azinecllc.champy.controller.UserController;
 import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.utils.OfflineMode;
 import com.azinecllc.champy.utils.SessionManager;
+import com.azinecllc.champy.utils.UserProfileUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.soundcloud.android.crop.Crop;
@@ -403,18 +404,7 @@ public class SettingsProfileFragment extends Fragment {
 
         /////////////////////////////////////////////////////////////////////////////////
 
-        Glide.with(getActivity())
-                .load(uri)
-                .bitmapTransform(new CropCircleTransformation(getContext()))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into((ImageView) getActivity().findViewById(R.id.drawer_user_photo));
-        Glide.with(getActivity())
-                .load(uri)
-                .bitmapTransform(new BlurTransformation(getContext(), 25))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into((ImageView) getActivity().findViewById(R.id.drawer_background));
+        UserProfileUtil.setProfilePicture(getActivity(), uri.toString());
 //        Glide.with(getActivity())
 //                .load(uri)
 //                .bitmapTransform(new BlurTransformation(context, 25))
