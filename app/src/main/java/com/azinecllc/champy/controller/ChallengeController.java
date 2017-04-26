@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.activity.ChallengeActivity;
+import com.azinecllc.champy.activity.ChallengesActivity;
 import com.azinecllc.champy.data.DBHelper;
 import com.azinecllc.champy.helper.CHCheckPendingDuels;
 import com.azinecllc.champy.helper.CHGetUserProgressBarInfo;
@@ -24,7 +24,6 @@ import com.azinecllc.champy.model.active_in_progress.Challenge;
 import com.azinecllc.champy.model.active_in_progress.Datum;
 import com.azinecllc.champy.model.active_in_progress.Recipient;
 import com.azinecllc.champy.model.active_in_progress.Sender;
-import com.azinecllc.champy.model.active_in_progress.Streak;
 import com.azinecllc.champy.model.duel.Duel;
 import com.azinecllc.champy.model.single_in_progress.Data;
 import com.azinecllc.champy.receiver.CustomAlarmReceiver;
@@ -149,7 +148,7 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    generateCardsForMainActivity(new Intent(activity, ChallengeActivity.class));
+                    generateCardsForMainActivity(new Intent(activity, ChallengesActivity.class));
                 } else {
                     Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
@@ -242,7 +241,7 @@ public class ChallengeController {
                     db.insert("updated", null, cv);
                     //////////////////////////////////////////////////
 
-                    refreshCardsForPendingDuel(new Intent(activity, ChallengeActivity.class));
+                    refreshCardsForPendingDuel(new Intent(activity, ChallengesActivity.class));
                 } else {
                     Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
@@ -334,7 +333,7 @@ public class ChallengeController {
     /**
      * Private Method to send Wake-Up challenge 'in progress'. Here we get data from our method
      * 'createNewWakeUpChallenge', create AlarmManager for daily ring, convert time for API, and
-     * sending extras for CustomAlarmReceiver. Next we generate cards for ChallengeActivity.
+     * sending extras for CustomAlarmReceiver. Next we generate cards for ChallengesActivity.
      * @param pID - our unique 'ID' for create new challenge, we get this value from
      *                     'createNewWakeUpChallenge' and transit here.
      * @param requestCode - values from time picker: minutes and hour. To start we get this,
@@ -357,7 +356,7 @@ public class ChallengeController {
                     DailyWakeUpController dwc = new DailyWakeUpController(context);
                     dwc.enableDailyWakeUp(hour, min, requestCode, inProgressID);
 
-                    generateCardsForMainActivity(new Intent(activity, ChallengeActivity.class));
+                    generateCardsForMainActivity(new Intent(activity, ChallengesActivity.class));
                 } else {
                     Toast.makeText(context, R.string.service_not_available, Toast.LENGTH_LONG).show();
                 }
@@ -389,10 +388,10 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    refreshCardsForPendingDuel(new Intent(activity, ChallengeActivity.class));
+                    refreshCardsForPendingDuel(new Intent(activity, ChallengesActivity.class));
                 } else {
                     Toast.makeText(context, R.string.challenge_canceled_by_opponent, Toast.LENGTH_LONG).show();
-                    refreshCardsForPendingDuel(new Intent(activity, ChallengeActivity.class));
+                    refreshCardsForPendingDuel(new Intent(activity, ChallengesActivity.class));
                 }
             }
 
@@ -420,10 +419,10 @@ public class ChallengeController {
             @Override
             public void onResponse(Response<com.azinecllc.champy.model.single_in_progress.SingleInProgress> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    refreshCardsForPendingDuel(new Intent(activity, ChallengeActivity.class));
+                    refreshCardsForPendingDuel(new Intent(activity, ChallengesActivity.class));
                 } else {
                     Toast.makeText(context, R.string.challenge_canceled_by_opponent, Toast.LENGTH_LONG).show();
-                    refreshCardsForPendingDuel(new Intent(activity, ChallengeActivity.class));
+                    refreshCardsForPendingDuel(new Intent(activity, ChallengesActivity.class));
                 }
             }
 
@@ -518,7 +517,7 @@ public class ChallengeController {
 
                 } else {
                     Toast.makeText(activity, activity.getString(R.string.service_not_available), Toast.LENGTH_LONG).show();
-                    generateCardsForMainActivity(new Intent(context, ChallengeActivity.class));
+                    generateCardsForMainActivity(new Intent(context, ChallengesActivity.class));
                 }
             }
 
@@ -791,7 +790,7 @@ public class ChallengeController {
 //        long now = System.currentTimeMillis() / 1000;
 //        for (int i = 0; i <= details.length - 1; i++) {
 //            if (now < Integer.parseInt(details[i])) {
-//                Intent intent = new Intent(context, ChallengeActivity.class);
+//                Intent intent = new Intent(context, ChallengesActivity.class);
 //                PendingIntent operation = PendingIntent.getBroadcast(
 //                        context, Integer.parseInt(alarmID), intent, PendingIntent.FLAG_UPDATE_CURRENT
 //                );

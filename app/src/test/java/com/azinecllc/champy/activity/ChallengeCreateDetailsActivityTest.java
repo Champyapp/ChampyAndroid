@@ -312,7 +312,7 @@ public class ChallengeCreateDetailsActivityTest {
 //
 //    @Test
 //    public void onClickChallengeAFriend() throws Exception {
-//        Intent intent = new Intent(activity, ChallengeActivity.class);
+//        Intent intent = new Intent(activity, ChallengesActivity.class);
 //        System.out.println(intent.getExtras());
 //        System.out.println(activity.getIntent().getExtras());
 //    }

@@ -4,7 +4,6 @@ package com.azinecllc.champy.activity;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.test.ActivityUnitTestCase;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +37,7 @@ import static org.hamcrest.Matchers.allOf;
 public class ChallengeActivityUITest {
 
     @Rule
-    public ActivityTestRule<ChallengeActivity> mActivityTestRule = new ActivityTestRule<>(ChallengeActivity.class);
+    public ActivityTestRule<ChallengesActivity> mActivityTestRule = new ActivityTestRule<>(ChallengesActivity.class);
 
     @Test
     public void challengeActivityTest() {

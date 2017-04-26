@@ -72,8 +72,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/ChampyMainTheme" />
         <activity
-            android:name=".activity.ChallengeActivity"
-            android:label="@string/challenges"
+            android:name=".activity.ChallengesActivity"
             android:screenOrientation="portrait"
             android:hardwareAccelerated="true"
             android:exported="true"

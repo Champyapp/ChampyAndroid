@@ -34,6 +34,7 @@ import com.azinecllc.champy.model.user.Data;
 import com.azinecllc.champy.model.user.LoginData;
 import com.azinecllc.champy.model.user.User;
 import com.azinecllc.champy.utils.OfflineMode;
+import com.azinecllc.champy.utils.ProfilePictureUtil;
 import com.azinecllc.champy.utils.SessionManager;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -476,8 +477,10 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
 
                     CHGetFacebookFriends getFbFriends = new CHGetFacebookFriends(getContext(), retrofit);
                     getFbFriends.getUserFacebookFriends(gcm);
-                    getFbFriends.getUserPending(userID, jwt);
+                    getFbFriends.getUserPending(userID, jwt); // todo: remove later.
 
+                    ProfilePictureUtil.setProfilePicture(getActivity(), userPicture, userName, userEmail);
+                    //ProfilePictureUtil.setBackgroundPicture(getActivity(), userPicture);
                     //Intent goToRoleActivity = new Intent(getContext(), RoleControllerActivity.class);
                     //startActivity(goToRoleActivity);
 

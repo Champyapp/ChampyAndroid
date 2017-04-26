@@ -77,7 +77,7 @@ public class ChallengeCreateDetailsActivity extends AppCompatActivity {
 
     @OnClick(R.id.text_view_challenge_a_friend)
     public void onClickChallengeAFriend() {
-        Intent intent = new Intent(this, ChallengeActivity.class);
+        Intent intent = new Intent(this, ChallengesActivity.class);
         intent.putExtra("tag", "TAG_FRIENDS");
         intent.putExtra("index", 6);
         startActivityForResult(intent, 1);
@@ -93,7 +93,7 @@ public class ChallengeCreateDetailsActivity extends AppCompatActivity {
     public void onClickGotIt() {
         Toast.makeText(this, "Got it...", Toast.LENGTH_SHORT).show();
         enableChildClicks();
-        Intent intent = new Intent(this, ChallengeActivity.class);
+        Intent intent = new Intent(this, ChallengesActivity.class);
         intent.putExtra("tag", "TAG_CHALLENGES");
         intent.putExtra("index", 0);
         startActivity(intent);

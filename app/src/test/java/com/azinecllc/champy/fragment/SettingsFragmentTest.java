@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.azinecllc.champy.BuildConfig;
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.activity.ChallengeActivity;
+import com.azinecllc.champy.activity.ChallengesActivity;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -36,11 +36,11 @@ public class SettingsFragmentTest {
 
     private View view;
     private SettingsFragment fragment;
-    private ChallengeActivity activity;
+    private ChallengesActivity activity;
 
     @Before
     public void setUp() throws Exception {
-        activity = Robolectric.buildActivity(ChallengeActivity.class).create().get();
+        activity = Robolectric.buildActivity(ChallengesActivity.class).create().get();
         fragment = new SettingsFragment();
         view = LayoutInflater.from(activity.getApplicationContext()).inflate(R.layout.fragment_settings, null);
     }
@@ -48,8 +48,8 @@ public class SettingsFragmentTest {
     @Test
     public void testForActivity() throws Exception {
         assertNotNull(activity);
-        assertEquals("ChallengeActivity", activity.getClass().getSimpleName());
-        System.out.println("ChallengeActivity is not null");
+        assertEquals("ChallengesActivity", activity.getClass().getSimpleName());
+        System.out.println("ChallengesActivity is not null");
     }
 
     @Test

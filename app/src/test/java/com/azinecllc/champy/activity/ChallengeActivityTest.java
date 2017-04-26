@@ -27,8 +27,6 @@ import org.robolectric.annotation.Config;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Objects;
-import java.util.Random;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
@@ -46,7 +44,7 @@ public class ChallengeActivityTest {
 
     @Before
     public void setup() throws Exception {
-        activity = Robolectric.buildActivity(ChallengeActivity.class).create().get();
+        activity = Robolectric.buildActivity(ChallengesActivity.class).create().get();
     }
 
     @After
@@ -58,13 +56,13 @@ public class ChallengeActivityTest {
     @Test
     public void testForNotNullActivity() throws Exception {
         assertNotNull(activity);
-        assertEquals("ChallengeActivity", activity.getClass().getSimpleName());
+        assertEquals("ChallengesActivity", activity.getClass().getSimpleName());
     }
 
     @Test
     public void testForCanonicalActivityPath() throws Exception {
         Assert.assertNotNull(activity);
-        junit.framework.Assert.assertEquals("com.azinecllc.champy.activity.ChallengeActivity",
+        junit.framework.Assert.assertEquals("com.azinecllc.champy.activity.ChallengesActivity",
                 activity.getClass().getCanonicalName());
     }
 

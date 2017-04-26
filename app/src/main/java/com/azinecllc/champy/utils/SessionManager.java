@@ -3,21 +3,19 @@ package com.azinecllc.champy.utils;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 import android.util.Log;
 
-import com.azinecllc.champy.activity.RoleControllerActivity;
 import com.azinecllc.champy.data.DBHelper;
 import com.facebook.login.LoginManager;
 
 import java.io.File;
 import java.util.HashMap;
 
-import static com.azinecllc.champy.activity.ChallengeActivity.CURRENT_TAG;
-import static com.azinecllc.champy.activity.ChallengeActivity.navItemIndex;
+import static com.azinecllc.champy.activity.ChallengesActivity.CURRENT_TAG;
+import static com.azinecllc.champy.activity.ChallengesActivity.navItemIndex;
 import static com.azinecllc.champy.utils.Constants.TAG_CHALLENGES;
 
 public class SessionManager {

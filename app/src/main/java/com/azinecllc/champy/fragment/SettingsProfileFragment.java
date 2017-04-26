@@ -156,13 +156,14 @@ public class SettingsProfileFragment extends Fragment {
 //        TextView tvDeleteAcc = (TextView) view.findViewById(R.id.tv_delete_account);
 
         Switch switchFB = (Switch) view.findViewById(R.id.switch_facebook);
+        switchFB.setChecked(sessionManager.isUserLoggedIn());
 
         String userPicture = sessionManager.getUserPicture();
         String userEmail = sessionManager.getUserEmail();
         String userName = sessionManager.getUserName();
         Glide.with(this)
                 .load(userPicture)
-                .bitmapTransform(new BlurTransformation(getContext(), 25))
+                //.bitmapTransform(new BlurTransformation(getContext(), 25))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(ivUserPhotoBG);
@@ -258,6 +259,7 @@ public class SettingsProfileFragment extends Fragment {
     @OnClick(R.id.tv_logout)
     public void onClickLogout() {
         sessionManager.logout(getActivity());
+        Toast.makeText(getContext(), "{Logout...}", Toast.LENGTH_SHORT).show();
     }
 
     @OnClick(R.id.tv_delete_account)
@@ -267,6 +269,18 @@ public class SettingsProfileFragment extends Fragment {
         } else {
             deleteAccountDialog();
         }
+    }
+
+    @OnClick(R.id.switch_facebook)
+    public void onClickFacebookSwitch() {
+        if (sessionManager.isUserLoggedIn()) {
+            sessionManager.logout(getActivity());
+            Toast.makeText(getContext(), "Logout...", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Toast.makeText(getContext(), "Login...", Toast.LENGTH_SHORT).show();
+
     }
 
 

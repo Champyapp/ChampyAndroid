@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".activity.ChallengeActivity"
+    tools:context=".activity.ChallengesActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:windowEnableSplitTouch="false"

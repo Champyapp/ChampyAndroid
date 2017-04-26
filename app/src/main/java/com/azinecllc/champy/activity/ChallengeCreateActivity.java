@@ -128,9 +128,14 @@ public class ChallengeCreateActivity extends AppCompatActivity {
 
     // get standard self-improvement challenges
     private void getChallenges(/*SwipeRefreshLayout swipeRefreshLayout, View view*/) {
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
         com.azinecllc.champy.interfaces.SelfImprovement selfImprovement = retrofit
                 .create(com.azinecllc.champy.interfaces.SelfImprovement.class);
+
         Call<SelfImprovement> call = selfImprovement.getChallenges(sessionManager.getToken());
         call.enqueue(new retrofit.Callback<SelfImprovement>() {
             @Override

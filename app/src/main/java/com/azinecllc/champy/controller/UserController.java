@@ -23,8 +23,8 @@ import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-import static com.azinecllc.champy.activity.ChallengeActivity.CURRENT_TAG;
-import static com.azinecllc.champy.activity.ChallengeActivity.navItemIndex;
+import static com.azinecllc.champy.activity.ChallengesActivity.CURRENT_TAG;
+import static com.azinecllc.champy.activity.ChallengesActivity.navItemIndex;
 import static com.azinecllc.champy.utils.Constants.TAG_CHALLENGES;
 
 /**

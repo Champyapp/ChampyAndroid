@@ -52,12 +52,12 @@ import static com.azinecllc.champy.utils.Constants.TAG_TERMS;
 /**
  * MAIN ACTIVITY
  */
-public class ChallengeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class ChallengesActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static String CURRENT_TAG = TAG_CHALLENGES;
     public static int navItemIndex = 0;
 
-    private static final String TAG = "ChallengeActivity";
+    private static final String TAG = "ChallengesActivity";
 
     private SessionManager sessionManager;
     private DrawerLayout drawer;
@@ -101,7 +101,7 @@ public class ChallengeActivity extends AppCompatActivity implements NavigationVi
 
         // NAVIGATION VIEW
         navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(ChallengeActivity.this);
+        navigationView.setNavigationItemSelectedListener(ChallengesActivity.this);
         View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         ImageView drawerBackground = (ImageView) headerLayout.findViewById(R.id.drawer_background);
         ImageView drawerUserPhoto = (ImageView) headerLayout.findViewById(R.id.drawer_user_photo);

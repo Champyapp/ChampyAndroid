@@ -8,7 +8,7 @@
     android:windowEnableSplitTouch="false"
     android:splitMotionEvents="false"
     android:fitsSystemWindows="true"
-    tools:context=".activity.ChallengeActivity">
+    tools:context=".activity.ChallengesActivity">
 
 
     <android.support.design.widget.AppBarLayout

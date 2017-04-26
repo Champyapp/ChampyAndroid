@@ -47,7 +47,6 @@
                 android:id="@+id/tv_first_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sasha Khyzhun"
                 android:textColor="@color/black"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp" />
@@ -68,7 +67,6 @@
                 android:id="@+id/a"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="sasha.khyzhun@gmail.com"
                 android:textColor="@color/black"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"

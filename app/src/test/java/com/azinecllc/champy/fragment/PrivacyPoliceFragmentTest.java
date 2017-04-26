@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.azinecllc.champy.BuildConfig;
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.activity.ChallengeActivity;
+import com.azinecllc.champy.activity.ChallengesActivity;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -30,11 +30,11 @@ public class PrivacyPoliceFragmentTest {
 
     private View view;
     private PrivacyPoliceFragment fragment;
-    private ChallengeActivity activity;
+    private ChallengesActivity activity;
 
     @Before
     public void setUp() throws Exception {
-        activity = Robolectric.buildActivity(ChallengeActivity.class).create().get();
+        activity = Robolectric.buildActivity(ChallengesActivity.class).create().get();
         fragment = new PrivacyPoliceFragment();
         view = LayoutInflater.from(activity.getApplicationContext()).inflate(R.layout.fragment_privacy, null);
     }
@@ -42,7 +42,7 @@ public class PrivacyPoliceFragmentTest {
     @Test
     public void testForActivity() throws Exception {
         assertNotNull(activity);
-        assertEquals("ChallengeActivity", activity.getClass().getSimpleName());
+        assertEquals("ChallengesActivity", activity.getClass().getSimpleName());
     }
 
     @Test
