@@ -1,6 +1,5 @@
 package com.azinecllc.champy.fragment;
 
-import android.app.SearchManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -40,8 +39,8 @@ import com.azinecllc.champy.model.user.Data;
 import com.azinecllc.champy.model.user.LoginData;
 import com.azinecllc.champy.model.user.User;
 import com.azinecllc.champy.utils.OfflineMode;
-import com.azinecllc.champy.utils.UserProfileUtil;
 import com.azinecllc.champy.utils.SessionManager;
+import com.azinecllc.champy.utils.UserProfileUtil;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -80,7 +79,7 @@ public class FriendsFragment extends Fragment implements View.OnClickListener, S
 
     public static final String TAG = "FriendsFragment";
     private static final String ARG_PAGE = "ARG_PAGE";
-    private String userEmail, userPicture, userName, userFBID;
+    private String userEmail, userPicture, userName, userFBID, searchLine;
     private SwipeRefreshLayout gSwipeRefreshLayout;
     private CHCheckTableForExist checkTableForExist;
     private CallbackManager mCallbackManager;
@@ -114,13 +113,13 @@ public class FriendsFragment extends Fragment implements View.OnClickListener, S
         cv = new ContentValues();
         dbHelper = DBHelper.getInstance(getContext());
         db = dbHelper.getWritableDatabase();
-        checkTableForExist = new CHCheckTableForExist(db);
     }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         View itemView = inflater.inflate(R.layout.item_recycler_friends, container, false);
         setHasOptionsMenu(true);
+        checkTableForExist = new CHCheckTableForExist(db);
         friendsList = new ArrayList<>();
         Cursor c = db.query("mytable", null, null, null, null, null, null);
         if (c.moveToFirst()) {
@@ -337,6 +336,7 @@ public class FriendsFragment extends Fragment implements View.OnClickListener, S
                 // Do something when expanded
                 return true; // Return true to expand action view
             }
+
         });
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -345,6 +345,7 @@ public class FriendsFragment extends Fragment implements View.OnClickListener, S
     public boolean onQueryTextChange(String newText) {
         final List<FriendModel> filteredModelList = filter(friendsList, newText);
         adapter.setFilter(filteredModelList);
+        searchLine = newText;
         return true;
     }
 
