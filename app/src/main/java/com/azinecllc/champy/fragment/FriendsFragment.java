@@ -1,5 +1,6 @@
 package com.azinecllc.champy.fragment;
 
+import android.app.SearchManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -10,13 +11,18 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,7 +76,7 @@ import retrofit.Retrofit;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static com.azinecllc.champy.utils.Constants.API_URL;
 
-public class FriendsFragment extends Fragment implements View.OnClickListener {
+public class FriendsFragment extends Fragment implements View.OnClickListener, SearchView.OnQueryTextListener {
 
     public static final String TAG = "FriendsFragment";
     private static final String ARG_PAGE = "ARG_PAGE";
@@ -114,7 +120,7 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         View itemView = inflater.inflate(R.layout.item_recycler_friends, container, false);
-
+        setHasOptionsMenu(true);
         friendsList = new ArrayList<>();
         Cursor c = db.query("mytable", null, null, null, null, null, null);
         if (c.moveToFirst()) {
@@ -141,9 +147,9 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
         c.close();
 
 
-        rvContacts = (RecyclerView) itemView.findViewById(R.id.recycler_view);
         adapter = new FriendsAdapter(friendsList, getContext(), getActivity());
-
+        rvContacts = (RecyclerView) itemView.findViewById(R.id.recycler_view);
+        rvContacts.setHasFixedSize(true); // to improve performance.
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         rvContacts.setAdapter(adapter);
 
@@ -166,7 +172,6 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
         return itemView;
 
     }
-
 
     @Override
     public void onClick(View v) {
@@ -269,7 +274,6 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
         Log.i(TAG, "onActivityCreated: ");
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
@@ -282,7 +286,6 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
         Log.i(TAG, "onResume: ");
     }
 
-
     @Override
     public void onPause() {
         super.onPause();
@@ -294,7 +297,6 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
         super.onStop();
         Log.i(TAG, "onStop: ");
     }
-
 
     @Override
     public void onDestroyView() {
@@ -316,6 +318,67 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
         Log.i(TAG, "onDetach: ");
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_search, menu);
+
+        final MenuItem item = menu.findItem(R.id.action_search);
+        //final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        //searchView.setOnQueryTextListener(this);
+        Toast.makeText(getContext(), "onCreateOptionsMenu", Toast.LENGTH_SHORT).show();
+//        MenuInflater menuInflater = getActivity().getMenuInflater();
+//        menuInflater.inflate(R.menu.menu_search, menu);
+
+        //SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+
+//        SearchView searchView = null;
+//        if (searchItem != null) {
+//            searchView = (SearchView) searchItem.getActionView();
+//        }
+//        if (searchView != null) {
+//            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+//        }
+
+        MenuItemCompat.setOnActionExpandListener(item, new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                // Do something when collapsed
+                adapter.setFilter(friendsList);
+                return true; // Return true to collapse action view
+            }
+
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                // Do something when expanded
+                return true; // Return true to expand action view
+            }
+        });
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        final List<FriendModel> filteredModelList = filter(friendsList, newText);
+        adapter.setFilter(filteredModelList);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    private List<FriendModel> filter(List<FriendModel> models, String query) {
+        query = query.toLowerCase();
+        final List<FriendModel> filteredModelList = new ArrayList<>();
+        for (FriendModel model : models) {
+            final String text = model.getName().toLowerCase();
+            if (text.contains(query)) {
+                filteredModelList.add(model);
+            }
+        }
+        return filteredModelList;
+    }
 
     private void refreshOtherView(SwipeRefreshLayout swipeRefreshLayout, View view) {
         if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
@@ -329,7 +392,8 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
                     StrictMode.setThreadPolicy(policy);
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
                     db.delete("mytable", null, null);
-                    GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONArrayCallback() {
+                    GraphRequest request = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(),
+                            new GraphRequest.GraphJSONArrayCallback() {
                         @Override
                         public void onCompleted(JSONArray array, GraphResponse response) {
                             if (array.length() == 0) {
@@ -415,7 +479,6 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
         sessionManager.setRefreshOthers("false");
     }
 
-
     /**
      * Method to login user in case when we have already created profile. Here we create new Session
      * for user, set current status bar, load photo from api and store it locally. We need this because
@@ -429,7 +492,7 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
      * @throws JSONException - we can expect this exception because we can get NPE in any value
      *                       In this case we can handle it.
      */
-    public void singInUser(String facebookID, String gcm, String pictureFB, String androidTok) throws JSONException {
+    private void singInUser(String facebookID, String gcm, String pictureFB, String androidTok) throws JSONException {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         String jwt = getToken(facebookID, gcm);
         NewUser newUser = retrofit.create(NewUser.class);
@@ -605,8 +668,9 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
         return (res == PackageManager.PERMISSION_GRANTED);
     }
 
+
     private void toggleCurrentView() {
-        Toast.makeText(getContext(), "login status: " + sessionManager.isUserLoggedIn(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), "login status: " + sessionManager.isUserLoggedIn(), Toast.LENGTH_SHORT).show();
         if (!sessionManager.isUserLoggedIn()) {
             loginButton.setVisibility(View.VISIBLE);
             tvConnectWithFB.setVisibility(View.VISIBLE);

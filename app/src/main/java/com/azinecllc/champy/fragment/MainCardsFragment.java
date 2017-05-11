@@ -79,9 +79,7 @@ public class MainCardsFragment extends Fragment {
         });
 
         fab = (FloatingActionButton) view.findViewById(R.id.fabPlus);
-        fab.setOnClickListener(v -> {
-            startActivity(new Intent(getContext(), ChallengeCreateActivity.class));
-        });
+        fab.setOnClickListener(v -> startActivity(new Intent(getContext(), ChallengeCreateActivity.class)));
 
 
 //        FabScrollBehavior behavior = new FabScrollBehavior(getContext());

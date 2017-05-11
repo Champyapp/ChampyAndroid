@@ -284,44 +284,42 @@ public class ChallengesActivity extends AppCompatActivity implements NavigationV
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_search, menu);
-        if (navItemIndex == 6 && getCallingActivity() != null) {
-
-            MenuInflater menuInflater = getMenuInflater();
-            menuInflater.inflate(R.menu.menu_search, menu);
-
-            MenuItem searchItem = menu.findItem(R.id.action_search);
-
-            SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-
-            SearchView searchView = null;
-            if (searchItem != null) {
-                searchView = (SearchView) searchItem.getActionView();
-            }
-            if (searchView != null) {
-                searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-            }
-        }
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
-
-        if (id == R.id.action_search) {
-            Toast.makeText(this, "Search...", Toast.LENGTH_SHORT).show();
-            return true;
-        } else if (id == android.R.id.home) {
-            finish();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+////        getMenuInflater().inflate(R.menu.menu_search, menu);
+//        if (navItemIndex == 6 && getCallingActivity() != null) {
+//
+//            MenuInflater menuInflater = getMenuInflater();
+//            menuInflater.inflate(R.menu.menu_search, menu);
+//            MenuItem searchItem = menu.findItem(R.id.action_search);
+//            SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+//
+//            SearchView searchView = null;
+//            if (searchItem != null) {
+//                searchView = (SearchView) searchItem.getActionView();
+//            }
+//            if (searchView != null) {
+//                searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+//            }
+//        }
+//        return super.onCreateOptionsMenu(menu);
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//        //noinspection SimplifiableIfStatement
+//
+//        if (id == R.id.action_search) {
+//            Toast.makeText(this, "Search...", Toast.LENGTH_SHORT).show();
+//            return true;
+//        } else if (id == android.R.id.home) {
+//            finish();
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
 
 }

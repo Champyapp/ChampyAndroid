@@ -1,10 +1,8 @@
 package com.azinecllc.champy.adapter;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +18,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.azinecllc.champy.R;
-import com.azinecllc.champy.interfaces.RecyclerFriendsClickListener;
 import com.azinecllc.champy.model.FriendModel;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -32,27 +29,27 @@ import java.util.Random;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
-public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> implements Filterable {
+public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder>/* implements Filterable */ {
 
     public static final String TAG = "FriendsAdapter";
-    private List<FriendModel> mContacts;
-    private List<FriendModel> filteredModelItemsArray;
-    private SQLiteDatabase db;
-    private ContentValues cv;
+    private List<FriendModel> mFriends;
+    private List<FriendModel> filteredFriends;
     private Context context;
     private Activity activity;
-    private ArrayList<Integer> selected = new ArrayList<>();
-    private RecyclerFriendsClickListener onCardClickListener;
-    private ModelFilter filter;
+//    private ModelFilter filter;
+//    private SQLiteDatabase db;
+//    private ContentValues cv;
+//    private ArrayList<Integer> selected = new ArrayList<>();
+//    private RecyclerFriendsClickListener onCardClickListener;
 
 
     // Pass in the contact array into the constructor
     public FriendsAdapter(List<FriendModel> contacts, Context ctx, Activity activity) {
-        mContacts = contacts;
+        mFriends = contacts;
         this.context = ctx;
         this.activity = activity;
-        this.filteredModelItemsArray = new ArrayList<FriendModel>();
-        filteredModelItemsArray.addAll(mContacts);
+        this.filteredFriends = new ArrayList<FriendModel>();
+        filteredFriends.addAll(mFriends);
     }
 
     @Override
@@ -99,7 +96,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     @Override
     public void onBindViewHolder(FriendsAdapter.ViewHolder viewHolder, final int position) {
         // Get the data model based on position
-        FriendModel contact = mContacts.get(position);
+        FriendModel contact = mFriends.get(position);
 
 
         Random random = new Random();
@@ -140,7 +137,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 //            db = dbHelper.getWritableDatabase();
 //            cv = new ContentValues();
 //            if (offlineMode.isConnectedToRemoteAPI(activity)) {
-//                String friend = mContacts.get(position).getID();
+//                String friend = mFriends.get(position).getID();
 //                if (friend != null) {
 //                    //щоб воно не обновляло (і дублювало) лист друзів після додавання когось, то має бути false
 //                    session.setRefreshPending("false");
@@ -150,13 +147,13 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 //                        @Override
 //                        public void onResponse(Response<com.azinecllc.champy.model.friend.Friend> response, Retrofit retrofit1) {
 //                            if (response.isSuccess()) {
-//                                cv.put("name",    mContacts.get(position).getName());
-//                                cv.put("photo",   mContacts.get(position).getPicture());
-//                                cv.put("user_id", mContacts.get(position).getID());
-//                                cv.put("level",   mContacts.get(position).getmLevel());
-//                                cv.put("inProgressChallengesCount", mContacts.get(position).getmChallenges());
-//                                cv.put("successChallenges", mContacts.get(position).getmWins());
-//                                cv.put("allChallengesCount", mContacts.get(position).getmTotal());
+//                                cv.put("name",    mFriends.get(position).getName());
+//                                cv.put("photo",   mFriends.get(position).getPicture());
+//                                cv.put("user_id", mFriends.get(position).getID());
+//                                cv.put("level",   mFriends.get(position).getmLevel());
+//                                cv.put("inProgressChallengesCount", mFriends.get(position).getmChallenges());
+//                                cv.put("successChallenges", mFriends.get(position).getmWins());
+//                                cv.put("allChallengesCount", mFriends.get(position).getmTotal());
 //                                db.insert("pending", null, cv);
 //                            }
 //                        }
@@ -164,7 +161,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 //                        @Override
 //                        public void onFailure(Throwable t) { }
 //                    });
-//                    mContacts.remove(position);
+//                    mFriends.remove(position);
 //                    notifyItemRemoved(position);
 //                    selected.clear();
 //                }
@@ -173,17 +170,17 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
     }
 
-    @Override
-    public Filter getFilter() {
-        if (filter == null) {
-            filter = new ModelFilter();
-        }
-        return filter;
-    }
+//    @Override
+//    public Filter getFilter() {
+//        if (filter == null){
+//            filter  = new ModelFilter();
+//        }
+//        return filter;
+//    }
 
     @Override
     public int getItemCount() {
-        return mContacts.size();
+        return mFriends.size();
     }
 
 
@@ -210,52 +207,54 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     }
 
 
-    private class ModelFilter extends Filter {
-
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            constraint = constraint.toString().toLowerCase();
-            FilterResults result = new FilterResults();
-            if (constraint.toString().length() > 0) {
-                ArrayList<String> filteredItems = new ArrayList<String>();
-
-                for (int i = 0, l = mContacts.size(); i < l; i++) {
-                    String m = String.valueOf(mContacts.get(i));
-                    if (m.toLowerCase().contains(constraint))
-                        filteredItems.add(m);
-                }
-                result.count = filteredItems.size();
-                result.values = filteredItems;
-            } else {
-                synchronized (this) {
-                    result.values = mContacts;
-                    result.count = mContacts.size();
-                }
-            }
-            return result;
-        }
-
-        @SuppressWarnings("unchecked")
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            filteredModelItemsArray = (List<FriendModel>) results.values;
-            notifyDataSetChanged();
-            //clear();
-//            for(int i = 0, l = filteredModelItemsArray.size(); i < l; i++) {
-//                add(filteredModelItemsArray.get(i));
+//    private class ModelFilter extends Filter {
+//
+//        @Override
+//        protected FilterResults performFiltering(CharSequence constraint) {
+//            constraint = constraint.toString().toLowerCase();
+//            FilterResults result = new FilterResults();
+//            if(constraint.toString().length() > 0) {
+//                ArrayList<String> filteredItems = new ArrayList<String>();
+//
+//                for(int i = 0, l = mFriends.size(); i < l; i++) {
+//                    String m = String.valueOf(mFriends.get(i));
+//                    if(m.toLowerCase().contains(constraint))
+//                        filteredItems.add(m);
+//                }
+//                result.count = filteredItems.size();
+//                result.values = filteredItems;
 //            }
-//            notifyDataSetInvalidated();
-        }
-    }
+//            else {
+//                synchronized(this) {
+//                    result.values = mFriends;
+//                    result.count = mFriends.size();
+//                }
+//            }
+//            return result;
+//        }
+//
+//        @SuppressWarnings("unchecked")
+//        @Override
+//        protected void publishResults(CharSequence constraint, FilterResults results) {
+//            filteredFriends = (List<FriendModel>) results.values;
+//            notifyDataSetChanged();
+//            //clear();
+////            for(int i = 0, l = filteredFriends.size(); i < l; i++) {
+////                add(filteredFriends.get(i));
+////            }
+////            notifyDataSetInvalidated();
+//        }
+//    }
 
 
-    public void updateList(List<FriendModel> list) {
-        mContacts = list;
+    public void setFilter(List<FriendModel> countryModels) {
+        mFriends = new ArrayList<>();
+        mFriends.addAll(countryModels);
         notifyDataSetChanged();
     }
 
-    public void setOnRecyclerClickListener(RecyclerFriendsClickListener recyclerClickListener) {
-        this.onCardClickListener = recyclerClickListener;
-    }
+//    public void setOnRecyclerClickListener(RecyclerFriendsClickListener recyclerClickListener) {
+//        this.onCardClickListener = recyclerClickListener;
+//    }
 
 }
