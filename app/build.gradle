@@ -52,16 +52,18 @@ android {
         }
     }
 
+    configurations.all {
+        resolutionStrategy.dependencySubstitution {
+            substitute module('org.apache.commons:commons-io:1.3.2') with module('commons-io:commons-io:1.3.2')
+        }
+    }
+
 //    configurations.all {
 //        resolutionStrategy {
 //            force 'com.android.support:support-annotations:23.1.1'
 //        }
 //    }
 
-    configurations {
-        all*.exclude group: 'com.android.support', module: 'support-v4'
-        all*.exclude group: 'com.android.support', module: 'support-annotations'
-    }
 
     buildTypes {
         release {
