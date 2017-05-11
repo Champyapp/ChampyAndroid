@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -30,16 +32,18 @@ import java.util.Random;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
-public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
+public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> implements Filterable {
 
     public static final String TAG = "FriendsAdapter";
     private List<FriendModel> mContacts;
+    private List<FriendModel> filteredModelItemsArray;
     private SQLiteDatabase db;
     private ContentValues cv;
     private Context context;
     private Activity activity;
     private ArrayList<Integer> selected = new ArrayList<>();
     private RecyclerFriendsClickListener onCardClickListener;
+    private ModelFilter filter;
 
 
     // Pass in the contact array into the constructor
@@ -47,6 +51,8 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         mContacts = contacts;
         this.context = ctx;
         this.activity = activity;
+        this.filteredModelItemsArray = new ArrayList<FriendModel>();
+        filteredModelItemsArray.addAll(mContacts);
     }
 
     @Override
@@ -167,6 +173,13 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
     }
 
+    @Override
+    public Filter getFilter() {
+        if (filter == null) {
+            filter = new ModelFilter();
+        }
+        return filter;
+    }
 
     @Override
     public int getItemCount() {
@@ -194,6 +207,51 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             layoutInfo = (LinearLayout) itemView.findViewById(R.id.layout_info);
             layoutCard = (RelativeLayout) itemView.findViewById(R.id.card_layout);
         }
+    }
+
+
+    private class ModelFilter extends Filter {
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            constraint = constraint.toString().toLowerCase();
+            FilterResults result = new FilterResults();
+            if (constraint.toString().length() > 0) {
+                ArrayList<String> filteredItems = new ArrayList<String>();
+
+                for (int i = 0, l = mContacts.size(); i < l; i++) {
+                    String m = String.valueOf(mContacts.get(i));
+                    if (m.toLowerCase().contains(constraint))
+                        filteredItems.add(m);
+                }
+                result.count = filteredItems.size();
+                result.values = filteredItems;
+            } else {
+                synchronized (this) {
+                    result.values = mContacts;
+                    result.count = mContacts.size();
+                }
+            }
+            return result;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            filteredModelItemsArray = (List<FriendModel>) results.values;
+            notifyDataSetChanged();
+            //clear();
+//            for(int i = 0, l = filteredModelItemsArray.size(); i < l; i++) {
+//                add(filteredModelItemsArray.get(i));
+//            }
+//            notifyDataSetInvalidated();
+        }
+    }
+
+
+    public void updateList(List<FriendModel> list) {
+        mContacts = list;
+        notifyDataSetChanged();
     }
 
     public void setOnRecyclerClickListener(RecyclerFriendsClickListener recyclerClickListener) {
