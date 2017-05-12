@@ -10,8 +10,12 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -28,10 +32,7 @@ public class MainFragmentWithTabs extends Fragment {
 
     public static final String TAG = "MainFragmentWithTabs";
     private TabLayout tabLayout;
-    private int[] tabIcons = {
-            R.mipmap.ic_tab_friends,
-            R.mipmap.ic_tab_friends,
-    };
+    private int[] tabIcons = { R.mipmap.ic_tab_friends, R.mipmap.ic_tab_friends };
 
     @Override
     public void onAttach(Context context) {
@@ -52,7 +53,7 @@ public class MainFragmentWithTabs extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main_with_tabs, container, false);
         Log.i(TAG, "onCreateView: ");
-
+        setHasOptionsMenu(true);
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.view_pager_main);
         viewPager.setOffscreenPageLimit(2);
         MainActivityPagerAdapter pagerAdapter = new MainActivityPagerAdapter(getChildFragmentManager(), getContext());
@@ -69,12 +70,16 @@ public class MainFragmentWithTabs extends Fragment {
                 Log.i(TAG, "onTabSelected: " + tab.getPosition());
                 String currentTitle = (tab.getPosition() == 0) ? "Challenge" : "Friends";
                 Log.i(TAG, "onTabSelected: " + currentTitle);
-                getActivity().setTitle(currentTitle);
+
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
                 Log.i(TAG, "onTabUnselected: ");
+
+                Log.i(TAG, "onTabUnselected: SearchView: + searchView");
+
+
             }
 
             @Override

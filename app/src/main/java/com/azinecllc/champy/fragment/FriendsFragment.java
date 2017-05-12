@@ -79,7 +79,7 @@ public class FriendsFragment extends Fragment implements View.OnClickListener, S
 
     public static final String TAG = "FriendsFragment";
     private static final String ARG_PAGE = "ARG_PAGE";
-    private String userEmail, userPicture, userName, userFBID, searchLine;
+    private String userEmail, userPicture, userName, userFBID;
     private SwipeRefreshLayout gSwipeRefreshLayout;
     private CHCheckTableForExist checkTableForExist;
     private CallbackManager mCallbackManager;
@@ -90,6 +90,7 @@ public class FriendsFragment extends Fragment implements View.OnClickListener, S
     private RecyclerView rvContacts;
     private LoginButton loginButton;
     private FriendsAdapter adapter;
+    private SearchView searchView;
     private SQLiteDatabase db;
     private Retrofit retrofit;
     private DBHelper dbHelper;
@@ -148,7 +149,7 @@ public class FriendsFragment extends Fragment implements View.OnClickListener, S
 
         adapter = new FriendsAdapter(friendsList, getContext(), getActivity());
         rvContacts = (RecyclerView) itemView.findViewById(R.id.recycler_view);
-        rvContacts.setHasFixedSize(true); // to improve performance.
+        //rvContacts.setHasFixedSize(true); // to improve performance.
         rvContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         rvContacts.setAdapter(adapter);
 
@@ -319,21 +320,25 @@ public class FriendsFragment extends Fragment implements View.OnClickListener, S
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        Log.i(TAG, "onCreateOptionsMenu: ");
         inflater.inflate(R.menu.menu_search, menu);
         final MenuItem item = menu.findItem(R.id.action_search);
-        final SearchView searchView = (SearchView) item.getActionView();
+        searchView = (SearchView) item.getActionView();
         searchView.setOnQueryTextListener(this);
+
         MenuItemCompat.setOnActionExpandListener(item, new MenuItemCompat.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 // Do something when collapsed
                 adapter.setFilter(friendsList);
+                Log.i(TAG, "onMenuItemActionCollapse: ");
                 return true; // Return true to collapse action view
             }
 
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
                 // Do something when expanded
+                Log.i(TAG, "onMenuItemActionExpand: ");
                 return true; // Return true to expand action view
             }
 
@@ -342,17 +347,31 @@ public class FriendsFragment extends Fragment implements View.OnClickListener, S
     }
 
     @Override
+    public void onDestroyOptionsMenu() {
+        super.onDestroyOptionsMenu();
+        Log.i(TAG, "onDestroyOptionsMenu: ");
+        if (searchView != null && !searchView.getQuery().toString().isEmpty()) {
+            searchView.setIconified(true);
+            searchView.setIconified(true);
+            Log.i(TAG, "onDestroyOptionsMenu: searchView != null, vse ok");
+        }
+    }
+
+    @Override
     public boolean onQueryTextChange(String newText) {
+        Log.i(TAG, "onQueryTextChange: ");
         final List<FriendModel> filteredModelList = filter(friendsList, newText);
         adapter.setFilter(filteredModelList);
-        searchLine = newText;
+        //searchLine = newText; ?
         return true;
     }
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        Log.i(TAG, "onQueryTextSubmit: ");
         return false;
     }
+
 
     private List<FriendModel> filter(List<FriendModel> models, String query) {
         query = query.toLowerCase();
@@ -365,6 +384,7 @@ public class FriendsFragment extends Fragment implements View.OnClickListener, S
         }
         return filteredModelList;
     }
+
 
     private void refreshOtherView(SwipeRefreshLayout swipeRefreshLayout, View view) {
         if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
@@ -517,8 +537,9 @@ public class FriendsFragment extends Fragment implements View.OnClickListener, S
                     sessionManager.setRefreshOthers("true");
                     sessionManager.setChampyOptions(total, wins, inProgress, "0");
                     sessionManager.createUserLoginSession(
-                            true, userName, userEmail, userFBID, userPicture, jwt, userID, pushN, newChallengeReq,
-                            acceptedYour, challengeEnd, challengesForToday, "true", gcm, androidTok
+                            true, userName, userEmail, userFBID, userPicture,
+                            jwt, userID, pushN, newChallengeReq, acceptedYour,
+                            challengeEnd, challengesForToday, "true", gcm, androidTok
                     );
 
                     UserController userController = new UserController(sessionManager, retrofit);
