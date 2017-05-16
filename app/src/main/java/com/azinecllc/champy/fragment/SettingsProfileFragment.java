@@ -47,8 +47,6 @@ import java.net.URISyntaxException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import jp.wasabeef.glide.transformations.BlurTransformation;
-import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 
@@ -73,10 +71,12 @@ public class SettingsProfileFragment extends Fragment {
     TextView tvLogout;
     @BindView(R.id.tv_delete_account)
     TextView tvDeleteAcc;
-    @BindView(R.id.tv_first_name)
-    TextView tvFirstName;
+    @BindView(R.id.tv_user_name)
+    TextView tvUserName;
     @BindView(R.id.tv_select_color)
     TextView tvSelectColor;
+    @BindView(R.id.tv_user_email)
+    TextView tvUserEmail;
     private SessionManager sessionManager;
     private DBHelper dbHelper;
     private OfflineMode offlineMode;
@@ -151,7 +151,7 @@ public class SettingsProfileFragment extends Fragment {
         ivUserPhotoBG = (ImageView) view.findViewById(R.id.iv_profile_picture_bg);
 
 //        ImageView fabChangePhoto = (ImageView) view.findViewById(R.id.iv_change_photo);
-//        TextView tvFirstName = (TextView) view.findViewById(R.id.tv_first_name);
+//        TextView tvUserName = (TextView) view.findViewById(R.id.tv_first_name);
 //        TextView tvLastName = (TextView) view.findViewById(R.id.tv_last_name);
 //        TextView tvLogout = (TextView) view.findViewById(R.id.tv_logout);
 //        TextView tvDeleteAcc = (TextView) view.findViewById(R.id.tv_delete_account);
@@ -164,11 +164,13 @@ public class SettingsProfileFragment extends Fragment {
         String userName = sessionManager.getUserName();
         Glide.with(this)
                 .load(userPicture)
+                //.bitmapTransform(new BlurTransformation(getContext(), 25))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(ivUserPhotoBG);
 
-        tvFirstName.setText(userName);
+        tvUserName.setText(userName);
+        tvUserEmail.setText(userEmail);
 
 
         return view;
@@ -235,7 +237,7 @@ public class SettingsProfileFragment extends Fragment {
             } else if (requestCode == Crop.REQUEST_PICK) {
                 // this thing starts activity for result 'REQUEST_CROP'
                 Uri destination = Uri.fromFile(new File(getContext().getCacheDir(), "cropped"));
-                Crop.of(data.getData(), destination).asSquare().withMaxSize(300, 300).start(getContext(), this);
+                Crop.of(data.getData(), destination).asSquare().start(getContext(), this);
             } else if (requestCode == Crop.REQUEST_CROP) {
                 try {
                     handleCrop(resultCode, data);
@@ -525,7 +527,6 @@ public class SettingsProfileFragment extends Fragment {
 
     /**
      * Method to start crop the photo. This method starts activity for result 'CROP_PIC'
-     *
      * @param picUri - this is data from intent: data.getData();
      */
     private void performCrop(Uri picUri) {
@@ -539,6 +540,8 @@ public class SettingsProfileFragment extends Fragment {
             cropIntent.putExtra("aspectY", 2);            // indicate output X and Y
             cropIntent.putExtra("outputX", 300);
             cropIntent.putExtra("outputY", 500);
+            cropIntent.putExtra("scale", true); // ?
+            cropIntent.putExtra("scaleUpIfNeeded", true); // ?
             cropIntent.putExtra("return-data", true);     // retrieve data on return
             startActivityForResult(cropIntent, CROP_PIC);
         }

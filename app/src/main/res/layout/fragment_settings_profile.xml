@@ -46,7 +46,7 @@
         <include layout="@layout/item_line" />
 
         <TextView
-            android:id="@+id/tv_first_name"
+            android:id="@+id/tv_user_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="First Name"
@@ -59,7 +59,7 @@
         <include layout="@layout/item_line" />
 
         <TextView
-            android:id="@+id/tv_last_name"
+            android:id="@+id/text_view_user_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Last Name"
