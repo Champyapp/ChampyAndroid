@@ -164,7 +164,6 @@ public class SettingsProfileFragment extends Fragment {
         String userName = sessionManager.getUserName();
         Glide.with(this)
                 .load(userPicture)
-                //.bitmapTransform(new BlurTransformation(getContext(), 25))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(ivUserPhotoBG);
@@ -233,7 +232,6 @@ public class SettingsProfileFragment extends Fragment {
                 Bitmap thePic = extras.getParcelable("data"); // get the cropped bitmap
                 savePhotoToStorageAndMakeBG(thePic);
                 userController.uploadPhotoForAPI(getPicturePathFromStorage(thePic));
-                //getActivity().recreate();
             } else if (requestCode == Crop.REQUEST_PICK) {
                 // this thing starts activity for result 'REQUEST_CROP'
                 Uri destination = Uri.fromFile(new File(getContext().getCacheDir(), "cropped"));
@@ -397,7 +395,6 @@ public class SettingsProfileFragment extends Fragment {
 
         Glide.with(this)
                 .load(uri)
-                .bitmapTransform(new BlurTransformation(getContext(), 25))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(ivUserPhotoBG);

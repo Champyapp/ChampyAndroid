@@ -378,7 +378,7 @@ public class FriendsFragment extends Fragment implements View.OnClickListener, S
         final List<FriendModel> filteredModelList = new ArrayList<>();
         for (FriendModel model : models) {
             final String text = model.getName().toLowerCase();
-            if (text.contains(query)) {
+            if (text.startsWith(query)) {
                 filteredModelList.add(model);
             }
         }
@@ -498,7 +498,9 @@ public class FriendsFragment extends Fragment implements View.OnClickListener, S
      * @throws JSONException - we can expect this exception because we can get NPE in any value
      *                       In this case we can handle it.
      */
-    private void singInUser(String facebookID, String gcm, String pictureFB, String androidTok) throws JSONException {
+    private void singInUser(String facebookID, String gcm, String pictureFB,
+                            String androidTok) throws JSONException
+    {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_URL).addConverterFactory(GsonConverterFactory.create()).build();
         String jwt = getToken(facebookID, gcm);
         NewUser newUser = retrofit.create(NewUser.class);
@@ -583,8 +585,9 @@ public class FriendsFragment extends Fragment implements View.OnClickListener, S
      * @throws JSONException - we can expect this exception because we can get NPE in any value
      *                       In this case we can handle it.
      */
-    private void registerUser(String fbId, String name, String email,
-                              String gcm, String androidTok, String picture) throws JSONException {
+    private void registerUser(String fbId, String name, String email, String gcm,
+                              String androidTok, String picture) throws JSONException
+    {
         String jwt = getToken(fbId, gcm);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(API_URL)

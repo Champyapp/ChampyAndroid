@@ -64,7 +64,7 @@ import static com.azinecllc.champy.utils.Constants.path;
 
 /**
  * @autor SashaKhyzhun
- * Created on 2/7/17.
+ * Created on 2/7/17. Can delete.
  */
 public class SettingsFragment extends Fragment implements View.OnClickListener {
 
