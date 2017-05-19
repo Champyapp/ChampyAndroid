@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -77,6 +78,8 @@ public class SettingsProfileFragment extends Fragment {
     TextView tvSelectColor;
     @BindView(R.id.tv_user_email)
     TextView tvUserEmail;
+    @BindView(R.id.progress_bar_photo)
+    ProgressBar progressBarPhoto;
     private SessionManager sessionManager;
     private DBHelper dbHelper;
     private OfflineMode offlineMode;
@@ -441,6 +444,8 @@ public class SettingsProfileFragment extends Fragment {
             }
         }
 
+        progressBarPhoto.setVisibility(View.INVISIBLE);
+
     }
 
     /**
@@ -471,13 +476,13 @@ public class SettingsProfileFragment extends Fragment {
 
     /**
      * Method witch handling crop the picture. Here we get photo path, cropped it and upload on API
-     *
      * @param resultCode - code from intent 'start activity for result' must be 'OK'
      * @param result     - code from intent which shows for us specify request, must be 'REQUEST_CROP'
      * @throws IOException if something went wrong then we  can expect empty fields.
      */
     private void handleCrop(int resultCode, Intent result) throws IOException {
         if (resultCode == RESULT_OK) {
+            progressBarPhoto.setVisibility(View.VISIBLE);
             Uri uri = Crop.getOutput(result);
             String path = null;
             try {
