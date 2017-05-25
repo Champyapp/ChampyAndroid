@@ -38,6 +38,7 @@ public class MainCardsFragment extends Fragment {
     private OfflineMode offlineMode;
     private ArrayList<CardChallenges> cardChallengesList;
     private MainCardAdapter adapter;
+    private RecyclerView rvCards;
 
 
     @Override
@@ -69,12 +70,12 @@ public class MainCardsFragment extends Fragment {
 //        }
 
 
-        loadInProgressCards(view);
+        loadInProgressCards();
 
         gSwipeRefreshLayout.setOnRefreshListener(() -> {
             if (offlineMode.isConnectedToRemoteAPI(getActivity())) {
                 cardChallengesList.clear();
-                loadInProgressCards(view);
+                loadInProgressCards();
             }
         });
 
@@ -150,9 +151,9 @@ public class MainCardsFragment extends Fragment {
 
 
 
-    private void loadInProgressCards(View view) {
+    private void loadInProgressCards() {
         gSwipeRefreshLayout.setRefreshing(true);
-        ArrayList<Challenge> challengesArrayList = Challenge.generate(getContext());
+        //ArrayList<Challenge> challengesArrayList = Challenge.generate(getContext());
 
         for (int i = 0; i < /*challengesArrayList.size()*/ 10; i++) {
 
@@ -219,7 +220,6 @@ public class MainCardsFragment extends Fragment {
 
         }
         gSwipeRefreshLayout.setRefreshing(false);
-        RecyclerView rvCards = (RecyclerView) view.findViewById(R.id.recycler_view);
         rvCards.setAdapter(adapter);
         rvCards.setLayoutManager(new LinearLayoutManager(getContext()));
 
