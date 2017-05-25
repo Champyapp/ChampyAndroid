@@ -77,7 +77,7 @@ public class ChallengeCreateDetailsActivity extends AppCompatActivity {
 
     @OnClick(R.id.text_view_challenge_a_friend)
     public void onClickChallengeAFriend() {
-        Intent intent = new Intent(this, ChallengewsActivity.class);
+        Intent intent = new Intent(this, ChallengesActivity.class);
         intent.putExtra("tag", "TAG_FRIENDS");
         intent.putExtra("index", 6);
         startActivityForResult(intent, 1);
